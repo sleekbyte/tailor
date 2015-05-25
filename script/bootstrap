@@ -1,0 +1,8 @@
+#!/bin/sh
+# Usage: script/bootstrap
+# Installs python3, creates a virtualenv, and installs required modules for development.
+
+hash python3 2>/dev/null || brew install python3
+[[ -d venv ]] || pyvenv venv
+[[ -f venv/bin/activate ]] && source venv/bin/activate
+pip --quiet install --requirement requirements.txt

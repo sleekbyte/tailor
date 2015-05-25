@@ -1,0 +1,5 @@
+# Python
+*.py[cod]
+
+# pyvenv
+venv/
