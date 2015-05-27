@@ -1,3 +1,9 @@
+# ANTLR
+*.tokens
+
+# Idea
+.idea
+
 # Python
 *.py[cod]
 
