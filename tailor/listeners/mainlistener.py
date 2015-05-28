@@ -1,5 +1,5 @@
-from swift.swiftlistener import SwiftListener
-from utils.charformat import isUpperCamelCase
+from tailor.swift.swiftlistener import SwiftListener
+from tailor.utils.charformat import isUpperCamelCase
 
 class MainListener(SwiftListener):
 

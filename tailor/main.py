@@ -1,10 +1,14 @@
+import os
 import sys
+
+parent_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
+sys.path.append(parent_path)
 
 from antlr4 import FileStream, CommonTokenStream, ParseTreeWalker
 
-from listeners.mainlistener import MainListener
-from swift.swiftlexer import SwiftLexer
-from swift.swiftparser import SwiftParser
+from tailor.listeners.mainlistener import MainListener
+from tailor.swift.swiftlexer import SwiftLexer
+from tailor.swift.swiftparser import SwiftParser
 
 def main(argv):
     input = FileStream(argv[1])
