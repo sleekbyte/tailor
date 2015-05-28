@@ -1,9 +1,10 @@
 import sys
 
 from antlr4 import FileStream, CommonTokenStream, ParseTreeWalker
+
+from listeners.mainlistener import MainListener
 from swift.swiftlexer import SwiftLexer
 from swift.swiftparser import SwiftParser
-from listener.mainlistener import MainListener
 
 def main(argv):
     input = FileStream(argv[1])
