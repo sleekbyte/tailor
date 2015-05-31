@@ -8,7 +8,7 @@ class MainListener(SwiftListener):
         self.__verify_upper_camel_case(ctx, 'Class names should be in UpperCamelCase')
 
     def enterEnumName(self, ctx):
-        pass
+        self.__verify_upper_camel_case(ctx, 'Enum names should be in UpperCamelCase')
 
     def enterEnumCaseName(self, ctx):
         pass
