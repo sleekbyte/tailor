@@ -19,5 +19,9 @@ class MyTestCase(unittest.TestCase):
     def is_upper_camel_case_test_numeric_name(self):
         self.assertFalse(charformat.is_upper_camel_case('1ello_world'))
 
+    def is_upper_camel_case_test_special_character_name(self):
+        self.assertFalse(charformat.is_upper_camel_case('!ello_world'))
+
+
 if __name__ == '__main__':
     unittest.main()
