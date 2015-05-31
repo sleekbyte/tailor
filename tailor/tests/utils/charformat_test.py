@@ -16,6 +16,8 @@ class MyTestCase(unittest.TestCase):
     def is_upper_camel_case_test_snake_case_name(self):
         self.assertFalse(charformat.is_upper_camel_case('Hello_World'))
 
+    def is_upper_camel_case_test_numeric_name(self):
+        self.assertFalse(charformat.is_upper_camel_case('1ello_world'))
 
 if __name__ == '__main__':
     unittest.main()
