@@ -46,3 +46,16 @@ struct invalidStructForCar: Vehicle {
 struct invalid_StructForCar: Vehicle {
     let numberOfWheels = 4
 }
+
+protocol ValidProtocol {
+    // protocol definition goes here
+}
+
+protocol invalidProtocol {
+    // protocol definition goes here
+}
+
+protocol Invalid_Protocol {
+    // protocol definition goes here
+}
+
