@@ -14,7 +14,7 @@ class MainListener(SwiftListener):
         self.__verify_upper_camel_case(ctx, 'Enum case names should be in UpperCamelCase')
 
     def enterStructName(self, ctx):
-        pass
+        self.__verify_upper_camel_case(ctx, 'Struct names should be in UpperCamelCase')
 
     @staticmethod
     def __verify_upper_camel_case(ctx, err_msg):
