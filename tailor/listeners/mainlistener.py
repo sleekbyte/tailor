@@ -16,6 +16,9 @@ class MainListener(SwiftListener):
     def enterStructName(self, ctx):
         self.__verify_upper_camel_case(ctx, 'Struct names should be in UpperCamelCase')
 
+    def enterProtocolName(self, ctx):
+        self.__verify_upper_camel_case(ctx, 'Protocol names should be in UpperCamelCase')
+
     @staticmethod
     def __verify_upper_camel_case(ctx, err_msg):
         construct_name = ctx.getText()
