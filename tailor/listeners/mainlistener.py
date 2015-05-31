@@ -1,5 +1,5 @@
 from tailor.swift.swiftlistener import SwiftListener
-from tailor.utils.charformat import isUpperCamelCase
+from tailor.utils.charformat import is_upper_camel_case
 
 
 class MainListener(SwiftListener):
@@ -19,5 +19,5 @@ class MainListener(SwiftListener):
     @staticmethod
     def __verify_upper_camel_case(ctx, err_msg):
         construct_name = ctx.getText()
-        if not isUpperCamelCase(construct_name):
+        if not is_upper_camel_case(construct_name):
             print('Line', str(ctx.start.line) + ':', err_msg)
