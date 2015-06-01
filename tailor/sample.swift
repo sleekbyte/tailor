@@ -19,6 +19,17 @@ enum Enumeration {
   case Validname
 }
 
+enum Barcode {
+  case UPCA(Int, Int, Int, Int)
+  case QRCode(String)
+}
+
+enum ASCIIControlCharacter: Character {
+    case Tab = "\t"
+    case LineFeed = "\n"
+    case CarriageReturn = "\r"
+}
+
 enum invalidEnum {
   case Nothing
 }
@@ -58,4 +69,3 @@ protocol invalidProtocol {
 protocol Invalid_Protocol {
     // protocol definition goes here
 }
-
