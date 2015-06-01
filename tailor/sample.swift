@@ -46,3 +46,11 @@ struct invalidStructForCar: Vehicle {
 struct invalid_StructForCar: Vehicle {
     let numberOfWheels = 4
 }
+
+func ThisIsNotLowerCase() {
+
+}
+
+func thisIsLowerCase() {
+
+}
