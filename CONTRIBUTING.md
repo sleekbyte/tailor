@@ -25,11 +25,6 @@ script/test
 
 * The ANTLR-executable version of the Swift grammar (based on [The Swift Programming Language: Summary of the Grammar](https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/Swift_Programming_Language/zzSummaryOfTheGrammar.html)) is located at `grammar/Swift.g4`
 * The lexer, parser, and listener generated via ANTLR from the grammar are located in `tailor/swift/`
-* If modifications to the [ANTLR](http://www.antlr.org) grammar are necessary, regenerate the lexer/parser/listener:
-```bash
-script/antlr
-```
-
 * Ensure that all new code is tested via unit tests (`tailor/tests/`) and/or functional tests (`functional_tests/`)
 
 ## Committing Changes
