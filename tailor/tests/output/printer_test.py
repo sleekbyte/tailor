@@ -15,6 +15,9 @@ class MyTestCase(unittest.TestCase):
         self.old_stdout = sys.stdout
         sys.stdout = self.mystdout = StringIO()     # redirect stdout
 
+    def tearDown(self):
+        sys.stdout = self.old_stdout    # restore stdout
+
     def printer_test_warn(self):
         ctx = Mock()
         ctx.start.line = 10
@@ -29,8 +32,6 @@ class MyTestCase(unittest.TestCase):
         self.printer.error(ctx, 'this is an error')
         self.assertRegex(self.mystdout.getvalue(),r'^.+abc\.swift:20:36: error: this is an error')
 
-    def tearDown(self):
-        sys.stdout = self.old_stdout        # restore stdout
 
 if __name__ == '__main__':
     unittest.main()
