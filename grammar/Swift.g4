@@ -242,7 +242,7 @@ defaultArgumentClause : '=' expression  ;
 
 // GRAMMAR OF AN ENUMERATION DECLARATION
 
-enumDeclaration : attributes? 'enum' unionStyleEnum | attributes? rawValueStyleEnum  ;
+enumDeclaration : attributes? 'enum' unionStyleEnum | attributes? 'enum' rawValueStyleEnum  ;
 unionStyleEnum : enumName genericParameterClause?'{' unionStyleEnumMembers?'}'  ;
 unionStyleEnumMembers : unionStyleEnumMember unionStyleEnumMembers? ;
 unionStyleEnumMember : declaration | unionStyleEnumCaseClause  ;

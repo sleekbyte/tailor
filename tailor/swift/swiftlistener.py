@@ -1642,30 +1642,12 @@ class SwiftListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SwiftParser#explicitMemberExpression1.
-    def enterExplicitMemberExpression1(self, ctx):
+    # Enter a parse tree produced by SwiftParser#subscriptExpression.
+    def enterSubscriptExpression(self, ctx):
         pass
 
-    # Exit a parse tree produced by SwiftParser#explicitMemberExpression1.
-    def exitExplicitMemberExpression1(self, ctx):
-        pass
-
-
-    # Enter a parse tree produced by SwiftParser#dynamicTypeExpression.
-    def enterDynamicTypeExpression(self, ctx):
-        pass
-
-    # Exit a parse tree produced by SwiftParser#dynamicTypeExpression.
-    def exitDynamicTypeExpression(self, ctx):
-        pass
-
-
-    # Enter a parse tree produced by SwiftParser#postfixOperation.
-    def enterPostfixOperation(self, ctx):
-        pass
-
-    # Exit a parse tree produced by SwiftParser#postfixOperation.
-    def exitPostfixOperation(self, ctx):
+    # Exit a parse tree produced by SwiftParser#subscriptExpression.
+    def exitSubscriptExpression(self, ctx):
         pass
 
 
@@ -1678,57 +1660,12 @@ class SwiftListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SwiftParser#initializerExpression.
-    def enterInitializerExpression(self, ctx):
+    # Enter a parse tree produced by SwiftParser#dynamicTypeExpression.
+    def enterDynamicTypeExpression(self, ctx):
         pass
 
-    # Exit a parse tree produced by SwiftParser#initializerExpression.
-    def exitInitializerExpression(self, ctx):
-        pass
-
-
-    # Enter a parse tree produced by SwiftParser#subscriptExpression.
-    def enterSubscriptExpression(self, ctx):
-        pass
-
-    # Exit a parse tree produced by SwiftParser#subscriptExpression.
-    def exitSubscriptExpression(self, ctx):
-        pass
-
-
-    # Enter a parse tree produced by SwiftParser#forcedValueExpression.
-    def enterForcedValueExpression(self, ctx):
-        pass
-
-    # Exit a parse tree produced by SwiftParser#forcedValueExpression.
-    def exitForcedValueExpression(self, ctx):
-        pass
-
-
-    # Enter a parse tree produced by SwiftParser#explicitMemberExpression2.
-    def enterExplicitMemberExpression2(self, ctx):
-        pass
-
-    # Exit a parse tree produced by SwiftParser#explicitMemberExpression2.
-    def exitExplicitMemberExpression2(self, ctx):
-        pass
-
-
-    # Enter a parse tree produced by SwiftParser#functionCallExpression.
-    def enterFunctionCallExpression(self, ctx):
-        pass
-
-    # Exit a parse tree produced by SwiftParser#functionCallExpression.
-    def exitFunctionCallExpression(self, ctx):
-        pass
-
-
-    # Enter a parse tree produced by SwiftParser#postfixSelfExpression.
-    def enterPostfixSelfExpression(self, ctx):
-        pass
-
-    # Exit a parse tree produced by SwiftParser#postfixSelfExpression.
-    def exitPostfixSelfExpression(self, ctx):
+    # Exit a parse tree produced by SwiftParser#dynamicTypeExpression.
+    def exitDynamicTypeExpression(self, ctx):
         pass
 
 
@@ -1741,12 +1678,75 @@ class SwiftListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by SwiftParser#forcedValueExpression.
+    def enterForcedValueExpression(self, ctx):
+        pass
+
+    # Exit a parse tree produced by SwiftParser#forcedValueExpression.
+    def exitForcedValueExpression(self, ctx):
+        pass
+
+
+    # Enter a parse tree produced by SwiftParser#explicitMemberExpression1.
+    def enterExplicitMemberExpression1(self, ctx):
+        pass
+
+    # Exit a parse tree produced by SwiftParser#explicitMemberExpression1.
+    def exitExplicitMemberExpression1(self, ctx):
+        pass
+
+
     # Enter a parse tree produced by SwiftParser#optionalChainingExpression.
     def enterOptionalChainingExpression(self, ctx):
         pass
 
     # Exit a parse tree produced by SwiftParser#optionalChainingExpression.
     def exitOptionalChainingExpression(self, ctx):
+        pass
+
+
+    # Enter a parse tree produced by SwiftParser#functionCallExpression.
+    def enterFunctionCallExpression(self, ctx):
+        pass
+
+    # Exit a parse tree produced by SwiftParser#functionCallExpression.
+    def exitFunctionCallExpression(self, ctx):
+        pass
+
+
+    # Enter a parse tree produced by SwiftParser#postfixOperation.
+    def enterPostfixOperation(self, ctx):
+        pass
+
+    # Exit a parse tree produced by SwiftParser#postfixOperation.
+    def exitPostfixOperation(self, ctx):
+        pass
+
+
+    # Enter a parse tree produced by SwiftParser#postfixSelfExpression.
+    def enterPostfixSelfExpression(self, ctx):
+        pass
+
+    # Exit a parse tree produced by SwiftParser#postfixSelfExpression.
+    def exitPostfixSelfExpression(self, ctx):
+        pass
+
+
+    # Enter a parse tree produced by SwiftParser#explicitMemberExpression2.
+    def enterExplicitMemberExpression2(self, ctx):
+        pass
+
+    # Exit a parse tree produced by SwiftParser#explicitMemberExpression2.
+    def exitExplicitMemberExpression2(self, ctx):
+        pass
+
+
+    # Enter a parse tree produced by SwiftParser#initializerExpression.
+    def enterInitializerExpression(self, ctx):
+        pass
+
+    # Exit a parse tree produced by SwiftParser#initializerExpression.
+    def exitInitializerExpression(self, ctx):
         pass
 
 
