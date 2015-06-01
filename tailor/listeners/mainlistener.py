@@ -9,4 +9,4 @@ class MainListener(SwiftListener):
     def enterClassName(self, ctx):
         className = ctx.getText()
         if not isUpperCamelCase(className):
-            self.__printer.warn(ctx, 'Class Names should be in UpperCamelCase')
+            self.__printer.error(ctx, 'Class names should be in UpperCamelCase')

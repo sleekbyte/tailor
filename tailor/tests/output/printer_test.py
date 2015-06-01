@@ -1,9 +1,10 @@
+import sys
 import unittest
+
+from io import StringIO
 from unittest.mock import Mock
 
 from tailor.output.printer import Printer
-from io import StringIO
-import sys
 
 
 class MyTestCase(unittest.TestCase):
