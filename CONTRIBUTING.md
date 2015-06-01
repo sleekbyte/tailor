@@ -42,14 +42,21 @@ script/test
 
 ## Creating a Pull Request (PR)
 
+### Naming a Branch
+
 * Create feature branches off of `master` with the naming convention: `aa-feature-description`, where `aa` are your initials and `feature-description` is a descriptive phrase that describes your feature
 * Ensure branch names always use lower case letters, with hyphens to separate words, never underscores
+
+### Submitting a PR
 
 * Once your feature is complete, push your branch to GitHub and open a PR
 * PRs should be based on your branch name with your initials removed and the name capitalized, i.e. `aa-feature-description` will become "Feature description"
 * If your PR shadows an issue, match the label and milestone to that issue
 * Assign a primary reviewer when opening your PR, and have at least 2 people endorse your request
 * If you are waiting for a second reviewer, you may reassign the PR to another contributor
+
+### Closing a PR
+
 * Once you have received two :+1:s and the [Travis CI](https://magnum.travis-ci.com/alykhank/tailor) build has passed, you are responsible for merging your branch into `master` and subsequently deleting it from the remote
 * When merging your branch, refer to the issue at the beginning of the commit description (e.g. "Fix #4: Integrate Travis CI")
 
