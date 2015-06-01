@@ -55,6 +55,10 @@ enum UpperCamelCase {
   case foo
 }
 
+enum Planet {
+    case Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune
+}
+
 enum Num3ricalNameCare{
   case foo
 }
