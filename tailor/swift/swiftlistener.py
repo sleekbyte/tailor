@@ -769,6 +769,15 @@ class SwiftListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by SwiftParser#enumDef.
+    def enterEnumDef(self, ctx):
+        pass
+
+    # Exit a parse tree produced by SwiftParser#enumDef.
+    def exitEnumDef(self, ctx):
+        pass
+
+
     # Enter a parse tree produced by SwiftParser#unionStyleEnum.
     def enterUnionStyleEnum(self, ctx):
         pass
