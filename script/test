@@ -1,0 +1,10 @@
+#!/bin/sh
+# Usage: script/test
+# Activates virtualenv and runs tests.
+
+set -e
+
+# Activate virtualenv
+[[ -f venv/bin/activate ]] && source venv/bin/activate
+# Run tests in tailor/tests/
+nosetests
