@@ -1,0 +1,17 @@
+Line 3: Class names should be in UpperCamelCase
+Line 7: Class names should be in UpperCamelCase
+Line 24: Enum case names should be in UpperCamelCase
+Line 25: Enum case names should be in UpperCamelCase
+Line 26: Enum case names should be in UpperCamelCase
+Line 42: Enum names should be in UpperCamelCase
+Line 43: Enum case names should be in UpperCamelCase
+Line 46: Enum names should be in UpperCamelCase
+Line 47: Enum case names should be in UpperCamelCase
+Line 50: Enum names should be in UpperCamelCase
+Line 55: Enum case names should be in UpperCamelCase
+Line 59: Enum case names should be in UpperCamelCase
+Line 68: Struct names should be in UpperCamelCase
+Line 72: Struct names should be in UpperCamelCase
+Line 86: Protocol names should be in UpperCamelCase
+Line 90: Protocol names should be in UpperCamelCase
+Line 94: Protocol names should be in UpperCamelCase
