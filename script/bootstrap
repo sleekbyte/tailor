@@ -14,3 +14,5 @@ hash python3 2>/dev/null || brew install python3
 pip --quiet install --upgrade pip
 # Install required development modules
 pip --quiet install --requirement requirements-dev.txt
+# Install Git pre-commit hooks using http://pre-commit.com
+pre-commit install
