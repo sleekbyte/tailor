@@ -1,0 +1,24 @@
+#!/bin/sh
+# Usage: script/antlr
+# Install and execute ANTLR Tool.
+
+set -e
+
+# Installs ANTLR
+if [[ ! -f /usr/local/lib/antlr-4.5-complete.jar ]]; then
+  cd /usr/local/lib
+  curl -O http://www.antlr.org/download/antlr-4.5-complete.jar
+fi
+
+# Generates the Swift lexer, parser, and listener
+pushd . >/dev/null
+cd grammar
+java -jar /usr/local/lib/antlr-4.5-complete.jar -Dlanguage=Python3 Swift.g4 -o ../tailor/swift/
+popd >/dev/null
+
+# Removes ANTLR-generated tokens
+rm tailor/swift/*.tokens
+
+# Downcase reference to SwiftListener module in swiftparser.py
+sed -i.bak 's/\.SwiftListener/\.swiftlistener/' tailor/swift/swiftparser.py
+rm tailor/swift/swiftparser.py.bak
