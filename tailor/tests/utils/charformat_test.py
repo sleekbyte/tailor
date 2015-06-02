@@ -22,6 +22,15 @@ class MyTestCase(unittest.TestCase):
     def is_upper_camel_case_test_special_character_name(self):
         self.assertFalse(charformat.is_upper_camel_case('!ello_world'))
 
+    def is_lower_camel_case_test_invalid_lower_camel_case(self):
+        self.assertFalse(charformat.is_lower_camel_case(''))
+        self.assertFalse(charformat.is_lower_camel_case('_notLowerCamelCase'))
+        self.assertFalse(charformat.is_lower_camel_case('NotLowerCamelCase'))
+        self.assertFalse(charformat.is_lower_camel_case('not_lower_camel_case'))
+
+    def is_lower_camel_case_test_valid_lower_camel_case(self):
+        self.assertTrue(charformat.is_lower_camel_case('isLowerCamelCase'))
+        self.assertTrue(charformat.is_lower_camel_case('isLow3rCam3lCas3'))
 
 if __name__ == '__main__':
     unittest.main()
