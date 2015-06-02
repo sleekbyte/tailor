@@ -12,10 +12,7 @@ class MainListener(SwiftListener):
     def enterFunctionName(self, ctx):
         self.__verify_lower_camel_case(ctx, 'Function names should be in lowerCamelCase')
 
-    def enterVariableDeclaration(self, ctx):
-        self.__verify_lower_camel_case(ctx, 'Variable names should be in lowerCamelCase')
-
-    def enterVariableName(self, ctx):
+    def enterPatternInitializer(self, ctx):
         self.__verify_lower_camel_case(ctx, 'Variable names should be in lowerCamelCase')
 
     def enterEnumName(self, ctx):

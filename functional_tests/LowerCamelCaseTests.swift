@@ -6,8 +6,6 @@ func isLowerCamelCase() {
 }
 
 func is_not_Lower_Camel_Case() {
-    var _incorrect = 0
+    var _incorrect = 0, _alsoIncorrect = 0
     var incorrect_name = 0
-    _incorrect = 11
-    incorrect_name = 11
 }
