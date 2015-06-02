@@ -12,6 +12,9 @@ class MainListener(SwiftListener):
     def enterFunctionName(self, ctx):
         self.__verify_lower_camel_case(ctx, 'Function names should be in lowerCamelCase')
 
+    def enterVariableDeclaration(self, ctx):
+        self.__verify_lower_camel_case(ctx, 'Variable names should be in lowerCamelCase')
+
     def enterVariableName(self, ctx):
         self.__verify_lower_camel_case(ctx, 'Variable names should be in lowerCamelCase')
 
@@ -32,7 +35,7 @@ class MainListener(SwiftListener):
         if not is_upper_camel_case(construct_name):
             self.__printer.error(ctx, err_msg)
 
-    def __verify_lower_camel_case(ctx, err_msg):
+    def __verify_lower_camel_case(self, ctx, err_msg):
         name = ctx.getText()
         if not is_lower_camel_case(name):
             self.__printer.error(ctx, err_msg)
