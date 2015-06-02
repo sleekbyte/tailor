@@ -16,3 +16,4 @@ pip --quiet install --upgrade pip
 pip --quiet install --requirement requirements-dev.txt
 # Install Git pre-commit hooks using http://pre-commit.com
 pre-commit install
+pre-commit autoupdate
