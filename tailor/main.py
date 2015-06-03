@@ -11,6 +11,7 @@ from tailor.output.printer import Printer
 from tailor.swift.swiftlexer import SwiftLexer
 from tailor.swift.swiftparser import SwiftParser
 
+
 def main(argv):
     input = FileStream(argv[1])
     printer = Printer(filepath=argv[1])

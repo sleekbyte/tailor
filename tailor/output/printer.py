@@ -1,5 +1,6 @@
 import os
 
+
 class Printer:
 
     def __init__(self, filepath):

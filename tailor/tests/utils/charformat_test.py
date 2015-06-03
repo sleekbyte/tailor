@@ -2,6 +2,7 @@ import unittest
 
 from tailor.utils import charformat
 
+
 class MyTestCase(unittest.TestCase):
 
     def is_upper_camel_case_test_upper_camel_case_name(self):
