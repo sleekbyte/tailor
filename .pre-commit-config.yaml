@@ -12,7 +12,7 @@
         exclude: tailor/swift/
     -   id: flake8
         exclude: tailor/swift/
-        args: [--max-line-length=120, --max-complexity=10]
+        args: [--max-complexity=10]
     -   id: name-tests-test
     -   id: trailing-whitespace
         exclude: tailor/swift/
