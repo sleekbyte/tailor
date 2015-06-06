@@ -22,6 +22,7 @@ pushd . >/dev/null
 cd grammar
 antlr4 Swift.g4 -o "$ANTLR_OUT"
 popd >/dev/null
+
 # Compile generated source and launch grun TestRig
 pushd . >/dev/null
 cd "$ANTLR_OUT"
