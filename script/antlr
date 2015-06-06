@@ -5,15 +5,12 @@
 set -e
 
 # Installs ANTLR
-if [[ ! -f /usr/local/lib/antlr-4.5-complete.jar ]]; then
-  cd /usr/local/lib
-  curl -O http://www.antlr.org/download/antlr-4.5-complete.jar
-fi
+hash antlr4 2>/dev/null || brew install antlr
 
 # Generates the Swift lexer, parser, and listener
 pushd . >/dev/null
 cd grammar
-java -jar /usr/local/lib/antlr-4.5-complete.jar -Dlanguage=Python3 Swift.g4 -o ../tailor/swift/
+antlr4 -Dlanguage=Python3 Swift.g4 -o ../tailor/swift/
 popd >/dev/null
 
 # Removes ANTLR-generated tokens
