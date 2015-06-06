@@ -5,7 +5,7 @@
 set -e
 
 # Activate virtualenv if deactivated
-[[ -n $VIRTUAL_ENV ]] || { [[ -f venv/bin/activate ]] && source venv/bin/activate; }
+[ ${VIRTUAL_ENV} ] || { [ -f venv/bin/activate ] && source venv/bin/activate; }
 # Execute test script
 script/test
 # Run pre-commit hooks on all files
