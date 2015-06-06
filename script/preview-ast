@@ -28,3 +28,6 @@ cd "$ANTLR_OUT"
 javac -classpath ".:/usr/local/Cellar/antlr/4.5/antlr-4.5-complete.jar:$CLASSPATH" *.java
 grun Swift topLevel -gui "$SWIFT_SRC"
 popd >/dev/null
+
+# Remove ANTLR output directory
+rm -r "$ANTLR_OUT"
