@@ -1,8 +1,8 @@
 import os
 import sys
 
-parent_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
-sys.path.append(parent_path)
+PARENT_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..')
+sys.path.append(PARENT_PATH)
 
 from antlr4 import FileStream, CommonTokenStream, ParseTreeWalker
 
@@ -13,9 +13,9 @@ from tailor.swift.swiftparser import SwiftParser
 
 
 def main(argv):
-    input = FileStream(argv[1])
+    infile = FileStream(argv[1])
     printer = Printer(filepath=argv[1])
-    lexer = SwiftLexer(input)
+    lexer = SwiftLexer(infile)
     stream = CommonTokenStream(lexer)
     parser = SwiftParser(stream)
     tree = parser.topLevel()
