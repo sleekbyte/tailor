@@ -5,7 +5,7 @@
 set -e
 
 # Installs ANTLR
-if [[ ! -f /usr/local/lib/antlr-4.5-complete.jar ]]; then
+if [ ! -f /usr/local/lib/antlr-4.5-complete.jar ]; then
   cd /usr/local/lib
   curl -O http://www.antlr.org/download/antlr-4.5-complete.jar
 fi
