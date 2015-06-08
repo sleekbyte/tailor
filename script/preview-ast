@@ -15,9 +15,8 @@ hash antlr4 2>/dev/null || brew install antlr
 
 # Variables
 SWIFT_SRC=$( cd "$( dirname "$1" )" && pwd -P )/$( basename "$1" )
-DEFAULT_START_RULE=“topLevel”
+DEFAULT_START_RULE="topLevel"
 START_RULE=${2:-$DEFAULT_START_RULE}
-echo "$START_RULE"
 ANTLR_OUT=$(mktemp -d -t antlr-out)
 
 # Generate the Swift lexer, parser, and listener
