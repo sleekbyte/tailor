@@ -23,14 +23,16 @@ class MyTestCase(unittest.TestCase):
         ctx.start.line = 10
         ctx.start.column = 42
         self.printer.warn(ctx, 'this is a warning')
-        self.assertRegex(self.mystdout.getvalue(), r'^.+abc\.swift:10:42: warning: this is a warning')
+        self.assertRegex(self.mystdout.getvalue(),
+                         r'^.+abc\.swift:10:42: warning: this is a warning')
 
     def printer_test_error(self):
         ctx = Mock()
         ctx.start.line = 20
         ctx.start.column = 36
         self.printer.error(ctx, 'this is an error')
-        self.assertRegex(self.mystdout.getvalue(),r'^.+abc\.swift:20:36: error: this is an error')
+        self.assertRegex(self.mystdout.getvalue(),
+                         r'^.+abc\.swift:20:36: error: this is an error')
 
 
 if __name__ == '__main__':

@@ -1,5 +1,6 @@
 import os
 
+
 class Printer:
 
     def __init__(self, filepath):
@@ -12,5 +13,5 @@ class Printer:
         self.__print(ctx, 'error', err_msg)
 
     def __print(self, ctx, classification, message):
-        print(self.__filepath + ':' + str(ctx.start.line) + ':' + str(ctx.start.column) + ': ' + classification + ': '
-              + message)
+        print(self.__filepath + ':' + str(ctx.start.line) + ':' +
+              str(ctx.start.column) + ': ' + classification + ': ' + message)

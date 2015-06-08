@@ -1,0 +1,36 @@
+#!/bin/sh
+# Usage: script/preview-ast
+# Generates visual parse tree of a supplied Swift source file.
+
+set -e
+
+# Accept only 1 or 2 input
+if [ $# -lt 1 -o $# -gt 2 ]; then
+  >&2 echo "usage: $0 swift_source_file [start_rule]"
+  exit 1
+fi
+
+# Install ANTLR
+hash antlr4 2>/dev/null || brew install antlr
+
+# Variables
+SWIFT_SRC=$( cd "$( dirname "$1" )" && pwd -P )/$( basename "$1" )
+DEFAULT_START_RULE="topLevel"
+START_RULE=${2:-$DEFAULT_START_RULE}
+ANTLR_OUT=$(mktemp -d -t antlr-out)
+
+# Generate the Swift lexer, parser, and listener
+pushd . >/dev/null
+cd grammar
+antlr4 Swift.g4 -o "$ANTLR_OUT"
+popd >/dev/null
+
+# Compile generated source and launch grun TestRig
+pushd . >/dev/null
+cd "$ANTLR_OUT"
+javac -classpath ".:/usr/local/Cellar/antlr/4.5/antlr-4.5-complete.jar:$CLASSPATH" *.java
+grun Swift "$START_RULE" -gui "$SWIFT_SRC"
+popd >/dev/null
+
+# Remove ANTLR output directory
+rm -r "$ANTLR_OUT"

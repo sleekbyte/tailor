@@ -20,6 +20,7 @@ script/test
 ```
 
 * Please set up [EditorConfig](http://editorconfig.org) for your editor to automatically comply with the `.editorconfig`
+* You should run `script/bootstrap` every time you pull changes to ensure that you have the latest dependencies and updates
 
 ## Developing
 
@@ -31,6 +32,10 @@ script/antlr
 ```
 
 * Ensure that all new code is tested via unit tests (`tailor/tests/`) and/or functional tests (`functional_tests/`)
+* Verify that your changes pass all tests and comply with the project's style guidelines:
+```bash
+script/cibuild
+```
 
 ## Committing Changes
 

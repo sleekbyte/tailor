@@ -8,19 +8,24 @@ class MainListener(SwiftListener):
         self.__printer = printer
 
     def enterClassName(self, ctx):
-        self.__verify_upper_camel_case(ctx, 'Class names should be in UpperCamelCase')
+        self.__verify_upper_camel_case(
+            ctx, 'Class names should be in UpperCamelCase')
 
     def enterEnumName(self, ctx):
-        self.__verify_upper_camel_case(ctx, 'Enum names should be in UpperCamelCase')
+        self.__verify_upper_camel_case(
+            ctx, 'Enum names should be in UpperCamelCase')
 
     def enterEnumCaseName(self, ctx):
-        self.__verify_upper_camel_case(ctx, 'Enum case names should be in UpperCamelCase')
+        self.__verify_upper_camel_case(
+            ctx, 'Enum case names should be in UpperCamelCase')
 
     def enterStructName(self, ctx):
-        self.__verify_upper_camel_case(ctx, 'Struct names should be in UpperCamelCase')
+        self.__verify_upper_camel_case(
+            ctx, 'Struct names should be in UpperCamelCase')
 
     def enterProtocolName(self, ctx):
-        self.__verify_upper_camel_case(ctx, 'Protocol names should be in UpperCamelCase')
+        self.__verify_upper_camel_case(
+            ctx, 'Protocol names should be in UpperCamelCase')
 
     # TODO: Aditya - Remove commented code
     def enterStatement(self, ctx):
