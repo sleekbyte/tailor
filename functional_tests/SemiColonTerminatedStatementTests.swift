@@ -5,13 +5,22 @@ println("Hello, World!")
 // Class examples
 
 class lowerCamelCase {
-    var x: String = "hello"
+    var x: String = "hello";
+    let b = 2;
 
     func demo()
     {
         for var x = 0; ; {
             print(x);
         };
-    }
+
+        if temperatureInFahrenheit <= 32 {
+            println("It's very cold. Consider wearing a scarf.");
+        } else if temperatureInFahrenheit >= 86 {
+            println("It's really warm. Don't forget to wear sunscreen.");
+        } else {
+            println("It's not that cold. Wear a t-shirt.");
+        }
+    };
 };
 
