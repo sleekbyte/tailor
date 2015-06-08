@@ -45,6 +45,9 @@ class MainListener(SwiftListener):
     def enterControlTransferStatement(self, ctx):
         self.__verify_not_semicolon_terminated(ctx)
 
+    def enterUnionStyleEnumMember(self, ctx):
+        self.__verify_not_semicolon_terminated(ctx)
+
     def __verify_upper_camel_case(self, ctx, err_msg):
         construct_name = ctx.getText()
         if not is_upper_camel_case(construct_name):

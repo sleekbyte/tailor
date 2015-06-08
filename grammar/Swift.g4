@@ -246,7 +246,7 @@ enumDeclaration : attributes? 'enum' enumDef  ;
 enumDef: unionStyleEnum | rawValueStyleEnum  ;
 unionStyleEnum : enumName genericParameterClause?'{' unionStyleEnumMembers?'}'  ;
 unionStyleEnumMembers : unionStyleEnumMember unionStyleEnumMembers? ;
-unionStyleEnumMember : declaration | unionStyleEnumCaseClause  ;
+unionStyleEnumMember : declaration | unionStyleEnumCaseClause ';'? ;
 unionStyleEnumCaseClause : attributes? 'case' unionStyleEnumCaseList  ;
 unionStyleEnumCaseList : unionStyleEnumCase | unionStyleEnumCase ',' unionStyleEnumCaseList  ;
 unionStyleEnumCase : enumCaseName tupleType? ;
