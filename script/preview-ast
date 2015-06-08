@@ -4,9 +4,9 @@
 
 set -e
 
-# Quit if no input
-if [ $# -ne 2 ]; then
-  >&2 echo "usage: $0 swift_source_file start_rule"
+# Accept only 1 or 2 input
+if [ $# -le 0 -o $# -ge 3 ]; then
+  >&2 echo "usage: $0 swift_source_file [start_rule]"
   exit 1
 fi
 
@@ -15,7 +15,9 @@ hash antlr4 2>/dev/null || brew install antlr
 
 # Variables
 SWIFT_SRC=$( cd "$( dirname "$1" )" && pwd -P )/$( basename "$1" )
-START_RULE="$2"
+DEFAULT_START_RULE=“topLevel”
+START_RULE=${2:-$DEFAULT_START_RULE}
+echo "$START_RULE"
 ANTLR_OUT=$(mktemp -d -t antlr-out)
 
 # Generate the Swift lexer, parser, and listener
