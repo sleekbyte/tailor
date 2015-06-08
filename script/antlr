@@ -1,19 +1,19 @@
 #!/bin/sh
 # Usage: script/antlr
-# Install and execute ANTLR Tool.
+# Installs and executes ANTLR Tool.
 
 set -e
 
-# Installs ANTLR
+# Install ANTLR
 hash antlr4 2>/dev/null || brew install antlr
 
-# Generates the Swift lexer, parser, and listener
+# Generate the Swift lexer, parser, and listener
 pushd . >/dev/null
 cd grammar
 antlr4 -Dlanguage=Python3 Swift.g4 -o ../tailor/swift/
 popd >/dev/null
 
-# Removes ANTLR-generated tokens
+# Remove ANTLR-generated tokens
 rm tailor/swift/*.tokens
 
 # Downcase reference to SwiftListener module in swiftparser.py

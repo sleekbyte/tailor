@@ -6,11 +6,11 @@ set -e
 
 # Quit if no input
 if [ $# -ne 1 ]; then
-  echo "usage: $0 <swift source file>"
-  exit
+  >&2 echo "usage: $0 swift_source_file"
+  exit 1
 fi
 
-# Installs ANTLR
+# Install ANTLR
 hash antlr4 2>/dev/null || brew install antlr
 
 # Variables
