@@ -2,6 +2,13 @@ import Foundation;
 
 println("Hello, World!")
 
+enum CompassPoint {
+    case North;
+    case South;
+    case East;
+    case West;
+};
+
 // Class examples
 
 class lowerCamelCase {
