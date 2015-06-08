@@ -27,33 +27,25 @@ class MainListener(SwiftListener):
         self.__verify_upper_camel_case(
             ctx, 'Protocol names should be in UpperCamelCase')
 
-    # TODO: Aditya - Remove commented code
     def enterStatement(self, ctx):
-        # print("STATEMENT: " + ctx.getText() + "\n")
         self.__verify_not_semicolon_terminated(ctx)
 
     def enterDeclaration(self, ctx):
-        # print("DEC: " + ctx.getText() + "\n")
         self.__verify_not_semicolon_terminated(ctx)
 
     def enterLoopStatement(self, ctx):
-        # print("LOOP: " + ctx.getText() + "\n")
         self.__verify_not_semicolon_terminated(ctx)
 
     def enterBranchStatement(self, ctx):
-        # print("BRANCH: " + ctx.getText() + "\n")
         self.__verify_not_semicolon_terminated(ctx)
 
     def enterLabeledStatement(self, ctx):
-        # print("LABELED: " + ctx.getText() + "\n")
         self.__verify_not_semicolon_terminated(ctx)
 
     def enterControlTransferStatement(self, ctx):
-        # print("CONTROL TRANSFER: " + ctx.getText() + "\n")
         self.__verify_not_semicolon_terminated(ctx)
 
-
-    def  __verify_upper_camel_case(self, ctx, err_msg):
+    def __verify_upper_camel_case(self, ctx, err_msg):
         construct_name = ctx.getText()
         if not is_upper_camel_case(construct_name):
             self.__printer.error(ctx, err_msg)
@@ -61,4 +53,5 @@ class MainListener(SwiftListener):
     def __verify_not_semicolon_terminated(self, ctx):
         line = ctx.getText()
         if line.endswith(';'):
-            self.__printer.error(ctx, 'Statement should not terminate with a semicolon ')
+            self.__printer.error(
+                ctx, 'Statement should not terminate with a semicolon')
