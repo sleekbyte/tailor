@@ -5,7 +5,7 @@
 set -e
 
 # Accept only 1 or 2 input
-if [ $# -le 0 -o $# -ge 3 ]; then
+if [ $# -lt 1 -o $# -gt 2 ]; then
   >&2 echo "usage: $0 swift_source_file [start_rule]"
   exit 1
 fi
