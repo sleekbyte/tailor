@@ -5,8 +5,8 @@
 set -e
 
 # Quit if no input
-if [ $# -ne 1 ]; then
-  >&2 echo "usage: $0 swift_source_file"
+if [ $# -ne 2 ]; then
+  >&2 echo "usage: $0 swift_source_file start_rule"
   exit 1
 fi
 
@@ -15,6 +15,7 @@ hash antlr4 2>/dev/null || brew install antlr
 
 # Variables
 SWIFT_SRC=$( cd "$( dirname "$1" )" && pwd -P )/$( basename "$1" )
+START_RULE="$2"
 ANTLR_OUT=$(mktemp -d -t antlr-out)
 
 # Generate the Swift lexer, parser, and listener
@@ -27,7 +28,7 @@ popd >/dev/null
 pushd . >/dev/null
 cd "$ANTLR_OUT"
 javac -classpath ".:/usr/local/Cellar/antlr/4.5/antlr-4.5-complete.jar:$CLASSPATH" *.java
-grun Swift topLevel -gui "$SWIFT_SRC"
+grun Swift "$START_RULE" -gui "$SWIFT_SRC"
 popd >/dev/null
 
 # Remove ANTLR output directory
