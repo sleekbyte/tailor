@@ -223,7 +223,7 @@ typealiasAssignment : '=' sType  ;
 
 // GRAMMAR OF A FUNCTION DECLARATION
 
-functionDeclaration : functionHead functionName genericParameterClause? functionSignature functionBody  ;
+functionDeclaration : functionHead functionName genericParameterClause? functionSignature functionBody  ';'? ;
 functionHead : attributes? declarationSpecifiers? 'func'  ;
 functionName : identifier |  operator  ;
 functionSignature : parameterClauses functionResult? ;
@@ -417,7 +417,7 @@ expressionList : expression (',' expression)* ;
 expression : prefixExpression binaryExpression* ;
 
 prefixExpression
-  : prefixOperator? postfixExpression
+  : prefixOperator? postfixExpression ';'?
   | inOutExpression
   ;
 
