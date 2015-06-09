@@ -1,3 +1,6 @@
+"""Perform static analysis on a Swift source file."""
+
+import argparse
 import os
 import sys
 
@@ -12,10 +15,20 @@ from tailor.swift.swiftlexer import SwiftLexer
 from tailor.swift.swiftparser import SwiftParser
 
 
-def main(argv):
-    infile = FileStream(argv[1])
-    printer = Printer(filepath=argv[1])
-    lexer = SwiftLexer(infile)
+def parse_args():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('infile', type=os.path.abspath,
+                        help='Swift source file')
+    parser.add_argument('-l', '--max-lines', type=int, default=0,
+                        help='maximum file line length')
+    return parser.parse_args()
+
+
+def main():
+    args = parse_args()
+
+    printer = Printer(filepath=args.infile)
+    lexer = SwiftLexer(FileStream(args.infile))
     stream = CommonTokenStream(lexer)
     parser = SwiftParser(stream)
     tree = parser.topLevel()
@@ -25,4 +38,4 @@ def main(argv):
 
 
 if __name__ == '__main__':
-    main(sys.argv)
+    main()
