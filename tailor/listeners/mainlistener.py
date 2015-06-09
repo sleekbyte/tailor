@@ -30,4 +30,4 @@ class MainListener(SwiftListener):
     def __verify_upper_camel_case(self, ctx, err_msg):
         construct_name = ctx.getText()
         if not is_upper_camel_case(construct_name):
-            self.__printer.error(ctx, err_msg)
+            self.__printer.error(err_msg, ctx)

@@ -10,6 +10,7 @@ sys.path.append(PARENT_PATH)
 from antlr4 import FileStream, CommonTokenStream, ParseTreeWalker
 
 from tailor.listeners.mainlistener import MainListener
+from tailor.listeners.filelistener import FileListener
 from tailor.output.printer import Printer
 from tailor.swift.swiftlexer import SwiftLexer
 from tailor.swift.swiftparser import SwiftParser
@@ -36,6 +37,8 @@ def main():
     walker = ParseTreeWalker()
     walker.walk(listener, tree)
 
+    file_listener = FileListener(printer, args.infile)
+    file_listener.verify(max_lines=args.max_lines)
 
 if __name__ == '__main__':
     main()
