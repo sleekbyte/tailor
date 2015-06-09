@@ -9,6 +9,13 @@ enum CompassPoint {
     case West;
 };
 
+protocol SomeProtocol {
+    var fullName: String { get };
+    func demo();
+    func dummy(f: Int);
+    func foo(bar: String, baz: Double);
+};
+
 // Class examples
 
 class lowerCamelCase {

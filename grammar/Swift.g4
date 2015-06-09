@@ -277,11 +277,11 @@ classBody : '{' declarations? '}'  ;
 protocolDeclaration : attributes? 'protocol' protocolName typeInheritanceClause? protocolBody  ;
 protocolName : identifier  ;
 protocolBody : '{' protocolMemberDeclarations?'}'  ;
-protocolMemberDeclaration : protocolPropertyDeclaration
- | protocolMethodDeclaration
- | protocolInitializerDeclaration
- | protocolSubscriptDeclaration
- | protocolAssociatedTypeDeclaration
+protocolMemberDeclaration : protocolPropertyDeclaration ';'?
+ | protocolMethodDeclaration ';'?
+ | protocolInitializerDeclaration ';'?
+ | protocolSubscriptDeclaration ';'?
+ | protocolAssociatedTypeDeclaration ';'?
  ;
 protocolMemberDeclarations : protocolMemberDeclaration protocolMemberDeclarations? ;
 
