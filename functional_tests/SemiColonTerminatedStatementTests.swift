@@ -16,7 +16,30 @@ protocol SomeProtocol {
     func foo(bar: String, baz: Double);
 };
 
+extension SomeType {
+    // new functionality to add to SomeType goes here
+};
 
+struct DemoStruct {
+    var x: String;
+
+    func test() {
+        // while loop test
+        while (true)
+        {
+        };
+
+        // for loop
+        for ; ; {
+
+        };
+
+        // do while
+        do {
+
+        } while (true);
+    };
+};
 
 // Class examples
 
