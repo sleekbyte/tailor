@@ -153,20 +153,20 @@ genericArgument : sType  ;
 // GRAMMAR OF A DECLARATION
 
 declaration
- : importDeclaration
- | constantDeclaration
- | variableDeclaration
- | typealiasDeclaration
- | functionDeclaration
- | enumDeclaration
- | structDeclaration
- | classDeclaration
- | protocolDeclaration
- | initializerDeclaration
- | deinitializerDeclaration
- | extensionDeclaration
- | subscriptDeclaration
- | operatorDeclaration
+ : importDeclaration ';'?
+ | constantDeclaration ';'?
+ | variableDeclaration ';'?
+ | typealiasDeclaration ';'?
+ | functionDeclaration ';'?
+ | enumDeclaration ';'?
+ | structDeclaration ';'?
+ | classDeclaration ';'?
+ | protocolDeclaration ';'?
+ | initializerDeclaration ';'?
+ | deinitializerDeclaration ';'?
+ | extensionDeclaration ';'?
+ | subscriptDeclaration ';'?
+ | operatorDeclaration ';'?
  ;
 
 declarations : declaration declarations? ;
@@ -223,7 +223,7 @@ typealiasAssignment : '=' sType  ;
 
 // GRAMMAR OF A FUNCTION DECLARATION
 
-functionDeclaration : functionHead functionName genericParameterClause? functionSignature functionBody  ';'? ;
+functionDeclaration : functionHead functionName genericParameterClause? functionSignature functionBody ;
 functionHead : attributes? declarationSpecifiers? 'func'  ;
 functionName : identifier |  operator  ;
 functionSignature : parameterClauses functionResult? ;

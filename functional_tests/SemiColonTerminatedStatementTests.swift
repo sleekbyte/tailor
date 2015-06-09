@@ -16,6 +16,8 @@ protocol SomeProtocol {
     func foo(bar: String, baz: Double);
 };
 
+
+
 // Class examples
 
 class lowerCamelCase {
