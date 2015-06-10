@@ -153,20 +153,20 @@ genericArgument : sType  ;
 // GRAMMAR OF A DECLARATION
 
 declaration
- : importDeclaration
- | constantDeclaration
- | variableDeclaration
- | typealiasDeclaration
- | functionDeclaration
- | enumDeclaration
- | structDeclaration
- | classDeclaration
- | protocolDeclaration
- | initializerDeclaration
- | deinitializerDeclaration
- | extensionDeclaration
- | subscriptDeclaration
- | operatorDeclaration
+ : importDeclaration ';'?
+ | constantDeclaration ';'?
+ | variableDeclaration ';'?
+ | typealiasDeclaration ';'?
+ | functionDeclaration ';'?
+ | enumDeclaration ';'?
+ | structDeclaration ';'?
+ | classDeclaration ';'?
+ | protocolDeclaration ';'?
+ | initializerDeclaration ';'?
+ | deinitializerDeclaration ';'?
+ | extensionDeclaration ';'?
+ | subscriptDeclaration ';'?
+ | operatorDeclaration ';'?
  ;
 
 declarations : declaration declarations? ;
@@ -223,7 +223,7 @@ typealiasAssignment : '=' sType  ;
 
 // GRAMMAR OF A FUNCTION DECLARATION
 
-functionDeclaration : functionHead functionName genericParameterClause? functionSignature functionBody  ;
+functionDeclaration : functionHead functionName genericParameterClause? functionSignature functionBody ;
 functionHead : attributes? declarationSpecifiers? 'func'  ;
 functionName : identifier |  operator  ;
 functionSignature : parameterClauses functionResult? ;
@@ -246,7 +246,7 @@ enumDeclaration : attributes? 'enum' enumDef  ;
 enumDef: unionStyleEnum | rawValueStyleEnum  ;
 unionStyleEnum : enumName genericParameterClause?'{' unionStyleEnumMembers?'}'  ;
 unionStyleEnumMembers : unionStyleEnumMember unionStyleEnumMembers? ;
-unionStyleEnumMember : declaration | unionStyleEnumCaseClause  ;
+unionStyleEnumMember : declaration | unionStyleEnumCaseClause ';'? ;
 unionStyleEnumCaseClause : attributes? 'case' unionStyleEnumCaseList  ;
 unionStyleEnumCaseList : unionStyleEnumCase | unionStyleEnumCase ',' unionStyleEnumCaseList  ;
 unionStyleEnumCase : enumCaseName tupleType? ;
@@ -277,11 +277,11 @@ classBody : '{' declarations? '}'  ;
 protocolDeclaration : attributes? 'protocol' protocolName typeInheritanceClause? protocolBody  ;
 protocolName : identifier  ;
 protocolBody : '{' protocolMemberDeclarations?'}'  ;
-protocolMemberDeclaration : protocolPropertyDeclaration
- | protocolMethodDeclaration
- | protocolInitializerDeclaration
- | protocolSubscriptDeclaration
- | protocolAssociatedTypeDeclaration
+protocolMemberDeclaration : protocolPropertyDeclaration ';'?
+ | protocolMethodDeclaration ';'?
+ | protocolInitializerDeclaration ';'?
+ | protocolSubscriptDeclaration ';'?
+ | protocolAssociatedTypeDeclaration ';'?
  ;
 protocolMemberDeclarations : protocolMemberDeclaration protocolMemberDeclarations? ;
 
@@ -417,7 +417,7 @@ expressionList : expression (',' expression)* ;
 expression : prefixExpression binaryExpression* ;
 
 prefixExpression
-  : prefixOperator? postfixExpression
+  : prefixOperator? postfixExpression ';'?
   | inOutExpression
   ;
 
