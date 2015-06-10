@@ -1,6 +1,6 @@
 from tailor.swift.swiftlistener import SwiftListener
-from tailor.utils.charformat import is_upper_camel_case
 from tailor.types.location import Location
+from tailor.utils.charformat import is_upper_camel_case
 
 
 class MainListener(SwiftListener):
