@@ -54,10 +54,11 @@ class MainListener(SwiftListener):
     def __verify_upper_camel_case(self, ctx, err_msg):
         construct_name = ctx.getText()
         if not is_upper_camel_case(construct_name):
-            self.__printer.error(ctx, err_msg)
+            self.__printer.error(err_msg, ctx)
 
     def __verify_not_semicolon_terminated(self, ctx):
         line = ctx.getText()
         if line.endswith(';'):
             self.__printer.error(
-                ctx, 'Statement should not terminate with a semicolon')
+                'Statement should not terminate with a semicolon',
+                loc=(ctx.stop.line, ctx.stop.column))

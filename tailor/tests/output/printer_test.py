@@ -22,7 +22,7 @@ class MyTestCase(unittest.TestCase):
         ctx = Mock()
         ctx.start.line = 10
         ctx.start.column = 42
-        self.printer.warn(ctx, 'this is a warning')
+        self.printer.warn('this is a warning', ctx)
         self.assertRegex(self.mystdout.getvalue(),
                          r'^.+abc\.swift:10:42: warning: this is a warning')
 
@@ -30,7 +30,7 @@ class MyTestCase(unittest.TestCase):
         ctx = Mock()
         ctx.start.line = 20
         ctx.start.column = 36
-        self.printer.error(ctx, 'this is an error')
+        self.printer.error('this is an error', ctx)
         self.assertRegex(self.mystdout.getvalue(),
                          r'^.+abc\.swift:20:36: error: this is an error')
 
