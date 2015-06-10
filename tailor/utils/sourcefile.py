@@ -9,3 +9,12 @@ def file_too_long(filepath, max_length):
 
 def construct_too_long(ctx, max_length):
     return 0 < max_length < (ctx.stop.line - ctx.start.line)
+
+
+def lines_too_long(filepath, max_length):
+    long_lines = []
+    if 0 < max_length:
+        with open(filepath) as file:
+            long_lines = [(lineno, len(line.rstrip('\r\n'))) for lineno, line
+                          in enumerate(file) if max_length < len(line)]
+    return long_lines
