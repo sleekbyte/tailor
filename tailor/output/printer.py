@@ -17,5 +17,5 @@ class Printer:
             print(self.__filepath + ':' + str(ctx.start.line) + ':' +
                   str(ctx.start.column) + ': ' + classification + ': ' + msg)
         else:
-            print(self.__filepath + ':' + str(loc[0]) + ':' + str(loc[1]) +
-                  ': ' + classification + ': ' + msg)
+            print(self.__filepath + ':' + str(loc.line) + ':' +
+                  str(loc.column) + ': ' + classification + ': ' + msg)

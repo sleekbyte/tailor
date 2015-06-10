@@ -1,5 +1,6 @@
 from tailor.swift.swiftlistener import SwiftListener
 from tailor.utils.charformat import is_upper_camel_case
+from tailor.types.location import Location
 
 
 class MainListener(SwiftListener):
@@ -61,4 +62,4 @@ class MainListener(SwiftListener):
         if line.endswith(';'):
             self.__printer.error(
                 'Statement should not terminate with a semicolon',
-                loc=(ctx.stop.line, ctx.stop.column + 1))
+                loc=Location(ctx.stop.line, ctx.stop.column + 1))
