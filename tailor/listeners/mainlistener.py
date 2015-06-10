@@ -61,4 +61,4 @@ class MainListener(SwiftListener):
         if line.endswith(';'):
             self.__printer.error(
                 'Statement should not terminate with a semicolon',
-                loc=(ctx.stop.line, ctx.stop.column))
+                loc=(ctx.stop.line, ctx.stop.column + 1))
