@@ -3,5 +3,9 @@ def num_lines_in_file(filepath):
         return len(file.readlines())
 
 
-def file_too_long(filepath, max_lines):
-    return 0 < max_lines < num_lines_in_file(filepath)
+def file_too_long(filepath, max_length):
+    return 0 < max_length < num_lines_in_file(filepath)
+
+
+def construct_too_long(ctx, max_length):
+    return 0 < max_length < (ctx.stop.line - ctx.start.line)

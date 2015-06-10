@@ -1,11 +1,13 @@
 from tailor.swift.swiftlistener import SwiftListener
 from tailor.utils.charformat import is_upper_camel_case
+from tailor.utils.sourcefile import construct_too_long
 
 
 class MainListener(SwiftListener):
 
-    def __init__(self, printer):
+    def __init__(self, printer, max_lengths):
         self.__printer = printer
+        self.__max_lengths = max_lengths
 
     def enterClassName(self, ctx):
         self.__verify_upper_camel_case(
@@ -27,7 +29,26 @@ class MainListener(SwiftListener):
         self.__verify_upper_camel_case(
             ctx, 'Protocol names should be in UpperCamelCase')
 
+    def enterClassBody(self, ctx):
+        self.__verify_construct_length(
+            ctx, 'Class', self.__max_lengths.max_class_length)
+
+    def enterFunctionBody(self, ctx):
+        self.__verify_construct_length(
+            ctx, 'Function', self.__max_lengths.max_function_length)
+
+    def enterClosureExpression(self, ctx):
+        self.__verify_construct_length(
+            ctx, 'Closure', self.__max_lengths.max_closure_length)
+
     def __verify_upper_camel_case(self, ctx, err_msg):
         construct_name = ctx.getText()
         if not is_upper_camel_case(construct_name):
             self.__printer.error(err_msg, ctx)
+
+    def __verify_construct_length(self, ctx, construct_type, max_length):
+        if construct_too_long(ctx, max_length):
+            self.__printer.error(
+                construct_type + ' is over maximum line limit (' +
+                str(ctx.stop.line - ctx.start.line) + '/' + str(max_length) +
+                ')', ctx)
