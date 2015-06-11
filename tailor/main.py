@@ -1,7 +1,6 @@
 """Perform static analysis on a Swift source file."""
 
 import argparse
-from collections import namedtuple
 import os
 import sys
 
@@ -15,10 +14,7 @@ from tailor.listeners.filelistener import FileListener
 from tailor.output.printer import Printer
 from tailor.swift.swiftlexer import SwiftLexer
 from tailor.swift.swiftparser import SwiftParser
-
-MaxLengths = namedtuple('MaxLines', ['max_class_length',
-                                     'max_function_length',
-                                     'max_closure_length'])
+from tailor.types.maxlengths import MaxLengths
 
 
 def parse_args():
