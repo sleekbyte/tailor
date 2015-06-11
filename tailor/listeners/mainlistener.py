@@ -1,4 +1,5 @@
 from tailor.swift.swiftlistener import SwiftListener
+from tailor.types.location import Location
 from tailor.utils.charformat import is_upper_camel_case
 from tailor.utils.sourcefile import construct_too_long
 
@@ -29,6 +30,30 @@ class MainListener(SwiftListener):
         self.__verify_upper_camel_case(
             ctx, 'Protocol names should be in UpperCamelCase')
 
+    def enterStatement(self, ctx):
+        self.__verify_not_semicolon_terminated(ctx)
+
+    def enterDeclaration(self, ctx):
+        self.__verify_not_semicolon_terminated(ctx)
+
+    def enterLoopStatement(self, ctx):
+        self.__verify_not_semicolon_terminated(ctx)
+
+    def enterBranchStatement(self, ctx):
+        self.__verify_not_semicolon_terminated(ctx)
+
+    def enterLabeledStatement(self, ctx):
+        self.__verify_not_semicolon_terminated(ctx)
+
+    def enterControlTransferStatement(self, ctx):
+        self.__verify_not_semicolon_terminated(ctx)
+
+    def enterUnionStyleEnumMember(self, ctx):
+        self.__verify_not_semicolon_terminated(ctx)
+
+    def enterProtocolMemberDeclaration(self, ctx):
+        self.__verify_not_semicolon_terminated(ctx)
+
     def enterClassBody(self, ctx):
         self.__verify_construct_length(
             ctx, 'Class', self.__max_lengths.max_class_length)
@@ -45,6 +70,13 @@ class MainListener(SwiftListener):
         construct_name = ctx.getText()
         if not is_upper_camel_case(construct_name):
             self.__printer.error(err_msg, ctx)
+
+    def __verify_not_semicolon_terminated(self, ctx):
+        line = ctx.getText()
+        if line.endswith(';'):
+            self.__printer.error(
+                'Statement should not terminate with a semicolon',
+                loc=Location(ctx.stop.line, ctx.stop.column + 1))
 
     def __verify_construct_length(self, ctx, construct_type, max_length):
         if construct_too_long(ctx, max_length):
