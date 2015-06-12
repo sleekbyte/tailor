@@ -20,6 +20,7 @@ class Greeting {
 }
 
 // Check Closure length
+var numbers = [1, 2, 3, 4]
 let strings = numbers.map {
     (number) -> String in
     var output = "hi"
@@ -28,4 +29,10 @@ let strings = numbers.map {
     //     number /= 10
     // }
     return output
+}
+
+// Check Struct length
+struct Resolution {
+    var width = 0
+    var height = 0
 }

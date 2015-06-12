@@ -1,5 +1,5 @@
 from tailor.types.location import Location
-from tailor.utils.sourcefile import num_lines_in_file, file_too_long
+from tailor.utils.sourcefile import file_too_long, num_lines_in_file
 
 
 class FileListener:

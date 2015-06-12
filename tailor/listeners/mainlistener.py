@@ -58,13 +58,17 @@ class MainListener(SwiftListener):
         self.__verify_construct_length(
             ctx, 'Class', self.__max_lengths.max_class_length)
 
+    def enterClosureExpression(self, ctx):
+        self.__verify_construct_length(
+            ctx, 'Closure', self.__max_lengths.max_closure_length)
+
     def enterFunctionBody(self, ctx):
         self.__verify_construct_length(
             ctx, 'Function', self.__max_lengths.max_function_length)
 
-    def enterClosureExpression(self, ctx):
+    def enterStructBody(self, ctx):
         self.__verify_construct_length(
-            ctx, 'Closure', self.__max_lengths.max_closure_length)
+            ctx, 'Struct', self.__max_lengths.max_struct_length)
 
     def __verify_upper_camel_case(self, ctx, err_msg):
         construct_name = ctx.getText()
