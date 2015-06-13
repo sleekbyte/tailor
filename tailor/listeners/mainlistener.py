@@ -4,12 +4,14 @@ from tailor.listeners.constantdeclistener import ConstantDecListener
 from tailor.swift.swiftlistener import SwiftListener
 from tailor.types.location import Location
 from tailor.utils.charformat import is_upper_camel_case
+from tailor.utils.sourcefile import construct_too_long
 
 
 class MainListener(SwiftListener):
 
-    def __init__(self, printer):
+    def __init__(self, printer, max_lengths):
         self.__printer = printer
+        self.__max_lengths = max_lengths
 
     def enterClassName(self, ctx):
         self.__verify_upper_camel_case(
@@ -54,6 +56,22 @@ class MainListener(SwiftListener):
 
     def enterProtocolMemberDeclaration(self, ctx):
         self.__verify_not_semicolon_terminated(ctx)
+
+    def enterClassBody(self, ctx):
+        self.__verify_construct_length(
+            ctx, 'Class', self.__max_lengths.max_class_length)
+
+    def enterClosureExpression(self, ctx):
+        self.__verify_construct_length(
+            ctx, 'Closure', self.__max_lengths.max_closure_length)
+
+    def enterFunctionBody(self, ctx):
+        self.__verify_construct_length(
+            ctx, 'Function', self.__max_lengths.max_function_length)
+
+    def enterStructBody(self, ctx):
+        self.__verify_construct_length(
+            ctx, 'Struct', self.__max_lengths.max_struct_length)
 
     def enterConstantDeclaration(self, ctx):
         walker = ParseTreeWalker()
@@ -114,3 +132,10 @@ class MainListener(SwiftListener):
             self.__printer.error(
                 'Statement should not terminate with a semicolon',
                 loc=Location(ctx.stop.line, ctx.stop.column + 1))
+
+    def __verify_construct_length(self, ctx, construct_type, max_length):
+        if construct_too_long(ctx, max_length):
+            self.__printer.error(
+                construct_type + ' is over maximum line limit (' +
+                str(ctx.stop.line - ctx.start.line) + '/' + str(max_length) +
+                ')', ctx)
