@@ -16,5 +16,6 @@ def lines_too_long(filepath, max_length):
     if 0 < max_length:
         with open(filepath) as file:
             long_lines = [(lineno, len(line.rstrip('\r\n'))) for lineno, line
-                          in enumerate(file) if max_length < len(line)]
+                          in enumerate(file)
+                          if max_length < len(line.rstrip('\r\n'))]
     return long_lines
