@@ -10,7 +10,7 @@
 # no Warning level messages displayed, use"--disable=all --enable=classes
 # --disable=W"
 # TODO: Remove once "#26 Add docstrings to all significant modules, classes, methods, and functions" is resolved
-disable=missing-docstring
+disable=fixme, missing-docstring
 
 
 [BASIC]

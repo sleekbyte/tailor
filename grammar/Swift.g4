@@ -94,7 +94,7 @@ switchStatement : 'switch' expression '{' switchCases? '}'  ;
 switchCases : switchCase switchCases? ;
 switchCase : caseLabel statements | defaultLabel statements  | caseLabel ';' | defaultLabel ';'  ;
 caseLabel : 'case' caseItemList ':' ;
-caseItemList : pattern guardClause?  pattern guardClause?',' caseItemList  ;
+caseItemList : pattern guardClause? | pattern guardClause? ',' caseItemList ;
 defaultLabel : 'default' ':' ;
 guardClause : 'where' guardExpression ;
 guardExpression : expression  ;
@@ -133,18 +133,18 @@ returnStatement : 'return' expression? ;
 
 // GRAMMAR OF A GENERIC PARAMETER CLAUSE
 
-genericParameterClause : '<' genericParameterList requirementClause? '>'  ;
+genericParameterClause : LessThanOperator genericParameterList requirementClause? GreaterThanOperator  ;
 genericParameterList : genericParameter | genericParameter ',' genericParameterList  ;
 genericParameter : typeName | typeName ':' typeIdentifier | typeName ':' protocolCompositionType  ;
 requirementClause : 'where' requirementList  ;
 requirementList : requirement | requirement ',' requirementList  ;
 requirement : conformanceRequirement | sameTypeRequirement  ;
 conformanceRequirement : typeIdentifier ':' typeIdentifier | typeIdentifier ':' protocolCompositionType  ;
-sameTypeRequirement : typeIdentifier '==' typeIdentifier  ;
+sameTypeRequirement : typeIdentifier EqualityOperator typeIdentifier  ;
 
 // GRAMMAR OF A GENERIC ARGUMENT CLAUSE
 
-genericArgumentClause : '<' genericArgumentList '>'  ;
+genericArgumentClause : LessThanOperator genericArgumentList GreaterThanOperator  ;
 genericArgumentList : genericArgument (',' genericArgument)* ;
 genericArgument : sType  ;
 
@@ -153,20 +153,20 @@ genericArgument : sType  ;
 // GRAMMAR OF A DECLARATION
 
 declaration
- : importDeclaration
- | constantDeclaration
- | variableDeclaration
- | typealiasDeclaration
- | functionDeclaration
- | enumDeclaration
- | structDeclaration
- | classDeclaration
- | protocolDeclaration
- | initializerDeclaration
- | deinitializerDeclaration
- | extensionDeclaration
- | subscriptDeclaration
- | operatorDeclaration
+ : importDeclaration ';'?
+ | constantDeclaration ';'?
+ | variableDeclaration ';'?
+ | typealiasDeclaration ';'?
+ | functionDeclaration ';'?
+ | enumDeclaration ';'?
+ | structDeclaration ';'?
+ | classDeclaration ';'?
+ | protocolDeclaration ';'?
+ | initializerDeclaration ';'?
+ | deinitializerDeclaration ';'?
+ | extensionDeclaration ';'?
+ | subscriptDeclaration ';'?
+ | operatorDeclaration ';'?
  ;
 
 declarations : declaration declarations? ;
@@ -189,7 +189,7 @@ importPathIdentifier : identifier | operator  ;
 constantDeclaration : attributes? declarationSpecifiers? 'let' patternInitializerList  ;
 patternInitializerList : patternInitializer (',' patternInitializer)* ;
 patternInitializer : pattern initializer? ;
-initializer : '=' expression  ;
+initializer : AssignmentOperator expression  ;
 
 // GRAMMAR OF A VARIABLE DECLARATION
 
@@ -219,11 +219,11 @@ didSetClause : attributes? 'didSet' setterName? codeBlock  ;
 typealiasDeclaration : typealiasHead typealiasAssignment  ;
 typealiasHead : 'typealias' typealiasName  ;
 typealiasName : identifier  ;
-typealiasAssignment : '=' sType  ;
+typealiasAssignment : AssignmentOperator sType  ;
 
 // GRAMMAR OF A FUNCTION DECLARATION
 
-functionDeclaration : functionHead functionName genericParameterClause? functionSignature functionBody  ;
+functionDeclaration : functionHead functionName genericParameterClause? functionSignature functionBody ;
 functionHead : attributes? declarationSpecifiers? 'func'  ;
 functionName : identifier |  operator  ;
 functionSignature : parameterClauses functionResult? ;
@@ -232,13 +232,13 @@ functionBody : codeBlock  ;
 parameterClauses : parameterClause parameterClauses? ;
 parameterClause : '(' ')' |  '(' parameterList '...'? ')'  ;
 parameterList : parameter | parameter ',' parameterList  ;
-parameter : 'inout'? 'let'? '#'? parameterName localParameterName? typeAnnotation defaultArgumentClause?
- | 'inout'? 'var' '#'? parameterName localParameterName? typeAnnotation defaultArgumentClause?
+parameter : 'inout'? 'let'? '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?
+ | 'inout'? 'var' '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?
  | attributes? sType
  ;
-parameterName : identifier | '_'  ;
+externalParameterName : identifier | '_'  ;
 localParameterName : identifier | '_'  ;
-defaultArgumentClause : '=' expression  ;
+defaultArgumentClause : AssignmentOperator expression  ;
 
 // GRAMMAR OF AN ENUMERATION DECLARATION
 
@@ -246,7 +246,7 @@ enumDeclaration : attributes? 'enum' enumDef  ;
 enumDef: unionStyleEnum | rawValueStyleEnum  ;
 unionStyleEnum : enumName genericParameterClause?'{' unionStyleEnumMembers?'}'  ;
 unionStyleEnumMembers : unionStyleEnumMember unionStyleEnumMembers? ;
-unionStyleEnumMember : declaration | unionStyleEnumCaseClause  ;
+unionStyleEnumMember : declaration | unionStyleEnumCaseClause ';'? ;
 unionStyleEnumCaseClause : attributes? 'case' unionStyleEnumCaseList  ;
 unionStyleEnumCaseList : unionStyleEnumCase | unionStyleEnumCase ',' unionStyleEnumCaseList  ;
 unionStyleEnumCase : enumCaseName tupleType? ;
@@ -258,7 +258,7 @@ rawValueStyleEnumMember : declaration | rawValueStyleEnumCaseClause  ;
 rawValueStyleEnumCaseClause : attributes? 'case' rawValueStyleEnumCaseList  ;
 rawValueStyleEnumCaseList : rawValueStyleEnumCase | rawValueStyleEnumCase ',' rawValueStyleEnumCaseList  ;
 rawValueStyleEnumCase : enumCaseName rawValueAssignment? ;
-rawValueAssignment : '=' literal  ;
+rawValueAssignment : AssignmentOperator literal  ;
 
 // GRAMMAR OF A STRUCTURE DECLARATION
 
@@ -277,11 +277,11 @@ classBody : '{' declarations? '}'  ;
 protocolDeclaration : attributes? 'protocol' protocolName typeInheritanceClause? protocolBody  ;
 protocolName : identifier  ;
 protocolBody : '{' protocolMemberDeclarations?'}'  ;
-protocolMemberDeclaration : protocolPropertyDeclaration
- | protocolMethodDeclaration
- | protocolInitializerDeclaration
- | protocolSubscriptDeclaration
- | protocolAssociatedTypeDeclaration
+protocolMemberDeclaration : protocolPropertyDeclaration ';'?
+ | protocolMethodDeclaration ';'?
+ | protocolInitializerDeclaration ';'?
+ | protocolSubscriptDeclaration ';'?
+ | protocolAssociatedTypeDeclaration ';'?
  ;
 protocolMemberDeclarations : protocolMemberDeclaration protocolMemberDeclarations? ;
 
@@ -417,7 +417,7 @@ expressionList : expression (',' expression)* ;
 expression : prefixExpression binaryExpression* ;
 
 prefixExpression
-  : prefixOperator? postfixExpression
+  : prefixOperator? postfixExpression ';'?
   | inOutExpression
   ;
 
@@ -456,7 +456,7 @@ binaryExpression
 
 // GRAMMAR OF AN ASSIGNMENT OPERATOR
 
-assignmentOperator : '='  ;
+assignmentOperator : AssignmentOperator  ;
 
 // GRAMMAR OF A CONDITIONAL OPERATOR
 
@@ -468,6 +468,7 @@ typeCastingOperator
   : 'is' sType
   | 'as' '?' sType
   | 'as' sType
+  | 'as' NotOperator sType
   ;
 
 // GRAMMAR OF A PRIMARY EXPRESSION
@@ -563,7 +564,7 @@ postfixExpression
  | postfixExpression '.' 'self'                                  # postfixSelfExpression
  | postfixExpression '.' 'dynamicType'                           # dynamicTypeExpression
  | postfixExpression '[' expressionList ']'                     # subscriptExpression
- | postfixExpression '!'                                         # forcedValueExpression
+ | postfixExpression NotOperator                                # forcedValueExpression
  | postfixExpression '?'                                         # optionalChainingExpression
  ;
 
@@ -609,7 +610,7 @@ functionCallExpression
 // split the operators out into the individual tokens as some of those tokens
 // are also referenced individually. For example, type signatures use
 // <...>.
-operator: Operator ;
+operator: EqualityOperator | LessThanOperator | GreaterThanOperator | NotOperator | Operator;
 
 
 // WHITESPACE scariness:
@@ -662,7 +663,7 @@ sType
  | typeIdentifier
  | tupleType
  | sType '?'
- | sType '!'
+ | sType NotOperator
  | protocolCompositionType
  | sType '.' 'Type'
  | sType '.' 'Protocol'
@@ -691,7 +692,7 @@ elementName : identifier  ;
 
 // GRAMMAR OF A PROTOCOL COMPOSITION TYPE
 
-protocolCompositionType : 'protocol' '<' protocolIdentifierList?'>'  ;
+protocolCompositionType : 'protocol' LessThanOperator protocolIdentifierList? GreaterThanOperator  ;
 protocolIdentifierList : protocolIdentifier | protocolIdentifier ',' protocolIdentifierList  ;
 protocolIdentifier : typeIdentifier  ;
 
@@ -718,13 +719,23 @@ contextSensitiveKeyword :
  'set' | 'unowned' | 'unowned(safe)' | 'unowned(unsafe)' | 'weak' | 'willSet'
  ;
 
+AssignmentOperator: '=' ;
+
+EqualityOperator: '==' ;
+
+LessThanOperator: '<' ;
+
+GreaterThanOperator: '>' ;
+
+NotOperator: '!';
+
 Operator
   : OperatorHead OperatorCharacter*
   | '..' ('.'|OperatorCharacter)*
   ;
 
 OperatorHead
-  : '/' | '=' | '\\' | '-' | '+' | '!' | '*' | '%' | '<' | '>' | '&' | '|' | '^' | '!' | '.'
+  : '/' | '=' | '-' | '+' | '!' | '*' | '%' | '<' | '>' | '&' | '|' | '^' | '~' | '?'
   | [\u00A1-\u00A7]
   | [\u00A9\u00AB\u00AC\u00AE]
   | [\u00B0-\u00B1\u00B6\u00BB\u00BF\u00D7\u00F7]
@@ -838,13 +849,13 @@ fragment Sign : [+\-] ;
 
 // GRAMMAR OF A STRING LITERAL
 
-StringLiteral : '"' QuotedText '"' ;
+StringLiteral : '"' QuotedText? '"' ;
 fragment QuotedText : QuotedTextItem QuotedText? ;
 fragment QuotedTextItem : EscapedCharacter
 // | '\\(' expression ')'
  | ~["\\\u000A\u000D]
  ;
-EscapedCharacter : '\\' [0\\tnr"']
+EscapedCharacter : '\\' [0\\(tnr"']
  | '\\x' HexadecimalDigit HexadecimalDigit
  | '\\u' HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit
  | '\\U' HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit

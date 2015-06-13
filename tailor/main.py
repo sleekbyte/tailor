@@ -1,7 +1,6 @@
 """Perform static analysis on a Swift source file."""
 
 import argparse
-from collections import namedtuple
 import os
 import sys
 
@@ -10,18 +9,12 @@ sys.path.append(PARENT_PATH)
 
 from antlr4 import FileStream, CommonTokenStream, ParseTreeWalker
 
-from tailor.listeners.mainlistener import MainListener
 from tailor.listeners.filelistener import FileListener
+from tailor.listeners.mainlistener import MainListener
 from tailor.output.printer import Printer
 from tailor.swift.swiftlexer import SwiftLexer
 from tailor.swift.swiftparser import SwiftParser
-
-MaxLengths = namedtuple('MaxLines', ['max_file_length',
-                                     'max_class_length',
-                                     'max_function_length',
-                                     'max_closure_length',
-                                     'max_line_length',
-                                     'max_name_length'])
+from tailor.types.maxlengths import MaxLengths
 
 
 def parse_args():
@@ -32,10 +25,12 @@ def parse_args():
                         help='maximum file length (in lines)')
     parser.add_argument('--max-class-length', type=int, default=0,
                         help='maximum class length (in lines)')
-    parser.add_argument('--max-function-length', type=int, default=0,
-                        help='maximum function length (in lines)')
     parser.add_argument('--max-closure-length', type=int, default=0,
                         help='maximum closure length (in lines)')
+    parser.add_argument('--max-function-length', type=int, default=0,
+                        help='maximum function length (in lines)')
+    parser.add_argument('--max-struct-length', type=int, default=0,
+                        help='maximum struct length (in lines)')
     parser.add_argument('-l', '--max-line-length', type=int, default=0,
                         help='maximum line length (in characters)')
     parser.add_argument('--max-name-length', type=int, default=0,
@@ -45,12 +40,13 @@ def parse_args():
 
 def main():
     args = parse_args()
-    max_lengths = MaxLengths(args.max_file_length,
-                             args.max_class_length,
-                             args.max_function_length,
+    max_lengths = MaxLengths(args.max_class_length,
                              args.max_closure_length,
+                             args.max_file_length,
+                             args.max_function_length,
                              args.max_line_length,
-                             args.max_name_length)
+                             args.max_name_length,
+                             args.max_struct_length)
 
     printer = Printer(filepath=args.infile)
     lexer = SwiftLexer(FileStream(args.infile))
