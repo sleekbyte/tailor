@@ -733,12 +733,12 @@ class SwiftListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by SwiftParser#parameterName.
-    def enterParameterName(self, ctx):
+    # Enter a parse tree produced by SwiftParser#externalParameterName.
+    def enterExternalParameterName(self, ctx):
         pass
 
-    # Exit a parse tree produced by SwiftParser#parameterName.
-    def exitParameterName(self, ctx):
+    # Exit a parse tree produced by SwiftParser#externalParameterName.
+    def exitExternalParameterName(self, ctx):
         pass
 
 
