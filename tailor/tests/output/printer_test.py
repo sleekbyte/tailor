@@ -25,7 +25,7 @@ class MyTestCase(unittest.TestCase):
         ctx.start.column = 42
         self.printer.warn('this is a warning', ctx)
         self.assertRegex(self.mystdout.getvalue(),
-                         r'^.+abc\.swift:10:42: warning: this is a warning')
+                         r'^.+abc\.swift:10:43: warning: this is a warning')
 
     def printer_test_error_ctx(self):
         ctx = Mock()
@@ -33,7 +33,7 @@ class MyTestCase(unittest.TestCase):
         ctx.start.column = 36
         self.printer.error('this is an error', ctx)
         self.assertRegex(self.mystdout.getvalue(),
-                         r'^.+abc\.swift:20:36: error: this is an error')
+                         r'^.+abc\.swift:20:37: error: this is an error')
 
     def printer_test_warn_loc(self):
         self.printer.warn('this is a warning', loc=Location(10, 42))

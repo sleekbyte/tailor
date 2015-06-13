@@ -1,3 +1,6 @@
+from antlr4 import ParseTreeWalker
+
+from tailor.listeners.constantdeclistener import ConstantDecListener
 from tailor.swift.swiftlistener import SwiftListener
 from tailor.types.location import Location
 from tailor.utils.charformat import is_upper_camel_case
@@ -69,6 +72,54 @@ class MainListener(SwiftListener):
     def enterStructBody(self, ctx):
         self.__verify_construct_length(
             ctx, 'Struct', self.__max_lengths.max_struct_length)
+
+    def enterConstantDeclaration(self, ctx):
+        walker = ParseTreeWalker()
+        for pattern_initializer in \
+                ctx.patternInitializerList().patternInitializer():
+            pattern = pattern_initializer.pattern()
+            self.__evaluate_pattern(pattern, walker)
+
+    def enterValueBindingPattern(self, ctx):
+        if ctx.start.text == 'let':
+            walker = ParseTreeWalker()
+            self.__evaluate_pattern(ctx.pattern(), walker)
+
+    def enterParameter(self, ctx):
+        for child in ctx.children:
+            if child.getText() == 'var':
+                return
+        walker = ParseTreeWalker()
+        if ctx.externalParameterName():
+            self.__walk_constant_dec_listener(walker,
+                                              ctx.externalParameterName())
+        self.__walk_constant_dec_listener(walker, ctx.localParameterName())
+
+    def __walk_constant_dec_listener(self, walker, tree):
+        walker.walk(ConstantDecListener(self.__printer), tree)
+
+    def __evaluate_pattern(self, pattern, walker):
+        if pattern.identifierPattern():
+            self.__walk_constant_dec_listener(walker,
+                                              pattern.identifierPattern())
+        elif pattern.tuplePattern() and \
+                pattern.tuplePattern().tuplePatternElementList():
+            self.__evaluate_tuple_pattern(pattern.tuplePattern(), walker)
+        elif pattern.enumCasePattern() and \
+                pattern.enumCasePattern().tuplePattern():
+            self.__evaluate_tuple_pattern(
+                pattern.enumCasePattern().tuplePattern(), walker)
+        elif pattern.pattern():
+            self.__evaluate_pattern(pattern.pattern(), walker)
+        elif pattern.expressionPattern():
+            self.__walk_constant_dec_listener(walker,
+                                              pattern.expressionPattern()
+                                              .expression().prefixExpression())
+
+    def __evaluate_tuple_pattern(self, tuple_pattern, walker):
+        for tuple_pattern_element in \
+                tuple_pattern.tuplePatternElementList().tuplePatternElement():
+            self.__evaluate_pattern(tuple_pattern_element.pattern(), walker)
 
     def __verify_upper_camel_case(self, ctx, err_msg):
         construct_name = ctx.getText()
