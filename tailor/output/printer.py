@@ -17,7 +17,8 @@ class Printer:
     def __print(self, classification, msg, ctx, loc):
         if ctx is not None:
             print(self.__filepath + ':' + str(ctx.start.line) + ':' +
-                  str(ctx.start.column) + ': ' + classification + ': ' + msg)
+                  str(ctx.start.column + 1) + ': ' + classification +
+                  ': ' + msg)
         else:
             print(self.__filepath + ':' + str(loc.line) + ':' +
                   str(loc.column) + ': ' + classification + ': ' + msg)
