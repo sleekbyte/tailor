@@ -22,3 +22,7 @@ def lines_too_long(filepath, max_length):
                           for lineno, line in enumerate(file)
                           if max_length < len(line.rstrip('\r\n'))]
     return long_lines
+
+
+def name_too_long(ctx, max_length):
+    return 0 < max_length < len(ctx.getText())

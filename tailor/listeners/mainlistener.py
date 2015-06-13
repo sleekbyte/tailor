@@ -4,10 +4,11 @@ from tailor.listeners.constantdeclistener import ConstantDecListener
 from tailor.swift.swiftlistener import SwiftListener
 from tailor.types.location import Location
 from tailor.utils.charformat import is_upper_camel_case
-from tailor.utils.sourcefile import construct_too_long
+from tailor.utils.sourcefile import construct_too_long, name_too_long
 
 
 class MainListener(SwiftListener):
+    # pylint: disable=too-many-public-methods
 
     def __init__(self, printer, max_lengths):
         self.__printer = printer
@@ -16,22 +17,32 @@ class MainListener(SwiftListener):
     def enterClassName(self, ctx):
         self.__verify_upper_camel_case(
             ctx, 'Class names should be in UpperCamelCase')
+        self.__verify_name_length(
+            ctx, 'Class', self.__max_lengths.max_name_length)
 
     def enterEnumName(self, ctx):
         self.__verify_upper_camel_case(
             ctx, 'Enum names should be in UpperCamelCase')
+        self.__verify_name_length(
+            ctx, 'Enum', self.__max_lengths.max_name_length)
 
     def enterEnumCaseName(self, ctx):
         self.__verify_upper_camel_case(
             ctx, 'Enum case names should be in UpperCamelCase')
+        self.__verify_name_length(
+            ctx, 'Enum Case', self.__max_lengths.max_name_length)
 
     def enterStructName(self, ctx):
         self.__verify_upper_camel_case(
             ctx, 'Struct names should be in UpperCamelCase')
+        self.__verify_name_length(
+            ctx, 'Struct', self.__max_lengths.max_name_length)
 
     def enterProtocolName(self, ctx):
         self.__verify_upper_camel_case(
             ctx, 'Protocol names should be in UpperCamelCase')
+        self.__verify_name_length(
+            ctx, 'Protocol', self.__max_lengths.max_name_length)
 
     def enterStatement(self, ctx):
         self.__verify_not_semicolon_terminated(ctx)
@@ -121,6 +132,44 @@ class MainListener(SwiftListener):
                 tuple_pattern.tuplePatternElementList().tuplePatternElement():
             self.__evaluate_pattern(tuple_pattern_element.pattern(), walker)
 
+    def enterElementName(self, ctx):
+        self.__verify_name_length(
+            ctx, 'Element', self.__max_lengths.max_name_length)
+
+    def enterExternalParameterName(self, ctx):
+        self.__verify_name_length(
+            ctx, 'External Parameter', self.__max_lengths.max_name_length)
+
+    def enterFunctionName(self, ctx):
+        self.__verify_name_length(
+            ctx, 'Function', self.__max_lengths.max_name_length)
+
+    def enterLabelName(self, ctx):
+        self.__verify_name_length(
+            ctx, 'Label', self.__max_lengths.max_name_length)
+
+    def enterLocalParameterName(self, ctx):
+        self.__verify_name_length(
+            ctx, 'Local Parameter', self.__max_lengths.max_name_length)
+
+    # TODO: Fix grammar for setter
+    def enterSetterName(self, ctx):
+        self.__verify_name_length(
+            ctx, 'Setter', self.__max_lengths.max_name_length)
+
+    def enterTypealiasName(self, ctx):
+        self.__verify_name_length(
+            ctx, 'Typealias', self.__max_lengths.max_name_length)
+
+    def enterTypeName(self, ctx):
+        self.__verify_name_length(
+            ctx, 'Type', self.__max_lengths.max_name_length)
+
+    # TODO: Fix grammar for variable names, ensure constants are checked
+    def enterVariableName(self, ctx):
+        self.__verify_name_length(
+            ctx, 'Variable', self.__max_lengths.max_name_length)
+
     def __verify_upper_camel_case(self, ctx, err_msg):
         construct_name = ctx.getText()
         if not is_upper_camel_case(construct_name):
@@ -139,3 +188,9 @@ class MainListener(SwiftListener):
                 construct_type + ' is over maximum line limit (' +
                 str(ctx.stop.line - ctx.start.line) + '/' + str(max_length) +
                 ')', ctx)
+
+    def __verify_name_length(self, ctx, construct_type, max_length):
+        if name_too_long(ctx, max_length):
+            self.__printer.error(
+                construct_type + ' name is over maximum character limit (' +
+                str(len(ctx.getText())) + '/' + str(max_length) + ')', ctx)

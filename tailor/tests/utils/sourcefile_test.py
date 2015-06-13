@@ -89,5 +89,25 @@ class SourceFileLineLengthTestCase(unittest.TestCase):
              Location(4, 100), Location(5, 100)],
             sourcefile.lines_too_long('100Characters', 50))
 
+
+class SourceFileNameLengthTestCase(unittest.TestCase):
+
+    def name_too_long_test_max_length_zero_or_less(self):
+        ctx = Mock()
+        ctx.getText = '6Chars'
+        self.assertFalse(sourcefile.name_too_long(ctx, -10))
+        self.assertFalse(sourcefile.name_too_long(ctx, 0))
+
+    def name_too_long_test_max_length_less_or_equal_limit(self):
+        ctx = Mock()
+        ctx.getText.return_value = '6Chars'
+        self.assertFalse(sourcefile.name_too_long(ctx, 10))
+        self.assertFalse(sourcefile.name_too_long(ctx, 6))
+
+    def name_too_long_test_max_length_over_limit(self):
+        ctx = Mock()
+        ctx.getText.return_value = '6Chars'
+        self.assertTrue(sourcefile.name_too_long(ctx, 4))
+
 if __name__ == '__main__':
     unittest.main()
