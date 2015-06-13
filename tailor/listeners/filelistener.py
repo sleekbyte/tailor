@@ -20,11 +20,14 @@ class FileListener:
             self.__printer.error('File is over maximum line limit (' +
                                  str(num_lines_in_file(self.__filepath)) +
                                  '/' + str(max_lines) + ')',
-                                 loc=Location(max_lines, 1))
+                                 # Mark error on first character of next line
+                                 # TODO: Use printer method without column
+                                 loc=Location(max_lines + 1, 1))
 
     def __verify_line_lengths(self, max_line_length):
         for line in lines_too_long(self.__filepath, max_line_length):
             self.__printer.error('Line is over maximum character limit (' +
-                                 str(line[1]) + '/' + str(max_line_length) +
-                                 ')',
-                                 loc=Location(line[0], max_line_length + 1))
+                                 str(line.column) + '/' +
+                                 str(max_line_length) + ')',
+                                 # Mark error on first character beyond limit
+                                 loc=Location(line.line, max_line_length + 1))

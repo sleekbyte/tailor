@@ -1,3 +1,6 @@
+from tailor.types.location import Location
+
+
 def num_lines_in_file(filepath):
     with open(filepath) as file:
         return len(file.readlines())
@@ -15,7 +18,7 @@ def lines_too_long(filepath, max_length):
     long_lines = []
     if 0 < max_length:
         with open(filepath) as file:
-            long_lines = [(lineno, len(line.rstrip('\r\n'))) for lineno, line
-                          in enumerate(file)
+            long_lines = [Location(lineno + 1, len(line.rstrip('\r\n')))
+                          for lineno, line in enumerate(file)
                           if max_length < len(line.rstrip('\r\n'))]
     return long_lines

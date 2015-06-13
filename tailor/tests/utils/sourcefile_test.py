@@ -2,6 +2,7 @@ import builtins
 import unittest
 from unittest.mock import Mock, mock_open, patch
 
+from tailor.types.location import Location
 from tailor.utils import sourcefile
 
 
@@ -84,7 +85,8 @@ class SourceFileLineLengthTestCase(unittest.TestCase):
 
     def lines_too_long_test_zero_lines_over_limit(self):
         self.assertListEqual(
-            [(0, 100), (1, 100), (2, 100), (3, 100), (4, 100)],
+            [Location(1, 100), Location(2, 100), Location(3, 100),
+             Location(4, 100), Location(5, 100)],
             sourcefile.lines_too_long('100Characters', 50))
 
 if __name__ == '__main__':

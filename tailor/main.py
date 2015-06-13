@@ -21,20 +21,20 @@ def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('infile', type=os.path.abspath,
                         help='Swift source file')
-    parser.add_argument('--max-file-length', type=int, default=0,
-                        help='maximum file length (in lines)')
     parser.add_argument('--max-class-length', type=int, default=0,
                         help='maximum class length (in lines)')
     parser.add_argument('--max-closure-length', type=int, default=0,
                         help='maximum closure length (in lines)')
+    parser.add_argument('--max-file-length', type=int, default=0,
+                        help='maximum file length (in lines)')
     parser.add_argument('--max-function-length', type=int, default=0,
                         help='maximum function length (in lines)')
-    parser.add_argument('--max-struct-length', type=int, default=0,
-                        help='maximum struct length (in lines)')
     parser.add_argument('-l', '--max-line-length', type=int, default=0,
                         help='maximum line length (in characters)')
     parser.add_argument('--max-name-length', type=int, default=0,
                         help='maximum identifier name length (in characters)')
+    parser.add_argument('--max-struct-length', type=int, default=0,
+                        help='maximum struct length (in lines)')
     return parser.parse_args()
 
 
