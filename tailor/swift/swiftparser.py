@@ -103,8 +103,8 @@ def serializedATN():
         buf.write("L\3M\3M\5M\u03ca\nM\3M\3M\3N\3N\3O\3O\5O\u03d2\nO\3P\3")
         buf.write("P\3P\3P\3P\5P\u03d9\nP\3P\3P\5P\u03dd\nP\3Q\3Q\3Q\3Q\3")
         buf.write("Q\5Q\u03e4\nQ\3R\5R\u03e7\nR\3R\5R\u03ea\nR\3R\5R\u03ed")
-        buf.write("\nR\3R\3R\5R\u03f1\nR\3R\5R\u03f4\nR\3R\5R\u03f7\nR\3")
-        buf.write("R\5R\u03fa\nR\3R\3R\5R\u03fe\nR\3R\3R\5R\u0402\nR\3R\5")
+        buf.write("\nR\3R\5R\u03f0\nR\3R\3R\5R\u03f4\nR\3R\5R\u03f7\nR\3")
+        buf.write("R\5R\u03fa\nR\3R\3R\5R\u03fe\nR\3R\5R\u0401\nR\3R\3R\5")
         buf.write("R\u0405\nR\3R\5R\u0408\nR\3R\5R\u040b\nR\3R\5R\u040e\n")
         buf.write("R\3S\3S\5S\u0412\nS\3T\3T\5T\u0416\nT\3U\3U\3U\3V\5V\u041c")
         buf.write("\nV\3V\3V\3V\3W\3W\5W\u0423\nW\3X\3X\5X\u0427\nX\3X\3")
@@ -577,17 +577,17 @@ def serializedATN():
         buf.write("\2\u03e7\u03e9\3\2\2\2\u03e8\u03ea\7)\2\2\u03e9\u03e8")
         buf.write("\3\2\2\2\u03e9\u03ea\3\2\2\2\u03ea\u03ec\3\2\2\2\u03eb")
         buf.write("\u03ed\7\61\2\2\u03ec\u03eb\3\2\2\2\u03ec\u03ed\3\2\2")
-        buf.write("\2\u03ed\u03ee\3\2\2\2\u03ee\u03f0\5\u00a4S\2\u03ef\u03f1")
-        buf.write("\5\u00a6T\2\u03f0\u03ef\3\2\2\2\u03f0\u03f1\3\2\2\2\u03f1")
-        buf.write("\u03f3\3\2\2\2\u03f2\u03f4\5\u017c\u00bf\2\u03f3\u03f2")
+        buf.write("\2\u03ed\u03ef\3\2\2\2\u03ee\u03f0\5\u00a4S\2\u03ef\u03ee")
+        buf.write("\3\2\2\2\u03ef\u03f0\3\2\2\2\u03f0\u03f1\3\2\2\2\u03f1")
+        buf.write("\u03f3\5\u00a6T\2\u03f2\u03f4\5\u017c\u00bf\2\u03f3\u03f2")
         buf.write("\3\2\2\2\u03f3\u03f4\3\2\2\2\u03f4\u03f6\3\2\2\2\u03f5")
         buf.write("\u03f7\5\u00a8U\2\u03f6\u03f5\3\2\2\2\u03f6\u03f7\3\2")
         buf.write("\2\2\u03f7\u040e\3\2\2\2\u03f8\u03fa\7\60\2\2\u03f9\u03f8")
         buf.write("\3\2\2\2\u03f9\u03fa\3\2\2\2\u03fa\u03fb\3\2\2\2\u03fb")
         buf.write("\u03fd\7&\2\2\u03fc\u03fe\7\61\2\2\u03fd\u03fc\3\2\2\2")
-        buf.write("\u03fd\u03fe\3\2\2\2\u03fe\u03ff\3\2\2\2\u03ff\u0401\5")
-        buf.write("\u00a4S\2\u0400\u0402\5\u00a6T\2\u0401\u0400\3\2\2\2\u0401")
-        buf.write("\u0402\3\2\2\2\u0402\u0404\3\2\2\2\u0403\u0405\5\u017c")
+        buf.write("\u03fd\u03fe\3\2\2\2\u03fe\u0400\3\2\2\2\u03ff\u0401\5")
+        buf.write("\u00a4S\2\u0400\u03ff\3\2\2\2\u0400\u0401\3\2\2\2\u0401")
+        buf.write("\u0402\3\2\2\2\u0402\u0404\5\u00a6T\2\u0403\u0405\5\u017c")
         buf.write("\u00bf\2\u0404\u0403\3\2\2\2\u0404\u0405\3\2\2\2\u0405")
         buf.write("\u0407\3\2\2\2\u0406\u0408\5\u00a8U\2\u0407\u0406\3\2")
         buf.write("\2\2\u0407\u0408\3\2\2\2\u0408\u040e\3\2\2\2\u0409\u040b")
@@ -1012,8 +1012,8 @@ def serializedATN():
         buf.write("\u031d\u0322\u033d\u0341\u0344\u0347\u0350\u0359\u035c")
         buf.write("\u0362\u0366\u036f\u0378\u037b\u0380\u0387\u0390\u0393")
         buf.write("\u0397\u039c\u03a0\u03b2\u03b8\u03bb\u03c1\u03c5\u03c9")
-        buf.write("\u03d1\u03d8\u03dc\u03e3\u03e6\u03e9\u03ec\u03f0\u03f3")
-        buf.write("\u03f6\u03f9\u03fd\u0401\u0404\u0407\u040a\u040d\u0411")
+        buf.write("\u03d1\u03d8\u03dc\u03e3\u03e6\u03e9\u03ec\u03ef\u03f3")
+        buf.write("\u03f6\u03f9\u03fd\u0400\u0404\u0407\u040a\u040d\u0411")
         buf.write("\u0415\u041b\u0422\u0426\u042a\u0430\u0435\u0437\u043a")
         buf.write("\u0444\u0448\u0450\u0456\u045c\u0460\u0463\u046d\u0471")
         buf.write("\u0477\u047c\u047f\u0487\u048c\u0491\u0494\u049c\u04a1")
@@ -1170,7 +1170,7 @@ class SwiftParser ( Parser ):
     RULE_parameterClause = 78
     RULE_parameterList = 79
     RULE_parameter = 80
-    RULE_parameterName = 81
+    RULE_externalParameterName = 81
     RULE_localParameterName = 82
     RULE_defaultArgumentClause = 83
     RULE_enumDeclaration = 84
@@ -1323,7 +1323,7 @@ class SwiftParser ( Parser ):
                    "typealiasName", "typealiasAssignment", "functionDeclaration", 
                    "functionHead", "functionName", "functionSignature", 
                    "functionResult", "functionBody", "parameterClauses", 
-                   "parameterClause", "parameterList", "parameter", "parameterName", 
+                   "parameterClause", "parameterList", "parameter", "externalParameterName", 
                    "localParameterName", "defaultArgumentClause", "enumDeclaration", 
                    "enumDef", "unionStyleEnum", "unionStyleEnumMembers", 
                    "unionStyleEnumMember", "unionStyleEnumCaseClause", "unionStyleEnumCaseList", 
@@ -6326,12 +6326,12 @@ class SwiftParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def parameterName(self):
-            return self.getTypedRuleContext(SwiftParser.ParameterNameContext,0)
-
-
         def localParameterName(self):
             return self.getTypedRuleContext(SwiftParser.LocalParameterNameContext,0)
+
+
+        def externalParameterName(self):
+            return self.getTypedRuleContext(SwiftParser.ExternalParameterNameContext,0)
 
 
         def typeAnnotation(self):
@@ -6395,15 +6395,15 @@ class SwiftParser ( Parser ):
                     self.match(SwiftParser.T__46)
 
 
-                self.state = 1004
-                self.parameterName()
-                self.state = 1006
-                _la = self._input.LA(1)
-                if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SwiftParser.T__22) | (1 << SwiftParser.T__23) | (1 << SwiftParser.T__24) | (1 << SwiftParser.T__26) | (1 << SwiftParser.T__27) | (1 << SwiftParser.T__28) | (1 << SwiftParser.T__29) | (1 << SwiftParser.T__39) | (1 << SwiftParser.T__40) | (1 << SwiftParser.T__41) | (1 << SwiftParser.T__42) | (1 << SwiftParser.T__45) | (1 << SwiftParser.T__47) | (1 << SwiftParser.T__53) | (1 << SwiftParser.T__54) | (1 << SwiftParser.T__55) | (1 << SwiftParser.T__56) | (1 << SwiftParser.T__57) | (1 << SwiftParser.T__58) | (1 << SwiftParser.T__59) | (1 << SwiftParser.T__60) | (1 << SwiftParser.T__61))) != 0) or _la==SwiftParser.Identifier:
-                    self.state = 1005
-                    self.localParameterName()
+                self.state = 1005
+                la_ = self._interp.adaptivePredict(self._input,99,self._ctx)
+                if la_ == 1:
+                    self.state = 1004
+                    self.externalParameterName()
 
 
+                self.state = 1007
+                self.localParameterName()
                 self.state = 1009
                 _la = self._input.LA(1)
                 if _la==SwiftParser.T__13:
@@ -6438,15 +6438,15 @@ class SwiftParser ( Parser ):
                     self.match(SwiftParser.T__46)
 
 
-                self.state = 1021
-                self.parameterName()
-                self.state = 1023
-                _la = self._input.LA(1)
-                if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << SwiftParser.T__22) | (1 << SwiftParser.T__23) | (1 << SwiftParser.T__24) | (1 << SwiftParser.T__26) | (1 << SwiftParser.T__27) | (1 << SwiftParser.T__28) | (1 << SwiftParser.T__29) | (1 << SwiftParser.T__39) | (1 << SwiftParser.T__40) | (1 << SwiftParser.T__41) | (1 << SwiftParser.T__42) | (1 << SwiftParser.T__45) | (1 << SwiftParser.T__47) | (1 << SwiftParser.T__53) | (1 << SwiftParser.T__54) | (1 << SwiftParser.T__55) | (1 << SwiftParser.T__56) | (1 << SwiftParser.T__57) | (1 << SwiftParser.T__58) | (1 << SwiftParser.T__59) | (1 << SwiftParser.T__60) | (1 << SwiftParser.T__61))) != 0) or _la==SwiftParser.Identifier:
-                    self.state = 1022
-                    self.localParameterName()
+                self.state = 1022
+                la_ = self._interp.adaptivePredict(self._input,104,self._ctx)
+                if la_ == 1:
+                    self.state = 1021
+                    self.externalParameterName()
 
 
+                self.state = 1024
+                self.localParameterName()
                 self.state = 1026
                 _la = self._input.LA(1)
                 if _la==SwiftParser.T__13:
@@ -6485,7 +6485,7 @@ class SwiftParser ( Parser ):
             self.exitRule()
         return localctx
 
-    class ParameterNameContext(ParserRuleContext):
+    class ExternalParameterNameContext(ParserRuleContext):
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -6496,23 +6496,23 @@ class SwiftParser ( Parser ):
 
 
         def getRuleIndex(self):
-            return SwiftParser.RULE_parameterName
+            return SwiftParser.RULE_externalParameterName
 
         def enterRule(self, listener:ParseTreeListener):
             if isinstance( listener, SwiftListener ):
-                listener.enterParameterName(self)
+                listener.enterExternalParameterName(self)
 
         def exitRule(self, listener:ParseTreeListener):
             if isinstance( listener, SwiftListener ):
-                listener.exitParameterName(self)
+                listener.exitExternalParameterName(self)
 
 
 
 
-    def parameterName(self):
+    def externalParameterName(self):
 
-        localctx = SwiftParser.ParameterNameContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 162, self.RULE_parameterName)
+        localctx = SwiftParser.ExternalParameterNameContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 162, self.RULE_externalParameterName)
         try:
             self.state = 1039
             token = self._input.LA(1)

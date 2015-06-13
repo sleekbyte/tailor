@@ -232,11 +232,11 @@ functionBody : codeBlock  ;
 parameterClauses : parameterClause parameterClauses? ;
 parameterClause : '(' ')' |  '(' parameterList '...'? ')'  ;
 parameterList : parameter | parameter ',' parameterList  ;
-parameter : 'inout'? 'let'? '#'? parameterName localParameterName? typeAnnotation? defaultArgumentClause?
- | 'inout'? 'var' '#'? parameterName localParameterName? typeAnnotation? defaultArgumentClause?
+parameter : 'inout'? 'let'? '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?
+ | 'inout'? 'var' '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?
  | attributes? sType
  ;
-parameterName : identifier | '_'  ;
+externalParameterName : identifier | '_'  ;
 localParameterName : identifier | '_'  ;
 defaultArgumentClause : AssignmentOperator expression  ;
 

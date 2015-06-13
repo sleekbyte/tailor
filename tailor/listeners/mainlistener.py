@@ -72,9 +72,10 @@ class MainListener(SwiftListener):
             if child.getText() == 'var':
                 return
         walker = ParseTreeWalker()
-        self.__walk_constant_dec_listener(walker, ctx.parameterName())
-        if ctx.localParameterName():
-            self.__walk_constant_dec_listener(walker, ctx.localParameterName())
+        if ctx.externalParameterName():
+            self.__walk_constant_dec_listener(walker,
+                                              ctx.externalParameterName())
+        self.__walk_constant_dec_listener(walker, ctx.localParameterName())
 
     def __walk_constant_dec_listener(self, walker, tree):
         walker.walk(ConstantDecListener(self.__printer), tree)

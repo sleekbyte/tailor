@@ -26,7 +26,7 @@ let romeo_And_Juliet = [
     "Act 1 Scene 2: Capulet's mansion",
 ]
 
-func declarations() {
+func declarations(ExternalParam LocalParam: String) {
   let OddDigits: Set = [1, 3, 5, 7, 9]
   let airport_Codes = [String](airports.keys)
   let numberOfLegs = ["spider": 8, "ant": 6, "cat": 4]

@@ -6,6 +6,8 @@
 15:8: error: Constant should be in lowerCamelCase
 20:4: error: Global constant should be either lowerCamelCase or UpperCamelCase
 24:4: error: Global constant should be either lowerCamelCase or UpperCamelCase
+29:32: error: Constant should be in lowerCamelCase
+29:18: error: Constant should be in lowerCamelCase
 30:6: error: Constant should be in lowerCamelCase
 31:6: error: Constant should be in lowerCamelCase
 33:6: error: Constant should be in lowerCamelCase
