@@ -152,7 +152,7 @@ class MainListener(SwiftListener):
         self.__verify_name_length(
             ctx, 'Local Parameter', self.__max_lengths.max_name_length)
 
-    # TODO: Fix grammar for setter
+    # TODO: #41 Fix grammar for setter declarations
     def enterSetterName(self, ctx):
         self.__verify_name_length(
             ctx, 'Setter', self.__max_lengths.max_name_length)
@@ -165,7 +165,7 @@ class MainListener(SwiftListener):
         self.__verify_name_length(
             ctx, 'Type', self.__max_lengths.max_name_length)
 
-    # TODO: Fix grammar for variable names, ensure constants are checked
+    # TODO: #13 Handle all cases for variable name declarations
     def enterVariableName(self, ctx):
         self.__verify_name_length(
             ctx, 'Variable', self.__max_lengths.max_name_length)
