@@ -9,3 +9,13 @@
 
 # pyvenv
 venv/
+
+# Java
+*.class
+
+# Package Files
+*.jar
+
+# Gradle
+.gradle
+build/
