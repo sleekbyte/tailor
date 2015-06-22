@@ -10,6 +10,14 @@ hash antlr4 2>/dev/null || brew install antlr
 # Install Gradle via Homebrew if nonexistent
 hash gradle 2>/dev/null || brew install gradle
 
+# Enable the Gradle Daemon for the current user: https://docs.gradle.org/2.4/userguide/gradle_daemon.html
+GRADLE_PROPERTIES=~/.gradle/gradle.properties
+GRADLE_DAEMON_ENABLE="org.gradle.daemon=true"
+mkdir -p ~/.gradle/ && touch "${GRADLE_PROPERTIES}"
+if ! grep "${GRADLE_DAEMON_ENABLE}" "${GRADLE_PROPERTIES}" >/dev/null; then
+  echo "${GRADLE_DAEMON_ENABLE}" >> "${GRADLE_PROPERTIES}"
+fi
+
 # Install Python 3 via Homebrew if nonexistent
 hash python3 2>/dev/null || brew install python3
 

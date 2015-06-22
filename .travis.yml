@@ -1,6 +1,4 @@
-language: python
-python:
-  - "3.4"
+language: java
 # command to install dependencies
 install:
   - "pip install -r requirements.txt"

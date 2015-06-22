@@ -1,12 +1,14 @@
-#!/bin/sh
+#!/usr/bin/env sh
 # Usage: script/cibuild
 # Emulates a continuous integration build.
 
 set -e
 
-# Activate virtualenv if deactivated
-[ ${VIRTUAL_ENV} ] || { [ -f venv/bin/activate ] && source venv/bin/activate; }
 # Execute test script
 script/test
+
+# Activate virtualenv if deactivated
+[ ${VIRTUAL_ENV} ] || { [ -f venv/bin/activate ] && source venv/bin/activate; }
+
 # Run pre-commit hooks on all files
 pre-commit run --all-files
