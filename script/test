@@ -4,5 +4,5 @@
 
 set -e
 
-# Run all Gradle tests and checks
-gradle check
+# Run tests via Gradle
+gradle test

@@ -4,11 +4,5 @@
 
 set -e
 
-# Execute test script
-script/test
-
-# Activate virtualenv if deactivated
-[ ${VIRTUAL_ENV} ] || { [ -f venv/bin/activate ] && source venv/bin/activate; }
-
-# Run pre-commit hooks on all files
-pre-commit run --all-files
+# Run all tests and checks via Gradle
+gradle check
