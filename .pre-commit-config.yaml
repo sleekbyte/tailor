@@ -2,25 +2,9 @@
     sha: 516cc9fa72ad09699f2c03ffbd0aa7f60d75b59a
     hooks:
     -   id: check-case-conflict
-    -   id: check-docstring-first
     -   id: check-merge-conflict
     -   id: check-yaml
-    -   id: debug-statements
-    -   id: double-quote-string-fixer
-        exclude: tailor/swift/
     -   id: end-of-file-fixer
         exclude: tailor/swift/
-    -   id: flake8
-        exclude: tailor/swift/
-        args:
-        - --max-complexity=10
-    -   id: name-tests-test
     -   id: trailing-whitespace
         exclude: tailor/swift/
--   repo: git://github.com/pre-commit/mirrors-pylint
-    sha: 4972270a188e28f100cd0db472e05f59d9621e54
-    hooks:
-    -   id: pylint
-        exclude: tailor/swift/
-        args:
-        - --disable=import-error
