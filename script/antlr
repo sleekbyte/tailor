@@ -1,21 +1,17 @@
-#!/bin/sh
+#!/usr/bin/env sh
 # Usage: script/antlr
-# Installs and executes ANTLR Tool.
+# Executes ANTLR Tool on Swift grammar.
 
 set -e
 
-# Install ANTLR
-hash antlr4 2>/dev/null || brew install antlr
+ANTLR_OUT="../src/main/java/com/sleekbyte/tailor/swift"
+JAVA_PKG="com.sleekbyte.tailor.swift"
 
 # Generate the Swift lexer, parser, and listener
 pushd . >/dev/null
 cd grammar
-antlr4 -Dlanguage=Python3 Swift.g4 -o ../tailor/swift/
-popd >/dev/null
+antlr4 Swift.g4 -package "${JAVA_PKG}" -o "${ANTLR_OUT}"
 
 # Remove ANTLR-generated tokens
-rm tailor/swift/*.tokens
-
-# Downcase reference to SwiftListener module in swiftparser.py
-sed -i.bak 's/\.SwiftListener/\.swiftlistener/' tailor/swift/swiftparser.py
-rm tailor/swift/swiftparser.py.bak
+rm "${ANTLR_OUT}"/*.tokens
+popd >/dev/null

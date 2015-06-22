@@ -1,5 +1,6 @@
 # ANTLR
 *.tokens
+src/main/java/com/sleekbyte/tailor/swift/
 
 # Idea
 .idea

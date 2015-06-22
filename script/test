@@ -1,10 +1,8 @@
-#!/bin/sh
+#!/usr/bin/env sh
 # Usage: script/test
-# Activates virtualenv and runs tests.
+# Runs test suite and other checks.
 
 set -e
 
-# Activate virtualenv if deactivated
-[ ${VIRTUAL_ENV} ] || { [ -f venv/bin/activate ] && source venv/bin/activate; }
-# Run tests in tailor/tests/
-nosetests
+# Run tests via Gradle
+gradle test

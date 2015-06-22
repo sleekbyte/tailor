@@ -2,3 +2,11 @@ apply plugin: 'java'
 apply plugin: 'application'
 
 mainClassName = 'com.sleekbyte.tailor.Tailor'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'org.antlr:antlr4-runtime:4.5'
+}
