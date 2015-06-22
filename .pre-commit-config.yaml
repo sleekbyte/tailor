@@ -1,5 +1,5 @@
 -   repo: git://github.com/pre-commit/pre-commit-hooks
-    sha: 516cc9fa72ad09699f2c03ffbd0aa7f60d75b59a
+    sha: cf550fcab3f12015f8676b8278b30e1a5bc10e70
     hooks:
     -   id: check-case-conflict
     -   id: check-docstring-first
@@ -12,8 +12,7 @@
         exclude: tailor/swift/
     -   id: flake8
         exclude: tailor/swift/
-        args:
-        - --max-complexity=10
+        args: [--max-complexity=10]
     -   id: name-tests-test
     -   id: trailing-whitespace
         exclude: tailor/swift/
@@ -22,6 +21,11 @@
     hooks:
     -   id: pylint
         exclude: tailor/swift/
-        args:
         # Disable import checks since hooks run in isolated virtualenv
-        - --disable=import-error
+        args: [--disable=import-error]
+# TODO: Enable pep257 pre-commit hook once "#26 Add docstrings to all significant modules, classes, methods, and functions" is resolved
+# -   repo: git://github.com/FalconSocial/pre-commit-mirrors-pep257
+#     sha: 67c970e89857fdcebcd59ace94950a3331985a3b
+#     hooks:
+#     -   id: pep257
+#         exclude: tailor/swift/
