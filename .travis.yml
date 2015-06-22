@@ -1,1 +1,5 @@
 language: java
+addons:
+  apt:
+    packages:
+    - antlr
