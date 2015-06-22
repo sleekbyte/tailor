@@ -2,19 +2,22 @@
 *.tokens
 src/main/java/com/sleekbyte/tailor/swift/
 
-# Idea
-.idea
+# IntelliJ IDEA
+*.iml
+
+## Directory-based project format:
+.idea/
 
 # Python
 *.py[cod]
 
-# pyvenv
+## pyvenv
 venv/
 
 # Java
 *.class
 
-# Package Files
+## Package Files
 *.jar
 
 # Gradle
