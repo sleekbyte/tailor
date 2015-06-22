@@ -8,5 +8,6 @@ repositories {
 }
 
 dependencies {
+    testCompile 'junit:junit:4.12'
     compile 'org.antlr:antlr4-runtime:4.5'
 }
