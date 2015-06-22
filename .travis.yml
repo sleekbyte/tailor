@@ -1,2 +1,4 @@
 language: java
-before_install: script/antlr
+before_install:
+  - script/install-antlr.sh
+  - script/antlr
