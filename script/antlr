@@ -2,13 +2,14 @@
 # Usage: script/antlr
 # Executes ANTLR Tool on Swift grammar.
 
-set -e
+set -ex
 
 ANTLR_OUT="../src/main/java/com/sleekbyte/tailor/swift"
 JAVA_PKG="com.sleekbyte.tailor.swift"
 
 # Generate the Swift lexer, parser, and listener
 cd grammar
+hash antlr4 2>/dev/null || alias antlr4='java -jar ../antlr-4.5-complete.jar'
 antlr4 Swift.g4 -package "${JAVA_PKG}" -o "${ANTLR_OUT}"
 
 # Remove ANTLR-generated tokens
