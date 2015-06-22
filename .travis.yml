@@ -1,5 +1,2 @@
 language: java
-addons:
-  apt:
-    packages:
-    - antlr
+before_install: script/antlr
