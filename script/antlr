@@ -9,7 +9,7 @@ JAVA_PKG="com.sleekbyte.tailor.swift"
 
 # Generate the Swift lexer, parser, and listener
 cd grammar
-alias antlr='antlr4'
+hash antlr4 2>/dev/null && alias antlr='antlr4'
 antlr Swift.g4 -package "${JAVA_PKG}" -o "${ANTLR_OUT}"
 
 # Remove ANTLR-generated tokens
