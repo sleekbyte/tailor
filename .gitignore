@@ -1,6 +1,6 @@
 # ANTLR
 *.tokens
-src/main/java/com/sleekbyte/tailor/swift/
+src/main/gen/
 
 # IntelliJ IDEA
 *.iml
@@ -23,3 +23,9 @@ venv/
 # Gradle
 .gradle
 build/
+
+## Ignore Gradle GUI config
+gradle-app.setting
+
+## Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
