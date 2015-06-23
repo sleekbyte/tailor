@@ -4,21 +4,37 @@ import com.sleekbyte.tailor.common.Location;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * Generates and outputs formatted analysis messages for Xcode
+ */
 public class Printer {
 
     private static final Location DEFAULT_LOCATION = new Location(1, 1);
-    private static File inputFile;
+    private File inputFile;
 
     public Printer(File inputFile) {
         this.inputFile = inputFile;
     }
 
-    public void warn(String warnMsg, Optional<ParserRuleContext> ctx, Optional<Location> location) {
-        print("warning", warnMsg, ctx, location);
+    /**
+     * Prints warning message
+     * @param warningMsg warning message to print
+     * @param ctx context object containing line and column number for printing [optional]
+     * @param location location object containing line and column number for printing [optional]
+     */
+    public void warn(String warningMsg, Optional<ParserRuleContext> ctx, Optional<Location> location) {
+        print("warning", warningMsg, ctx, location);
     }
 
+    /**
+     * Prints error message
+     * @param errorMsg error message to print
+     * @param ctx context object containing line and column number for printing [optional]
+     * @param location location object containing line and column number for printing [optional]
+     */
     public void error(String errorMsg, Optional<ParserRuleContext> ctx, Optional<Location> location) {
         print("error", errorMsg, ctx, location);
     }
@@ -37,6 +53,13 @@ public class Printer {
     }
 
     private String genOutputString(String classification, String msg, int line, int column) {
-        return inputFile.getName() + ":" + line + ":" + column + ": " + classification + ": " + msg;
+        String outputString = "";
+        try {
+            outputString = inputFile.getCanonicalPath() + ":" + line + ":" + column + ": " +
+                classification + ": " + msg;
+        } catch (IOException e) {
+            System.err.println("Error in getting canonical path of input file: " + e.getMessage());
+        }
+        return outputString;
     }
 }
