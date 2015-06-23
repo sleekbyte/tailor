@@ -1,6 +1,6 @@
 # ANTLR
 *.tokens
-src/main/java/com/sleekbyte/tailor/swift/
+src/main/gen/
 
 # IntelliJ IDEA
 *.iml

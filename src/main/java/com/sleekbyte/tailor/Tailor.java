@@ -1,8 +1,8 @@
 package com.sleekbyte.tailor;
 
+import com.sleekbyte.tailor.antlr.SwiftLexer;
+import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.listeners.MainListener;
-import com.sleekbyte.tailor.swift.SwiftLexer;
-import com.sleekbyte.tailor.swift.SwiftParser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
