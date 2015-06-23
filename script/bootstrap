@@ -1,14 +1,11 @@
 #!/usr/bin/env sh
 # Usage: script/bootstrap
-# Installs ANTLR, Gradle, and Python 3, creates a virtualenv, and installs required modules for development.
+# Installs ANTLR and Python 3, creates a virtualenv, and installs required modules for development.
 
 set -e
 
 # Install ANTLR via Homebrew if nonexistent
 hash antlr4 2>/dev/null || brew install antlr
-
-# Install Gradle via Homebrew if nonexistent
-hash gradle 2>/dev/null || brew install gradle
 
 # Enable the Gradle Daemon for the current user: https://docs.gradle.org/2.4/userguide/gradle_daemon.html
 GRADLE_PROPERTIES=~/.gradle/gradle.properties
