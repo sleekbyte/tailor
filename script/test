@@ -5,4 +5,4 @@
 set -e
 
 # Run tests via Gradle
-gradle test
+./gradlew test

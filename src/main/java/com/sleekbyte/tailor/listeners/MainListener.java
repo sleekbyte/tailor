@@ -1,8 +1,8 @@
 package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.output.Printer;
-import com.sleekbyte.tailor.swift.SwiftBaseListener;
-import com.sleekbyte.tailor.swift.SwiftParser;
+import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 
 public class MainListener extends SwiftBaseListener {
 
