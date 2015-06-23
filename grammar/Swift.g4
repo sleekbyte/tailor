@@ -38,12 +38,14 @@ topLevel : (statement | expression)* EOF ;
 // GRAMMAR OF A STATEMENT
 
 statement
- : expression ';'?
- | declaration ';'?
+ : declaration ';'?
  | loopStatement ';'?
  | branchStatement ';'?
  | labeledStatement
  | controlTransferStatement ';'?
+ | deferStatement ';' ?
+ | doStatement ':'?
+ | expression ';'?
  ;
 
 statements : statement+ ;
@@ -53,7 +55,7 @@ statements : statement+ ;
 loopStatement : forStatement
  | forInStatement
  | whileStatement
- | doWhileStatement
+ | repeatWhileStatement
  ;
 
 // GRAMMAR OF A FOR STATEMENT
@@ -67,26 +69,28 @@ forInit : variableDeclaration | expressionList  ;
 
 // GRAMMAR OF A FOR_IN STATEMENT
 
-forInStatement : 'for' pattern 'in' expression codeBlock  ;
+forInStatement : 'for' 'case'? pattern 'in' expression codeBlock whereClause? ;
 
 // GRAMMAR OF A WHILE STATEMENT
 
-whileStatement : 'while' whileCondition codeBlock  ;
-whileCondition : expression | declaration  ;
+whileStatement : 'while' conditionClause codeBlock  ;
 
-// GRAMMAR OF A DO_WHILE STATEMENT
+// GRAMMAR OF A REPEAT WHILE STATEMENT
 
-doWhileStatement : 'do' codeBlock 'while' whileCondition  ;
+repeatWhileStatement: 'repeat' codeBlock 'while' expression ;
 
 // GRAMMAR OF A BRANCH STATEMENT
 
-branchStatement : ifStatement | switchStatement  ;
+branchStatement : ifStatement | guardStatement | switchStatement  ;
 
 // GRAMMAR OF AN IF STATEMENT
 
-ifStatement : 'if' ifCondition codeBlock elseClause? ;
-ifCondition : expression | declaration  ;
+ifStatement : 'if' conditionClause codeBlock elseClause? ;
 elseClause : 'else' codeBlock | 'else' ifStatement  ;
+
+// GRAMMAR OF A GUARD STATEMENT
+
+guardStatement : 'guard' conditionClause 'else' codeBlock ;
 
 // GRAMMAR OF A SWITCH STATEMENT
 
@@ -94,10 +98,8 @@ switchStatement : 'switch' expression '{' switchCases? '}'  ;
 switchCases : switchCase switchCases? ;
 switchCase : caseLabel statements | defaultLabel statements  | caseLabel ';' | defaultLabel ';'  ;
 caseLabel : 'case' caseItemList ':' ;
-caseItemList : pattern guardClause? | pattern guardClause? ',' caseItemList ;
+caseItemList : pattern whereClause? | pattern whereClause? ',' caseItemList ;
 defaultLabel : 'default' ':' ;
-guardClause : 'where' guardExpression ;
-guardExpression : expression  ;
 
 // GRAMMAR OF A LABELED STATEMENT
 
@@ -111,6 +113,7 @@ controlTransferStatement : breakStatement
  | continueStatement
  | fallthroughStatement
  | returnStatement
+ | throwStatement
  ;
 
 // GRAMMAR OF A BREAK STATEMENT
@@ -129,22 +132,63 @@ fallthroughStatement : 'fallthrough'  ;
 
 returnStatement : 'return' expression? ;
 
+// GRAMMAR OF A THROW STATEMENT
+
+throwStatement : 'throw' expression ;
+
+// GRAMMAR OF A DEFER STATEMENT
+
+deferStatement: 'defer' codeBlock ;
+
+// GRAMMAR OF A DO STATEMENT
+
+doStatement: 'do' codeBlock catchClauses? ;
+catchClauses: catchClause catchClauses? ;
+catchClause: 'catch' pattern? whereClause? codeBlock ;
+
+// GRAMMAR FOR CONDITION CLAUSES
+
+conditionClause : expression
+ | expression ',' conditionList
+ | conditionList
+ | availabilityCondition ',' expression
+ ;
+
+conditionList : condition | condition ',' conditionList ;
+condition: availabilityCondition | caseCondition | optionalBindingCondition ;
+caseCondition: 'case' pattern initializer whereClause? ;
+optionalBindingCondition: optionalBindingHead optionalBindingContinuationList? whereClause? ;
+optionalBindingHead: 'let' pattern initializer | 'var' pattern initializer ;
+optionalBindingContinuationList: optionalBindingContinuation (',' optionalBindingContinuationList)? ;
+optionalBindingContinuation: pattern initializer | optionalBindingHead ;
+
+whereClause: 'where' whereExpression ;
+whereExpression: expression ;
+
+// GRAMMAR OF AN AVAILABILITY CONDITION
+
+availabilityCondition: '#available' '(' availabilityArguments ')' ;
+availabilityArguments: availabilityArgument (',' availabilityArguments)? ;
+availabilityArgument: platformName platformVersion | '*' ; // Not sure what * meant in the Swift Language Reference
+platformName: 'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS' ;
+platformVersion: VersionLiteral | DecimalLiteral | FloatingPointLiteral ; // TODO: Find a way to make this only VersionLiteral
+
 // Generic Parameters and Arguments
 
 // GRAMMAR OF A GENERIC PARAMETER CLAUSE
 
-genericParameterClause : LessThanOperator genericParameterList requirementClause? GreaterThanOperator  ;
+genericParameterClause : '<' genericParameterList requirementClause? '>'  ;
 genericParameterList : genericParameter | genericParameter ',' genericParameterList  ;
 genericParameter : typeName | typeName ':' typeIdentifier | typeName ':' protocolCompositionType  ;
 requirementClause : 'where' requirementList  ;
 requirementList : requirement | requirement ',' requirementList  ;
 requirement : conformanceRequirement | sameTypeRequirement  ;
 conformanceRequirement : typeIdentifier ':' typeIdentifier | typeIdentifier ':' protocolCompositionType  ;
-sameTypeRequirement : typeIdentifier EqualityOperator typeIdentifier  ;
+sameTypeRequirement : typeIdentifier '==' typeIdentifier  ;
 
 // GRAMMAR OF A GENERIC ARGUMENT CLAUSE
 
-genericArgumentClause : LessThanOperator genericArgumentList GreaterThanOperator  ;
+genericArgumentClause : '<' genericArgumentList '>'  ;
 genericArgumentList : genericArgument (',' genericArgument)* ;
 genericArgument : sType  ;
 
@@ -170,8 +214,17 @@ declaration
  ;
 
 declarations : declaration declarations? ;
-declarationSpecifiers : declarationSpecifier declarationSpecifiers? ;
-declarationSpecifier : 'class' | 'mutating' | 'nonmutating' | 'override' | 'static' | 'unowned' | 'unowned(safe)' | 'unowned(unsafe)' | 'weak' ;
+declarationModifiers : declarationModifier declarationModifiers? ;
+declarationModifier : 'class' | 'convenience' | 'dynamic' | 'final' | 'infix'
+ | 'lazy' | 'mutating' | 'nonmutating' | 'optional' | 'override' | 'postfix'
+ | 'prefix' | 'required' | 'static' | 'unowned' | 'unowned' '(' 'safe' ')'
+ | 'unowned' '(' 'unsafe' ')' | 'weak'
+ | accessLevelModifier ;
+
+accessLevelModifier : 'internal' | 'internal' '(' 'set' ')'
+ | 'private' | 'private' '(' 'set' ')'
+ | 'public' | 'public' '(' 'set' ')' ;
+accessLevelModifiers : accessLevelModifier accessLevelModifiers? ;
 
 // GRAMMAR OF A CODE BLOCK
 
@@ -186,27 +239,27 @@ importPathIdentifier : identifier | operator  ;
 
 // GRAMMAR OF A CONSTANT DECLARATION
 
-constantDeclaration : attributes? declarationSpecifiers? 'let' patternInitializerList  ;
+constantDeclaration : attributes? declarationModifiers? 'let' patternInitializerList  ;
 patternInitializerList : patternInitializer (',' patternInitializer)* ;
 patternInitializer : pattern initializer? ;
-initializer : AssignmentOperator expression  ;
+initializer : '=' expression  ;
 
 // GRAMMAR OF A VARIABLE DECLARATION
 
 variableDeclaration
  : variableDeclarationHead patternInitializerList
- | variableDeclarationHead variableName typeAnnotation codeBlock
  | variableDeclarationHead variableName typeAnnotation getterSetterBlock
  | variableDeclarationHead variableName typeAnnotation getterSetterKeywordBlock
  | variableDeclarationHead variableName typeAnnotation initializer? willSetDidSetBlock
+ | variableDeclarationHead variableName typeAnnotation codeBlock
  ;
 
-variableDeclarationHead : attributes? declarationSpecifiers? 'var'  ;
+variableDeclarationHead : attributes? declarationModifiers? 'var'  ;
 variableName : identifier  ;
 getterSetterBlock : '{' getterClause setterClause?'}'  | '{' setterClause getterClause '}'  ;
 getterClause : attributes? 'get' codeBlock  ;
 setterClause : attributes? 'set' setterName? codeBlock  ;
-setterName : ( identifier )  ;
+setterName : '(' identifier ')'  ;
 getterSetterKeywordBlock : '{' getterKeywordClause setterKeywordClause?'}' | '{' setterKeywordClause getterKeywordClause '}'  ;
 getterKeywordClause : attributes? 'get'  ;
 setterKeywordClause : attributes? 'set'  ;
@@ -219,14 +272,14 @@ didSetClause : attributes? 'didSet' setterName? codeBlock  ;
 typealiasDeclaration : typealiasHead typealiasAssignment  ;
 typealiasHead : 'typealias' typealiasName  ;
 typealiasName : identifier  ;
-typealiasAssignment : AssignmentOperator sType  ;
+typealiasAssignment : '=' sType  ;
 
 // GRAMMAR OF A FUNCTION DECLARATION
 
 functionDeclaration : functionHead functionName genericParameterClause? functionSignature functionBody ;
-functionHead : attributes? declarationSpecifiers? 'func'  ;
+functionHead : attributes? declarationModifiers? 'func'  ;
 functionName : identifier |  operator  ;
-functionSignature : parameterClauses functionResult? ;
+functionSignature : parameterClauses ('throws' | 'rethrows')? functionResult? ;
 functionResult : '->' attributes? sType  ;
 functionBody : codeBlock  ;
 parameterClauses : parameterClause parameterClauses? ;
@@ -238,13 +291,13 @@ parameter : 'inout'? 'let'? '#'? externalParameterName? localParameterName typeA
  ;
 externalParameterName : identifier | '_'  ;
 localParameterName : identifier | '_'  ;
-defaultArgumentClause : AssignmentOperator expression  ;
+defaultArgumentClause : '=' expression  ;
 
 // GRAMMAR OF AN ENUMERATION DECLARATION
 
-enumDeclaration : attributes? 'enum' enumDef  ;
+enumDeclaration : attributes? accessLevelModifier? 'enum' enumDef  ;
 enumDef: unionStyleEnum | rawValueStyleEnum  ;
-unionStyleEnum : enumName genericParameterClause?'{' unionStyleEnumMembers?'}'  ;
+unionStyleEnum : enumName genericParameterClause? typeInheritanceClause? '{' unionStyleEnumMembers?'}'  ;
 unionStyleEnumMembers : unionStyleEnumMember unionStyleEnumMembers? ;
 unionStyleEnumMember : declaration | unionStyleEnumCaseClause ';'? ;
 unionStyleEnumCaseClause : attributes? 'case' unionStyleEnumCaseList  ;
@@ -252,29 +305,29 @@ unionStyleEnumCaseList : unionStyleEnumCase | unionStyleEnumCase ',' unionStyleE
 unionStyleEnumCase : enumCaseName tupleType? ;
 enumName : identifier  ;
 enumCaseName : identifier  ;
-rawValueStyleEnum : enumName genericParameterClause? ':' typeIdentifier '{' rawValueStyleEnumMembers?'}'  ;
+rawValueStyleEnum : enumName genericParameterClause? typeInheritanceClause? '{' rawValueStyleEnumMembers?'}'  ;
 rawValueStyleEnumMembers : rawValueStyleEnumMember rawValueStyleEnumMembers? ;
 rawValueStyleEnumMember : declaration | rawValueStyleEnumCaseClause  ;
 rawValueStyleEnumCaseClause : attributes? 'case' rawValueStyleEnumCaseList  ;
 rawValueStyleEnumCaseList : rawValueStyleEnumCase | rawValueStyleEnumCase ',' rawValueStyleEnumCaseList  ;
 rawValueStyleEnumCase : enumCaseName rawValueAssignment? ;
-rawValueAssignment : AssignmentOperator literal  ;
+rawValueAssignment : '=' literal  ;
 
 // GRAMMAR OF A STRUCTURE DECLARATION
 
-structDeclaration : attributes? 'struct' structName genericParameterClause? typeInheritanceClause? structBody  ;
+structDeclaration : attributes? accessLevelModifier? 'struct' structName genericParameterClause? typeInheritanceClause? structBody  ;
 structName : identifier  ;
 structBody : '{' declarations?'}'  ;
 
 // GRAMMAR OF A CLASS DECLARATION
 
-classDeclaration : attributes? 'class' className genericParameterClause? typeInheritanceClause? classBody  ;
+classDeclaration : attributes? accessLevelModifier? 'class' className genericParameterClause? typeInheritanceClause? classBody  ;
 className : identifier ;
 classBody : '{' declarations? '}'  ;
 
 // GRAMMAR OF A PROTOCOL DECLARATION
 
-protocolDeclaration : attributes? 'protocol' protocolName typeInheritanceClause? protocolBody  ;
+protocolDeclaration : attributes? accessLevelModifier? 'protocol' protocolName typeInheritanceClause? protocolBody  ;
 protocolName : identifier  ;
 protocolBody : '{' protocolMemberDeclarations?'}'  ;
 protocolMemberDeclaration : protocolPropertyDeclaration ';'?
@@ -308,7 +361,7 @@ protocolAssociatedTypeDeclaration : typealiasHead typeInheritanceClause? typeali
 // GRAMMAR OF AN INITIALIZER DECLARATION
 
 initializerDeclaration : initializerHead genericParameterClause? parameterClause initializerBody  ;
-initializerHead : attributes? 'convenience'? 'init'  ;
+initializerHead : attributes? declarationModifiers? 'init' ('?' | '!')?  ;
 initializerBody : codeBlock  ;
 
 // GRAMMAR OF A DEINITIALIZER DECLARATION
@@ -317,25 +370,25 @@ deinitializerDeclaration : attributes? 'deinit' codeBlock  ;
 
 // GRAMMAR OF AN EXTENSION DECLARATION
 
-extensionDeclaration : 'extension' typeIdentifier typeInheritanceClause? extensionBody  ;
+extensionDeclaration : accessLevelModifier? 'extension' typeIdentifier requirementClause? typeInheritanceClause? extensionBody  ;
 extensionBody : '{' declarations?'}'  ;
 
 // GRAMMAR OF A SUBSCRIPT DECLARATION
 
-subscriptDeclaration : subscriptHead subscriptResult codeBlock
- | subscriptHead subscriptResult getterSetterBlock
+subscriptDeclaration : subscriptHead subscriptResult getterSetterBlock
  | subscriptHead subscriptResult getterSetterKeywordBlock
+ | subscriptHead subscriptResult codeBlock
  ;
-subscriptHead : attributes? 'subscript' parameterClause  ;
+subscriptHead : attributes? declarationModifiers? 'subscript' parameterClause  ;
 subscriptResult : '->' attributes? sType  ;
 
 // GRAMMAR OF AN OPERATOR DECLARATION
 
 operatorDeclaration : prefixOperatorDeclaration | postfixOperatorDeclaration | infixOperatorDeclaration  ;
-prefixOperatorDeclaration : 'operator' 'prefix' 'operator' '{' '}'  ;
-postfixOperatorDeclaration : 'operator' 'postfix' 'operator' '{' '}'  ;
-infixOperatorDeclaration : 'operator' 'infix' 'operator' '{' infixOperatorAttributes '}'  ;
-infixOperatorAttributes : precedenceClause? associativityClause? ;
+prefixOperatorDeclaration : 'prefix' 'operator' operator '{' '}'  ;
+postfixOperatorDeclaration : 'postfix' 'operator' operator '{' '}'  ;
+infixOperatorDeclaration : 'infix' 'operator' operator '{' infixOperatorAttributes '}'  ;
+infixOperatorAttributes : precedenceClause? associativityClause? | associativityClause? precedenceClause? ;
 precedenceClause : 'precedence' precedenceLevel  ;
 precedenceLevel : integerLiteral ;
 associativityClause : 'associativity' associativity  ;
@@ -414,7 +467,8 @@ balancedToken
 
 expressionList : expression (',' expression)* ;
 
-expression : prefixExpression binaryExpression* ;
+expression : tryOperator? prefixExpression binaryExpression+
+ | tryOperator? prefixExpression ;
 
 prefixExpression
   : prefixOperator? postfixExpression ';'?
@@ -447,16 +501,22 @@ expression
 
 inOutExpression : '&' identifier ;
 
+// GRAMMAR OF A TRY EXPRESSION
+
+tryOperator : 'try' '!'? ;
+
+// GRAMMAR OF A BINARY EXPRESSION
+
 binaryExpression
   : binaryOperator prefixExpression
-  | assignmentOperator prefixExpression
-  | conditionalOperator prefixExpression
+  | assignmentOperator tryOperator? prefixExpression
+  | conditionalOperator tryOperator? prefixExpression
   | typeCastingOperator
   ;
 
 // GRAMMAR OF AN ASSIGNMENT OPERATOR
 
-assignmentOperator : AssignmentOperator  ;
+assignmentOperator : '='  ;
 
 // GRAMMAR OF A CONDITIONAL OPERATOR
 
@@ -468,18 +528,19 @@ typeCastingOperator
   : 'is' sType
   | 'as' '?' sType
   | 'as' sType
-  | 'as' NotOperator sType
+  | 'as' '!' sType
   ;
 
 // GRAMMAR OF A PRIMARY EXPRESSION
 
 primaryExpression
- : identifier genericArgumentClause?
+ : (identifier | operator) genericArgumentClause?
  | literalExpression
  | selfExpression
  | superclassExpression
  | closureExpression
  | parenthesizedExpression
+ | implicitMemberExpression
 // | implicit_member_expression disallow as ambig with explicit member expr in postfix_expression
  | wildcardExpression
  ;
@@ -532,7 +593,7 @@ closureSignature
  | captureList 'in'
  ;
 
-captureList : '[' captureSpecifier expression ']'  ;
+captureList : '[' captureSpecifier expression (',' captureSpecifier expression)? ']'  ;
 
 captureSpecifier : 'weak' | 'unowned' | 'unowned(safe)' | 'unowned(unsafe)'  ;
 
@@ -564,7 +625,7 @@ postfixExpression
  | postfixExpression '.' 'self'                                  # postfixSelfExpression
  | postfixExpression '.' 'dynamicType'                           # dynamicTypeExpression
  | postfixExpression '[' expressionList ']'                     # subscriptExpression
- | postfixExpression NotOperator                                # forcedValueExpression
+ | postfixExpression '!'                                # forcedValueExpression
  | postfixExpression '?'                                         # optionalChainingExpression
  ;
 
@@ -610,7 +671,7 @@ functionCallExpression
 // split the operators out into the individual tokens as some of those tokens
 // are also referenced individually. For example, type signatures use
 // <...>.
-operator: EqualityOperator | LessThanOperator | GreaterThanOperator | NotOperator | Operator;
+operator: '==' | '<' | '>' | '!' | '...' | '*' | '&' | Operator;
 
 
 // WHITESPACE scariness:
@@ -657,17 +718,40 @@ postfixOperator : operator  ;
 
 // GRAMMAR OF A TYPE
 
-sType
+/*sType
  : sType '[' ']'
  | sType '->' sType
  | typeIdentifier
  | tupleType
  | sType '?'
- | sType NotOperator
+ | sType '!'
  | protocolCompositionType
  | sType '.' 'Type'
  | sType '.' 'Protocol'
+ ;*/
+
+sType
+ : arrayType
+ | dictionaryType
+ | sType 'throws'? '->' sType  // function-type
+ | sType 'rethrows' '->' sType // function-type
+ | typeIdentifier
+ | tupleType
+ | sType '?'  // optional-type
+ | sType '!'  // implicitly-unwrapped-optional-type
+ | protocolCompositionType
+ | sType '.' 'Type' | sType '.' 'Protocol' // metatype
  ;
+
+arrayType: '[' sType ']' ;
+
+dictionaryType: '[' sType ':' sType ']' ;
+
+functionType: sType 'throws'? '->' sType | sType 'rethrows' '->' sType ;
+
+optionalType: sType '?' ;
+
+implicitlyUnwrappedOptionalType: sType '!' ;
 
 // GRAMMAR OF A TYPE ANNOTATION
 
@@ -692,7 +776,7 @@ elementName : identifier  ;
 
 // GRAMMAR OF A PROTOCOL COMPOSITION TYPE
 
-protocolCompositionType : 'protocol' LessThanOperator protocolIdentifierList? GreaterThanOperator  ;
+protocolCompositionType : 'protocol' '<' protocolIdentifierList? '>'  ;
 protocolIdentifierList : protocolIdentifier | protocolIdentifier ',' protocolIdentifierList  ;
 protocolIdentifier : typeIdentifier  ;
 
@@ -702,8 +786,12 @@ metatypeType : sType '.' 'Type' | sType '.' 'Protocol';
 
 // GRAMMAR OF A TYPE INHERITANCE CLAUSE
 
-typeInheritanceClause : ':' typeInheritanceList  ;
+typeInheritanceClause : ':' classRequirement ',' typeInheritanceList
+ | ':' classRequirement
+ | ':' typeInheritanceList
+ ;
 typeInheritanceList : typeIdentifier (',' typeIdentifier)* ;
+classRequirement: 'class' ;
 
 // ---------- Lexical Structure -----------
 
@@ -711,23 +799,13 @@ typeInheritanceList : typeIdentifier (',' typeIdentifier)* ;
 
 identifier : Identifier | contextSensitiveKeyword ;
 
-keyword : 'convenience' | 'class' | 'deinit' | 'enum' | 'extension' | 'func' | 'import' | 'init' | 'let' | 'protocol' | 'static' | 'struct' | 'subscript' | 'typealias' | 'var' | 'break' | 'case' | 'continue' | 'default' | 'do' | 'else' | 'fallthrough' | 'if' | 'in' | 'for' | 'return' | 'switch' | 'where' | 'while' | 'as' | 'dynamicType' | 'is' | 'new' | 'super' | 'self' | 'Self' | 'Type' ;
+keyword : 'convenience' | 'class' | 'deinit' | 'enum' | 'extension' | 'func' | 'import' | 'init' | 'let' | 'protocol' | 'static' | 'struct' | 'subscript' | 'typealias' | 'var' | 'break' | 'case' | 'continue' | 'default' | 'do' | 'else' | 'fallthrough' | 'if' | 'in' | 'for' | 'return' | 'switch' | 'where' | 'while' | 'as' | 'dynamicType' | 'is' | 'new' | 'super' | 'self' | 'Self' | 'Type' | 'repeat' ;
 
 contextSensitiveKeyword :
  'associativity' | 'didSet' | 'get' | 'infix' | 'inout' | 'left' | 'mutating' | 'none' |
  'nonmutating' | 'operator' | 'override' | 'postfix' | 'precedence' | 'prefix' | 'right' |
- 'set' | 'unowned' | 'unowned(safe)' | 'unowned(unsafe)' | 'weak' | 'willSet'
+ 'set' | 'unowned' | 'unowned(safe)' | 'unowned(unsafe)' | 'weak' | 'willSet' | 'required'
  ;
-
-AssignmentOperator: '=' ;
-
-EqualityOperator: '==' ;
-
-LessThanOperator: '<' ;
-
-GreaterThanOperator: '>' ;
-
-NotOperator: '!';
 
 Operator
   : OperatorHead OperatorCharacter*
@@ -846,6 +924,8 @@ fragment HexadecimalExponent : FloatingPointP Sign? HexadecimalLiteral ;
 fragment FloatingPointE : [eE] ;
 fragment FloatingPointP : [pP] ;
 fragment Sign : [+\-] ;
+
+VersionLiteral: DecimalLiteral DecimalFraction DecimalFraction ;
 
 // GRAMMAR OF A STRING LITERAL
 
