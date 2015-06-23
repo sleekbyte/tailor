@@ -3,6 +3,12 @@ apply plugin: 'application'
 
 mainClassName = 'com.sleekbyte.tailor.Tailor'
 
+run {
+    if(project.hasProperty('args')){
+        args project.args.split('\\s+')
+    }
+}
+
 repositories {
     jcenter()
 }
@@ -10,4 +16,5 @@ repositories {
 dependencies {
     testCompile 'junit:junit:4.12'
     compile 'org.antlr:antlr4-runtime:4.5'
+    compile 'commons-cli:commons-cli:1.3.1'
 }
