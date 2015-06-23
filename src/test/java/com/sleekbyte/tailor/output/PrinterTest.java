@@ -80,6 +80,7 @@ public class PrinterTest {
     public void testPrintWithContextAndLocation() {
         Location location = new Location(LINE_NUMBER + 1, COLUMN_NUMBER + 1);
         printer.error(ERROR_MSG, Optional.of(context), Optional.of(location));
+        // Output should print line and column number of context
         assertEquals(expectedOutput("error", ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER + 1), outContent.toString());
     }
 
