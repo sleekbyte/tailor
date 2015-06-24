@@ -4,5 +4,8 @@
 
 set -e
 
-# Run all tests and checks via Gradle
+# Assemble all the archives in the project
+./gradlew assemble
+
+# Perform all verification tasks in the project
 ./gradlew check

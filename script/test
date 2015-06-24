@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 # Usage: script/test
-# Runs test suite and other checks.
+# Runs the test suite.
 
 set -e
 
-# Run tests via Gradle
+# Run the unit tests
 ./gradlew test

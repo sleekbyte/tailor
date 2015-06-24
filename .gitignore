@@ -1,6 +1,6 @@
 # ANTLR
 *.tokens
-src/main/gen/
+src/gen/
 
 # IntelliJ IDEA
 *.iml
