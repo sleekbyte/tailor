@@ -7,6 +7,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
 
+/**
+ * Util class for source files
+ */
 public class SourceFileUtil {
 
     public static int numLinesInFile(File inputFile) throws IOException {

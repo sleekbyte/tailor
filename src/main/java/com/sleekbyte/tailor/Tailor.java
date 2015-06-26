@@ -3,6 +3,7 @@ package com.sleekbyte.tailor;
 import com.sleekbyte.tailor.antlr.SwiftLexer;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.MaxLengths;
+import com.sleekbyte.tailor.listeners.FileListener;
 import com.sleekbyte.tailor.listeners.MainListener;
 import com.sleekbyte.tailor.output.Printer;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -37,7 +38,7 @@ public class Tailor {
             MaxLengths maxLengths = new MaxLengths();
             maxLengths.setMaxClassLength(0);
             maxLengths.setMaxClosureLength(0);
-            maxLengths.setMaxFileLength(0);
+            maxLengths.setMaxFileLength(2);
             maxLengths.setMaxFunctionLength(0);
             maxLengths.setMaxLineLength(0);
             maxLengths.setMaxNameLength(0);
@@ -45,8 +46,11 @@ public class Tailor {
 
             MainListener listener = new MainListener(printer, maxLengths);
             ParseTreeWalker walker = new ParseTreeWalker();
-
             walker.walk(listener, tree);
+
+            FileListener fileListener = new FileListener(printer, inputFile, maxLengths);
+            fileListener.verify();
+
 
         } catch (ParseException | IOException e) {
             System.err.println("Parsing failed. Reason: " + e.getMessage());

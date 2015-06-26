@@ -18,6 +18,7 @@ public class Messages {
     public static final String CLOSURE = "Closure";
     public static final String FUNCTION = "Function";
     public static final String STRUCT = "Struct";
+    public static final String FILE = "File";
 
     public static final String UPPER_CAMEL_CASE = " should be in UpperCamelCase";
     public static final String SEMICOLON = " should not terminate with a semicolon";
