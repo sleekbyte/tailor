@@ -1,7 +1,7 @@
 package com.sleekbyte.tailor.utils;
 
 /**
- * TODO!!!
+ * Util class for character formatting
  */
 public class CharFormatUtil {
 
