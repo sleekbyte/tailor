@@ -20,7 +20,6 @@ import java.io.IOException;
 public class Tailor {
 
     public static void main(String[] args) {
-
         Options options = new Options();
         CommandLineParser cmdParser = new DefaultParser();
         try {
@@ -41,7 +40,6 @@ public class Tailor {
         } catch (ParseException | IOException e) {
             System.err.println("Parsing failed. Reason: " + e.getMessage());
         }
-
     }
 
 }
