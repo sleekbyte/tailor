@@ -24,11 +24,11 @@ import static org.junit.Assert.assertTrue;
 @RunWith(MockitoJUnitRunner.class)
 public class UpperCamelCaseTest {
 
+    private static final String NEWLINE_REGEX = "\\r?\\n";
+
     private ByteArrayOutputStream outContent;
     private File inputFile = new File("src/test/java/com/sleekbyte/tailor/functional/UpperCamelCaseTests.swift");
     private Set<String> expectedMessages = new HashSet<>();
-
-    private static final String NEWLINE_REGEX = "\\r?\\n";
 
     @Before
     public void setUp() {
@@ -45,33 +45,37 @@ public class UpperCamelCaseTest {
     public void testUpperCamelCase() throws IOException {
         String[] command = { inputFile.getPath() };
 
-        addExpectMsg(Messages.CLASS_NAME, 3, 7, "error");
-        addExpectMsg(Messages.CLASS_NAME, 7, 7, "error");
-        addExpectMsg(Messages.ENUM_CASE_NAME, 24, 8, "error");
-        addExpectMsg(Messages.ENUM_CASE_NAME, 25, 8, "error");
-        addExpectMsg(Messages.ENUM_CASE_NAME, 26, 8, "error");
-        addExpectMsg(Messages.ENUM_NAME, 42, 6, "error");
-        addExpectMsg(Messages.ENUM_CASE_NAME, 43, 8, "error");
-        addExpectMsg(Messages.ENUM_NAME, 46, 6, "error");
-        addExpectMsg(Messages.ENUM_CASE_NAME, 47, 8, "error");
-        addExpectMsg(Messages.ENUM_NAME, 50, 6, "error");
-        addExpectMsg(Messages.ENUM_CASE_NAME, 55, 8, "error");
-        addExpectMsg(Messages.ENUM_CASE_NAME, 63, 8, "error");
-        addExpectMsg(Messages.STRUCT_NAME, 72, 8, "error");
-        addExpectMsg(Messages.STRUCT_NAME, 76, 8, "error");
-        addExpectMsg(Messages.PROTOCOL_NAME, 90, 10, "error");
-        addExpectMsg(Messages.PROTOCOL_NAME, 94, 10, "error");
-        addExpectMsg(Messages.PROTOCOL_NAME, 98, 10, "error");
+        addExpectedMsg(Messages.CLASS_NAME, 3, 7, "error");
+        addExpectedMsg(Messages.CLASS_NAME, 7, 7, "error");
+        addExpectedMsg(Messages.ENUM_CASE_NAME, 24, 8, "error");
+        addExpectedMsg(Messages.ENUM_CASE_NAME, 25, 8, "error");
+        addExpectedMsg(Messages.ENUM_CASE_NAME, 26, 8, "error");
+        addExpectedMsg(Messages.ENUM_NAME, 42, 6, "error");
+        addExpectedMsg(Messages.ENUM_CASE_NAME, 43, 8, "error");
+        addExpectedMsg(Messages.ENUM_NAME, 46, 6, "error");
+        addExpectedMsg(Messages.ENUM_CASE_NAME, 47, 8, "error");
+        addExpectedMsg(Messages.ENUM_NAME, 50, 6, "error");
+        addExpectedMsg(Messages.ENUM_CASE_NAME, 55, 8, "error");
+        addExpectedMsg(Messages.ENUM_CASE_NAME, 63, 8, "error");
+        addExpectedMsg(Messages.STRUCT_NAME, 72, 8, "error");
+        addExpectedMsg(Messages.STRUCT_NAME, 76, 8, "error");
+        addExpectedMsg(Messages.PROTOCOL_NAME, 90, 10, "error");
+        addExpectedMsg(Messages.PROTOCOL_NAME, 94, 10, "error");
+        addExpectedMsg(Messages.PROTOCOL_NAME, 98, 10, "error");
 
         Tailor.main(command);
 
-        for(String msg : outContent.toString().split(NEWLINE_REGEX)) {
+        Set<String> actualOutput = new HashSet<>();
+        for (String msg : outContent.toString().split(NEWLINE_REGEX)) {
             String truncatedMsg = msg.substring(msg.indexOf(inputFile.getName()));
-            assertTrue(expectedMessages.contains(truncatedMsg));
+            actualOutput.add(truncatedMsg);
         }
+
+        assertTrue(actualOutput.size() == expectedMessages.size());
+        assertTrue(actualOutput.containsAll(expectedMessages));
     }
 
-    private void addExpectMsg(String msg, int line, int column, String classification) {
+    private void addExpectedMsg(String msg, int line, int column, String classification) {
         expectedMessages.add(
             Printer.genOutputStringForTest(
                 inputFile.getName(), msg + Messages.UPPER_CAMEL_CASE, line, column, classification));

@@ -42,14 +42,14 @@ public class PrinterTest {
 
     @Test
     public void testWarnWithLocationSuccess() throws IOException {
-        printer.warn(WARNING_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER + 1));
-        assertEquals(expectedOutput("warning", WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER + 1), outContent.toString());
+        printer.warn(WARNING_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
+        assertEquals(expectedOutput("warning", WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER), outContent.toString());
     }
 
     @Test
     public void testErrorWithLocationSuccess() throws IOException {
-        printer.error(ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER + 1));
-        assertEquals(expectedOutput("error", ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER + 1), outContent.toString());
+        printer.error(ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
+        assertEquals(expectedOutput("error", ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER), outContent.toString());
     }
 
     private String expectedOutput(String classification, String msg, int line, int column) throws IOException {
