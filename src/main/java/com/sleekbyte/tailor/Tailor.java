@@ -23,6 +23,8 @@ public class Tailor {
 
     public static void main(String[] args) {
         Options options = new Options();
+        options.addOption("l", "max-file-length", true, "maximum file length (in lines)");
+
         CommandLineParser cmdParser = new DefaultParser();
         try {
 
@@ -38,7 +40,7 @@ public class Tailor {
             MaxLengths maxLengths = new MaxLengths();
             maxLengths.setMaxClassLength(0);
             maxLengths.setMaxClosureLength(0);
-            maxLengths.setMaxFileLength(2);
+            maxLengths.setMaxFileLength(getIntegerArgument(cmd, "l"));
             maxLengths.setMaxFunctionLength(0);
             maxLengths.setMaxLineLength(0);
             maxLengths.setMaxNameLength(0);
@@ -55,6 +57,15 @@ public class Tailor {
         } catch (ParseException | IOException e) {
             System.err.println("Parsing failed. Reason: " + e.getMessage());
         }
+    }
+
+    private static int getIntegerArgument(CommandLine cmd, String opt) {
+        try {
+            return Integer.parseInt(cmd.getOptionValue(opt, "0"));
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid integer argument value: " + e.getMessage());
+        }
+        return 0;
     }
 
 }
