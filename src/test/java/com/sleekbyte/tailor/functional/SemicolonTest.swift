@@ -43,7 +43,7 @@ struct DemoStruct {
 
 // Class examples
 
-class lowerCamelCase {
+class UpperCamelCase {
     var x: String = "hello";
     let b = 2;
 
