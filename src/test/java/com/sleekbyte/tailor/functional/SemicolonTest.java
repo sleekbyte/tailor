@@ -45,33 +45,33 @@ public class SemicolonTest {
     public void testSemicolon() throws IOException {
         String[] command = { inputFile.getPath() };
 
-        addExpectedMsg(Messages.STATEMENT, 1, 18, "error");
-        addExpectedMsg(Messages.STATEMENT, 10, 2, "error");
-        addExpectedMsg(Messages.STATEMENT, 6, 15, "error");
-        addExpectedMsg(Messages.STATEMENT, 7, 15, "error");
-        addExpectedMsg(Messages.STATEMENT, 8, 14, "error");
-        addExpectedMsg(Messages.STATEMENT, 9, 14, "error");
-        addExpectedMsg(Messages.STATEMENT, 17, 2, "error");
-        addExpectedMsg(Messages.STATEMENT, 13, 33, "error");
-        addExpectedMsg(Messages.STATEMENT, 14, 16, "error");
-        addExpectedMsg(Messages.STATEMENT, 15, 23, "error");
-        addExpectedMsg(Messages.STATEMENT, 16, 39, "error");
-        addExpectedMsg(Messages.STATEMENT, 21, 2, "error");
-        addExpectedMsg(Messages.STATEMENT, 42, 2, "error");
-        addExpectedMsg(Messages.STATEMENT, 24, 18, "error");
-        addExpectedMsg(Messages.STATEMENT, 41, 6, "error");
-        addExpectedMsg(Messages.STATEMENT, 30, 10, "error");
-        addExpectedMsg(Messages.STATEMENT, 35, 10, "error");
-        addExpectedMsg(Messages.STATEMENT, 40, 23, "error");
-        addExpectedMsg(Messages.STATEMENT, 64, 2, "error");
-        addExpectedMsg(Messages.STATEMENT, 47, 28, "error");
-        addExpectedMsg(Messages.STATEMENT, 48, 14, "error");
-        addExpectedMsg(Messages.STATEMENT, 63, 6, "error");
-        addExpectedMsg(Messages.STATEMENT, 54, 10, "error");
-        addExpectedMsg(Messages.STATEMENT, 53, 21, "error");
-        addExpectedMsg(Messages.STATEMENT, 57, 65, "error");
-        addExpectedMsg(Messages.STATEMENT, 59, 73, "error");
-        addExpectedMsg(Messages.STATEMENT, 61, 59, "error");
+        addExpectedMsg(Messages.STATEMENT, 1, 18, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 10, 2, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 6, 15, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 7, 15, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 8, 14, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 9, 14, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 17, 2, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 13, 33, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 14, 16, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 15, 23, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 16, 39, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 21, 2, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 42, 2, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 24, 18, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 41, 6, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 30, 10, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 35, 10, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 40, 23, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 64, 2, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 47, 28, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 48, 14, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 63, 6, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 54, 10, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 53, 21, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 57, 65, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 59, 73, Messages.ERROR);
+        addExpectedMsg(Messages.STATEMENT, 61, 59, Messages.ERROR);
 
         Tailor.main(command);
 
@@ -81,7 +81,7 @@ public class SemicolonTest {
             actualOutput.add(truncatedMsg);
         }
 
-        // TODO: Use `==` once #33 "Buffer output in printer class and remove duplicate error messages" is complete
+        // TODO: Use `==` once #33 "Buffer output in printer class and remove duplicateMessages.ERROR messages" is complete
         assertTrue(actualOutput.size() >= expectedMessages.size());
         assertTrue(actualOutput.containsAll(expectedMessages));
     }

@@ -45,23 +45,23 @@ public class UpperCamelCaseTest {
     public void testUpperCamelCase() throws IOException {
         String[] command = { inputFile.getPath() };
 
-        addExpectedMsg(Messages.CLASS_NAME, 3, 7, "error");
-        addExpectedMsg(Messages.CLASS_NAME, 7, 7, "error");
-        addExpectedMsg(Messages.ENUM_CASE_NAME, 24, 8, "error");
-        addExpectedMsg(Messages.ENUM_CASE_NAME, 25, 8, "error");
-        addExpectedMsg(Messages.ENUM_CASE_NAME, 26, 8, "error");
-        addExpectedMsg(Messages.ENUM_NAME, 42, 6, "error");
-        addExpectedMsg(Messages.ENUM_CASE_NAME, 43, 8, "error");
-        addExpectedMsg(Messages.ENUM_NAME, 46, 6, "error");
-        addExpectedMsg(Messages.ENUM_CASE_NAME, 47, 8, "error");
-        addExpectedMsg(Messages.ENUM_NAME, 50, 6, "error");
-        addExpectedMsg(Messages.ENUM_CASE_NAME, 55, 8, "error");
-        addExpectedMsg(Messages.ENUM_CASE_NAME, 63, 8, "error");
-        addExpectedMsg(Messages.STRUCT_NAME, 72, 8, "error");
-        addExpectedMsg(Messages.STRUCT_NAME, 76, 8, "error");
-        addExpectedMsg(Messages.PROTOCOL_NAME, 90, 10, "error");
-        addExpectedMsg(Messages.PROTOCOL_NAME, 94, 10, "error");
-        addExpectedMsg(Messages.PROTOCOL_NAME, 98, 10, "error");
+        addExpectedMsg(Messages.CLASS_NAME, 3, 7, Messages.ERROR);
+        addExpectedMsg(Messages.CLASS_NAME, 7, 7, Messages.ERROR);
+        addExpectedMsg(Messages.ENUM_CASE_NAME, 24, 8, Messages.ERROR);
+        addExpectedMsg(Messages.ENUM_CASE_NAME, 25, 8, Messages.ERROR);
+        addExpectedMsg(Messages.ENUM_CASE_NAME, 26, 8, Messages.ERROR);
+        addExpectedMsg(Messages.ENUM_NAME, 42, 6, Messages.ERROR);
+        addExpectedMsg(Messages.ENUM_CASE_NAME, 43, 8, Messages.ERROR);
+        addExpectedMsg(Messages.ENUM_NAME, 46, 6, Messages.ERROR);
+        addExpectedMsg(Messages.ENUM_CASE_NAME, 47, 8, Messages.ERROR);
+        addExpectedMsg(Messages.ENUM_NAME, 50, 6, Messages.ERROR);
+        addExpectedMsg(Messages.ENUM_CASE_NAME, 55, 8, Messages.ERROR);
+        addExpectedMsg(Messages.ENUM_CASE_NAME, 63, 8, Messages.ERROR);
+        addExpectedMsg(Messages.STRUCT_NAME, 72, 8, Messages.ERROR);
+        addExpectedMsg(Messages.STRUCT_NAME, 76, 8, Messages.ERROR);
+        addExpectedMsg(Messages.PROTOCOL_NAME, 90, 10, Messages.ERROR);
+        addExpectedMsg(Messages.PROTOCOL_NAME, 94, 10, Messages.ERROR);
+        addExpectedMsg(Messages.PROTOCOL_NAME, 98, 10, Messages.ERROR);
 
         Tailor.main(command);
 

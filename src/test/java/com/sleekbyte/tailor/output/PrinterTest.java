@@ -1,6 +1,7 @@
 package com.sleekbyte.tailor.output;
 
 import com.sleekbyte.tailor.common.Location;
+import com.sleekbyte.tailor.common.Messages;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,13 +44,13 @@ public class PrinterTest {
     @Test
     public void testWarnWithLocationSuccess() throws IOException {
         printer.warn(WARNING_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
-        assertEquals(expectedOutput("warning", WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER), outContent.toString());
+        assertEquals(expectedOutput(Messages.WARNING, WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER), outContent.toString());
     }
 
     @Test
     public void testErrorWithLocationSuccess() throws IOException {
         printer.error(ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
-        assertEquals(expectedOutput("error", ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER), outContent.toString());
+        assertEquals(expectedOutput(Messages.ERROR, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER), outContent.toString());
     }
 
     private String expectedOutput(String classification, String msg, int line, int column) throws IOException {
