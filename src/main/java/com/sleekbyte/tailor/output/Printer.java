@@ -1,6 +1,7 @@
 package com.sleekbyte.tailor.output;
 
 import com.sleekbyte.tailor.common.Location;
+import com.sleekbyte.tailor.common.Messages;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class Printer {
      * @param location location object containing line and column number for printing
      */
     public void warn(String warningMsg, Location location) {
-        print("warning", warningMsg, location);
+        print(Messages.WARNING, warningMsg, location);
     }
 
     /**
@@ -31,7 +32,7 @@ public class Printer {
      * @param location location object containing line and column number for printing
      */
     public void error(String errorMsg, Location location) {
-        print("error", errorMsg, location);
+        print(Messages.ERROR, errorMsg, location);
     }
 
     private void print(String classification, String msg, Location location) {
