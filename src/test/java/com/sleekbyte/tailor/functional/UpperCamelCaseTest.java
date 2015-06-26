@@ -27,7 +27,7 @@ public class UpperCamelCaseTest {
     private static final String NEWLINE_REGEX = "\\r?\\n";
 
     private ByteArrayOutputStream outContent;
-    private File inputFile = new File("src/test/java/com/sleekbyte/tailor/functional/UpperCamelCaseTests.swift");
+    private File inputFile = new File("src/test/java/com/sleekbyte/tailor/functional/UpperCamelCaseTest.swift");
     private Set<String> expectedMessages = new HashSet<>();
 
     @Before
