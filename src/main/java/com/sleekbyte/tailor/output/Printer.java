@@ -22,6 +22,7 @@ public class Printer {
      * @param location location object containing line and column number for printing
      */
     public void warn(String warningMsg, Location location) {
+        // TODO: Extract string to Messages
         print("warning", warningMsg, location);
     }
 
@@ -31,6 +32,7 @@ public class Printer {
      * @param location location object containing line and column number for printing
      */
     public void error(String errorMsg, Location location) {
+        // TODO: Extract string to Messages
         print("error", errorMsg, location);
     }
 

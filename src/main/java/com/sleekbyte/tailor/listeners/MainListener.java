@@ -41,4 +41,44 @@ public class MainListener extends SwiftBaseListener {
         listenerHelper.verifyUpperCamelCase(Messages.PROTOCOL_NAME, ctx);
     }
 
+    @Override
+    public void enterStatement(SwiftParser.StatementContext ctx) {
+        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENT, ctx);
+    }
+
+    @Override
+    public void enterDeclaration(SwiftParser.DeclarationContext ctx) {
+        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENT, ctx);
+    }
+
+    @Override
+    public void enterLoopStatement(SwiftParser.LoopStatementContext ctx) {
+        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENT, ctx);
+    }
+
+    @Override
+    public void enterBranchStatement(SwiftParser.BranchStatementContext ctx) {
+        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENT, ctx);
+    }
+
+    @Override
+    public void enterLabeledStatement(SwiftParser.LabeledStatementContext ctx) {
+        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENT, ctx);
+    }
+
+    @Override
+    public void enterControlTransferStatement(SwiftParser.ControlTransferStatementContext ctx) {
+        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENT, ctx);
+    }
+
+    @Override
+    public void enterUnionStyleEnumMember(SwiftParser.UnionStyleEnumMemberContext ctx) {
+        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENT, ctx);
+    }
+
+    @Override
+    public void enterProtocolMemberDeclaration(SwiftParser.ProtocolMemberDeclarationContext ctx) {
+        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENT, ctx);
+    }
+
 }

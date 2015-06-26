@@ -25,4 +25,12 @@ public class MainListenerHelper {
         }
     }
 
+    public void verifyNotSemicolonTerminated(String constructType, ParserRuleContext ctx) {
+        String construct = ctx.getText();
+        if (construct.endsWith(";")) {
+            Location location = new Location(ctx.getStop().getLine(), ctx.getStop().getCharPositionInLine() + 1);
+            this.printer.error(constructType + Messages.SEMICOLON, location);
+        }
+    }
+
 }
