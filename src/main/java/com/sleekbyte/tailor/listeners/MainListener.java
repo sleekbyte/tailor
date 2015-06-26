@@ -21,67 +21,67 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterClassName(SwiftParser.ClassNameContext ctx) {
-        listenerHelper.verifyUpperCamelCase(Messages.CLASS_NAME, ctx);
+        listenerHelper.verifyUpperCamelCase(Messages.CLASS_NAMES, ctx);
     }
 
     @Override
     public void enterEnumName(SwiftParser.EnumNameContext ctx) {
-        listenerHelper.verifyUpperCamelCase(Messages.ENUM_NAME, ctx);
+        listenerHelper.verifyUpperCamelCase(Messages.ENUM_NAMES, ctx);
     }
 
     @Override
     public void enterEnumCaseName(SwiftParser.EnumCaseNameContext ctx) {
-        listenerHelper.verifyUpperCamelCase(Messages.ENUM_CASE_NAME, ctx);
+        listenerHelper.verifyUpperCamelCase(Messages.ENUM_CASE_NAMES, ctx);
     }
 
     @Override
     public void enterStructName(SwiftParser.StructNameContext ctx) {
-        listenerHelper.verifyUpperCamelCase(Messages.STRUCT_NAME, ctx);
+        listenerHelper.verifyUpperCamelCase(Messages.STRUCT_NAMES, ctx);
     }
 
     @Override
     public void enterProtocolName(SwiftParser.ProtocolNameContext ctx) {
-        listenerHelper.verifyUpperCamelCase(Messages.PROTOCOL_NAME, ctx);
+        listenerHelper.verifyUpperCamelCase(Messages.PROTOCOL_NAMES, ctx);
     }
 
     @Override
     public void enterStatement(SwiftParser.StatementContext ctx) {
-        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENT, ctx);
+        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
     }
 
     @Override
     public void enterDeclaration(SwiftParser.DeclarationContext ctx) {
-        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENT, ctx);
+        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
     }
 
     @Override
     public void enterLoopStatement(SwiftParser.LoopStatementContext ctx) {
-        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENT, ctx);
+        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
     }
 
     @Override
     public void enterBranchStatement(SwiftParser.BranchStatementContext ctx) {
-        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENT, ctx);
+        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
     }
 
     @Override
     public void enterLabeledStatement(SwiftParser.LabeledStatementContext ctx) {
-        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENT, ctx);
+        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
     }
 
     @Override
     public void enterControlTransferStatement(SwiftParser.ControlTransferStatementContext ctx) {
-        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENT, ctx);
+        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
     }
 
     @Override
     public void enterUnionStyleEnumMember(SwiftParser.UnionStyleEnumMemberContext ctx) {
-        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENT, ctx);
+        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
     }
 
     @Override
     public void enterProtocolMemberDeclaration(SwiftParser.ProtocolMemberDeclarationContext ctx) {
-        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENT, ctx);
+        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
     }
 
     @Override
