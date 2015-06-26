@@ -45,34 +45,36 @@ public class UpperCamelCaseTest {
     public void testUpperCamelCase() throws IOException {
         String[] command = { inputFile.getPath() };
 
-        addExpectMsg(Messages.CLASS_NAME + Messages.UPPER_CAMEL_CASE, 3, 7, "error");
-        addExpectMsg(Messages.CLASS_NAME + Messages.UPPER_CAMEL_CASE, 7, 7, "error");
-        addExpectMsg(Messages.ENUM_CASE_NAME + Messages.UPPER_CAMEL_CASE, 24, 8, "error");
-        addExpectMsg(Messages.ENUM_CASE_NAME + Messages.UPPER_CAMEL_CASE, 25, 8, "error");
-        addExpectMsg(Messages.ENUM_CASE_NAME + Messages.UPPER_CAMEL_CASE, 26, 8, "error");
-        addExpectMsg(Messages.ENUM_NAME + Messages.UPPER_CAMEL_CASE, 42, 6, "error");
-        addExpectMsg(Messages.ENUM_CASE_NAME + Messages.UPPER_CAMEL_CASE, 43, 8, "error");
-        addExpectMsg(Messages.ENUM_NAME + Messages.UPPER_CAMEL_CASE, 46, 6, "error");
-        addExpectMsg(Messages.ENUM_CASE_NAME + Messages.UPPER_CAMEL_CASE, 47, 8, "error");
-        addExpectMsg(Messages.ENUM_NAME + Messages.UPPER_CAMEL_CASE, 50, 6, "error");
-        addExpectMsg(Messages.ENUM_CASE_NAME + Messages.UPPER_CAMEL_CASE, 55, 8, "error");
-        addExpectMsg(Messages.ENUM_CASE_NAME + Messages.UPPER_CAMEL_CASE, 63, 8, "error");
-        addExpectMsg(Messages.STRUCT_NAME + Messages.UPPER_CAMEL_CASE, 72, 8, "error");
-        addExpectMsg(Messages.STRUCT_NAME + Messages.UPPER_CAMEL_CASE, 76, 8, "error");
-        addExpectMsg(Messages.PROTOCOL_NAME + Messages.UPPER_CAMEL_CASE, 90, 10, "error");
-        addExpectMsg(Messages.PROTOCOL_NAME + Messages.UPPER_CAMEL_CASE, 94, 10, "error");
-        addExpectMsg(Messages.PROTOCOL_NAME + Messages.UPPER_CAMEL_CASE, 98, 10, "error");
+        addExpectMsg(Messages.CLASS_NAME, 3, 7, "error");
+        addExpectMsg(Messages.CLASS_NAME, 7, 7, "error");
+        addExpectMsg(Messages.ENUM_CASE_NAME, 24, 8, "error");
+        addExpectMsg(Messages.ENUM_CASE_NAME, 25, 8, "error");
+        addExpectMsg(Messages.ENUM_CASE_NAME, 26, 8, "error");
+        addExpectMsg(Messages.ENUM_NAME, 42, 6, "error");
+        addExpectMsg(Messages.ENUM_CASE_NAME, 43, 8, "error");
+        addExpectMsg(Messages.ENUM_NAME, 46, 6, "error");
+        addExpectMsg(Messages.ENUM_CASE_NAME, 47, 8, "error");
+        addExpectMsg(Messages.ENUM_NAME, 50, 6, "error");
+        addExpectMsg(Messages.ENUM_CASE_NAME, 55, 8, "error");
+        addExpectMsg(Messages.ENUM_CASE_NAME, 63, 8, "error");
+        addExpectMsg(Messages.STRUCT_NAME, 72, 8, "error");
+        addExpectMsg(Messages.STRUCT_NAME, 76, 8, "error");
+        addExpectMsg(Messages.PROTOCOL_NAME, 90, 10, "error");
+        addExpectMsg(Messages.PROTOCOL_NAME, 94, 10, "error");
+        addExpectMsg(Messages.PROTOCOL_NAME, 98, 10, "error");
 
         Tailor.main(command);
 
         for(String msg : outContent.toString().split(NEWLINE_REGEX)) {
-            assertTrue(expectedMessages.contains(msg.substring(msg.indexOf(inputFile.getName()))));
+            String truncatedMsg = msg.substring(msg.indexOf(inputFile.getName()));
+            assertTrue(expectedMessages.contains(truncatedMsg));
         }
     }
 
     private void addExpectMsg(String msg, int line, int column, String classification) {
         expectedMessages.add(
-            Printer.genOutputStringForTest(inputFile.getName(), msg, line, column, classification));
+            Printer.genOutputStringForTest(
+                inputFile.getName(), msg + Messages.UPPER_CAMEL_CASE, line, column, classification));
     }
 
 }

@@ -1,5 +1,8 @@
 package com.sleekbyte.tailor.common;
 
+/**
+ * Output messages
+ */
 public class Messages {
 
     public static final String CLASS_NAME = "Class names";

@@ -1,9 +1,12 @@
 package com.sleekbyte.tailor.common;
 
+/**
+ * Stores location corresponding to a character in a source file
+ */
 public class Location {
 
-    public int line = 1;
-    public int column = 1;
+    public int line;
+    public int column;
 
     public Location(int line, int column) {
         this.line = line;
