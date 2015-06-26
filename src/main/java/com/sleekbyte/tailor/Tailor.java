@@ -2,6 +2,7 @@ package com.sleekbyte.tailor;
 
 import com.sleekbyte.tailor.antlr.SwiftLexer;
 import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.listeners.MainListener;
 import com.sleekbyte.tailor.output.Printer;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -32,7 +33,17 @@ public class Tailor {
             SwiftParser swiftParser = new SwiftParser(stream);
             SwiftParser.TopLevelContext tree = swiftParser.topLevel();
             Printer printer = new Printer(inputFile);
-            MainListener listener = new MainListener(printer);
+
+            MaxLengths maxLengths = new MaxLengths();
+            maxLengths.setMaxClassLength(0);
+            maxLengths.setMaxClosureLength(0);
+            maxLengths.setMaxFileLength(0);
+            maxLengths.setMaxFunctionLength(0);
+            maxLengths.setMaxLineLength(0);
+            maxLengths.setMaxNameLength(0);
+            maxLengths.setMaxStructLength(0);
+
+            MainListener listener = new MainListener(printer, maxLengths);
             ParseTreeWalker walker = new ParseTreeWalker();
 
             walker.walk(listener, tree);

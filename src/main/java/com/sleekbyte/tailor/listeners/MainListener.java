@@ -1,9 +1,10 @@
 package com.sleekbyte.tailor.listeners;
 
+import com.sleekbyte.tailor.antlr.SwiftBaseListener;
+import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
-import com.sleekbyte.tailor.antlr.SwiftParser;
-import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 
 /**
  * Parse tree listener for verifying Swift constructs
@@ -11,9 +12,11 @@ import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 public class MainListener extends SwiftBaseListener {
 
     private static MainListenerHelper listenerHelper;
+    private MaxLengths maxLengths;
 
-    public MainListener(Printer printer) {
+    public MainListener(Printer printer, MaxLengths maxLengths) {
         listenerHelper = new MainListenerHelper(printer);
+        this.maxLengths = maxLengths;
     }
 
     @Override
@@ -81,4 +84,23 @@ public class MainListener extends SwiftBaseListener {
         listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENT, ctx);
     }
 
+    @Override
+    public void enterClassBody(SwiftParser.ClassBodyContext ctx) {
+        listenerHelper.verifyConstructLength(Messages.CLASS, this.maxLengths.maxClassLength, ctx);
+    }
+
+    @Override
+    public void enterClosureExpression(SwiftParser.ClosureExpressionContext ctx) {
+        listenerHelper.verifyConstructLength(Messages.CLOSURE, this.maxLengths.maxClosureLength, ctx);
+    }
+
+    @Override
+    public void enterFunctionBody(SwiftParser.FunctionBodyContext ctx) {
+        listenerHelper.verifyConstructLength(Messages.FUNCTION, this.maxLengths.maxFunctionLength, ctx);
+    }
+
+    @Override
+    public void enterStructBody(SwiftParser.StructBodyContext ctx) {
+        listenerHelper.verifyConstructLength(Messages.STRUCT, this.maxLengths.maxStructLength, ctx);
+    }
 }
