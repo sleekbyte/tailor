@@ -54,7 +54,7 @@ public class ConstructLengthTest {
 
         addExpectedMsg(Messages.CLASS, 8, 16, Messages.ERROR, 12, 8);
         addExpectedMsg(Messages.CLOSURE, 24, 27, Messages.ERROR, 8, 6);
-        addExpectedMsg(Messages.FILE, 31, 1, Messages.ERROR, 39, 30);
+        addExpectedMsg(Messages.FILE, 31, 1, Messages.ERROR, 38, 30);
         addExpectedMsg(Messages.FUNCTION, 10, 67, Messages.ERROR, 9, 3);
         addExpectedMsg(Messages.FUNCTION, 12, 35, Messages.ERROR, 5, 3);
         addExpectedMsg(Messages.STRUCT, 35, 19, Messages.ERROR, 3, 1);
