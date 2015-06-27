@@ -61,7 +61,7 @@ public class SourceFileUtilTest {
     }
 
     @Test
-    public void testNumLinesInFileManyLines() throws IOException {
+    public void testNumLinesInFileMultipleLines() throws IOException {
         writeNumOfLines(4);
         assertEquals(4, SourceFileUtil.numLinesInFile(inputFile));
     }
@@ -77,11 +77,12 @@ public class SourceFileUtilTest {
     }
 
     @Test
-    public void testFileTooLongMaxLengthLarge() throws IOException {
+    public void testFileTooLongMaxLengthValid() throws IOException {
         assertFalse(SourceFileUtil.fileTooLong(inputFile, 2));
 
         writeNumOfLines(3);
         assertTrue(SourceFileUtil.fileTooLong(inputFile, 2));
+        assertFalse(SourceFileUtil.fileTooLong(inputFile, 3));
     }
 
     @Test
@@ -97,7 +98,7 @@ public class SourceFileUtilTest {
     }
 
     @Test
-    public void testConstructTooLongMaxLengthLarge() throws IOException {
+    public void testConstructTooLongMaxLengthValid() throws IOException {
         when(startToken.getLine()).thenReturn(1);
         when(stopToken.getLine()).thenReturn(5);
         assertFalse(SourceFileUtil.constructTooLong(context, 10));
@@ -105,6 +106,7 @@ public class SourceFileUtilTest {
         when(startToken.getLine()).thenReturn(1);
         when(stopToken.getLine()).thenReturn(20);
         assertTrue(SourceFileUtil.constructTooLong(context, 12));
+        assertFalse(SourceFileUtil.constructTooLong(context, 19));
     }
 
     private void writeNumOfLines(int numOfLines) {

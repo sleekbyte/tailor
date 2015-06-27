@@ -24,6 +24,9 @@ public class FileListener {
         this.maxLengths = maxLengths;
     }
 
+    /**
+     * Verify that all source file specific rules are satisfied
+     */
     public void verify() throws IOException {
         this.verifyFileLength(maxLengths.maxFileLength);
     }
@@ -32,7 +35,7 @@ public class FileListener {
         if (SourceFileUtil.fileTooLong(inputFile, maxLines)) {
             String lengthVersusLimit = " (" + SourceFileUtil.numLinesInFile(inputFile) + "/" + maxLines + ")";
             // Mark error on first character of next line
-            // TODO: Use printer method without column
+            // TODO: #33: Use printer method where column is unspecified
             Location location = new Location(maxLines + 1, 1);
             this.printer.error(Messages.FILE + Messages.EXCEEDS_LINE_LIMIT + lengthVersusLimit, location);
         }

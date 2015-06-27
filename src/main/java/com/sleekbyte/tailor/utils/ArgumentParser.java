@@ -11,11 +11,11 @@ import org.apache.commons.cli.ParseException;
 
 public class ArgumentParser {
 
-    public static final String HELP_SHORT_OPT = "h";
-    public static final String HELP_LONG_OPT = "help";
+    private static final String HELP_SHORT_OPT = "h";
+    private static final String HELP_LONG_OPT = "help";
     private static final String MAX_CLASS_LENGTH_OPT = "max-class-length";
     private static final String MAX_CLOSURE_LENGTH_OPT = "max-closure-length";
-    public static final String MAX_FILE_LENGTH_OPT = "max-file-length";
+    private static final String MAX_FILE_LENGTH_OPT = "max-file-length";
     private static final String MAX_FUNCTION_LENGTH_OPT = "max-function-length";
     private static final String MAX_LINE_LENGTH_SHORT_OPT = "l";
     private static final String MAX_LINE_LENGTH_LONG_OPT = "max-line-length";
@@ -32,6 +32,9 @@ public class ArgumentParser {
         this.args = args;
     }
 
+    /**
+     * Parse command line options/flags and arguments
+     */
     public CommandLine parseCommandLine() throws ParseException {
         addOptions();
         cmd = new DefaultParser().parse(this.options, this.args);
@@ -42,10 +45,16 @@ public class ArgumentParser {
         return cmd;
     }
 
+    /**
+     * Print usage message with flag descriptions to STDOUT
+     */
     public void printHelp() {
         new HelpFormatter().printHelp(Messages.CMD_LINE_SYNTAX, this.options);
     }
 
+    /**
+     * Parse maximum construct length flags into MaxLengths object
+     */
     public MaxLengths parseMaxLengths() {
         MaxLengths maxLengths = new MaxLengths();
         maxLengths.setMaxClassLength(getIntegerArgument(MAX_CLASS_LENGTH_OPT));
@@ -83,10 +92,21 @@ public class ArgumentParser {
         options.addOption(maxStructLength);
     }
 
+    /**
+     * Add Integer argument with short and long name to command line options
+     * @param shortOpt short version of option
+     * @param longOpt long version of option
+     * @param desc description of option
+     */
     private Option addIntegerArgument(String shortOpt, String longOpt, String desc) {
         return Option.builder(shortOpt).longOpt(longOpt).hasArg().desc(desc).build();
     }
 
+    /**
+     * Add Integer argument with only long name to command line options
+     * @param longOpt long version of option
+     * @param desc description of option
+     */
     private Option addIntegerArgument(String longOpt, String desc) {
         return Option.builder().longOpt(longOpt).hasArg().desc(desc).build();
     }
@@ -96,6 +116,7 @@ public class ArgumentParser {
             return Integer.parseInt(this.cmd.getOptionValue(opt, DEFAULT_INT_ARG));
         } catch (NumberFormatException e) {
             System.err.println("Invalid integer argument value: " + e.getMessage());
+            System.exit(1);
         }
         return DEFAULT_INT_ARG_VALUE;
     }

@@ -10,15 +10,15 @@ import org.antlr.v4.runtime.ParserRuleContext;
 /**
  * Helper class for {@link MainListener}
  */
-public class MainListenerHelper {
+class MainListenerHelper {
 
     private Printer printer;
 
-    public MainListenerHelper(Printer printer) {
+    MainListenerHelper(Printer printer) {
         this.printer = printer;
     }
 
-    public void verifyUpperCamelCase(String constructType, ParserRuleContext ctx) {
+    void verifyUpperCamelCase(String constructType, ParserRuleContext ctx) {
         String constructName = ctx.getText();
         if (!CharFormatUtil.isUpperCamelCase(constructName)) {
             Location location = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
@@ -26,7 +26,7 @@ public class MainListenerHelper {
         }
     }
 
-    public void verifyNotSemicolonTerminated(String constructType, ParserRuleContext ctx) {
+    void verifyNotSemicolonTerminated(String constructType, ParserRuleContext ctx) {
         String construct = ctx.getText();
         if (construct.endsWith(";")) {
             Location location = new Location(ctx.getStop().getLine(), ctx.getStop().getCharPositionInLine() + 1);
@@ -34,7 +34,7 @@ public class MainListenerHelper {
         }
     }
 
-    public void verifyConstructLength(String constructType, int maxLength, ParserRuleContext ctx) {
+    void verifyConstructLength(String constructType, int maxLength, ParserRuleContext ctx) {
         if (SourceFileUtil.constructTooLong(ctx, maxLength)) {
             int constructLength = ctx.getStop().getLine() - ctx.getStart().getLine();
             String lengthVersusLimit = " (" + constructLength + "/" + maxLength + ")";
