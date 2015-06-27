@@ -1,4 +1,4 @@
-class checkSuperLongClassName {
+class CheckSuperLongClassName {
 }
 
 let checkElementNameLength:(ename:Int, veryLongElementName:Int) = (1, 2)

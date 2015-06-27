@@ -45,23 +45,23 @@ public class UpperCamelCaseTest {
     public void testUpperCamelCase() throws IOException {
         String[] command = { inputFile.getPath() };
 
-        addExpectedMsg(Messages.CLASS_NAMES, 3, 7, Messages.ERROR);
-        addExpectedMsg(Messages.CLASS_NAMES, 7, 7, Messages.ERROR);
-        addExpectedMsg(Messages.ENUM_CASE_NAMES, 24, 8, Messages.ERROR);
-        addExpectedMsg(Messages.ENUM_CASE_NAMES, 25, 8, Messages.ERROR);
-        addExpectedMsg(Messages.ENUM_CASE_NAMES, 26, 8, Messages.ERROR);
-        addExpectedMsg(Messages.ENUM_NAMES, 42, 6, Messages.ERROR);
-        addExpectedMsg(Messages.ENUM_CASE_NAMES, 43, 8, Messages.ERROR);
-        addExpectedMsg(Messages.ENUM_NAMES, 46, 6, Messages.ERROR);
-        addExpectedMsg(Messages.ENUM_CASE_NAMES, 47, 8, Messages.ERROR);
-        addExpectedMsg(Messages.ENUM_NAMES, 50, 6, Messages.ERROR);
-        addExpectedMsg(Messages.ENUM_CASE_NAMES, 55, 8, Messages.ERROR);
-        addExpectedMsg(Messages.ENUM_CASE_NAMES, 63, 8, Messages.ERROR);
-        addExpectedMsg(Messages.STRUCT_NAMES, 72, 8, Messages.ERROR);
-        addExpectedMsg(Messages.STRUCT_NAMES, 76, 8, Messages.ERROR);
-        addExpectedMsg(Messages.PROTOCOL_NAMES, 90, 10, Messages.ERROR);
-        addExpectedMsg(Messages.PROTOCOL_NAMES, 94, 10, Messages.ERROR);
-        addExpectedMsg(Messages.PROTOCOL_NAMES, 98, 10, Messages.ERROR);
+        addExpectedMsg(3, 7, Messages.ERROR, Messages.CLASS + Messages.NAMES);
+        addExpectedMsg(7, 7, Messages.ERROR, Messages.CLASS + Messages.NAMES);
+        addExpectedMsg(24, 8, Messages.ERROR, Messages.ENUM_CASE + Messages.NAMES);
+        addExpectedMsg(25, 8, Messages.ERROR, Messages.ENUM_CASE + Messages.NAMES);
+        addExpectedMsg(26, 8, Messages.ERROR, Messages.ENUM_CASE + Messages.NAMES);
+        addExpectedMsg(42, 6, Messages.ERROR, Messages.ENUM + Messages.NAMES);
+        addExpectedMsg(43, 8, Messages.ERROR, Messages.ENUM_CASE + Messages.NAMES);
+        addExpectedMsg(46, 6, Messages.ERROR, Messages.ENUM + Messages.NAMES);
+        addExpectedMsg(47, 8, Messages.ERROR, Messages.ENUM_CASE + Messages.NAMES);
+        addExpectedMsg(50, 6, Messages.ERROR, Messages.ENUM + Messages.NAMES);
+        addExpectedMsg(55, 8, Messages.ERROR, Messages.ENUM_CASE + Messages.NAMES);
+        addExpectedMsg(63, 8, Messages.ERROR, Messages.ENUM_CASE + Messages.NAMES);
+        addExpectedMsg(72, 8, Messages.ERROR, Messages.STRUCT + Messages.NAMES);
+        addExpectedMsg(76, 8, Messages.ERROR, Messages.STRUCT + Messages.NAMES);
+        addExpectedMsg(90, 10, Messages.ERROR, Messages.PROTOCOL + Messages.NAMES);
+        addExpectedMsg(94, 10, Messages.ERROR, Messages.PROTOCOL + Messages.NAMES);
+        addExpectedMsg(98, 10, Messages.ERROR, Messages.PROTOCOL + Messages.NAMES);
 
         Tailor.main(command);
 
@@ -76,10 +76,10 @@ public class UpperCamelCaseTest {
         assertTrue(actualOutput.containsAll(expectedMessages));
     }
 
-    private void addExpectedMsg(String msg, int line, int column, String classification) {
+    private void addExpectedMsg(int line, int column, String classification, String msg) {
         expectedMessages.add(
             Printer.genOutputStringForTest(
-                inputFile.getName(), msg + Messages.UPPER_CAMEL_CASE, line, column, classification));
+                inputFile.getName(), line, column, classification, msg + Messages.UPPER_CAMEL_CASE));
     }
 
 }

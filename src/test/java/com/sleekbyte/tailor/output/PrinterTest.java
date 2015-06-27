@@ -54,7 +54,7 @@ public class PrinterTest {
     }
 
     private String expectedOutput(String classification, String msg, int line, int column) throws IOException {
-        return Printer.genOutputStringForTest(inputFile.getCanonicalPath(), msg, line, column, classification) + "\n";
+        return Printer.genOutputStringForTest(inputFile.getCanonicalPath(), line, column, classification, msg) + "\n";
     }
 
 }

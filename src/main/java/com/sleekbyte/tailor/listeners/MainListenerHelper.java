@@ -43,4 +43,12 @@ class MainListenerHelper {
         }
     }
 
+    void verifyNameLength(String constructType, int maxLength, ParserRuleContext ctx) {
+        if (SourceFileUtil.nameTooLong(ctx, maxLength)) {
+            String lengthVersusLimit = " (" + ctx.getText().length() + "/" + maxLength + ")";
+            Location location = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+            this.printer.error(constructType + Messages.EXCEEDS_CHARACTER_LIMIT + lengthVersusLimit, location);
+        }
+    }
+
 }
