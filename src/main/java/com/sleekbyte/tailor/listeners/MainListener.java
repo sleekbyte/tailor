@@ -21,27 +21,32 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterClassName(SwiftParser.ClassNameContext ctx) {
-        listenerHelper.verifyUpperCamelCase(Messages.CLASS_NAMES, ctx);
+        listenerHelper.verifyUpperCamelCase(Messages.CLASS + Messages.NAMES, ctx);
+        listenerHelper.verifyNameLength(Messages.CLASS + Messages.NAME, maxLengths.maxNameLength, ctx);
     }
 
     @Override
     public void enterEnumName(SwiftParser.EnumNameContext ctx) {
-        listenerHelper.verifyUpperCamelCase(Messages.ENUM_NAMES, ctx);
+        listenerHelper.verifyUpperCamelCase(Messages.ENUM + Messages.NAMES, ctx);
+        listenerHelper.verifyNameLength(Messages.ENUM + Messages.NAME, maxLengths.maxNameLength, ctx);
     }
 
     @Override
     public void enterEnumCaseName(SwiftParser.EnumCaseNameContext ctx) {
-        listenerHelper.verifyUpperCamelCase(Messages.ENUM_CASE_NAMES, ctx);
+        listenerHelper.verifyUpperCamelCase(Messages.ENUM_CASE + Messages.NAMES, ctx);
+        listenerHelper.verifyNameLength(Messages.ENUM_CASE + Messages.NAME, maxLengths.maxNameLength, ctx);
     }
 
     @Override
     public void enterStructName(SwiftParser.StructNameContext ctx) {
-        listenerHelper.verifyUpperCamelCase(Messages.STRUCT_NAMES, ctx);
+        listenerHelper.verifyUpperCamelCase(Messages.STRUCT + Messages.NAMES, ctx);
+        listenerHelper.verifyNameLength(Messages.STRUCT + Messages.NAME, maxLengths.maxNameLength, ctx);
     }
 
     @Override
     public void enterProtocolName(SwiftParser.ProtocolNameContext ctx) {
-        listenerHelper.verifyUpperCamelCase(Messages.PROTOCOL_NAMES, ctx);
+        listenerHelper.verifyUpperCamelCase(Messages.PROTOCOL + Messages.NAMES, ctx);
+        listenerHelper.verifyNameLength(Messages.PROTOCOL + Messages.NAME, maxLengths.maxNameLength, ctx);
     }
 
     @Override
@@ -102,5 +107,52 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterStructBody(SwiftParser.StructBodyContext ctx) {
         listenerHelper.verifyConstructLength(Messages.STRUCT, this.maxLengths.maxStructLength, ctx);
+    }
+
+    @Override
+    public void enterElementName(SwiftParser.ElementNameContext ctx) {
+        listenerHelper.verifyNameLength(Messages.ELEMENT + Messages.NAME, maxLengths.maxNameLength, ctx);
+    }
+
+    @Override
+    public void enterExternalParameterName(SwiftParser.ExternalParameterNameContext ctx) {
+        listenerHelper.verifyNameLength(Messages.EXTERNAL_PARAMETER + Messages.NAME, maxLengths.maxNameLength, ctx);
+    }
+
+    @Override
+    public void enterFunctionName(SwiftParser.FunctionNameContext ctx) {
+        listenerHelper.verifyNameLength(Messages.FUNCTION + Messages.NAME, maxLengths.maxNameLength, ctx);
+    }
+
+    @Override
+    public void enterLabelName(SwiftParser.LabelNameContext ctx) {
+        listenerHelper.verifyNameLength(Messages.LABEL + Messages.NAME, maxLengths.maxNameLength, ctx);
+    }
+
+    @Override
+    public void enterLocalParameterName(SwiftParser.LocalParameterNameContext ctx) {
+        listenerHelper.verifyNameLength(Messages.LOCAL_PARAMETER + Messages.NAME, maxLengths.maxNameLength, ctx);
+    }
+
+    // TODO: #41: Fix grammar for setter declarations
+    @Override
+    public void enterSetterName(SwiftParser.SetterNameContext ctx) {
+        listenerHelper.verifyNameLength(Messages.SETTER + Messages.NAME, maxLengths.maxNameLength, ctx);
+    }
+
+    @Override
+    public void enterTypeName(SwiftParser.TypeNameContext ctx) {
+        listenerHelper.verifyNameLength(Messages.TYPE + Messages.NAME, maxLengths.maxNameLength, ctx);
+    }
+
+    @Override
+    public void enterTypealiasName(SwiftParser.TypealiasNameContext ctx) {
+        listenerHelper.verifyNameLength(Messages.TYPEALIAS + Messages.NAME, maxLengths.maxNameLength, ctx);
+    }
+
+    // TODO: #13: Handle all cases for variable name declaration
+    @Override
+    public void enterVariableName(SwiftParser.VariableNameContext ctx) {
+        listenerHelper.verifyNameLength(Messages.VARIABLE + Messages.NAME, maxLengths.maxNameLength, ctx);
     }
 }
