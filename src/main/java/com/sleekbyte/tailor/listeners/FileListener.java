@@ -48,8 +48,10 @@ public class FileListener {
         // Map<lineNumber, lineLength>
         Set<Map.Entry<Integer, Integer>> longLines =
             SourceFileUtil.linesTooLong(this.inputFile, maxLineLength).entrySet();
+
         for (Map.Entry<Integer, Integer> entry : longLines) {
             String lengthVersusLimit = " (" + entry.getValue() + "/" + maxLineLength + ")";
+            // Mark error on first character beyond limit
             Location location = new Location(entry.getKey(), maxLineLength + 1);
             this.printer.error(Messages.LINE + Messages.EXCEEDS_CHARACTER_LIMIT + lengthVersusLimit, location);
         }
