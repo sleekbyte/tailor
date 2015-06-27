@@ -152,6 +152,7 @@ public class SourceFileUtilTest {
     @Test
     public void testNameTooLongMaxLengthValid() {
         when(context.getText()).thenReturn(NAME);
+        assertFalse(SourceFileUtil.nameTooLong(context, NAME.length()));
         assertFalse(SourceFileUtil.nameTooLong(context, NAME.length() + 1));
         assertTrue(SourceFileUtil.nameTooLong(context, NAME.length() - 10));
 
