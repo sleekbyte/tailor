@@ -41,16 +41,17 @@ public class Tailor {
             CommonTokenStream stream = new CommonTokenStream(lexer);
             SwiftParser swiftParser = new SwiftParser(stream);
             SwiftParser.TopLevelContext tree = swiftParser.topLevel();
-            Printer printer = new Printer(inputFile);
 
             MaxLengths maxLengths = argumentParser.parseMaxLengths();
 
-            MainListener listener = new MainListener(printer, maxLengths);
-            ParseTreeWalker walker = new ParseTreeWalker();
-            walker.walk(listener, tree);
+            try (Printer printer = new Printer(inputFile)) {
+                MainListener listener = new MainListener(printer, maxLengths);
+                ParseTreeWalker walker = new ParseTreeWalker();
+                walker.walk(listener, tree);
 
-            FileListener fileListener = new FileListener(printer, inputFile, maxLengths);
-            fileListener.verify();
+                FileListener fileListener = new FileListener(printer, inputFile, maxLengths);
+                fileListener.verify();
+            }
 
         } catch (ParseException | IOException e) {
             System.err.println("Source file analysis failed. Reason: " + e.getMessage());

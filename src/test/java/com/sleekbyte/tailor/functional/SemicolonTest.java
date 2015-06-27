@@ -16,6 +16,7 @@ import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -81,8 +82,7 @@ public class SemicolonTest {
             actualOutput.add(truncatedMsg);
         }
 
-        // TODO: Use `==` once #33 "Buffer output in printer class and remove duplicateMessages.ERROR messages" is complete
-        assertTrue(actualOutput.size() >= expectedMessages.size());
+        assertEquals(actualOutput.size(), expectedMessages.size());
         assertTrue(actualOutput.containsAll(expectedMessages));
     }
 

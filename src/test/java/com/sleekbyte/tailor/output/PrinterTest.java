@@ -44,12 +44,14 @@ public class PrinterTest {
     @Test
     public void testWarnWithLocationSuccess() throws IOException {
         printer.warn(WARNING_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
+        printer.close();
         assertEquals(expectedOutput(Messages.WARNING, WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER), outContent.toString());
     }
 
     @Test
     public void testErrorWithLocationSuccess() throws IOException {
         printer.error(ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
+        printer.close();
         assertEquals(expectedOutput(Messages.ERROR, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER), outContent.toString());
     }
 

@@ -5,13 +5,16 @@ import com.sleekbyte.tailor.common.Messages;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Generates and outputs formatted analysis messages for Xcode
  */
-public class Printer {
+public class Printer implements AutoCloseable {
 
     private File inputFile;
+    private Set<String> msgBuffer = new HashSet<>();
 
     public Printer(File inputFile) {
         this.inputFile = inputFile;
@@ -38,17 +41,24 @@ public class Printer {
     private void print(String classification, String msg, Location location) {
         String outputString = "";
         try {
-            outputString = inputFile.getCanonicalPath() + ":" + location.line + ":" + location.column + ": " +
+            outputString = this.inputFile.getCanonicalPath() + ":" + location.line + ":" + location.column + ": " +
                 classification + ": " + msg;
         } catch (IOException e) {
             System.err.println("Error in getting canonical path of input file: " + e.getMessage());
         }
-        System.out.println(outputString);
+        this.msgBuffer.add(outputString);
     }
 
     // Visible for testing only
     public static String genOutputStringForTest(String filePath, int line, int column, String classification,
                                                 String msg) {
         return filePath + ":" + line + ":" + column + ": " + classification + ": " + msg;
+    }
+
+    @Override
+    public void close() {
+        // TODO: #55: this.msgBuffer.sort(lineNumber1 < lineNumber2, columnNumber1 < columnNumber2);
+        this.msgBuffer.forEach(System.out::println);
+        this.msgBuffer.clear();
     }
 }
