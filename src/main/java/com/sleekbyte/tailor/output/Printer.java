@@ -59,5 +59,6 @@ public class Printer implements AutoCloseable {
     public void close() {
         // TODO: #55: this.msgBuffer.sort(lineNumber1 < lineNumber2, columnNumber1 < columnNumber2);
         this.msgBuffer.forEach(System.out::println);
+        this.msgBuffer.clear();
     }
 }
