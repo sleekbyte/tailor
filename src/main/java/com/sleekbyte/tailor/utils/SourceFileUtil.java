@@ -40,7 +40,7 @@ public class SourceFileUtil {
             LineNumberReader reader = new LineNumberReader(new FileReader(inputFile));
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                 if (line.length() > maxLength) {
-                    longLines.put(reader.getLineNumber() + 1, line.length());
+                    longLines.put(reader.getLineNumber(), line.length());
                 }
             }
         }

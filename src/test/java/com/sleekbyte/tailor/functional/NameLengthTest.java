@@ -19,15 +19,15 @@ import java.util.Set;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Functional tests for construct length rule
+ * Functional tests for name length rule
  */
 @RunWith(MockitoJUnitRunner.class)
-public class ConstructLengthTest {
+public class NameLengthTest {
 
     private static final String NEWLINE_REGEX = "\\r?\\n";
 
     private ByteArrayOutputStream outContent;
-    private File inputFile = new File("src/test/java/com/sleekbyte/tailor/functional/ConstructLengthTest.swift");
+    private File inputFile = new File("src/test/java/com/sleekbyte/tailor/functional/NameLengthTest.swift");
     private Set<String> expectedMessages = new HashSet<>();
 
     @Before
@@ -42,22 +42,29 @@ public class ConstructLengthTest {
     }
 
     @Test
-    public void testConstructLength() throws IOException {
+    public void testNameLength() throws IOException {
         String[] command = {
-            "--max-class-length", "8",
-            "--max-closure-length", "6",
-            "--max-file-length", "30",
-            "--max-function-length", "3",
-            "--max-struct-length", "1",
+            "--max-line-length", "40",
+            "--max-name-length", "5",
             inputFile.getPath()
         };
 
-        addExpectedMsg(8, 16, Messages.ERROR, Messages.CLASS, 12, 8);
-        addExpectedMsg(24, 27, Messages.ERROR, Messages.CLOSURE, 8, 6);
-        addExpectedMsg(31, 1, Messages.ERROR, Messages.FILE, 38, 30);
-        addExpectedMsg(10, 67, Messages.ERROR, Messages.FUNCTION, 9, 3);
-        addExpectedMsg(12, 35, Messages.ERROR, Messages.FUNCTION, 5, 3);
-        addExpectedMsg(35, 19, Messages.ERROR, Messages.STRUCT, 3, 1);
+        addExpectedMsg(1, 7, Messages.ERROR, Messages.CLASS + Messages.NAME, 23, 5);
+        addExpectedMsg(4, 40, Messages.ERROR, Messages.ELEMENT + Messages.NAME, 19, 5);
+        addExpectedMsg(6, 6, Messages.ERROR, Messages.ENUM + Messages.NAME, 21, 5);
+        addExpectedMsg(7, 13, Messages.ERROR, Messages.ENUM_CASE + Messages.NAME, 24, 5);
+        addExpectedMsg(10, 6, Messages.ERROR, Messages.FUNCTION + Messages.NAME, 23, 5);
+        addExpectedMsg(10, 30, Messages.ERROR, Messages.EXTERNAL_PARAMETER + Messages.NAME, 25, 5);
+        addExpectedMsg(10, 56, Messages.ERROR, Messages.LOCAL_PARAMETER + Messages.NAME, 23, 5);
+        addExpectedMsg(15, 1, Messages.ERROR, Messages.LABEL + Messages.NAME, 13, 5);
+        addExpectedMsg(24, 10, Messages.ERROR, Messages.PROTOCOL + Messages.NAME, 19, 5);
+        addExpectedMsg(27, 8, Messages.ERROR, Messages.STRUCT + Messages.NAME, 21, 5);
+        addExpectedMsg(38, 11, Messages.ERROR, Messages.TYPEALIAS + Messages.NAME, 19, 5);
+        addExpectedMsg(38, 33, Messages.ERROR, Messages.TYPE + Messages.NAME, 6, 5);
+
+        addExpectedMsg(4, 41, Messages.ERROR, Messages.LINE, 72, 40);
+        addExpectedMsg(7, 41, Messages.ERROR, Messages.LINE, 46, 40);
+        addExpectedMsg(10, 41, Messages.ERROR, Messages.LINE, 94, 40);
 
         Tailor.main(command);
 
@@ -74,7 +81,7 @@ public class ConstructLengthTest {
 
     private void addExpectedMsg(int line, int column, String classification, String msg, int length, int limit) {
         String lengthVersusLimit = " (" + length + "/" + limit + ")";
-        msg += Messages.EXCEEDS_LINE_LIMIT + lengthVersusLimit;
+        msg += Messages.EXCEEDS_CHARACTER_LIMIT + lengthVersusLimit;
         expectedMessages.add(Printer.genOutputStringForTest(inputFile.getName(), line, column, classification, msg));
     }
 

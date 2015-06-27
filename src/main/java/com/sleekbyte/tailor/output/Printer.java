@@ -47,8 +47,8 @@ public class Printer {
     }
 
     // Visible for testing only
-    public static String genOutputStringForTest(String filePath, String msg, int line, int column,
-                                                String classification) {
+    public static String genOutputStringForTest(String filePath, int line, int column, String classification,
+                                                String msg) {
         return filePath + ":" + line + ":" + column + ": " + classification + ": " + msg;
     }
 }
