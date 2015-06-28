@@ -1,0 +1,54 @@
+apply plugin: 'java'
+
+// Add ANTLR output as sourceSet
+sourceSets {
+    gen {
+        java {
+            srcDir file('src/gen/java')
+        }
+    }
+}
+
+// Ensure ANTLR output is generated before compilation
+compileGenJava.dependsOn 'generateGrammarSource'
+
+// Generate ANTLR output based on Swift grammar
+apply plugin: 'antlr'
+
+generateGrammarSource {
+    arguments += ['-package', 'com.sleekbyte.tailor.antlr']
+    outputDirectory = file('src/gen/java/com/sleekbyte/tailor/antlr')
+}
+
+// Ensure ANTLR output is deleted via clean
+clean {
+    delete file('src/gen')
+}
+
+// Add run task
+apply plugin: 'application'
+
+mainClassName = 'com.sleekbyte.tailor.Tailor'
+
+// Allow arguments: `gradle run -Pargs="args"`
+run {
+    if(project.hasProperty('args')){
+        args project.args.split('\\s+')
+    }
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    antlr 'org.antlr:antlr4:4.5'
+    genCompile 'org.antlr:antlr4-runtime:4.5'
+    // Ensure ANTLR output is compiled before main sourceSet
+    compile sourceSets.gen.output
+    compile 'commons-cli:commons-cli:1.3.1'
+    compile 'org.antlr:antlr4-runtime:4.5'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.hamcrest:hamcrest-all:1.3'
+    testCompile 'org.mockito:mockito-core:1.+'
+}

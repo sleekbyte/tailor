@@ -21,7 +21,7 @@ ANTLR_OUT=$(mktemp -d -t antlr-out)
 
 # Generate the Swift lexer, parser, and listener
 pushd . >/dev/null
-cd grammar
+cd src/main/antlr
 antlr4 Swift.g4 -o "$ANTLR_OUT"
 popd >/dev/null
 
