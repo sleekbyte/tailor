@@ -5,23 +5,20 @@ import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-
-import java.util.List;
 
 /**
  * Parse tree listener for verifying Swift constructs
  */
 public class MainListener extends SwiftBaseListener {
 
+    private static final String LET = "let";
+    private static final String VAR = "var";
     private static MainListenerHelper listenerHelper;
     private MaxLengths maxLengths;
-    private Printer printer;
 
     public MainListener(Printer printer, MaxLengths maxLengths) {
-        this.printer = printer;
         listenerHelper = new MainListenerHelper(printer);
         this.maxLengths = maxLengths;
     }
@@ -174,7 +171,7 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterValueBindingPattern(SwiftParser.ValueBindingPatternContext ctx) {
-        if (ctx.getStart().getText().equals("let")) {
+        if (ctx.getStart().getText().equals(LET)) {
             ParseTreeWalker walker = new ParseTreeWalker();
             listenerHelper.evaluatePattern(ctx.pattern(), walker);
         }
@@ -183,7 +180,7 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterParameter(SwiftParser.ParameterContext ctx) {
         for (ParseTree child : ctx.children) {
-            if (child.getText().equals("var")) {
+            if (child.getText().equals(VAR)) {
                 return;
             }
         }
