@@ -37,6 +37,7 @@ public class NameLengthTest extends RuleTest {
         addExpectedMsg(15, 1, Messages.ERROR, Messages.LABEL + Messages.NAME, 13, 5);
         addExpectedMsg(24, 10, Messages.ERROR, Messages.PROTOCOL + Messages.NAME, 19, 5);
         addExpectedMsg(27, 8, Messages.ERROR, Messages.STRUCT + Messages.NAME, 21, 5);
+        addExpectedMsg(32, 13, Messages.ERROR, Messages.SETTER + Messages.NAME, 16, 5);
         addExpectedMsg(38, 11, Messages.ERROR, Messages.TYPEALIAS + Messages.NAME, 19, 5);
         addExpectedMsg(38, 33, Messages.ERROR, Messages.TYPE + Messages.NAME, 6, 5);
 
