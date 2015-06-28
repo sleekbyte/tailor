@@ -1,51 +1,23 @@
 package com.sleekbyte.tailor.functional;
 
-import com.sleekbyte.tailor.Tailor;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Functional tests for semicolon rule
  */
 @RunWith(MockitoJUnitRunner.class)
-public class SemicolonTest {
+public class SemicolonTest extends RuleTest {
 
-    private static final String NEWLINE_REGEX = "\\r?\\n";
-
-    private ByteArrayOutputStream outContent;
-    private File inputFile = new File("src/test/java/com/sleekbyte/tailor/functional/SemicolonTest.swift");
-    private Set<String> expectedMessages = new HashSet<>();
-
-    @Before
-    public void setUp() {
-        outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
+    @Override
+    protected String getInputFilePath() {
+        return "SemicolonTest.swift";
     }
 
-    @After
-    public void tearDown() {
-        System.setOut(null);
-    }
-
-    @Test
-    public void testSemicolon() throws IOException {
-        String[] command = { inputFile.getPath() };
-
+    @Override
+    protected void addAllExpectedMsgs() {
         addExpectedMsg(1, 18, Messages.ERROR, Messages.STATEMENTS);
         addExpectedMsg(10, 2, Messages.ERROR, Messages.STATEMENTS);
         addExpectedMsg(6, 15, Messages.ERROR, Messages.STATEMENTS);
@@ -73,17 +45,6 @@ public class SemicolonTest {
         addExpectedMsg(57, 65, Messages.ERROR, Messages.STATEMENTS);
         addExpectedMsg(59, 73, Messages.ERROR, Messages.STATEMENTS);
         addExpectedMsg(61, 59, Messages.ERROR, Messages.STATEMENTS);
-
-        Tailor.main(command);
-
-        Set<String> actualOutput = new HashSet<>();
-        for (String msg : outContent.toString().split(NEWLINE_REGEX)) {
-            String truncatedMsg = msg.substring(msg.indexOf(inputFile.getName()));
-            actualOutput.add(truncatedMsg);
-        }
-
-        assertEquals(actualOutput.size(), expectedMessages.size());
-        assertTrue(actualOutput.containsAll(expectedMessages));
     }
 
     private void addExpectedMsg(int line, int column, String classification, String msg) {
