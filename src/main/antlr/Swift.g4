@@ -154,13 +154,13 @@ conditionClause : expression
  | availabilityCondition ',' expression
  ;
 
-conditionList : condition | condition ',' conditionList ;
+conditionList : condition (',' condition)* ;
 condition: availabilityCondition | caseCondition | optionalBindingCondition ;
 caseCondition: 'case' pattern initializer whereClause? ;
-optionalBindingCondition: optionalBindingHead optionalBindingContinuationList? whereClause? ;
+optionalBindingCondition: optionalBindingHead (',' optionalBindingContinuationList)? whereClause? ;
 optionalBindingHead: 'let' pattern initializer | 'var' pattern initializer ;
-optionalBindingContinuationList: optionalBindingContinuation (',' optionalBindingContinuationList)? ;
-optionalBindingContinuation: pattern initializer | optionalBindingHead ;
+optionalBindingContinuationList: optionalBindingContinuation (',' optionalBindingContinuation)* ;
+optionalBindingContinuation: optionalBindingHead | pattern initializer ;
 
 whereClause: 'where' whereExpression ;
 whereExpression: expression ;

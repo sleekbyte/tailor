@@ -178,6 +178,36 @@ public class MainListener extends SwiftBaseListener {
     }
 
     @Override
+    public void enterOptionalBindingCondition(SwiftParser.OptionalBindingConditionContext ctx) {
+        /*  Optional Binding is tricky. Consider the following Swift code:
+            if let const1 = foo?.bar, const2 = foo?.bar, var var1 = foo?.bar, var2 = foo?.bar {
+                ...
+            }
+            const1 and const2 are both constants even though only const1 has 'let' before it.
+            var1 and var2 are both variables as there is a 'var' before var1 and no 'let' before var2.
+
+            The code below iterates through each declared variable and applies rules based on the last seen binding,
+            'let' or 'var'.
+         */
+        String currentBinding = listenerHelper.letOrVar(ctx.optionalBindingHead());
+        if (currentBinding.equals(LET)) {
+            listenerHelper.evaluateOptionalBindingHead(ctx.optionalBindingHead());
+        }
+        SwiftParser.OptionalBindingContinuationListContext continuationList = ctx.optionalBindingContinuationList();
+        if (continuationList != null) {
+            for (SwiftParser.OptionalBindingContinuationContext continuation:
+                    continuationList.optionalBindingContinuation()) {
+                if (continuation.optionalBindingHead() != null) {
+                    currentBinding = listenerHelper.letOrVar(continuation.optionalBindingHead());
+                }
+                if (currentBinding.equals(LET)) {
+                    listenerHelper.evaluateOptionalBindingContinuation(continuation);
+                }
+            }
+        }
+    }
+
+    @Override
     public void enterParameter(SwiftParser.ParameterContext ctx) {
         for (ParseTree child : ctx.children) {
             if (child.getText().equals(VAR)) {

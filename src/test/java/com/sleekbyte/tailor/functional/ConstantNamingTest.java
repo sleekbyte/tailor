@@ -40,6 +40,9 @@ public class ConstantNamingTest extends RuleTest {
         addExpectedMsg(87, 17, Messages.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
         addExpectedMsg(94, 8, Messages.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
         addExpectedMsg(104, 14, Messages.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
+        addExpectedMsg(111, 51, Messages.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
+        addExpectedMsg(116, 61, Messages.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
+        addExpectedMsg(117, 3, Messages.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
     }
 
     private void addExpectedMsg(int line, int column, String classification, String msg) {
