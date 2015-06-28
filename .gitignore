@@ -9,8 +9,6 @@ src/gen/
 .idea/
 
 # Python
-*.py[cod]
-
 ## pyvenv
 venv/
 
