@@ -62,7 +62,7 @@ public class ConstructLengthTest {
         addExpectedMsg(31, Messages.ERROR, Messages.FILE, 38, 30);
 
         Tailor.main(command);
-System.err.println(outContent.toString());
+
         Set<String> actualOutput = new HashSet<>();
         for (String msg : outContent.toString().split(NEWLINE_REGEX)) {
             String truncatedMsg = msg.substring(msg.indexOf(inputFile.getName()));
