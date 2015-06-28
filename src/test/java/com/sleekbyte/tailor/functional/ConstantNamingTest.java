@@ -70,7 +70,7 @@ public class ConstantNamingTest {
         addExpectedMsg(104, 14, Messages.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
 
         Tailor.main(command);
-System.err.println(outContent.toString());
+
         Set<String> actualOutput = new HashSet<>();
         for (String msg : outContent.toString().split(NEWLINE_REGEX)) {
             String truncatedMsg = msg.substring(msg.indexOf(inputFile.getName()));
