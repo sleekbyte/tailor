@@ -55,10 +55,11 @@ public class ConstructLengthTest {
 
         addExpectedMsg(8, 16, Messages.ERROR, Messages.CLASS, 12, 8);
         addExpectedMsg(24, 27, Messages.ERROR, Messages.CLOSURE, 8, 6);
-        addExpectedMsg(31, 1, Messages.ERROR, Messages.FILE, 38, 30);
         addExpectedMsg(10, 67, Messages.ERROR, Messages.FUNCTION, 9, 3);
         addExpectedMsg(12, 35, Messages.ERROR, Messages.FUNCTION, 5, 3);
         addExpectedMsg(35, 19, Messages.ERROR, Messages.STRUCT, 3, 1);
+
+        addExpectedMsg(31, Messages.ERROR, Messages.FILE, 38, 30);
 
         Tailor.main(command);
 
@@ -70,6 +71,12 @@ public class ConstructLengthTest {
 
         assertEquals(actualOutput.size(), expectedMessages.size());
         assertTrue(actualOutput.containsAll(expectedMessages));
+    }
+
+    private void addExpectedMsg(int line, String classification, String msg, int length, int limit) {
+        String lengthVersusLimit = " (" + length + "/" + limit + ")";
+        msg += Messages.EXCEEDS_LINE_LIMIT + lengthVersusLimit;
+        expectedMessages.add(Printer.genOutputStringForTest(inputFile.getName(), line, classification, msg));
     }
 
     private void addExpectedMsg(int line, int column, String classification, String msg, int length, int limit) {
