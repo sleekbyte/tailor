@@ -168,7 +168,7 @@ public class MainListener extends SwiftBaseListener {
         ParseTreeWalker walker = new ParseTreeWalker();
         for (SwiftParser.PatternInitializerContext context : ctx.patternInitializerList().patternInitializer()) {
             SwiftParser.PatternContext pattern = context.pattern();
-            evaluatePattern(pattern, walker);
+            listenerHelper.evaluatePattern(pattern, walker);
         }
     }
 
@@ -176,7 +176,7 @@ public class MainListener extends SwiftBaseListener {
     public void enterValueBindingPattern(SwiftParser.ValueBindingPatternContext ctx) {
         if (ctx.getStart().getText().equals("let")) {
             ParseTreeWalker walker = new ParseTreeWalker();
-            evaluatePattern(ctx.pattern(), walker);
+            listenerHelper.evaluatePattern(ctx.pattern(), walker);
         }
     }
 
@@ -189,37 +189,9 @@ public class MainListener extends SwiftBaseListener {
         }
         ParseTreeWalker walker = new ParseTreeWalker();
         if (ctx.externalParameterName() != null) {
-            walkConstantDecListener(walker, ctx.externalParameterName());
+            listenerHelper.walkConstantDecListener(walker, ctx.externalParameterName());
         }
-        walkConstantDecListener(walker, ctx.localParameterName());
+        listenerHelper.walkConstantDecListener(walker, ctx.localParameterName());
     }
 
-    private void walkConstantDecListener(ParseTreeWalker walker, ParserRuleContext tree) {
-        walker.walk(new ConstantDecListener(this.printer), tree);
-    }
-
-    private void evaluatePattern(SwiftParser.PatternContext pattern, ParseTreeWalker walker) {
-        if (pattern.identifierPattern() != null) {
-            this.walkConstantDecListener(walker, pattern.identifierPattern());
-
-        } else if (pattern.tuplePattern() != null && pattern.tuplePattern().tuplePatternElementList() != null) {
-            evaluateTuplePattern(pattern.tuplePattern(), walker);
-
-        } else if (pattern.enumCasePattern() != null && pattern.enumCasePattern().tuplePattern() != null) {
-            evaluateTuplePattern(pattern.enumCasePattern().tuplePattern(), walker);
-
-        } else if (pattern.pattern() != null) {
-            evaluatePattern(pattern.pattern(), walker);
-
-        } else if (pattern.expressionPattern() != null) {
-            walkConstantDecListener(walker, pattern.expressionPattern().expression().prefixExpression());
-        }
-    }
-
-    private void evaluateTuplePattern(SwiftParser.TuplePatternContext tuplePatternContext, ParseTreeWalker walker) {
-        List<SwiftParser.TuplePatternElementContext> tuplePatternElementContexts = tuplePatternContext.tuplePatternElementList().tuplePatternElement();
-        for (SwiftParser.TuplePatternElementContext tuplePatternElement : tuplePatternElementContexts) {
-            evaluatePattern(tuplePatternElement.pattern(), walker);
-        }
-    }
 }
