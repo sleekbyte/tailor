@@ -41,12 +41,19 @@ public class Printer implements AutoCloseable {
     private void print(String classification, String msg, Location location) {
         String outputString = "";
         try {
-            outputString = this.inputFile.getCanonicalPath() + ":" + location.line + ":" + location.column + ": " +
+            String column = (location.column != 0) ? (":" + location.column) : "";
+            outputString = this.inputFile.getCanonicalPath() + ":" + location.line + column + ": " +
                 classification + ": " + msg;
         } catch (IOException e) {
             System.err.println("Error in getting canonical path of input file: " + e.getMessage());
         }
         this.msgBuffer.add(outputString);
+    }
+
+    // Visible for testing only
+    public static String genOutputStringForTest(String filePath, int line, String classification,
+                                                String msg) {
+        return filePath + ":" + line + ": " + classification + ": " + msg;
     }
 
     // Visible for testing only
