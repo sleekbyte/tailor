@@ -5,6 +5,11 @@ import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+
+import java.util.List;
 
 /**
  * Parse tree listener for verifying Swift constructs
@@ -13,8 +18,10 @@ public class MainListener extends SwiftBaseListener {
 
     private static MainListenerHelper listenerHelper;
     private MaxLengths maxLengths;
+    private Printer printer;
 
     public MainListener(Printer printer, MaxLengths maxLengths) {
+        this.printer = printer;
         listenerHelper = new MainListenerHelper(printer);
         this.maxLengths = maxLengths;
     }
@@ -154,5 +161,65 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterVariableName(SwiftParser.VariableNameContext ctx) {
         listenerHelper.verifyNameLength(Messages.VARIABLE + Messages.NAME, maxLengths.maxNameLength, ctx);
+    }
+
+    @Override
+    public void enterConstantDeclaration(SwiftParser.ConstantDeclarationContext ctx) {
+        ParseTreeWalker walker = new ParseTreeWalker();
+        for (SwiftParser.PatternInitializerContext context : ctx.patternInitializerList().patternInitializer()) {
+            SwiftParser.PatternContext pattern = context.pattern();
+            evaluatePattern(pattern, walker);
+        }
+    }
+
+    @Override
+    public void enterValueBindingPattern(SwiftParser.ValueBindingPatternContext ctx) {
+        if (ctx.getStart().getText().equals("let")) {
+            ParseTreeWalker walker = new ParseTreeWalker();
+            evaluatePattern(ctx.pattern(), walker);
+        }
+    }
+
+    @Override
+    public void enterParameter(SwiftParser.ParameterContext ctx) {
+        for (ParseTree child : ctx.children) {
+            if (child.getText().equals("var")) {
+                return;
+            }
+        }
+        ParseTreeWalker walker = new ParseTreeWalker();
+        if (ctx.externalParameterName() != null) {
+            walkConstantDecListener(walker, ctx.externalParameterName());
+        }
+        walkConstantDecListener(walker, ctx.localParameterName());
+    }
+
+    private void walkConstantDecListener(ParseTreeWalker walker, ParserRuleContext tree) {
+        walker.walk(new ConstantDecListener(this.printer), tree);
+    }
+
+    private void evaluatePattern(SwiftParser.PatternContext pattern, ParseTreeWalker walker) {
+        if (pattern.identifierPattern() != null) {
+            this.walkConstantDecListener(walker, pattern.identifierPattern());
+
+        } else if (pattern.tuplePattern() != null && pattern.tuplePattern().tuplePatternElementList() != null) {
+            evaluateTuplePattern(pattern.tuplePattern(), walker);
+
+        } else if (pattern.enumCasePattern() != null && pattern.enumCasePattern().tuplePattern() != null) {
+            evaluateTuplePattern(pattern.enumCasePattern().tuplePattern(), walker);
+
+        } else if (pattern.pattern() != null) {
+            evaluatePattern(pattern.pattern(), walker);
+
+        } else if (pattern.expressionPattern() != null) {
+            walkConstantDecListener(walker, pattern.expressionPattern().expression().prefixExpression());
+        }
+    }
+
+    private void evaluateTuplePattern(SwiftParser.TuplePatternContext tuplePatternContext, ParseTreeWalker walker) {
+        List<SwiftParser.TuplePatternElementContext> tuplePatternElementContexts = tuplePatternContext.tuplePatternElementList().tuplePatternElement();
+        for (SwiftParser.TuplePatternElementContext tuplePatternElement : tuplePatternElementContexts) {
+            evaluatePattern(tuplePatternElement.pattern(), walker);
+        }
     }
 }
