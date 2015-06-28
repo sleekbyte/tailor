@@ -41,7 +41,7 @@ public class Printer implements AutoCloseable {
     private void print(String classification, String msg, Location location) {
         String outputString = "";
         try {
-            String column = location.column != 0 ? ":" + location.column : "";
+            String column = (location.column != 0) ? (":" + location.column) : "";
             outputString = this.inputFile.getCanonicalPath() + ":" + location.line + column + ": " +
                 classification + ": " + msg;
         } catch (IOException e) {
