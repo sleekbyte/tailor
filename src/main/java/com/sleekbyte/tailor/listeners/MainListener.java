@@ -5,12 +5,16 @@ import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 /**
  * Parse tree listener for verifying Swift constructs
  */
 public class MainListener extends SwiftBaseListener {
 
+    private static final String LET = "let";
+    private static final String VAR = "var";
     private static MainListenerHelper listenerHelper;
     private MaxLengths maxLengths;
 
@@ -155,4 +159,36 @@ public class MainListener extends SwiftBaseListener {
     public void enterVariableName(SwiftParser.VariableNameContext ctx) {
         listenerHelper.verifyNameLength(Messages.VARIABLE + Messages.NAME, maxLengths.maxNameLength, ctx);
     }
+
+    @Override
+    public void enterConstantDeclaration(SwiftParser.ConstantDeclarationContext ctx) {
+        ParseTreeWalker walker = new ParseTreeWalker();
+        for (SwiftParser.PatternInitializerContext context : ctx.patternInitializerList().patternInitializer()) {
+            SwiftParser.PatternContext pattern = context.pattern();
+            listenerHelper.evaluatePattern(pattern, walker);
+        }
+    }
+
+    @Override
+    public void enterValueBindingPattern(SwiftParser.ValueBindingPatternContext ctx) {
+        if (ctx.getStart().getText().equals(LET)) {
+            ParseTreeWalker walker = new ParseTreeWalker();
+            listenerHelper.evaluatePattern(ctx.pattern(), walker);
+        }
+    }
+
+    @Override
+    public void enterParameter(SwiftParser.ParameterContext ctx) {
+        for (ParseTree child : ctx.children) {
+            if (child.getText().equals(VAR)) {
+                return;
+            }
+        }
+        ParseTreeWalker walker = new ParseTreeWalker();
+        if (ctx.externalParameterName() != null) {
+            listenerHelper.walkConstantDecListener(walker, ctx.externalParameterName());
+        }
+        listenerHelper.walkConstantDecListener(walker, ctx.localParameterName());
+    }
+
 }

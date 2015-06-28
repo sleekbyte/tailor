@@ -10,12 +10,14 @@ public class Messages {
     public static final String ERROR = "error";
 
     // Modifiers
+    public static final String GLOBAL = "Global ";
     public static final String NAME = "name ";
     public static final String NAMES = "names ";
 
     // Singular constructs
     public static final String CLASS = "Class ";
     public static final String CLOSURE = "Closure ";
+    public static final String CONSTANT = "Constant ";
     public static final String ELEMENT = "Element ";
     public static final String ENUM = "Enum ";
     public static final String ENUM_CASE = "Enum case ";
@@ -37,10 +39,12 @@ public class Messages {
     public static final String STATEMENTS = "Statements ";
 
     // Message descriptions
-    public static final String UPPER_CAMEL_CASE = "should be in UpperCamelCase";
+    public static final String UPPER_CAMEL_CASE = "should be UpperCamelCase";
     public static final String SEMICOLON = "should not terminate with a semicolon";
     public static final String EXCEEDS_LINE_LIMIT = "is over maximum line limit";
     public static final String EXCEEDS_CHARACTER_LIMIT = "is over maximum character limit";
+    public static final String GLOBAL_CONSTANT_NAMING = "should be either lowerCamelCase or UpperCamelCase";
+    public static final String CONSTANT_NAMING = "should be lowerCamelCase";
 
     // Usage messages
     public static final String CMD_LINE_SYNTAX = "tailor";
