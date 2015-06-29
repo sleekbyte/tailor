@@ -30,7 +30,7 @@ public class SortedPrinterOutputTest extends RuleTest {
         addExpectedMsg(15, 23, Messages.ERROR, Messages.STATEMENTS + Messages.SEMICOLON);
         addExpectedMsg(16, 39, Messages.ERROR, Messages.STATEMENTS + Messages.SEMICOLON);
         addExpectedMsg(17, 2, Messages.ERROR, Messages.STATEMENTS + Messages.SEMICOLON);
-        addExpectedMsg(20, 8, Messages.ERROR, Messages.STRUCT + Messages.NAMES+ Messages.UPPER_CAMEL_CASE);
+        addExpectedMsg(20, 8, Messages.ERROR, Messages.STRUCT + Messages.NAMES + Messages.UPPER_CAMEL_CASE);
         addExpectedMsg(21, 18, Messages.ERROR, Messages.STATEMENTS + Messages.SEMICOLON);
         addExpectedMsg(27, 10, Messages.ERROR, Messages.STATEMENTS + Messages.SEMICOLON);
         addExpectedMsg(31, 10, Messages.ERROR, Messages.STATEMENTS + Messages.SEMICOLON);
