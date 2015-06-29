@@ -30,7 +30,7 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
         message = (ViolationMessage)o;
         return this.filePath == message.filePath
                 && this.lineNumber == message.lineNumber
-                && this.columnNumber == message.lineNumber
+                && this.columnNumber == message.columnNumber
                 && this.classification == message.classification
                 && this.violationMessage == message.violationMessage;
     }
