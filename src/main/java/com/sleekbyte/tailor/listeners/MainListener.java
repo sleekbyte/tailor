@@ -138,7 +138,6 @@ public class MainListener extends SwiftBaseListener {
         listenerHelper.verifyNameLength(Messages.LOCAL_PARAMETER + Messages.NAME, maxLengths.maxNameLength, ctx);
     }
 
-    // TODO: #41: Fix grammar for setter declarations
     @Override
     public void enterSetterName(SwiftParser.SetterNameContext ctx) {
         listenerHelper.verifyNameLength(Messages.SETTER + Messages.NAME, maxLengths.maxNameLength, ctx.identifier());

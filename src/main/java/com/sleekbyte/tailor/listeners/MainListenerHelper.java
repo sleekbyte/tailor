@@ -96,8 +96,7 @@ class MainListenerHelper {
     public void evaluateOptionalBindingContinuation(SwiftParser.OptionalBindingContinuationContext ctx) {
         if (ctx.optionalBindingHead() != null) {
             evaluateOptionalBindingHead(ctx.optionalBindingHead());
-        }
-        else {
+        } else {
             ParseTreeWalker walker = new ParseTreeWalker();
             evaluatePattern(ctx.pattern(), walker);
         }

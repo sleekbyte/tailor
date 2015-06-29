@@ -394,9 +394,9 @@ subscriptResult : '->' attributes? sType  ;
 operatorDeclaration : prefixOperatorDeclaration | postfixOperatorDeclaration | infixOperatorDeclaration  ;
 prefixOperatorDeclaration : 'prefix' 'operator' operator '{' '}'  ;
 postfixOperatorDeclaration : 'postfix' 'operator' operator '{' '}'  ;
-infixOperatorDeclaration : 'infix' 'operator' operator '{' infixOperatorAttributes ? '}'  ;
+infixOperatorDeclaration : 'infix' 'operator' operator '{' infixOperatorAttributes '}'  ;
 // Order of clauses can be reversed, not indicated in Swift Language Reference
-infixOperatorAttributes : precedenceClause associativityClause | associativityClause precedenceClause ;
+infixOperatorAttributes : precedenceClause? associativityClause? | associativityClause? precedenceClause? ;
 precedenceClause : 'precedence' precedenceLevel  ;
 precedenceLevel : integerLiteral ;
 associativityClause : 'associativity' associativity  ;
