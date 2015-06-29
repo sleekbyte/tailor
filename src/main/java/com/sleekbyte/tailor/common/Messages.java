@@ -45,6 +45,7 @@ public class Messages {
     public static final String EXCEEDS_CHARACTER_LIMIT = "is over maximum character limit";
     public static final String GLOBAL_CONSTANT_NAMING = "should be either lowerCamelCase or UpperCamelCase";
     public static final String CONSTANT_NAMING = "should be lowerCamelCase";
+    public static final String NEWLINE_TERMINATOR = "should terminate with a newline character ('\\n')";
 
     // Usage messages
     public static final String CMD_LINE_SYNTAX = "tailor";

@@ -30,8 +30,9 @@ public class FileListener {
      * Verify that all source file specific rules are satisfied
      */
     public void verify() throws IOException {
-        this.verifyFileLength(maxLengths.maxFileLength);
-        this.verifyLineLengths(maxLengths.maxLineLength);
+        verifyFileLength(maxLengths.maxFileLength);
+        verifyLineLengths(maxLengths.maxLineLength);
+        verifyNewlineTerminated();
     }
 
     private void verifyFileLength(int maxLines) throws IOException {
@@ -53,6 +54,13 @@ public class FileListener {
             // Mark error on first character beyond limit
             Location location = new Location(entry.getKey(), maxLineLength + 1);
             this.printer.error(Messages.LINE + Messages.EXCEEDS_CHARACTER_LIMIT + lengthVersusLimit, location);
+        }
+    }
+
+    private void verifyNewlineTerminated() throws IOException {
+        if (!SourceFileUtil.newlineTerminated(this.inputFile)) {
+            Location location = new Location(SourceFileUtil.numLinesInFile(this.inputFile));
+            this.printer.error(Messages.FILE + Messages.NEWLINE_TERMINATOR, location);
         }
     }
 
