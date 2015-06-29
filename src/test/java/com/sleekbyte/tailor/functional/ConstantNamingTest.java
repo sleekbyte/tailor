@@ -43,6 +43,17 @@ public class ConstantNamingTest extends RuleTest {
         addExpectedMsg(111, 51, Messages.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
         addExpectedMsg(116, 61, Messages.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
         addExpectedMsg(117, 3, Messages.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
+
+        // K PREFIX TESTS
+        addExpectedMsg(2, 22, Messages.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
+        addExpectedMsg(2, 37, Messages.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
+        addExpectedMsg(79, 16, Messages.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
+        addExpectedMsg(79, 16, Messages.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
+        addExpectedMsg(126, 16, Messages.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
+        addExpectedMsg(127, 16, Messages.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
+        addExpectedMsg(132, 20, Messages.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
+        addExpectedMsg(133, 20, Messages.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
+
     }
 
     private void addExpectedMsg(int line, int column, String classification, String msg) {

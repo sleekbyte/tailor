@@ -41,4 +41,28 @@ public class CharFormatUtilTest {
         assertTrue(CharFormatUtil.isLowerCamelCase("helloWorld"));
     }
 
+    @Test
+    public void testKPrefixedInvalidVariableNamesStartingWithK() {
+        assertTrue(CharFormatUtil.isKPrefixed("KBadConstantName"));
+        assertTrue(CharFormatUtil.isKPrefixed("kBadConstantName"));
+    }
+
+    @Test
+    public void testKPrefixedValidVariableNamesStartingWithK() {
+        assertFalse(CharFormatUtil.isKPrefixed("koalasEatKale"));
+        assertFalse(CharFormatUtil.isKPrefixed("KoalasEatKale"));
+    }
+
+    @Test
+    public void testKPrefixedVariableNamesNotInCamelCase() {
+        assertFalse(CharFormatUtil.isKPrefixed("k_valid_because_not_camel_case"));
+        assertFalse(CharFormatUtil.isKPrefixed("K_valid_because_not_camel_case"));
+    }
+
+    @Test
+    public void testKPrefixedVariableNamesNotStartingWithK() {
+        assertFalse(CharFormatUtil.isKPrefixed("validConstantName"));
+        assertFalse(CharFormatUtil.isKPrefixed("AlsoValidConstantName"));
+    }
+
 }
