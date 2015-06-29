@@ -58,6 +58,7 @@ public class SourceFileUtil {
                     longLines.put(reader.getLineNumber(), line.length());
                 }
             }
+            reader.close();
         }
         return longLines;
     }

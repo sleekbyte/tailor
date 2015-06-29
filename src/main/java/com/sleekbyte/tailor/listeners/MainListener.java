@@ -15,11 +15,11 @@ public class MainListener extends SwiftBaseListener {
 
     private static final String LET = "let";
     private static final String VAR = "var";
-    private static MainListenerHelper listenerHelper;
+    private static MainListenerHelper listenerHelper = new MainListenerHelper();
     private MaxLengths maxLengths;
 
     public MainListener(Printer printer, MaxLengths maxLengths) {
-        listenerHelper = new MainListenerHelper(printer);
+        listenerHelper.setPrinter(printer);
         this.maxLengths = maxLengths;
     }
 

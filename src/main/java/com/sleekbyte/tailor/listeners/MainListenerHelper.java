@@ -18,7 +18,7 @@ class MainListenerHelper {
 
     private Printer printer;
 
-    MainListenerHelper(Printer printer) {
+    public void setPrinter(Printer printer) {
         this.printer = printer;
     }
 
