@@ -27,9 +27,6 @@ public class ViolationMessageTest {
         ViolationMessage violationMessage = new ViolationMessage("/usr/bin/local", 10, 1, Messages.ERROR, "errMsg");
     }
 
-    @After
-    public void tearDown() { }
-
     @Test
     public void testCompareTo() throws Exception { }
 
