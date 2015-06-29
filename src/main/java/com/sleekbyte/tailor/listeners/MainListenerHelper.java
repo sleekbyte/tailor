@@ -66,6 +66,14 @@ class MainListenerHelper {
         }
     }
 
+    void verifyLowerCamelCase(String constructType, ParserRuleContext ctx) {
+        String constructName = ctx.getText();
+        if (!CharFormatUtil.isLowerCamelCase(constructName)) {
+            Location location = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+            this.printer.error(constructType + Messages.LOWER_CAMEL_CASE, location);
+        }
+    }
+
     void walkConstantDecListener(ParseTreeWalker walker, ParserRuleContext tree) {
         walker.walk(new ConstantDecListener(this.printer), tree);
     }

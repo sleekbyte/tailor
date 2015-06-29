@@ -126,6 +126,7 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterFunctionName(SwiftParser.FunctionNameContext ctx) {
         listenerHelper.verifyNameLength(Messages.FUNCTION + Messages.NAME, maxLengths.maxNameLength, ctx);
+        listenerHelper.verifyLowerCamelCase(Messages.FUNCTION + Messages.NAMES, ctx);
     }
 
     @Override
