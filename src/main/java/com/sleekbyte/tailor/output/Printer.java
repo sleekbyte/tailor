@@ -86,11 +86,24 @@ public class Printer implements AutoCloseable {
             this.violationMessage = violationMessage;
         }
 
-        public int compareTo(ViolationMessage data) {
+        @Override
+        public int compareTo(final ViolationMessage message) {
             return 0;
         }
 
-        // TODO: Implement equals and hashCode (equals to be consistent with compareTo).
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof ViolationMessage)) {
+                return false;
+            }
+            ViolationMessage message;
+            message = (ViolationMessage)o;
+            return this.filePath == message.filePath
+                    && this.lineNumber == message.lineNumber
+                    && this.columnNumber == message.lineNumber
+                    && this.classification == message.classification
+                    && this.violationMessage == message.violationMessage;
+        }
 
         public String toString() {
             return String.format("%s:%d:%d: %s: %s", this.filePath, this.lineNumber, this.columnNumber, this.classification, this.violationMessage);
