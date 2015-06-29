@@ -72,7 +72,11 @@ public class Printer implements AutoCloseable {
     }
 
     private void flushBuffer() {
-        List<String> outputList = new ArrayList(this.msgBuffer.keySet());
+
+        ArrayList<ViolationMessage> outputList = new ArrayList<>();
+        for(Map.Entry<String, ViolationMessage> map : msgBuffer.entrySet()){
+            outputList.add(map.getValue());
+        }
         Collections.sort(outputList);
         outputList.forEach(System.out::println);
         this.msgBuffer.clear();
