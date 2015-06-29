@@ -33,13 +33,13 @@ public class GrammarTest {
     }
 
     @Test
-    public void testRule() {
+    public void testGrammar() {
         for (File swiftFile: swiftFiles) {
             errContent = new ByteArrayOutputStream();
             System.setErr(new PrintStream(errContent));
             String[] command = { (TEST_INPUT_DIR + swiftFile.getName()) };
             Tailor.main(command);
-            assertEquals(errContent.toString(), "");
+            assertEquals("", errContent.toString());
             System.setErr(null);
         }
     }
