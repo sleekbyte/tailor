@@ -791,6 +791,9 @@ classRequirement: 'class' ;
 
 // ---------- Lexical Structure -----------
 
+BooleanLiteral: 'true' | 'false' ;
+NilLiteral: 'nil' ;
+
 // GRAMMAR OF AN IDENTIFIER
 
 identifier : Identifier | contextSensitiveKeyword ;
@@ -876,7 +879,7 @@ ImplicitParameterName : '$' DecimalLiteral ; // TODO: don't allow '_' here
 
 // GRAMMAR OF A LITERAL
 
-literal : integerLiteral | FloatingPointLiteral | StringLiteral  ;
+literal : integerLiteral | FloatingPointLiteral | StringLiteral | BooleanLiteral | NilLiteral ;
 
 // GRAMMAR OF AN INTEGER LITERAL
 
