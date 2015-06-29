@@ -22,8 +22,9 @@ public class Printer implements AutoCloseable {
 
     /**
      * Prints warning message
+     *
      * @param warningMsg warning message to print
-     * @param location location object containing line and column number for printing
+     * @param location   location object containing line and column number for printing
      */
     public void warn(String warningMsg, Location location) {
         print(Messages.WARNING, warningMsg, location);
@@ -31,6 +32,7 @@ public class Printer implements AutoCloseable {
 
     /**
      * Prints error message
+     *
      * @param errorMsg error message to print
      * @param location location object containing line and column number for printing
      */
@@ -43,7 +45,7 @@ public class Printer implements AutoCloseable {
         try {
             String column = (location.column != 0) ? (":" + location.column) : "";
             outputString = this.inputFile.getCanonicalPath() + ":" + location.line + column + ": " +
-                classification + ": " + msg;
+                    classification + ": " + msg;
         } catch (IOException e) {
             System.err.println("Error in getting canonical path of input file: " + e.getMessage());
         }
@@ -89,6 +91,9 @@ public class Printer implements AutoCloseable {
         }
 
         // TODO: Implement equals and hashCode (equals to be consistent with compareTo).
-    }
 
+        public String toString() {
+            return String.format("%s:%d:%d: %s: %s", this.filePath, this.lineNumber, this.columnNumber, this.classification, this.violationMessage);
+        }
     }
+}
