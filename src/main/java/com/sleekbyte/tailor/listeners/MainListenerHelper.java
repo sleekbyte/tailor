@@ -86,4 +86,24 @@ class MainListenerHelper {
         }
     }
 
+    /* Optional Binding Condition Evaluators */
+
+    public void evaluateOptionalBindingHead(SwiftParser.OptionalBindingHeadContext ctx) {
+        ParseTreeWalker walker = new ParseTreeWalker();
+        evaluatePattern(ctx.pattern(), walker);
+    }
+
+    public void evaluateOptionalBindingContinuation(SwiftParser.OptionalBindingContinuationContext ctx) {
+        if (ctx.optionalBindingHead() != null) {
+            evaluateOptionalBindingHead(ctx.optionalBindingHead());
+        } else {
+            ParseTreeWalker walker = new ParseTreeWalker();
+            evaluatePattern(ctx.pattern(), walker);
+        }
+    }
+
+    public String letOrVar(SwiftParser.OptionalBindingHeadContext ctx) {
+        return ctx.getChild(0).getText();
+    }
+
 }

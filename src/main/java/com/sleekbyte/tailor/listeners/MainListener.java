@@ -138,10 +138,9 @@ public class MainListener extends SwiftBaseListener {
         listenerHelper.verifyNameLength(Messages.LOCAL_PARAMETER + Messages.NAME, maxLengths.maxNameLength, ctx);
     }
 
-    // TODO: #41: Fix grammar for setter declarations
     @Override
     public void enterSetterName(SwiftParser.SetterNameContext ctx) {
-        listenerHelper.verifyNameLength(Messages.SETTER + Messages.NAME, maxLengths.maxNameLength, ctx);
+        listenerHelper.verifyNameLength(Messages.SETTER + Messages.NAME, maxLengths.maxNameLength, ctx.identifier());
     }
 
     @Override
@@ -174,6 +173,36 @@ public class MainListener extends SwiftBaseListener {
         if (ctx.getStart().getText().equals(LET)) {
             ParseTreeWalker walker = new ParseTreeWalker();
             listenerHelper.evaluatePattern(ctx.pattern(), walker);
+        }
+    }
+
+    @Override
+    public void enterOptionalBindingCondition(SwiftParser.OptionalBindingConditionContext ctx) {
+        /*  Optional Binding is tricky. Consider the following Swift code:
+            if let const1 = foo?.bar, const2 = foo?.bar, var var1 = foo?.bar, var2 = foo?.bar {
+                ...
+            }
+            const1 and const2 are both constants even though only const1 has 'let' before it.
+            var1 and var2 are both variables as there is a 'var' before var1 and no 'let' before var2.
+
+            The code below iterates through each declared variable and applies rules based on the last seen binding,
+            'let' or 'var'.
+         */
+        String currentBinding = listenerHelper.letOrVar(ctx.optionalBindingHead());
+        if (currentBinding.equals(LET)) {
+            listenerHelper.evaluateOptionalBindingHead(ctx.optionalBindingHead());
+        }
+        SwiftParser.OptionalBindingContinuationListContext continuationList = ctx.optionalBindingContinuationList();
+        if (continuationList != null) {
+            for (SwiftParser.OptionalBindingContinuationContext continuation:
+                    continuationList.optionalBindingContinuation()) {
+                if (continuation.optionalBindingHead() != null) {
+                    currentBinding = listenerHelper.letOrVar(continuation.optionalBindingHead());
+                }
+                if (currentBinding.equals(LET)) {
+                    listenerHelper.evaluateOptionalBindingContinuation(continuation);
+                }
+            }
         }
     }
 

@@ -56,7 +56,7 @@ public abstract class RuleTest {
             actualOutput.add(truncatedMsg);
         }
 
-        assertEquals(actualOutput.size(), expectedMessages.size());
+        assertEquals(expectedMessages.size(), actualOutput.size());
         assertTrue(actualOutput.containsAll(expectedMessages));
     }
 

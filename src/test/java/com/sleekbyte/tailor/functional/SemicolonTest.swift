@@ -34,8 +34,8 @@ struct DemoStruct {
 
         };
 
-        // do while
-        do {
+        // repeat while
+        repeat {
 
         } while (true);
     };
