@@ -5,14 +5,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.PrintStream;
 
 import static org.junit.Assert.assertEquals;
 
 public class GrammarTest {
 
     protected static final String TEST_INPUT_DIR = "src/test/java/com/sleekbyte/tailor/grammar/";
-    protected static final String NEWLINE_REGEX = "\\r?\\n";
 
     protected ByteArrayOutputStream errContent;
     protected ByteArrayOutputStream outContent;
@@ -32,8 +33,8 @@ public class GrammarTest {
     }
 
     @Test
-    public void testRule() throws IOException {
-        for ( File swiftFile: swiftFiles) {
+    public void testRule() {
+        for (File swiftFile: swiftFiles) {
             errContent = new ByteArrayOutputStream();
             System.setErr(new PrintStream(errContent));
             String[] command = { (TEST_INPUT_DIR + swiftFile.getName()) };
