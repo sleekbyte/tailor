@@ -45,7 +45,7 @@ statement
  | controlTransferStatement ';'?
  | deferStatement ';' ?
  | doStatement ':'?
- | expression ';'?
+ | expression ';'?  // Keep expression last to handle ambiguity
  ;
 
 statements : statement+ ;
@@ -157,6 +157,7 @@ conditionClause : expression
 conditionList : condition (',' condition)* ;
 condition: availabilityCondition | caseCondition | optionalBindingCondition ;
 caseCondition: 'case' pattern initializer whereClause? ;
+// optionalBindingCondition is incorrect in the Swift Language Reference (missing a ',')
 optionalBindingCondition: optionalBindingHead (',' optionalBindingContinuationList)? whereClause? ;
 optionalBindingHead: 'let' pattern initializer | 'var' pattern initializer ;
 optionalBindingContinuationList: optionalBindingContinuation (',' optionalBindingContinuation)* ;
@@ -169,7 +170,7 @@ whereExpression: expression ;
 
 availabilityCondition: '#available' '(' availabilityArguments ')' ;
 availabilityArguments: availabilityArgument (',' availabilityArguments)? ;
-availabilityArgument: platformName platformVersion | '*' ; // Not sure what * meant in the Swift Language Reference
+availabilityArgument: platformName platformVersion | '*' ;
 platformName: 'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS' ;
 platformVersion: VersionLiteral | DecimalLiteral | FloatingPointLiteral ; // TODO: Find a way to make this only VersionLiteral
 
@@ -184,7 +185,7 @@ requirementClause : 'where' requirementList  ;
 requirementList : requirement | requirement ',' requirementList  ;
 requirement : conformanceRequirement | sameTypeRequirement  ;
 conformanceRequirement : typeIdentifier ':' typeIdentifier | typeIdentifier ':' protocolCompositionType  ;
-sameTypeRequirement : typeIdentifier '==' typeIdentifier  ;
+sameTypeRequirement : typeIdentifier '==' sType  ;
 
 // GRAMMAR OF A GENERIC ARGUMENT CLAUSE
 
@@ -250,7 +251,9 @@ variableDeclaration
  : variableDeclarationHead patternInitializerList
  | variableDeclarationHead variableName typeAnnotation getterSetterBlock
  | variableDeclarationHead variableName typeAnnotation getterSetterKeywordBlock
+ | variableDeclarationHead variableName initializer willSetDidSetBlock
  | variableDeclarationHead variableName typeAnnotation initializer? willSetDidSetBlock
+ // keep this below getter and setter rules for ambiguity reasons
  | variableDeclarationHead variableName typeAnnotation codeBlock
  ;
 
@@ -270,7 +273,7 @@ didSetClause : attributes? 'didSet' setterName? codeBlock  ;
 // GRAMMAR OF A TYPE ALIAS DECLARATION
 
 typealiasDeclaration : typealiasHead typealiasAssignment  ;
-typealiasHead : 'typealias' typealiasName  ;
+typealiasHead : attributes? accessLevelModifier? 'typealias' typealiasName  ;
 typealiasName : identifier  ;
 typealiasAssignment : '=' sType  ;
 
@@ -279,6 +282,7 @@ typealiasAssignment : '=' sType  ;
 functionDeclaration : functionHead functionName genericParameterClause? functionSignature functionBody ;
 functionHead : attributes? declarationModifiers? 'func'  ;
 functionName : identifier |  operator  ;
+// rethrows is not marked as optional in the Swift Language Reference
 functionSignature : parameterClauses ('throws' | 'rethrows')? functionResult? ;
 functionResult : '->' attributes? sType  ;
 functionBody : codeBlock  ;
@@ -305,6 +309,7 @@ unionStyleEnumCaseList : unionStyleEnumCase | unionStyleEnumCase ',' unionStyleE
 unionStyleEnumCase : enumCaseName tupleType? ;
 enumName : identifier  ;
 enumCaseName : identifier  ;
+// typeInheritanceClause is not optional in the Swift Language Reference
 rawValueStyleEnum : enumName genericParameterClause? typeInheritanceClause? '{' rawValueStyleEnumMembers?'}'  ;
 rawValueStyleEnumMembers : rawValueStyleEnumMember rawValueStyleEnumMembers? ;
 rawValueStyleEnumMember : declaration | rawValueStyleEnumCaseClause  ;
@@ -370,6 +375,7 @@ deinitializerDeclaration : attributes? 'deinit' codeBlock  ;
 
 // GRAMMAR OF AN EXTENSION DECLARATION
 
+// requirementClause missing in the Swift Language Reference
 extensionDeclaration : accessLevelModifier? 'extension' typeIdentifier requirementClause? typeInheritanceClause? extensionBody  ;
 extensionBody : '{' declarations?'}'  ;
 
@@ -377,6 +383,7 @@ extensionBody : '{' declarations?'}'  ;
 
 subscriptDeclaration : subscriptHead subscriptResult getterSetterBlock
  | subscriptHead subscriptResult getterSetterKeywordBlock
+ // most general form of subscript declaration; should be kept at the bottom.
  | subscriptHead subscriptResult codeBlock
  ;
 subscriptHead : attributes? declarationModifiers? 'subscript' parameterClause  ;
@@ -387,8 +394,9 @@ subscriptResult : '->' attributes? sType  ;
 operatorDeclaration : prefixOperatorDeclaration | postfixOperatorDeclaration | infixOperatorDeclaration  ;
 prefixOperatorDeclaration : 'prefix' 'operator' operator '{' '}'  ;
 postfixOperatorDeclaration : 'postfix' 'operator' operator '{' '}'  ;
-infixOperatorDeclaration : 'infix' 'operator' operator '{' infixOperatorAttributes '}'  ;
-infixOperatorAttributes : precedenceClause? associativityClause? | associativityClause? precedenceClause? ;
+infixOperatorDeclaration : 'infix' 'operator' operator '{' infixOperatorAttributes ? '}'  ;
+// Order of clauses can be reversed, not indicated in Swift Language Reference
+infixOperatorAttributes : precedenceClause associativityClause | associativityClause precedenceClause ;
 precedenceClause : 'precedence' precedenceLevel  ;
 precedenceLevel : integerLiteral ;
 associativityClause : 'associativity' associativity  ;
@@ -467,8 +475,7 @@ balancedToken
 
 expressionList : expression (',' expression)* ;
 
-expression : tryOperator? prefixExpression binaryExpression+
- | tryOperator? prefixExpression ;
+expression : tryOperator? prefixExpression binaryExpression* ;
 
 prefixExpression
   : prefixOperator? postfixExpression ';'?
@@ -534,7 +541,7 @@ typeCastingOperator
 // GRAMMAR OF A PRIMARY EXPRESSION
 
 primaryExpression
- : (identifier | operator) genericArgumentClause?
+ : (identifier | operator) genericArgumentClause? // operator not mentioned in the Swift Language Reference
  | literalExpression
  | selfExpression
  | superclassExpression
@@ -593,7 +600,8 @@ closureSignature
  | captureList 'in'
  ;
 
-captureList : '[' captureSpecifier expression (',' captureSpecifier expression)? ']'  ;
+// The Swift Language Reference only allows one captureSpecifier expression pair
+captureList : '[' captureSpecifier expression (',' captureSpecifier expression)* ']'  ;
 
 captureSpecifier : 'weak' | 'unowned' | 'unowned(safe)' | 'unowned(unsafe)'  ;
 
@@ -717,18 +725,6 @@ postfixOperator : operator  ;
 // Types
 
 // GRAMMAR OF A TYPE
-
-/*sType
- : sType '[' ']'
- | sType '->' sType
- | typeIdentifier
- | tupleType
- | sType '?'
- | sType '!'
- | protocolCompositionType
- | sType '.' 'Type'
- | sType '.' 'Protocol'
- ;*/
 
 sType
  : arrayType
