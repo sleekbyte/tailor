@@ -160,6 +160,24 @@ public class SourceFileUtilTest {
         assertFalse(SourceFileUtil.nameTooLong(context, NAME.length()));
     }
 
+    @Test
+    public void testNewlineTerminatedBlankFile() throws IOException {
+        assertTrue(SourceFileUtil.newlineTerminated(inputFile));
+    }
+
+    @Test
+    public void testNewLineTerminatedNoNewline() throws IOException {
+        writer.print("Line without a terminating newline.");
+        writer.close();
+        assertFalse(SourceFileUtil.newlineTerminated(inputFile));
+    }
+
+    @Test
+    public void testNewlineTerminatedWithNewline() throws IOException {
+        writeNumOfLines(3, NORMAL_LINE);
+        assertTrue(SourceFileUtil.newlineTerminated(inputFile));
+    }
+
     private void writeNumOfLines(int numOfLines, String data) {
         for (int i = 1; i <= numOfLines; i++) {
             writer.println(data);
