@@ -20,9 +20,11 @@ import static org.junit.Assert.assertTrue;
 
 public class ViolationMessageTest {
 
+    ViolationMessage violationMessage;
+
     @Before
     public void setUp() throws IOException {
-
+        ViolationMessage violationMessage = new ViolationMessage("/usr/bin/local", 10, 1, Messages.ERROR, "errMsg");
     }
 
     @After
@@ -33,11 +35,9 @@ public class ViolationMessageTest {
 
     @Test
     public void testEquals() throws Exception {
-        ViolationMessage violationMessage = new ViolationMessage("/usr/bin/local", 10, 1, Messages.ERROR, "errMsg");
-
         // Equal ViolationMessage
         ViolationMessage unequalViolationMessage = new ViolationMessage("/usr/bin/local", 12, 5, Messages.ERROR, "errMsg");
-        assertFalse(violationMessage.equals(unequalViolationMessage));
+        assertFalse(this.violationMessage.equals(unequalViolationMessage));
 
         // Unequal ViolationMessage
         ViolationMessage equalViolationMessage = new ViolationMessage("/usr/bin/local", 10, 1, Messages.ERROR, "errMsg");
@@ -46,9 +46,7 @@ public class ViolationMessageTest {
 
     @Test
     public void testToString() throws Exception {
-        ViolationMessage violationMessage = new ViolationMessage("/usr/bin/local", 10, 1, Messages.ERROR, "errMsg");
         String expectedOutput = "/usr/bin/local:10:1: error: errMsg";
-
-        assertEquals(expectedOutput, violationMessage.toString());
+        assertEquals(expectedOutput, this.violationMessage.toString());
     }
 }
