@@ -5,7 +5,9 @@ import com.sleekbyte.tailor.common.Messages;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -14,7 +16,7 @@ import java.util.Set;
 public class Printer implements AutoCloseable {
 
     private File inputFile;
-    private Set<String> msgBuffer = new HashSet<>();
+    private HashMap<String, ViolationMessage> msgBuffer = new HashMap<String, ViolationMessage>();
 
     public Printer(File inputFile) {
         this.inputFile = inputFile;
@@ -41,15 +43,19 @@ public class Printer implements AutoCloseable {
     }
 
     private void print(String classification, String msg, Location location) {
-        String outputString = "";
+        ViolationMessage violationMessage = null;
         try {
             String column = (location.column != 0) ? (":" + location.column) : "";
-            outputString = this.inputFile.getCanonicalPath() + ":" + location.line + column + ": " +
-                    classification + ": " + msg;
+            violationMessage = new ViolationMessage(this.inputFile.getCanonicalPath(),
+                                location.line,
+                                location.column,
+                                classification,
+                                msg);
+
         } catch (IOException e) {
             System.err.println("Error in getting canonical path of input file: " + e.getMessage());
         }
-        this.msgBuffer.add(outputString);
+        this.msgBuffer.put(violationMessage.toString(), violationMessage);
     }
 
     // Visible for testing only
@@ -67,7 +73,8 @@ public class Printer implements AutoCloseable {
     @Override
     public void close() {
         // TODO: #55: this.msgBuffer.sort(lineNumber1 < lineNumber2, columnNumber1 < columnNumber2);
-        this.msgBuffer.forEach(System.out::println);
+        Set<String> msgBufferKeys = this.msgBuffer.keySet();
+        msgBufferKeys.forEach(System.out::println);
         this.msgBuffer.clear();
     }
 
@@ -88,7 +95,7 @@ public class Printer implements AutoCloseable {
 
         @Override
         public int compareTo(final ViolationMessage message) {
-            return 0;
+            return this.filePath.compareToIgnoreCase(message.filePath);
         }
 
         @Override
