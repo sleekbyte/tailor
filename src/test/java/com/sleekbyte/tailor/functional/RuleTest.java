@@ -9,6 +9,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,11 +33,11 @@ public abstract class RuleTest {
     protected abstract String getInputFilePath();
 
     @Before
-    public void setUp() {
+    public void setUp() throws UnsupportedEncodingException {
         inputFile = new File(TEST_INPUT_DIR + getInputFilePath());
         expectedMessages = new HashSet<>();
         outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
+        System.setOut(new PrintStream(outContent, false, Charset.defaultCharset().name()));
     }
 
     @After
@@ -51,7 +53,7 @@ public abstract class RuleTest {
         Tailor.main(command);
 
         Set<String> actualOutput = new HashSet<>();
-        for (String msg : outContent.toString().split(NEWLINE_REGEX)) {
+        for (String msg : outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX)) {
             String truncatedMsg = msg.substring(msg.indexOf(inputFile.getName()));
             actualOutput.add(truncatedMsg);
         }

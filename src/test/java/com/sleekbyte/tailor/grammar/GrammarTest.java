@@ -10,6 +10,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import static org.junit.Assert.assertEquals;
 
@@ -23,11 +25,11 @@ public class GrammarTest {
     private File[] swiftFiles;
 
     @Before
-    public void setUp() {
+    public void setUp() throws UnsupportedEncodingException {
         File curDir = new File(TEST_INPUT_DIR);
         swiftFiles = curDir.listFiles((File file, String name) -> name.endsWith(".swift"));
         outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
+        System.setOut(new PrintStream(outContent, false, Charset.defaultCharset().name()));
     }
 
     @After
@@ -36,13 +38,13 @@ public class GrammarTest {
     }
 
     @Test
-    public void testGrammar() {
+    public void testGrammar() throws UnsupportedEncodingException {
         for (File swiftFile: swiftFiles) {
             errContent = new ByteArrayOutputStream();
-            System.setErr(new PrintStream(errContent));
+            System.setErr(new PrintStream(errContent, false, Charset.defaultCharset().name()));
             String[] command = { (TEST_INPUT_DIR + swiftFile.getName()) };
             Tailor.main(command);
-            assertEquals("", errContent.toString());
+            assertEquals("", errContent.toString(Charset.defaultCharset().name()));
             System.setErr(null);
         }
     }

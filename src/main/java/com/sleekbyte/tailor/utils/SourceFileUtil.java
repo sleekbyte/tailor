@@ -2,12 +2,11 @@ package com.sleekbyte.tailor.utils;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.RandomAccessFile;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +25,7 @@ public class SourceFileUtil {
             return storedNumOfLines;
         }
 
-        BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+        LineNumberReader reader = new LineNumberReader(Files.newBufferedReader(inputFile.toPath()));
         int numOfLines = 0;
         while (reader.readLine() != null) {
             numOfLines++;
@@ -52,7 +51,7 @@ public class SourceFileUtil {
         // Map<lineNumber, lineLength>
         Map<Integer, Integer> longLines = new HashMap<>();
         if (maxLength > 0) {
-            LineNumberReader reader = new LineNumberReader(new FileReader(inputFile));
+            LineNumberReader reader = new LineNumberReader(Files.newBufferedReader(inputFile.toPath()));
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                 if (line.length() > maxLength) {
                     longLines.put(reader.getLineNumber(), line.length());

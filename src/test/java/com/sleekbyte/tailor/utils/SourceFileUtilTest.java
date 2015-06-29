@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -48,10 +49,10 @@ public class SourceFileUtilTest {
     @Mock private Token stopToken;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() throws NoSuchMethodException, IOException {
         Method m = this.getClass().getMethod(testName.getMethodName());
         inputFile = folder.newFile(m.getName() + "-" + INPUT_FILE);
-        writer = new PrintWriter(inputFile);
+        writer = new PrintWriter(inputFile, Charset.defaultCharset().name());
         when(context.getStart()).thenReturn(startToken);
         when(context.getStop()).thenReturn(stopToken);
     }
