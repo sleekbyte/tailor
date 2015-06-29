@@ -68,4 +68,27 @@ public class Printer implements AutoCloseable {
         this.msgBuffer.forEach(System.out::println);
         this.msgBuffer.clear();
     }
-}
+
+    public class ViolationMessage implements Comparable<ViolationMessage> {
+        private final String filePath;
+        private final int lineNumber;
+        private final int columnNumber;
+        private final String classification;
+        private final String violationMessage;
+
+        public ViolationMessage(String filePath, int lineNumber, int columnNumber, String classification, String violationMessage) {
+            this.filePath = filePath;
+            this.lineNumber = lineNumber;
+            this.columnNumber = columnNumber;
+            this.classification = classification;
+            this.violationMessage = violationMessage;
+        }
+
+        public int compareTo(ViolationMessage data) {
+            return 0;
+        }
+
+        // TODO: Implement equals and hashCode (equals to be consistent with compareTo).
+    }
+
+    }
