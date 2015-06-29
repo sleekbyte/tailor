@@ -16,16 +16,27 @@ import java.util.Map;
  */
 public class SourceFileUtil {
 
-    public static final byte NEWLINE_DELIMITER = (byte) '\n';
     private static final String READ_ONLY_MODE = "r";
+    private static final byte NEWLINE_DELIMITER = (byte) '\n';
+    private static File fileWithStoredLength;
+    private static int storedNumOfLines;
 
     public static int numLinesInFile(File inputFile) throws IOException {
+        if (inputFile.equals(fileWithStoredLength)) {
+            return storedNumOfLines;
+        }
+
         BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         int numOfLines = 0;
         while (reader.readLine() != null) {
             numOfLines++;
         }
         reader.close();
+
+        // memoize length of inputFile
+        fileWithStoredLength = inputFile;
+        storedNumOfLines = numOfLines;
+
         return numOfLines;
     }
 
@@ -58,7 +69,9 @@ public class SourceFileUtil {
     public static boolean newlineTerminated(File inputFile) throws IOException {
         RandomAccessFile randomAccessFile = new RandomAccessFile(inputFile, READ_ONLY_MODE);
 
-        if (inputFile.length() < 1) { return true; }
+        if (inputFile.length() < 1) {
+            return true;
+        }
         randomAccessFile.seek(inputFile.length() - 1);
         byte fileTerminator = randomAccessFile.readByte();
         return (Byte.compare(fileTerminator, NEWLINE_DELIMITER) == 0);
