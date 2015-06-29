@@ -107,3 +107,17 @@ for thing in things {
         println("a positive double value of \(someDouble)")
     }
 }
+
+if let roomCount = john.residence?.numberOfRooms, RoomCount = john.residence?.numberOfRooms {
+    println("John's residence has \(roomCount) room(s).")
+}
+
+if let hello = john.residence?.numberOfRooms, var ShouldNotMatter = john.residence?.numberOfRooms,
+  StillShouldNotMatter = john.residence?.numberOfRooms, let BadName = john.residence?.numberOfRooms,
+  AlsoBadName = john.residence?.number {
+    println("John's residence has \(roomCount) room(s).")
+}
+
+if var ShouldNotMatter = john.residence?.numberOfRooms, RoomCount = john.residence?.numberOfRooms {
+    println("John's residence has \(roomCount) room(s).")
+}
