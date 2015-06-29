@@ -2,10 +2,11 @@ package com.sleekbyte.tailor.utils;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -13,6 +14,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,11 +30,16 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class SourceFileUtilTest {
 
+    @Rule
+    public TestName testName = new TestName();
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
+
     private static final String INPUT_FILE = "inputFile.swift";
     private static final String NORMAL_LINE = "This is data for a file";
     private static final String LONG_LINE = "This is really really really really long, it should not be this long";
     private static final String NAME = "variableName";
-    private TemporaryFolder folder = new TemporaryFolder();
+
     private File inputFile;
     private PrintWriter writer;
 
@@ -42,16 +49,11 @@ public class SourceFileUtilTest {
 
     @Before
     public void setUp() throws Exception {
-        folder.create();
-        inputFile = folder.newFile(INPUT_FILE);
+        Method m = this.getClass().getMethod(testName.getMethodName());
+        inputFile = folder.newFile(m.getName() + "-" + INPUT_FILE);
         writer = new PrintWriter(inputFile);
         when(context.getStart()).thenReturn(startToken);
         when(context.getStop()).thenReturn(stopToken);
-    }
-
-    @After
-    public void tearDown() throws IOException {
-        folder.delete();
     }
 
     @Test
@@ -72,19 +74,25 @@ public class SourceFileUtilTest {
     }
 
     @Test
-    public void testFileTooLongMaxLengthZeroOrNegative() throws IOException {
+    public void testFileTooLongMaxLengthZeroOrNegativeEmptyFile() throws IOException {
         assertFalse(SourceFileUtil.fileTooLong(inputFile, 0));
         assertFalse(SourceFileUtil.fileTooLong(inputFile, -1));
+    }
 
+    @Test
+    public void testFileTooLongMaxLengthZeroOrNegative() throws IOException {
         writeNumOfLines(1, NORMAL_LINE);
         assertFalse(SourceFileUtil.fileTooLong(inputFile, 0));
         assertFalse(SourceFileUtil.fileTooLong(inputFile, -1));
     }
 
     @Test
-    public void testFileTooLongMaxLengthValid() throws IOException {
+    public void testFileTooLongMaxLengthValidEmptyFile() throws IOException {
         assertFalse(SourceFileUtil.fileTooLong(inputFile, 2));
+    }
 
+    @Test
+    public void testFileTooLongMaxLengthValid() throws IOException {
         writeNumOfLines(3, NORMAL_LINE);
         assertTrue(SourceFileUtil.fileTooLong(inputFile, 2));
         assertFalse(SourceFileUtil.fileTooLong(inputFile, 3));
@@ -158,6 +166,24 @@ public class SourceFileUtilTest {
 
         when(context.getText()).thenReturn("");
         assertFalse(SourceFileUtil.nameTooLong(context, NAME.length()));
+    }
+
+    @Test
+    public void testNewlineTerminatedBlankFile() throws IOException {
+        assertTrue(SourceFileUtil.newlineTerminated(inputFile));
+    }
+
+    @Test
+    public void testNewLineTerminatedNoNewline() throws IOException {
+        writer.print("Line without a terminating newline.");
+        writer.close();
+        assertFalse(SourceFileUtil.newlineTerminated(inputFile));
+    }
+
+    @Test
+    public void testNewlineTerminatedWithNewline() throws IOException {
+        writeNumOfLines(3, NORMAL_LINE);
+        assertTrue(SourceFileUtil.newlineTerminated(inputFile));
     }
 
     private void writeNumOfLines(int numOfLines, String data) {
