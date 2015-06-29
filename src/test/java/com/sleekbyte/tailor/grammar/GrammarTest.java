@@ -4,6 +4,8 @@ import com.sleekbyte.tailor.Tailor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -11,13 +13,14 @@ import java.io.PrintStream;
 
 import static org.junit.Assert.assertEquals;
 
+@RunWith(MockitoJUnitRunner.class)
 public class GrammarTest {
 
-    protected static final String TEST_INPUT_DIR = "src/test/java/com/sleekbyte/tailor/grammar/";
+    private static final String TEST_INPUT_DIR = "src/test/java/com/sleekbyte/tailor/grammar/";
 
-    protected ByteArrayOutputStream errContent;
-    protected ByteArrayOutputStream outContent;
-    protected File[] swiftFiles;
+    private ByteArrayOutputStream errContent;
+    private ByteArrayOutputStream outContent;
+    private File[] swiftFiles;
 
     @Before
     public void setUp() {
