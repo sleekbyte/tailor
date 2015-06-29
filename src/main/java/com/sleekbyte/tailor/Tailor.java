@@ -7,6 +7,7 @@ import com.sleekbyte.tailor.listeners.FileListener;
 import com.sleekbyte.tailor.listeners.MainListener;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ArgumentParser;
+import com.sleekbyte.tailor.utils.ArgumentParserException;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -19,12 +20,20 @@ import java.io.IOException;
 
 public class Tailor {
 
+    private static final int EXIT_SUCCESS = 0;
+    private static final int EXIT_FAILURE = 1;
+    private static ArgumentParser argumentParser = new ArgumentParser();
+
     public static void main(String[] args) {
 
         try {
 
-            ArgumentParser argumentParser = new ArgumentParser(args);
-            CommandLine cmd = argumentParser.parseCommandLine();
+            CommandLine cmd = argumentParser.parseCommandLine(args);
+            if (argumentParser.shouldPrintHelp()) {
+                argumentParser.printHelp();
+                System.exit(EXIT_SUCCESS);
+            }
+
             String pathname = "";
             if (cmd.getArgs().length >= 1) {
                 pathname = cmd.getArgs()[0];
@@ -32,7 +41,7 @@ public class Tailor {
             if (cmd.getArgs().length < 1 || pathname.isEmpty()) {
                 System.err.println("Swift source file must be provided.");
                 argumentParser.printHelp();
-                System.exit(1);
+                System.exit(EXIT_FAILURE);
             }
 
             File inputFile = new File(pathname);
@@ -53,9 +62,9 @@ public class Tailor {
                 fileListener.verify();
             }
 
-        } catch (ParseException | IOException e) {
+        } catch (ArgumentParserException | ParseException | IOException e) {
             System.err.println("Source file analysis failed. Reason: " + e.getMessage());
-            System.exit(1);
+            System.exit(EXIT_FAILURE);
         }
     }
 

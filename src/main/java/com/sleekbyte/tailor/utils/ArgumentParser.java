@@ -22,27 +22,24 @@ public class ArgumentParser {
     private static final String MAX_NAME_LENGTH_OPT = "max-name-length";
     private static final String MAX_STRUCT_LENGTH_OPT = "max-struct-length";
     private static final String DEFAULT_INT_ARG = "0";
-    private static final int DEFAULT_INT_ARG_VALUE = 0;
 
-    private String[] args;
     private Options options;
     private CommandLine cmd;
-
-    public ArgumentParser(String[] args) {
-        this.args = args;
-    }
 
     /**
      * Parse command line options/flags and arguments
      */
-    public CommandLine parseCommandLine() throws ParseException {
+    public CommandLine parseCommandLine(String[] args) throws ParseException {
         addOptions();
-        cmd = new DefaultParser().parse(this.options, this.args);
-        if (cmd.hasOption(HELP_SHORT_OPT)) {
-            printHelp();
-            System.exit(0);
-        }
+        cmd = new DefaultParser().parse(this.options, args);
         return cmd;
+    }
+
+    /**
+     * Check if "-h" or "--help" option was specified
+     */
+    public boolean shouldPrintHelp() {
+        return cmd != null && cmd.hasOption(HELP_SHORT_OPT);
     }
 
     /**
@@ -115,10 +112,8 @@ public class ArgumentParser {
         try {
             return Integer.parseInt(this.cmd.getOptionValue(opt, DEFAULT_INT_ARG));
         } catch (NumberFormatException e) {
-            System.err.println("Invalid integer argument value: " + e.getMessage());
-            System.exit(1);
+            throw new ArgumentParserException("Invalid integer argument value: " + e.getMessage());
         }
-        return DEFAULT_INT_ARG_VALUE;
     }
 
 }
