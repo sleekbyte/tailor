@@ -5,10 +5,7 @@ import com.sleekbyte.tailor.common.Messages;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Generates and outputs formatted analysis messages for Xcode
@@ -72,9 +69,13 @@ public class Printer implements AutoCloseable {
 
     @Override
     public void close() {
-        // TODO: #55: this.msgBuffer.sort(lineNumber1 < lineNumber2, columnNumber1 < columnNumber2);
-        Set<String> msgBufferKeys = this.msgBuffer.keySet();
-        msgBufferKeys.forEach(System.out::println);
+        flushBuffer();
+    }
+
+    private void flushBuffer() {
+        List<String> outputList = new ArrayList(this.msgBuffer.keySet());
+        Collections.sort(outputList);
+        outputList.forEach(System.out::println);
         this.msgBuffer.clear();
     }
 }

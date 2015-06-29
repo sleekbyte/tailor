@@ -17,7 +17,13 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
 
     @Override
     public int compareTo(final ViolationMessage message) {
-        return this.filePath.compareToIgnoreCase(message.filePath);
+        int ret = this.lineNumber - message.lineNumber;
+
+        if (ret == 0) {
+            ret = this.columnNumber - message.columnNumber;
+        }
+
+        return ret;
     }
 
     @Override
