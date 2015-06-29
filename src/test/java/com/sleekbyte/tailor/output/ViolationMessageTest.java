@@ -9,6 +9,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -32,19 +33,22 @@ public class ViolationMessageTest {
 
     @Test
     public void testEquals() throws Exception {
-        ViolationMessage violationMessageOne = new ViolationMessage("/usr/bin/local", 10, 1, Messages.ERROR, "errMsg");
+        ViolationMessage violationMessage = new ViolationMessage("/usr/bin/local", 10, 1, Messages.ERROR, "errMsg");
 
         // Equal ViolationMessage
         ViolationMessage unequalViolationMessage = new ViolationMessage("/usr/bin/local", 12, 5, Messages.ERROR, "errMsg");
-        assertFalse(violationMessageOne.equals(unequalViolationMessage));
+        assertFalse(violationMessage.equals(unequalViolationMessage));
 
         // Unequal ViolationMessage
         ViolationMessage equalViolationMessage = new ViolationMessage("/usr/bin/local", 10, 1, Messages.ERROR, "errMsg");
-        assertTrue(violationMessageOne.equals(equalViolationMessage));
+        assertTrue(violationMessage.equals(equalViolationMessage));
     }
 
     @Test
     public void testToString() throws Exception {
+        ViolationMessage violationMessage = new ViolationMessage("/usr/bin/local", 10, 1, Messages.ERROR, "errMsg");
+        String expectedOutput = "/usr/bin/local:10:1: error: errMsg";
 
+        assertEquals(expectedOutput, violationMessage.toString());
     }
 }
