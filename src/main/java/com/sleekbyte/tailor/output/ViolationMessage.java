@@ -41,6 +41,9 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
     }
 
     public String toString() {
+        if (columnNumber == 0) {
+            return String.format("%s:%d: %s: %s", this.filePath, this.lineNumber, this.classification, this.violationMessage);
+        }
         return String.format("%s:%d:%d: %s: %s", this.filePath, this.lineNumber, this.columnNumber, this.classification, this.violationMessage);
     }
 }
