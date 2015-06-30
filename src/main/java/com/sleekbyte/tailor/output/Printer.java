@@ -40,7 +40,7 @@ public class Printer implements AutoCloseable {
     }
 
     private void print(String classification, String msg, Location location) {
-        ViolationMessage violationMessage = null;
+        ViolationMessage violationMessage = new ViolationMessage("", -1, 0, "", "");
         try {
             violationMessage = new ViolationMessage(this.inputFile.getCanonicalPath(),
                                 location.line,
