@@ -9,11 +9,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Base class for functional rule tests
@@ -25,7 +25,7 @@ public abstract class RuleTest {
 
     protected ByteArrayOutputStream outContent;
     protected File inputFile;
-    protected Set<String> expectedMessages;
+    protected List<String> expectedMessages;
 
     protected abstract void addAllExpectedMsgs();
     protected abstract String getInputFilePath();
@@ -33,7 +33,7 @@ public abstract class RuleTest {
     @Before
     public void setUp() {
         inputFile = new File(TEST_INPUT_DIR + getInputFilePath());
-        expectedMessages = new HashSet<>();
+        expectedMessages = new ArrayList<>();
         outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
     }
@@ -50,14 +50,13 @@ public abstract class RuleTest {
 
         Tailor.main(command);
 
-        Set<String> actualOutput = new HashSet<>();
+        List<String> actualOutput = new ArrayList<>();
         for (String msg : outContent.toString().split(NEWLINE_REGEX)) {
             String truncatedMsg = msg.substring(msg.indexOf(inputFile.getName()));
             actualOutput.add(truncatedMsg);
         }
 
-        assertEquals(expectedMessages.size(), actualOutput.size());
-        assertTrue(actualOutput.containsAll(expectedMessages));
+        assertArrayEquals(outContent.toString(), this.expectedMessages.toArray(), actualOutput.toArray());
     }
 
     protected String[] getCommandArgs() {
