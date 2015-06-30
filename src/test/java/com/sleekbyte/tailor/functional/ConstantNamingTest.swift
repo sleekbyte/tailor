@@ -121,3 +121,15 @@ if let hello = john.residence?.numberOfRooms, var ShouldNotMatter = john.residen
 if var ShouldNotMatter = john.residence?.numberOfRooms, RoomCount = john.residence?.numberOfRooms {
     println("John's residence has \(roomCount) room(s).")
 }
+
+private struct Scaling {
+    static let KFaceRadiusToEyeRadiusRatio: CGFloat = 10
+    static let kFaceRadiusToEyeOffsetRatio: CGFloat = 3
+    static let FaceRadiusToEyeSeparationRatio: CGFloat = 1.5
+
+    func sup() {
+        static let faceRadiusToMouthWidthRatio: CGFloat = 1
+        static let kFaceRadiusToMouthHeightRatio: CGFloat = 3
+        static let KFaceRadiusToMouthOffsetRatio: CGFloat = 3
+    }
+}
