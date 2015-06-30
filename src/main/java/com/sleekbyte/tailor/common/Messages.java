@@ -37,6 +37,8 @@ public class Messages {
     public static final String CONDITIONAL = "Conditional clause ";
     public static final String SWITCH = "Switch ";
     public static final String SWITCH_EXPRESSION = "Switch expression ";
+    public static final String FOR = "For ";
+    public static final String FOR_LOOP = "For loop ";
 
     // Plural constructs
     public static final String STATEMENTS = "Statements ";

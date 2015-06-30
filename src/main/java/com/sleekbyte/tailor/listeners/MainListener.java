@@ -2,12 +2,15 @@ package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 /**
  * Parse tree listener for verifying Swift constructs
@@ -230,5 +233,17 @@ public class MainListener extends SwiftBaseListener {
     public void enterSwitchStatement(SwiftParser.SwitchStatementContext ctx) {
         ParserRuleContext expressionContext = ctx.expression();
         listenerHelper.verifyRedundantParentheses(Messages.SWITCH_EXPRESSION, expressionContext);
+    }
+
+    @Override
+    public void enterForStatement(SwiftParser.ForStatementContext ctx) {
+        // redundant parenthesis check
+        if (ctx.getChildCount() < 1 || !(ctx.getChild(1) instanceof TerminalNodeImpl)) { return; }
+
+        Token openParenthesisToken = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
+        if (openParenthesisToken.getText().equalsIgnoreCase("(")) {
+            listenerHelper.printRedundantParenthesesWarning(Messages.FOR_LOOP,
+                    new Location(openParenthesisToken.getLine(), openParenthesisToken.getCharPositionInLine()), null);
+        }
     }
 }

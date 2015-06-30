@@ -32,6 +32,7 @@ public class ControlFlowParenthesisTest extends RuleTest {
         addExpectedMsg(18, 16, Messages.WARNING, Messages.CONDITIONAL + Messages.ENDS_WITH_PARENTHESIS);
         addExpectedMsg(21, 12, Messages.WARNING, Messages.SWITCH_EXPRESSION + Messages.STARTS_WITH_PARENTHESIS);
         addExpectedMsg(21, 14, Messages.WARNING, Messages.SWITCH_EXPRESSION + Messages.ENDS_WITH_PARENTHESIS);
+        addExpectedMsg(26, 8, Messages.WARNING, Messages.FOR_LOOP + Messages.ENDS_WITH_PARENTHESIS);
     }
 
     private void addExpectedMsg(int line, int column, String classification, String msg) {

@@ -10,6 +10,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Helper class for {@link MainListener}
@@ -91,15 +92,21 @@ class MainListenerHelper {
         char firstCharacter = conditionalClause.charAt(0);
         char lastCharacter = conditionalClause.charAt(conditionalClause.length() - 1);
 
+        Location startLocation = null, endLocation = null;
         if (firstCharacter == '(') {
-            Location startLocation = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
-            this.printer.warn(constructType + Messages.STARTS_WITH_PARENTHESIS, startLocation);
+            startLocation = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+
+        }
+        if (lastCharacter == ')') {
+            endLocation = new Location(ctx.getStop().getLine(),  ctx.getStop().getCharPositionInLine() + 1);
         }
 
-        if (lastCharacter == ')') {
-            Location endLocation = new Location(ctx.getStop().getLine(),  ctx.getStop().getCharPositionInLine() + 1);
-            this.printer.warn(constructType + Messages.ENDS_WITH_PARENTHESIS, endLocation);
-        }
+        printRedundantParenthesesWarning(constructType, startLocation, endLocation);
+    }
+
+    void printRedundantParenthesesWarning(String constructType, Location startLocation, Location endLocation) {
+        this.printer.warn(constructType + Messages.STARTS_WITH_PARENTHESIS, startLocation);
+        if (endLocation != null) this.printer.warn(constructType + Messages.ENDS_WITH_PARENTHESIS, endLocation);
     }
 
     /* Optional Binding Condition Evaluators */
