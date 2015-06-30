@@ -1,7 +1,6 @@
 package com.sleekbyte.tailor.functional;
 
 import com.sleekbyte.tailor.Tailor;
-import org.hamcrest.core.IsEqual;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,9 +9,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Base class for functional rule tests
@@ -55,11 +56,7 @@ public abstract class RuleTest {
             actualOutput.add(truncatedMsg);
         }
 
-        assertEquals(expectedMessages.size(), actualOutput.size());
-
-        for (int i = 0; i < expectedMessages.size(); i+=1) {
-            assertEquals(expectedMessages.get(i), actualOutput.get(i));
-        }
+        assertArrayEquals(outContent.toString(), this.expectedMessages.toArray(), actualOutput.toArray());
     }
 
     protected String[] getCommandArgs() {

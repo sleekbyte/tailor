@@ -39,15 +39,11 @@ public class SortedPrinterOutputTest extends RuleTest {
     }
 
     private void addExpectedMsg(int line, String classification, String msg) {
-        expectedMessages.add(
-                Printer.genOutputStringForTest(
-                        inputFile.getName(), line, classification, msg));
+        expectedMessages.add(Printer.genOutputStringForTest(inputFile.getName(), line, classification, msg));
     }
 
     private void addExpectedMsg(int line, int column, String classification, String msg) {
-        expectedMessages.add(
-                Printer.genOutputStringForTest(
-                        inputFile.getName(), line, column, classification, msg));
+        expectedMessages.add(Printer.genOutputStringForTest(inputFile.getName(), line, column, classification, msg));
     }
 
 }
