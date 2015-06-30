@@ -58,16 +58,16 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || this.getClass() != o.getClass()) { return false; }
+        if (!(o instanceof ViolationMessage)) return false;
 
-        ViolationMessage that = (ViolationMessage) o;
+        ViolationMessage candidateObject = (ViolationMessage) o;
 
         // Test primitives (int) for equality first, then objects (String)
-        return (this.lineNumber == that.lineNumber)
-            && (this.columnNumber == that.columnNumber)
-            && (this.filePath.equals(that.filePath))
-            && (this.classification.equals(that.classification))
-            && (this.violationMessage.equals(that.violationMessage));
+        return (this.lineNumber == candidateObject.lineNumber)
+            && (this.columnNumber == candidateObject.columnNumber)
+            && (this.filePath.equals(candidateObject.filePath))
+            && (this.classification.equals(candidateObject.classification))
+            && (this.violationMessage.equals(candidateObject.violationMessage));
     }
 
     @Override
