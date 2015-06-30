@@ -11,5 +11,9 @@ func demo() {
 
     }
 
+    repeat {
+
+    } while (true)
+
     guard (true) else { }
 }
