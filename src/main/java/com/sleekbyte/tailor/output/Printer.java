@@ -44,7 +44,7 @@ public class Printer implements AutoCloseable {
     }
 
     private void print(String classification, String msg, Location location) {
-        ViolationMessage violationMessage = new ViolationMessage("", -1, 0, "", "");
+        ViolationMessage violationMessage = ViolationMessage.EmptyViolationMessage();
         try {
             violationMessage = new ViolationMessage(this.inputFile.getCanonicalPath(), location.line, location.column,
                     classification, msg);

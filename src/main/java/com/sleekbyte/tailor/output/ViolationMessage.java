@@ -15,6 +15,10 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
         this.violationMessage = violationMessage;
     }
 
+    public static ViolationMessage EmptyViolationMessage() {
+        return new ViolationMessage("", 0, 0, "", "");
+    }
+
     @Override
     public int compareTo(final ViolationMessage message) {
         int ret = this.lineNumber - message.lineNumber;
