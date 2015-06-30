@@ -44,13 +44,9 @@ public class Printer implements AutoCloseable {
     }
 
     private void print(String classification, String msg, Location location) {
-        ViolationMessage violationMessage = new ViolationMessage();
+        ViolationMessage violationMessage = new ViolationMessage(location.line, location.column, classification, msg);
         try {
             violationMessage.setFilePath(this.inputFile.getCanonicalPath());
-            violationMessage.setLineNumber(location.line);
-            violationMessage.setColumnNumber(location.column);
-            violationMessage.setClassification(classification);
-            violationMessage.setViolationMessage(msg);
         } catch (IOException e) {
             System.err.println("Error in getting canonical path of input file: " + e.getMessage());
         }
@@ -59,13 +55,13 @@ public class Printer implements AutoCloseable {
 
     // Visible for testing only
     public static String genOutputStringForTest(String filePath, int line, String classification, String msg) {
-        return filePath + ":" + line + ": " + classification + ": " + msg;
+        return new ViolationMessage(filePath, line, 0, classification, msg).toString();
     }
 
     // Visible for testing only
     public static String genOutputStringForTest(String filePath, int line, int column, String classification,
                                                 String msg) {
-        return filePath + ":" + line + ":" + column + ": " + classification + ": " + msg;
+        return new ViolationMessage(filePath, line, column, classification, msg).toString();
     }
 
     @Override

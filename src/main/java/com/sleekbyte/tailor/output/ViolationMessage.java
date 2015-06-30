@@ -13,28 +13,11 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
     private String classification;
     private String violationMessage;
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-    public void setLineNumber(int lineNumber) {
+    public ViolationMessage(int lineNumber, int columnNumber, String classification, String violationMessage) {
         this.lineNumber = lineNumber;
-    }
-
-    public void setColumnNumber(int columnNumber) {
         this.columnNumber = columnNumber;
-    }
-
-    public void setClassification(String classification) {
         this.classification = classification;
-    }
-
-    public void setViolationMessage(String violationMessage) {
         this.violationMessage = violationMessage;
-    }
-
-    public ViolationMessage() {
-
     }
 
     public ViolationMessage(String filePath, int lineNumber, int columnNumber, String classification,
@@ -44,6 +27,11 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
         this.columnNumber = columnNumber;
         this.classification = classification;
         this.violationMessage = violationMessage;
+    }
+
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
     @Override
