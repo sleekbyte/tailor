@@ -1,6 +1,7 @@
 package com.sleekbyte.tailor.output;
 
 import com.sleekbyte.tailor.common.Messages;
+import org.hamcrest.text.IsEmptyString;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,11 +57,23 @@ public class ViolationMessageTest {
 
     @Test
     public void testEquals() {
-        // Equal ViolationMessage
-        ViolationMessage unequalViolationMessage = new ViolationMessage("/usr/bin/local", 12, 5, Messages.ERROR, "errMsg");
+        // Unequal ViolationMessages, verify that each field is checked for differences
+        ViolationMessage unequalViolationMessage = new ViolationMessage("/usr/bin/local", 12, 1, Messages.ERROR, "errMsg");
         assertNotEquals(this.violationMessage, unequalViolationMessage);
 
-        // Unequal ViolationMessage
+        unequalViolationMessage = new ViolationMessage("/usr/bin/local", 10, 5, Messages.ERROR, "errMsg");
+        assertNotEquals(this.violationMessage, unequalViolationMessage);
+
+        unequalViolationMessage = new ViolationMessage("/usr/bin/local/diff", 10, 1, Messages.ERROR, "errMsg");
+        assertNotEquals(this.violationMessage, unequalViolationMessage);
+
+        unequalViolationMessage = new ViolationMessage("/usr/bin/local", 10, 1, Messages.WARNING, "errMsg");
+        assertNotEquals(this.violationMessage, unequalViolationMessage);
+
+        unequalViolationMessage = new ViolationMessage("/usr/bin/local", 10, 1, Messages.ERROR, "warningMsg");
+        assertNotEquals(this.violationMessage, unequalViolationMessage);
+
+        // Equal ViolationMessages
         ViolationMessage equalViolationMessage = new ViolationMessage("/usr/bin/local", 10, 1, Messages.ERROR, "errMsg");
         assertEquals(this.violationMessage, equalViolationMessage);
     }
@@ -69,5 +82,8 @@ public class ViolationMessageTest {
     public void testToString() {
         String expectedOutput = "/usr/bin/local:10:1: error: errMsg";
         assertEquals(expectedOutput, this.violationMessage.toString());
+
+        ViolationMessage emptyViolationMessage = ViolationMessage.EMPTY;
+        assertThat(emptyViolationMessage.toString(), IsEmptyString.isEmptyString());
     }
 }
