@@ -44,11 +44,13 @@ public class Printer implements AutoCloseable {
     }
 
     private void print(String classification, String msg, Location location) {
-        ViolationMessage violationMessage = ViolationMessage.EMPTY;
+        ViolationMessage violationMessage = new ViolationMessage();
         try {
-            violationMessage = new ViolationMessage(this.inputFile.getCanonicalPath(), location.line, location.column,
-                    classification, msg);
-
+            violationMessage.setFilePath(this.inputFile.getCanonicalPath());
+            violationMessage.setLineNumber(location.line);
+            violationMessage.setColumnNumber(location.column);
+            violationMessage.setClassification(classification);
+            violationMessage.setViolationMessage(msg);
         } catch (IOException e) {
             System.err.println("Error in getting canonical path of input file: " + e.getMessage());
         }

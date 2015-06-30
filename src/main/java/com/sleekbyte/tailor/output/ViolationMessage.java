@@ -6,11 +6,36 @@ package com.sleekbyte.tailor.output;
 public class ViolationMessage implements Comparable<ViolationMessage> {
 
     public static final ViolationMessage EMPTY = new ViolationMessage("", 0, 0, "", "");
-    private final String filePath;
-    private final int lineNumber;
-    private final int columnNumber;
-    private final String classification;
-    private final String violationMessage;
+
+    private String filePath;
+    private int lineNumber;
+    private int columnNumber;
+    private String classification;
+    private String violationMessage;
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public void setLineNumber(int lineNumber) {
+        this.lineNumber = lineNumber;
+    }
+
+    public void setColumnNumber(int columnNumber) {
+        this.columnNumber = columnNumber;
+    }
+
+    public void setClassification(String classification) {
+        this.classification = classification;
+    }
+
+    public void setViolationMessage(String violationMessage) {
+        this.violationMessage = violationMessage;
+    }
+
+    public ViolationMessage() {
+
+    }
 
     public ViolationMessage(String filePath, int lineNumber, int columnNumber, String classification,
                             String violationMessage) {
