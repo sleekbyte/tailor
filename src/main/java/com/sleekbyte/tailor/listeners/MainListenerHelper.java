@@ -86,6 +86,22 @@ class MainListenerHelper {
         }
     }
 
+    void verifyRedundantParentheses(String constructType, ParserRuleContext ctx) {
+        String conditionalClause = ctx.getText();
+        char firstCharacter = conditionalClause.charAt(0);
+        char lastCharacter = conditionalClause.charAt(conditionalClause.length() - 1);
+
+        if (firstCharacter == '(') {
+            Location startLocation = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+            this.printer.warn(constructType + Messages.CONDITIONAL_START, startLocation);
+        }
+
+        if (lastCharacter == ')') {
+            Location endLocation = new Location(ctx.getStop().getLine(),  ctx.getStop().getCharPositionInLine() + 1);
+            this.printer.warn(constructType + Messages.CONDITIONAL_END, endLocation);
+        }
+    }
+
     /* Optional Binding Condition Evaluators */
 
     public void evaluateOptionalBindingHead(SwiftParser.OptionalBindingHeadContext ctx) {

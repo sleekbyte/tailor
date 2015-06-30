@@ -220,4 +220,8 @@ public class MainListener extends SwiftBaseListener {
         listenerHelper.walkConstantDecListener(walker, ctx.localParameterName());
     }
 
+    @Override
+    public void enterConditionClause(SwiftParser.ConditionClauseContext ctx) {
+        listenerHelper.verifyRedundantParentheses(Messages.CONDITIONAL, ctx);
+    }
 }
