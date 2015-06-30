@@ -19,6 +19,8 @@ public class ConstantNamingTest extends RuleTest {
     @Override
     protected void addAllExpectedMsgs() {
         addExpectedMsg(2, 5, Messages.ERROR, Messages.GLOBAL + Messages.CONSTANT + Messages.GLOBAL_CONSTANT_NAMING);
+        addExpectedMsg(2, 22, Messages.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
+        addExpectedMsg(2, 37, Messages.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
         addExpectedMsg(5, 16, Messages.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
         addExpectedMsg(5, 45, Messages.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
         addExpectedMsg(11, 13, Messages.ERROR, Messages.GLOBAL + Messages.CONSTANT + Messages.GLOBAL_CONSTANT_NAMING);
@@ -36,17 +38,13 @@ public class ConstantNamingTest extends RuleTest {
         addExpectedMsg(56, 5, Messages.ERROR, Messages.GLOBAL + Messages.CONSTANT + Messages.GLOBAL_CONSTANT_NAMING);
         addExpectedMsg(67, 9, Messages.ERROR, Messages.GLOBAL + Messages.CONSTANT + Messages.GLOBAL_CONSTANT_NAMING);
         addExpectedMsg(78, 9, Messages.ERROR, Messages.GLOBAL + Messages.CONSTANT + Messages.GLOBAL_CONSTANT_NAMING);
+        addExpectedMsg(79, 16, Messages.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
         addExpectedMsg(87, 17, Messages.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
         addExpectedMsg(94, 8, Messages.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
         addExpectedMsg(104, 14, Messages.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
         addExpectedMsg(111, 51, Messages.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
         addExpectedMsg(116, 61, Messages.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
         addExpectedMsg(117, 3, Messages.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
-
-        // K PREFIX TESTS
-        addExpectedMsg(2, 22, Messages.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
-        addExpectedMsg(2, 37, Messages.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
-        addExpectedMsg(79, 16, Messages.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
         addExpectedMsg(126, 16, Messages.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
         addExpectedMsg(127, 16, Messages.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
         addExpectedMsg(132, 20, Messages.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
