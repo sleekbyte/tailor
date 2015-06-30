@@ -44,6 +44,18 @@ run {
     }
 }
 
+// Use [Checkstyle](http://checkstyle.sourceforge.net) Plugin
+apply plugin: 'checkstyle'
+
+checkstyle {
+    configFile = file('config/checkstyle/google_checks.xml')
+    toolVersion = "6.7"
+    // Exclude generated code from Checkstyle checks
+    sourceSets -= sourceSets.gen
+}
+
+checkstyleTest.configFile = file('config/checkstyle/google_test_checks.xml')
+
 // Use [FindBugs](http://findbugs.sourceforge.net/) Plugin
 apply plugin: 'findbugs'
 
