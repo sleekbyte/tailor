@@ -96,8 +96,5 @@ public class ViolationMessageTest {
     public void testToString() {
         String expectedOutput = "/usr/bin/local:10:1: error: errMsg";
         assertEquals(expectedOutput, this.violationMessage.toString());
-
-        ViolationMessage emptyViolationMessage = ViolationMessage.EMPTY;
-        assertThat(emptyViolationMessage.toString(), IsEmptyString.isEmptyString());
     }
 }
