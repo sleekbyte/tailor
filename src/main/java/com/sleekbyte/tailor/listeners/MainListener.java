@@ -5,6 +5,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
@@ -223,5 +224,11 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterConditionClause(SwiftParser.ConditionClauseContext ctx) {
         listenerHelper.verifyRedundantParentheses(Messages.CONDITIONAL, ctx);
+    }
+
+    @Override
+    public void enterSwitchStatement(SwiftParser.SwitchStatementContext ctx) {
+        ParserRuleContext expressionContext = ctx.expression();
+        listenerHelper.verifyRedundantParentheses(Messages.CONDITIONAL, expressionContext);
     }
 }

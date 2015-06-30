@@ -37,5 +37,4 @@ public class ControlFlowParenthesisTest extends RuleTest {
                 Printer.genOutputStringForTest(
                         inputFile.getName(), line, column, classification, msg));
     }
-
 }
