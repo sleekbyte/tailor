@@ -35,6 +35,8 @@ public class Messages {
     public static final String TYPEALIAS = "Typealias ";
     public static final String VARIABLE = "Variable ";
     public static final String CONDITIONAL = "Conditional clause ";
+    public static final String SWITCH = "Switch ";
+    public static final String SWITCH_EXPRESSION = "Switch expression ";
 
     // Plural constructs
     public static final String STATEMENTS = "Statements ";
@@ -47,8 +49,8 @@ public class Messages {
     public static final String GLOBAL_CONSTANT_NAMING = "should be either lowerCamelCase or UpperCamelCase";
     public static final String CONSTANT_NAMING = "should be lowerCamelCase";
     public static final String NEWLINE_TERMINATOR = "should terminate with a newline character ('\\n')";
-    public static final String CONDITIONAL_START = "should not start with a parenthesis";
-    public static final String CONDITIONAL_END = "should not end with a parenthesis";
+    public static final String STARTS_WITH_PARENTHESIS = "should not start with a parenthesis";
+    public static final String ENDS_WITH_PARENTHESIS = "should not end with a parenthesis";
 
     // Usage messages
     public static final String CMD_LINE_SYNTAX = "tailor";

@@ -93,12 +93,12 @@ class MainListenerHelper {
 
         if (firstCharacter == '(') {
             Location startLocation = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
-            this.printer.warn(constructType + Messages.CONDITIONAL_START, startLocation);
+            this.printer.warn(constructType + Messages.STARTS_WITH_PARENTHESIS, startLocation);
         }
 
         if (lastCharacter == ')') {
             Location endLocation = new Location(ctx.getStop().getLine(),  ctx.getStop().getCharPositionInLine() + 1);
-            this.printer.warn(constructType + Messages.CONDITIONAL_END, endLocation);
+            this.printer.warn(constructType + Messages.ENDS_WITH_PARENTHESIS, endLocation);
         }
     }
 

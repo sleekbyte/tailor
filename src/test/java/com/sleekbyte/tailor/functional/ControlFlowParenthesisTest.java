@@ -18,18 +18,20 @@ public class ControlFlowParenthesisTest extends RuleTest {
 
     @Override
     protected void addAllExpectedMsgs() {
-        addExpectedMsg(3, 8, Messages.WARNING, Messages.CONDITIONAL + Messages.CONDITIONAL_START);
-        addExpectedMsg(3, 15, Messages.WARNING, Messages.CONDITIONAL + Messages.CONDITIONAL_END);
-        addExpectedMsg(6, 13, Messages.WARNING, Messages.CONDITIONAL + Messages.CONDITIONAL_START);
-        addExpectedMsg(6, 20, Messages.WARNING, Messages.CONDITIONAL + Messages.CONDITIONAL_END);
-        addExpectedMsg(10, 10, Messages.WARNING, Messages.CONDITIONAL + Messages.CONDITIONAL_START);
-        addExpectedMsg(10, 15, Messages.WARNING, Messages.CONDITIONAL + Messages.CONDITIONAL_END);
-        addExpectedMsg(16, 13, Messages.WARNING, Messages.CONDITIONAL + Messages.CONDITIONAL_START);
-        addExpectedMsg(16, 18, Messages.WARNING, Messages.CONDITIONAL + Messages.CONDITIONAL_END);
-        addExpectedMsg(16, 13, Messages.WARNING, Messages.CONDITIONAL + Messages.CONDITIONAL_START);
-        addExpectedMsg(16, 18, Messages.WARNING, Messages.CONDITIONAL + Messages.CONDITIONAL_END);
-        addExpectedMsg(18, 11, Messages.WARNING, Messages.CONDITIONAL + Messages.CONDITIONAL_START);
-        addExpectedMsg(18, 16, Messages.WARNING, Messages.CONDITIONAL + Messages.CONDITIONAL_END);
+        addExpectedMsg(3, 8, Messages.WARNING, Messages.CONDITIONAL + Messages.STARTS_WITH_PARENTHESIS);
+        addExpectedMsg(3, 15, Messages.WARNING, Messages.CONDITIONAL + Messages.ENDS_WITH_PARENTHESIS);
+        addExpectedMsg(6, 13, Messages.WARNING, Messages.CONDITIONAL + Messages.STARTS_WITH_PARENTHESIS);
+        addExpectedMsg(6, 20, Messages.WARNING, Messages.CONDITIONAL + Messages.ENDS_WITH_PARENTHESIS);
+        addExpectedMsg(10, 10, Messages.WARNING, Messages.CONDITIONAL + Messages.STARTS_WITH_PARENTHESIS);
+        addExpectedMsg(10, 15, Messages.WARNING, Messages.CONDITIONAL + Messages.ENDS_WITH_PARENTHESIS);
+        addExpectedMsg(16, 13, Messages.WARNING, Messages.CONDITIONAL + Messages.STARTS_WITH_PARENTHESIS);
+        addExpectedMsg(16, 18, Messages.WARNING, Messages.CONDITIONAL + Messages.ENDS_WITH_PARENTHESIS);
+        addExpectedMsg(16, 13, Messages.WARNING, Messages.CONDITIONAL + Messages.STARTS_WITH_PARENTHESIS);
+        addExpectedMsg(16, 18, Messages.WARNING, Messages.CONDITIONAL + Messages.ENDS_WITH_PARENTHESIS);
+        addExpectedMsg(18, 11, Messages.WARNING, Messages.CONDITIONAL + Messages.STARTS_WITH_PARENTHESIS);
+        addExpectedMsg(18, 16, Messages.WARNING, Messages.CONDITIONAL + Messages.ENDS_WITH_PARENTHESIS);
+        addExpectedMsg(21, 12, Messages.WARNING, Messages.SWITCH_EXPRESSION + Messages.STARTS_WITH_PARENTHESIS);
+        addExpectedMsg(21, 14, Messages.WARNING, Messages.SWITCH_EXPRESSION + Messages.ENDS_WITH_PARENTHESIS);
     }
 
     private void addExpectedMsg(int line, int column, String classification, String msg) {

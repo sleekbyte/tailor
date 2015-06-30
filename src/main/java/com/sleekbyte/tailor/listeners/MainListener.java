@@ -229,6 +229,6 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterSwitchStatement(SwiftParser.SwitchStatementContext ctx) {
         ParserRuleContext expressionContext = ctx.expression();
-        listenerHelper.verifyRedundantParentheses(Messages.CONDITIONAL, expressionContext);
+        listenerHelper.verifyRedundantParentheses(Messages.SWITCH_EXPRESSION, expressionContext);
     }
 }
