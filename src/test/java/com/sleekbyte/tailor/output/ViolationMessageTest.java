@@ -27,30 +27,42 @@ public class ViolationMessageTest {
     }
 
     @Test
-    public void testCompareTo() {
+    public void testCompareToMessageWithGreaterLineNumber() {
         // global message has lower line number than test message
         ViolationMessage messageWithGreaterLineNumber = new ViolationMessage("/usr/bin/local", 12, 5, Messages.ERROR, "errMsg");
         int ret = this.violationMessage.compareTo(messageWithGreaterLineNumber);
         assertThat(ret, lessThan(0));
+    }
 
-        // global message has greater line number than test message
-        ViolationMessage messageWithLesserLineNumber = new ViolationMessage("/usr/bin/local", 8, 5, Messages.ERROR, "errMsg");
-        ret = this.violationMessage.compareTo(messageWithLesserLineNumber);
-        assertThat(ret, greaterThan(0));
+    @Test
+    public void testCompareToMessageWithLesserLineNumber() {
+        // global message has lower line number than test message
+        ViolationMessage messageWithGreaterLineNumber = new ViolationMessage("/usr/bin/local", 12, 5, Messages.ERROR, "errMsg");
+        int ret = this.violationMessage.compareTo(messageWithGreaterLineNumber);
+        assertThat(ret, lessThan(0));
+    }
 
+    @Test
+    public void testCompareToMessageWithGreaterColumnNumber() {
         // global message has equal line number but greater column number than test message
         ViolationMessage messageWithGreaterColumnNumber = new ViolationMessage("/usr/bin/local", 10, 2, Messages.ERROR, "errMsg");
-        ret = this.violationMessage.compareTo(messageWithGreaterColumnNumber);
+        int ret = this.violationMessage.compareTo(messageWithGreaterColumnNumber);
         assertThat(ret, lessThan(0));
+    }
 
+    @Test
+    public void testCompareToMessageWithLesserColumnNumber() {
         // global message has equal line number but lesser column number than test message
         ViolationMessage messageWithLesserColumnNumber = new ViolationMessage("/usr/bin/local", 10, 0, Messages.WARNING, "warningMsg");
-        ret = this.violationMessage.compareTo(messageWithLesserColumnNumber);
+        int ret = this.violationMessage.compareTo(messageWithLesserColumnNumber);
         assertThat(ret, greaterThan(0));
+    }
 
+    @Test
+    public void testCompareToMessageWithEqualLineAndColumnNumbers() {
         // global message has equal line number and column number wrt test message
         ViolationMessage messageWithEqualLineColumnNumber = new ViolationMessage("/usr/bin/local", 10, 1, Messages.WARNING, "warningMsg");
-        ret = this.violationMessage.compareTo(messageWithEqualLineColumnNumber);
+        int ret = this.violationMessage.compareTo(messageWithEqualLineColumnNumber);
         assertEquals(ret, 0);
     }
 
