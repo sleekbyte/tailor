@@ -38,11 +38,11 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
         ViolationMessage that = (ViolationMessage) o;
 
         // Test primitives (int) for equality first, then objects (String)
-        if (this.lineNumber != that.lineNumber) { return false; }
-        if (this.columnNumber != that.columnNumber) { return false; }
-        if (!this.filePath.equals(that.filePath)) { return false; }
-        if (!this.classification.equals(that.classification)) { return false; }
-        return this.violationMessage.equals(that.violationMessage);
+        return (this.lineNumber == that.lineNumber)
+            && (this.columnNumber == that.columnNumber)
+            && (this.filePath.equals(that.filePath))
+            && (this.classification.equals(that.classification))
+            && (this.violationMessage.equals(that.violationMessage));
     }
 
     @Override
