@@ -17,7 +17,6 @@ import static org.junit.Assert.assertThat;
  * Tests for {@link ViolationMessage}
  */
 @RunWith(MockitoJUnitRunner.class)
-
 public class ViolationMessageTest {
 
     ViolationMessage violationMessage;
