@@ -55,7 +55,7 @@ public class ViolationMessageTest {
     }
 
     @Test
-    public void testEquals() {
+    public void testEqualsUnequalMessage() {
         // Unequal ViolationMessages, verify that each field is checked for differences
         ViolationMessage unequalViolationMessage = new ViolationMessage("/usr/bin/local", 12, 1, Messages.ERROR, "errMsg");
         assertNotEquals(this.violationMessage, unequalViolationMessage);
@@ -71,7 +71,10 @@ public class ViolationMessageTest {
 
         unequalViolationMessage = new ViolationMessage("/usr/bin/local", 10, 1, Messages.ERROR, "warningMsg");
         assertNotEquals(this.violationMessage, unequalViolationMessage);
+    }
 
+    @Test
+    public void testEqualsSameMessage() {
         // Equal ViolationMessages
         ViolationMessage equalViolationMessage = new ViolationMessage("/usr/bin/local", 10, 1, Messages.ERROR, "errMsg");
         assertEquals(this.violationMessage, equalViolationMessage);
