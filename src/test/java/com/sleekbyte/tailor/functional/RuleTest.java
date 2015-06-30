@@ -1,5 +1,8 @@
 package com.sleekbyte.tailor.functional;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import com.sleekbyte.tailor.Tailor;
 import org.junit.After;
 import org.junit.Before;
@@ -14,9 +17,6 @@ import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 /**
  * Base class for functional rule tests
  */
@@ -30,6 +30,7 @@ public abstract class RuleTest {
     protected Set<String> expectedMessages;
 
     protected abstract void addAllExpectedMsgs();
+
     protected abstract String getInputFilePath();
 
     @Before

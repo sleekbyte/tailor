@@ -1,5 +1,7 @@
 package com.sleekbyte.tailor.output;
 
+import static org.junit.Assert.assertEquals;
+
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import org.junit.After;
@@ -14,8 +16,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for {@link Printer}

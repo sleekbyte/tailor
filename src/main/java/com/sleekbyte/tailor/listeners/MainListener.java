@@ -9,7 +9,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 /**
- * Parse tree listener for verifying Swift constructs
+ * Parse tree listener for verifying Swift constructs.
  */
 public class MainListener extends SwiftBaseListener {
 

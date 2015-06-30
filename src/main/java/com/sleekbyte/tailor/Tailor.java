@@ -18,12 +18,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+/**
+ * Performs static analysis on Swift source files.
+ */
 public class Tailor {
 
     private static final int EXIT_SUCCESS = 0;
     private static final int EXIT_FAILURE = 1;
     private static ArgumentParser argumentParser = new ArgumentParser();
 
+    /**
+     * Main runner for Tailor.
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
 
         try {

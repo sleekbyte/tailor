@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Generates and outputs formatted analysis messages for Xcode
+ * Generates and outputs formatted analysis messages for Xcode.
  */
 public class Printer implements AutoCloseable {
 
@@ -21,7 +21,7 @@ public class Printer implements AutoCloseable {
     }
 
     /**
-     * Prints warning message
+     * Prints warning message.
      * @param warningMsg warning message to print
      * @param location location object containing line and column number for printing
      */
@@ -30,7 +30,7 @@ public class Printer implements AutoCloseable {
     }
 
     /**
-     * Prints error message
+     * Prints error message.
      * @param errorMsg error message to print
      * @param location location object containing line and column number for printing
      */
@@ -42,8 +42,8 @@ public class Printer implements AutoCloseable {
         String outputString = "";
         try {
             String column = (location.column != 0) ? (":" + location.column) : "";
-            outputString = this.inputFile.getCanonicalPath() + ":" + location.line + column + ": " +
-                classification + ": " + msg;
+            outputString = this.inputFile.getCanonicalPath() + ":" + location.line + column + ": " + classification
+                + ": " + msg;
         } catch (IOException e) {
             System.err.println("Error in getting canonical path of input file: " + e.getMessage());
         }

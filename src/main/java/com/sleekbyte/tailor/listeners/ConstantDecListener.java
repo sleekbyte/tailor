@@ -9,7 +9,7 @@ import com.sleekbyte.tailor.utils.CharFormatUtil;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 /**
- * Listener for constant declarations
+ * Listener for constant declarations.
  */
 public class ConstantDecListener extends SwiftBaseListener {
 
@@ -28,15 +28,13 @@ public class ConstantDecListener extends SwiftBaseListener {
         if (isGlobal(constantDecContext) || insideClass(constantDecContext) || insideStruct(constantDecContext)) {
             if (!CharFormatUtil.isUpperCamelCase(constantName) && !CharFormatUtil.isLowerCamelCase(constantName)) {
                 this.printer.error(Messages.GLOBAL + Messages.CONSTANT + Messages.GLOBAL_CONSTANT_NAMING, location);
-            }
-            else if (CharFormatUtil.isKPrefixed(constantName)) {
+            } else if (CharFormatUtil.isKPrefixed(constantName)) {
                 this.printer.warn(Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED, location);
             }
         } else {
             if (!CharFormatUtil.isLowerCamelCase(constantName)) {
                 this.printer.error(Messages.CONSTANT + Messages.CONSTANT_NAMING, location);
-            }
-            else if (CharFormatUtil.isKPrefixed(constantName)) {
+            } else if (CharFormatUtil.isKPrefixed(constantName)) {
                 this.printer.warn(Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED, location);
             }
         }
@@ -69,12 +67,12 @@ public class ConstantDecListener extends SwiftBaseListener {
         return rootCtx != null && (rootCtx instanceof SwiftParser.StructDeclarationContext);
     }
 
-    private static ParserRuleContext genNthParent(ParserRuleContext ctx, int n) {
+    private static ParserRuleContext genNthParent(ParserRuleContext ctx, int nval) {
         if (ctx == null) {
             return null;
         }
-        while (n != 0) {
-            n--;
+        while (nval != 0) {
+            nval--;
             ctx = ctx.getParent();
             if (ctx == null) {
                 return null;
@@ -89,8 +87,8 @@ public class ConstantDecListener extends SwiftBaseListener {
         }
         while (true) {
             ctx = ctx.getParent();
-            if (!(ctx instanceof SwiftParser.DeclarationsContext) &&
-                !(ctx instanceof SwiftParser.DeclarationContext)) {
+            if (!(ctx instanceof SwiftParser.DeclarationsContext)
+                && !(ctx instanceof SwiftParser.DeclarationContext)) {
                 break;
             }
         }

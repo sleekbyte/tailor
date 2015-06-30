@@ -1,5 +1,7 @@
 package com.sleekbyte.tailor.grammar;
 
+import static org.junit.Assert.assertThat;
+
 import com.sleekbyte.tailor.Tailor;
 import org.hamcrest.text.IsEmptyString;
 import org.junit.After;
@@ -13,8 +15,6 @@ import java.io.File;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
-
-import static org.junit.Assert.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GrammarTest {
