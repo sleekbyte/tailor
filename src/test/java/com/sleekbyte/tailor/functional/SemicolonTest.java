@@ -35,7 +35,7 @@ public class SemicolonTest extends RuleTest {
         addExpectedMsg(41, 6, Messages.ERROR, Messages.STATEMENTS);
         addExpectedMsg(30, 10, Messages.ERROR, Messages.STATEMENTS);
         addExpectedMsg(35, 10, Messages.ERROR, Messages.STATEMENTS);
-        addExpectedMsg(40, 23, Messages.ERROR, Messages.STATEMENTS);
+        addExpectedMsg(40, 21, Messages.ERROR, Messages.STATEMENTS);
         addExpectedMsg(64, 2, Messages.ERROR, Messages.STATEMENTS);
         addExpectedMsg(47, 28, Messages.ERROR, Messages.STATEMENTS);
         addExpectedMsg(48, 14, Messages.ERROR, Messages.STATEMENTS);
