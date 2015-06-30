@@ -10,4 +10,6 @@ func demo() {
     while(true) {
 
     }
+
+    guard (true) else { }
 }
