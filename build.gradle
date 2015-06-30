@@ -9,6 +9,13 @@ sourceSets {
     }
 }
 
+// Display useful test events and output on the console
+test {
+    testLogging {
+        events "skipped", "failed", "standardOut", "standardError"
+    }
+}
+
 // Ensure ANTLR output is generated before compilation
 compileGenJava.dependsOn 'generateGrammarSource'
 
