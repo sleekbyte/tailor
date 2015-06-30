@@ -1,6 +1,7 @@
 package com.sleekbyte.tailor.grammar;
 
 import com.sleekbyte.tailor.Tailor;
+import org.hamcrest.text.IsEmptyString;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +14,7 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GrammarTest {
@@ -44,7 +45,7 @@ public class GrammarTest {
             System.setErr(new PrintStream(errContent, false, Charset.defaultCharset().name()));
             String[] command = { (TEST_INPUT_DIR + swiftFile.getName()) };
             Tailor.main(command);
-            assertEquals("", errContent.toString(Charset.defaultCharset().name()));
+            assertThat(errContent.toString(Charset.defaultCharset().name()), IsEmptyString.isEmptyString());
             System.setErr(null);
         }
     }
