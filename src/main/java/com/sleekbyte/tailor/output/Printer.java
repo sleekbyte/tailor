@@ -5,7 +5,11 @@ import com.sleekbyte.tailor.common.Messages;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Generates and outputs formatted analysis messages for Xcode
@@ -13,7 +17,7 @@ import java.util.*;
 public class Printer implements AutoCloseable {
 
     private File inputFile;
-    private HashMap<String, ViolationMessage> msgBuffer = new HashMap<String, ViolationMessage>();
+    private Map<String, ViolationMessage> msgBuffer = new HashMap<>();
 
     public Printer(File inputFile) {
         this.inputFile = inputFile;
@@ -42,11 +46,8 @@ public class Printer implements AutoCloseable {
     private void print(String classification, String msg, Location location) {
         ViolationMessage violationMessage = new ViolationMessage("", -1, 0, "", "");
         try {
-            violationMessage = new ViolationMessage(this.inputFile.getCanonicalPath(),
-                                location.line,
-                                location.column,
-                                classification,
-                                msg);
+            violationMessage = new ViolationMessage(this.inputFile.getCanonicalPath(), location.line, location.column,
+                    classification, msg);
 
         } catch (IOException e) {
             System.err.println("Error in getting canonical path of input file: " + e.getMessage());
@@ -55,8 +56,7 @@ public class Printer implements AutoCloseable {
     }
 
     // Visible for testing only
-    public static String genOutputStringForTest(String filePath, int line, String classification,
-                                                String msg) {
+    public static String genOutputStringForTest(String filePath, int line, String classification, String msg) {
         return filePath + ":" + line + ": " + classification + ": " + msg;
     }
 
@@ -68,15 +68,7 @@ public class Printer implements AutoCloseable {
 
     @Override
     public void close() {
-        flushBuffer();
-    }
-
-    private void flushBuffer() {
-
-        ArrayList<ViolationMessage> outputList = new ArrayList<>();
-        for(Map.Entry<String, ViolationMessage> map : msgBuffer.entrySet()){
-            outputList.add(map.getValue());
-        }
+        List<ViolationMessage> outputList = new ArrayList<>(this.msgBuffer.values());
         Collections.sort(outputList);
         outputList.forEach(System.out::println);
         this.msgBuffer.clear();
