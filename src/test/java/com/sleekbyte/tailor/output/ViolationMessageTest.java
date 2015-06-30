@@ -19,7 +19,7 @@ import static org.junit.Assert.assertThat;
 @RunWith(MockitoJUnitRunner.class)
 public class ViolationMessageTest {
 
-    ViolationMessage violationMessage;
+    private ViolationMessage violationMessage;
 
     @Before
     public void setUp() {
