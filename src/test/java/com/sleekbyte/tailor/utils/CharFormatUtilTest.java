@@ -51,6 +51,7 @@ public class CharFormatUtilTest {
     public void testKPrefixedValidVariableNamesStartingWithK() {
         assertFalse(CharFormatUtil.isKPrefixed("koalasEatKale"));
         assertFalse(CharFormatUtil.isKPrefixed("KoalasEatKale"));
+        assertFalse(CharFormatUtil.isKPrefixed("k"));
     }
 
     @Test

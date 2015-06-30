@@ -16,6 +16,7 @@ public class CharFormatUtil {
     }
 
     public static boolean isKPrefixed(String name) {
+        if (name.length() < 2) return false;
         if (isUpperCamelCase(name)) {
             return name.charAt(0) == 'K' && Character.isUpperCase(name.charAt(1));
         }
