@@ -237,7 +237,6 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterForStatement(SwiftParser.ForStatementContext ctx) {
-        // redundant parenthesis check
         if (ctx.getChildCount() < 1 || !(ctx.getChild(1) instanceof TerminalNodeImpl)) { return; }
 
         Token openParenthesisToken = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();

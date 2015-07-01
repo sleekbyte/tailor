@@ -105,7 +105,7 @@ class MainListenerHelper {
     }
 
     void printRedundantParenthesesWarning(String constructType, Location startLocation, Location endLocation) {
-        this.printer.warn(constructType + Messages.STARTS_WITH_PARENTHESIS, startLocation);
+        if (startLocation != null) this.printer.warn(constructType + Messages.STARTS_WITH_PARENTHESIS, startLocation);
         if (endLocation != null) this.printer.warn(constructType + Messages.ENDS_WITH_PARENTHESIS, endLocation);
     }
 
