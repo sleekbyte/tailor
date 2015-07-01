@@ -54,7 +54,7 @@ public class Tailor {
                 System.exit(EXIT_FAILURE);
             }
 
-            Severity maxSeverity;
+            Severity maxSeverity = null;
             try {
                 maxSeverity = argumentParser.getSeverityLevel();
             } catch (Severity.IllegalSeverityException e) {
@@ -72,7 +72,7 @@ public class Tailor {
 
             MaxLengths maxLengths = argumentParser.parseMaxLengths();
 
-            try (Printer printer = new Printer(inputFile)) {
+            try (Printer printer = new Printer(inputFile, maxSeverity)) {
                 MainListener listener = new MainListener(printer, maxLengths);
                 ParseTreeWalker walker = new ParseTreeWalker();
                 walker.walk(listener, tree);

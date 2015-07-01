@@ -29,7 +29,8 @@ public class PrinterTest {
     private static final int COLUMN_NUMBER = 13;
 
     private File inputFile = new File("abc.swift");
-    private Printer printer = new Printer(inputFile);
+    private Printer printer = new Printer(inputFile, Severity.ERROR);
+    private Printer warnPrinter = new Printer(inputFile, Severity.WARNING);
     private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     @Before
@@ -57,6 +58,20 @@ public class PrinterTest {
         printer.close();
         assertEquals(expectedOutput(Severity.ERROR, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER),
             outContent.toString(Charset.defaultCharset().name()));
+    }
+
+    @Test
+    public void testErrorWithMaxSeverityWarn() throws IOException {
+        warnPrinter.error(ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
+        warnPrinter.close();
+        assertEquals(expectedOutput(Severity.WARNING, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER), outContent.toString());
+    }
+
+    @Test
+    public void testWarnWithMaxSeverityWarn() throws IOException {
+        warnPrinter.warn(WARNING_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
+        warnPrinter.close();
+        assertEquals(expectedOutput(Severity.WARNING, WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER), outContent.toString());
     }
 
     private String expectedOutput(Severity severity, String msg, int line, int column) throws IOException {

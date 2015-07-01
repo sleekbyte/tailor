@@ -1,13 +1,15 @@
 package com.sleekbyte.tailor.common;
 
 public enum Severity {
-    ERROR(Messages.ERROR),
-    WARNING(Messages.WARNING);
+    ERROR(Messages.ERROR, 2),
+    WARNING(Messages.WARNING, 1);
 
     private String value;
+    private int severity;
 
-    Severity(String strRepr) {
-        value = strRepr;
+    Severity(String value, int severity) {
+        this.value = value;
+        this.severity = severity;
     }
 
     @Override
@@ -29,5 +31,9 @@ public enum Severity {
         else {
             throw new IllegalSeverityException();
         }
+    }
+
+    public static Severity min(Severity s1, Severity s2) {
+        return (s1.severity < s2.severity) ? s1 : s2;
     }
 }

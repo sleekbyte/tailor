@@ -18,10 +18,12 @@ import java.util.Map;
 public class Printer implements AutoCloseable {
 
     private File inputFile;
+    private Severity maxSeverity;
     private Map<String, ViolationMessage> msgBuffer = new HashMap<>();
 
-    public Printer(File inputFile) {
+    public Printer(File inputFile, Severity maxSeverity) {
         this.inputFile = inputFile;
+        this.maxSeverity = maxSeverity;
     }
 
     /**
@@ -41,7 +43,7 @@ public class Printer implements AutoCloseable {
      * @param location location object containing line and column number for printing
      */
     public void error(String errorMsg, Location location) {
-        print(Severity.ERROR, errorMsg, location);
+            print(Severity.min(Severity.ERROR, maxSeverity), errorMsg, location);
     }
 
     private void print(Severity classification, String msg, Location location) {
