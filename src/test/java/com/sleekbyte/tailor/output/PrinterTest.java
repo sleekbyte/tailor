@@ -3,7 +3,7 @@ package com.sleekbyte.tailor.output;
 import static org.junit.Assert.assertEquals;
 
 import com.sleekbyte.tailor.common.Location;
-import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Severity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +47,7 @@ public class PrinterTest {
     public void testWarnWithLocationSuccess() throws IOException {
         printer.warn(WARNING_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         printer.close();
-        assertEquals(expectedOutput(Messages.WARNING, WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER),
+        assertEquals(expectedOutput(Severity.WARNING, WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER),
             outContent.toString(Charset.defaultCharset().name()));
     }
 
@@ -55,12 +55,12 @@ public class PrinterTest {
     public void testErrorWithLocationSuccess() throws IOException {
         printer.error(ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         printer.close();
-        assertEquals(expectedOutput(Messages.ERROR, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER),
+        assertEquals(expectedOutput(Severity.ERROR, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER),
             outContent.toString(Charset.defaultCharset().name()));
     }
 
-    private String expectedOutput(String classification, String msg, int line, int column) throws IOException {
-        return Printer.genOutputStringForTest(inputFile.getCanonicalPath(), line, column, classification, msg) + "\n";
+    private String expectedOutput(Severity severity, String msg, int line, int column) throws IOException {
+        return Printer.genOutputStringForTest(inputFile.getCanonicalPath(), line, column, severity, msg) + "\n";
     }
 
 }

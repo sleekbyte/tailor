@@ -3,6 +3,8 @@ package com.sleekbyte.tailor;
 import com.sleekbyte.tailor.antlr.SwiftLexer;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.MaxLengths;
+import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.listeners.FileListener;
 import com.sleekbyte.tailor.listeners.MainListener;
 import com.sleekbyte.tailor.output.Printer;
@@ -50,6 +52,15 @@ public class Tailor {
                 System.err.println("Swift source file must be provided.");
                 argumentParser.printHelp();
                 System.exit(EXIT_FAILURE);
+            }
+
+            Severity maxSeverity;
+            try {
+                maxSeverity = argumentParser.getSeverityLevel();
+            } catch (Severity.IllegalSeverityException e) {
+                System.err.println("Invalid value provided for option " + ArgumentParser.MAX_SEVERITY_OPT + ".");
+                argumentParser.printHelp();
+                System.exit(1);
             }
 
             File inputFile = new File(pathname);

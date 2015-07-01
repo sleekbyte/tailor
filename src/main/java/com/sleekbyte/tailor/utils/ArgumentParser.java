@@ -2,6 +2,7 @@ package com.sleekbyte.tailor.utils;
 
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Severity;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -24,6 +25,7 @@ public class ArgumentParser {
     private static final String MAX_LINE_LENGTH_LONG_OPT = "max-line-length";
     private static final String MAX_NAME_LENGTH_OPT = "max-name-length";
     private static final String MAX_STRUCT_LENGTH_OPT = "max-struct-length";
+    public static final String MAX_SEVERITY_OPT = "max-severity";
     private static final String DEFAULT_INT_ARG = "0";
 
     private Options options;
@@ -72,14 +74,16 @@ public class ArgumentParser {
             .longOpt(HELP_LONG_OPT)
             .desc(Messages.HELP_DESC)
             .build();
-        final Option maxClassLength = addIntegerArgument(MAX_CLASS_LENGTH_OPT, Messages.MAX_CLASS_LENGTH_DESC);
-        final Option maxClosureLength = addIntegerArgument(MAX_CLOSURE_LENGTH_OPT, Messages.MAX_CLOSURE_LENGTH_DESC);
-        final Option maxFileLength = addIntegerArgument(MAX_FILE_LENGTH_OPT, Messages.MAX_FILE_LENGTH_DESC);
-        final Option maxFunctionLength = addIntegerArgument(MAX_FUNCTION_LENGTH_OPT, Messages.MAX_FUNCTION_LENGTH_DESC);
-        final Option maxLineLength = addIntegerArgument(MAX_LINE_LENGTH_SHORT_OPT, MAX_LINE_LENGTH_LONG_OPT,
+
+        Option maxClassLength = addArgument(MAX_CLASS_LENGTH_OPT, Messages.MAX_CLASS_LENGTH_DESC);
+        Option maxClosureLength = addArgument(MAX_CLOSURE_LENGTH_OPT, Messages.MAX_CLOSURE_LENGTH_DESC);
+        Option maxFileLength = addArgument(MAX_FILE_LENGTH_OPT, Messages.MAX_FILE_LENGTH_DESC);
+        Option maxFunctionLength = addArgument(MAX_FUNCTION_LENGTH_OPT, Messages.MAX_FUNCTION_LENGTH_DESC);
+        Option maxLineLength = addArgument(MAX_LINE_LENGTH_SHORT_OPT, MAX_LINE_LENGTH_LONG_OPT,
             Messages.MAX_LINE_LENGTH_DESC);
-        final Option maxNameLength = addIntegerArgument(MAX_NAME_LENGTH_OPT, Messages.MAX_NAME_LENGTH_DESC);
-        final Option maxStructLength = addIntegerArgument(MAX_STRUCT_LENGTH_OPT, Messages.MAX_STRUCT_LENGTH_DESC);
+        Option maxNameLength = addArgument(MAX_NAME_LENGTH_OPT, Messages.MAX_NAME_LENGTH_DESC);
+        Option maxStructLength = addArgument(MAX_STRUCT_LENGTH_OPT, Messages.MAX_STRUCT_LENGTH_DESC);
+        Option maxSeverity = addArgument(MAX_SEVERITY_OPT, Messages.MAX_SEVERITY_DESC);
 
         options = new Options();
         options.addOption(help);
@@ -90,6 +94,7 @@ public class ArgumentParser {
         options.addOption(maxLineLength);
         options.addOption(maxNameLength);
         options.addOption(maxStructLength);
+        options.addOption(maxSeverity);
     }
 
     /**
@@ -99,7 +104,7 @@ public class ArgumentParser {
      * @param longOpt  long version of option
      * @param desc     description of option
      */
-    private Option addIntegerArgument(String shortOpt, String longOpt, String desc) {
+    private Option addArgument(String shortOpt, String longOpt, String desc) {
         return Option.builder(shortOpt).longOpt(longOpt).hasArg().desc(desc).build();
     }
 
@@ -109,7 +114,7 @@ public class ArgumentParser {
      * @param longOpt long version of option
      * @param desc    description of option
      */
-    private Option addIntegerArgument(String longOpt, String desc) {
+    private Option addArgument(String longOpt, String desc) {
         return Option.builder().longOpt(longOpt).hasArg().desc(desc).build();
     }
 
@@ -119,6 +124,10 @@ public class ArgumentParser {
         } catch (NumberFormatException e) {
             throw new ArgumentParserException("Invalid integer argument value: " + e.getMessage());
         }
+    }
+
+    public Severity getSeverityLevel() throws Severity.IllegalSeverityException {
+        return Severity.parseSeverity(this.cmd.getOptionValue(MAX_SEVERITY_OPT, "error"));
     }
 
 }

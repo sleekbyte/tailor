@@ -2,6 +2,7 @@ package com.sleekbyte.tailor.output;
 
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Severity;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +31,7 @@ public class Printer implements AutoCloseable {
      * @param location   location object containing line and column number for printing
      */
     public void warn(String warningMsg, Location location) {
-        print(Messages.WARNING, warningMsg, location);
+        print(Severity.WARNING, warningMsg, location);
     }
 
     /**
@@ -40,10 +41,10 @@ public class Printer implements AutoCloseable {
      * @param location location object containing line and column number for printing
      */
     public void error(String errorMsg, Location location) {
-        print(Messages.ERROR, errorMsg, location);
+        print(Severity.ERROR, errorMsg, location);
     }
 
-    private void print(String classification, String msg, Location location) {
+    private void print(Severity classification, String msg, Location location) {
         ViolationMessage violationMessage = new ViolationMessage(location.line, location.column, classification, msg);
         try {
             violationMessage.setFilePath(this.inputFile.getCanonicalPath());
@@ -54,14 +55,14 @@ public class Printer implements AutoCloseable {
     }
 
     // Visible for testing only
-    public static String genOutputStringForTest(String filePath, int line, String classification, String msg) {
-        return new ViolationMessage(filePath, line, 0, classification, msg).toString();
+    public static String genOutputStringForTest(String filePath, int line, Severity severity, String msg) {
+        return new ViolationMessage(filePath, line, 0, severity, msg).toString();
     }
 
     // Visible for testing only
-    public static String genOutputStringForTest(String filePath, int line, int column, String classification,
+    public static String genOutputStringForTest(String filePath, int line, int column, Severity severity,
                                                 String msg) {
-        return new ViolationMessage(filePath, line, column, classification, msg).toString();
+        return new ViolationMessage(filePath, line, column, severity, msg).toString();
     }
 
     @Override
