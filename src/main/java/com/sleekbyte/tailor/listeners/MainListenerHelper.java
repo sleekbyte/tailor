@@ -7,8 +7,11 @@ import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.CharFormatUtil;
 import com.sleekbyte.tailor.utils.SourceFileUtil;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
+import javax.swing.text.html.parser.Parser;
 import java.util.List;
 import java.util.Optional;
 
@@ -88,25 +91,28 @@ class MainListenerHelper {
     }
 
     void verifyRedundantParentheses(String constructType, ParserRuleContext ctx) {
-        String conditionalClause = ctx.getText();
-        char firstCharacter = conditionalClause.charAt(0);
-        char lastCharacter = conditionalClause.charAt(conditionalClause.length() - 1);
-
+        char firstCharacter = '\0', lastCharacter = '\0';
         Location startLocation = null, endLocation = null;
-        if (firstCharacter == '(') {
-            startLocation = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
 
+        if (ctx instanceof SwiftParser.ConditionClauseContext || ctx instanceof SwiftParser.ExpressionContext) {
+            String conditionalClause = ctx.getText();
+            firstCharacter = conditionalClause.charAt(0); // extract '('
+            lastCharacter = conditionalClause.charAt(conditionalClause.length() - 1); // extract ')'
+            startLocation = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+            endLocation = new Location(ctx.getStop().getLine(),  ctx.getStop().getCharPositionInLine() + 1);
+        } else if (ctx instanceof SwiftParser.ForStatementContext) {
+            if (!(ctx.getChild(1) instanceof TerminalNodeImpl)) { return; } // return if '(' not present
+            Token openParenthesisToken = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
+            firstCharacter = openParenthesisToken.getText().charAt(0); // extract '(' token
+            startLocation = new Location(openParenthesisToken.getLine(), openParenthesisToken.getCharPositionInLine());
+        }
+
+        if (firstCharacter == '(') {
+            this.printer.warn(constructType + Messages.STARTS_WITH_PARENTHESIS, startLocation);
         }
         if (lastCharacter == ')') {
-            endLocation = new Location(ctx.getStop().getLine(),  ctx.getStop().getCharPositionInLine() + 1);
+            this.printer.warn(constructType + Messages.ENDS_WITH_PARENTHESIS, endLocation);
         }
-
-        printRedundantParenthesesWarning(constructType, startLocation, endLocation);
-    }
-
-    void printRedundantParenthesesWarning(String constructType, Location startLocation, Location endLocation) {
-        if (startLocation != null) this.printer.warn(constructType + Messages.STARTS_WITH_PARENTHESIS, startLocation);
-        if (endLocation != null) this.printer.warn(constructType + Messages.ENDS_WITH_PARENTHESIS, endLocation);
     }
 
     /* Optional Binding Condition Evaluators */

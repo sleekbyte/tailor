@@ -237,12 +237,6 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterForStatement(SwiftParser.ForStatementContext ctx) {
-        if (ctx.getChildCount() < 1 || !(ctx.getChild(1) instanceof TerminalNodeImpl)) { return; }
-
-        Token openParenthesisToken = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
-        if (openParenthesisToken.getText().equalsIgnoreCase("(")) {
-            listenerHelper.printRedundantParenthesesWarning(Messages.FOR_LOOP,
-                    new Location(openParenthesisToken.getLine(), openParenthesisToken.getCharPositionInLine()), null);
-        }
+        listenerHelper.verifyRedundantParentheses(Messages.FOR_LOOP, ctx);
     }
 }
