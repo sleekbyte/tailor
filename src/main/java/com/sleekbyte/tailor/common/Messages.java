@@ -40,6 +40,7 @@ public class Messages {
     public static final String FOR = "For ";
     public static final String FOR_LOOP = "For loop ";
     public static final String THROW_STATEMENT = "Throw statement ";
+    public static final String CATCH_CLAUSE = "Catch clause ";
 
     // Plural constructs
     public static final String STATEMENTS = "Statements ";

@@ -31,6 +31,8 @@ public class RedundantParenthesisTest extends RuleTest {
         addExpectedMsg(21, 12, Messages.WARNING, Messages.SWITCH_EXPRESSION + Messages.STARTS_WITH_PARENTHESIS);
         addExpectedMsg(21, 14, Messages.WARNING, Messages.SWITCH_EXPRESSION + Messages.ENDS_WITH_PARENTHESIS);
         addExpectedMsg(26, 8, Messages.WARNING, Messages.FOR_LOOP + Messages.STARTS_WITH_PARENTHESIS);
+        addExpectedMsg(31, 13, Messages.WARNING, Messages.CATCH_CLAUSE + Messages.STARTS_WITH_PARENTHESIS);
+        addExpectedMsg(31, 50, Messages.WARNING, Messages.CATCH_CLAUSE + Messages.ENDS_WITH_PARENTHESIS);
         addExpectedMsg(35, 11, Messages.WARNING, Messages.THROW_STATEMENT + Messages.STARTS_WITH_PARENTHESIS);
         addExpectedMsg(35, 42, Messages.WARNING, Messages.THROW_STATEMENT + Messages.ENDS_WITH_PARENTHESIS);
     }

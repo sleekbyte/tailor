@@ -91,8 +91,9 @@ class MainListenerHelper {
     }
 
     void verifyRedundantParentheses(String constructType, ParserRuleContext ctx) {
-        String conditionalClause = ctx.getText();
+        if (ctx == null) { return; }
 
+        String conditionalClause = ctx.getText();
         char firstCharacter = conditionalClause.charAt(0); // extract '('
         char lastCharacter = conditionalClause.charAt(conditionalClause.length() - 1); // extract ')'
 
@@ -113,7 +114,8 @@ class MainListenerHelper {
         char firstCharacter = openParenthesisToken.getText().charAt(0); // extract '(' token
 
         if (firstCharacter == '(') {
-            Location startLocation = new Location(openParenthesisToken.getLine(), openParenthesisToken.getCharPositionInLine());
+            Location startLocation = new Location(openParenthesisToken.getLine(),
+                    openParenthesisToken.getCharPositionInLine());
             this.printer.warn(Messages.FOR_LOOP + Messages.STARTS_WITH_PARENTHESIS, startLocation);
         }
     }

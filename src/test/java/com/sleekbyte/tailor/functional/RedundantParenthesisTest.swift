@@ -28,9 +28,15 @@ func demo() {
 
     do {
         try vend(itemNamed: "Candy Bar")
-    } catch VendingMachineError.InvalidSelection {
+    } catch (VendingMachineError.InvalidSelection) {
         print("Invalid Selection.")
     }
 
     throw (VendingMachineError.OutOfStock)
+
+    do {
+        try willOnlyThrowIfTrue(false)
+    } catch {
+        // Handle Error
+    }
 }

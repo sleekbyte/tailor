@@ -242,4 +242,10 @@ public class MainListener extends SwiftBaseListener {
         ParserRuleContext expressionContext = ctx.expression();
         listenerHelper.verifyRedundantParentheses(Messages.THROW_STATEMENT, expressionContext);
     }
+
+    @Override
+    public void enterCatchClause(SwiftParser.CatchClauseContext ctx) {
+        ParserRuleContext patternContext = ctx.pattern();
+        listenerHelper.verifyRedundantParentheses(Messages.CATCH_CLAUSE, patternContext);
+    }
 }
