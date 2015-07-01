@@ -91,28 +91,30 @@ class MainListenerHelper {
     }
 
     void verifyRedundantParentheses(String constructType, ParserRuleContext ctx) {
-        char firstCharacter = '\0', lastCharacter = '\0';
-        Location startLocation = null, endLocation = null;
+        String conditionalClause = ctx.getText();
 
-        if (ctx instanceof SwiftParser.ConditionClauseContext || ctx instanceof SwiftParser.ExpressionContext) {
-            String conditionalClause = ctx.getText();
-            firstCharacter = conditionalClause.charAt(0); // extract '('
-            lastCharacter = conditionalClause.charAt(conditionalClause.length() - 1); // extract ')'
-            startLocation = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
-            endLocation = new Location(ctx.getStop().getLine(),  ctx.getStop().getCharPositionInLine() + 1);
-            
-        } else if (ctx instanceof SwiftParser.ForStatementContext) {
-            if (!(ctx.getChild(1) instanceof TerminalNodeImpl)) { return; } // return if '(' not present
-            Token openParenthesisToken = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
-            firstCharacter = openParenthesisToken.getText().charAt(0); // extract '(' token
-            startLocation = new Location(openParenthesisToken.getLine(), openParenthesisToken.getCharPositionInLine());
-        }
+        char firstCharacter = conditionalClause.charAt(0); // extract '('
+        char lastCharacter = conditionalClause.charAt(conditionalClause.length() - 1); // extract ')'
 
         if (firstCharacter == '(') {
+            Location startLocation = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
             this.printer.warn(constructType + Messages.STARTS_WITH_PARENTHESIS, startLocation);
         }
         if (lastCharacter == ')') {
+            Location endLocation = new Location(ctx.getStop().getLine(), ctx.getStop().getCharPositionInLine() + 1);
             this.printer.warn(constructType + Messages.ENDS_WITH_PARENTHESIS, endLocation);
+        }
+    }
+
+    void verifyRedundantForLoopParenthesis(ParserRuleContext ctx) {
+        if (!(ctx.getChild(1) instanceof TerminalNodeImpl)) { return; } // return if '(' not present
+
+        Token openParenthesisToken = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
+        char firstCharacter = openParenthesisToken.getText().charAt(0); // extract '(' token
+
+        if (firstCharacter == '(') {
+            Location startLocation = new Location(openParenthesisToken.getLine(), openParenthesisToken.getCharPositionInLine());
+            this.printer.warn(Messages.FOR_LOOP + Messages.STARTS_WITH_PARENTHESIS, startLocation);
         }
     }
 
