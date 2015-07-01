@@ -34,11 +34,12 @@ public class Messages {
     public static final String TYPE = "Type ";
     public static final String TYPEALIAS = "Typealias ";
     public static final String VARIABLE = "Variable ";
-    public static final String CONDITIONAL = "Conditional clause ";
+    public static final String CONDITIONAL_CLAUSE = "Conditional clause ";
     public static final String SWITCH = "Switch ";
     public static final String SWITCH_EXPRESSION = "Switch expression ";
     public static final String FOR = "For ";
     public static final String FOR_LOOP = "For loop ";
+    public static final String THROW_STATEMENT = "Throw statement ";
 
     // Plural constructs
     public static final String STATEMENTS = "Statements ";

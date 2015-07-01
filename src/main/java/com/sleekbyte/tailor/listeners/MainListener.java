@@ -2,15 +2,12 @@ package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
-import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 /**
  * Parse tree listener for verifying Swift constructs
@@ -226,7 +223,7 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterConditionClause(SwiftParser.ConditionClauseContext ctx) {
-        listenerHelper.verifyRedundantParentheses(Messages.CONDITIONAL, ctx);
+        listenerHelper.verifyRedundantParentheses(Messages.CONDITIONAL_CLAUSE, ctx);
     }
 
     @Override
@@ -238,5 +235,11 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterForStatement(SwiftParser.ForStatementContext ctx) {
         listenerHelper.verifyRedundantForLoopParenthesis(ctx);
+    }
+
+    @Override
+    public void enterThrowStatement(SwiftParser.ThrowStatementContext ctx) {
+        ParserRuleContext expressionContext = ctx.expression();
+        listenerHelper.verifyRedundantParentheses(Messages.THROW_STATEMENT, expressionContext);
     }
 }

@@ -25,4 +25,12 @@ func demo() {
 
     for (var i = 0; i < 10; i+=1) {
     }
+
+    do {
+        try vend(itemNamed: "Candy Bar")
+    } catch VendingMachineError.InvalidSelection {
+        print("Invalid Selection.")
+    }
+
+    throw (VendingMachineError.OutOfStock)
 }
