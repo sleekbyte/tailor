@@ -9,11 +9,11 @@ import org.mockito.runners.MockitoJUnitRunner;
  * Functional tests for semicolon rule
  */
 @RunWith(MockitoJUnitRunner.class)
-public class ControlFlowParenthesisTest extends RuleTest {
+public class RedundantParenthesisTest extends RuleTest {
 
     @Override
     protected String getInputFilePath() {
-        return "ControlFlowParenthesisTest.swift";
+        return "RedundantParenthesisTest.swift";
     }
 
     @Override
