@@ -100,6 +100,7 @@ class MainListenerHelper {
             lastCharacter = conditionalClause.charAt(conditionalClause.length() - 1); // extract ')'
             startLocation = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
             endLocation = new Location(ctx.getStop().getLine(),  ctx.getStop().getCharPositionInLine() + 1);
+            
         } else if (ctx instanceof SwiftParser.ForStatementContext) {
             if (!(ctx.getChild(1) instanceof TerminalNodeImpl)) { return; } // return if '(' not present
             Token openParenthesisToken = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
