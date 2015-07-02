@@ -31,12 +31,11 @@ public class ConstructLengthTest extends RuleTest {
     @Override
     protected void addAllExpectedMsgs() {
         addExpectedMsg(8, 16, Messages.ERROR, Messages.CLASS, 12, 8);
-        addExpectedMsg(24, 27, Messages.ERROR, Messages.CLOSURE, 8, 6);
         addExpectedMsg(10, 67, Messages.ERROR, Messages.FUNCTION, 9, 3);
         addExpectedMsg(12, 35, Messages.ERROR, Messages.FUNCTION, 5, 3);
-        addExpectedMsg(35, 19, Messages.ERROR, Messages.STRUCT, 3, 1);
-
+        addExpectedMsg(24, 27, Messages.ERROR, Messages.CLOSURE, 8, 6);
         addExpectedMsg(31, Messages.ERROR, Messages.FILE, 38, 30);
+        addExpectedMsg(35, 19, Messages.ERROR, Messages.STRUCT, 3, 1);
     }
 
     private void addExpectedMsg(int line, String classification, String msg, int length, int limit) {

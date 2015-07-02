@@ -5,8 +5,11 @@ import com.sleekbyte.tailor.common.Messages;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Generates and outputs formatted analysis messages for Xcode.
@@ -14,7 +17,7 @@ import java.util.Set;
 public class Printer implements AutoCloseable {
 
     private File inputFile;
-    private Set<String> msgBuffer = new HashSet<>();
+    private Map<String, ViolationMessage> msgBuffer = new HashMap<>();
 
     public Printer(File inputFile) {
         this.inputFile = inputFile;
@@ -41,33 +44,31 @@ public class Printer implements AutoCloseable {
     }
 
     private void print(String classification, String msg, Location location) {
-        String outputString = "";
+        ViolationMessage violationMessage = new ViolationMessage(location.line, location.column, classification, msg);
         try {
-            String column = (location.column != 0) ? (":" + location.column) : "";
-            outputString = this.inputFile.getCanonicalPath() + ":" + location.line + column + ": " + classification
-                + ": " + msg;
+            violationMessage.setFilePath(this.inputFile.getCanonicalPath());
         } catch (IOException e) {
             System.err.println("Error in getting canonical path of input file: " + e.getMessage());
         }
-        this.msgBuffer.add(outputString);
+        this.msgBuffer.put(violationMessage.toString(), violationMessage);
     }
 
     // Visible for testing only
-    public static String genOutputStringForTest(String filePath, int line, String classification,
-                                                String msg) {
-        return filePath + ":" + line + ": " + classification + ": " + msg;
+    public static String genOutputStringForTest(String filePath, int line, String classification, String msg) {
+        return new ViolationMessage(filePath, line, 0, classification, msg).toString();
     }
 
     // Visible for testing only
     public static String genOutputStringForTest(String filePath, int line, int column, String classification,
                                                 String msg) {
-        return filePath + ":" + line + ":" + column + ": " + classification + ": " + msg;
+        return new ViolationMessage(filePath, line, column, classification, msg).toString();
     }
 
     @Override
     public void close() {
-        // TODO: #55: this.msgBuffer.sort(lineNumber1 < lineNumber2, columnNumber1 < columnNumber2);
-        this.msgBuffer.forEach(System.out::println);
+        List<ViolationMessage> outputList = new ArrayList<>(this.msgBuffer.values());
+        Collections.sort(outputList);
+        outputList.forEach(System.out::println);
         this.msgBuffer.clear();
     }
 }
