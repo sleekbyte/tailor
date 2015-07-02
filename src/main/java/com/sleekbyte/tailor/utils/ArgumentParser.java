@@ -9,6 +9,9 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+/**
+ * Parse command line options and arguments.
+ */
 public class ArgumentParser {
 
     private static final String HELP_SHORT_OPT = "h";
