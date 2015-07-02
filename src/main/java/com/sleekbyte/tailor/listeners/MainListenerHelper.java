@@ -115,7 +115,6 @@ class MainListenerHelper {
         }
 
         printRedundantParenthesisWarning(ctx, constructType + Messages.ENCLOSED_PARENTHESIS);
-
     }
 
     void verifyRedundantForLoopParenthesis(ParserRuleContext ctx) {

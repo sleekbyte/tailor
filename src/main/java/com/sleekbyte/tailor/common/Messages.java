@@ -53,7 +53,7 @@ public class Messages {
     public static final String GLOBAL_CONSTANT_NAMING = "should be either lowerCamelCase or UpperCamelCase";
     public static final String CONSTANT_NAMING = "should be lowerCamelCase";
     public static final String NEWLINE_TERMINATOR = "should terminate with a newline character ('\\n')";
-    public static final String ENCLOSED_PARENTHESIS = "should not be enclosed in a parenthesis";
+    public static final String ENCLOSED_PARENTHESIS = "should not be enclosed within parenthesis";
     public static final String K_PREFIXED = "should not be prefixed with 'k' or 'K'";
 
     // Usage messages
