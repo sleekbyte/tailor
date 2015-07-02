@@ -1,7 +1,6 @@
 package com.sleekbyte.tailor.output;
 
 import com.sleekbyte.tailor.common.Location;
-import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Severity;
 
 import java.io.File;
@@ -43,7 +42,7 @@ public class Printer implements AutoCloseable {
      * @param location location object containing line and column number for printing
      */
     public void error(String errorMsg, Location location) {
-            print(Severity.min(Severity.ERROR, maxSeverity), errorMsg, location);
+        print(Severity.min(Severity.ERROR, maxSeverity), errorMsg, location);
     }
 
     private void print(Severity classification, String msg, Location location) {

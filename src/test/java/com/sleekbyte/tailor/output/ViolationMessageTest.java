@@ -2,9 +2,10 @@ package com.sleekbyte.tailor.output;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertThat;
 
-import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Severity;
 import org.junit.Before;
 import org.junit.Test;

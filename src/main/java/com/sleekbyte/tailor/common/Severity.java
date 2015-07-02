@@ -1,5 +1,8 @@
 package com.sleekbyte.tailor.common;
 
+/**
+ * Severity of violation messages.
+ */
 public enum Severity {
     ERROR(Messages.ERROR, 2),
     WARNING(Messages.WARNING, 1);
@@ -17,18 +20,25 @@ public enum Severity {
         return this.value;
     }
 
+    /**
+     * Exception thrown when invalid severity is provided.
+     */
     public static class IllegalSeverityException extends Exception {
-
     }
 
+    /**
+     * Parse str and convert to appropriate Severity.
+     *
+     * @param str Severity string (error|warning)
+     * @return Parsed Severity value
+     * @throws IllegalSeverityException if string is not recognized
+     */
     public static Severity parseSeverity(String str) throws IllegalSeverityException {
         if (str.toLowerCase().equals(Messages.ERROR)) {
             return ERROR;
-        }
-        else if (str.toLowerCase().equals(Messages.WARNING)) {
+        } else if (str.toLowerCase().equals(Messages.WARNING)) {
             return WARNING;
-        }
-        else {
+        } else {
             throw new IllegalSeverityException();
         }
     }

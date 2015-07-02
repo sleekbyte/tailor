@@ -3,7 +3,6 @@ package com.sleekbyte.tailor;
 import com.sleekbyte.tailor.antlr.SwiftLexer;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.MaxLengths;
-import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.listeners.FileListener;
 import com.sleekbyte.tailor.listeners.MainListener;

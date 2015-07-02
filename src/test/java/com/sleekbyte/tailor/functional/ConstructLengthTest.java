@@ -20,6 +20,7 @@ public class ConstructLengthTest extends RuleTest {
     @Override
     protected String[] getCommandArgs() {
         return new String[] {
+            "--max-severity", "error",
             "--max-class-length", "8",
             "--max-closure-length", "6",
             "--max-file-length", "30",

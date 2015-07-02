@@ -1,15 +1,15 @@
 package com.sleekbyte.tailor.common;
 
+import static junit.framework.TestCase.assertEquals;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static junit.framework.TestCase.assertEquals;
-
 /**
- * Tests for {@link Severity}
+ * Tests for {@link Severity}.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class SeverityTest {
@@ -30,7 +30,7 @@ public class SeverityTest {
         assertEquals(Severity.parseSeverity("ERROR"), Severity.ERROR);
     }
 
-    @Test(expected=Severity.IllegalSeverityException.class)
+    @Test(expected = Severity.IllegalSeverityException.class)
     public void testSeverityParserWithInvalidInputs() throws Severity.IllegalSeverityException {
         Severity.parseSeverity("invalid");
     }

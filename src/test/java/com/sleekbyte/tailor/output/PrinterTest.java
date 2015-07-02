@@ -64,14 +64,16 @@ public class PrinterTest {
     public void testErrorWithMaxSeverityWarn() throws IOException {
         warnPrinter.error(ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         warnPrinter.close();
-        assertEquals(expectedOutput(Severity.WARNING, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER), outContent.toString());
+        assertEquals(expectedOutput(Severity.WARNING, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER),
+            outContent.toString(Charset.defaultCharset().name()));
     }
 
     @Test
     public void testWarnWithMaxSeverityWarn() throws IOException {
         warnPrinter.warn(WARNING_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         warnPrinter.close();
-        assertEquals(expectedOutput(Severity.WARNING, WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER), outContent.toString());
+        assertEquals(expectedOutput(Severity.WARNING, WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER),
+            outContent.toString(Charset.defaultCharset().name()));
     }
 
     private String expectedOutput(Severity severity, String msg, int line, int column) throws IOException {

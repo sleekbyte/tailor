@@ -20,6 +20,7 @@ public class NameLengthTest extends RuleTest {
     @Override
     protected String[] getCommandArgs() {
         return new String[] {
+            "--max-severity", "error",
             "--max-line-length", "40",
             "--max-name-length", "5",
             inputFile.getPath()
