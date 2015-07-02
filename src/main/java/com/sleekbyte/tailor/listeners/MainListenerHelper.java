@@ -101,7 +101,7 @@ class MainListenerHelper {
         if (ctx == null
                 || ctx.getChildCount() != 1
                 || ctx.prefixExpression() == null
-                || ctx.prefixExpression().prefixOperator() != null
+                || ctx.prefixExpression().prefixOperator() != null // flag cases with trailing ;
                 || ctx.prefixExpression().postfixExpression() == null
                 || ctx.prefixExpression().postfixExpression().getChildCount() != 1) {
             return;
@@ -123,6 +123,7 @@ class MainListenerHelper {
         ParenthesizedExpressionContext parenthesizedExpressionContext =
                 (ParenthesizedExpressionContext) primaryExpression.getChild(0);
 
+        // check to not flag tuple initialization
         if (parenthesizedExpressionContext.expressionElementList() == null
                 || parenthesizedExpressionContext.expressionElementList().getChildCount() != 1) {
             return;
