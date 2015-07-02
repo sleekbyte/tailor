@@ -223,13 +223,12 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterConditionClause(SwiftParser.ConditionClauseContext ctx) {
-        listenerHelper.verifyRedundantParentheses(Messages.CONDITIONAL_CLAUSE, ctx);
+        listenerHelper.verifyRedundantParentheses(Messages.CONDITIONAL_CLAUSE, ctx.expression());
     }
 
     @Override
     public void enterSwitchStatement(SwiftParser.SwitchStatementContext ctx) {
-        ParserRuleContext expressionContext = ctx.expression();
-        listenerHelper.verifyRedundantParentheses(Messages.SWITCH_EXPRESSION, expressionContext);
+        listenerHelper.verifyRedundantParentheses(Messages.SWITCH_EXPRESSION, ctx.expression());
     }
 
     @Override
@@ -239,13 +238,11 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterThrowStatement(SwiftParser.ThrowStatementContext ctx) {
-        ParserRuleContext expressionContext = ctx.expression();
-        listenerHelper.verifyRedundantParentheses(Messages.THROW_STATEMENT, expressionContext);
+        listenerHelper.verifyRedundantParentheses(Messages.THROW_STATEMENT, ctx.expression());
     }
 
     @Override
     public void enterCatchClause(SwiftParser.CatchClauseContext ctx) {
-        ParserRuleContext patternContext = ctx.pattern();
-        listenerHelper.verifyRedundantParentheses(Messages.CATCH_CLAUSE, patternContext);
+        listenerHelper.verifyRedundantCatchParentheses(ctx.pattern());
     }
 }

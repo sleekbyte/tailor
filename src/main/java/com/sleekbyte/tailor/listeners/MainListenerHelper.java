@@ -14,6 +14,9 @@ import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import javax.swing.text.html.parser.Parser;
 import java.util.List;
 import java.util.Optional;
+import java.util.Stack;
+
+import static com.sleekbyte.tailor.antlr.SwiftParser.*;
 
 /**
  * Helper class for {@link MainListener}
@@ -63,7 +66,7 @@ class MainListenerHelper {
         walker.walk(new ConstantDecListener(this.printer), tree);
     }
 
-    void evaluatePattern(SwiftParser.PatternContext pattern, ParseTreeWalker walker) {
+    void evaluatePattern(PatternContext pattern, ParseTreeWalker walker) {
         if (pattern.identifierPattern() != null) {
             walkConstantDecListener(walker, pattern.identifierPattern());
 
@@ -81,32 +84,42 @@ class MainListenerHelper {
         }
     }
 
-    void evaluateTuplePattern(SwiftParser.TuplePatternContext tuplePatternContext, ParseTreeWalker walker) {
+    void evaluateTuplePattern(TuplePatternContext tuplePatternContext, ParseTreeWalker walker) {
         List<SwiftParser.TuplePatternElementContext> tuplePatternElementContexts =
             tuplePatternContext.tuplePatternElementList().tuplePatternElement();
 
-        for (SwiftParser.TuplePatternElementContext tuplePatternElement : tuplePatternElementContexts) {
+        for (TuplePatternElementContext tuplePatternElement : tuplePatternElementContexts) {
             evaluatePattern(tuplePatternElement.pattern(), walker);
         }
     }
 
-    void verifyRedundantParentheses(String constructType, ParserRuleContext ctx) {
-        if (ctx == null) { return; }
+    void verifyRedundantParentheses(String constructType, ExpressionContext ctx) {
 
-        String expression = ctx.getText();
-
-        long openParenthesisCount = expression.chars().filter(e -> e == '(').count();
-        if (openParenthesisCount != 1) { return; }
-
-        char firstCharacter = expression.charAt(0);
-        char lastCharacter = expression.charAt(expression.length() - 1);
-
-        if (firstCharacter == '(' && lastCharacter == ')') {
-            Location startLocation = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
-            Location endLocation = new Location(ctx.getStop().getLine(), ctx.getStop().getCharPositionInLine() + 1);
-            this.printer.warn(constructType + Messages.STARTS_WITH_PARENTHESIS, startLocation);
-            this.printer.warn(constructType + Messages.ENDS_WITH_PARENTHESIS, endLocation);
+        if (ctx == null
+                || ctx.getChildCount() != 1
+                || ctx.prefixExpression() == null
+                || ctx.prefixExpression().getChildCount() != 1
+                || ctx.prefixExpression().postfixExpression() == null
+                || ctx.prefixExpression().postfixExpression().getChildCount() != 1) {
+            return;
         }
+
+        PostfixExpressionContext postfixExpression = ctx.prefixExpression().postfixExpression();
+
+        if (!(postfixExpression.getChild(0) instanceof PrimaryExpressionContext)) {
+            return;
+        }
+
+        PrimaryExpressionContext primaryExpression = (PrimaryExpressionContext) postfixExpression.getChild(0);
+
+        if (primaryExpression.getChildCount() != 1
+                || !(primaryExpression.getChild(0) instanceof ParenthesizedExpressionContext)) {
+            return;
+        }
+
+        printRedundantParenthesisWarning(ctx, constructType + Messages.STARTS_WITH_PARENTHESIS,
+                constructType + Messages.ENDS_WITH_PARENTHESIS);
+
     }
 
     void verifyRedundantForLoopParenthesis(ParserRuleContext ctx) {
@@ -122,14 +135,35 @@ class MainListenerHelper {
         }
     }
 
+    public void verifyRedundantCatchParentheses(ParserRuleContext ctx) {
+        if (ctx == null) {
+            return;
+        }
+        String pattern = ctx.getText();
+        char firstCharacter = pattern.charAt(0);
+        char lastCharacter = pattern.charAt(pattern.length() - 1);
+
+        if (firstCharacter == '(' || lastCharacter == ')') {
+            printRedundantParenthesisWarning(ctx, Messages.CATCH_CLAUSE + Messages.STARTS_WITH_PARENTHESIS,
+                    Messages.CATCH_CLAUSE + Messages.ENDS_WITH_PARENTHESIS);
+        }
+    }
+
+    private void printRedundantParenthesisWarning(ParserRuleContext ctx, String firstParenthesisMsg, String secondParenthesisMsg) {
+        Location startLocation = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+        Location endLocation = new Location(ctx.getStop().getLine(), ctx.getStop().getCharPositionInLine() + 1);
+        this.printer.warn(firstParenthesisMsg, startLocation);
+        this.printer.warn(secondParenthesisMsg, endLocation);
+    }
+
     /* Optional Binding Condition Evaluators */
 
-    public void evaluateOptionalBindingHead(SwiftParser.OptionalBindingHeadContext ctx) {
+    public void evaluateOptionalBindingHead(OptionalBindingHeadContext ctx) {
         ParseTreeWalker walker = new ParseTreeWalker();
         evaluatePattern(ctx.pattern(), walker);
     }
 
-    public void evaluateOptionalBindingContinuation(SwiftParser.OptionalBindingContinuationContext ctx) {
+    public void evaluateOptionalBindingContinuation(OptionalBindingContinuationContext ctx) {
         if (ctx.optionalBindingHead() != null) {
             evaluateOptionalBindingHead(ctx.optionalBindingHead());
         } else {
@@ -138,8 +172,7 @@ class MainListenerHelper {
         }
     }
 
-    public String letOrVar(SwiftParser.OptionalBindingHeadContext ctx) {
+    public String letOrVar(OptionalBindingHeadContext ctx) {
         return ctx.getChild(0).getText();
     }
-
 }
