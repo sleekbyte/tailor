@@ -17,9 +17,11 @@ public class MainListener extends SwiftBaseListener {
     private static final String VAR = "var";
     private static MainListenerHelper listenerHelper = new MainListenerHelper();
     private MaxLengths maxLengths;
+    private Printer printer;
 
     public MainListener(Printer printer, MaxLengths maxLengths) {
         listenerHelper.setPrinter(printer);
+        this.printer = printer;
         this.maxLengths = maxLengths;
     }
 
@@ -158,6 +160,7 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterVariableName(SwiftParser.VariableNameContext ctx) {
         listenerHelper.verifyNameLength(Messages.VARIABLE + Messages.NAME, maxLengths.maxNameLength, ctx);
+        listenerHelper.verifyLowerCamelCase(Messages.VARIABLE + Messages.NAMES, ctx);
     }
 
     @Override
@@ -165,15 +168,29 @@ public class MainListener extends SwiftBaseListener {
         ParseTreeWalker walker = new ParseTreeWalker();
         for (SwiftParser.PatternInitializerContext context : ctx.patternInitializerList().patternInitializer()) {
             SwiftParser.PatternContext pattern = context.pattern();
-            listenerHelper.evaluatePattern(pattern, walker);
+            listenerHelper.evaluatePattern(pattern, walker, new ConstantDecListener(this.printer));
+        }
+    }
+
+    @Override
+    public void enterVariableDeclaration(SwiftParser.VariableDeclarationContext ctx) {
+        ParseTreeWalker walker = new ParseTreeWalker();
+        if (ctx == null || ctx.patternInitializerList() == null) {
+            return;
+        }
+        for (SwiftParser.PatternInitializerContext context : ctx.patternInitializerList().patternInitializer()) {
+            SwiftParser.PatternContext pattern = context.pattern();
+            listenerHelper.evaluatePattern(pattern, walker, new VariableDecListener(this.printer));
         }
     }
 
     @Override
     public void enterValueBindingPattern(SwiftParser.ValueBindingPatternContext ctx) {
+        ParseTreeWalker walker = new ParseTreeWalker();
         if (ctx.getStart().getText().equals(LET)) {
-            ParseTreeWalker walker = new ParseTreeWalker();
-            listenerHelper.evaluatePattern(ctx.pattern(), walker);
+            listenerHelper.evaluatePattern(ctx.pattern(), walker, new ConstantDecListener(this.printer));
+        } else if (ctx.getStart().getText().equals(VAR)) {
+            listenerHelper.evaluatePattern(ctx.pattern(), walker, new VariableDecListener(this.printer));
         }
     }
 
@@ -191,7 +208,11 @@ public class MainListener extends SwiftBaseListener {
          */
         String currentBinding = listenerHelper.letOrVar(ctx.optionalBindingHead());
         if (currentBinding.equals(LET)) {
-            listenerHelper.evaluateOptionalBindingHead(ctx.optionalBindingHead());
+            listenerHelper.evaluateOptionalBindingHead(ctx.optionalBindingHead(),
+                new ConstantDecListener(this.printer));
+        } else if (currentBinding.equals(VAR)) {
+            listenerHelper.evaluateOptionalBindingHead(ctx.optionalBindingHead(),
+                new VariableDecListener(this.printer));
         }
         SwiftParser.OptionalBindingContinuationListContext continuationList = ctx.optionalBindingContinuationList();
         if (continuationList != null) {
@@ -201,7 +222,11 @@ public class MainListener extends SwiftBaseListener {
                     currentBinding = listenerHelper.letOrVar(continuation.optionalBindingHead());
                 }
                 if (currentBinding.equals(LET)) {
-                    listenerHelper.evaluateOptionalBindingContinuation(continuation);
+                    listenerHelper.evaluateOptionalBindingContinuation(continuation,
+                        new ConstantDecListener(this.printer));
+                } else if (currentBinding.equals(VAR)) {
+                    listenerHelper.evaluateOptionalBindingContinuation(continuation,
+                        new VariableDecListener(this.printer));
                 }
             }
         }
@@ -209,16 +234,20 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterParameter(SwiftParser.ParameterContext ctx) {
+        SwiftBaseListener listener = null;
         for (ParseTree child : ctx.children) {
             if (child.getText().equals(VAR)) {
-                return;
+                listener = new VariableDecListener(this.printer);
             }
+        }
+        if (listener == null) {
+            listener = new ConstantDecListener(this.printer);
         }
         ParseTreeWalker walker = new ParseTreeWalker();
         if (ctx.externalParameterName() != null) {
-            listenerHelper.walkConstantDecListener(walker, ctx.externalParameterName());
+            listenerHelper.walkListener(walker, ctx.externalParameterName(), listener);
         }
-        listenerHelper.walkConstantDecListener(walker, ctx.localParameterName());
+        listenerHelper.walkListener(walker, ctx.localParameterName(), listener);
     }
 
     @Override

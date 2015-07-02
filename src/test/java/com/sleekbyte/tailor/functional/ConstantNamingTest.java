@@ -44,18 +44,20 @@ public class ConstantNamingTest extends RuleTest {
         addExpectedMsg(94, 8, Severity.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
         addExpectedMsg(104, 14, Severity.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
         addExpectedMsg(111, 51, Severity.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
+        addExpectedMsg(115, 51, Severity.ERROR, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
+        addExpectedMsg(116, 3, Severity.ERROR, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
         addExpectedMsg(116, 61, Severity.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
         addExpectedMsg(117, 3, Severity.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
+        addExpectedMsg(121, 8, Severity.ERROR, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
+        addExpectedMsg(121, 57, Severity.ERROR, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
         addExpectedMsg(126, 16, Severity.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
         addExpectedMsg(127, 16, Severity.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
         addExpectedMsg(132, 20, Severity.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
         addExpectedMsg(133, 20, Severity.ERROR, Messages.CONSTANT + Messages.CONSTANT_NAMING);
-
     }
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg) {
-        this.expectedMessages.add(
-            Printer.genOutputStringForTest(inputFile.getName(), line, column, severity, msg));
+        this.expectedMessages.add(Printer.genOutputStringForTest(inputFile.getName(), line, column, severity, msg));
     }
 
 }
