@@ -91,7 +91,6 @@ class MainListenerHelper {
     }
 
     void verifyRedundantExpressionParenthesis(String constructType, ExpressionContext ctx) {
-
         if (ctx == null
                 || ctx.getChildCount() != 1
                 || ctx.prefixExpression() == null
