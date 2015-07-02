@@ -195,7 +195,7 @@ public class MainListener extends SwiftBaseListener {
         SwiftParser.OptionalBindingContinuationListContext continuationList = ctx.optionalBindingContinuationList();
         if (continuationList != null) {
             for (SwiftParser.OptionalBindingContinuationContext continuation :
-                continuationList.optionalBindingContinuation()) {
+                    continuationList.optionalBindingContinuation()) {
                 if (continuation.optionalBindingHead() != null) {
                     currentBinding = listenerHelper.letOrVar(continuation.optionalBindingHead());
                 }

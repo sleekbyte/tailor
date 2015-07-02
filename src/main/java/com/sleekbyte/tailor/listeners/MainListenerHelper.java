@@ -1,6 +1,15 @@
 package com.sleekbyte.tailor.listeners;
 
-import com.sleekbyte.tailor.antlr.SwiftParser;
+import static com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingContinuationContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingHeadContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.ParenthesizedExpressionContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.PatternContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
+
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
@@ -12,8 +21,6 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 import java.util.List;
-
-import static com.sleekbyte.tailor.antlr.SwiftParser.*;
 
 /**
  * Helper class for {@link MainListener}.
@@ -82,8 +89,8 @@ class MainListenerHelper {
     }
 
     void evaluateTuplePattern(TuplePatternContext tuplePatternContext, ParseTreeWalker walker) {
-        List<SwiftParser.TuplePatternElementContext> tuplePatternElementContexts =
-            tuplePatternContext.tuplePatternElementList().tuplePatternElement();
+        List<TuplePatternElementContext> tuplePatternElementContexts =
+                tuplePatternContext.tuplePatternElementList().tuplePatternElement();
 
         for (TuplePatternElementContext tuplePatternElement : tuplePatternElementContexts) {
             evaluatePattern(tuplePatternElement.pattern(), walker);
@@ -117,14 +124,16 @@ class MainListenerHelper {
     }
 
     void verifyRedundantForLoopParenthesis(ParserRuleContext ctx) {
-        if (!(ctx.getChild(1) instanceof TerminalNodeImpl)) { return; } // return if '(' not present
+        if (!(ctx.getChild(1) instanceof TerminalNodeImpl)) {
+            return;
+        } // return if '(' not present
 
         Token openParenthesisToken = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
         char firstCharacter = openParenthesisToken.getText().charAt(0);
 
         if (firstCharacter == '(') {
             Location startLocation = new Location(openParenthesisToken.getLine(),
-                    openParenthesisToken.getCharPositionInLine()+1);
+                    openParenthesisToken.getCharPositionInLine() + 1);
             this.printer.warn(Messages.FOR_LOOP + Messages.ENCLOSED_PARENTHESIS, startLocation);
         }
     }
