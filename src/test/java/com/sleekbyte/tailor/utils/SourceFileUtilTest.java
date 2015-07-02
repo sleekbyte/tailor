@@ -26,7 +26,7 @@ import java.nio.charset.Charset;
 import java.util.Map;
 
 /**
- * Tests for {@link SourceFileUtil}
+ * Tests for {@link SourceFileUtil}.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class SourceFileUtilTest {

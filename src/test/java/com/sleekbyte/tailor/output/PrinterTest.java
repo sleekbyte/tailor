@@ -18,7 +18,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
 /**
- * Tests for {@link Printer}
+ * Tests for {@link Printer}.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class PrinterTest {

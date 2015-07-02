@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
- * Tests for {@link CharFormatUtil}
+ * Tests for {@link CharFormatUtil}.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class CharFormatUtilTest {

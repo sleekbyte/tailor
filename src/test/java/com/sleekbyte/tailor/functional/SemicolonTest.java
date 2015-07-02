@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
- * Functional tests for semicolon rule
+ * Functional tests for semicolon rule.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class SemicolonTest extends RuleTest {

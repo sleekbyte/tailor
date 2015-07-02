@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Base class for functional rule tests
+ * Base class for functional rule tests.
  */
 public abstract class RuleTest {
 

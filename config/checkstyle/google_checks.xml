@@ -198,7 +198,8 @@
              value="Method name ''{0}'' must match pattern ''{1}''."/>
         </module>
         <module name="SingleLineJavadoc"/>
-            <!--<property name="ignoreInlineTags" value="false"/>-->
+            <!-- Only available in Checkstyle 6.8 -->
+            <!-- <property name="ignoreInlineTags" value="false"/> -->
         <module name="EmptyCatchBlock">
             <property name="exceptionVariableName" value="expected"/>
         </module>

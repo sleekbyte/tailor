@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
- * Functional tests for construct length rule
+ * Functional tests for construct length rule.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class ConstructLengthTest extends RuleTest {

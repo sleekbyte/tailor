@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
- * Functional tests for UpperCamelCase rule
+ * Functional tests for UpperCamelCase rule.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class UpperCamelCaseTest extends RuleTest {
