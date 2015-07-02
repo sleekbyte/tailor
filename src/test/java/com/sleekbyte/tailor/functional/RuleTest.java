@@ -58,7 +58,8 @@ public abstract class RuleTest {
             actualOutput.add(truncatedMsg);
         }
 
-        assertArrayEquals(outContent.toString(), this.expectedMessages.toArray(), actualOutput.toArray());
+        assertArrayEquals(outContent.toString(Charset.defaultCharset().name()), this.expectedMessages.toArray(),
+            actualOutput.toArray());
     }
 
     protected String[] getCommandArgs() {
