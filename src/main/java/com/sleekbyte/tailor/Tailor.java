@@ -53,14 +53,8 @@ public class Tailor {
                 System.exit(EXIT_FAILURE);
             }
 
-            Severity maxSeverity = null;
-            try {
-                maxSeverity = argumentParser.getSeverityLevel();
-            } catch (Severity.IllegalSeverityException e) {
-                System.err.println("Invalid value provided for option " + ArgumentParser.MAX_SEVERITY_OPT + ".");
-                argumentParser.printHelp();
-                System.exit(1);
-            }
+            MaxLengths maxLengths = argumentParser.parseMaxLengths();
+            Severity maxSeverity = argumentParser.getMaxSeverity();
 
             File inputFile = new File(pathname);
             FileInputStream inputStream = new FileInputStream(inputFile);
@@ -69,7 +63,6 @@ public class Tailor {
             SwiftParser swiftParser = new SwiftParser(stream);
             SwiftParser.TopLevelContext tree = swiftParser.topLevel();
 
-            MaxLengths maxLengths = argumentParser.parseMaxLengths();
 
             try (Printer printer = new Printer(inputFile, maxSeverity)) {
                 MainListener listener = new MainListener(printer, maxLengths);
@@ -80,8 +73,12 @@ public class Tailor {
                 fileListener.verify();
             }
 
-        } catch (ArgumentParserException | ParseException | IOException e) {
+        } catch (ParseException | IOException e) {
             System.err.println("Source file analysis failed. Reason: " + e.getMessage());
+            System.exit(EXIT_FAILURE);
+        } catch (ArgumentParserException e) {
+            System.err.println(e.getMessage());
+            argumentParser.printHelp();
             System.exit(EXIT_FAILURE);
         }
     }

@@ -93,7 +93,7 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
 
     @Override
     public String toString() {
-        // filePath, classification, violationMessage are optional in the output, but at least one must be present
+        // filePath, severity, violationMessage are optional in the output, but at least one must be present
         if (this.filePath.isEmpty() && this.severity == null && this.violationMessage.isEmpty()) {
             return "";
         }

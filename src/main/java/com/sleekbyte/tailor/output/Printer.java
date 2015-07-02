@@ -45,8 +45,8 @@ public class Printer implements AutoCloseable {
         print(Severity.min(Severity.ERROR, maxSeverity), errorMsg, location);
     }
 
-    private void print(Severity classification, String msg, Location location) {
-        ViolationMessage violationMessage = new ViolationMessage(location.line, location.column, classification, msg);
+    private void print(Severity severity, String msg, Location location) {
+        ViolationMessage violationMessage = new ViolationMessage(location.line, location.column, severity, msg);
         try {
             violationMessage.setFilePath(this.inputFile.getCanonicalPath());
         } catch (IOException e) {
