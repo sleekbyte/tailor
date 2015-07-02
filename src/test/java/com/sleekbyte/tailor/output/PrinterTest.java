@@ -3,7 +3,7 @@ package com.sleekbyte.tailor.output;
 import static org.junit.Assert.assertEquals;
 
 import com.sleekbyte.tailor.common.Location;
-import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Severity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +29,8 @@ public class PrinterTest {
     private static final int COLUMN_NUMBER = 13;
 
     private File inputFile = new File("abc.swift");
-    private Printer printer = new Printer(inputFile);
+    private Printer printer = new Printer(inputFile, Severity.ERROR);
+    private Printer warnPrinter = new Printer(inputFile, Severity.WARNING);
     private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     @Before
@@ -47,7 +48,7 @@ public class PrinterTest {
     public void testWarnWithLocationSuccess() throws IOException {
         printer.warn(WARNING_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         printer.close();
-        assertEquals(expectedOutput(Messages.WARNING, WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER),
+        assertEquals(expectedOutput(Severity.WARNING, WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER),
             outContent.toString(Charset.defaultCharset().name()));
     }
 
@@ -55,12 +56,28 @@ public class PrinterTest {
     public void testErrorWithLocationSuccess() throws IOException {
         printer.error(ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         printer.close();
-        assertEquals(expectedOutput(Messages.ERROR, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER),
+        assertEquals(expectedOutput(Severity.ERROR, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER),
             outContent.toString(Charset.defaultCharset().name()));
     }
 
-    private String expectedOutput(String classification, String msg, int line, int column) throws IOException {
-        return Printer.genOutputStringForTest(inputFile.getCanonicalPath(), line, column, classification, msg) + "\n";
+    @Test
+    public void testErrorWithMaxSeverityWarn() throws IOException {
+        warnPrinter.error(ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
+        warnPrinter.close();
+        assertEquals(expectedOutput(Severity.WARNING, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER),
+            outContent.toString(Charset.defaultCharset().name()));
+    }
+
+    @Test
+    public void testWarnWithMaxSeverityWarn() throws IOException {
+        warnPrinter.warn(WARNING_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
+        warnPrinter.close();
+        assertEquals(expectedOutput(Severity.WARNING, WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER),
+            outContent.toString(Charset.defaultCharset().name()));
+    }
+
+    private String expectedOutput(Severity severity, String msg, int line, int column) throws IOException {
+        return Printer.genOutputStringForTest(inputFile.getCanonicalPath(), line, column, severity, msg) + "\n";
     }
 
 }
