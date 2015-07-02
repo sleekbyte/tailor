@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
- * Functional tests for semicolon rule.
+ * Functional tests for redundant parenthesis rule.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class RedundantParenthesisTest extends RuleTest {
@@ -30,8 +30,6 @@ public class RedundantParenthesisTest extends RuleTest {
     }
 
     private void addExpectedMsg(int line, int column, String classification, String msg) {
-        expectedMessages.add(
-                Printer.genOutputStringForTest(
-                        inputFile.getName(), line, column, classification, msg));
+        expectedMessages.add(Printer.genOutputStringForTest(inputFile.getName(), line, column, classification, msg));
     }
 }
