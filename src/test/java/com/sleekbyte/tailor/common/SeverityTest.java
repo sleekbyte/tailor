@@ -14,14 +14,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class SeverityTest {
 
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
     @Test
     public void testSeverityParserWithValidInputs() throws Severity.IllegalSeverityException {
         assertEquals(Severity.parseSeverity("error"), Severity.ERROR);
