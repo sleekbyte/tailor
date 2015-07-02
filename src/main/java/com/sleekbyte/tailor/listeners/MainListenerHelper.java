@@ -101,7 +101,7 @@ class MainListenerHelper {
         if (ctx == null
                 || ctx.getChildCount() != 1
                 || ctx.prefixExpression() == null
-                || ctx.prefixExpression().getChildCount() != 1
+                || ctx.prefixExpression().prefixOperator() != null
                 || ctx.prefixExpression().postfixExpression() == null
                 || ctx.prefixExpression().postfixExpression().getChildCount() != 1) {
             return;
