@@ -247,7 +247,7 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterInitializer(SwiftParser.InitializerContext ctx) {
-//        listenerHelper.verifyRedundantExpressionParenthesis(Messages.INITIALIZER_EXPRESSION, ctx.expression());
+        listenerHelper.verifyRedundantExpressionParenthesis(Messages.INITIALIZER_EXPRESSION, ctx.expression());
     }
 
     @Override

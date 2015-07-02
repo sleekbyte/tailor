@@ -120,6 +120,14 @@ class MainListenerHelper {
             return;
         }
 
+        ParenthesizedExpressionContext parenthesizedExpressionContext =
+                (ParenthesizedExpressionContext) primaryExpression.getChild(0);
+
+        if (parenthesizedExpressionContext.expressionElementList() == null
+                || parenthesizedExpressionContext.expressionElementList().getChildCount() != 1) {
+            return;
+        }
+
         printRedundantParenthesisWarning(ctx, constructType + Messages.ENCLOSED_PARENTHESIS);
     }
 
