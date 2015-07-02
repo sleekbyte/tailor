@@ -46,7 +46,7 @@
             <property name="allowNonPrintableEscapes" value="true"/>
         </module>
         <module name="LineLength">
-            <!-- Modified max LineLength from 100 to 120 -->
+            <!-- Differs from Google style: Modified max LineLength from 100 to 120 -->
             <property name="max" value="120"/>
             <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
         </module>
@@ -142,7 +142,7 @@
              value="GenericWhitespace ''{0}'' is not preceded with whitespace."/>
         </module>
         <module name="Indentation">
-            <!-- Modified basicOffset from 2 to 4 -->
+            <!-- Differs from Google style: Modified basicOffset from 2 to 4 -->
             <property name="basicOffset" value="4"/>
             <property name="braceAdjustment" value="0"/>
             <property name="caseIndent" value="2"/>
