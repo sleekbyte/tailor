@@ -137,7 +137,7 @@ class MainListenerHelper {
         char firstCharacter = pattern.charAt(0);
         char lastCharacter = pattern.charAt(pattern.length() - 1);
 
-        if (firstCharacter == '(' || lastCharacter == ')') {
+        if (firstCharacter == '(' && lastCharacter == ')') {
             printRedundantParenthesisWarning(ctx, Messages.CATCH_CLAUSE + Messages.ENCLOSED_PARENTHESIS);
         }
     }
