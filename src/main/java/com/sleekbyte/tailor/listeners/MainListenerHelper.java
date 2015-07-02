@@ -125,7 +125,7 @@ class MainListenerHelper {
 
         if (firstCharacter == '(') {
             Location startLocation = new Location(openParenthesisToken.getLine(),
-                    openParenthesisToken.getCharPositionInLine());
+                    openParenthesisToken.getCharPositionInLine()+1);
             this.printer.warn(Messages.FOR_LOOP + Messages.ENCLOSED_PARENTHESIS, startLocation);
         }
     }
