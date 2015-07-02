@@ -9,6 +9,13 @@ sourceSets {
     }
 }
 
+// Display useful test events and output on the console
+test {
+    testLogging {
+        events "skipped", "failed", "standardOut", "standardError"
+    }
+}
+
 // Ensure ANTLR output is generated before compilation
 compileGenJava.dependsOn 'generateGrammarSource'
 
@@ -32,8 +39,56 @@ mainClassName = 'com.sleekbyte.tailor.Tailor'
 
 // Allow arguments: `gradle run -Pargs="args"`
 run {
-    if(project.hasProperty('args')){
+    if (project.hasProperty('args')) {
         args project.args.split('\\s+')
+    }
+}
+
+// Use [Checkstyle](http://checkstyle.sourceforge.net) Plugin
+apply plugin: 'checkstyle'
+
+checkstyle {
+    configFile = file('config/checkstyle/google_checks.xml')
+    toolVersion = "6.7"
+    // Exclude generated code from Checkstyle checks
+    sourceSets -= sourceSets.gen
+}
+
+checkstyleTest.configFile = file('config/checkstyle/google_test_checks.xml')
+
+// Use [FindBugs](http://findbugs.sourceforge.net/) Plugin
+apply plugin: 'findbugs'
+
+findbugs {
+    // Exclude generated code from FindBugs checks
+    sourceSets -= sourceSets.gen
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        // Use HTML reports instead of XML
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+// Use [PMD](http://pmd.sourceforge.net/) Plugin
+apply plugin: 'pmd'
+
+pmd {
+    // Exclude generated code from PMD checks
+    sourceSets -= sourceSets.gen
+    // Disable default ruleSets
+    ruleSets = []
+    // Use custom ruleSet file
+    ruleSetFiles = files('config/pmd/tailorRuleSet.xml')
+}
+
+tasks.withType(Pmd) {
+    reports {
+        // Use HTML reports instead of XML
+        xml.enabled = false
+        html.enabled = true
     }
 }
 

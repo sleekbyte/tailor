@@ -1,5 +1,7 @@
 package com.sleekbyte.tailor.functional;
 
+import static org.junit.Assert.assertArrayEquals;
+
 import com.sleekbyte.tailor.Tailor;
 import org.junit.After;
 import org.junit.Before;
@@ -9,14 +11,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-
 /**
- * Base class for functional rule tests
+ * Base class for functional rule tests.
  */
 public abstract class RuleTest {
 
@@ -28,14 +29,15 @@ public abstract class RuleTest {
     protected List<String> expectedMessages;
 
     protected abstract void addAllExpectedMsgs();
+
     protected abstract String getInputFilePath();
 
     @Before
-    public void setUp() {
+    public void setUp() throws UnsupportedEncodingException {
         inputFile = new File(TEST_INPUT_DIR + getInputFilePath());
         expectedMessages = new ArrayList<>();
         outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
+        System.setOut(new PrintStream(outContent, false, Charset.defaultCharset().name()));
     }
 
     @After
@@ -51,12 +53,13 @@ public abstract class RuleTest {
         Tailor.main(command);
 
         List<String> actualOutput = new ArrayList<>();
-        for (String msg : outContent.toString().split(NEWLINE_REGEX)) {
+        for (String msg : outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX)) {
             String truncatedMsg = msg.substring(msg.indexOf(inputFile.getName()));
             actualOutput.add(truncatedMsg);
         }
 
-        assertArrayEquals(outContent.toString(), this.expectedMessages.toArray(), actualOutput.toArray());
+        assertArrayEquals(outContent.toString(Charset.defaultCharset().name()), this.expectedMessages.toArray(),
+            actualOutput.toArray());
     }
 
     protected String[] getCommandArgs() {

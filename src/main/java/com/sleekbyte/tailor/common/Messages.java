@@ -1,7 +1,7 @@
 package com.sleekbyte.tailor.common;
 
 /**
- * Output messages
+ * Output messages.
  */
 public class Messages {
 

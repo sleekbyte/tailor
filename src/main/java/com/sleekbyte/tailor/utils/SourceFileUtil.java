@@ -2,17 +2,16 @@ package com.sleekbyte.tailor.utils;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.RandomAccessFile;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Util class for source files
+ * Util class for source files.
  */
 public class SourceFileUtil {
 
@@ -21,12 +20,20 @@ public class SourceFileUtil {
     private static File fileWithStoredLength;
     private static int storedNumOfLines;
 
+    /**
+     * Counts the number of lines in a file.
+     * Opens and reads all lines of the file, then memoizes that count for the same file.
+     *
+     * @param inputFile the file in which to count the number of lines
+     * @return the number of lines in the file
+     * @throws IOException if the file cannot be read
+     */
     public static int numLinesInFile(File inputFile) throws IOException {
         if (inputFile.equals(fileWithStoredLength)) {
             return storedNumOfLines;
         }
 
-        BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+        LineNumberReader reader = new LineNumberReader(Files.newBufferedReader(inputFile.toPath()));
         int numOfLines = 0;
         while (reader.readLine() != null) {
             numOfLines++;
@@ -48,16 +55,25 @@ public class SourceFileUtil {
         return maxLength > 0 && (ctx.getStop().getLine() - ctx.getStart().getLine()) > maxLength;
     }
 
+    /**
+     * Checks for lines in a source file that are longer than the specified maximum length.
+     *
+     * @param inputFile the file in which to count the lengths of each line
+     * @param maxLength the maximum allowed length for any line
+     * @return a map of line numbers to their lengths for lines exceeding the maximum allowed length
+     * @throws IOException if the file cannot be read
+     */
     public static Map<Integer, Integer> linesTooLong(File inputFile, int maxLength) throws IOException {
         // Map<lineNumber, lineLength>
         Map<Integer, Integer> longLines = new HashMap<>();
         if (maxLength > 0) {
-            LineNumberReader reader = new LineNumberReader(new FileReader(inputFile));
+            LineNumberReader reader = new LineNumberReader(Files.newBufferedReader(inputFile.toPath()));
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                 if (line.length() > maxLength) {
                     longLines.put(reader.getLineNumber(), line.length());
                 }
             }
+            reader.close();
         }
         return longLines;
     }
@@ -66,6 +82,13 @@ public class SourceFileUtil {
         return maxLength > 0 && ctx.getText().length() > maxLength;
     }
 
+    /**
+     * Checks whether a file is terminated with a trailing newline.
+     *
+     * @param inputFile the file to check for a trailing newline
+     * @return true if file is terminated with a newline
+     * @throws IOException if the file cannot be read
+     */
     public static boolean newlineTerminated(File inputFile) throws IOException {
         RandomAccessFile randomAccessFile = new RandomAccessFile(inputFile, READ_ONLY_MODE);
 

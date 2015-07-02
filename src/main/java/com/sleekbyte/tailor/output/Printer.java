@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Generates and outputs formatted analysis messages for Xcode
+ * Generates and outputs formatted analysis messages for Xcode.
  */
 public class Printer implements AutoCloseable {
 
@@ -24,7 +24,7 @@ public class Printer implements AutoCloseable {
     }
 
     /**
-     * Prints warning message
+     * Prints warning message.
      *
      * @param warningMsg warning message to print
      * @param location   location object containing line and column number for printing
@@ -34,7 +34,7 @@ public class Printer implements AutoCloseable {
     }
 
     /**
-     * Prints error message
+     * Prints error message.
      *
      * @param errorMsg error message to print
      * @param location location object containing line and column number for printing

@@ -16,13 +16,13 @@ import java.util.List;
 import static com.sleekbyte.tailor.antlr.SwiftParser.*;
 
 /**
- * Helper class for {@link MainListener}
+ * Helper class for {@link MainListener}.
  */
 class MainListenerHelper {
 
     private Printer printer;
 
-    MainListenerHelper(Printer printer) {
+    public void setPrinter(Printer printer) {
         this.printer = printer;
     }
 

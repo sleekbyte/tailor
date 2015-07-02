@@ -1,7 +1,7 @@
 package com.sleekbyte.tailor.utils;
 
 /**
- * Util class for character formatting
+ * Util class for character formatting.
  */
 public class CharFormatUtil {
 
@@ -15,8 +15,16 @@ public class CharFormatUtil {
         return !word.isEmpty() && Character.isLowerCase(word.charAt(0)) && word.matches(ALPHANUMERIC_REGEX);
     }
 
+    /**
+     * Checks if a name is prefixed with a 'k' or 'K'.
+     *
+     * @param name the name of an identifier
+     * @return true if name is prefixed with a 'k' or 'K'
+     */
     public static boolean isKPrefixed(String name) {
-        if (name.length() < 2) return false;
+        if (name.length() < 2) {
+            return false;
+        }
         if (isUpperCamelCase(name)) {
             return name.charAt(0) == 'K' && Character.isUpperCase(name.charAt(1));
         }

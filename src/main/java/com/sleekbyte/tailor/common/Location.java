@@ -1,7 +1,7 @@
 package com.sleekbyte.tailor.common;
 
 /**
- * Stores location corresponding to a character in a source file
+ * Stores location corresponding to a character in a source file.
  */
 public class Location {
 

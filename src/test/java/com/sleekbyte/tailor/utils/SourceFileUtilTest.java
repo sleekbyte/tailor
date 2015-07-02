@@ -1,5 +1,12 @@
 package com.sleekbyte.tailor.utils;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsMapContaining.hasEntry;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.junit.Before;
@@ -15,17 +22,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 import java.util.Map;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsMapContaining.hasEntry;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-
 /**
- * Tests for {@link SourceFileUtil}
+ * Tests for {@link SourceFileUtil}.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class SourceFileUtilTest {
@@ -48,10 +49,10 @@ public class SourceFileUtilTest {
     @Mock private Token stopToken;
 
     @Before
-    public void setUp() throws Exception {
-        Method m = this.getClass().getMethod(testName.getMethodName());
-        inputFile = folder.newFile(m.getName() + "-" + INPUT_FILE);
-        writer = new PrintWriter(inputFile);
+    public void setUp() throws NoSuchMethodException, IOException {
+        Method method = this.getClass().getMethod(testName.getMethodName());
+        inputFile = folder.newFile(method.getName() + "-" + INPUT_FILE);
+        writer = new PrintWriter(inputFile, Charset.defaultCharset().name());
         when(context.getStart()).thenReturn(startToken);
         when(context.getStop()).thenReturn(stopToken);
     }
