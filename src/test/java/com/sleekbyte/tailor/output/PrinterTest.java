@@ -48,7 +48,7 @@ public class PrinterTest {
         printer.warn(WARNING_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         printer.close();
         assertEquals(expectedOutput(Messages.WARNING, WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER),
-                outContent.toString(Charset.defaultCharset().name()));
+            outContent.toString(Charset.defaultCharset().name()));
     }
 
     @Test
@@ -56,7 +56,7 @@ public class PrinterTest {
         printer.error(ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         printer.close();
         assertEquals(expectedOutput(Messages.ERROR, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER),
-                outContent.toString(Charset.defaultCharset().name()));
+            outContent.toString(Charset.defaultCharset().name()));
     }
 
     private String expectedOutput(String classification, String msg, int line, int column) throws IOException {

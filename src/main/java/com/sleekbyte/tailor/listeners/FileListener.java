@@ -22,8 +22,9 @@ public class FileListener {
 
     /**
      * Constructs a file listener with the specified printer, input file, and max lengths restrictions.
-     * @param printer the printer to use for displaying violation messages
-     * @param inputFile the source file to verify
+     *
+     * @param printer    the printer to use for displaying violation messages
+     * @param inputFile  the source file to verify
      * @param maxLengths the restrictions for maximum lengths
      */
     public FileListener(Printer printer, File inputFile, MaxLengths maxLengths) {

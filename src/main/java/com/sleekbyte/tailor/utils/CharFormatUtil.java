@@ -17,6 +17,7 @@ public class CharFormatUtil {
 
     /**
      * Checks if a name is prefixed with a 'k' or 'K'.
+     *
      * @param name the name of an identifier
      * @return true if name is prefixed with a 'k' or 'K'
      */

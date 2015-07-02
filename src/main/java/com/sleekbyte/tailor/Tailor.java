@@ -29,6 +29,7 @@ public class Tailor {
 
     /**
      * Main runner for Tailor.
+     *
      * @param args command line arguments
      */
     public static void main(String[] args) {

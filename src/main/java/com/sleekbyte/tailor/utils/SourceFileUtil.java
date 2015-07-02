@@ -23,6 +23,7 @@ public class SourceFileUtil {
     /**
      * Counts the number of lines in a file.
      * Opens and reads all lines of the file, then memoizes that count for the same file.
+     *
      * @param inputFile the file in which to count the number of lines
      * @return the number of lines in the file
      * @throws IOException if the file cannot be read
@@ -56,6 +57,7 @@ public class SourceFileUtil {
 
     /**
      * Checks for lines in a source file that are longer than the specified maximum length.
+     *
      * @param inputFile the file in which to count the lengths of each line
      * @param maxLength the maximum allowed length for any line
      * @return a map of line numbers to their lengths for lines exceeding the maximum allowed length
@@ -82,6 +84,7 @@ public class SourceFileUtil {
 
     /**
      * Checks whether a file is terminated with a trailing newline.
+     *
      * @param inputFile the file to check for a trailing newline
      * @return true if file is terminated with a newline
      * @throws IOException if the file cannot be read

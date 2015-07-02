@@ -22,8 +22,9 @@ public class Printer implements AutoCloseable {
 
     /**
      * Prints warning message.
+     *
      * @param warningMsg warning message to print
-     * @param location location object containing line and column number for printing
+     * @param location   location object containing line and column number for printing
      */
     public void warn(String warningMsg, Location location) {
         print(Messages.WARNING, warningMsg, location);
@@ -31,6 +32,7 @@ public class Printer implements AutoCloseable {
 
     /**
      * Prints error message.
+     *
      * @param errorMsg error message to print
      * @param location location object containing line and column number for printing
      */

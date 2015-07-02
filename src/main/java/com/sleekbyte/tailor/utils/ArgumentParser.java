@@ -94,9 +94,10 @@ public class ArgumentParser {
 
     /**
      * Add Integer argument with short and long name to command line options.
+     *
      * @param shortOpt short version of option
-     * @param longOpt long version of option
-     * @param desc description of option
+     * @param longOpt  long version of option
+     * @param desc     description of option
      */
     private Option addIntegerArgument(String shortOpt, String longOpt, String desc) {
         return Option.builder(shortOpt).longOpt(longOpt).hasArg().desc(desc).build();
@@ -104,8 +105,9 @@ public class ArgumentParser {
 
     /**
      * Add Integer argument with only long name to command line options.
+     *
      * @param longOpt long version of option
-     * @param desc description of option
+     * @param desc    description of option
      */
     private Option addIntegerArgument(String longOpt, String desc) {
         return Option.builder().longOpt(longOpt).hasArg().desc(desc).build();
