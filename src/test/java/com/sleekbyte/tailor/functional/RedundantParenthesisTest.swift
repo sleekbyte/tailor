@@ -34,9 +34,13 @@ func demo() {
 
     throw (VendingMachineError.OutOfStock)
 
-    do {
-        try willOnlyThrowIfTrue(false)
-    } catch {
-        // Handle Error
+    if (1 * 3) == 4 {
     }
+
+    if a == 2 * (a + b) {
+    }
+
+    if ((x + 2) * (y + 4)) == (2 * (z + 3)) {
+    }
+
 }

@@ -93,16 +93,18 @@ class MainListenerHelper {
     void verifyRedundantParentheses(String constructType, ParserRuleContext ctx) {
         if (ctx == null) { return; }
 
-        String conditionalClause = ctx.getText();
-        char firstCharacter = conditionalClause.charAt(0); // extract '('
-        char lastCharacter = conditionalClause.charAt(conditionalClause.length() - 1); // extract ')'
+        String expression = ctx.getText();
 
-        if (firstCharacter == '(') {
+        long openParenthesisCount = expression.chars().filter(e -> e == '(').count();
+        if (openParenthesisCount != 1) { return; }
+
+        char firstCharacter = expression.charAt(0);
+        char lastCharacter = expression.charAt(expression.length() - 1);
+
+        if (firstCharacter == '(' && lastCharacter == ')') {
             Location startLocation = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
-            this.printer.warn(constructType + Messages.STARTS_WITH_PARENTHESIS, startLocation);
-        }
-        if (lastCharacter == ')') {
             Location endLocation = new Location(ctx.getStop().getLine(), ctx.getStop().getCharPositionInLine() + 1);
+            this.printer.warn(constructType + Messages.STARTS_WITH_PARENTHESIS, startLocation);
             this.printer.warn(constructType + Messages.ENDS_WITH_PARENTHESIS, endLocation);
         }
     }
@@ -111,7 +113,7 @@ class MainListenerHelper {
         if (!(ctx.getChild(1) instanceof TerminalNodeImpl)) { return; } // return if '(' not present
 
         Token openParenthesisToken = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
-        char firstCharacter = openParenthesisToken.getText().charAt(0); // extract '(' token
+        char firstCharacter = openParenthesisToken.getText().charAt(0);
 
         if (firstCharacter == '(') {
             Location startLocation = new Location(openParenthesisToken.getLine(),
