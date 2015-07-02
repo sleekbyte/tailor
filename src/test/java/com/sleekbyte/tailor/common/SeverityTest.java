@@ -2,8 +2,6 @@ package com.sleekbyte.tailor.common;
 
 import static junit.framework.TestCase.assertEquals;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
