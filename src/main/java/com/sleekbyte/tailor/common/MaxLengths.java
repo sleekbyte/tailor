@@ -1,5 +1,8 @@
 package com.sleekbyte.tailor.common;
 
+/**
+ * Keeps track of maximum length restrictions for files and constructs.
+ */
 public class MaxLengths {
 
     public int maxClassLength = 0;

@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
- * Functional tests for constant naming rule
+ * Functional tests for constant naming rule.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class ConstantNamingTest extends RuleTest {

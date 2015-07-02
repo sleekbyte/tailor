@@ -9,17 +9,17 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 /**
- * Parse tree listener for verifying Swift constructs
+ * Parse tree listener for verifying Swift constructs.
  */
 public class MainListener extends SwiftBaseListener {
 
     private static final String LET = "let";
     private static final String VAR = "var";
-    private static MainListenerHelper listenerHelper;
+    private static MainListenerHelper listenerHelper = new MainListenerHelper();
     private MaxLengths maxLengths;
 
     public MainListener(Printer printer, MaxLengths maxLengths) {
-        listenerHelper = new MainListenerHelper(printer);
+        listenerHelper.setPrinter(printer);
         this.maxLengths = maxLengths;
     }
 
@@ -194,8 +194,8 @@ public class MainListener extends SwiftBaseListener {
         }
         SwiftParser.OptionalBindingContinuationListContext continuationList = ctx.optionalBindingContinuationList();
         if (continuationList != null) {
-            for (SwiftParser.OptionalBindingContinuationContext continuation:
-                    continuationList.optionalBindingContinuation()) {
+            for (SwiftParser.OptionalBindingContinuationContext continuation :
+                continuationList.optionalBindingContinuation()) {
                 if (continuation.optionalBindingHead() != null) {
                     currentBinding = listenerHelper.letOrVar(continuation.optionalBindingHead());
                 }

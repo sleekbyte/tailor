@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<ruleset name="Tailor PMD ruleset"
+  xmlns="http://pmd.sf.net/ruleset/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+  xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+
+  <description>
+    Performs PMD checks for Tailor code style
+  </description>
+
+  <rule ref="rulesets/java/basic.xml"/>
+
+  <rule ref="rulesets/java/braces.xml"/>
+
+  <rule ref="rulesets/java/imports.xml">
+    <exclude name="TooManyStaticImports"/>
+  </rule>
+
+  <rule ref="rulesets/java/junit.xml">
+    <exclude name="JUnitAssertionsShouldIncludeMessage"/>
+    <exclude name="JUnitTestContainsTooManyAsserts"/>
+    <exclude name="TestClassWithoutTestCases"/>
+  </rule>
+
+  <rule ref="rulesets/java/strictexception.xml"/>
+
+  <rule ref="rulesets/java/typeresolution.xml"/>
+
+</ruleset>

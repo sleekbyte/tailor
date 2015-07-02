@@ -1,6 +1,9 @@
 package com.sleekbyte.tailor.grammar;
 
+import static org.junit.Assert.assertThat;
+
 import com.sleekbyte.tailor.Tailor;
+import org.hamcrest.text.IsEmptyString;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,8 +13,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
-
-import static org.junit.Assert.assertEquals;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GrammarTest {
@@ -23,11 +26,11 @@ public class GrammarTest {
     private File[] swiftFiles;
 
     @Before
-    public void setUp() {
+    public void setUp() throws UnsupportedEncodingException {
         File curDir = new File(TEST_INPUT_DIR);
         swiftFiles = curDir.listFiles((File file, String name) -> name.endsWith(".swift"));
         outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
+        System.setOut(new PrintStream(outContent, false, Charset.defaultCharset().name()));
     }
 
     @After
@@ -36,13 +39,13 @@ public class GrammarTest {
     }
 
     @Test
-    public void testGrammar() {
+    public void testGrammar() throws UnsupportedEncodingException {
         for (File swiftFile: swiftFiles) {
             errContent = new ByteArrayOutputStream();
-            System.setErr(new PrintStream(errContent));
+            System.setErr(new PrintStream(errContent, false, Charset.defaultCharset().name()));
             String[] command = { (TEST_INPUT_DIR + swiftFile.getName()) };
             Tailor.main(command);
-            assertEquals("", errContent.toString());
+            assertThat(errContent.toString(Charset.defaultCharset().name()), IsEmptyString.isEmptyString());
             System.setErr(null);
         }
     }

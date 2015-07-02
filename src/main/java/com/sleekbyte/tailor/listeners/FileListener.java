@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Listener for verifying source files
+ * Listener for verifying source files.
  */
 public class FileListener {
 
@@ -20,6 +20,13 @@ public class FileListener {
     private File inputFile;
     private MaxLengths maxLengths;
 
+    /**
+     * Constructs a file listener with the specified printer, input file, and max lengths restrictions.
+     *
+     * @param printer    the printer to use for displaying violation messages
+     * @param inputFile  the source file to verify
+     * @param maxLengths the restrictions for maximum lengths
+     */
     public FileListener(Printer printer, File inputFile, MaxLengths maxLengths) {
         this.printer = printer;
         this.inputFile = inputFile;
@@ -27,7 +34,7 @@ public class FileListener {
     }
 
     /**
-     * Verify that all source file specific rules are satisfied
+     * Verify that all source file specific rules are satisfied.
      */
     public void verify() throws IOException {
         verifyFileLength(maxLengths.maxFileLength);

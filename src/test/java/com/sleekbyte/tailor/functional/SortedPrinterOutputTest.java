@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
- * Functional tests for sorted printer output
+ * Functional tests for sorted printer output.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class SortedPrinterOutputTest extends RuleTest {

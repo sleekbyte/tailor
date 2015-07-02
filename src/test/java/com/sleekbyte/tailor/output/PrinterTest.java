@@ -1,5 +1,7 @@
 package com.sleekbyte.tailor.output;
 
+import static org.junit.Assert.assertEquals;
+
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import org.junit.After;
@@ -12,11 +14,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-
-import static org.junit.Assert.assertEquals;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 /**
- * Tests for {@link Printer}
+ * Tests for {@link Printer}.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class PrinterTest {
@@ -31,9 +33,9 @@ public class PrinterTest {
     private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() throws UnsupportedEncodingException {
         outContent.reset();
-        System.setOut(new PrintStream(outContent));
+        System.setOut(new PrintStream(outContent, false, Charset.defaultCharset().name()));
     }
 
     @After
@@ -45,14 +47,16 @@ public class PrinterTest {
     public void testWarnWithLocationSuccess() throws IOException {
         printer.warn(WARNING_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         printer.close();
-        assertEquals(expectedOutput(Messages.WARNING, WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER), outContent.toString());
+        assertEquals(expectedOutput(Messages.WARNING, WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER),
+            outContent.toString(Charset.defaultCharset().name()));
     }
 
     @Test
     public void testErrorWithLocationSuccess() throws IOException {
         printer.error(ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         printer.close();
-        assertEquals(expectedOutput(Messages.ERROR, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER), outContent.toString());
+        assertEquals(expectedOutput(Messages.ERROR, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER),
+            outContent.toString(Charset.defaultCharset().name()));
     }
 
     private String expectedOutput(String classification, String msg, int line, int column) throws IOException {
