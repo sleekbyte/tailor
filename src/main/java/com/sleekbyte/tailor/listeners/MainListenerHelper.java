@@ -11,10 +11,7 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
-import javax.swing.text.html.parser.Parser;
 import java.util.List;
-import java.util.Optional;
-import java.util.Stack;
 
 import static com.sleekbyte.tailor.antlr.SwiftParser.*;
 
@@ -93,7 +90,7 @@ class MainListenerHelper {
         }
     }
 
-    void verifyRedundantParentheses(String constructType, ExpressionContext ctx) {
+    void verifyRedundantExpressionParenthesis(String constructType, ExpressionContext ctx) {
 
         if (ctx == null
                 || ctx.getChildCount() != 1
@@ -117,8 +114,7 @@ class MainListenerHelper {
             return;
         }
 
-        printRedundantParenthesisWarning(ctx, constructType + Messages.STARTS_WITH_PARENTHESIS,
-                constructType + Messages.ENDS_WITH_PARENTHESIS);
+        printRedundantParenthesisWarning(ctx, constructType + Messages.ENCLOSED_PARENTHESIS);
 
     }
 
@@ -131,7 +127,7 @@ class MainListenerHelper {
         if (firstCharacter == '(') {
             Location startLocation = new Location(openParenthesisToken.getLine(),
                     openParenthesisToken.getCharPositionInLine());
-            this.printer.warn(Messages.FOR_LOOP + Messages.STARTS_WITH_PARENTHESIS, startLocation);
+            this.printer.warn(Messages.FOR_LOOP + Messages.ENCLOSED_PARENTHESIS, startLocation);
         }
     }
 
@@ -144,16 +140,13 @@ class MainListenerHelper {
         char lastCharacter = pattern.charAt(pattern.length() - 1);
 
         if (firstCharacter == '(' || lastCharacter == ')') {
-            printRedundantParenthesisWarning(ctx, Messages.CATCH_CLAUSE + Messages.STARTS_WITH_PARENTHESIS,
-                    Messages.CATCH_CLAUSE + Messages.ENDS_WITH_PARENTHESIS);
+            printRedundantParenthesisWarning(ctx, Messages.CATCH_CLAUSE + Messages.ENCLOSED_PARENTHESIS);
         }
     }
 
-    private void printRedundantParenthesisWarning(ParserRuleContext ctx, String firstParenthesisMsg, String secondParenthesisMsg) {
+    private void printRedundantParenthesisWarning(ParserRuleContext ctx, String firstParenthesisMsg) {
         Location startLocation = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
-        Location endLocation = new Location(ctx.getStop().getLine(), ctx.getStop().getCharPositionInLine() + 1);
         this.printer.warn(firstParenthesisMsg, startLocation);
-        this.printer.warn(secondParenthesisMsg, endLocation);
     }
 
     /* Optional Binding Condition Evaluators */
