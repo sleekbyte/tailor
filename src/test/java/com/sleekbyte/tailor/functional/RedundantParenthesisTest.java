@@ -27,6 +27,12 @@ public class RedundantParenthesisTest extends RuleTest {
         addExpectedMsg(26, 9, Messages.WARNING, Messages.FOR_LOOP + Messages.ENCLOSED_PARENTHESIS);
         addExpectedMsg(31, 13, Messages.WARNING, Messages.CATCH_CLAUSE + Messages.ENCLOSED_PARENTHESIS);
         addExpectedMsg(35, 11, Messages.WARNING, Messages.THROW_STATEMENT + Messages.ENCLOSED_PARENTHESIS);
+        addExpectedMsg(60, 35, Messages.WARNING, Messages.ARRAY_LITERAL + Messages.ENCLOSED_PARENTHESIS);
+        addExpectedMsg(60, 45, Messages.WARNING, Messages.ARRAY_LITERAL + Messages.ENCLOSED_PARENTHESIS);
+        addExpectedMsg(62, 39, Messages.WARNING, Messages.DICTIONARY_LITERAL + Messages.ENCLOSED_PARENTHESIS);
+        addExpectedMsg(62, 48, Messages.WARNING, Messages.DICTIONARY_LITERAL + Messages.ENCLOSED_PARENTHESIS);
+        addExpectedMsg(62, 69, Messages.WARNING, Messages.DICTIONARY_LITERAL + Messages.ENCLOSED_PARENTHESIS);
+        addExpectedMsg(62, 78, Messages.WARNING, Messages.DICTIONARY_LITERAL + Messages.ENCLOSED_PARENTHESIS);
     }
 
     private void addExpectedMsg(int line, int column, String classification, String msg) {

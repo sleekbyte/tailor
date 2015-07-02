@@ -54,4 +54,12 @@ func demo() {
     } catch {
 
     }
+
+    var shoppingList: [String] = []
+    var shoppingList: [String] = ["Eggs", "Milk"]
+    var shoppingList: [String] = [("Eggs"), ("Milk")]
+    var airports: [String: String] = ["YYZ": "Toronto Pearson", "DUB": "Dublin"]
+    var airports: [String: String] = [("YYZ"): ("Toronto Pearson"), ("DUB"): ("Dublin")]
+    var namesOfIntegers = [Int: String]()
+    namesOfIntegers[16] = "sixteen"
 }

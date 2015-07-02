@@ -244,4 +244,21 @@ public class MainListener extends SwiftBaseListener {
     public void enterCatchClause(SwiftParser.CatchClauseContext ctx) {
         listenerHelper.verifyRedundantCatchParentheses(ctx.pattern());
     }
+
+    @Override
+    public void enterInitializer(SwiftParser.InitializerContext ctx) {
+//        listenerHelper.verifyRedundantExpressionParenthesis(Messages.INITIALIZER_EXPRESSION, ctx.expression());
+    }
+
+    @Override
+    public void enterArrayLiteralItem(SwiftParser.ArrayLiteralItemContext ctx) {
+        listenerHelper.verifyRedundantExpressionParenthesis(Messages.ARRAY_LITERAL, ctx.expression());
+    }
+
+    @Override
+    public void enterDictionaryLiteralItem(SwiftParser.DictionaryLiteralItemContext ctx) {
+        for (SwiftParser.ExpressionContext expressionContext : ctx.expression()) {
+            listenerHelper.verifyRedundantExpressionParenthesis(Messages.DICTIONARY_LITERAL, expressionContext);
+        }
+    }
 }
