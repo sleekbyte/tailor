@@ -34,6 +34,16 @@ public class Messages {
     public static final String TYPE = "Type ";
     public static final String TYPEALIAS = "Typealias ";
     public static final String VARIABLE = "Variable ";
+    public static final String CONDITIONAL_CLAUSE = "Conditional clause ";
+    public static final String SWITCH = "Switch ";
+    public static final String SWITCH_EXPRESSION = "Switch expression ";
+    public static final String FOR = "For ";
+    public static final String FOR_LOOP = "For loop ";
+    public static final String THROW_STATEMENT = "Throw statement ";
+    public static final String CATCH_CLAUSE = "Catch clause ";
+    public static final String INITIALIZER_EXPRESSION = "Initializer expression ";
+    public static final String ARRAY_LITERAL = "Array literal ";
+    public static final String DICTIONARY_LITERAL = "Dictionary literal ";
 
     // Plural constructs
     public static final String STATEMENTS = "Statements ";
@@ -46,6 +56,7 @@ public class Messages {
     public static final String GLOBAL_CONSTANT_NAMING = "should be either lowerCamelCase or UpperCamelCase";
     public static final String CONSTANT_NAMING = "should be lowerCamelCase";
     public static final String NEWLINE_TERMINATOR = "should terminate with a newline character ('\\n')";
+    public static final String ENCLOSED_PARENTHESIS = "should not be enclosed within parentheses";
     public static final String K_PREFIXED = "should not be prefixed with 'k' or 'K'";
 
     // Usage messages

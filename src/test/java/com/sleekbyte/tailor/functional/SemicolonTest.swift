@@ -25,7 +25,7 @@ struct DemoStruct {
 
     func test() {
         // while loop test
-        while (true)
+        while true
         {
         };
 
@@ -37,7 +37,7 @@ struct DemoStruct {
         // repeat while
         repeat {
 
-        } while (true);
+        } while true;
     };
 };
 

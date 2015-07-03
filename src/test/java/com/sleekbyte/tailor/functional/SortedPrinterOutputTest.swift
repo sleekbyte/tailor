@@ -22,7 +22,7 @@ struct invalidStructName {
 
     func test() {
         // while loop test
-        while (true)
+        while true
         {
         };
 

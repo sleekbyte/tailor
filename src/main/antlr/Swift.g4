@@ -77,7 +77,7 @@ whileStatement : 'while' conditionClause codeBlock  ;
 
 // GRAMMAR OF A REPEAT WHILE STATEMENT
 
-repeatWhileStatement: 'repeat' codeBlock 'while' expression ;
+repeatWhileStatement: 'repeat' codeBlock 'while' conditionClause ;
 
 // GRAMMAR OF A BRANCH STATEMENT
 
@@ -409,7 +409,7 @@ associativity : 'left' | 'right' | 'none'  ;
 
 pattern
  : wildcardPattern typeAnnotation?
- | identifierPattern typeAnnotation
+ | identifierPattern typeAnnotation?
  | valueBindingPattern
  | tuplePattern typeAnnotation?
  | enumCasePattern

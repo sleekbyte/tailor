@@ -195,7 +195,7 @@ public class MainListener extends SwiftBaseListener {
         SwiftParser.OptionalBindingContinuationListContext continuationList = ctx.optionalBindingContinuationList();
         if (continuationList != null) {
             for (SwiftParser.OptionalBindingContinuationContext continuation :
-                continuationList.optionalBindingContinuation()) {
+                    continuationList.optionalBindingContinuation()) {
                 if (continuation.optionalBindingHead() != null) {
                     currentBinding = listenerHelper.letOrVar(continuation.optionalBindingHead());
                 }
@@ -220,4 +220,45 @@ public class MainListener extends SwiftBaseListener {
         listenerHelper.walkConstantDecListener(walker, ctx.localParameterName());
     }
 
+    @Override
+    public void enterConditionClause(SwiftParser.ConditionClauseContext ctx) {
+        listenerHelper.verifyRedundantExpressionParenthesis(Messages.CONDITIONAL_CLAUSE, ctx.expression());
+    }
+
+    @Override
+    public void enterSwitchStatement(SwiftParser.SwitchStatementContext ctx) {
+        listenerHelper.verifyRedundantExpressionParenthesis(Messages.SWITCH_EXPRESSION, ctx.expression());
+    }
+
+    @Override
+    public void enterForStatement(SwiftParser.ForStatementContext ctx) {
+        listenerHelper.verifyRedundantForLoopParenthesis(ctx);
+    }
+
+    @Override
+    public void enterThrowStatement(SwiftParser.ThrowStatementContext ctx) {
+        listenerHelper.verifyRedundantExpressionParenthesis(Messages.THROW_STATEMENT, ctx.expression());
+    }
+
+    @Override
+    public void enterCatchClause(SwiftParser.CatchClauseContext ctx) {
+        listenerHelper.verifyRedundantCatchParentheses(ctx.pattern());
+    }
+
+    @Override
+    public void enterInitializer(SwiftParser.InitializerContext ctx) {
+        listenerHelper.verifyRedundantExpressionParenthesis(Messages.INITIALIZER_EXPRESSION, ctx.expression());
+    }
+
+    @Override
+    public void enterArrayLiteralItem(SwiftParser.ArrayLiteralItemContext ctx) {
+        listenerHelper.verifyRedundantExpressionParenthesis(Messages.ARRAY_LITERAL, ctx.expression());
+    }
+
+    @Override
+    public void enterDictionaryLiteralItem(SwiftParser.DictionaryLiteralItemContext ctx) {
+        for (SwiftParser.ExpressionContext expressionContext : ctx.expression()) {
+            listenerHelper.verifyRedundantExpressionParenthesis(Messages.DICTIONARY_LITERAL, expressionContext);
+        }
+    }
 }
