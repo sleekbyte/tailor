@@ -65,5 +65,8 @@ func demo() {
     let checkElementNameLength:(ename:Int, veryLongElementName:Int) = (1, 2)
     var x: Int = (2)
     var y: String = ("Reddit")
-    // var x = (2) does not get caught :(
+    var x = (2)
+
+    var airports = [ (1, 2) , (3, 4) ]
+    var airports: [String: (String, String)] = [ "YYZ": ("Toronto", "Toronto Pearson") ]
 }

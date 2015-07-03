@@ -1,5 +1,7 @@
 package com.sleekbyte.tailor.output;
 
+import com.sleekbyte.tailor.common.Severity;
+
 /**
  * Note: this class has a natural ordering that is inconsistent with equals.
  */
@@ -8,7 +10,7 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
     private String filePath = "";
     private int lineNumber;
     private int columnNumber;
-    private String classification = "";
+    private Severity severity = null;
     private String violationMessage = "";
 
     /**
@@ -16,13 +18,13 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
      *
      * @param lineNumber       the logical line number in the source file
      * @param columnNumber     the logical column number in the source file
-     * @param classification   the classification of the violation message
+     * @param severity         the severity of the violation message
      * @param violationMessage the description of the violation message
      */
-    public ViolationMessage(int lineNumber, int columnNumber, String classification, String violationMessage) {
+    public ViolationMessage(int lineNumber, int columnNumber, Severity severity, String violationMessage) {
         this.lineNumber = lineNumber;
         this.columnNumber = columnNumber;
-        this.classification = classification;
+        this.severity = severity;
         this.violationMessage = violationMessage;
     }
 
@@ -32,15 +34,15 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
      * @param filePath         the path of the source file
      * @param lineNumber       the logical line number in the source file
      * @param columnNumber     the logical column number in the source file
-     * @param classification   the classification of the violation message
+     * @param severity         the severity of the violation message
      * @param violationMessage the description of the violation message
      */
-    public ViolationMessage(String filePath, int lineNumber, int columnNumber, String classification,
+    public ViolationMessage(String filePath, int lineNumber, int columnNumber, Severity severity,
                             String violationMessage) {
         this.filePath = filePath;
         this.lineNumber = lineNumber;
         this.columnNumber = columnNumber;
-        this.classification = classification;
+        this.severity = severity;
         this.violationMessage = violationMessage;
     }
 
@@ -65,7 +67,7 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
         int result = filePath.hashCode();
         result = 31 * result + lineNumber;
         result = 31 * result + columnNumber;
-        result = 31 * result + classification.hashCode();
+        result = 31 * result + severity.hashCode();
         result = 31 * result + violationMessage.hashCode();
         return result;
     }
@@ -85,22 +87,22 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
         return (this.lineNumber == candidateObject.lineNumber)
             && (this.columnNumber == candidateObject.columnNumber)
             && (this.filePath.equals(candidateObject.filePath))
-            && (this.classification.equals(candidateObject.classification))
+            && (this.severity.equals(candidateObject.severity))
             && (this.violationMessage.equals(candidateObject.violationMessage));
     }
 
     @Override
     public String toString() {
-        // filePath, classification, violationMessage are optional in the output, but at least one must be present
-        if (this.filePath.isEmpty() && this.classification.isEmpty() && this.violationMessage.isEmpty()) {
+        // filePath, severity, violationMessage are optional in the output, but at least one must be present
+        if (this.filePath.isEmpty() && this.severity == null && this.violationMessage.isEmpty()) {
             return "";
         }
 
         if (this.columnNumber == 0) {
-            return String.format("%s:%d: %s: %s", this.filePath, this.lineNumber, this.classification,
+            return String.format("%s:%d: %s: %s", this.filePath, this.lineNumber, this.severity,
                 this.violationMessage);
         }
-        return String.format("%s:%d:%d: %s: %s", this.filePath, this.lineNumber, this.columnNumber, this.classification,
+        return String.format("%s:%d:%d: %s: %s", this.filePath, this.lineNumber, this.columnNumber, this.severity,
             this.violationMessage);
     }
 

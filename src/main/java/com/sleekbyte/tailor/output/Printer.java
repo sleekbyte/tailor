@@ -1,7 +1,7 @@
 package com.sleekbyte.tailor.output;
 
 import com.sleekbyte.tailor.common.Location;
-import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Severity;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,10 +17,12 @@ import java.util.Map;
 public class Printer implements AutoCloseable {
 
     private File inputFile;
+    private Severity maxSeverity;
     private Map<String, ViolationMessage> msgBuffer = new HashMap<>();
 
-    public Printer(File inputFile) {
+    public Printer(File inputFile, Severity maxSeverity) {
         this.inputFile = inputFile;
+        this.maxSeverity = maxSeverity;
     }
 
     /**
@@ -30,7 +32,7 @@ public class Printer implements AutoCloseable {
      * @param location   location object containing line and column number for printing
      */
     public void warn(String warningMsg, Location location) {
-        print(Messages.WARNING, warningMsg, location);
+        print(Severity.WARNING, warningMsg, location);
     }
 
     /**
@@ -40,11 +42,11 @@ public class Printer implements AutoCloseable {
      * @param location location object containing line and column number for printing
      */
     public void error(String errorMsg, Location location) {
-        print(Messages.ERROR, errorMsg, location);
+        print(Severity.min(Severity.ERROR, maxSeverity), errorMsg, location);
     }
 
-    private void print(String classification, String msg, Location location) {
-        ViolationMessage violationMessage = new ViolationMessage(location.line, location.column, classification, msg);
+    private void print(Severity severity, String msg, Location location) {
+        ViolationMessage violationMessage = new ViolationMessage(location.line, location.column, severity, msg);
         try {
             violationMessage.setFilePath(this.inputFile.getCanonicalPath());
         } catch (IOException e) {
@@ -54,14 +56,14 @@ public class Printer implements AutoCloseable {
     }
 
     // Visible for testing only
-    public static String genOutputStringForTest(String filePath, int line, String classification, String msg) {
-        return new ViolationMessage(filePath, line, 0, classification, msg).toString();
+    public static String genOutputStringForTest(String filePath, int line, Severity severity, String msg) {
+        return new ViolationMessage(filePath, line, 0, severity, msg).toString();
     }
 
     // Visible for testing only
-    public static String genOutputStringForTest(String filePath, int line, int column, String classification,
+    public static String genOutputStringForTest(String filePath, int line, int column, Severity severity,
                                                 String msg) {
-        return new ViolationMessage(filePath, line, column, classification, msg).toString();
+        return new ViolationMessage(filePath, line, column, severity, msg).toString();
     }
 
     @Override

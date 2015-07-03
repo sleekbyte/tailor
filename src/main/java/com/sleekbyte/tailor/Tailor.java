@@ -3,6 +3,7 @@ package com.sleekbyte.tailor;
 import com.sleekbyte.tailor.antlr.SwiftLexer;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.MaxLengths;
+import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.listeners.FileListener;
 import com.sleekbyte.tailor.listeners.MainListener;
 import com.sleekbyte.tailor.output.Printer;
@@ -52,6 +53,9 @@ public class Tailor {
                 System.exit(EXIT_FAILURE);
             }
 
+            MaxLengths maxLengths = argumentParser.parseMaxLengths();
+            Severity maxSeverity = argumentParser.getMaxSeverity();
+
             File inputFile = new File(pathname);
             FileInputStream inputStream = new FileInputStream(inputFile);
             SwiftLexer lexer = new SwiftLexer(new ANTLRInputStream(inputStream));
@@ -59,9 +63,8 @@ public class Tailor {
             SwiftParser swiftParser = new SwiftParser(stream);
             SwiftParser.TopLevelContext tree = swiftParser.topLevel();
 
-            MaxLengths maxLengths = argumentParser.parseMaxLengths();
 
-            try (Printer printer = new Printer(inputFile)) {
+            try (Printer printer = new Printer(inputFile, maxSeverity)) {
                 MainListener listener = new MainListener(printer, maxLengths);
                 ParseTreeWalker walker = new ParseTreeWalker();
                 walker.walk(listener, tree);
@@ -70,8 +73,12 @@ public class Tailor {
                 fileListener.verify();
             }
 
-        } catch (ArgumentParserException | ParseException | IOException e) {
+        } catch (ParseException | IOException e) {
             System.err.println("Source file analysis failed. Reason: " + e.getMessage());
+            System.exit(EXIT_FAILURE);
+        } catch (ArgumentParserException e) {
+            System.err.println(e.getMessage());
+            argumentParser.printHelp();
             System.exit(EXIT_FAILURE);
         }
     }

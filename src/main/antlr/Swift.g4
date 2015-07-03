@@ -409,7 +409,7 @@ associativity : 'left' | 'right' | 'none'  ;
 
 pattern
  : wildcardPattern typeAnnotation?
- | identifierPattern typeAnnotation
+ | identifierPattern typeAnnotation?
  | valueBindingPattern
  | tuplePattern typeAnnotation?
  | enumCasePattern

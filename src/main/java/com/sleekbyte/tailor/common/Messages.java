@@ -64,6 +64,7 @@ public class Messages {
     public static final String HELP_DESC = "display help";
     public static final String MAXIMUM = "maximum ";
     public static final String LENGTH = "length";
+    public static final String SEVERITY = "severity ";
     public static final String IN_LINES_DESC = " (in lines)";
     public static final String IN_CHARS_DESC = " (in characters)";
     public static final String MAX_CLASS_LENGTH_DESC = MAXIMUM + CLASS + LENGTH + IN_LINES_DESC;
@@ -73,5 +74,6 @@ public class Messages {
     public static final String MAX_LINE_LENGTH_DESC = MAXIMUM + LINE + LENGTH + IN_CHARS_DESC;
     public static final String MAX_NAME_LENGTH_DESC = MAXIMUM + IDENTIFIER_NAME + LENGTH + IN_CHARS_DESC;
     public static final String MAX_STRUCT_LENGTH_DESC = MAXIMUM + STRUCT + LENGTH + IN_CHARS_DESC;
+    public static final String MAX_SEVERITY_DESC = MAXIMUM + SEVERITY + "[" + ERROR + "|" + WARNING + "]";
 
 }
