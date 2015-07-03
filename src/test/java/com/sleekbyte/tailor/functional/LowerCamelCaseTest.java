@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
- * Functional tests for constant naming rule.
+ * Functional tests for lower camel case rule.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class LowerCamelCaseTest extends RuleTest {
