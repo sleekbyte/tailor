@@ -15,7 +15,7 @@ public class MainListener extends SwiftBaseListener {
 
     private static final String LET = "let";
     private static final String VAR = "var";
-    private static MainListenerHelper listenerHelper = new MainListenerHelper();
+    private MainListenerHelper listenerHelper = new MainListenerHelper();
     private MaxLengths maxLengths;
 
     public MainListener(Printer printer, MaxLengths maxLengths) {
@@ -260,5 +260,10 @@ public class MainListener extends SwiftBaseListener {
         for (SwiftParser.ExpressionContext expressionContext : ctx.expression()) {
             listenerHelper.verifyRedundantExpressionParenthesis(Messages.DICTIONARY_LITERAL, expressionContext);
         }
+    }
+
+    @Override
+    public void enterImportDeclaration(SwiftParser.ImportDeclarationContext ctx) {
+        listenerHelper.verifyMultipleImports(ctx);
     }
 }

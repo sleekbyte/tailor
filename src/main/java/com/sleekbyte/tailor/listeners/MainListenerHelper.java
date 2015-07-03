@@ -20,13 +20,16 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Helper class for {@link MainListener}.
  */
 class MainListenerHelper {
 
+    private Set<Integer> importLineNumbers = new HashSet<>();
     private Printer printer;
 
     public void setPrinter(Printer printer) {
@@ -63,6 +66,15 @@ class MainListenerHelper {
             String lengthVersusLimit = " (" + ctx.getText().length() + "/" + maxLength + ")";
             Location location = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
             this.printer.error(constructType + Messages.EXCEEDS_CHARACTER_LIMIT + lengthVersusLimit, location);
+        }
+    }
+
+    void verifyMultipleImports(ParserRuleContext ctx) {
+        if (importLineNumbers.contains(ctx.getStart().getLine())) {
+            Location location = new Location(ctx.getStart().getLine());
+            this.printer.warn(Messages.IMPORTS + Messages.MULTIPLE_IMPORTS, location);
+        } else {
+            importLineNumbers.add(ctx.getStart().getLine());
         }
     }
 
