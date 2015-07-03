@@ -46,6 +46,10 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
         this.violationMessage = violationMessage;
     }
 
+    public Severity getSeverity() {
+        return severity;
+    }
+
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
