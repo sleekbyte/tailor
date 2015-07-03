@@ -10,6 +10,7 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
 
+import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
@@ -98,10 +99,10 @@ class MainListenerHelper {
 
     void evaluateTuplePattern(TuplePatternContext tuplePatternContext, ParseTreeWalker walker,
                               SwiftBaseListener listener) {
-        List<SwiftParser.TuplePatternElementContext> tuplePatternElementContexts =
+        List<TuplePatternElementContext> tuplePatternElementContexts =
             tuplePatternContext.tuplePatternElementList().tuplePatternElement();
 
-        for (SwiftParser.TuplePatternElementContext tuplePatternElement : tuplePatternElementContexts) {
+        for (TuplePatternElementContext tuplePatternElement : tuplePatternElementContexts) {
             evaluatePattern(tuplePatternElement.pattern(), walker, listener);
         }
     }
