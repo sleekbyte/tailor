@@ -26,6 +26,5 @@ public class VariableDecListener extends SwiftBaseListener {
         if (!CharFormatUtil.isLowerCamelCase(variableName)) {
             this.printer.error(Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE, location);
         }
-
     }
 }

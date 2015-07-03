@@ -37,8 +37,7 @@ public class LowerCamelCaseTest extends RuleTest {
     }
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg) {
-        this.expectedMessages.add(
-            Printer.genOutputStringForTest(inputFile.getName(), line, column, severity, msg));
+        this.expectedMessages.add(Printer.genOutputStringForTest(inputFile.getName(), line, column, severity, msg));
     }
 
 }
