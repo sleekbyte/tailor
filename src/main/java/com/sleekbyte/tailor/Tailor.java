@@ -18,6 +18,18 @@ import org.apache.commons.cli.ParseException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * Performs static analysis on Swift source files.
@@ -27,6 +39,40 @@ public class Tailor {
     private static final int EXIT_SUCCESS = 0;
     private static final int EXIT_FAILURE = 1;
     private static ArgumentParser argumentParser = new ArgumentParser();
+
+    public static void printMissingSourceFileError() {
+        System.err.println("Swift source file must be provided.");
+        argumentParser.printHelp();
+        System.exit(EXIT_FAILURE);
+    }
+
+    public static void checkForSRCROOT(ArrayList<String> pathnames) {
+        if (pathnames.size() == 0) {
+            String srcRoot = System.getenv("SRCROOT");
+            if (srcRoot == null || srcRoot.equals("")) {
+                printMissingSourceFileError();
+            }
+            else {
+                pathnames = new ArrayList<>();
+                pathnames.add(srcRoot);
+            }
+        }
+    }
+
+    public static Set<String> getSwiftSourceFiles(ArrayList<String> pathnames) throws IOException {
+        Set<String> filenames = new TreeSet<String>();
+        for (String pathname: pathnames) {
+            if (pathname.endsWith(".swift")) {
+                filenames.add(pathname);
+            }
+            if (new File(pathname).isDirectory()) {
+                Files.walk(Paths.get(pathname))
+                    .filter((Path path) -> path.toString().endsWith(".swift"))
+                    .forEach((Path path) -> filenames.add(path.toString()));
+            }
+        }
+        return filenames;
+    }
 
     /**
      * Main runner for Tailor.
@@ -43,41 +89,47 @@ public class Tailor {
                 System.exit(EXIT_SUCCESS);
             }
 
-            String pathname = "";
+            ArrayList<String> pathnames = new ArrayList<>();
             if (cmd.getArgs().length >= 1) {
-                pathname = cmd.getArgs()[0];
-            }
-            if (cmd.getArgs().length < 1 || pathname.isEmpty()) {
-                System.err.println("Swift source file must be provided.");
-                argumentParser.printHelp();
-                System.exit(EXIT_FAILURE);
+                pathnames = new ArrayList<>(Arrays.asList(cmd.getArgs()));
             }
 
+            if (pathnames.size() == 0) {
+                checkForSRCROOT(pathnames);
+            }
+
+            Set<String> filenames = getSwiftSourceFiles(pathnames);
+
+            if (filenames.size() == 0) {
+                printMissingSourceFileError();
+            }
+
+//            filenames.stream().forEach((String name) -> System.out.println(name));
+
+            long numErrors = 0;
             MaxLengths maxLengths = argumentParser.parseMaxLengths();
             Severity maxSeverity = argumentParser.getMaxSeverity();
 
-            File inputFile = new File(pathname);
-            FileInputStream inputStream = new FileInputStream(inputFile);
-            SwiftLexer lexer = new SwiftLexer(new ANTLRInputStream(inputStream));
-            CommonTokenStream stream = new CommonTokenStream(lexer);
-            SwiftParser swiftParser = new SwiftParser(stream);
-            SwiftParser.TopLevelContext tree = swiftParser.topLevel();
+            for (String filename: filenames) {
+                File inputFile = new File(filename);
+                FileInputStream inputStream = new FileInputStream(inputFile);
+                SwiftLexer lexer = new SwiftLexer(new ANTLRInputStream(inputStream));
+                CommonTokenStream stream = new CommonTokenStream(lexer);
+                SwiftParser swiftParser = new SwiftParser(stream);
+                SwiftParser.TopLevelContext tree = swiftParser.topLevel();
 
-            final long numErrors;
-
-            try (Printer printer = new Printer(inputFile, maxSeverity)) {
-                MainListener listener = new MainListener(printer, maxLengths);
-                ParseTreeWalker walker = new ParseTreeWalker();
-                walker.walk(listener, tree);
-
-                FileListener fileListener = new FileListener(printer, inputFile, maxLengths);
-                fileListener.verify();
-
-                numErrors = printer.getNumErrorMessages();
+                try (Printer printer = new Printer(inputFile, maxSeverity)) {
+                    MainListener listener = new MainListener(printer, maxLengths);
+                    ParseTreeWalker walker = new ParseTreeWalker();
+                    walker.walk(listener, tree);
+                    FileListener fileListener = new FileListener(printer, inputFile, maxLengths);
+                    fileListener.verify();
+                    numErrors += printer.getNumErrorMessages();
+                }
             }
 
-            // Non-zero exit status when any violation messages have Severity.ERROR, controlled by --max-severity
             if (numErrors >= 1L) {
+                // Non-zero exit status when any violation messages have Severity.ERROR, controlled by --max-severity
                 System.exit(EXIT_FAILURE);
             }
 
