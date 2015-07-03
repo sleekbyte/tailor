@@ -13,11 +13,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class SemicolonTest extends RuleTest {
 
     @Override
-    protected String getInputFilePath() {
-        return "SemicolonTest.swift";
-    }
-
-    @Override
     protected void addAllExpectedMsgs() {
         addExpectedMsg(1, 18, Severity.ERROR, Messages.STATEMENTS);
         addExpectedMsg(6, 15, Severity.ERROR, Messages.STATEMENTS);

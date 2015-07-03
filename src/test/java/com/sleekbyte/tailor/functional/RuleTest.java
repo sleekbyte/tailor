@@ -21,7 +21,7 @@ import java.util.List;
  */
 public abstract class RuleTest {
 
-    protected static final String TEST_INPUT_DIR = "src/test/java/com/sleekbyte/tailor/functional/";
+    protected static final String TEST_INPUT_DIR = "src/test/swift/com/sleekbyte/tailor/functional/";
     protected static final String NEWLINE_REGEX = "\\r?\\n";
 
     protected ByteArrayOutputStream outContent;
@@ -30,7 +30,9 @@ public abstract class RuleTest {
 
     protected abstract void addAllExpectedMsgs();
 
-    protected abstract String getInputFilePath();
+    protected String getInputFilePath() {
+        return String.format("%s.swift", this.getClass().getSimpleName());
+    }
 
     @Before
     public void setUp() throws UnsupportedEncodingException {

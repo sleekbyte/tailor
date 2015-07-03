@@ -13,11 +13,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class MultipleImportTest extends RuleTest {
 
     @Override
-    protected String getInputFilePath() {
-        return "MultipleImportTest.swift";
-    }
-
-    @Override
     protected void addAllExpectedMsgs() {
         addExpectedMsg(1, Severity.WARNING, Messages.IMPORTS + Messages.MULTIPLE_IMPORTS);
         addExpectedMsg(1, 18, Severity.ERROR, Messages.STATEMENTS + Messages.SEMICOLON);

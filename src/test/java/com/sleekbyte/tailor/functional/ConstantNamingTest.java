@@ -13,11 +13,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class ConstantNamingTest extends RuleTest {
 
     @Override
-    protected String getInputFilePath() {
-        return "ConstantNamingTest.swift";
-    }
-
-    @Override
     protected void addAllExpectedMsgs() {
         addExpectedMsg(2, 5, Severity.ERROR, Messages.GLOBAL + Messages.CONSTANT + Messages.GLOBAL_CONSTANT_NAMING);
         addExpectedMsg(2, 22, Severity.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
