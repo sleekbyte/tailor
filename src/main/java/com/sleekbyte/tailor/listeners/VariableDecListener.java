@@ -7,6 +7,9 @@ import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.CharFormatUtil;
 
+/**
+ * Listener for variable declarations.
+ */
 public class VariableDecListener extends SwiftBaseListener {
 
     private Printer printer;
@@ -23,5 +26,6 @@ public class VariableDecListener extends SwiftBaseListener {
         if (!CharFormatUtil.isLowerCamelCase(variableName)) {
             this.printer.error(Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE, location);
         }
+
     }
 }
