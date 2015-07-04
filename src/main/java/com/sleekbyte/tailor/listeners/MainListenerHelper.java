@@ -9,6 +9,7 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.ImportDeclarationContext;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.common.Location;
@@ -21,13 +22,16 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Helper class for {@link MainListener}.
  */
 class MainListenerHelper {
 
+    private Set<Integer> importLineNumbers = new HashSet<>();
     private Printer printer;
 
     public void setPrinter(Printer printer) {
@@ -72,6 +76,16 @@ class MainListenerHelper {
         if (!CharFormatUtil.isLowerCamelCase(constructName)) {
             Location location = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
             this.printer.error(constructType + Messages.LOWER_CAMEL_CASE, location);
+        }
+    }
+
+    void verifyMultipleImports(ImportDeclarationContext ctx) {
+        int lineNum = ctx.getStart().getLine();
+        if (importLineNumbers.contains(lineNum)) {
+            Location location = new Location(lineNum);
+            this.printer.warn(Messages.IMPORTS + Messages.MULTIPLE_IMPORTS, location);
+        } else {
+            importLineNumbers.add(lineNum);
         }
     }
 

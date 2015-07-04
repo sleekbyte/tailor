@@ -46,6 +46,7 @@ public class Messages {
     public static final String DICTIONARY_LITERAL = "Dictionary literal ";
 
     // Plural constructs
+    public static final String IMPORTS = "Imports ";
     public static final String STATEMENTS = "Statements ";
 
     // Message descriptions
@@ -59,6 +60,7 @@ public class Messages {
     public static final String NEWLINE_TERMINATOR = "should terminate with a newline character ('\\n')";
     public static final String ENCLOSED_PARENTHESIS = "should not be enclosed within parentheses";
     public static final String K_PREFIXED = "should not be prefixed with 'k' or 'K'";
+    public static final String MULTIPLE_IMPORTS = "should be on separate lines";
 
     // Usage messages
     public static final String CMD_LINE_SYNTAX = "tailor";
