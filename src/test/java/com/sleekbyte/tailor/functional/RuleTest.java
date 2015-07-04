@@ -29,6 +29,7 @@ public abstract class RuleTest {
     protected List<String> expectedMessages;
 
     protected abstract void addAllExpectedMsgs();
+
     protected abstract String getInputFilePath();
 
     @Before

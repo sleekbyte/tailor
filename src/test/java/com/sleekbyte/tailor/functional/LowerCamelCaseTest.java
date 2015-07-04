@@ -34,6 +34,15 @@ public class LowerCamelCaseTest extends RuleTest {
         addExpectedMsg(54, 5, Severity.ERROR, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
         addExpectedMsg(55, 10, Severity.ERROR, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
         addExpectedMsg(56, 9, Severity.ERROR, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
+        addExpectedMsg(63, 5, Severity.ERROR, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
+        addExpectedMsg(63, 8, Severity.ERROR, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
+        addExpectedMsg(64, 5, Severity.ERROR, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
+        addExpectedMsg(69, 9, Severity.ERROR, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
+        addExpectedMsg(70, 9, Severity.ERROR, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
+        addExpectedMsg(73, 5, Severity.ERROR, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
+        addExpectedMsg(77, 9, Severity.ERROR, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
+        addExpectedMsg(83, 9, Severity.ERROR, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
+        addExpectedMsg(87, 9, Severity.ERROR, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
     }
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg) {

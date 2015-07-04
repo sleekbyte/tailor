@@ -59,3 +59,38 @@ var many_times = numbers.map {
     }
     return output
 }
+
+var X, Y: Int
+var XPlusY: Int {
+  return x + y
+}
+
+protocol SomeProtocol {
+    var MustBeSettable: Int { get set }
+    var DoesNotNeedToBeSettable: Int { get }
+}
+
+var ThisIsAFunction: (Int, Int) -> (Int) =  { (a, b) in return a + b }
+
+get {
+    let centerX = origin.x + (size.width / 2)
+    var CenterY = origin.y + (size.height / 2)
+    return Point(x: centerX, y: centerY)
+}
+
+set {
+    var origin.x = newValue.x - (size.width / 2)
+    var Origin.y = newValue.y - (size.height / 2)
+}
+
+class MyClass {
+    var MyValue:String {
+        willSet(newVal) {
+            println("myValue will change")
+        }
+
+        didSet {
+            println("myValue changed")
+        }
+    }
+}
