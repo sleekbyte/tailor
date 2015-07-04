@@ -1,6 +1,7 @@
 package com.sleekbyte.tailor.listeners;
 
 import static com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.ImportDeclarationContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingContinuationContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingHeadContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ParenthesizedExpressionContext;
@@ -9,7 +10,6 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.ImportDeclarationContext;
 
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
@@ -104,7 +104,7 @@ class MainListenerHelper {
 
     void evaluateTuplePattern(TuplePatternContext tuplePatternContext, ParseTreeWalker walker) {
         List<TuplePatternElementContext> tuplePatternElementContexts =
-                tuplePatternContext.tuplePatternElementList().tuplePatternElement();
+            tuplePatternContext.tuplePatternElementList().tuplePatternElement();
 
         for (TuplePatternElementContext tuplePatternElement : tuplePatternElementContexts) {
             evaluatePattern(tuplePatternElement.pattern(), walker);
@@ -135,7 +135,7 @@ class MainListenerHelper {
         }
 
         ParenthesizedExpressionContext parenthesizedExpressionContext =
-                (ParenthesizedExpressionContext) primaryExpression.getChild(0);
+            (ParenthesizedExpressionContext) primaryExpression.getChild(0);
 
         // check to not flag tuple initialization
         if (parenthesizedExpressionContext.expressionElementList() == null
@@ -156,7 +156,7 @@ class MainListenerHelper {
 
         if (firstCharacter == '(') {
             Location startLocation = new Location(openParenthesisToken.getLine(),
-                    openParenthesisToken.getCharPositionInLine() + 1);
+                openParenthesisToken.getCharPositionInLine() + 1);
             this.printer.warn(Messages.FOR_LOOP + Messages.ENCLOSED_PARENTHESIS, startLocation);
         }
     }

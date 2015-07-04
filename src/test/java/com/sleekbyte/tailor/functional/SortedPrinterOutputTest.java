@@ -13,11 +13,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class SortedPrinterOutputTest extends RuleTest {
 
     @Override
-    protected String getInputFilePath() {
-        return "SortedPrinterOutputTest.swift";
-    }
-
-    @Override
     protected void addAllExpectedMsgs() {
         addExpectedMsg(1, 18, Severity.ERROR, Messages.STATEMENTS + Messages.SEMICOLON);
         addExpectedMsg(3, 25, Severity.ERROR, Messages.STATEMENTS + Messages.SEMICOLON);

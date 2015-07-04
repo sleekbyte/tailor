@@ -13,11 +13,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class NameLengthTest extends RuleTest {
 
     @Override
-    protected String getInputFilePath() {
-        return "NameLengthTest.swift";
-    }
-
-    @Override
     protected String[] getCommandArgs() {
         return new String[] {
             "--max-severity", "error",

@@ -13,11 +13,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class RedundantParenthesisTest extends RuleTest {
 
     @Override
-    protected String getInputFilePath() {
-        return "RedundantParenthesisTest.swift";
-    }
-
-    @Override
     protected void addAllExpectedMsgs() {
         addExpectedMsg(3, 8, Severity.WARNING, Messages.CONDITIONAL_CLAUSE + Messages.ENCLOSED_PARENTHESIS);
         addExpectedMsg(6, 13, Severity.WARNING, Messages.CONDITIONAL_CLAUSE + Messages.ENCLOSED_PARENTHESIS);
