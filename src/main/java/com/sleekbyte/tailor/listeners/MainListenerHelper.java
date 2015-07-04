@@ -9,6 +9,7 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.ImportDeclarationContext;
 
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
@@ -69,12 +70,13 @@ class MainListenerHelper {
         }
     }
 
-    void verifyMultipleImports(ParserRuleContext ctx) {
-        if (importLineNumbers.contains(ctx.getStart().getLine())) {
-            Location location = new Location(ctx.getStart().getLine());
+    void verifyMultipleImports(ImportDeclarationContext ctx) {
+        int lineNum = ctx.getStart().getLine();
+        if (importLineNumbers.contains(lineNum)) {
+            Location location = new Location(lineNum);
             this.printer.warn(Messages.IMPORTS + Messages.MULTIPLE_IMPORTS, location);
         } else {
-            importLineNumbers.add(ctx.getStart().getLine());
+            importLineNumbers.add(lineNum);
         }
     }
 

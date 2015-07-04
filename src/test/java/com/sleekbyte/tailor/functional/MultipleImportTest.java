@@ -34,6 +34,10 @@ public class MultipleImportTest extends RuleTest {
         addExpectedMsg(7, 11, Severity.ERROR, Messages.STATEMENTS + Messages.SEMICOLON);
         addExpectedMsg(9, Severity.WARNING, Messages.IMPORTS + Messages.MULTIPLE_IMPORTS);
         addExpectedMsg(9, 18, Severity.ERROR, Messages.STATEMENTS + Messages.SEMICOLON);
+        addExpectedMsg(14, 1, Severity.ERROR, Messages.STATEMENTS + Messages.SEMICOLON);
+        addExpectedMsg(18, Severity.WARNING, Messages.IMPORTS + Messages.MULTIPLE_IMPORTS);
+        addExpectedMsg(18, 1, Severity.ERROR, Messages.STATEMENTS + Messages.SEMICOLON);
+        addExpectedMsg(18, 14, Severity.ERROR, Messages.STATEMENTS + Messages.SEMICOLON);
     }
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg) {

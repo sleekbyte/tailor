@@ -8,3 +8,11 @@ Foundation; import Hello
 
 import Foundation; import
 Foundation
+
+import
+Foundation
+; import Math
+
+import
+Foundation
+; import Math; import QuartzCore
