@@ -22,7 +22,7 @@ public class MainListener extends SwiftBaseListener {
     /**
      * Creates a MainListener object and sets the printer in MainListenerHelper.
      *
-     * @param printer {@link Printer} used for outputting messages to user
+     * @param printer    {@link Printer} used for outputting messages to user
      * @param maxLengths {@link MaxLengths} stores numbers for max length restrictions
      */
     public MainListener(Printer printer, MaxLengths maxLengths) {
