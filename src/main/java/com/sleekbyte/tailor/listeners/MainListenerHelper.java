@@ -113,11 +113,11 @@ class MainListenerHelper {
 
     void verifyRedundantExpressionParenthesis(String constructType, ExpressionContext ctx) {
         if (ctx == null
-            || ctx.getChildCount() != 1
-            || ctx.prefixExpression() == null
-            || ctx.prefixExpression().prefixOperator() != null // flag cases with trailing ;
-            || ctx.prefixExpression().postfixExpression() == null
-            || ctx.prefixExpression().postfixExpression().getChildCount() != 1) {
+                || ctx.getChildCount() != 1
+                || ctx.prefixExpression() == null
+                || ctx.prefixExpression().prefixOperator() != null // flag cases with trailing ;
+                || ctx.prefixExpression().postfixExpression() == null
+                || ctx.prefixExpression().postfixExpression().getChildCount() != 1) {
             return;
         }
 
@@ -130,7 +130,7 @@ class MainListenerHelper {
         PrimaryExpressionContext primaryExpression = (PrimaryExpressionContext) postfixExpression.getChild(0);
 
         if (primaryExpression.getChildCount() != 1
-            || !(primaryExpression.getChild(0) instanceof ParenthesizedExpressionContext)) {
+                || !(primaryExpression.getChild(0) instanceof ParenthesizedExpressionContext)) {
             return;
         }
 
@@ -139,7 +139,7 @@ class MainListenerHelper {
 
         // check to not flag tuple initialization
         if (parenthesizedExpressionContext.expressionElementList() == null
-            || parenthesizedExpressionContext.expressionElementList().getChildCount() != 1) {
+                || parenthesizedExpressionContext.expressionElementList().getChildCount() != 1) {
             return;
         }
 
