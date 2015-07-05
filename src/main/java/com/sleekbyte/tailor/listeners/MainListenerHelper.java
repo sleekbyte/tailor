@@ -37,7 +37,7 @@ class MainListenerHelper {
         this.printer = printer;
     }
 
-    void verifyUpperCamelCase(String constructType, ParserRuleContext ctx) {
+    public void verifyUpperCamelCase(String constructType, ParserRuleContext ctx) {
         String constructName = ctx.getText();
         if (!CharFormatUtil.isUpperCamelCase(constructName)) {
             Location location = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
@@ -45,7 +45,7 @@ class MainListenerHelper {
         }
     }
 
-    void verifyNotSemicolonTerminated(String constructType, ParserRuleContext ctx) {
+    public void verifyNotSemicolonTerminated(String constructType, ParserRuleContext ctx) {
         String construct = ctx.getText();
         if (construct.endsWith(";")) {
             Location location = new Location(ctx.getStop().getLine(), ctx.getStop().getCharPositionInLine() + 1);
@@ -53,7 +53,7 @@ class MainListenerHelper {
         }
     }
 
-    void verifyConstructLength(String constructType, int maxLength, ParserRuleContext ctx) {
+    public void verifyConstructLength(String constructType, int maxLength, ParserRuleContext ctx) {
         if (SourceFileUtil.constructTooLong(ctx, maxLength)) {
             int constructLength = ctx.getStop().getLine() - ctx.getStart().getLine();
             String lengthVersusLimit = " (" + constructLength + "/" + maxLength + ")";
@@ -62,7 +62,7 @@ class MainListenerHelper {
         }
     }
 
-    void verifyNameLength(String constructType, int maxLength, ParserRuleContext ctx) {
+    public void verifyNameLength(String constructType, int maxLength, ParserRuleContext ctx) {
         if (SourceFileUtil.nameTooLong(ctx, maxLength)) {
             String lengthVersusLimit = " (" + ctx.getText().length() + "/" + maxLength + ")";
             Location location = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
@@ -70,7 +70,7 @@ class MainListenerHelper {
         }
     }
 
-    void verifyMultipleImports(ImportDeclarationContext ctx) {
+    public void verifyMultipleImports(ImportDeclarationContext ctx) {
         int lineNum = ctx.getStart().getLine();
         if (importLineNumbers.contains(lineNum)) {
             Location location = new Location(lineNum);
@@ -80,11 +80,11 @@ class MainListenerHelper {
         }
     }
 
-    void walkConstantDecListener(ParseTreeWalker walker, ParserRuleContext tree) {
+    public void walkConstantDecListener(ParseTreeWalker walker, ParserRuleContext tree) {
         walker.walk(new ConstantDecListener(this.printer), tree);
     }
 
-    void evaluatePattern(PatternContext pattern, ParseTreeWalker walker) {
+    public void evaluatePattern(PatternContext pattern, ParseTreeWalker walker) {
         if (pattern.identifierPattern() != null) {
             walkConstantDecListener(walker, pattern.identifierPattern());
 
@@ -102,7 +102,7 @@ class MainListenerHelper {
         }
     }
 
-    void evaluateTuplePattern(TuplePatternContext tuplePatternContext, ParseTreeWalker walker) {
+    public void evaluateTuplePattern(TuplePatternContext tuplePatternContext, ParseTreeWalker walker) {
         List<TuplePatternElementContext> tuplePatternElementContexts =
             tuplePatternContext.tuplePatternElementList().tuplePatternElement();
 
@@ -111,7 +111,7 @@ class MainListenerHelper {
         }
     }
 
-    void verifyRedundantExpressionParenthesis(String constructType, ExpressionContext ctx) {
+    public void verifyRedundantExpressionParenthesis(String constructType, ExpressionContext ctx) {
         if (ctx == null
                 || ctx.getChildCount() != 1
                 || ctx.prefixExpression() == null
@@ -146,7 +146,7 @@ class MainListenerHelper {
         printRedundantParenthesisWarning(ctx, constructType + Messages.ENCLOSED_PARENTHESIS);
     }
 
-    void verifyRedundantForLoopParenthesis(ParserRuleContext ctx) {
+    public void verifyRedundantForLoopParenthesis(ParserRuleContext ctx) {
         if (!(ctx.getChild(1) instanceof TerminalNodeImpl)) {
             return;
         } // return if '(' not present
