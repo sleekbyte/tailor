@@ -44,6 +44,9 @@ public class Messages {
     public static final String INITIALIZER_EXPRESSION = "Initializer expression ";
     public static final String ARRAY_LITERAL = "Array literal ";
     public static final String DICTIONARY_LITERAL = "Dictionary literal ";
+    public static final String IF_STATEMENT = "If statement ";
+    public static final String ELSE_CLAUSE = "Else clause ";
+    public static final String SWITCH_STATEMENT = "Switch statement ";
 
     // Plural constructs
     public static final String IMPORTS = "Imports ";
