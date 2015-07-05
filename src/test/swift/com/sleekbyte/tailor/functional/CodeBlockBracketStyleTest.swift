@@ -103,4 +103,9 @@ class Rectangle
             // infinite loop
         } while true
     }
+
+    func multiLineFunction(arg1: String,
+                           arg2: String) {
+        // do nothing.
+   }
 }

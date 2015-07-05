@@ -6,6 +6,7 @@ import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
@@ -270,8 +271,9 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterFunctionDeclaration(SwiftParser.FunctionDeclarationContext ctx) {
-        Location functionDeclarationLocation = new Location(ctx.getStart().getLine(),
-                                                               ctx.getStart().getCharPositionInLine() + 1);
+        Token functionSignatureStop = ctx.functionSignature().getStop();
+        Location functionDeclarationLocation = new Location(functionSignatureStop.getLine(),
+                                                               functionSignatureStop.getCharPositionInLine() + 1);
         listenerHelper.verifyCodeBlockBracketStyle(functionDeclarationLocation, ctx.functionBody().codeBlock());
     }
 }
