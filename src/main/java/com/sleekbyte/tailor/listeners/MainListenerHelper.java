@@ -11,6 +11,7 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
 
+import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.antlr.SwiftParser.CodeBlockContext;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
@@ -180,16 +181,27 @@ class MainListenerHelper {
         this.printer.warn(firstParenthesisMsg, startLocation);
     }
 
+    void verifySwitchStatementBracketStyle(SwiftParser.SwitchStatementContext ctx) {
+        Token switchStop = ctx.expression().getStop();
+        Location switchExpLocation = new Location(switchStop.getLine(),
+                                                               switchStop.getCharPositionInLine() + 1);
+        Token openBraceToken = ((TerminalNodeImpl) ctx.getChild(2)).getSymbol();
+        Location openBraceLocation = new Location(openBraceToken.getLine(), openBraceToken.getCharPositionInLine() + 1);
+
+        if (switchExpLocation.line != openBraceLocation.line) {
+            this.printer.warn(Messages.SWITCH_STATEMENT + Messages.BRACKET_STYLE, openBraceLocation);
+        }
+    }
+
     void verifyCodeBlockBracketStyle(String constructName, Location constructLocation,
                                      CodeBlockContext codeBlockCtx) {
-
         // Null check for else if code blocks
         if (codeBlockCtx == null) {
             return;
         }
 
         Token openBraceToken = ((TerminalNodeImpl) codeBlockCtx.getChild(0)).getSymbol();
-        Location openBraceLocation = new Location(openBraceToken.getLine(), openBraceToken.getCharPositionInLine()+1);
+        Location openBraceLocation = new Location(openBraceToken.getLine(), openBraceToken.getCharPositionInLine() + 1);
 
         if (constructLocation.line != openBraceLocation.line) {
             this.printer.warn(constructName + Messages.BRACKET_STYLE, openBraceLocation);

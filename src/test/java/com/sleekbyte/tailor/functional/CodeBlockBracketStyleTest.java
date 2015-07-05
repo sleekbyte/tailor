@@ -18,6 +18,7 @@ public class CodeBlockBracketStyleTest extends RuleTest {
         addExpectedMsg(27, 9, Severity.WARNING, Messages.IF_STATEMENT);
         addExpectedMsg(32, 9, Severity.WARNING, Messages.IF_STATEMENT);
         addExpectedMsg(37, 9, Severity.WARNING, Messages.ELSE_CLAUSE);
+        addExpectedMsg(50, 9, Severity.WARNING, Messages.SWITCH_STATEMENT);
         addExpectedMsg(82, 5, Severity.WARNING, Messages.FUNCTION);
     }
 

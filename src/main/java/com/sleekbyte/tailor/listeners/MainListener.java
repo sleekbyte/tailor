@@ -230,6 +230,7 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterSwitchStatement(SwiftParser.SwitchStatementContext ctx) {
         listenerHelper.verifyRedundantExpressionParenthesis(Messages.SWITCH_EXPRESSION, ctx.expression());
+        listenerHelper.verifySwitchStatementBracketStyle(ctx);
     }
 
     @Override
