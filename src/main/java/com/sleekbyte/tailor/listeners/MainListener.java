@@ -302,8 +302,15 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterRepeatWhileStatement(SwiftParser.RepeatWhileStatementContext ctx) {
-        Location conditionClauseLocation = new Location(ctx.conditionClause().getStop().getLine(),
-                                                           ctx.conditionClause().getStop().getCharPositionInLine() + 1);
-        listenerHelper.verifyCodeBlockBracketStyle(Messages.REPEAT_WHILE_STATEMENT, conditionClauseLocation, ctx.codeBlock());
+        Location repeatClause = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+        listenerHelper.verifyCodeBlockBracketStyle(Messages.REPEAT_WHILE_STATEMENT, repeatClause, ctx.codeBlock());
+    }
+
+    @Override
+    public void enterInitializerDeclaration(SwiftParser.InitializerDeclarationContext ctx) {
+        Location parameterClauseLocation = new Location(ctx.parameterClause().getStop().getLine(),
+                                                           ctx.parameterClause().getStop().getCharPositionInLine() + 1);
+        listenerHelper.verifyCodeBlockBracketStyle(Messages.INITIALIZER_BODY, parameterClauseLocation,
+                                                      ctx.initializerBody().codeBlock());
     }
 }

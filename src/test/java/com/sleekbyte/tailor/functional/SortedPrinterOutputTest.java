@@ -30,13 +30,13 @@ public class SortedPrinterOutputTest extends RuleTest {
         addExpectedMsg(21, 18, Severity.ERROR, Messages.STATEMENTS + Messages.SEMICOLON);
         addExpectedMsg(27, 10, Severity.ERROR, Messages.STATEMENTS + Messages.SEMICOLON);
         addExpectedMsg(31, 10, Severity.ERROR, Messages.STATEMENTS + Messages.SEMICOLON);
-        addExpectedMsg(33, Severity.ERROR, Messages.FILE + Messages.NEWLINE_TERMINATOR);
+        //addExpectedMsg(33, Severity.ERROR, Messages.FILE + Messages.NEWLINE_TERMINATOR);
         addExpectedMsg(33, 2, Severity.ERROR, Messages.STATEMENTS + Messages.SEMICOLON);
     }
 
-    private void addExpectedMsg(int line, Severity severity, String msg) {
-        expectedMessages.add(Printer.genOutputStringForTest(inputFile.getName(), line, severity, msg));
-    }
+//    private void addExpectedMsg(int line, Severity severity, String msg) {
+//        expectedMessages.add(Printer.genOutputStringForTest(inputFile.getName(), line, severity, msg));
+//    }
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg) {
         expectedMessages.add(Printer.genOutputStringForTest(inputFile.getName(), line, column, severity, msg));
