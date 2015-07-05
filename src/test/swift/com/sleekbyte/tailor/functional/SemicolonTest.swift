@@ -25,8 +25,7 @@ struct DemoStruct {
 
     func test() {
         // while loop test
-        while true
-        {
+        while true {
         };
 
         // for loop
@@ -47,8 +46,7 @@ class UpperCamelCase {
     var x: String = "hello";
     let b = 2;
 
-    func demo()
-    {
+    func demo() {
         for var x = 0; ; {
             print(x);
         };
