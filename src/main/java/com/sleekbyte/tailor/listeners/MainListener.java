@@ -292,4 +292,18 @@ public class MainListener extends SwiftBaseListener {
                                                            ctx.conditionClause().getStop().getCharPositionInLine() + 1);
         listenerHelper.verifyCodeBlockBracketStyle(Messages.IF_STATEMENT, conditionClauseLocation, ctx.codeBlock());
     }
+
+    @Override
+    public void enterWhileStatement(SwiftParser.WhileStatementContext ctx) {
+        Location conditionClauseLocation = new Location(ctx.conditionClause().getStop().getLine(),
+                                                           ctx.conditionClause().getStop().getCharPositionInLine() + 1);
+        listenerHelper.verifyCodeBlockBracketStyle(Messages.WHILE_STATEMENT, conditionClauseLocation, ctx.codeBlock());
+    }
+
+    @Override
+    public void enterRepeatWhileStatement(SwiftParser.RepeatWhileStatementContext ctx) {
+        Location conditionClauseLocation = new Location(ctx.conditionClause().getStop().getLine(),
+                                                           ctx.conditionClause().getStop().getCharPositionInLine() + 1);
+        listenerHelper.verifyCodeBlockBracketStyle(Messages.REPEAT_WHILE_STATEMENT, conditionClauseLocation, ctx.codeBlock());
+    }
 }

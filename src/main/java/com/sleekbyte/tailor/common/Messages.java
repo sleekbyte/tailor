@@ -47,6 +47,8 @@ public class Messages {
     public static final String IF_STATEMENT = "If statement ";
     public static final String ELSE_CLAUSE = "Else clause ";
     public static final String SWITCH_STATEMENT = "Switch statement ";
+    public static final String WHILE_STATEMENT = "While statement ";
+    public static final String REPEAT_WHILE_STATEMENT = "Repeat-While statement ";
 
     // Plural constructs
     public static final String IMPORTS = "Imports ";

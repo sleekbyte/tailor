@@ -19,7 +19,10 @@ public class CodeBlockBracketStyleTest extends RuleTest {
         addExpectedMsg(32, 9, Severity.WARNING, Messages.IF_STATEMENT);
         addExpectedMsg(37, 9, Severity.WARNING, Messages.ELSE_CLAUSE);
         addExpectedMsg(50, 9, Severity.WARNING, Messages.SWITCH_STATEMENT);
+        addExpectedMsg(76, 16, Severity.WARNING, Messages.WHILE_STATEMENT);
         addExpectedMsg(82, 5, Severity.WARNING, Messages.FUNCTION);
+        addExpectedMsg(97, 9, Severity.WARNING, Messages.WHILE_STATEMENT);
+        addExpectedMsg(102, 9, Severity.WARNING, Messages.REPEAT_WHILE_STATEMENT);
     }
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg) {
