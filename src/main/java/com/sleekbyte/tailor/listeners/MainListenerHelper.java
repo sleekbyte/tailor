@@ -180,13 +180,19 @@ class MainListenerHelper {
         this.printer.warn(firstParenthesisMsg, startLocation);
     }
 
-    void verifyCodeBlockBracketStyle(Location grandParentLocation, CodeBlockContext codeBlockCtx) {
+    void verifyCodeBlockBracketStyle(String constructName, Location constructLocation,
+                                     CodeBlockContext codeBlockCtx) {
 
-        Token openBrace = ((TerminalNodeImpl) codeBlockCtx.getChild(0)).getSymbol();
-        Location openBraceLocation = new Location(openBrace.getLine(), openBrace.getCharPositionInLine()+1);
+        // Null check for else if code blocks
+        if (codeBlockCtx == null) {
+            return;
+        }
 
-        if (grandParentLocation.line != openBraceLocation.line) {
-            this.printer.warn(Messages.FUNCTION + Messages.BRACKET_STYLE, openBraceLocation);
+        Token openBraceToken = ((TerminalNodeImpl) codeBlockCtx.getChild(0)).getSymbol();
+        Location openBraceLocation = new Location(openBraceToken.getLine(), openBraceToken.getCharPositionInLine()+1);
+
+        if (constructLocation.line != openBraceLocation.line) {
+            this.printer.warn(constructName + Messages.BRACKET_STYLE, openBraceLocation);
         }
     }
 

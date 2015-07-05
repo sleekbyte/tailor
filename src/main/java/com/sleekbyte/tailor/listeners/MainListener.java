@@ -274,6 +274,21 @@ public class MainListener extends SwiftBaseListener {
         Token functionSignatureStop = ctx.functionSignature().getStop();
         Location functionDeclarationLocation = new Location(functionSignatureStop.getLine(),
                                                                functionSignatureStop.getCharPositionInLine() + 1);
-        listenerHelper.verifyCodeBlockBracketStyle(functionDeclarationLocation, ctx.functionBody().codeBlock());
+        listenerHelper.verifyCodeBlockBracketStyle(Messages.FUNCTION, functionDeclarationLocation,
+                                                      ctx.functionBody().codeBlock());
+    }
+
+    @Override
+    public void enterElseClause(SwiftParser.ElseClauseContext ctx) {
+        Location elseClauseLocation = new Location(ctx.getStart().getLine(),
+                                                      ctx.getStart().getCharPositionInLine() + 1);
+        listenerHelper.verifyCodeBlockBracketStyle(Messages.ELSE_CLAUSE, elseClauseLocation, ctx.codeBlock());
+    }
+
+    @Override
+    public void enterIfStatement(SwiftParser.IfStatementContext ctx) {
+        Location conditionClauseLocation = new Location(ctx.conditionClause().getStop().getLine(),
+                                                           ctx.conditionClause().getStop().getCharPositionInLine() + 1);
+        listenerHelper.verifyCodeBlockBracketStyle(Messages.IF_STATEMENT, conditionClauseLocation, ctx.codeBlock());
     }
 }
