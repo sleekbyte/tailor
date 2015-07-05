@@ -11,6 +11,7 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
 
+import com.sleekbyte.tailor.antlr.SwiftParser.CodeBlockContext;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
@@ -177,6 +178,16 @@ class MainListenerHelper {
     private void printRedundantParenthesisWarning(ParserRuleContext ctx, String firstParenthesisMsg) {
         Location startLocation = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
         this.printer.warn(firstParenthesisMsg, startLocation);
+    }
+    
+    void verifyCodeBlockBracketStyle(Location grandParentLocation, CodeBlockContext codeBlockCtx) {
+
+        Token openBrace = ((TerminalNodeImpl) codeBlockCtx.getChild(0)).getSymbol();
+        Location openBraceLocation = new Location(openBrace.getLine(), openBrace.getCharPositionInLine()+1);
+
+        if (grandParentLocation.line != openBraceLocation.line) {
+            this.printer.warn(Messages.FUNCTION + Messages.BRACKET_STYLE, openBraceLocation);
+        }
     }
 
     /* Optional Binding Condition Evaluators */
