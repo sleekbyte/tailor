@@ -179,7 +179,7 @@ class MainListenerHelper {
         Location startLocation = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
         this.printer.warn(firstParenthesisMsg, startLocation);
     }
-    
+
     void verifyCodeBlockBracketStyle(Location grandParentLocation, CodeBlockContext codeBlockCtx) {
 
         Token openBrace = ((TerminalNodeImpl) codeBlockCtx.getChild(0)).getSymbol();

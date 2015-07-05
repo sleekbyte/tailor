@@ -271,7 +271,7 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterFunctionDeclaration(SwiftParser.FunctionDeclarationContext ctx) {
         Location functionDeclarationLocation = new Location(ctx.getStart().getLine(),
-                                                               ctx.getStart().getCharPositionInLine()+1);
+                                                               ctx.getStart().getCharPositionInLine() + 1);
         listenerHelper.verifyCodeBlockBracketStyle(functionDeclarationLocation, ctx.functionBody().codeBlock());
     }
 }
