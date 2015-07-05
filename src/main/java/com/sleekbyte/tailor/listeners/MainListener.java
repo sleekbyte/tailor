@@ -313,4 +313,11 @@ public class MainListener extends SwiftBaseListener {
         listenerHelper.verifyCodeBlockBracketStyle(Messages.INITIALIZER_BODY, parameterClauseLocation,
                                                       ctx.initializerBody().codeBlock());
     }
+
+    @Override
+    public void enterForInStatement(SwiftParser.ForInStatementContext ctx) {
+        Location expressionLocation = new Location(ctx.expression().getStop().getLine(),
+                                                               ctx.expression().getStop().getCharPositionInLine() + 1);
+        listenerHelper.verifyCodeBlockBracketStyle(Messages.FOR_IN_LOOP, expressionLocation, ctx.codeBlock());
+    }
 }
