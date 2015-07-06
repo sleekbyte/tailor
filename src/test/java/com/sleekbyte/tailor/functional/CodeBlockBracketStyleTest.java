@@ -11,6 +11,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class CodeBlockBracketStyleTest extends RuleTest {
+
     @Override
     protected void addAllExpectedMsgs() {
         addExpectedMsg(2, 1, Severity.WARNING, Messages.CLASS);
