@@ -15,6 +15,7 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.PatternContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.RepeatWhileStatementContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.StructDeclarationContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
@@ -274,6 +275,23 @@ class MainListenerHelper {
 
         if (classLocation.line != openBraceLocation.line) {
             this.printer.warn(Messages.CLASS + Messages.BRACKET_STYLE, openBraceLocation);
+        }
+    }
+
+    public void verifyStructBrackets(StructDeclarationContext ctx) {
+        TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
+        Location classLocation;
+        if (typeInheritanceClauseContext != null) {
+            classLocation = getContextStopLocation(typeInheritanceClauseContext);
+        } else {
+            classLocation = getContextStopLocation(ctx.structName());
+        }
+
+        Token openBraceToken = ((TerminalNodeImpl) ctx.structBody().getChild(0)).getSymbol();
+        Location openBraceLocation = getTokenLocation(openBraceToken);
+
+        if (classLocation.line != openBraceLocation.line) {
+            this.printer.warn(Messages.STRUCT + Messages.BRACKET_STYLE, openBraceLocation);
         }
     }
 

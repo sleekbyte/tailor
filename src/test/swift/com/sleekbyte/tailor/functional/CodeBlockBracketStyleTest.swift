@@ -113,4 +113,13 @@ class Rectangle : Shape
    {
 
    }
+
+   struct Square: Shape
+   {
+        // square struct
+   }
+
+   struct Line {
+        // line struct
+   }
 }

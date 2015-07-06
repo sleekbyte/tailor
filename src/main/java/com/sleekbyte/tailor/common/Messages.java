@@ -49,8 +49,8 @@ public class Messages {
     public static final String SWITCH_STATEMENT = "Switch statement ";
     public static final String WHILE_STATEMENT = "While statement ";
     public static final String REPEAT_WHILE_STATEMENT = "Repeat-While statement ";
-    public static final String INITIALIZER_BODY = "Initializer body";
-    public static final String FOR_IN_LOOP = "For-in loop";
+    public static final String INITIALIZER_BODY = "Initializer body ";
+    public static final String FOR_IN_LOOP = "For-in loop ";
 
     // Plural constructs
     public static final String IMPORTS = "Imports ";
