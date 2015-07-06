@@ -23,13 +23,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 /**
  * Performs static analysis on Swift source files.
@@ -39,27 +35,30 @@ public class Tailor {
     private static final int EXIT_SUCCESS = 0;
     private static final int EXIT_FAILURE = 1;
     private static ArgumentParser argumentParser = new ArgumentParser();
+    private static List<String> pathnames;
 
-    public static void printMissingSourceFileError() {
+    /**
+     * Prints error indicating no source file was provided, and exits.
+     */
+    public static void exitWithMissingSourceFileError() {
         System.err.println("Swift source file must be provided.");
         argumentParser.printHelp();
         System.exit(EXIT_FAILURE);
     }
 
-    public static void checkForSRCROOT(ArrayList<String> pathnames) {
-        if (pathnames.size() == 0) {
-            String srcRoot = System.getenv("SRCROOT");
-            if (srcRoot == null || srcRoot.equals("")) {
-                printMissingSourceFileError();
-            }
-            else {
-                pathnames = new ArrayList<>();
-                pathnames.add(srcRoot);
-            }
+    /**
+     * Checks environment variable SRCROOT (set by Xcode) for the top-level path to the source code and adds path to
+     * pathnames.
+     */
+    public static void checkSrcRoot() {
+        String srcRoot = System.getenv("SRCROOT");
+        if (srcRoot == null || srcRoot.equals("")) {
+            exitWithMissingSourceFileError();
         }
+        pathnames.add(srcRoot);
     }
 
-    public static Set<String> getSwiftSourceFiles(ArrayList<String> pathnames) throws IOException {
+    public static Set<String> getSwiftSourceFiles() throws IOException {
         Set<String> filenames = new TreeSet<String>();
         for (String pathname: pathnames) {
             if (pathname.endsWith(".swift")) {
@@ -89,22 +88,18 @@ public class Tailor {
                 System.exit(EXIT_SUCCESS);
             }
 
-            ArrayList<String> pathnames = new ArrayList<>();
+            pathnames = new ArrayList<>();
+
             if (cmd.getArgs().length >= 1) {
-                pathnames = new ArrayList<>(Arrays.asList(cmd.getArgs()));
+                pathnames.addAll(Arrays.asList(cmd.getArgs()));
             }
-
             if (pathnames.size() == 0) {
-                checkForSRCROOT(pathnames);
+                checkSrcRoot();
             }
-
-            Set<String> filenames = getSwiftSourceFiles(pathnames);
-
+            Set<String> filenames = getSwiftSourceFiles();
             if (filenames.size() == 0) {
-                printMissingSourceFileError();
+                exitWithMissingSourceFileError();
             }
-
-//            filenames.stream().forEach((String name) -> System.out.println(name));
 
             long numErrors = 0;
             MaxLengths maxLengths = argumentParser.parseMaxLengths();
