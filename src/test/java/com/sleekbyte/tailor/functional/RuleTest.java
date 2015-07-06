@@ -66,7 +66,6 @@ public abstract class RuleTest {
 
     protected String[] getCommandArgs() {
         return new String[]{
-            "--max-severity", "error",
             inputFile.getPath()
         };
     }

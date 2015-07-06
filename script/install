@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+# Usage: script/install
+# Installs tailor to /usr/local/bin.
+
+set -ev
+
+# Build the entire project
+./gradlew distZip
+
+# Uninstall old versions if existent
+[ -d /usr/local/tailor ] && rm -r /usr/local/tailor
+[ -L /usr/local/bin/tailor ] && unlink /usr/local/bin/tailor
+
+# Unzip distribution to /usr/local/tailor
+unzip -q build/distributions/tailor.zip -d /usr/local
+
+# Symlink start script to /usr/local/bin/tailor
+ln -s /usr/local/tailor/bin/tailor /usr/local/bin/tailor

@@ -16,6 +16,18 @@ test {
     }
 }
 
+compileJava {
+    // Enable compilation in a separate daemon process
+    options.fork = true
+    // Enable incremental compilation
+    options.incremental = true
+}
+
+// Ensure main JAR includes ANTLR output
+jar {
+    from sourceSets.gen.output
+}
+
 // Ensure ANTLR output is generated before compilation
 compileGenJava.dependsOn 'generateGrammarSource'
 
