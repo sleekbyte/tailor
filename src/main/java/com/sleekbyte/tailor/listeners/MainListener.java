@@ -234,6 +234,7 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterForStatement(SwiftParser.ForStatementContext ctx) {
         listenerHelper.verifyRedundantForLoopParenthesis(ctx);
+        listenerHelper.verifyForLoopBrackets(ctx);
     }
 
     @Override

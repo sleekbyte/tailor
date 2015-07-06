@@ -4,6 +4,7 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.ClassDeclarationContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ElseClauseContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ForInStatementContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.ForStatementContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.FunctionDeclarationContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.IfStatementContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ImportDeclarationContext;
@@ -293,6 +294,21 @@ class MainListenerHelper {
         if (classLocation.line != openBraceLocation.line) {
             this.printer.warn(Messages.STRUCT + Messages.BRACKET_STYLE, openBraceLocation);
         }
+    }
+
+    public void verifyForLoopBrackets(ForStatementContext ctx) {
+        int numChildren = ctx.getChildCount();
+        Location loopEndLocation;
+
+        // numChildren - 1 index is for codeBlock
+        if (ctx.getChild(numChildren - 2) instanceof TerminalNodeImpl) {
+            Token token = ((TerminalNodeImpl) ctx.getChild(numChildren - 2)).getSymbol();
+            loopEndLocation = getTokenLocation(token);
+        } else {
+            ExpressionContext expressionContext = (ExpressionContext) ctx.getChild(numChildren - 2);
+            loopEndLocation = getContextStopLocation(expressionContext);
+        }
+        verifyCodeBlockBracketStyle(Messages.FOR_LOOP, loopEndLocation, ctx.codeBlock());
     }
 
     /* Optional Binding Condition Evaluators */

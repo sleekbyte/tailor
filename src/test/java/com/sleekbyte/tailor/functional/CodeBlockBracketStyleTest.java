@@ -22,11 +22,13 @@ public class CodeBlockBracketStyleTest extends RuleTest {
         addExpectedMsg(37, 9, Severity.WARNING, Messages.ELSE_CLAUSE);
         addExpectedMsg(50, 9, Severity.WARNING, Messages.SWITCH_STATEMENT);
         addExpectedMsg(82, 5, Severity.WARNING, Messages.FUNCTION);
+        addExpectedMsg(87, 9, Severity.WARNING, Messages.FOR_LOOP);
         addExpectedMsg(92, 9, Severity.WARNING, Messages.FOR_IN_LOOP);
         addExpectedMsg(97, 9, Severity.WARNING, Messages.WHILE_STATEMENT);
         addExpectedMsg(102, 9, Severity.WARNING, Messages.REPEAT_WHILE_STATEMENT);
         addExpectedMsg(113, 4, Severity.WARNING, Messages.CLASS);
         addExpectedMsg(118, 4, Severity.WARNING, Messages.STRUCT);
+        addExpectedMsg(146, 13, Severity.WARNING, Messages.FOR_LOOP);
     }
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg) {
