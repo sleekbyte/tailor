@@ -50,6 +50,8 @@ class MainListenerHelper {
         this.printer = printer;
     }
 
+    //<editor-fold desc="Static utils">
+
     public static Location getContextStartLocation(ParserRuleContext ctx) {
         return new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
     }
@@ -62,6 +64,10 @@ class MainListenerHelper {
         return new Location(token.getLine(), token.getCharPositionInLine() + 1);
     }
 
+    //</editor-fold>
+
+    //<editor-fold desc="UpperCamelCase name check">
+
     public void verifyUpperCamelCase(String constructType, ParserRuleContext ctx) {
         String constructName = ctx.getText();
         if (!CharFormatUtil.isUpperCamelCase(constructName)) {
@@ -70,6 +76,10 @@ class MainListenerHelper {
         }
     }
 
+    //</editor-fold>
+
+    //<editor-fold desc="Semicolon terminated statement check">
+
     public void verifyNotSemicolonTerminated(String constructType, ParserRuleContext ctx) {
         String construct = ctx.getText();
         if (construct.endsWith(";")) {
@@ -77,6 +87,10 @@ class MainListenerHelper {
             this.printer.error(constructType + Messages.SEMICOLON, location);
         }
     }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Length checks">
 
     public void verifyConstructLength(String constructType, int maxLength, ParserRuleContext ctx) {
         if (SourceFileUtil.constructTooLong(ctx, maxLength)) {
@@ -95,6 +109,10 @@ class MainListenerHelper {
         }
     }
 
+    //</editor-fold>
+
+    //<editor-fold desc="Multiple import check">
+
     public void verifyMultipleImports(ImportDeclarationContext ctx) {
         int lineNum = ctx.getStart().getLine();
         if (importLineNumbers.contains(lineNum)) {
@@ -105,9 +123,13 @@ class MainListenerHelper {
         }
     }
 
+    //</editor-fold>
+
     public void walkConstantDecListener(ParseTreeWalker walker, ParserRuleContext tree) {
         walker.walk(new ConstantDecListener(this.printer), tree);
     }
+
+    //<editor-fold desc="Tuple pattern evaluation">
 
     public void evaluatePattern(PatternContext pattern, ParseTreeWalker walker) {
         if (pattern.identifierPattern() != null) {
@@ -135,6 +157,10 @@ class MainListenerHelper {
             evaluatePattern(tuplePatternElement.pattern(), walker);
         }
     }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Parenthesis check">
 
     public void verifyRedundantExpressionParenthesis(String constructType, ExpressionContext ctx) {
         if (ctx == null
@@ -202,6 +228,10 @@ class MainListenerHelper {
         Location startLocation = getContextStartLocation(ctx);
         this.printer.warn(firstParenthesisMsg, startLocation);
     }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Bracket style check">
 
     public void verifySwitchStatementBracketStyle(SwitchStatementContext ctx) {
         Location switchExpLocation = getTokenLocation(ctx.expression().getStop());
@@ -300,10 +330,11 @@ class MainListenerHelper {
         int numChildren = ctx.getChildCount();
         Location loopEndLocation;
 
-        // numChildren - 1 index is for codeBlock
+        // numChildren - 1 index is codeBlock
+        // numChildren - 1 index is either an expression or ';'
         if (ctx.getChild(numChildren - 2) instanceof TerminalNodeImpl) {
-            Token token = ((TerminalNodeImpl) ctx.getChild(numChildren - 2)).getSymbol();
-            loopEndLocation = getTokenLocation(token);
+            Token semicolon = ((TerminalNodeImpl) ctx.getChild(numChildren - 2)).getSymbol();
+            loopEndLocation = getTokenLocation(semicolon);
         } else {
             ExpressionContext expressionContext = (ExpressionContext) ctx.getChild(numChildren - 2);
             loopEndLocation = getContextStopLocation(expressionContext);
@@ -311,7 +342,9 @@ class MainListenerHelper {
         verifyCodeBlockBracketStyle(Messages.FOR_LOOP, loopEndLocation, ctx.codeBlock());
     }
 
-    /* Optional Binding Condition Evaluators */
+    //</editor-fold>
+
+    //<editor-fold desc="Optional binding condition evaluators">
 
     public void evaluateOptionalBindingHead(OptionalBindingHeadContext ctx) {
         ParseTreeWalker walker = new ParseTreeWalker();
@@ -330,4 +363,6 @@ class MainListenerHelper {
     public String letOrVar(OptionalBindingHeadContext ctx) {
         return ctx.getChild(0).getText();
     }
+
+    //</editor-fold>
 }
