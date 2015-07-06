@@ -192,7 +192,7 @@ class MainListenerHelper {
         this.printer.warn(firstParenthesisMsg, startLocation);
     }
 
-    void verifySwitchStatementBracketStyle(SwiftParser.SwitchStatementContext ctx) {
+    public void verifySwitchStatementBracketStyle(SwiftParser.SwitchStatementContext ctx) {
         Location switchExpLocation = getTokenLocation(ctx.expression().getStop());
         Token openBraceToken = ((TerminalNodeImpl) ctx.getChild(2)).getSymbol();
         Location openBraceLocation = getTokenLocation(openBraceToken);
@@ -202,19 +202,53 @@ class MainListenerHelper {
         }
     }
 
-    void verifyCodeBlockBracketStyle(String constructName, Location constructLocation,
+    private void verifyCodeBlockBracketStyle(String constructName, Location constructLocation,
                                      CodeBlockContext codeBlockCtx) {
-        // Null check for else if code blocks
-        if (codeBlockCtx == null) {
-            return;
-        }
-
         Token openBraceToken = ((TerminalNodeImpl) codeBlockCtx.getChild(0)).getSymbol();
         Location openBraceLocation = getTokenLocation(openBraceToken);
 
         if (constructLocation.line != openBraceLocation.line) {
             this.printer.warn(constructName + Messages.BRACKET_STYLE, openBraceLocation);
         }
+    }
+
+    public void verifyForInStatementBrackets(SwiftParser.ForInStatementContext ctx) {
+        Location expressionLocation = MainListenerHelper.getContextStopLocation(ctx.expression());
+        verifyCodeBlockBracketStyle(Messages.FOR_IN_LOOP, expressionLocation, ctx.codeBlock());
+    }
+
+    public void verifyInitializerBrackets(SwiftParser.InitializerDeclarationContext ctx) {
+        Location parameterClauseLocation = MainListenerHelper.getContextStopLocation(ctx.parameterClause());
+        verifyCodeBlockBracketStyle(Messages.INITIALIZER_BODY, parameterClauseLocation,
+                                           ctx.initializerBody().codeBlock());
+    }
+
+    public void verifyRepeatWhileLoopBrackets(SwiftParser.RepeatWhileStatementContext ctx) {
+        Location repeatClause = MainListenerHelper.getContextStartLocation(ctx);
+        verifyCodeBlockBracketStyle(Messages.REPEAT_WHILE_STATEMENT, repeatClause, ctx.codeBlock());
+    }
+
+    public void verifyWhileLoopBrackets(SwiftParser.WhileStatementContext ctx) {
+        Location conditionClauseLocation = MainListenerHelper.getContextStopLocation(ctx.conditionClause());
+        verifyCodeBlockBracketStyle(Messages.WHILE_STATEMENT, conditionClauseLocation, ctx.codeBlock());
+    }
+
+    public void verifyIfStatementBrackets(SwiftParser.IfStatementContext ctx) {
+        Location conditionClauseLocation = MainListenerHelper.getContextStopLocation(ctx.conditionClause());
+        verifyCodeBlockBracketStyle(Messages.IF_STATEMENT, conditionClauseLocation, ctx.codeBlock());
+    }
+
+    public void verifyElseClauseBrackets(SwiftParser.ElseClauseContext ctx) {
+        if (ctx.codeBlock() == null) {
+            return;
+        }
+        Location elseClauseLocation = MainListenerHelper.getContextStartLocation(ctx);
+        verifyCodeBlockBracketStyle(Messages.ELSE_CLAUSE, elseClauseLocation, ctx.codeBlock());
+    }
+
+    public void verifyFunctionBrackets(SwiftParser.FunctionDeclarationContext ctx) {
+        Location functionDeclarationLocation = MainListenerHelper.getContextStopLocation(ctx.functionSignature());
+        verifyCodeBlockBracketStyle(Messages.FUNCTION, functionDeclarationLocation, ctx.functionBody().codeBlock());
     }
 
     /* Optional Binding Condition Evaluators */

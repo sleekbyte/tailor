@@ -2,7 +2,6 @@ package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
-import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
@@ -271,45 +270,36 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterFunctionDeclaration(SwiftParser.FunctionDeclarationContext ctx) {
-        Location functionDeclarationLocation = MainListenerHelper.getContextStopLocation(ctx.functionSignature());
-        listenerHelper.verifyCodeBlockBracketStyle(Messages.FUNCTION, functionDeclarationLocation,
-                                                      ctx.functionBody().codeBlock());
+        listenerHelper.verifyFunctionBrackets(ctx);
     }
 
     @Override
     public void enterElseClause(SwiftParser.ElseClauseContext ctx) {
-        Location elseClauseLocation = MainListenerHelper.getContextStartLocation(ctx);
-        listenerHelper.verifyCodeBlockBracketStyle(Messages.ELSE_CLAUSE, elseClauseLocation, ctx.codeBlock());
+        listenerHelper.verifyElseClauseBrackets(ctx);
     }
 
     @Override
     public void enterIfStatement(SwiftParser.IfStatementContext ctx) {
-        Location conditionClauseLocation = MainListenerHelper.getContextStopLocation(ctx.conditionClause());
-        listenerHelper.verifyCodeBlockBracketStyle(Messages.IF_STATEMENT, conditionClauseLocation, ctx.codeBlock());
+        listenerHelper.verifyIfStatementBrackets(ctx);
     }
 
     @Override
     public void enterWhileStatement(SwiftParser.WhileStatementContext ctx) {
-        Location conditionClauseLocation = MainListenerHelper.getContextStopLocation(ctx.conditionClause());
-        listenerHelper.verifyCodeBlockBracketStyle(Messages.WHILE_STATEMENT, conditionClauseLocation, ctx.codeBlock());
+        listenerHelper.verifyWhileLoopBrackets(ctx);
     }
 
     @Override
     public void enterRepeatWhileStatement(SwiftParser.RepeatWhileStatementContext ctx) {
-        Location repeatClause = MainListenerHelper.getContextStartLocation(ctx);
-        listenerHelper.verifyCodeBlockBracketStyle(Messages.REPEAT_WHILE_STATEMENT, repeatClause, ctx.codeBlock());
+        listenerHelper.verifyRepeatWhileLoopBrackets(ctx);
     }
 
     @Override
     public void enterInitializerDeclaration(SwiftParser.InitializerDeclarationContext ctx) {
-        Location parameterClauseLocation = MainListenerHelper.getContextStopLocation(ctx.parameterClause());
-        listenerHelper.verifyCodeBlockBracketStyle(Messages.INITIALIZER_BODY, parameterClauseLocation,
-                                                      ctx.initializerBody().codeBlock());
+        listenerHelper.verifyInitializerBrackets(ctx);
     }
 
     @Override
     public void enterForInStatement(SwiftParser.ForInStatementContext ctx) {
-        Location expressionLocation = MainListenerHelper.getContextStopLocation(ctx.expression());
-        listenerHelper.verifyCodeBlockBracketStyle(Messages.FOR_IN_LOOP, expressionLocation, ctx.codeBlock());
+        listenerHelper.verifyForInStatementBrackets(ctx);
     }
 }
