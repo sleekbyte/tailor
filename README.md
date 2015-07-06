@@ -1,4 +1,4 @@
-# tailor
+# Tailor
 Static analysis for Swift.
 
 ## Project Wiki
