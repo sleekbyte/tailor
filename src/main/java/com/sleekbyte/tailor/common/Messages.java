@@ -51,11 +51,11 @@ public class Messages {
 
     // Message descriptions
     public static final String UPPER_CAMEL_CASE = "should be UpperCamelCase";
+    public static final String LOWER_CAMEL_CASE = "should be lowerCamelCase";
     public static final String SEMICOLON = "should not terminate with a semicolon";
     public static final String EXCEEDS_LINE_LIMIT = "is over maximum line limit";
     public static final String EXCEEDS_CHARACTER_LIMIT = "is over maximum character limit";
     public static final String GLOBAL_CONSTANT_NAMING = "should be either lowerCamelCase or UpperCamelCase";
-    public static final String CONSTANT_NAMING = "should be lowerCamelCase";
     public static final String NEWLINE_TERMINATOR = "should terminate with a newline character ('\\n')";
     public static final String ENCLOSED_PARENTHESIS = "should not be enclosed within parentheses";
     public static final String K_PREFIXED = "should not be prefixed with 'k' or 'K'";

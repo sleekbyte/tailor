@@ -11,6 +11,7 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
 
+import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
@@ -70,6 +71,14 @@ class MainListenerHelper {
         }
     }
 
+    void verifyLowerCamelCase(String constructType, ParserRuleContext ctx) {
+        String constructName = ctx.getText();
+        if (!CharFormatUtil.isLowerCamelCase(constructName)) {
+            Location location = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+            this.printer.error(constructType + Messages.LOWER_CAMEL_CASE, location);
+        }
+    }
+
     void verifyMultipleImports(ImportDeclarationContext ctx) {
         int lineNum = ctx.getStart().getLine();
         if (importLineNumbers.contains(lineNum)) {
@@ -80,34 +89,35 @@ class MainListenerHelper {
         }
     }
 
-    void walkConstantDecListener(ParseTreeWalker walker, ParserRuleContext tree) {
-        walker.walk(new ConstantDecListener(this.printer), tree);
+    void walkListener(ParseTreeWalker walker, ParserRuleContext tree, SwiftBaseListener listener) {
+        walker.walk(listener, tree);
     }
 
-    void evaluatePattern(PatternContext pattern, ParseTreeWalker walker) {
+    void evaluatePattern(PatternContext pattern, ParseTreeWalker walker, SwiftBaseListener listener) {
         if (pattern.identifierPattern() != null) {
-            walkConstantDecListener(walker, pattern.identifierPattern());
+            walkListener(walker, pattern.identifierPattern(), listener);
 
         } else if (pattern.tuplePattern() != null && pattern.tuplePattern().tuplePatternElementList() != null) {
-            evaluateTuplePattern(pattern.tuplePattern(), walker);
+            evaluateTuplePattern(pattern.tuplePattern(), walker, listener);
 
         } else if (pattern.enumCasePattern() != null && pattern.enumCasePattern().tuplePattern() != null) {
-            evaluateTuplePattern(pattern.enumCasePattern().tuplePattern(), walker);
+            evaluateTuplePattern(pattern.enumCasePattern().tuplePattern(), walker, listener);
 
         } else if (pattern.pattern() != null) {
-            evaluatePattern(pattern.pattern(), walker);
+            evaluatePattern(pattern.pattern(), walker, listener);
 
         } else if (pattern.expressionPattern() != null) {
-            walkConstantDecListener(walker, pattern.expressionPattern().expression().prefixExpression());
+            walkListener(walker, pattern.expressionPattern().expression().prefixExpression(), listener);
         }
     }
 
-    void evaluateTuplePattern(TuplePatternContext tuplePatternContext, ParseTreeWalker walker) {
+    void evaluateTuplePattern(TuplePatternContext tuplePatternContext, ParseTreeWalker walker,
+                              SwiftBaseListener listener) {
         List<TuplePatternElementContext> tuplePatternElementContexts =
             tuplePatternContext.tuplePatternElementList().tuplePatternElement();
 
         for (TuplePatternElementContext tuplePatternElement : tuplePatternElementContexts) {
-            evaluatePattern(tuplePatternElement.pattern(), walker);
+            evaluatePattern(tuplePatternElement.pattern(), walker, listener);
         }
     }
 
@@ -181,17 +191,18 @@ class MainListenerHelper {
 
     /* Optional Binding Condition Evaluators */
 
-    public void evaluateOptionalBindingHead(OptionalBindingHeadContext ctx) {
+    public void evaluateOptionalBindingHead(OptionalBindingHeadContext ctx, SwiftBaseListener listener) {
         ParseTreeWalker walker = new ParseTreeWalker();
-        evaluatePattern(ctx.pattern(), walker);
+        evaluatePattern(ctx.pattern(), walker, listener);
     }
 
-    public void evaluateOptionalBindingContinuation(OptionalBindingContinuationContext ctx) {
+    public void evaluateOptionalBindingContinuation(OptionalBindingContinuationContext ctx,
+                                                    SwiftBaseListener listener) {
         if (ctx.optionalBindingHead() != null) {
-            evaluateOptionalBindingHead(ctx.optionalBindingHead());
+            evaluateOptionalBindingHead(ctx.optionalBindingHead(), listener);
         } else {
             ParseTreeWalker walker = new ParseTreeWalker();
-            evaluatePattern(ctx.pattern(), walker);
+            evaluatePattern(ctx.pattern(), walker, listener);
         }
     }
 

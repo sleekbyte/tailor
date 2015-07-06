@@ -33,7 +33,7 @@ public class ConstantDecListener extends SwiftBaseListener {
             }
         } else {
             if (!CharFormatUtil.isLowerCamelCase(constantName)) {
-                this.printer.error(Messages.CONSTANT + Messages.CONSTANT_NAMING, location);
+                this.printer.error(Messages.CONSTANT + Messages.LOWER_CAMEL_CASE, location);
             } else if (CharFormatUtil.isKPrefixed(constantName)) {
                 this.printer.warn(Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED, location);
             }
