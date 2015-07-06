@@ -302,4 +302,9 @@ public class MainListener extends SwiftBaseListener {
     public void enterForInStatement(SwiftParser.ForInStatementContext ctx) {
         listenerHelper.verifyForInStatementBrackets(ctx);
     }
+
+    @Override
+    public void enterClassDeclaration(SwiftParser.ClassDeclarationContext ctx) {
+        listenerHelper.verifyClassBrackets(ctx);
+    }
 }

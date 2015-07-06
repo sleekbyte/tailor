@@ -251,6 +251,23 @@ class MainListenerHelper {
         verifyCodeBlockBracketStyle(Messages.FUNCTION, functionDeclarationLocation, ctx.functionBody().codeBlock());
     }
 
+    public void verifyClassBrackets(SwiftParser.ClassDeclarationContext ctx) {
+        SwiftParser.TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
+        Location classLocation;
+        if (typeInheritanceClauseContext != null) {
+            classLocation = getContextStopLocation(typeInheritanceClauseContext);
+        } else {
+            classLocation = getContextStopLocation(ctx.className());
+        }
+
+        Token openBraceToken = ((TerminalNodeImpl) ctx.classBody().getChild(0)).getSymbol();
+        Location openBraceLocation = getTokenLocation(openBraceToken);
+
+        if (classLocation.line != openBraceLocation.line) {
+            this.printer.warn(Messages.CLASS + Messages.BRACKET_STYLE, openBraceLocation);
+        }
+    }
+
     /* Optional Binding Condition Evaluators */
 
     public void evaluateOptionalBindingHead(OptionalBindingHeadContext ctx) {

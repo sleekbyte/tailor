@@ -13,6 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class CodeBlockBracketStyleTest extends RuleTest {
     @Override
     protected void addAllExpectedMsgs() {
+        addExpectedMsg(2, 1, Severity.WARNING, Messages.CLASS);
         addExpectedMsg(7, 5, Severity.WARNING, Messages.INITIALIZER_BODY);
         addExpectedMsg(14, 5, Severity.WARNING, Messages.FUNCTION);
         addExpectedMsg(19, 5, Severity.WARNING, Messages.FUNCTION);
@@ -24,6 +25,7 @@ public class CodeBlockBracketStyleTest extends RuleTest {
         addExpectedMsg(92, 9, Severity.WARNING, Messages.FOR_IN_LOOP);
         addExpectedMsg(97, 9, Severity.WARNING, Messages.WHILE_STATEMENT);
         addExpectedMsg(102, 9, Severity.WARNING, Messages.REPEAT_WHILE_STATEMENT);
+        addExpectedMsg(113, 4, Severity.WARNING, Messages.CLASS);
     }
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg) {

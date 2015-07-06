@@ -1,4 +1,4 @@
-class Rectangle
+class Rectangle : Shape
 {
     let length:Double
     let breadth:Double
@@ -107,5 +107,10 @@ class Rectangle
     func multiLineFunction(arg1: String,
                            arg2: String) {
         // do nothing.
+   }
+
+   class Shape
+   {
+
    }
 }
