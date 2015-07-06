@@ -1,6 +1,7 @@
 package com.sleekbyte.tailor.listeners;
 
 import static com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.ImportDeclarationContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingContinuationContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingHeadContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ParenthesizedExpressionContext;
@@ -9,7 +10,6 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.ImportDeclarationContext;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.common.Location;

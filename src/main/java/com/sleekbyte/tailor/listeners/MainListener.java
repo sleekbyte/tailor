@@ -181,7 +181,7 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterVariableDeclaration(SwiftParser.VariableDeclarationContext ctx) {
         ParseTreeWalker walker = new ParseTreeWalker();
-        if (ctx == null || ctx.patternInitializerList() == null) {
+        if (ctx.patternInitializerList() == null) {
             return;
         }
         for (SwiftParser.PatternInitializerContext context : ctx.patternInitializerList().patternInitializer()) {
@@ -244,6 +244,7 @@ public class MainListener extends SwiftBaseListener {
         for (ParseTree child : ctx.children) {
             if (child.getText().equals(VAR)) {
                 listener = new VariableDecListener(this.printer);
+                break;
             }
         }
         if (listener == null) {
