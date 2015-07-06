@@ -1,17 +1,26 @@
 package com.sleekbyte.tailor.listeners;
 
+import static com.sleekbyte.tailor.antlr.SwiftParser.ClassDeclarationContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.ElseClauseContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.ForInStatementContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.FunctionDeclarationContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.IfStatementContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ImportDeclarationContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.InitializerDeclarationContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingContinuationContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingHeadContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ParenthesizedExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.PatternContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.RepeatWhileStatementContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.TypeInheritanceClauseContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
 
-import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.antlr.SwiftParser.CodeBlockContext;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
@@ -192,7 +201,7 @@ class MainListenerHelper {
         this.printer.warn(firstParenthesisMsg, startLocation);
     }
 
-    public void verifySwitchStatementBracketStyle(SwiftParser.SwitchStatementContext ctx) {
+    public void verifySwitchStatementBracketStyle(SwitchStatementContext ctx) {
         Location switchExpLocation = getTokenLocation(ctx.expression().getStop());
         Token openBraceToken = ((TerminalNodeImpl) ctx.getChild(2)).getSymbol();
         Location openBraceLocation = getTokenLocation(openBraceToken);
@@ -212,33 +221,33 @@ class MainListenerHelper {
         }
     }
 
-    public void verifyForInStatementBrackets(SwiftParser.ForInStatementContext ctx) {
+    public void verifyForInStatementBrackets(ForInStatementContext ctx) {
         Location expressionLocation = MainListenerHelper.getContextStopLocation(ctx.expression());
         verifyCodeBlockBracketStyle(Messages.FOR_IN_LOOP, expressionLocation, ctx.codeBlock());
     }
 
-    public void verifyInitializerBrackets(SwiftParser.InitializerDeclarationContext ctx) {
+    public void verifyInitializerBrackets(InitializerDeclarationContext ctx) {
         Location parameterClauseLocation = MainListenerHelper.getContextStopLocation(ctx.parameterClause());
         verifyCodeBlockBracketStyle(Messages.INITIALIZER_BODY, parameterClauseLocation,
                                            ctx.initializerBody().codeBlock());
     }
 
-    public void verifyRepeatWhileLoopBrackets(SwiftParser.RepeatWhileStatementContext ctx) {
+    public void verifyRepeatWhileLoopBrackets(RepeatWhileStatementContext ctx) {
         Location repeatClause = MainListenerHelper.getContextStartLocation(ctx);
         verifyCodeBlockBracketStyle(Messages.REPEAT_WHILE_STATEMENT, repeatClause, ctx.codeBlock());
     }
 
-    public void verifyWhileLoopBrackets(SwiftParser.WhileStatementContext ctx) {
+    public void verifyWhileLoopBrackets(WhileStatementContext ctx) {
         Location conditionClauseLocation = MainListenerHelper.getContextStopLocation(ctx.conditionClause());
         verifyCodeBlockBracketStyle(Messages.WHILE_STATEMENT, conditionClauseLocation, ctx.codeBlock());
     }
 
-    public void verifyIfStatementBrackets(SwiftParser.IfStatementContext ctx) {
+    public void verifyIfStatementBrackets(IfStatementContext ctx) {
         Location conditionClauseLocation = MainListenerHelper.getContextStopLocation(ctx.conditionClause());
         verifyCodeBlockBracketStyle(Messages.IF_STATEMENT, conditionClauseLocation, ctx.codeBlock());
     }
 
-    public void verifyElseClauseBrackets(SwiftParser.ElseClauseContext ctx) {
+    public void verifyElseClauseBrackets(ElseClauseContext ctx) {
         if (ctx.codeBlock() == null) {
             return;
         }
@@ -246,13 +255,13 @@ class MainListenerHelper {
         verifyCodeBlockBracketStyle(Messages.ELSE_CLAUSE, elseClauseLocation, ctx.codeBlock());
     }
 
-    public void verifyFunctionBrackets(SwiftParser.FunctionDeclarationContext ctx) {
+    public void verifyFunctionBrackets(FunctionDeclarationContext ctx) {
         Location functionDeclarationLocation = MainListenerHelper.getContextStopLocation(ctx.functionSignature());
         verifyCodeBlockBracketStyle(Messages.FUNCTION, functionDeclarationLocation, ctx.functionBody().codeBlock());
     }
 
-    public void verifyClassBrackets(SwiftParser.ClassDeclarationContext ctx) {
-        SwiftParser.TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
+    public void verifyClassBrackets(ClassDeclarationContext ctx) {
+        TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
         Location classLocation;
         if (typeInheritanceClauseContext != null) {
             classLocation = getContextStopLocation(typeInheritanceClauseContext);
