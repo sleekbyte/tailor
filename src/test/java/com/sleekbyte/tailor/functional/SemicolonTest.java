@@ -41,7 +41,7 @@ public class SemicolonTest extends RuleTest {
         addExpectedMsg(59, 59, Severity.WARNING, Messages.STATEMENTS);
         addExpectedMsg(61, 6, Severity.WARNING, Messages.STATEMENTS);
         addExpectedMsg(62, 2, Severity.WARNING, Messages.STATEMENTS);
-}
+    }
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg) {
         expectedMessages.add(
