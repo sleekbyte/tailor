@@ -22,8 +22,8 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TypeInheritanceClauseContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.CodeBlockContext;
 
-import com.sleekbyte.tailor.antlr.SwiftParser.CodeBlockContext;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
