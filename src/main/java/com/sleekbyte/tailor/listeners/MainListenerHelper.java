@@ -145,7 +145,7 @@ class MainListenerHelper {
         }
 
         ParenthesizedExpressionContext parenthesizedExpressionContext =
-                (ParenthesizedExpressionContext) primaryExpression.getChild(0);
+            (ParenthesizedExpressionContext) primaryExpression.getChild(0);
 
         // check to not flag tuple initialization
         if (parenthesizedExpressionContext.expressionElementList() == null
@@ -166,7 +166,7 @@ class MainListenerHelper {
 
         if (firstCharacter == '(') {
             Location startLocation = new Location(openParenthesisToken.getLine(),
-                    openParenthesisToken.getCharPositionInLine() + 1);
+                openParenthesisToken.getCharPositionInLine() + 1);
             this.printer.warn(Messages.FOR_LOOP + Messages.ENCLOSED_PARENTHESIS, startLocation);
         }
     }

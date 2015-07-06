@@ -19,7 +19,7 @@ import java.nio.charset.Charset;
 @RunWith(MockitoJUnitRunner.class)
 public class GrammarTest {
 
-    private static final String TEST_INPUT_DIR = "src/test/java/com/sleekbyte/tailor/grammar/";
+    private static final String TEST_INPUT_DIR = "src/test/swift/com/sleekbyte/tailor/grammar/";
 
     private ByteArrayOutputStream errContent;
     private ByteArrayOutputStream outContent;
@@ -27,8 +27,8 @@ public class GrammarTest {
 
     @Before
     public void setUp() throws UnsupportedEncodingException {
-        File curDir = new File(TEST_INPUT_DIR);
-        swiftFiles = curDir.listFiles((File file, String name) -> name.endsWith(".swift"));
+        File inputDir = new File(TEST_INPUT_DIR);
+        swiftFiles = inputDir.listFiles((File file, String name) -> name.endsWith(".swift"));
         outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent, false, Charset.defaultCharset().name()));
     }
