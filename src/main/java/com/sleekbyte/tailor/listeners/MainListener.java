@@ -6,7 +6,6 @@ import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
@@ -272,52 +271,45 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterFunctionDeclaration(SwiftParser.FunctionDeclarationContext ctx) {
-        Token functionSignatureStop = ctx.functionSignature().getStop();
-        Location functionDeclarationLocation = new Location(functionSignatureStop.getLine(),
-                                                               functionSignatureStop.getCharPositionInLine() + 1);
+        Location functionDeclarationLocation = MainListenerHelper.getContextStopLocation(ctx.functionSignature());
         listenerHelper.verifyCodeBlockBracketStyle(Messages.FUNCTION, functionDeclarationLocation,
                                                       ctx.functionBody().codeBlock());
     }
 
     @Override
     public void enterElseClause(SwiftParser.ElseClauseContext ctx) {
-        Location elseClauseLocation = new Location(ctx.getStart().getLine(),
-                                                      ctx.getStart().getCharPositionInLine() + 1);
+        Location elseClauseLocation = MainListenerHelper.getContextStartLocation(ctx);
         listenerHelper.verifyCodeBlockBracketStyle(Messages.ELSE_CLAUSE, elseClauseLocation, ctx.codeBlock());
     }
 
     @Override
     public void enterIfStatement(SwiftParser.IfStatementContext ctx) {
-        Location conditionClauseLocation = new Location(ctx.conditionClause().getStop().getLine(),
-                                                           ctx.conditionClause().getStop().getCharPositionInLine() + 1);
+        Location conditionClauseLocation = MainListenerHelper.getContextStopLocation(ctx.conditionClause());
         listenerHelper.verifyCodeBlockBracketStyle(Messages.IF_STATEMENT, conditionClauseLocation, ctx.codeBlock());
     }
 
     @Override
     public void enterWhileStatement(SwiftParser.WhileStatementContext ctx) {
-        Location conditionClauseLocation = new Location(ctx.conditionClause().getStop().getLine(),
-                                                           ctx.conditionClause().getStop().getCharPositionInLine() + 1);
+        Location conditionClauseLocation = MainListenerHelper.getContextStopLocation(ctx.conditionClause());
         listenerHelper.verifyCodeBlockBracketStyle(Messages.WHILE_STATEMENT, conditionClauseLocation, ctx.codeBlock());
     }
 
     @Override
     public void enterRepeatWhileStatement(SwiftParser.RepeatWhileStatementContext ctx) {
-        Location repeatClause = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+        Location repeatClause = MainListenerHelper.getContextStartLocation(ctx);
         listenerHelper.verifyCodeBlockBracketStyle(Messages.REPEAT_WHILE_STATEMENT, repeatClause, ctx.codeBlock());
     }
 
     @Override
     public void enterInitializerDeclaration(SwiftParser.InitializerDeclarationContext ctx) {
-        Location parameterClauseLocation = new Location(ctx.parameterClause().getStop().getLine(),
-                                                           ctx.parameterClause().getStop().getCharPositionInLine() + 1);
+        Location parameterClauseLocation = MainListenerHelper.getContextStopLocation(ctx.parameterClause());
         listenerHelper.verifyCodeBlockBracketStyle(Messages.INITIALIZER_BODY, parameterClauseLocation,
                                                       ctx.initializerBody().codeBlock());
     }
 
     @Override
     public void enterForInStatement(SwiftParser.ForInStatementContext ctx) {
-        Location expressionLocation = new Location(ctx.expression().getStop().getLine(),
-                                                               ctx.expression().getStop().getCharPositionInLine() + 1);
+        Location expressionLocation = MainListenerHelper.getContextStopLocation(ctx.expression());
         listenerHelper.verifyCodeBlockBracketStyle(Messages.FOR_IN_LOOP, expressionLocation, ctx.codeBlock());
     }
 }

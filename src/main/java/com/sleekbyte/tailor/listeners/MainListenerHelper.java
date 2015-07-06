@@ -39,10 +39,22 @@ class MainListenerHelper {
         this.printer = printer;
     }
 
+    public static Location getContextStartLocation(ParserRuleContext ctx) {
+        return new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+    }
+
+    public static Location getContextStopLocation(ParserRuleContext ctx) {
+        return new Location(ctx.getStop().getLine(), ctx.getStop().getCharPositionInLine() + 1);
+    }
+
+    public static Location getTokenLocation(Token token) {
+        return new Location(token.getLine(), token.getCharPositionInLine() + 1);
+    }
+
     public void verifyUpperCamelCase(String constructType, ParserRuleContext ctx) {
         String constructName = ctx.getText();
         if (!CharFormatUtil.isUpperCamelCase(constructName)) {
-            Location location = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+            Location location = getContextStartLocation(ctx);
             this.printer.error(constructType + Messages.UPPER_CAMEL_CASE, location);
         }
     }
@@ -50,7 +62,7 @@ class MainListenerHelper {
     public void verifyNotSemicolonTerminated(String constructType, ParserRuleContext ctx) {
         String construct = ctx.getText();
         if (construct.endsWith(";")) {
-            Location location = new Location(ctx.getStop().getLine(), ctx.getStop().getCharPositionInLine() + 1);
+            Location location = getContextStopLocation(ctx);
             this.printer.error(constructType + Messages.SEMICOLON, location);
         }
     }
@@ -59,7 +71,7 @@ class MainListenerHelper {
         if (SourceFileUtil.constructTooLong(ctx, maxLength)) {
             int constructLength = ctx.getStop().getLine() - ctx.getStart().getLine();
             String lengthVersusLimit = " (" + constructLength + "/" + maxLength + ")";
-            Location location = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+            Location location = getContextStartLocation(ctx);
             this.printer.error(constructType + Messages.EXCEEDS_LINE_LIMIT + lengthVersusLimit, location);
         }
     }
@@ -67,7 +79,7 @@ class MainListenerHelper {
     public void verifyNameLength(String constructType, int maxLength, ParserRuleContext ctx) {
         if (SourceFileUtil.nameTooLong(ctx, maxLength)) {
             String lengthVersusLimit = " (" + ctx.getText().length() + "/" + maxLength + ")";
-            Location location = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+            Location location = getContextStartLocation(ctx);
             this.printer.error(constructType + Messages.EXCEEDS_CHARACTER_LIMIT + lengthVersusLimit, location);
         }
     }
@@ -157,8 +169,7 @@ class MainListenerHelper {
         char firstCharacter = openParenthesisToken.getText().charAt(0);
 
         if (firstCharacter == '(') {
-            Location startLocation = new Location(openParenthesisToken.getLine(),
-                openParenthesisToken.getCharPositionInLine() + 1);
+            Location startLocation = getTokenLocation(openParenthesisToken);
             this.printer.warn(Messages.FOR_LOOP + Messages.ENCLOSED_PARENTHESIS, startLocation);
         }
     }
@@ -177,16 +188,14 @@ class MainListenerHelper {
     }
 
     private void printRedundantParenthesisWarning(ParserRuleContext ctx, String firstParenthesisMsg) {
-        Location startLocation = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+        Location startLocation = getContextStartLocation(ctx);
         this.printer.warn(firstParenthesisMsg, startLocation);
     }
 
     void verifySwitchStatementBracketStyle(SwiftParser.SwitchStatementContext ctx) {
-        Token switchStop = ctx.expression().getStop();
-        Location switchExpLocation = new Location(switchStop.getLine(),
-                                                               switchStop.getCharPositionInLine() + 1);
+        Location switchExpLocation = getTokenLocation(ctx.expression().getStop());
         Token openBraceToken = ((TerminalNodeImpl) ctx.getChild(2)).getSymbol();
-        Location openBraceLocation = new Location(openBraceToken.getLine(), openBraceToken.getCharPositionInLine() + 1);
+        Location openBraceLocation = getTokenLocation(openBraceToken);
 
         if (switchExpLocation.line != openBraceLocation.line) {
             this.printer.warn(Messages.SWITCH_STATEMENT + Messages.BRACKET_STYLE, openBraceLocation);
@@ -201,7 +210,7 @@ class MainListenerHelper {
         }
 
         Token openBraceToken = ((TerminalNodeImpl) codeBlockCtx.getChild(0)).getSymbol();
-        Location openBraceLocation = new Location(openBraceToken.getLine(), openBraceToken.getCharPositionInLine() + 1);
+        Location openBraceLocation = getTokenLocation(openBraceToken);
 
         if (constructLocation.line != openBraceLocation.line) {
             this.printer.warn(constructName + Messages.BRACKET_STYLE, openBraceLocation);
