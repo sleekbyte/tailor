@@ -73,4 +73,9 @@ public class Printer implements AutoCloseable {
         outputList.forEach(System.out::println);
         this.msgBuffer.clear();
     }
+
+    public long getNumErrorMessages() {
+        return msgBuffer.values().stream().filter(msg -> msg.getSeverity().equals(Severity.ERROR)).count();
+    }
+
 }
