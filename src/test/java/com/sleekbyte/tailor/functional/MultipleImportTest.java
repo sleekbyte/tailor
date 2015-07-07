@@ -42,4 +42,5 @@ public class MultipleImportTest extends RuleTest {
     private void addExpectedMsg(int line, Severity severity, String msg) {
         this.expectedMessages.add(Printer.genOutputStringForTest(inputFile.getName(), line, severity, msg));
     }
+
 }
