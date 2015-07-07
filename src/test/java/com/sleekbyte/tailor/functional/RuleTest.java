@@ -55,7 +55,12 @@ public abstract class RuleTest {
         Tailor.main(command);
 
         List<String> actualOutput = new ArrayList<>();
+        int lineNum = 0;
         for (String msg : outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX)) {
+            // Skip the first two lines for file header
+            if (lineNum++ < 2) {
+                continue;
+            }
             String truncatedMsg = msg.substring(msg.indexOf(inputFile.getName()));
             actualOutput.add(truncatedMsg);
         }

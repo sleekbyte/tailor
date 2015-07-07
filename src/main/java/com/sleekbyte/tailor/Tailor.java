@@ -19,7 +19,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +34,7 @@ public class Tailor {
     private static final int EXIT_SUCCESS = 0;
     private static final int EXIT_FAILURE = 1;
     private static ArgumentParser argumentParser = new ArgumentParser();
-    private static List<String> pathnames;
+    private static List<String> pathNames;
 
     /**
      * Prints error indicating no source file was provided, and exits.
@@ -48,26 +47,35 @@ public class Tailor {
 
     /**
      * Checks environment variable SRCROOT (set by Xcode) for the top-level path to the source code and adds path to
-     * pathnames.
+     * pathNames.
      */
     public static void checkSrcRoot() {
         String srcRoot = System.getenv("SRCROOT");
         if (srcRoot == null || srcRoot.equals("")) {
             exitWithMissingSourceFileError();
         }
-        pathnames.add(srcRoot);
+        pathNames.add(srcRoot);
     }
 
+    /**
+     * Iterate through pathNames and derive swift source files from each path.
+     *
+     * @return Swift file names
+     * @throws IOException if path specified does not exist
+     */
     public static Set<String> getSwiftSourceFiles() throws IOException {
-        Set<String> filenames = new TreeSet<String>();
-        for (String pathname: pathnames) {
-            if (pathname.endsWith(".swift")) {
-                filenames.add(pathname);
-            }
-            if (new File(pathname).isDirectory()) {
-                Files.walk(Paths.get(pathname))
-                    .filter((Path path) -> path.toString().endsWith(".swift"))
-                    .forEach((Path path) -> filenames.add(path.toString()));
+        Set<String> filenames = new TreeSet<>();
+        for (String pathName : pathNames) {
+            File file = new File(pathName);
+            if (file.isDirectory()) {
+                Files.walk(Paths.get(pathName))
+                    .filter(path -> path.toFile().isFile())
+                    .filter(path -> path.toString().endsWith(".swift"))
+                    .forEach(path -> filenames.add(path.toString()));
+            } else if (file.isFile() && pathName.endsWith(".swift") && file.canRead()) {
+                filenames.add(pathName);
+            } else {
+                throw new IOException("Cannot read " + pathName);
             }
         }
         return filenames;
@@ -81,6 +89,7 @@ public class Tailor {
     public static void main(String[] args) {
 
         try {
+            pathNames = new ArrayList<>();
 
             CommandLine cmd = argumentParser.parseCommandLine(args);
             if (argumentParser.shouldPrintHelp()) {
@@ -88,12 +97,10 @@ public class Tailor {
                 System.exit(EXIT_SUCCESS);
             }
 
-            pathnames = new ArrayList<>();
-
             if (cmd.getArgs().length >= 1) {
-                pathnames.addAll(Arrays.asList(cmd.getArgs()));
+                pathNames.addAll(Arrays.asList(cmd.getArgs()));
             }
-            if (pathnames.size() == 0) {
+            if (pathNames.size() == 0) {
                 checkSrcRoot();
             }
             Set<String> filenames = getSwiftSourceFiles();
@@ -105,7 +112,7 @@ public class Tailor {
             MaxLengths maxLengths = argumentParser.parseMaxLengths();
             Severity maxSeverity = argumentParser.getMaxSeverity();
 
-            for (String filename: filenames) {
+            for (String filename : filenames) {
                 File inputFile = new File(filename);
                 FileInputStream inputStream = new FileInputStream(inputFile);
                 SwiftLexer lexer = new SwiftLexer(new ANTLRInputStream(inputStream));
