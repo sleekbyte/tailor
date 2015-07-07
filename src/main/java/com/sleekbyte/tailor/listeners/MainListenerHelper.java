@@ -118,7 +118,7 @@ class MainListenerHelper {
     public void verifyLowerCamelCase(String constructType, ParserRuleContext ctx) {
         String constructName = ctx.getText();
         if (!CharFormatUtil.isLowerCamelCase(constructName)) {
-            Location location = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+            Location location = getContextStartLocation(ctx);
             this.printer.error(constructType + Messages.LOWER_CAMEL_CASE, location);
         }
     }
