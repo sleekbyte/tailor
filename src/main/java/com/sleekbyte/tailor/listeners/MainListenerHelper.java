@@ -53,15 +53,15 @@ class MainListenerHelper {
 
     //<editor-fold desc="Static utils">
 
-    public static Location getContextStartLocation(ParserRuleContext ctx) {
+    private Location getContextStartLocation(ParserRuleContext ctx) {
         return new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
     }
 
-    public static Location getContextStopLocation(ParserRuleContext ctx) {
+    private Location getContextStopLocation(ParserRuleContext ctx) {
         return new Location(ctx.getStop().getLine(), ctx.getStop().getCharPositionInLine() + 1);
     }
 
-    public static Location getTokenLocation(Token token) {
+    private Location getTokenLocation(Token token) {
         return new Location(token.getLine(), token.getCharPositionInLine() + 1);
     }
 
