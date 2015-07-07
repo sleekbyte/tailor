@@ -3,6 +3,7 @@ package com.sleekbyte.tailor.listeners;
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.Location;
+import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.CharFormatUtil;
@@ -13,11 +14,20 @@ import org.antlr.v4.runtime.ParserRuleContext;
  */
 public class ConstantDecListener extends SwiftBaseListener {
 
+    private MaxLengths maxLengths;
     private Printer printer;
     private MainListenerHelper listenerHelper = new MainListenerHelper();
 
-    public ConstantDecListener(Printer printer) {
+    /**
+     * Creates a ConstantDecListener object and sets the printer in listenerHelper.
+     *
+     * @param printer    {@link Printer} used for outputting messages to user
+     * @param maxLengths {@link MaxLengths} stores numbers for max length restrictions
+     */
+    public ConstantDecListener(Printer printer, MaxLengths maxLengths) {
+        listenerHelper.setPrinter(printer);
         this.printer = printer;
+        this.maxLengths = maxLengths;
     }
 
     @Override
@@ -39,6 +49,7 @@ public class ConstantDecListener extends SwiftBaseListener {
                 this.printer.warn(Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED, location);
             }
         }
+        listenerHelper.verifyNameLength(Messages.CONSTANT + Messages.NAME, maxLengths.maxNameLength, ctx);
     }
 
     private ParserRuleContext getConstantDeclaration(ParserRuleContext ctx) {

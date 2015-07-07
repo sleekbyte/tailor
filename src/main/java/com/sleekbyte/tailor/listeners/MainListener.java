@@ -20,7 +20,7 @@ public class MainListener extends SwiftBaseListener {
     private Printer printer;
 
     /**
-     * Creates a MainListener object and sets the printer in MainListenerHelper.
+     * Creates a MainListener object and sets the printer in listenerHelper.
      *
      * @param printer    {@link Printer} used for outputting messages to user
      * @param maxLengths {@link MaxLengths} stores numbers for max length restrictions
@@ -127,11 +127,6 @@ public class MainListener extends SwiftBaseListener {
     }
 
     @Override
-    public void enterExternalParameterName(SwiftParser.ExternalParameterNameContext ctx) {
-        listenerHelper.verifyNameLength(Messages.EXTERNAL_PARAMETER + Messages.NAME, maxLengths.maxNameLength, ctx);
-    }
-
-    @Override
     public void enterFunctionName(SwiftParser.FunctionNameContext ctx) {
         listenerHelper.verifyNameLength(Messages.FUNCTION + Messages.NAME, maxLengths.maxNameLength, ctx);
         listenerHelper.verifyLowerCamelCase(Messages.FUNCTION + Messages.NAMES, ctx);
@@ -140,11 +135,6 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterLabelName(SwiftParser.LabelNameContext ctx) {
         listenerHelper.verifyNameLength(Messages.LABEL + Messages.NAME, maxLengths.maxNameLength, ctx);
-    }
-
-    @Override
-    public void enterLocalParameterName(SwiftParser.LocalParameterNameContext ctx) {
-        listenerHelper.verifyNameLength(Messages.LOCAL_PARAMETER + Messages.NAME, maxLengths.maxNameLength, ctx);
     }
 
     @Override
@@ -162,7 +152,6 @@ public class MainListener extends SwiftBaseListener {
         listenerHelper.verifyNameLength(Messages.TYPEALIAS + Messages.NAME, maxLengths.maxNameLength, ctx);
     }
 
-    // TODO: #13: Handle all cases for variable name declaration
     @Override
     public void enterVariableName(SwiftParser.VariableNameContext ctx) {
         listenerHelper.verifyNameLength(Messages.VARIABLE + Messages.NAME, maxLengths.maxNameLength, ctx);
@@ -174,7 +163,7 @@ public class MainListener extends SwiftBaseListener {
         ParseTreeWalker walker = new ParseTreeWalker();
         for (SwiftParser.PatternInitializerContext context : ctx.patternInitializerList().patternInitializer()) {
             SwiftParser.PatternContext pattern = context.pattern();
-            listenerHelper.evaluatePattern(pattern, walker, new ConstantDecListener(this.printer));
+            listenerHelper.evaluatePattern(pattern, walker, new ConstantDecListener(this.printer, this.maxLengths));
         }
     }
 
@@ -186,7 +175,7 @@ public class MainListener extends SwiftBaseListener {
         }
         for (SwiftParser.PatternInitializerContext context : ctx.patternInitializerList().patternInitializer()) {
             SwiftParser.PatternContext pattern = context.pattern();
-            listenerHelper.evaluatePattern(pattern, walker, new VariableDecListener(this.printer));
+            listenerHelper.evaluatePattern(pattern, walker, new VariableDecListener(this.printer, this.maxLengths));
         }
     }
 
@@ -194,9 +183,11 @@ public class MainListener extends SwiftBaseListener {
     public void enterValueBindingPattern(SwiftParser.ValueBindingPatternContext ctx) {
         ParseTreeWalker walker = new ParseTreeWalker();
         if (ctx.getStart().getText().equals(LET)) {
-            listenerHelper.evaluatePattern(ctx.pattern(), walker, new ConstantDecListener(this.printer));
+            listenerHelper.evaluatePattern(ctx.pattern(), walker,
+                new ConstantDecListener(this.printer, this.maxLengths));
         } else if (ctx.getStart().getText().equals(VAR)) {
-            listenerHelper.evaluatePattern(ctx.pattern(), walker, new VariableDecListener(this.printer));
+            listenerHelper.evaluatePattern(ctx.pattern(), walker,
+                new VariableDecListener(this.printer, this.maxLengths));
         }
     }
 
@@ -215,10 +206,10 @@ public class MainListener extends SwiftBaseListener {
         String currentBinding = listenerHelper.letOrVar(ctx.optionalBindingHead());
         if (currentBinding.equals(LET)) {
             listenerHelper.evaluateOptionalBindingHead(ctx.optionalBindingHead(),
-                new ConstantDecListener(this.printer));
+                new ConstantDecListener(this.printer, this.maxLengths));
         } else if (currentBinding.equals(VAR)) {
             listenerHelper.evaluateOptionalBindingHead(ctx.optionalBindingHead(),
-                new VariableDecListener(this.printer));
+                new VariableDecListener(this.printer, this.maxLengths));
         }
         SwiftParser.OptionalBindingContinuationListContext continuationList = ctx.optionalBindingContinuationList();
         if (continuationList != null) {
@@ -229,10 +220,10 @@ public class MainListener extends SwiftBaseListener {
                 }
                 if (currentBinding.equals(LET)) {
                     listenerHelper.evaluateOptionalBindingContinuation(continuation,
-                        new ConstantDecListener(this.printer));
+                        new ConstantDecListener(this.printer, this.maxLengths));
                 } else if (currentBinding.equals(VAR)) {
                     listenerHelper.evaluateOptionalBindingContinuation(continuation,
-                        new VariableDecListener(this.printer));
+                        new VariableDecListener(this.printer, this.maxLengths));
                 }
             }
         }
@@ -243,12 +234,12 @@ public class MainListener extends SwiftBaseListener {
         SwiftBaseListener listener = null;
         for (ParseTree child : ctx.children) {
             if (child.getText().equals(VAR)) {
-                listener = new VariableDecListener(this.printer);
+                listener = new VariableDecListener(this.printer, this.maxLengths);
                 break;
             }
         }
         if (listener == null) {
-            listener = new ConstantDecListener(this.printer);
+            listener = new ConstantDecListener(this.printer, this.maxLengths);
         }
         ParseTreeWalker walker = new ParseTreeWalker();
         if (ctx.externalParameterName() != null) {
