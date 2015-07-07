@@ -67,7 +67,7 @@ public class Messages {
     public static final String ENCLOSED_PARENTHESIS = "should not be enclosed within parentheses";
     public static final String K_PREFIXED = "should not be prefixed with 'k' or 'K'";
     public static final String MULTIPLE_IMPORTS = "should be on separate lines";
-    public static final String BRACKET_STYLE = "code block should not begin on a new line.";
+    public static final String BRACKET_STYLE = "code block should not begin on a new line";
 
     // Usage messages
     public static final String CMD_LINE_SYNTAX = "tailor";
