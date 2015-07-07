@@ -51,7 +51,7 @@ class MainListenerHelper {
         this.printer = printer;
     }
 
-    //<editor-fold desc="Static utils">
+    //region Static utils
 
     private Location getContextStartLocation(ParserRuleContext ctx) {
         return new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
@@ -65,9 +65,9 @@ class MainListenerHelper {
         return new Location(token.getLine(), token.getCharPositionInLine() + 1);
     }
 
-    //</editor-fold>
+    //endregion
 
-    //<editor-fold desc="UpperCamelCase name check">
+    //region UpperCamelCase name check
 
     public void verifyUpperCamelCase(String constructType, ParserRuleContext ctx) {
         String constructName = ctx.getText();
@@ -77,9 +77,9 @@ class MainListenerHelper {
         }
     }
 
-    //</editor-fold>
+    //endregion
 
-    //<editor-fold desc="Semicolon terminated statement check">
+    //region Semicolon terminated statement check
 
     public void verifyNotSemicolonTerminated(String constructType, ParserRuleContext ctx) {
         String construct = ctx.getText();
@@ -89,9 +89,9 @@ class MainListenerHelper {
         }
     }
 
-    //</editor-fold>
+    //endregion
 
-    //<editor-fold desc="Length checks">
+    //region Length checks
 
     public void verifyConstructLength(String constructType, int maxLength, ParserRuleContext ctx) {
         if (SourceFileUtil.constructTooLong(ctx, maxLength)) {
@@ -111,9 +111,9 @@ class MainListenerHelper {
     }
 
 
-    //</editor-fold>
+    //endregion
 
-    //<editor-fold desc="Lowercamelcase check">
+    //region Lowercamelcase check
 
     public void verifyLowerCamelCase(String constructType, ParserRuleContext ctx) {
         String constructName = ctx.getText();
@@ -123,9 +123,9 @@ class MainListenerHelper {
         }
     }
 
-    //</editor-fold>
+    //endregion
 
-    //<editor-fold desc="Multiple import check">
+    //region Multiple import check
 
     public void verifyMultipleImports(ImportDeclarationContext ctx) {
 
@@ -138,13 +138,9 @@ class MainListenerHelper {
         }
     }
 
-    //</editor-fold>
+    //endregion
 
-    public void walkConstantDecListener(ParseTreeWalker walker, ParserRuleContext tree) {
-        walker.walk(new ConstantDecListener(this.printer), tree);
-    }
-
-    //<editor-fold desc="Tuple pattern evaluation">
+    //region Tuple pattern evaluation
 
     public void walkListener(ParseTreeWalker walker, ParserRuleContext tree, SwiftBaseListener listener) {
         walker.walk(listener, tree);
@@ -178,9 +174,9 @@ class MainListenerHelper {
         }
     }
 
-    //</editor-fold>
+    //endregion
 
-    //<editor-fold desc="Parenthesis check">
+    //region Parenthesis check
 
     public void verifyRedundantExpressionParenthesis(String constructType, ExpressionContext ctx) {
         if (ctx == null
@@ -249,9 +245,9 @@ class MainListenerHelper {
         this.printer.warn(firstParenthesisMsg, startLocation);
     }
 
-    //</editor-fold>
+    //endregion
 
-    //<editor-fold desc="Bracket style check">
+    //region Bracket style check
 
     public void verifySwitchStatementBracketStyle(SwitchStatementContext ctx) {
         Location switchExpLocation = getTokenLocation(ctx.expression().getStop());
@@ -362,9 +358,9 @@ class MainListenerHelper {
         verifyCodeBlockBracketStyle(Messages.FOR_LOOP, loopEndLocation, ctx.codeBlock());
     }
 
-    //</editor-fold>
+    //endregion
 
-    //<editor-fold desc="Optional binding condition evaluators">
+    //region Optional binding condition evaluators
 
     public void evaluateOptionalBindingHead(OptionalBindingHeadContext ctx, SwiftBaseListener listener) {
         ParseTreeWalker walker = new ParseTreeWalker();
@@ -385,5 +381,5 @@ class MainListenerHelper {
         return ctx.getChild(0).getText();
     }
 
-    //</editor-fold>
+    //endregion
 }
