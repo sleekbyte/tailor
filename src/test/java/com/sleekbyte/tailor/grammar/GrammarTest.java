@@ -40,7 +40,7 @@ public class GrammarTest {
 
     @Test
     public void testGrammar() throws UnsupportedEncodingException {
-        for (File swiftFile: swiftFiles) {
+        for (File swiftFile : swiftFiles) {
             errContent = new ByteArrayOutputStream();
             System.setErr(new PrintStream(errContent, false, Charset.defaultCharset().name()));
             String[] command = { (TEST_INPUT_DIR + swiftFile.getName()) };
