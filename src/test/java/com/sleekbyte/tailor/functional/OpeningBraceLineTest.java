@@ -7,10 +7,10 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
- * Functional test for code block bracket style.
+ * Functional tests for opening brace on same line rule.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class CodeBlockBracketStyleTest extends RuleTest {
+public class OpeningBraceLineTest extends RuleTest {
 
     @Override
     protected void addAllExpectedMsgs() {
@@ -36,5 +36,5 @@ public class CodeBlockBracketStyleTest extends RuleTest {
         expectedMessages.add(Printer.genOutputStringForTest(inputFile.getName(), line, column, severity,
                                                                    msg + Messages.BRACKET_STYLE));
     }
-}
 
+}

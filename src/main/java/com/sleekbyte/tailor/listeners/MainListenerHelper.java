@@ -52,48 +52,41 @@ class MainListenerHelper {
     }
 
     //region Static utils
-
-    private Location getContextStartLocation(ParserRuleContext ctx) {
+    Location getContextStartLocation(ParserRuleContext ctx) {
         return new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
     }
 
-    private Location getContextStopLocation(ParserRuleContext ctx) {
+    Location getContextStopLocation(ParserRuleContext ctx) {
         return new Location(ctx.getStop().getLine(), ctx.getStop().getCharPositionInLine() + 1);
     }
 
-    private Location getTokenLocation(Token token) {
+    Location getTokenLocation(Token token) {
         return new Location(token.getLine(), token.getCharPositionInLine() + 1);
     }
-
     //endregion
 
     //region UpperCamelCase name check
-
-    public void verifyUpperCamelCase(String constructType, ParserRuleContext ctx) {
+    void verifyUpperCamelCase(String constructType, ParserRuleContext ctx) {
         String constructName = ctx.getText();
         if (!CharFormatUtil.isUpperCamelCase(constructName)) {
             Location location = getContextStartLocation(ctx);
             this.printer.error(constructType + Messages.UPPER_CAMEL_CASE, location);
         }
     }
-
     //endregion
 
     //region Semicolon terminated statement check
-
-    public void verifyNotSemicolonTerminated(String constructType, ParserRuleContext ctx) {
+    void verifyNotSemicolonTerminated(String constructType, ParserRuleContext ctx) {
         String construct = ctx.getText();
         if (construct.endsWith(";")) {
             Location location = getContextStopLocation(ctx);
             this.printer.error(constructType + Messages.SEMICOLON, location);
         }
     }
-
     //endregion
 
     //region Length checks
-
-    public void verifyConstructLength(String constructType, int maxLength, ParserRuleContext ctx) {
+    void verifyConstructLength(String constructType, int maxLength, ParserRuleContext ctx) {
         if (SourceFileUtil.constructTooLong(ctx, maxLength)) {
             int constructLength = ctx.getStop().getLine() - ctx.getStart().getLine();
             String lengthVersusLimit = " (" + constructLength + "/" + maxLength + ")";
@@ -102,32 +95,27 @@ class MainListenerHelper {
         }
     }
 
-    public void verifyNameLength(String constructType, int maxLength, ParserRuleContext ctx) {
+    void verifyNameLength(String constructType, int maxLength, ParserRuleContext ctx) {
         if (SourceFileUtil.nameTooLong(ctx, maxLength)) {
             String lengthVersusLimit = " (" + ctx.getText().length() + "/" + maxLength + ")";
             Location location = getContextStartLocation(ctx);
             this.printer.error(constructType + Messages.EXCEEDS_CHARACTER_LIMIT + lengthVersusLimit, location);
         }
     }
-
-
     //endregion
 
     //region Lowercamelcase check
-
-    public void verifyLowerCamelCase(String constructType, ParserRuleContext ctx) {
+    void verifyLowerCamelCase(String constructType, ParserRuleContext ctx) {
         String constructName = ctx.getText();
         if (!CharFormatUtil.isLowerCamelCase(constructName)) {
             Location location = getContextStartLocation(ctx);
             this.printer.error(constructType + Messages.LOWER_CAMEL_CASE, location);
         }
     }
-
     //endregion
 
     //region Multiple import check
-
-    public void verifyMultipleImports(ImportDeclarationContext ctx) {
+    void verifyMultipleImports(ImportDeclarationContext ctx) {
 
         int lineNum = ctx.getStart().getLine();
         if (importLineNumbers.contains(lineNum)) {
@@ -137,16 +125,14 @@ class MainListenerHelper {
             importLineNumbers.add(lineNum);
         }
     }
-
     //endregion
 
     //region Tuple pattern evaluation
-
-    public void walkListener(ParseTreeWalker walker, ParserRuleContext tree, SwiftBaseListener listener) {
+    void walkListener(ParseTreeWalker walker, ParserRuleContext tree, SwiftBaseListener listener) {
         walker.walk(listener, tree);
     }
 
-    public void evaluatePattern(PatternContext pattern, ParseTreeWalker walker, SwiftBaseListener listener) {
+    void evaluatePattern(PatternContext pattern, ParseTreeWalker walker, SwiftBaseListener listener) {
         if (pattern.identifierPattern() != null) {
             walkListener(walker, pattern.identifierPattern(), listener);
 
@@ -164,7 +150,7 @@ class MainListenerHelper {
         }
     }
 
-    public void evaluateTuplePattern(TuplePatternContext tuplePatternContext, ParseTreeWalker walker,
+    void evaluateTuplePattern(TuplePatternContext tuplePatternContext, ParseTreeWalker walker,
                               SwiftBaseListener listener) {
         List<TuplePatternElementContext> tuplePatternElementContexts =
             tuplePatternContext.tuplePatternElementList().tuplePatternElement();
@@ -173,12 +159,10 @@ class MainListenerHelper {
             evaluatePattern(tuplePatternElement.pattern(), walker, listener);
         }
     }
-
     //endregion
 
     //region Parenthesis check
-
-    public void verifyRedundantExpressionParenthesis(String constructType, ExpressionContext ctx) {
+    void verifyRedundantExpressionParenthesis(String constructType, ExpressionContext ctx) {
         if (ctx == null
                 || ctx.getChildCount() != 1
                 || ctx.prefixExpression() == null
@@ -213,7 +197,7 @@ class MainListenerHelper {
         printRedundantParenthesisWarning(ctx, constructType + Messages.ENCLOSED_PARENTHESIS);
     }
 
-    public void verifyRedundantForLoopParenthesis(ParserRuleContext ctx) {
+    void verifyRedundantForLoopParenthesis(ParserRuleContext ctx) {
         if (!(ctx.getChild(1) instanceof TerminalNodeImpl)) {
             return;
         } // return if '(' not present
@@ -227,7 +211,7 @@ class MainListenerHelper {
         }
     }
 
-    public void verifyRedundantCatchParentheses(ParserRuleContext ctx) {
+    void verifyRedundantCatchParentheses(ParserRuleContext ctx) {
         if (ctx == null) {
             return;
         }
@@ -244,12 +228,10 @@ class MainListenerHelper {
         Location startLocation = getContextStartLocation(ctx);
         this.printer.warn(firstParenthesisMsg, startLocation);
     }
-
     //endregion
 
     //region Bracket style check
-
-    public void verifySwitchStatementBracketStyle(SwitchStatementContext ctx) {
+    void verifySwitchStatementBracketStyle(SwitchStatementContext ctx) {
         Location switchExpLocation = getTokenLocation(ctx.expression().getStop());
         Token openBraceToken = ((TerminalNodeImpl) ctx.getChild(2)).getSymbol();
         Location openBraceLocation = getTokenLocation(openBraceToken);
@@ -269,33 +251,33 @@ class MainListenerHelper {
         }
     }
 
-    public void verifyForInStatementBrackets(ForInStatementContext ctx) {
+    void verifyForInStatementBrackets(ForInStatementContext ctx) {
         Location expressionLocation = getContextStopLocation(ctx.expression());
         verifyCodeBlockBracketStyle(Messages.FOR_IN_LOOP, expressionLocation, ctx.codeBlock());
     }
 
-    public void verifyInitializerBrackets(InitializerDeclarationContext ctx) {
+    void verifyInitializerBrackets(InitializerDeclarationContext ctx) {
         Location parameterClauseLocation = getContextStopLocation(ctx.parameterClause());
         verifyCodeBlockBracketStyle(Messages.INITIALIZER_BODY, parameterClauseLocation,
                                            ctx.initializerBody().codeBlock());
     }
 
-    public void verifyRepeatWhileLoopBrackets(RepeatWhileStatementContext ctx) {
+    void verifyRepeatWhileLoopBrackets(RepeatWhileStatementContext ctx) {
         Location repeatClause = getContextStartLocation(ctx);
         verifyCodeBlockBracketStyle(Messages.REPEAT_WHILE_STATEMENT, repeatClause, ctx.codeBlock());
     }
 
-    public void verifyWhileLoopBrackets(WhileStatementContext ctx) {
+    void verifyWhileLoopBrackets(WhileStatementContext ctx) {
         Location conditionClauseLocation = getContextStopLocation(ctx.conditionClause());
         verifyCodeBlockBracketStyle(Messages.WHILE_STATEMENT, conditionClauseLocation, ctx.codeBlock());
     }
 
-    public void verifyIfStatementBrackets(IfStatementContext ctx) {
+    void verifyIfStatementBrackets(IfStatementContext ctx) {
         Location conditionClauseLocation = getContextStopLocation(ctx.conditionClause());
         verifyCodeBlockBracketStyle(Messages.IF_STATEMENT, conditionClauseLocation, ctx.codeBlock());
     }
 
-    public void verifyElseClauseBrackets(ElseClauseContext ctx) {
+    void verifyElseClauseBrackets(ElseClauseContext ctx) {
         if (ctx.codeBlock() == null) {
             return;
         }
@@ -303,12 +285,12 @@ class MainListenerHelper {
         verifyCodeBlockBracketStyle(Messages.ELSE_CLAUSE, elseClauseLocation, ctx.codeBlock());
     }
 
-    public void verifyFunctionBrackets(FunctionDeclarationContext ctx) {
+    void verifyFunctionBrackets(FunctionDeclarationContext ctx) {
         Location functionDeclarationLocation = getContextStopLocation(ctx.functionSignature());
         verifyCodeBlockBracketStyle(Messages.FUNCTION, functionDeclarationLocation, ctx.functionBody().codeBlock());
     }
 
-    public void verifyClassBrackets(ClassDeclarationContext ctx) {
+    void verifyClassBrackets(ClassDeclarationContext ctx) {
         TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
         Location classLocation;
         if (typeInheritanceClauseContext != null) {
@@ -325,7 +307,7 @@ class MainListenerHelper {
         }
     }
 
-    public void verifyStructBrackets(StructDeclarationContext ctx) {
+    void verifyStructBrackets(StructDeclarationContext ctx) {
         TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
         Location classLocation;
         if (typeInheritanceClauseContext != null) {
@@ -342,7 +324,7 @@ class MainListenerHelper {
         }
     }
 
-    public void verifyForLoopBrackets(ForStatementContext ctx) {
+    void verifyForLoopBrackets(ForStatementContext ctx) {
         int numChildren = ctx.getChildCount();
         Location loopEndLocation;
 
@@ -357,17 +339,15 @@ class MainListenerHelper {
         }
         verifyCodeBlockBracketStyle(Messages.FOR_LOOP, loopEndLocation, ctx.codeBlock());
     }
-
     //endregion
 
     //region Optional binding condition evaluators
-
-    public void evaluateOptionalBindingHead(OptionalBindingHeadContext ctx, SwiftBaseListener listener) {
+    void evaluateOptionalBindingHead(OptionalBindingHeadContext ctx, SwiftBaseListener listener) {
         ParseTreeWalker walker = new ParseTreeWalker();
         evaluatePattern(ctx.pattern(), walker, listener);
     }
 
-    public void evaluateOptionalBindingContinuation(OptionalBindingContinuationContext ctx,
+    void evaluateOptionalBindingContinuation(OptionalBindingContinuationContext ctx,
                                                     SwiftBaseListener listener) {
         if (ctx.optionalBindingHead() != null) {
             evaluateOptionalBindingHead(ctx.optionalBindingHead(), listener);
@@ -377,9 +357,8 @@ class MainListenerHelper {
         }
     }
 
-    public String letOrVar(OptionalBindingHeadContext ctx) {
+    String letOrVar(OptionalBindingHeadContext ctx) {
         return ctx.getChild(0).getText();
     }
-
     //endregion
 }
