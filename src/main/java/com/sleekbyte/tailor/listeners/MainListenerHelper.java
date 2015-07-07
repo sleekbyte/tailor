@@ -274,28 +274,28 @@ class MainListenerHelper {
     }
 
     public void verifyForInStatementBrackets(ForInStatementContext ctx) {
-        Location expressionLocation = MainListenerHelper.getContextStopLocation(ctx.expression());
+        Location expressionLocation = getContextStopLocation(ctx.expression());
         verifyCodeBlockBracketStyle(Messages.FOR_IN_LOOP, expressionLocation, ctx.codeBlock());
     }
 
     public void verifyInitializerBrackets(InitializerDeclarationContext ctx) {
-        Location parameterClauseLocation = MainListenerHelper.getContextStopLocation(ctx.parameterClause());
+        Location parameterClauseLocation = getContextStopLocation(ctx.parameterClause());
         verifyCodeBlockBracketStyle(Messages.INITIALIZER_BODY, parameterClauseLocation,
                                            ctx.initializerBody().codeBlock());
     }
 
     public void verifyRepeatWhileLoopBrackets(RepeatWhileStatementContext ctx) {
-        Location repeatClause = MainListenerHelper.getContextStartLocation(ctx);
+        Location repeatClause = getContextStartLocation(ctx);
         verifyCodeBlockBracketStyle(Messages.REPEAT_WHILE_STATEMENT, repeatClause, ctx.codeBlock());
     }
 
     public void verifyWhileLoopBrackets(WhileStatementContext ctx) {
-        Location conditionClauseLocation = MainListenerHelper.getContextStopLocation(ctx.conditionClause());
+        Location conditionClauseLocation = getContextStopLocation(ctx.conditionClause());
         verifyCodeBlockBracketStyle(Messages.WHILE_STATEMENT, conditionClauseLocation, ctx.codeBlock());
     }
 
     public void verifyIfStatementBrackets(IfStatementContext ctx) {
-        Location conditionClauseLocation = MainListenerHelper.getContextStopLocation(ctx.conditionClause());
+        Location conditionClauseLocation = getContextStopLocation(ctx.conditionClause());
         verifyCodeBlockBracketStyle(Messages.IF_STATEMENT, conditionClauseLocation, ctx.codeBlock());
     }
 
@@ -303,12 +303,12 @@ class MainListenerHelper {
         if (ctx.codeBlock() == null) {
             return;
         }
-        Location elseClauseLocation = MainListenerHelper.getContextStartLocation(ctx);
+        Location elseClauseLocation = getContextStartLocation(ctx);
         verifyCodeBlockBracketStyle(Messages.ELSE_CLAUSE, elseClauseLocation, ctx.codeBlock());
     }
 
     public void verifyFunctionBrackets(FunctionDeclarationContext ctx) {
-        Location functionDeclarationLocation = MainListenerHelper.getContextStopLocation(ctx.functionSignature());
+        Location functionDeclarationLocation = getContextStopLocation(ctx.functionSignature());
         verifyCodeBlockBracketStyle(Messages.FUNCTION, functionDeclarationLocation, ctx.functionBody().codeBlock());
     }
 
