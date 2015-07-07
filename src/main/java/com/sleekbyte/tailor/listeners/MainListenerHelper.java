@@ -51,7 +51,7 @@ class MainListenerHelper {
         this.printer = printer;
     }
 
-    //region Static utils
+    //region Utils
     Location getContextStartLocation(ParserRuleContext ctx) {
         return new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
     }

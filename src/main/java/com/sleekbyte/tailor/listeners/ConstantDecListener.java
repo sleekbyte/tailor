@@ -14,6 +14,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 public class ConstantDecListener extends SwiftBaseListener {
 
     private Printer printer;
+    private MainListenerHelper listenerHelper = new MainListenerHelper();
 
     public ConstantDecListener(Printer printer) {
         this.printer = printer;
@@ -23,7 +24,7 @@ public class ConstantDecListener extends SwiftBaseListener {
     public void enterIdentifier(SwiftParser.IdentifierContext ctx) {
         String constantName = ctx.getText();
         ParserRuleContext constantDecContext = getConstantDeclaration(ctx);
-        Location location = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+        Location location = listenerHelper.getContextStartLocation(ctx);
 
         if (isGlobal(constantDecContext) || insideClass(constantDecContext) || insideStruct(constantDecContext)) {
             if (!CharFormatUtil.isUpperCamelCase(constantName) && !CharFormatUtil.isLowerCamelCase(constantName)) {
