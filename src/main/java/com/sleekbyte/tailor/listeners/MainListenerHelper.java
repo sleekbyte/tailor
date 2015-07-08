@@ -229,7 +229,7 @@ class MainListenerHelper {
     }
     //endregion
 
-    //region Bracket style check
+    //region Open brace style check
     void verifySwitchStatementOpenBraceStyle(SwitchStatementContext ctx) {
         Location switchExpLocation = getTokenLocation(ctx.expression().getStop());
         Token openBraceToken = ((TerminalNodeImpl) ctx.getChild(2)).getSymbol();
