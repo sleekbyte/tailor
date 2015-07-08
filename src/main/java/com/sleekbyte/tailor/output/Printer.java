@@ -55,6 +55,10 @@ public class Printer implements AutoCloseable {
         this.msgBuffer.put(violationMessage.toString(), violationMessage);
     }
 
+    static String getHeader(File inputFile) {
+        return String.format("%n********** %s **********", inputFile.toString());
+    }
+
     // Visible for testing only
     public static String genOutputStringForTest(String filePath, int line, Severity severity, String msg) {
         return new ViolationMessage(filePath, line, 0, severity, msg).toString();
@@ -70,6 +74,9 @@ public class Printer implements AutoCloseable {
     public void close() {
         List<ViolationMessage> outputList = new ArrayList<>(this.msgBuffer.values());
         Collections.sort(outputList);
+        if (outputList.size() > 0) {
+            System.out.println(getHeader(inputFile));
+        }
         outputList.forEach(System.out::println);
         this.msgBuffer.clear();
     }
