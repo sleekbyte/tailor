@@ -232,18 +232,21 @@ class MainListenerHelper {
     //region Open brace style check
     void verifySwitchStatementOpenBraceStyle(SwitchStatementContext ctx) {
         Location switchExpLocation = getTokenLocation(ctx.expression().getStop());
-        Token openBraceToken = ((TerminalNodeImpl) ctx.getChild(2)).getSymbol();
-        Location openBraceLocation = getTokenLocation(openBraceToken);
+        Location openBraceLocation = getLocationOfChildToken(ctx, 2);
 
         if (switchExpLocation.line != openBraceLocation.line) {
             this.printer.warn(Messages.SWITCH_STATEMENT + Messages.BRACKET_STYLE, openBraceLocation);
         }
     }
 
+    private Location getLocationOfChildToken(ParserRuleContext ctx, int childNumber) {
+        Token token = ((TerminalNodeImpl) ctx.getChild(childNumber)).getSymbol();
+        return getTokenLocation(token);
+    }
+
     private void verifyCodeBlockOpenBraceStyle(String constructName, Location constructLocation,
                                                ParserRuleContext codeBlockCtx) {
-        Token openBraceToken = ((TerminalNodeImpl) codeBlockCtx.getChild(0)).getSymbol();
-        Location openBraceLocation = getTokenLocation(openBraceToken);
+        Location openBraceLocation = getLocationOfChildToken(codeBlockCtx, 0);
 
         if (constructLocation.line != openBraceLocation.line) {
             this.printer.warn(constructName + Messages.BRACKET_STYLE, openBraceLocation);
