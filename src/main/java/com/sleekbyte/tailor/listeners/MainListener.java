@@ -265,13 +265,13 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterSwitchStatement(SwiftParser.SwitchStatementContext ctx) {
         listenerHelper.verifyRedundantExpressionParenthesis(Messages.SWITCH_EXPRESSION, ctx.expression());
-        listenerHelper.verifySwitchStatementBracketStyle(ctx);
+        listenerHelper.verifySwitchStatementOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterForStatement(SwiftParser.ForStatementContext ctx) {
         listenerHelper.verifyRedundantForLoopParenthesis(ctx);
-        listenerHelper.verifyForLoopBrackets(ctx);
+        listenerHelper.verifyForLoopOpenBraceStyle(ctx);
     }
 
     @Override
@@ -308,46 +308,46 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterFunctionDeclaration(SwiftParser.FunctionDeclarationContext ctx) {
-        listenerHelper.verifyFunctionBrackets(ctx);
+        listenerHelper.verifyFunctionOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterElseClause(SwiftParser.ElseClauseContext ctx) {
-        listenerHelper.verifyElseClauseBrackets(ctx);
+        listenerHelper.verifyElseClauseOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterIfStatement(SwiftParser.IfStatementContext ctx) {
-        listenerHelper.verifyIfStatementBrackets(ctx);
+        listenerHelper.verifyIfStatementOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterWhileStatement(SwiftParser.WhileStatementContext ctx) {
-        listenerHelper.verifyWhileLoopBrackets(ctx);
+        listenerHelper.verifyWhileLoopOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterRepeatWhileStatement(SwiftParser.RepeatWhileStatementContext ctx) {
-        listenerHelper.verifyRepeatWhileLoopBrackets(ctx);
+        listenerHelper.verifyRepeatWhileLoopOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterInitializerDeclaration(SwiftParser.InitializerDeclarationContext ctx) {
-        listenerHelper.verifyInitializerBrackets(ctx);
+        listenerHelper.verifyInitializerOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterForInStatement(SwiftParser.ForInStatementContext ctx) {
-        listenerHelper.verifyForInStatementBrackets(ctx);
+        listenerHelper.verifyForInStatementOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterClassDeclaration(SwiftParser.ClassDeclarationContext ctx) {
-        listenerHelper.verifyClassBrackets(ctx);
+        listenerHelper.verifyClassOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterStructDeclaration(SwiftParser.StructDeclarationContext ctx) {
-        listenerHelper.verifyStructBrackets(ctx);
+        listenerHelper.verifyStructOpenBraceStyle(ctx);
     }
 }

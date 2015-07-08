@@ -1,7 +1,6 @@
 package com.sleekbyte.tailor.listeners;
 
 import static com.sleekbyte.tailor.antlr.SwiftParser.ClassDeclarationContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.CodeBlockContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ElseClauseContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ForInStatementContext;
@@ -231,7 +230,7 @@ class MainListenerHelper {
     //endregion
 
     //region Bracket style check
-    void verifySwitchStatementBracketStyle(SwitchStatementContext ctx) {
+    void verifySwitchStatementOpenBraceStyle(SwitchStatementContext ctx) {
         Location switchExpLocation = getTokenLocation(ctx.expression().getStop());
         Token openBraceToken = ((TerminalNodeImpl) ctx.getChild(2)).getSymbol();
         Location openBraceLocation = getTokenLocation(openBraceToken);
@@ -241,8 +240,8 @@ class MainListenerHelper {
         }
     }
 
-    private void verifyCodeBlockBracketStyle(String constructName, Location constructLocation,
-                                     CodeBlockContext codeBlockCtx) {
+    private void verifyCodeBlockOpenBraceStyle(String constructName, Location constructLocation,
+                                               ParserRuleContext codeBlockCtx) {
         Token openBraceToken = ((TerminalNodeImpl) codeBlockCtx.getChild(0)).getSymbol();
         Location openBraceLocation = getTokenLocation(openBraceToken);
 
@@ -251,46 +250,46 @@ class MainListenerHelper {
         }
     }
 
-    void verifyForInStatementBrackets(ForInStatementContext ctx) {
+    void verifyForInStatementOpenBraceStyle(ForInStatementContext ctx) {
         Location expressionLocation = getContextStopLocation(ctx.expression());
-        verifyCodeBlockBracketStyle(Messages.FOR_IN_LOOP, expressionLocation, ctx.codeBlock());
+        verifyCodeBlockOpenBraceStyle(Messages.FOR_IN_LOOP, expressionLocation, ctx.codeBlock());
     }
 
-    void verifyInitializerBrackets(InitializerDeclarationContext ctx) {
+    void verifyInitializerOpenBraceStyle(InitializerDeclarationContext ctx) {
         Location parameterClauseLocation = getContextStopLocation(ctx.parameterClause());
-        verifyCodeBlockBracketStyle(Messages.INITIALIZER_BODY, parameterClauseLocation,
-                                           ctx.initializerBody().codeBlock());
+        verifyCodeBlockOpenBraceStyle(Messages.INITIALIZER_BODY, parameterClauseLocation,
+                                             ctx.initializerBody().codeBlock());
     }
 
-    void verifyRepeatWhileLoopBrackets(RepeatWhileStatementContext ctx) {
+    void verifyRepeatWhileLoopOpenBraceStyle(RepeatWhileStatementContext ctx) {
         Location repeatClause = getContextStartLocation(ctx);
-        verifyCodeBlockBracketStyle(Messages.REPEAT_WHILE_STATEMENT, repeatClause, ctx.codeBlock());
+        verifyCodeBlockOpenBraceStyle(Messages.REPEAT_WHILE_STATEMENT, repeatClause, ctx.codeBlock());
     }
 
-    void verifyWhileLoopBrackets(WhileStatementContext ctx) {
+    void verifyWhileLoopOpenBraceStyle(WhileStatementContext ctx) {
         Location conditionClauseLocation = getContextStopLocation(ctx.conditionClause());
-        verifyCodeBlockBracketStyle(Messages.WHILE_STATEMENT, conditionClauseLocation, ctx.codeBlock());
+        verifyCodeBlockOpenBraceStyle(Messages.WHILE_STATEMENT, conditionClauseLocation, ctx.codeBlock());
     }
 
-    void verifyIfStatementBrackets(IfStatementContext ctx) {
+    void verifyIfStatementOpenBraceStyle(IfStatementContext ctx) {
         Location conditionClauseLocation = getContextStopLocation(ctx.conditionClause());
-        verifyCodeBlockBracketStyle(Messages.IF_STATEMENT, conditionClauseLocation, ctx.codeBlock());
+        verifyCodeBlockOpenBraceStyle(Messages.IF_STATEMENT, conditionClauseLocation, ctx.codeBlock());
     }
 
-    void verifyElseClauseBrackets(ElseClauseContext ctx) {
+    void verifyElseClauseOpenBraceStyle(ElseClauseContext ctx) {
         if (ctx.codeBlock() == null) {
             return;
         }
         Location elseClauseLocation = getContextStartLocation(ctx);
-        verifyCodeBlockBracketStyle(Messages.ELSE_CLAUSE, elseClauseLocation, ctx.codeBlock());
+        verifyCodeBlockOpenBraceStyle(Messages.ELSE_CLAUSE, elseClauseLocation, ctx.codeBlock());
     }
 
-    void verifyFunctionBrackets(FunctionDeclarationContext ctx) {
+    void verifyFunctionOpenBraceStyle(FunctionDeclarationContext ctx) {
         Location functionDeclarationLocation = getContextStopLocation(ctx.functionSignature());
-        verifyCodeBlockBracketStyle(Messages.FUNCTION, functionDeclarationLocation, ctx.functionBody().codeBlock());
+        verifyCodeBlockOpenBraceStyle(Messages.FUNCTION, functionDeclarationLocation, ctx.functionBody().codeBlock());
     }
 
-    void verifyClassBrackets(ClassDeclarationContext ctx) {
+    void verifyClassOpenBraceStyle(ClassDeclarationContext ctx) {
         TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
         Location classLocation;
         if (typeInheritanceClauseContext != null) {
@@ -299,15 +298,10 @@ class MainListenerHelper {
             classLocation = getContextStopLocation(ctx.className());
         }
 
-        Token openBraceToken = ((TerminalNodeImpl) ctx.classBody().getChild(0)).getSymbol();
-        Location openBraceLocation = getTokenLocation(openBraceToken);
-
-        if (classLocation.line != openBraceLocation.line) {
-            this.printer.warn(Messages.CLASS + Messages.BRACKET_STYLE, openBraceLocation);
-        }
+        verifyCodeBlockOpenBraceStyle(Messages.CLASS, classLocation, ctx.classBody());
     }
 
-    void verifyStructBrackets(StructDeclarationContext ctx) {
+    void verifyStructOpenBraceStyle(StructDeclarationContext ctx) {
         TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
         Location classLocation;
         if (typeInheritanceClauseContext != null) {
@@ -316,28 +310,24 @@ class MainListenerHelper {
             classLocation = getContextStopLocation(ctx.structName());
         }
 
-        Token openBraceToken = ((TerminalNodeImpl) ctx.structBody().getChild(0)).getSymbol();
-        Location openBraceLocation = getTokenLocation(openBraceToken);
-
-        if (classLocation.line != openBraceLocation.line) {
-            this.printer.warn(Messages.STRUCT + Messages.BRACKET_STYLE, openBraceLocation);
-        }
+        verifyCodeBlockOpenBraceStyle(Messages.STRUCT, classLocation, ctx.structBody());
     }
 
-    void verifyForLoopBrackets(ForStatementContext ctx) {
+    void verifyForLoopOpenBraceStyle(ForStatementContext ctx) {
         int numChildren = ctx.getChildCount();
         Location loopEndLocation;
 
-        // numChildren - 1 index is codeBlock
-        // numChildren - 1 index is either an expression or ';'
-        if (ctx.getChild(numChildren - 2) instanceof TerminalNodeImpl) {
-            Token semicolon = ((TerminalNodeImpl) ctx.getChild(numChildren - 2)).getSymbol();
+        // object at [numChildren - 1] index is codeBlock
+        // object at [numChildren - 2 index] is either an expression or ';'
+        Object constructBeforeOpenBrace = ctx.getChild(numChildren - 2);
+        if (constructBeforeOpenBrace instanceof TerminalNodeImpl) {
+            Token semicolon = ((TerminalNodeImpl) constructBeforeOpenBrace).getSymbol();
             loopEndLocation = getTokenLocation(semicolon);
         } else {
-            ExpressionContext expressionContext = (ExpressionContext) ctx.getChild(numChildren - 2);
+            ExpressionContext expressionContext = (ExpressionContext) constructBeforeOpenBrace;
             loopEndLocation = getContextStopLocation(expressionContext);
         }
-        verifyCodeBlockBracketStyle(Messages.FOR_LOOP, loopEndLocation, ctx.codeBlock());
+        verifyCodeBlockOpenBraceStyle(Messages.FOR_LOOP, loopEndLocation, ctx.codeBlock());
     }
     //endregion
 
