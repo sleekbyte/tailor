@@ -30,11 +30,13 @@ public class OpeningBraceLineTest extends RuleTest {
         addExpectedMsg(113, 4, Severity.WARNING, Messages.CLASS);
         addExpectedMsg(118, 4, Severity.WARNING, Messages.STRUCT);
         addExpectedMsg(146, 13, Severity.WARNING, Messages.FOR_LOOP);
+        addExpectedMsg(158, 1, Severity.WARNING, Messages.CLASS);
+        addExpectedMsg(165, 4, Severity.WARNING, Messages.STRUCT);
     }
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg) {
-        expectedMessages.add(Printer.genOutputStringForTest(inputFile.getName(), line, column, severity,
-                                                                   msg + Messages.BRACKET_STYLE));
+        expectedMessages.add(
+            Printer.genOutputStringForTest(inputFile.getName(), line, column, severity, msg + Messages.BRACKET_STYLE));
     }
 
 }

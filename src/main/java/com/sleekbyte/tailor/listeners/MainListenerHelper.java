@@ -6,6 +6,7 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ForInStatementContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ForStatementContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.FunctionDeclarationContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.GenericParameterClauseContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.IfStatementContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ImportDeclarationContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.InitializerDeclarationContext;
@@ -31,6 +32,7 @@ import com.sleekbyte.tailor.utils.CharFormatUtil;
 import com.sleekbyte.tailor.utils.SourceFileUtil;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
@@ -115,7 +117,6 @@ class MainListenerHelper {
 
     //region Multiple import check
     void verifyMultipleImports(ImportDeclarationContext ctx) {
-
         int lineNum = ctx.getStart().getLine();
         if (importLineNumbers.contains(lineNum)) {
             Location location = new Location(lineNum);
@@ -232,21 +233,21 @@ class MainListenerHelper {
     //region Open brace style check
     void verifySwitchStatementOpenBraceStyle(SwitchStatementContext ctx) {
         Location switchExpLocation = getTokenLocation(ctx.expression().getStop());
-        Location openBraceLocation = getLocationOfChildToken(ctx, 2);
+        Location openBraceLocation = getLocationOfChildToken(2, ctx);
 
         if (switchExpLocation.line != openBraceLocation.line) {
             this.printer.warn(Messages.SWITCH_STATEMENT + Messages.BRACKET_STYLE, openBraceLocation);
         }
     }
 
-    private Location getLocationOfChildToken(ParserRuleContext ctx, int childNumber) {
+    private Location getLocationOfChildToken(int childNumber, ParserRuleContext ctx) {
         Token token = ((TerminalNodeImpl) ctx.getChild(childNumber)).getSymbol();
         return getTokenLocation(token);
     }
 
     private void verifyCodeBlockOpenBraceStyle(String constructName, Location constructLocation,
                                                ParserRuleContext codeBlockCtx) {
-        Location openBraceLocation = getLocationOfChildToken(codeBlockCtx, 0);
+        Location openBraceLocation = getLocationOfChildToken(0, codeBlockCtx);
 
         if (constructLocation.line != openBraceLocation.line) {
             this.printer.warn(constructName + Messages.BRACKET_STYLE, openBraceLocation);
@@ -293,10 +294,13 @@ class MainListenerHelper {
     }
 
     void verifyClassOpenBraceStyle(ClassDeclarationContext ctx) {
+        GenericParameterClauseContext genericParameterClauseContext = ctx.genericParameterClause();
         TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
         Location classLocation;
         if (typeInheritanceClauseContext != null) {
             classLocation = getContextStopLocation(typeInheritanceClauseContext);
+        } else if (genericParameterClauseContext != null) {
+            classLocation = getContextStopLocation(genericParameterClauseContext);
         } else {
             classLocation = getContextStopLocation(ctx.className());
         }
@@ -305,15 +309,18 @@ class MainListenerHelper {
     }
 
     void verifyStructOpenBraceStyle(StructDeclarationContext ctx) {
+        GenericParameterClauseContext genericParameterClauseContext = ctx.genericParameterClause();
         TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
-        Location classLocation;
+        Location structLocation;
         if (typeInheritanceClauseContext != null) {
-            classLocation = getContextStopLocation(typeInheritanceClauseContext);
+            structLocation = getContextStopLocation(typeInheritanceClauseContext);
+        } else if (genericParameterClauseContext != null) {
+            structLocation = getContextStopLocation(genericParameterClauseContext);
         } else {
-            classLocation = getContextStopLocation(ctx.structName());
+            structLocation = getContextStopLocation(ctx.structName());
         }
 
-        verifyCodeBlockOpenBraceStyle(Messages.STRUCT, classLocation, ctx.structBody());
+        verifyCodeBlockOpenBraceStyle(Messages.STRUCT, structLocation, ctx.structBody());
     }
 
     void verifyForLoopOpenBraceStyle(ForStatementContext ctx) {
@@ -322,7 +329,7 @@ class MainListenerHelper {
 
         // object at [numChildren - 1] index is codeBlock
         // object at [numChildren - 2 index] is either an expression or ';'
-        Object constructBeforeOpenBrace = ctx.getChild(numChildren - 2);
+        ParseTree constructBeforeOpenBrace = ctx.getChild(numChildren - 2);
         if (constructBeforeOpenBrace instanceof TerminalNodeImpl) {
             Token semicolon = ((TerminalNodeImpl) constructBeforeOpenBrace).getSymbol();
             loopEndLocation = getTokenLocation(semicolon);

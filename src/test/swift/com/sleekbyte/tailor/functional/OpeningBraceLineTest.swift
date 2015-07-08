@@ -149,3 +149,18 @@ class Rectangle : Shape
         }
    }
 }
+
+class Hello
+<T> {
+}
+class Hello
+<T>
+{
+}
+struct Hello
+<T>{
+}
+struct Hello
+<T>
+   {
+   }
