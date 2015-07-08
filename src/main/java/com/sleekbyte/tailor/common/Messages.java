@@ -51,6 +51,7 @@ public class Messages {
     public static final String REPEAT_WHILE_STATEMENT = "Repeat-While statement ";
     public static final String INITIALIZER_BODY = "Initializer body ";
     public static final String FOR_IN_LOOP = "For-in loop ";
+    public static final String OPERATOR = "Operator ";
 
     // Plural constructs
     public static final String IMPORTS = "Imports ";
@@ -68,6 +69,8 @@ public class Messages {
     public static final String K_PREFIXED = "should not be prefixed with 'k' or 'K'";
     public static final String MULTIPLE_IMPORTS = "should be on separate lines";
     public static final String BRACKET_STYLE = "should not have any line breaks before the opening brace";
+    public static final String SPACE_BEFORE = "must have exactly one space before it";
+    public static final String SPACE_AFTER = "must have exactly one space after it";
 
     // Usage messages
     public static final String CMD_LINE_SYNTAX = "tailor";

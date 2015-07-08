@@ -2,11 +2,15 @@ package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
+import org.antlr.v4.runtime.tree.xpath.XPath;
 
 /**
  * Parse tree listener for verifying Swift constructs.
@@ -334,5 +338,10 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterStructDeclaration(SwiftParser.StructDeclarationContext ctx) {
         listenerHelper.verifyStructOpenBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterOperatorDeclaration(SwiftParser.OperatorDeclarationContext ctx) {
+        listenerHelper.checkSpacesAroundOperator(ctx);
     }
 }

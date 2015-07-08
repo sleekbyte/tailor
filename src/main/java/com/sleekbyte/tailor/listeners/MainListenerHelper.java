@@ -27,11 +27,14 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.TypeInheritanceClauseContex
 import static com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
+import com.sleekbyte.tailor.antlr.SwiftParser.OperatorContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.OperatorDeclarationContext;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.CharFormatUtil;
 import com.sleekbyte.tailor.utils.SourceFileUtil;
+import com.sleekbyte.tailor.utils.ListenerUtil;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -54,25 +57,11 @@ class MainListenerHelper {
         this.printer = printer;
     }
 
-    //region Utils
-    Location getContextStartLocation(ParserRuleContext ctx) {
-        return new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
-    }
-
-    Location getContextStopLocation(ParserRuleContext ctx) {
-        return new Location(ctx.getStop().getLine(), ctx.getStop().getCharPositionInLine() + 1);
-    }
-
-    Location getTokenLocation(Token token) {
-        return new Location(token.getLine(), token.getCharPositionInLine() + 1);
-    }
-    //endregion
-
     //region UpperCamelCase name check
     void verifyUpperCamelCase(String constructType, ParserRuleContext ctx) {
         String constructName = ctx.getText();
         if (!CharFormatUtil.isUpperCamelCase(constructName)) {
-            Location location = getContextStartLocation(ctx);
+            Location location = ListenerUtil.getContextStartLocation(ctx);
             this.printer.error(constructType + Messages.UPPER_CAMEL_CASE, location);
         }
     }
@@ -82,7 +71,7 @@ class MainListenerHelper {
     void verifyNotSemicolonTerminated(String constructType, ParserRuleContext ctx) {
         String construct = ctx.getText();
         if (construct.endsWith(";")) {
-            Location location = getContextStopLocation(ctx);
+            Location location = ListenerUtil.getContextStopLocation(ctx);
             this.printer.error(constructType + Messages.SEMICOLON, location);
         }
     }
@@ -93,7 +82,7 @@ class MainListenerHelper {
         if (SourceFileUtil.constructTooLong(ctx, maxLength)) {
             int constructLength = ctx.getStop().getLine() - ctx.getStart().getLine();
             String lengthVersusLimit = " (" + constructLength + "/" + maxLength + ")";
-            Location location = getContextStartLocation(ctx);
+            Location location = ListenerUtil.getContextStartLocation(ctx);
             this.printer.error(constructType + Messages.EXCEEDS_LINE_LIMIT + lengthVersusLimit, location);
         }
     }
@@ -101,7 +90,7 @@ class MainListenerHelper {
     void verifyNameLength(String constructType, int maxLength, ParserRuleContext ctx) {
         if (SourceFileUtil.nameTooLong(ctx, maxLength)) {
             String lengthVersusLimit = " (" + ctx.getText().length() + "/" + maxLength + ")";
-            Location location = getContextStartLocation(ctx);
+            Location location = ListenerUtil.getContextStartLocation(ctx);
             this.printer.error(constructType + Messages.EXCEEDS_CHARACTER_LIMIT + lengthVersusLimit, location);
         }
     }
@@ -111,7 +100,7 @@ class MainListenerHelper {
     void verifyLowerCamelCase(String constructType, ParserRuleContext ctx) {
         String constructName = ctx.getText();
         if (!CharFormatUtil.isLowerCamelCase(constructName)) {
-            Location location = getContextStartLocation(ctx);
+            Location location = ListenerUtil.getContextStartLocation(ctx);
             this.printer.error(constructType + Messages.LOWER_CAMEL_CASE, location);
         }
     }
@@ -216,7 +205,7 @@ class MainListenerHelper {
         char firstCharacter = openParenthesisToken.getText().charAt(0);
 
         if (firstCharacter == '(') {
-            Location startLocation = getTokenLocation(openParenthesisToken);
+            Location startLocation = ListenerUtil.getTokenLocation(openParenthesisToken);
             this.printer.warn(Messages.FOR_LOOP + Messages.ENCLOSED_PARENTHESIS, startLocation);
         }
     }
@@ -235,14 +224,14 @@ class MainListenerHelper {
     }
 
     private void printRedundantParenthesisWarning(ParserRuleContext ctx, String firstParenthesisMsg) {
-        Location startLocation = getContextStartLocation(ctx);
+        Location startLocation = ListenerUtil.getContextStartLocation(ctx);
         this.printer.warn(firstParenthesisMsg, startLocation);
     }
     //endregion
 
     //region Open brace style check
     void verifySwitchStatementOpenBraceStyle(SwitchStatementContext ctx) {
-        Location switchExpLocation = getTokenLocation(ctx.expression().getStop());
+        Location switchExpLocation = ListenerUtil.getTokenLocation(ctx.expression().getStop());
         Location openBraceLocation = getLocationOfChildToken(2, ctx);
 
         if (switchExpLocation.line != openBraceLocation.line) {
@@ -252,7 +241,7 @@ class MainListenerHelper {
 
     private Location getLocationOfChildToken(int childNumber, ParserRuleContext ctx) {
         Token token = ((TerminalNodeImpl) ctx.getChild(childNumber)).getSymbol();
-        return getTokenLocation(token);
+        return ListenerUtil.getTokenLocation(token);
     }
 
     private void verifyCodeBlockOpenBraceStyle(String constructName, Location constructLocation,
@@ -265,28 +254,28 @@ class MainListenerHelper {
     }
 
     void verifyForInStatementOpenBraceStyle(ForInStatementContext ctx) {
-        Location expressionLocation = getContextStopLocation(ctx.expression());
+        Location expressionLocation = ListenerUtil.getContextStopLocation(ctx.expression());
         verifyCodeBlockOpenBraceStyle(Messages.FOR_IN_LOOP, expressionLocation, ctx.codeBlock());
     }
 
     void verifyInitializerOpenBraceStyle(InitializerDeclarationContext ctx) {
-        Location parameterClauseLocation = getContextStopLocation(ctx.parameterClause());
+        Location parameterClauseLocation = ListenerUtil.getContextStopLocation(ctx.parameterClause());
         verifyCodeBlockOpenBraceStyle(Messages.INITIALIZER_BODY, parameterClauseLocation,
                                              ctx.initializerBody().codeBlock());
     }
 
     void verifyRepeatWhileLoopOpenBraceStyle(RepeatWhileStatementContext ctx) {
-        Location repeatClause = getContextStartLocation(ctx);
+        Location repeatClause = ListenerUtil.getContextStartLocation(ctx);
         verifyCodeBlockOpenBraceStyle(Messages.REPEAT_WHILE_STATEMENT, repeatClause, ctx.codeBlock());
     }
 
     void verifyWhileLoopOpenBraceStyle(WhileStatementContext ctx) {
-        Location conditionClauseLocation = getContextStopLocation(ctx.conditionClause());
+        Location conditionClauseLocation = ListenerUtil.getContextStopLocation(ctx.conditionClause());
         verifyCodeBlockOpenBraceStyle(Messages.WHILE_STATEMENT, conditionClauseLocation, ctx.codeBlock());
     }
 
     void verifyIfStatementOpenBraceStyle(IfStatementContext ctx) {
-        Location conditionClauseLocation = getContextStopLocation(ctx.conditionClause());
+        Location conditionClauseLocation = ListenerUtil.getContextStopLocation(ctx.conditionClause());
         verifyCodeBlockOpenBraceStyle(Messages.IF_STATEMENT, conditionClauseLocation, ctx.codeBlock());
     }
 
@@ -294,12 +283,12 @@ class MainListenerHelper {
         if (ctx.codeBlock() == null) {
             return;
         }
-        Location elseClauseLocation = getContextStartLocation(ctx);
+        Location elseClauseLocation = ListenerUtil.getContextStartLocation(ctx);
         verifyCodeBlockOpenBraceStyle(Messages.ELSE_CLAUSE, elseClauseLocation, ctx.codeBlock());
     }
 
     void verifyFunctionOpenBraceStyle(FunctionDeclarationContext ctx) {
-        Location functionDeclarationLocation = getContextStopLocation(ctx.functionSignature());
+        Location functionDeclarationLocation = ListenerUtil.getContextStopLocation(ctx.functionSignature());
         verifyCodeBlockOpenBraceStyle(Messages.FUNCTION, functionDeclarationLocation, ctx.functionBody().codeBlock());
     }
 
@@ -308,11 +297,11 @@ class MainListenerHelper {
         TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
         Location classLocation;
         if (typeInheritanceClauseContext != null) {
-            classLocation = getContextStopLocation(typeInheritanceClauseContext);
+            classLocation = ListenerUtil.getContextStopLocation(typeInheritanceClauseContext);
         } else if (genericParameterClauseContext != null) {
-            classLocation = getContextStopLocation(genericParameterClauseContext);
+            classLocation = ListenerUtil.getContextStopLocation(genericParameterClauseContext);
         } else {
-            classLocation = getContextStopLocation(ctx.className());
+            classLocation = ListenerUtil.getContextStopLocation(ctx.className());
         }
 
         verifyCodeBlockOpenBraceStyle(Messages.CLASS, classLocation, ctx.classBody());
@@ -323,11 +312,11 @@ class MainListenerHelper {
         TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
         Location structLocation;
         if (typeInheritanceClauseContext != null) {
-            structLocation = getContextStopLocation(typeInheritanceClauseContext);
+            structLocation = ListenerUtil.getContextStopLocation(typeInheritanceClauseContext);
         } else if (genericParameterClauseContext != null) {
-            structLocation = getContextStopLocation(genericParameterClauseContext);
+            structLocation = ListenerUtil.getContextStopLocation(genericParameterClauseContext);
         } else {
-            structLocation = getContextStopLocation(ctx.structName());
+            structLocation = ListenerUtil.getContextStopLocation(ctx.structName());
         }
 
         verifyCodeBlockOpenBraceStyle(Messages.STRUCT, structLocation, ctx.structBody());
@@ -342,10 +331,10 @@ class MainListenerHelper {
         ParseTree constructBeforeOpenBrace = ctx.getChild(numChildren - 2);
         if (constructBeforeOpenBrace instanceof TerminalNodeImpl) {
             Token semicolon = ((TerminalNodeImpl) constructBeforeOpenBrace).getSymbol();
-            loopEndLocation = getTokenLocation(semicolon);
+            loopEndLocation = ListenerUtil.getTokenLocation(semicolon);
         } else {
             ExpressionContext expressionContext = (ExpressionContext) constructBeforeOpenBrace;
-            loopEndLocation = getContextStopLocation(expressionContext);
+            loopEndLocation = ListenerUtil.getContextStopLocation(expressionContext);
         }
         verifyCodeBlockOpenBraceStyle(Messages.FOR_LOOP, loopEndLocation, ctx.codeBlock());
     }
@@ -370,5 +359,31 @@ class MainListenerHelper {
     String letOrVar(OptionalBindingHeadContext ctx) {
         return ctx.getChild(0).getText();
     }
+    //endregion
+
+    //region Whitespace check helpers
+
+    public void checkSpacesAroundOperator(OperatorDeclarationContext ctx) {
+        for (int i = 0; i < ctx.getChild(0).getChildCount(); i++) {
+            if (ctx.getChild(0).getChild(i) instanceof OperatorContext) {
+                OperatorContext op = (OperatorContext) ctx.getChild(0).getChild(i);
+                Token before = ((TerminalNodeImpl) ctx.getChild(0).getChild(i - 1)).getSymbol();
+                Token after = ((TerminalNodeImpl) ctx.getChild(0).getChild(i + 1)).getSymbol();
+
+                if (op.getStart().getLine() == before.getLine()) {
+                    if (op.getStart().getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(before) > 2) {
+                        printer.error(Messages.OPERATOR + Messages.SPACE_BEFORE, ListenerUtil.getContextStopLocation(op));
+                    }
+                }
+
+                if (after.getLine() == op.getStart().getLine()) {
+                    if (after.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(op.getStart()) > 2) {
+                        printer.error(Messages.OPERATOR + Messages.SPACE_AFTER, ListenerUtil.getContextStopLocation(op));
+                    }
+                }
+            }
+        }
+    }
+
     //endregion
 }

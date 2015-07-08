@@ -7,6 +7,7 @@ import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.CharFormatUtil;
+import com.sleekbyte.tailor.utils.ListenerUtil;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 /**
@@ -16,7 +17,6 @@ public class ConstantDecListener extends SwiftBaseListener {
 
     private MaxLengths maxLengths;
     private Printer printer;
-    private MainListenerHelper listenerHelper = new MainListenerHelper();
 
     /**
      * Creates a ConstantDecListener object and sets the printer in listenerHelper.
@@ -34,7 +34,7 @@ public class ConstantDecListener extends SwiftBaseListener {
     public void enterIdentifier(SwiftParser.IdentifierContext ctx) {
         String constantName = ctx.getText();
         ParserRuleContext constantDecContext = getConstantDeclaration(ctx);
-        Location location = listenerHelper.getContextStartLocation(ctx);
+        Location location = ListenerUtil.getContextStartLocation(ctx);
 
         if (isGlobal(constantDecContext) || insideClass(constantDecContext) || insideStruct(constantDecContext)) {
             if (!CharFormatUtil.isUpperCamelCase(constantName) && !CharFormatUtil.isLowerCamelCase(constantName)) {
