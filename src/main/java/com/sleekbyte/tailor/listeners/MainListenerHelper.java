@@ -328,7 +328,7 @@ class MainListenerHelper {
         Location loopEndLocation;
 
         // object at [numChildren - 1] index is codeBlock
-        // object at [numChildren - 2 index] is either an expression or ';'
+        // object at [numChildren - 2] index is either an expression or ';'
         ParseTree constructBeforeOpenBrace = ctx.getChild(numChildren - 2);
         if (constructBeforeOpenBrace instanceof TerminalNodeImpl) {
             Token semicolon = ((TerminalNodeImpl) constructBeforeOpenBrace).getSymbol();
