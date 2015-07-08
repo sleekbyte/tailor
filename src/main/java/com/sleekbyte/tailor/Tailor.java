@@ -71,9 +71,9 @@ public class Tailor {
                 Files.walk(Paths.get(pathName))
                     .filter(path -> path.toString().endsWith(".swift"))
                     .filter(path -> {
-                        File tempFile = path.toFile();
-                        return tempFile.isFile() && tempFile.canRead();
-                    })
+                            File tempFile = path.toFile();
+                            return tempFile.isFile() && tempFile.canRead();
+                        })
                     .forEach(path -> filenames.add(path.toString()));
             } else if (file.isFile() && pathName.endsWith(".swift") && file.canRead()) {
                 filenames.add(pathName);
