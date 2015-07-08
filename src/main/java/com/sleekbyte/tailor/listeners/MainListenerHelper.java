@@ -1,15 +1,28 @@
 package com.sleekbyte.tailor.listeners;
 
+import static com.sleekbyte.tailor.antlr.SwiftParser.ClassDeclarationContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.ElseClauseContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.ForInStatementContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.ForStatementContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.FunctionDeclarationContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.GenericParameterClauseContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.IfStatementContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ImportDeclarationContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.InitializerDeclarationContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingContinuationContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingHeadContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ParenthesizedExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.PatternContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.RepeatWhileStatementContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.StructDeclarationContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.TypeInheritanceClauseContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.common.Location;
@@ -19,6 +32,7 @@ import com.sleekbyte.tailor.utils.CharFormatUtil;
 import com.sleekbyte.tailor.utils.SourceFileUtil;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
@@ -38,27 +52,46 @@ class MainListenerHelper {
         this.printer = printer;
     }
 
+    //region Utils
+    Location getContextStartLocation(ParserRuleContext ctx) {
+        return new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+    }
+
+    Location getContextStopLocation(ParserRuleContext ctx) {
+        return new Location(ctx.getStop().getLine(), ctx.getStop().getCharPositionInLine() + 1);
+    }
+
+    Location getTokenLocation(Token token) {
+        return new Location(token.getLine(), token.getCharPositionInLine() + 1);
+    }
+    //endregion
+
+    //region UpperCamelCase name check
     void verifyUpperCamelCase(String constructType, ParserRuleContext ctx) {
         String constructName = ctx.getText();
         if (!CharFormatUtil.isUpperCamelCase(constructName)) {
-            Location location = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+            Location location = getContextStartLocation(ctx);
             this.printer.error(constructType + Messages.UPPER_CAMEL_CASE, location);
         }
     }
+    //endregion
 
+    //region Semicolon terminated statement check
     void verifyNotSemicolonTerminated(String constructType, ParserRuleContext ctx) {
         String construct = ctx.getText();
         if (construct.endsWith(";")) {
-            Location location = new Location(ctx.getStop().getLine(), ctx.getStop().getCharPositionInLine() + 1);
+            Location location = getContextStopLocation(ctx);
             this.printer.error(constructType + Messages.SEMICOLON, location);
         }
     }
+    //endregion
 
+    //region Length checks
     void verifyConstructLength(String constructType, int maxLength, ParserRuleContext ctx) {
         if (SourceFileUtil.constructTooLong(ctx, maxLength)) {
             int constructLength = ctx.getStop().getLine() - ctx.getStart().getLine();
             String lengthVersusLimit = " (" + constructLength + "/" + maxLength + ")";
-            Location location = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+            Location location = getContextStartLocation(ctx);
             this.printer.error(constructType + Messages.EXCEEDS_LINE_LIMIT + lengthVersusLimit, location);
         }
     }
@@ -66,19 +99,23 @@ class MainListenerHelper {
     void verifyNameLength(String constructType, int maxLength, ParserRuleContext ctx) {
         if (SourceFileUtil.nameTooLong(ctx, maxLength)) {
             String lengthVersusLimit = " (" + ctx.getText().length() + "/" + maxLength + ")";
-            Location location = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+            Location location = getContextStartLocation(ctx);
             this.printer.error(constructType + Messages.EXCEEDS_CHARACTER_LIMIT + lengthVersusLimit, location);
         }
     }
+    //endregion
 
+    //region Lowercamelcase check
     void verifyLowerCamelCase(String constructType, ParserRuleContext ctx) {
         String constructName = ctx.getText();
         if (!CharFormatUtil.isLowerCamelCase(constructName)) {
-            Location location = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+            Location location = getContextStartLocation(ctx);
             this.printer.error(constructType + Messages.LOWER_CAMEL_CASE, location);
         }
     }
+    //endregion
 
+    //region Multiple import check
     void verifyMultipleImports(ImportDeclarationContext ctx) {
         int lineNum = ctx.getStart().getLine();
         if (importLineNumbers.contains(lineNum)) {
@@ -88,7 +125,9 @@ class MainListenerHelper {
             importLineNumbers.add(lineNum);
         }
     }
+    //endregion
 
+    //region Tuple pattern evaluation
     void walkListener(ParseTreeWalker walker, ParserRuleContext tree, SwiftBaseListener listener) {
         walker.walk(listener, tree);
     }
@@ -120,7 +159,9 @@ class MainListenerHelper {
             evaluatePattern(tuplePatternElement.pattern(), walker, listener);
         }
     }
+    //endregion
 
+    //region Parenthesis check
     void verifyRedundantExpressionParenthesis(String constructType, ExpressionContext ctx) {
         if (ctx == null
                 || ctx.getChildCount() != 1
@@ -165,13 +206,12 @@ class MainListenerHelper {
         char firstCharacter = openParenthesisToken.getText().charAt(0);
 
         if (firstCharacter == '(') {
-            Location startLocation = new Location(openParenthesisToken.getLine(),
-                openParenthesisToken.getCharPositionInLine() + 1);
+            Location startLocation = getTokenLocation(openParenthesisToken);
             this.printer.warn(Messages.FOR_LOOP + Messages.ENCLOSED_PARENTHESIS, startLocation);
         }
     }
 
-    public void verifyRedundantCatchParentheses(ParserRuleContext ctx) {
+    void verifyRedundantCatchParentheses(ParserRuleContext ctx) {
         if (ctx == null) {
             return;
         }
@@ -185,18 +225,129 @@ class MainListenerHelper {
     }
 
     private void printRedundantParenthesisWarning(ParserRuleContext ctx, String firstParenthesisMsg) {
-        Location startLocation = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+        Location startLocation = getContextStartLocation(ctx);
         this.printer.warn(firstParenthesisMsg, startLocation);
     }
+    //endregion
 
-    /* Optional Binding Condition Evaluators */
+    //region Open brace style check
+    void verifySwitchStatementOpenBraceStyle(SwitchStatementContext ctx) {
+        Location switchExpLocation = getTokenLocation(ctx.expression().getStop());
+        Location openBraceLocation = getLocationOfChildToken(2, ctx);
 
-    public void evaluateOptionalBindingHead(OptionalBindingHeadContext ctx, SwiftBaseListener listener) {
+        if (switchExpLocation.line != openBraceLocation.line) {
+            this.printer.warn(Messages.SWITCH_STATEMENT + Messages.BRACKET_STYLE, openBraceLocation);
+        }
+    }
+
+    private Location getLocationOfChildToken(int childNumber, ParserRuleContext ctx) {
+        Token token = ((TerminalNodeImpl) ctx.getChild(childNumber)).getSymbol();
+        return getTokenLocation(token);
+    }
+
+    private void verifyCodeBlockOpenBraceStyle(String constructName, Location constructLocation,
+                                               ParserRuleContext codeBlockCtx) {
+        Location openBraceLocation = getLocationOfChildToken(0, codeBlockCtx);
+
+        if (constructLocation.line != openBraceLocation.line) {
+            this.printer.warn(constructName + Messages.BRACKET_STYLE, openBraceLocation);
+        }
+    }
+
+    void verifyForInStatementOpenBraceStyle(ForInStatementContext ctx) {
+        Location expressionLocation = getContextStopLocation(ctx.expression());
+        verifyCodeBlockOpenBraceStyle(Messages.FOR_IN_LOOP, expressionLocation, ctx.codeBlock());
+    }
+
+    void verifyInitializerOpenBraceStyle(InitializerDeclarationContext ctx) {
+        Location parameterClauseLocation = getContextStopLocation(ctx.parameterClause());
+        verifyCodeBlockOpenBraceStyle(Messages.INITIALIZER_BODY, parameterClauseLocation,
+                                             ctx.initializerBody().codeBlock());
+    }
+
+    void verifyRepeatWhileLoopOpenBraceStyle(RepeatWhileStatementContext ctx) {
+        Location repeatClause = getContextStartLocation(ctx);
+        verifyCodeBlockOpenBraceStyle(Messages.REPEAT_WHILE_STATEMENT, repeatClause, ctx.codeBlock());
+    }
+
+    void verifyWhileLoopOpenBraceStyle(WhileStatementContext ctx) {
+        Location conditionClauseLocation = getContextStopLocation(ctx.conditionClause());
+        verifyCodeBlockOpenBraceStyle(Messages.WHILE_STATEMENT, conditionClauseLocation, ctx.codeBlock());
+    }
+
+    void verifyIfStatementOpenBraceStyle(IfStatementContext ctx) {
+        Location conditionClauseLocation = getContextStopLocation(ctx.conditionClause());
+        verifyCodeBlockOpenBraceStyle(Messages.IF_STATEMENT, conditionClauseLocation, ctx.codeBlock());
+    }
+
+    void verifyElseClauseOpenBraceStyle(ElseClauseContext ctx) {
+        if (ctx.codeBlock() == null) {
+            return;
+        }
+        Location elseClauseLocation = getContextStartLocation(ctx);
+        verifyCodeBlockOpenBraceStyle(Messages.ELSE_CLAUSE, elseClauseLocation, ctx.codeBlock());
+    }
+
+    void verifyFunctionOpenBraceStyle(FunctionDeclarationContext ctx) {
+        Location functionDeclarationLocation = getContextStopLocation(ctx.functionSignature());
+        verifyCodeBlockOpenBraceStyle(Messages.FUNCTION, functionDeclarationLocation, ctx.functionBody().codeBlock());
+    }
+
+    void verifyClassOpenBraceStyle(ClassDeclarationContext ctx) {
+        GenericParameterClauseContext genericParameterClauseContext = ctx.genericParameterClause();
+        TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
+        Location classLocation;
+        if (typeInheritanceClauseContext != null) {
+            classLocation = getContextStopLocation(typeInheritanceClauseContext);
+        } else if (genericParameterClauseContext != null) {
+            classLocation = getContextStopLocation(genericParameterClauseContext);
+        } else {
+            classLocation = getContextStopLocation(ctx.className());
+        }
+
+        verifyCodeBlockOpenBraceStyle(Messages.CLASS, classLocation, ctx.classBody());
+    }
+
+    void verifyStructOpenBraceStyle(StructDeclarationContext ctx) {
+        GenericParameterClauseContext genericParameterClauseContext = ctx.genericParameterClause();
+        TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
+        Location structLocation;
+        if (typeInheritanceClauseContext != null) {
+            structLocation = getContextStopLocation(typeInheritanceClauseContext);
+        } else if (genericParameterClauseContext != null) {
+            structLocation = getContextStopLocation(genericParameterClauseContext);
+        } else {
+            structLocation = getContextStopLocation(ctx.structName());
+        }
+
+        verifyCodeBlockOpenBraceStyle(Messages.STRUCT, structLocation, ctx.structBody());
+    }
+
+    void verifyForLoopOpenBraceStyle(ForStatementContext ctx) {
+        int numChildren = ctx.getChildCount();
+        Location loopEndLocation;
+
+        // object at [numChildren - 1] index is codeBlock
+        // object at [numChildren - 2] index is either an expression or ';'
+        ParseTree constructBeforeOpenBrace = ctx.getChild(numChildren - 2);
+        if (constructBeforeOpenBrace instanceof TerminalNodeImpl) {
+            Token semicolon = ((TerminalNodeImpl) constructBeforeOpenBrace).getSymbol();
+            loopEndLocation = getTokenLocation(semicolon);
+        } else {
+            ExpressionContext expressionContext = (ExpressionContext) constructBeforeOpenBrace;
+            loopEndLocation = getContextStopLocation(expressionContext);
+        }
+        verifyCodeBlockOpenBraceStyle(Messages.FOR_LOOP, loopEndLocation, ctx.codeBlock());
+    }
+    //endregion
+
+    //region Optional binding condition evaluators
+    void evaluateOptionalBindingHead(OptionalBindingHeadContext ctx, SwiftBaseListener listener) {
         ParseTreeWalker walker = new ParseTreeWalker();
         evaluatePattern(ctx.pattern(), walker, listener);
     }
 
-    public void evaluateOptionalBindingContinuation(OptionalBindingContinuationContext ctx,
+    void evaluateOptionalBindingContinuation(OptionalBindingContinuationContext ctx,
                                                     SwiftBaseListener listener) {
         if (ctx.optionalBindingHead() != null) {
             evaluateOptionalBindingHead(ctx.optionalBindingHead(), listener);
@@ -206,7 +357,8 @@ class MainListenerHelper {
         }
     }
 
-    public String letOrVar(OptionalBindingHeadContext ctx) {
+    String letOrVar(OptionalBindingHeadContext ctx) {
         return ctx.getChild(0).getText();
     }
+    //endregion
 }

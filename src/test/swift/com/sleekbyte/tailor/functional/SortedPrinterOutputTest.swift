@@ -21,9 +21,9 @@ struct invalidStructName {
     var x: String;
 
     func test() {
+
         // while loop test
-        while true
-        {
+        while true {
         };
 
         // for loop

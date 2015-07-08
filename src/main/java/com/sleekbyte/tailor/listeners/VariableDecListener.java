@@ -13,6 +13,7 @@ import com.sleekbyte.tailor.utils.CharFormatUtil;
 public class VariableDecListener extends SwiftBaseListener {
 
     private Printer printer;
+    private MainListenerHelper listenerHelper = new MainListenerHelper();
 
     public VariableDecListener(Printer printer) {
         this.printer = printer;
@@ -21,7 +22,7 @@ public class VariableDecListener extends SwiftBaseListener {
     @Override
     public void enterIdentifier(SwiftParser.IdentifierContext ctx) {
         String variableName = ctx.getText();
-        Location location = new Location(ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine() + 1);
+        Location location = listenerHelper.getContextStartLocation(ctx);
 
         if (!CharFormatUtil.isLowerCamelCase(variableName)) {
             this.printer.error(Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE, location);
