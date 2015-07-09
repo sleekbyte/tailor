@@ -1,6 +1,7 @@
 package com.sleekbyte.tailor.listeners;
 
 import static com.sleekbyte.tailor.antlr.SwiftParser.ClassDeclarationContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.ConditionalOperatorContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ElseClauseContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ForInStatementContext;
@@ -369,6 +370,34 @@ class MainListenerHelper {
 
     String letOrVar(OptionalBindingHeadContext ctx) {
         return ctx.getChild(0).getText();
+    }
+    //endregion
+
+    //region Ternary conditional operator parentheses check
+    void verifyTernaryOperatorParentheses(ConditionalOperatorContext ctx) {
+        // First move up parse tree from conditionalOperator to binaryExpression to expression
+        // Next move down to first child (prefixExpression) to postfixExpression
+        if (ctx.getParent() == null
+                || ctx.getParent().getParent() == null
+                || !(ctx.getParent().getParent() instanceof ExpressionContext)
+                || ((ExpressionContext) ctx.getParent().getParent()).prefixExpression() == null
+                || ((ExpressionContext) ctx.getParent().getParent()).prefixExpression().postfixExpression() == null) {
+            return;
+        }
+        PostfixExpressionContext postfixExpression =
+            ((ExpressionContext) ctx.getParent().getParent()).prefixExpression().postfixExpression();
+
+        // Check if last expression before conditionalOperator is parenthesized
+        ParseTree lastChild = postfixExpression.getChild(postfixExpression.getChildCount() - 1);
+        if (lastChild instanceof ParenthesizedExpressionContext
+                || ((lastChild instanceof PrimaryExpressionContext)
+                        && lastChild.getChildCount() == 1
+                        && (lastChild.getChild(0) instanceof ParenthesizedExpressionContext))) {
+            return;
+        }
+
+        this.printer.warn(Messages.TERNARY_OPERATOR_CONDITION + Messages.TERNARY_PARENTHESES,
+            getContextStopLocation(postfixExpression));
     }
     //endregion
 }
