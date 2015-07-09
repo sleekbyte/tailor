@@ -11,8 +11,8 @@ func myFunctionNameIsTooLong(longExternalParameterName aLongLocalParameterName: 
     return true
 }
 
-let myString = "hello"
-mySwitchLabel: switch myString {
+let myStr = "hello"
+mySwitchLabel: switch myStr {
     case "hello":
         print("yes")
     case "hi":
@@ -37,5 +37,17 @@ struct RectIsAPrettyLongName {
 
 typealias LongNameMusicalNote = String
 
-var thisIsALongVariableName = 0
+struct Rect { // test enterVariableName
+    var thisIsALongVariable: Point {
+        get {
+            return Point(12, 144)
+        }
+    }
+}
+
+func myFunctionNameIsAlsoLong(var longExternalParameterName aLongLocalParameterName: Int) -> Bool {
+    return true
+}
+
 let thisIsALongConstantName = 1
+var thisIsALongVariableName = 0
