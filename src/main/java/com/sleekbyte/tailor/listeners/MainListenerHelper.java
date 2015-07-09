@@ -14,6 +14,8 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingContinuation
 import static com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingHeadContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ParenthesizedExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.PatternContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerListContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.RepeatWhileStatementContext;
@@ -130,6 +132,14 @@ class MainListenerHelper {
     //region Tuple pattern evaluation
     void walkListener(ParseTreeWalker walker, ParserRuleContext tree, SwiftBaseListener listener) {
         walker.walk(listener, tree);
+    }
+
+    void evaluatePatternInitializerList(PatternInitializerListContext ctx, SwiftBaseListener listener) {
+        ParseTreeWalker walker = new ParseTreeWalker();
+        for (PatternInitializerContext context : ctx.patternInitializer()) {
+            PatternContext pattern = context.pattern();
+            evaluatePattern(pattern, walker, listener);
+        }
     }
 
     void evaluatePattern(PatternContext pattern, ParseTreeWalker walker, SwiftBaseListener listener) {

@@ -160,23 +160,17 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterConstantDeclaration(SwiftParser.ConstantDeclarationContext ctx) {
-        ParseTreeWalker walker = new ParseTreeWalker();
-        for (SwiftParser.PatternInitializerContext context : ctx.patternInitializerList().patternInitializer()) {
-            SwiftParser.PatternContext pattern = context.pattern();
-            listenerHelper.evaluatePattern(pattern, walker, new ConstantDecListener(this.printer, this.maxLengths));
-        }
+        listenerHelper.evaluatePatternInitializerList(ctx.patternInitializerList(),
+            new ConstantDecListener(this.printer, this.maxLengths));
     }
 
     @Override
     public void enterVariableDeclaration(SwiftParser.VariableDeclarationContext ctx) {
-        ParseTreeWalker walker = new ParseTreeWalker();
         if (ctx.patternInitializerList() == null) {
             return;
         }
-        for (SwiftParser.PatternInitializerContext context : ctx.patternInitializerList().patternInitializer()) {
-            SwiftParser.PatternContext pattern = context.pattern();
-            listenerHelper.evaluatePattern(pattern, walker, new VariableDecListener(this.printer, this.maxLengths));
-        }
+        listenerHelper.evaluatePatternInitializerList(ctx.patternInitializerList(),
+            new VariableDecListener(this.printer, this.maxLengths));
     }
 
     @Override
