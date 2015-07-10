@@ -1,7 +1,7 @@
 class CheckSuperLongClassName {
 }
 
-let checkElementNameLength:(ename:Int, veryLongElementName:Int) = (1, 2)
+let checkElementNameLength: (ename: Int, veryLongElementName: Int) = (1, 2)
 
 enum PrettyLongExampleEnum: Int {
     case A, BIsAVeryLongEnumCaseName, C = 5, D

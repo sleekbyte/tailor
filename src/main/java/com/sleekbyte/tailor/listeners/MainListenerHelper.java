@@ -29,12 +29,14 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorDeclarationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.TypeAnnotationContext;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.CharFormatUtil;
-import com.sleekbyte.tailor.utils.SourceFileUtil;
 import com.sleekbyte.tailor.utils.ListenerUtil;
+import com.sleekbyte.tailor.utils.ParseTreeUtil;
+import com.sleekbyte.tailor.utils.SourceFileUtil;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -261,7 +263,7 @@ class MainListenerHelper {
     void verifyInitializerOpenBraceStyle(InitializerDeclarationContext ctx) {
         Location parameterClauseLocation = ListenerUtil.getContextStopLocation(ctx.parameterClause());
         verifyCodeBlockOpenBraceStyle(Messages.INITIALIZER_BODY, parameterClauseLocation,
-                                             ctx.initializerBody().codeBlock());
+            ctx.initializerBody().codeBlock());
     }
 
     void verifyRepeatWhileLoopOpenBraceStyle(RepeatWhileStatementContext ctx) {
@@ -347,7 +349,7 @@ class MainListenerHelper {
     }
 
     void evaluateOptionalBindingContinuation(OptionalBindingContinuationContext ctx,
-                                                    SwiftBaseListener listener) {
+                                             SwiftBaseListener listener) {
         if (ctx.optionalBindingHead() != null) {
             evaluateOptionalBindingHead(ctx.optionalBindingHead(), listener);
         } else {
@@ -363,25 +365,52 @@ class MainListenerHelper {
 
     //region Whitespace check helpers
 
-    public void checkSpacesAroundOperator(OperatorDeclarationContext ctx) {
+    public void checkWhitespaceAroundOperator(OperatorDeclarationContext ctx) {
         for (int i = 0; i < ctx.getChild(0).getChildCount(); i++) {
             if (ctx.getChild(0).getChild(i) instanceof OperatorContext) {
                 OperatorContext op = (OperatorContext) ctx.getChild(0).getChild(i);
                 Token before = ((TerminalNodeImpl) ctx.getChild(0).getChild(i - 1)).getSymbol();
                 Token after = ((TerminalNodeImpl) ctx.getChild(0).getChild(i + 1)).getSymbol();
 
-                if (op.getStart().getLine() == before.getLine()) {
-                    if (op.getStart().getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(before) > 2) {
-                        printer.error(Messages.OPERATOR + Messages.SPACE_BEFORE, ListenerUtil.getContextStopLocation(op));
-                    }
+                int leftMargin = op.getStart().getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(before);
+                if (op.getStart().getLine() == before.getLine() && leftMargin != 2) {
+                    printer.error(Messages.OPERATOR + Messages.SPACE_BEFORE,
+                        ListenerUtil.getContextStopLocation(op));
                 }
 
-                if (after.getLine() == op.getStart().getLine()) {
-                    if (after.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(op.getStart()) > 2) {
-                        printer.error(Messages.OPERATOR + Messages.SPACE_AFTER, ListenerUtil.getContextStopLocation(op));
-                    }
+                int rightMargin = after.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(op.getStart());
+                if (after.getLine() == op.getStart().getLine() && rightMargin != 2) {
+                    printer.error(Messages.OPERATOR + Messages.SPACE_AFTER,
+                        ListenerUtil.getContextStopLocation(op));
                 }
             }
+        }
+    }
+
+    public void checkWhitespaceAroundColon(TypeAnnotationContext ctx) {
+        TerminalNodeImpl colon = (TerminalNodeImpl) ctx.getChild(0);
+        ParseTree parentLeftSibling = ParseTreeUtil.getLeftSibling(colon.getParent());
+        ParseTree rightSibling = ctx.getChild(1);
+
+        if (parentLeftSibling == null || rightSibling == null) {
+            return; // pray for us
+        }
+
+        Token left = parentLeftSibling instanceof ParserRuleContext ? ((ParserRuleContext) parentLeftSibling).getStop()
+            : ((TerminalNodeImpl) parentLeftSibling).getSymbol();
+        Token right = rightSibling instanceof ParserRuleContext ? ((ParserRuleContext) rightSibling).getStart() :
+            ((TerminalNodeImpl) rightSibling).getSymbol();
+
+        Token colonToken = colon.getSymbol();
+
+        if (colonToken.getLine() == left.getLine()
+                && colonToken.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(left) != 1) {
+            printer.error(Messages.COLON + Messages.NO_SPACE_BEFORE, ListenerUtil.getTokenLocation(colonToken));
+        }
+
+        if (right.getLine() == colonToken.getLine()
+                && right.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(colonToken) != 2) {
+            printer.error(Messages.COLON + Messages.SPACE_AFTER, ListenerUtil.getTokenLocation(colonToken));
         }
     }
 

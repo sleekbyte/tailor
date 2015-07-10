@@ -8,6 +8,7 @@ import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.CharFormatUtil;
 import com.sleekbyte.tailor.utils.ListenerUtil;
+import com.sleekbyte.tailor.utils.ParseTreeUtil;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 /**
@@ -17,6 +18,7 @@ public class ConstantDecListener extends SwiftBaseListener {
 
     private MaxLengths maxLengths;
     private Printer printer;
+    private MainListenerHelper listenerHelper = new MainListenerHelper();
 
     /**
      * Creates a ConstantDecListener object and sets the printer in listenerHelper.
@@ -65,32 +67,18 @@ public class ConstantDecListener extends SwiftBaseListener {
     }
 
     private boolean isGlobal(ParserRuleContext ctx) {
-        ParserRuleContext parentCtx = ConstantDecListener.genNthParent(ctx, 3);
+        ParserRuleContext parentCtx = ParseTreeUtil.getNthParent(ctx, 3);
         return parentCtx != null && (parentCtx instanceof SwiftParser.TopLevelContext);
     }
 
     private boolean insideClass(ParserRuleContext ctx) {
-        ParserRuleContext rootCtx = ConstantDecListener.genNthParent(ConstantDecListener.getDeclarationRoot(ctx), 1);
+        ParserRuleContext rootCtx = ParseTreeUtil.getNthParent(ConstantDecListener.getDeclarationRoot(ctx), 1);
         return rootCtx != null && (rootCtx instanceof SwiftParser.ClassDeclarationContext);
     }
 
     private boolean insideStruct(ParserRuleContext ctx) {
-        ParserRuleContext rootCtx = ConstantDecListener.genNthParent(ConstantDecListener.getDeclarationRoot(ctx), 1);
+        ParserRuleContext rootCtx = ParseTreeUtil.getNthParent(ConstantDecListener.getDeclarationRoot(ctx), 1);
         return rootCtx != null && (rootCtx instanceof SwiftParser.StructDeclarationContext);
-    }
-
-    private static ParserRuleContext genNthParent(ParserRuleContext ctx, int nval) {
-        if (ctx == null) {
-            return null;
-        }
-        while (nval != 0) {
-            nval--;
-            ctx = ctx.getParent();
-            if (ctx == null) {
-                return null;
-            }
-        }
-        return ctx;
     }
 
     private static ParserRuleContext getDeclarationRoot(ParserRuleContext ctx) {
