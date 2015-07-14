@@ -25,6 +25,7 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TypeInheritanceClauseContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.UnionStyleEnumContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
@@ -309,7 +310,7 @@ class MainListenerHelper {
         TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
         Location classLocation;
         if (typeInheritanceClauseContext != null) {
-            classLocation = getContextStopLocation(typeInheritanceClauseContext);
+            classLocation = getContextStopLocation(typeInheritanceClauseContext.typeInheritanceList());
         } else if (genericParameterClauseContext != null) {
             classLocation = getContextStopLocation(genericParameterClauseContext);
         } else {
@@ -324,7 +325,7 @@ class MainListenerHelper {
         TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
         Location structLocation;
         if (typeInheritanceClauseContext != null) {
-            structLocation = getContextStopLocation(typeInheritanceClauseContext);
+            structLocation = getContextStopLocation(typeInheritanceClauseContext.typeInheritanceList());
         } else if (genericParameterClauseContext != null) {
             structLocation = getContextStopLocation(genericParameterClauseContext);
         } else {
@@ -356,12 +357,44 @@ class MainListenerHelper {
         Location protocolLocation;
 
         if (typeInheritanceClauseContext != null) {
-            protocolLocation = getContextStopLocation(typeInheritanceClauseContext);
+            protocolLocation = getContextStopLocation(typeInheritanceClauseContext.typeInheritanceList());
         } else {
             protocolLocation = getContextStopLocation(ctx.protocolName());
         }
 
         verifyCodeBlockOpenBraceStyle(Messages.PROTOCOL, protocolLocation, ctx.protocolBody());
+    }
+
+    void verifyUnionStyleEnumOpenBraceStyle(UnionStyleEnumContext ctx) {
+
+        /*
+           first child is always EnumName
+           second child is either '{' or TypeInheritanceClause
+        */
+        Location openBraceLocation;
+        TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
+
+        // if second child is '{'
+        if (typeInheritanceClauseContext == null) {
+            Location enumNameLocation = getContextStartLocation((ParserRuleContext) ctx.getChild(0));
+            Token openBrace = ((TerminalNodeImpl)ctx.getChild(1)).getSymbol();
+            openBraceLocation = getTokenLocation(openBrace);
+            if (openBraceLocation.line == enumNameLocation.line) {
+                return;
+            }
+        } else {
+            // second child is TypeInheritanceClause
+            // third child is openBrace
+            Location typeInheritanceClauseLocation =
+                    getContextStopLocation(typeInheritanceClauseContext.typeInheritanceList());
+            Token openBrace = ((TerminalNodeImpl)ctx.getChild(2)).getSymbol();
+            openBraceLocation = getTokenLocation(openBrace);
+            if (openBraceLocation.line == typeInheritanceClauseLocation.line) {
+                return;
+            }
+        }
+
+        this.printer.warn(Messages.ENUM + Messages.BRACKET_STYLE, openBraceLocation);
     }
     //endregion
 

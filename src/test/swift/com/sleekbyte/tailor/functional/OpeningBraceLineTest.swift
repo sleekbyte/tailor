@@ -197,3 +197,42 @@ protocol SomeOtherProtocol : X
 {
 
 }
+
+enum SomeEnum {
+    case SomeCase
+}
+
+enum SomeOtherEnum : Int {
+    case SomeCase
+}
+
+enum SomeEnum
+{
+    case SomeCase
+}
+
+enum SomeOtherEnum : Int
+{
+    case SomeCase
+}
+
+enum SomeOtherEnum :
+Int
+{
+    case SomeCase
+}
+
+class SomeClass :
+SomeProtocol, SomeOtherProtocol {
+
+}
+
+enum SomeOtherEnum :
+Int {
+    case SomeCase
+}
+
+struct SomeStruct :
+SomeProtocol, SomeOtherProtocol {
+
+}

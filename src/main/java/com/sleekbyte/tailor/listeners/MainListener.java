@@ -340,4 +340,9 @@ public class MainListener extends SwiftBaseListener {
     public void enterProtocolDeclaration(SwiftParser.ProtocolDeclarationContext ctx) {
         listenerHelper.verifyProtocolOpenBraceStyle(ctx);
     }
+
+    @Override
+    public void enterUnionStyleEnum(SwiftParser.UnionStyleEnumContext ctx) {
+        listenerHelper.verifyUnionStyleEnumOpenBraceStyle(ctx);
+    }
 }
