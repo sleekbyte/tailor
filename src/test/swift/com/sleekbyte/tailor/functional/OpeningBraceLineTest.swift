@@ -164,3 +164,36 @@ struct Hello
 <T>
    {
    }
+
+protocol SomeProtocol {
+
+}
+
+protocol SomeOtherProtocol : X {
+
+}
+
+protocol
+SomeProtocol {
+
+}
+
+protocol SomeProtocol
+{
+
+}
+
+protocol
+SomeOtherProtocol : X {
+
+}
+
+protocol SomeOtherProtocol
+: X {
+
+}
+
+protocol SomeOtherProtocol : X
+{
+
+}

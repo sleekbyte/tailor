@@ -335,4 +335,9 @@ public class MainListener extends SwiftBaseListener {
     public void enterStructDeclaration(SwiftParser.StructDeclarationContext ctx) {
         listenerHelper.verifyStructOpenBraceStyle(ctx);
     }
+
+    @Override
+    public void enterProtocolDeclaration(SwiftParser.ProtocolDeclarationContext ctx) {
+        listenerHelper.verifyProtocolOpenBraceStyle(ctx);
+    }
 }

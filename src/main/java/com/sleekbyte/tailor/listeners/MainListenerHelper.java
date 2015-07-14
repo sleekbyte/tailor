@@ -18,6 +18,7 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerListContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
+import static com.sleekbyte.tailor.antlr.SwiftParser.ProtocolDeclarationContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.RepeatWhileStatementContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.StructDeclarationContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
@@ -348,6 +349,19 @@ class MainListenerHelper {
             loopEndLocation = getContextStopLocation(expressionContext);
         }
         verifyCodeBlockOpenBraceStyle(Messages.FOR_LOOP, loopEndLocation, ctx.codeBlock());
+    }
+
+    void verifyProtocolOpenBraceStyle(ProtocolDeclarationContext ctx) {
+        TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
+        Location protocolLocation;
+
+        if (typeInheritanceClauseContext != null) {
+            protocolLocation = getContextStopLocation(typeInheritanceClauseContext);
+        } else {
+            protocolLocation = getContextStopLocation(ctx.protocolName());
+        }
+
+        verifyCodeBlockOpenBraceStyle(Messages.PROTOCOL, protocolLocation, ctx.protocolBody());
     }
     //endregion
 
