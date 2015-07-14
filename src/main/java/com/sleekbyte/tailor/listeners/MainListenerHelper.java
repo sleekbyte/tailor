@@ -364,8 +364,7 @@ class MainListenerHelper {
     //endregion
 
     //region Whitespace check helpers
-
-    public void checkWhitespaceAroundOperator(OperatorDeclarationContext ctx) {
+    void checkWhitespaceAroundOperator(OperatorDeclarationContext ctx) {
         for (int i = 0; i < ctx.getChild(0).getChildCount(); i++) {
             if (ctx.getChild(0).getChild(i) instanceof OperatorContext) {
                 OperatorContext op = (OperatorContext) ctx.getChild(0).getChild(i);
@@ -387,14 +386,12 @@ class MainListenerHelper {
         }
     }
 
-    public void checkWhitespaceAroundColon(TypeAnnotationContext ctx) {
+    void checkWhitespaceAroundColon(TypeAnnotationContext ctx) {
         TerminalNodeImpl colon = (TerminalNodeImpl) ctx.getChild(0);
         ParseTree parentLeftSibling = ParseTreeUtil.getLeftSibling(colon.getParent());
         ParseTree rightSibling = ctx.getChild(1);
 
-        if (parentLeftSibling == null || rightSibling == null) {
-            return; // pray for us
-        }
+        assert !(parentLeftSibling == null || rightSibling == null);
 
         Token left = parentLeftSibling instanceof ParserRuleContext ? ((ParserRuleContext) parentLeftSibling).getStop()
             : ((TerminalNodeImpl) parentLeftSibling).getSymbol();
@@ -413,6 +410,5 @@ class MainListenerHelper {
             printer.error(Messages.COLON + Messages.SPACE_AFTER, ListenerUtil.getTokenLocation(colonToken));
         }
     }
-
     //endregion
 }

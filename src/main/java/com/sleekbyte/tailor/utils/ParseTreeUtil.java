@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 /**
  * Utils for traversing Parse Trees.
  */
-public class ParseTreeUtil {
+public final class ParseTreeUtil {
 
     /**
      * Return parent `nval` levels above ctx.

@@ -8,7 +8,7 @@ import org.antlr.v4.runtime.Token;
 /**
  * Class with utility functions that are used by listeners.
  */
-public class ListenerUtil {
+public final class ListenerUtil {
 
     public static Location getTokenLocation(Token token) {
         return new Location(token.getLine(), token.getCharPositionInLine() + 1);

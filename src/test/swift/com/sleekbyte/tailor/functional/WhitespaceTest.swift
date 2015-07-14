@@ -17,6 +17,21 @@ prefix operator
 
 prefix operator-++ {}
 
+prefix operator
++=     {
+
+}
+
+prefix operator
+    +=    {
+
+}
+
+prefix operator
+   += {
+
+}
+
 var i : Int
 var j:  Int = 2
 var k: Int
