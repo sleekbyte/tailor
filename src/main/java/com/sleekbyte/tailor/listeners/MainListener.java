@@ -109,6 +109,7 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterClosureExpression(SwiftParser.ClosureExpressionContext ctx) {
         listenerHelper.verifyConstructLength(Messages.CLOSURE, this.maxLengths.maxClosureLength, ctx);
+        listenerHelper.verifyClosureExpressionOpenBraceStyle(ctx);
     }
 
     @Override

@@ -29,6 +29,8 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.UnionStyleEnumContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
+import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementListContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ClosureExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorDeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TypeAnnotationContext;
@@ -386,6 +388,34 @@ class MainListenerHelper {
         }
 
         this.printer.warn(Messages.ENUM + Messages.BRACKET_STYLE, openBraceLocation);
+    }
+
+    void verifyClosureExpressionOpenBraceStyle(ClosureExpressionContext ctx) {
+        ParseTree sixthAncestor = ParseTreeUtil.getNthParent(ctx, 6);
+
+        if (sixthAncestor == null || !(sixthAncestor instanceof ExpressionElementListContext)) {
+            return;
+        }
+
+        ExpressionElementListContext expressionElementListContext = (ExpressionElementListContext) sixthAncestor;
+
+        ParseTree expElementListLeftSibling = ParseTreeUtil.getLeftSibling(expressionElementListContext);
+
+        if (expElementListLeftSibling == null) {
+            return;
+        }
+
+        Location expElementLeftSiblingLocation;
+
+        if (expElementListLeftSibling instanceof TerminalNodeImpl) {
+            Token leftToken = ((TerminalNodeImpl) expElementListLeftSibling).getSymbol();
+            expElementLeftSiblingLocation = ListenerUtil.getTokenLocation(leftToken);
+        } else {
+            ParserRuleContext leftContext = (ParserRuleContext) expElementListLeftSibling;
+            expElementLeftSiblingLocation = ListenerUtil.getContextStopLocation(leftContext);
+        }
+
+        verifyCodeBlockOpenBraceStyle(Messages.CLOSURE, expElementLeftSiblingLocation, ctx);
     }
     //endregion
 
