@@ -340,7 +340,7 @@ public class MainListener extends SwiftBaseListener {
     }
 
     @Override
-    public void enterProtocolDeclaration(SwiftParser.ProtocolDeclarationContext ctx) {
+    public void enterProtocolBody(SwiftParser.ProtocolBodyContext ctx) {
         listenerHelper.verifyProtocolOpenBraceStyle(ctx);
     }
 

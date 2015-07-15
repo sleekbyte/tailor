@@ -29,7 +29,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser.ClosureExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorDeclarationContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.ProtocolDeclarationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ProtocolBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.StructBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TypeAnnotationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.UnionStyleEnumContext;
@@ -321,17 +321,10 @@ class MainListenerHelper {
         verifyCodeBlockOpenBraceStyle(Messages.FOR_LOOP, loopEndLocation, ctx.codeBlock());
     }
 
-    void verifyProtocolOpenBraceStyle(ProtocolDeclarationContext ctx) {
-        TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
-        Location protocolLocation;
-
-        if (typeInheritanceClauseContext != null) {
-            protocolLocation = ListenerUtil.getContextStopLocation(typeInheritanceClauseContext.typeInheritanceList());
-        } else {
-            protocolLocation = ListenerUtil.getContextStopLocation(ctx.protocolName());
-        }
-
-        verifyCodeBlockOpenBraceStyle(Messages.PROTOCOL, protocolLocation, ctx.protocolBody());
+    void verifyProtocolOpenBraceStyle(ProtocolBodyContext ctx) {
+        ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(ctx);
+        Location protocolLocation = ListenerUtil.getContextStopLocation(leftSibling);
+        verifyCodeBlockOpenBraceStyle(Messages.PROTOCOL, protocolLocation, ctx);
     }
 
     void verifyUnionStyleEnumOpenBraceStyle(UnionStyleEnumContext ctx) {
