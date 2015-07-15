@@ -104,6 +104,7 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterClassBody(SwiftParser.ClassBodyContext ctx) {
         listenerHelper.verifyConstructLength(Messages.CLASS, this.maxLengths.maxClassLength, ctx);
+        listenerHelper.verifyClassOpenBraceStyle(ctx);
     }
 
     @Override
@@ -325,11 +326,6 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterForInStatement(SwiftParser.ForInStatementContext ctx) {
         listenerHelper.verifyForInStatementOpenBraceStyle(ctx);
-    }
-
-    @Override
-    public void enterClassDeclaration(SwiftParser.ClassDeclarationContext ctx) {
-        listenerHelper.verifyClassOpenBraceStyle(ctx);
     }
 
     @Override

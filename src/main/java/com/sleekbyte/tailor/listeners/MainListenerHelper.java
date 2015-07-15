@@ -1,6 +1,5 @@
 package com.sleekbyte.tailor.listeners;
 
-import static com.sleekbyte.tailor.antlr.SwiftParser.ClassDeclarationContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ElseClauseContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ForInStatementContext;
@@ -27,6 +26,7 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.TypeInheritanceClauseContex
 import static com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
+import com.sleekbyte.tailor.antlr.SwiftParser.ClassBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClosureExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorContext;
@@ -293,19 +293,10 @@ class MainListenerHelper {
         verifyCodeBlockOpenBraceStyle(Messages.FUNCTION, functionDeclarationLocation, ctx.functionBody().codeBlock());
     }
 
-    void verifyClassOpenBraceStyle(ClassDeclarationContext ctx) {
-        GenericParameterClauseContext genericParameterClauseContext = ctx.genericParameterClause();
-        TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
-        Location classLocation;
-        if (typeInheritanceClauseContext != null) {
-            classLocation = ListenerUtil.getContextStopLocation(typeInheritanceClauseContext.typeInheritanceList());
-        } else if (genericParameterClauseContext != null) {
-            classLocation = ListenerUtil.getContextStopLocation(genericParameterClauseContext);
-        } else {
-            classLocation = ListenerUtil.getContextStopLocation(ctx.className());
-        }
-
-        verifyCodeBlockOpenBraceStyle(Messages.CLASS, classLocation, ctx.classBody());
+    void verifyClassOpenBraceStyle(ClassBodyContext ctx) {
+        ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(ctx);
+        Location classLocation = ListenerUtil.getContextStopLocation(leftSibling);
+        verifyCodeBlockOpenBraceStyle(Messages.CLASS, classLocation, ctx);
     }
 
     void verifyStructOpenBraceStyle(StructDeclarationContext ctx) {
