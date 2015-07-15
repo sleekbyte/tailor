@@ -37,6 +37,11 @@ public class WhitespaceTest extends RuleTest {
         addExpectedMsg(start + 16, 13, Messages.COLON + Messages.NO_SPACE_BEFORE);
         addExpectedMsg(start + 16, 37, Messages.COLON + Messages.SPACE_AFTER);
         addExpectedMsg(start + 20, 33, Messages.COLON + Messages.NO_SPACE_BEFORE);
+
+        // Colons in dictionaries
+        start = 58;
+        addExpectedMsg(start, 41, Messages.COLON + Messages.NO_SPACE_BEFORE);
+        addExpectedMsg(start + 1, 25, Messages.COLON + Messages.SPACE_AFTER);
     }
 
     private void addExpectedMsg(int line, int column, String msg) {

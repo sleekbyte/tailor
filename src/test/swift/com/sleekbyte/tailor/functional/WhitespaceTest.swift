@@ -54,3 +54,7 @@ protocol SomeProtocol {
     var mustBeSettable: Int { get set }
     var doesNotNeedToBeSettable : Int { get }
 }
+
+var airports: [String: String] = ["YYZ" : "Toronto Pearson", "DUB": "Dublin"]
+var capitals = ["Canada":  "Ottawa", "India":
+  "New Delhi"]

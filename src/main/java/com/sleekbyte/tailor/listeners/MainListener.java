@@ -284,6 +284,7 @@ public class MainListener extends SwiftBaseListener {
         for (SwiftParser.ExpressionContext expressionContext : ctx.expression()) {
             listenerHelper.verifyRedundantExpressionParenthesis(Messages.DICTIONARY_LITERAL, expressionContext);
         }
+        listenerHelper.checkWhitespaceAroundColon(ctx);
     }
 
     @Override
