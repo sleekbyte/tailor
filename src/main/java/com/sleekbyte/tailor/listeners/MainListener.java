@@ -162,7 +162,7 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterConstantDeclaration(SwiftParser.ConstantDeclarationContext ctx) {
         listenerHelper.evaluatePatternInitializerList(ctx.patternInitializerList(),
-             new ConstantDecListener(this.printer, this.maxLengths));
+            new ConstantDecListener(this.printer, this.maxLengths));
     }
 
     @Override
