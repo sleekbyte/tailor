@@ -1,39 +1,38 @@
 package com.sleekbyte.tailor.listeners;
 
-import static com.sleekbyte.tailor.antlr.SwiftParser.ClassDeclarationContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.ElseClauseContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.ForInStatementContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.ForStatementContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.FunctionDeclarationContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.GenericParameterClauseContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.IfStatementContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.ImportDeclarationContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.InitializerDeclarationContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingContinuationContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingHeadContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.ParenthesizedExpressionContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.PatternContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerListContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.RepeatWhileStatementContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.StructDeclarationContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.TypeInheritanceClauseContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
-
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
+import com.sleekbyte.tailor.antlr.SwiftParser.ClassDeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryLiteralItemContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryTypeContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ElseClauseContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ForInStatementContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ForStatementContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.FunctionDeclarationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.GenericParameterClauseContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.IfStatementContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ImportDeclarationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.InitializerDeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorDeclarationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingContinuationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingHeadContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ParenthesizedExpressionContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.PatternContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerListContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.RepeatWhileStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.StatementsContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.StructDeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.SwitchCaseContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TypeAnnotationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.TypeInheritanceClauseContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
@@ -447,12 +446,16 @@ class MainListenerHelper {
     }
 
     private void verifyColonLeftAssociation(Token left, Token right, Token colon) {
+        Location colonLocation = ListenerUtil.getTokenLocation(colon);
+
         if (checkLeftSpaces(left, colon, 0)) {
-            printer.error(Messages.COLON + Messages.NO_SPACE_BEFORE, ListenerUtil.getTokenLocation(colon));
+            printer.error(Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " "
+                + Messages.NO_SPACE_BEFORE, ListenerUtil.getTokenLocation(colon));
         }
 
         if (checkRightSpaces(right, colon, 1)) {
-            printer.error(Messages.COLON + Messages.SPACE_AFTER, ListenerUtil.getTokenLocation(colon));
+            printer.error(Messages.COLON + Messages.AT_COLUMN + colonLocation.column +
+                " "  + Messages.SPACE_AFTER, ListenerUtil.getTokenLocation(colon));
         }
     }
 
