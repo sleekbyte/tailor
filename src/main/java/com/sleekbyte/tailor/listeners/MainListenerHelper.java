@@ -29,6 +29,7 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryLiteralItemContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryTypeContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorDeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TypeAnnotationContext;
@@ -421,7 +422,20 @@ class MainListenerHelper {
         if (checkRightSpaces(right, colon, 1)) {
             printer.error(Messages.COLON + Messages.SPACE_AFTER, ListenerUtil.getTokenLocation(colon));
         }
+    }
 
+    void checkWhitespaceAroundColon(DictionaryTypeContext ctx) {
+        Token left = ctx.sType(0).getStop();
+        Token right = ctx.sType(1).getStart();
+        Token colon = ((TerminalNodeImpl) ctx.getChild(2)).getSymbol();
+
+        if (checkLeftSpaces(left, colon, 0)) {
+            printer.error(Messages.COLON + Messages.NO_SPACE_BEFORE, ListenerUtil.getTokenLocation(colon));
+        }
+
+        if (checkRightSpaces(right, colon, 1)) {
+            printer.error(Messages.COLON + Messages.SPACE_AFTER, ListenerUtil.getTokenLocation(colon));
+        }
     }
 
     private boolean checkLeftSpaces(Token left, Token op, int expectedSpaces) {

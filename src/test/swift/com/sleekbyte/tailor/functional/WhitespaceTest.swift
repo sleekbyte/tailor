@@ -58,3 +58,5 @@ protocol SomeProtocol {
 var airports: [String: String] = ["YYZ" : "Toronto Pearson", "DUB": "Dublin"]
 var capitals = ["Canada":  "Ottawa", "India":
   "New Delhi"]
+var frequencies: [String : Int]
+var marks: [String:  Int]

@@ -346,4 +346,9 @@ public class MainListener extends SwiftBaseListener {
     public void enterTypeAnnotation(SwiftParser.TypeAnnotationContext ctx) {
         listenerHelper.checkWhitespaceAroundColon(ctx);
     }
+
+    @Override
+    public void enterDictionaryType(SwiftParser.DictionaryTypeContext ctx) {
+        listenerHelper.checkWhitespaceAroundColon(ctx);
+    }
 }
