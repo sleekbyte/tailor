@@ -9,13 +9,13 @@ class Snake_Case {
 }
 
 class UpperCamelCase {
-  var foo : Int
-  var bar : String
+  var foo: Int
+  var bar: String
 }
 
 class UpperCamelCase : SuperClass {
-  var foo : Int
-  var bar : String
+  var foo: Int
+  var bar: String
 }
 
 // Enum examples

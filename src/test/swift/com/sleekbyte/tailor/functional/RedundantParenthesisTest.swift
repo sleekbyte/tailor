@@ -62,7 +62,7 @@ func demo() {
     var airports: [String: String] = [("YYZ"): ("Toronto Pearson"), ("DUB"): ("Dublin")]
     var namesOfIntegers = [Int: String]()
     namesOfIntegers[16] = "sixteen"
-    let checkElementNameLength:(ename:Int, veryLongElementName:Int) = (1, 2)
+    let checkElementNameLength: (ename: Int, veryLongElementName: Int) = (1, 2)
     var x: Int = (2)
     var y: String = ("Reddit")
     var x = (2)

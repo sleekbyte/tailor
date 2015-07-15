@@ -60,6 +60,12 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
         if (ret == 0) {
             ret = this.columnNumber - message.columnNumber;
         }
+        if (ret == 0) {
+            ret = this.severity.toString().compareTo(message.severity.toString());
+        }
+        if (ret == 0) {
+            return this.violationMessage.compareTo(message.violationMessage);
+        }
         return ret;
     }
 

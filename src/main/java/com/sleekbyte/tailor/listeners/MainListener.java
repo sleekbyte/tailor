@@ -335,4 +335,14 @@ public class MainListener extends SwiftBaseListener {
     public void enterStructDeclaration(SwiftParser.StructDeclarationContext ctx) {
         listenerHelper.verifyStructOpenBraceStyle(ctx);
     }
+
+    @Override
+    public void enterOperatorDeclaration(SwiftParser.OperatorDeclarationContext ctx) {
+        listenerHelper.checkWhitespaceAroundOperator(ctx);
+    }
+
+    @Override
+    public void enterTypeAnnotation(SwiftParser.TypeAnnotationContext ctx) {
+        listenerHelper.checkWhitespaceAroundColon(ctx);
+    }
 }

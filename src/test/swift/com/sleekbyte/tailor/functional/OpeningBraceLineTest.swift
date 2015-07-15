@@ -1,9 +1,9 @@
 class Rectangle : Shape
 {
-    let length:Double
-    let breadth:Double
+    let length: Double
+    let breadth: Double
 
-    init(length:Double, breadth:Double)
+    init(length: Double, breadth: Double)
     {
         //store the row and column of the square in the grid
         self.length = length

@@ -25,8 +25,8 @@ public class NameLengthTest extends RuleTest {
     protected void addAllExpectedMsgs() {
         addExpectedMsg(1, 7, Severity.WARNING, Messages.CLASS + Messages.NAME, 23, 5);
         addExpectedMsg(4, 5, Severity.WARNING, Messages.CONSTANT + Messages.NAME, 22, 5);
-        addExpectedMsg(4, 40, Severity.WARNING, Messages.ELEMENT + Messages.NAME, 19, 5);
-        addExpectedMsg(4, 41, Severity.WARNING, Messages.LINE, 72, 40);
+        addExpectedMsg(4, 41, Severity.WARNING, Messages.LINE, 75, 40);
+        addExpectedMsg(4, 42, Severity.WARNING, Messages.ELEMENT + Messages.NAME, 19, 5);
         addExpectedMsg(6, 6, Severity.WARNING, Messages.ENUM + Messages.NAME, 21, 5);
         addExpectedMsg(7, 13, Severity.WARNING, Messages.ENUM_CASE + Messages.NAME, 24, 5);
         addExpectedMsg(7, 41, Severity.WARNING, Messages.LINE, 46, 40);
