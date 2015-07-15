@@ -20,7 +20,6 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.RepeatWhileStatementContext
 import static com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.TypeInheritanceClauseContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
@@ -328,33 +327,18 @@ class MainListenerHelper {
     }
 
     void verifyUnionStyleEnumOpenBraceStyle(UnionStyleEnumContext ctx) {
-
-        /*
-           first child is always EnumName
-           second child is either '{' or TypeInheritanceClause
-        */
-        Location openBraceLocation;
-        TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
-
-        // if second child is '{'
-        if (typeInheritanceClauseContext == null) {
-            Location enumNameLocation = ListenerUtil.getContextStartLocation((ParserRuleContext) ctx.getChild(0));
-            openBraceLocation = ListenerUtil.getLocationOfChildToken(ctx, 1);
-            if (openBraceLocation.line == enumNameLocation.line) {
-                return;
-            }
-        } else {
-            // second child is TypeInheritanceClause
-            // third child is openBrace
-            Location typeInheritanceClauseLocation =
-                    ListenerUtil.getContextStopLocation(typeInheritanceClauseContext.typeInheritanceList());
-            openBraceLocation = ListenerUtil.getLocationOfChildToken(ctx, 2);
-            if (openBraceLocation.line == typeInheritanceClauseLocation.line) {
-                return;
+        for (ParseTree child : ctx.children) {
+            if (child instanceof TerminalNodeImpl) {
+                Token openBrace = ((TerminalNodeImpl) child).getSymbol();
+                Location openBraceLocation = ListenerUtil.getTokenLocation(openBrace);
+                ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(child);
+                Location leftSiblingLocation = ListenerUtil.getContextStopLocation(leftSibling);
+                if (openBraceLocation.line != leftSiblingLocation.line) {
+                    this.printer.warn(Messages.ENUM + Messages.BRACKET_STYLE, openBraceLocation);
+                }
+                break;
             }
         }
-
-        this.printer.warn(Messages.ENUM + Messages.BRACKET_STYLE, openBraceLocation);
     }
 
     void verifyClosureExpressionOpenBraceStyle(ClosureExpressionContext ctx) {
