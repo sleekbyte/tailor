@@ -5,7 +5,6 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ForInStatementContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ForStatementContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.FunctionDeclarationContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.GenericParameterClauseContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.IfStatementContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.ImportDeclarationContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.InitializerDeclarationContext;
@@ -18,7 +17,6 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerListConte
 import static com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.RepeatWhileStatementContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.StructDeclarationContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
@@ -32,6 +30,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorDeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ProtocolDeclarationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.StructBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TypeAnnotationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.UnionStyleEnumContext;
 import com.sleekbyte.tailor.common.Location;
@@ -299,19 +298,10 @@ class MainListenerHelper {
         verifyCodeBlockOpenBraceStyle(Messages.CLASS, classLocation, ctx);
     }
 
-    void verifyStructOpenBraceStyle(StructDeclarationContext ctx) {
-        GenericParameterClauseContext genericParameterClauseContext = ctx.genericParameterClause();
-        TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
-        Location structLocation;
-        if (typeInheritanceClauseContext != null) {
-            structLocation = ListenerUtil.getContextStopLocation(typeInheritanceClauseContext.typeInheritanceList());
-        } else if (genericParameterClauseContext != null) {
-            structLocation = ListenerUtil.getContextStopLocation(genericParameterClauseContext);
-        } else {
-            structLocation = ListenerUtil.getContextStopLocation(ctx.structName());
-        }
-
-        verifyCodeBlockOpenBraceStyle(Messages.STRUCT, structLocation, ctx.structBody());
+    void verifyStructOpenBraceStyle(StructBodyContext ctx) {
+        ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(ctx);
+        Location structLocation = ListenerUtil.getContextStopLocation(leftSibling);
+        verifyCodeBlockOpenBraceStyle(Messages.STRUCT, structLocation, ctx);
     }
 
     void verifyForLoopOpenBraceStyle(ForStatementContext ctx) {
