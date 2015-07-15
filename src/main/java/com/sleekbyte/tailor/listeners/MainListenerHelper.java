@@ -29,8 +29,8 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.UnionStyleEnumContext;
 import static com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
-import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClosureExpressionContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorDeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TypeAnnotationContext;
@@ -238,21 +238,16 @@ class MainListenerHelper {
     //region Open brace style check
     void verifySwitchStatementOpenBraceStyle(SwitchStatementContext ctx) {
         Location switchExpLocation = ListenerUtil.getTokenLocation(ctx.expression().getStop());
-        Location openBraceLocation = getLocationOfChildToken(2, ctx);
+        Location openBraceLocation = ListenerUtil.getLocationOfChildToken(ctx, 2);
 
         if (switchExpLocation.line != openBraceLocation.line) {
             this.printer.warn(Messages.SWITCH_STATEMENT + Messages.BRACKET_STYLE, openBraceLocation);
         }
     }
 
-    private Location getLocationOfChildToken(int childNumber, ParserRuleContext ctx) {
-        Token token = ((TerminalNodeImpl) ctx.getChild(childNumber)).getSymbol();
-        return ListenerUtil.getTokenLocation(token);
-    }
-
     private void verifyCodeBlockOpenBraceStyle(String constructName, Location constructLocation,
                                                ParserRuleContext codeBlockCtx) {
-        Location openBraceLocation = getLocationOfChildToken(0, codeBlockCtx);
+        Location openBraceLocation = ListenerUtil.getLocationOfChildToken(codeBlockCtx, 0);
 
         if (constructLocation.line != openBraceLocation.line) {
             this.printer.warn(constructName + Messages.BRACKET_STYLE, openBraceLocation);
@@ -370,8 +365,7 @@ class MainListenerHelper {
         // if second child is '{'
         if (typeInheritanceClauseContext == null) {
             Location enumNameLocation = ListenerUtil.getContextStartLocation((ParserRuleContext) ctx.getChild(0));
-            Token openBrace = ((TerminalNodeImpl)ctx.getChild(1)).getSymbol();
-            openBraceLocation = ListenerUtil.getTokenLocation(openBrace);
+            openBraceLocation = ListenerUtil.getLocationOfChildToken(ctx, 1);
             if (openBraceLocation.line == enumNameLocation.line) {
                 return;
             }
@@ -380,8 +374,7 @@ class MainListenerHelper {
             // third child is openBrace
             Location typeInheritanceClauseLocation =
                     ListenerUtil.getContextStopLocation(typeInheritanceClauseContext.typeInheritanceList());
-            Token openBrace = ((TerminalNodeImpl)ctx.getChild(2)).getSymbol();
-            openBraceLocation = ListenerUtil.getTokenLocation(openBrace);
+            openBraceLocation = ListenerUtil.getLocationOfChildToken(ctx, 2);
             if (openBraceLocation.line == typeInheritanceClauseLocation.line) {
                 return;
             }
