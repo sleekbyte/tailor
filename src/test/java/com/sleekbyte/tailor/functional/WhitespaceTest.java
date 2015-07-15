@@ -37,9 +37,6 @@ public class WhitespaceTest extends RuleTest {
         addExpectedMsg(start + 16, 13, Messages.COLON + Messages.NO_SPACE_BEFORE);
         addExpectedMsg(start + 16, 37, Messages.COLON + Messages.SPACE_AFTER);
         addExpectedMsg(start + 20, 33, Messages.COLON + Messages.NO_SPACE_BEFORE);
-
-        // Operator declarations
-
     }
 
     private void addExpectedMsg(int line, int column, String msg) {
