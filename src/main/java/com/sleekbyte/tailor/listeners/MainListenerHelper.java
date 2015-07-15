@@ -27,11 +27,12 @@ import static com.sleekbyte.tailor.antlr.SwiftParser.TypeInheritanceClauseContex
 import static com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
-import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryLiteralItemContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryTypeContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorDeclarationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.StatementsContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.SwitchCaseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TypeAnnotationContext;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
@@ -401,13 +402,7 @@ class MainListenerHelper {
 
         Token colonToken = colon.getSymbol();
 
-        if (checkLeftSpaces(left, colonToken, 0)) {
-            printer.error(Messages.COLON + Messages.NO_SPACE_BEFORE, ListenerUtil.getTokenLocation(colonToken));
-        }
-
-        if (checkRightSpaces(right, colonToken, 1)) {
-            printer.error(Messages.COLON + Messages.SPACE_AFTER, ListenerUtil.getTokenLocation(colonToken));
-        }
+        verifyColonLeftAssociation(left, right, colonToken);
     }
 
     void checkWhitespaceAroundColon(DictionaryLiteralItemContext ctx) {
@@ -415,13 +410,7 @@ class MainListenerHelper {
         Token right = ctx.expression(1).getStart();
         Token colon = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
 
-        if (checkLeftSpaces(left, colon, 0)) {
-            printer.error(Messages.COLON + Messages.NO_SPACE_BEFORE, ListenerUtil.getTokenLocation(colon));
-        }
-
-        if (checkRightSpaces(right, colon, 1)) {
-            printer.error(Messages.COLON + Messages.SPACE_AFTER, ListenerUtil.getTokenLocation(colon));
-        }
+        verifyColonLeftAssociation(left, right, colon);
     }
 
     void checkWhitespaceAroundColon(DictionaryTypeContext ctx) {
@@ -429,6 +418,35 @@ class MainListenerHelper {
         Token right = ctx.sType(1).getStart();
         Token colon = ((TerminalNodeImpl) ctx.getChild(2)).getSymbol();
 
+        verifyColonLeftAssociation(left, right, colon);
+    }
+
+    void checkWhitespaceAroundColon(SwitchCaseContext ctx) {
+        Token left = null;
+        Token right = null;
+        Token colon = null;
+
+        if (ctx.caseLabel() != null) {
+            left = ctx.caseLabel().caseItemList().getStop();
+            ParseTree rightChild = ctx.getChild(1);
+            // right child can be statements or a semi colon
+            right = rightChild instanceof StatementsContext ? ((StatementsContext) rightChild).getStart()
+                    : ((TerminalNodeImpl) rightChild).getSymbol();
+            colon = ((TerminalNodeImpl) ctx.caseLabel().getChild(2)).getSymbol();
+        } else if (ctx.defaultLabel() != null) {
+            left = ((TerminalNodeImpl) ctx.defaultLabel().getChild(0)).getSymbol();
+            ParseTree rightChild = ctx.getChild(1);
+            right = rightChild instanceof StatementsContext ? ((StatementsContext) rightChild).getStart()
+                : ((TerminalNodeImpl) rightChild).getSymbol();
+            colon = ((TerminalNodeImpl) ctx.defaultLabel().getChild(1)).getSymbol();
+        } else {
+            return;
+        }
+
+        verifyColonLeftAssociation(left, right, colon);
+    }
+
+    private void verifyColonLeftAssociation(Token left, Token right, Token colon) {
         if (checkLeftSpaces(left, colon, 0)) {
             printer.error(Messages.COLON + Messages.NO_SPACE_BEFORE, ListenerUtil.getTokenLocation(colon));
         }
@@ -438,14 +456,14 @@ class MainListenerHelper {
         }
     }
 
-    private boolean checkLeftSpaces(Token left, Token op, int expectedSpaces) {
+    private boolean checkLeftSpaces(Token left, Token op, int numSpaces) {
         return op.getLine() == left.getLine()
-            && op.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(left) != expectedSpaces + 1;
+            && op.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(left) != numSpaces + 1;
     }
 
-    private boolean checkRightSpaces(Token right, Token op, int expectedSpaces) {
+    private boolean checkRightSpaces(Token right, Token op, int numSpaces) {
         return right.getLine() == op.getLine()
-            && right.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(op) != expectedSpaces + 1;
+            && right.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(op) != numSpaces + 1;
     }
     //endregion
 }

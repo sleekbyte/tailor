@@ -60,3 +60,28 @@ var capitals = ["Canada":  "Ottawa", "India":
   "New Delhi"]
 var frequencies: [String : Int]
 var marks: [String:  Int]
+
+switch anotherPoint {
+case (let x, 0) : print("on the x-axis with an x value of \(x)")
+case (0, let y):  print("on the y-axis with a y value of \(y)")
+case let (x, y): print("somewhere else at (\(x), \(y))")
+default :
+  print("you had one job")
+}
+
+switch character {
+case "a", "e", "i", "o", "u", " ":  continue
+default:  puzzleOutput.append(character)
+}
+
+switch character {
+case "a", "e", "i", "o", "u", " ":
+  continue
+default: puzzleOutput.append(character)
+}
+
+switch character {
+  case "t":  ;
+  case "s": ;
+  default:;
+}

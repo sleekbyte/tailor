@@ -351,4 +351,9 @@ public class MainListener extends SwiftBaseListener {
     public void enterDictionaryType(SwiftParser.DictionaryTypeContext ctx) {
         listenerHelper.checkWhitespaceAroundColon(ctx);
     }
+
+    @Override
+    public void enterSwitchCase(SwiftParser.SwitchCaseContext ctx) {
+        listenerHelper.checkWhitespaceAroundColon(ctx);
+    }
 }
