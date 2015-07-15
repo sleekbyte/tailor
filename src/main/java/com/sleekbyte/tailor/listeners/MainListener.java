@@ -348,4 +348,9 @@ public class MainListener extends SwiftBaseListener {
     public void enterUnionStyleEnum(SwiftParser.UnionStyleEnumContext ctx) {
         listenerHelper.verifyUnionStyleEnumOpenBraceStyle(ctx);
     }
+
+    @Override
+    public void enterRawValueStyleEnum(SwiftParser.RawValueStyleEnumContext ctx) {
+        listenerHelper.verifyRawStyleEnumOpenBraceStyle(ctx);
+    }
 }

@@ -29,6 +29,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorDeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ProtocolBodyContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.RawValueStyleEnumContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.StructBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TypeAnnotationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.UnionStyleEnumContext;
@@ -327,6 +328,21 @@ class MainListenerHelper {
     }
 
     void verifyUnionStyleEnumOpenBraceStyle(UnionStyleEnumContext ctx) {
+        for (ParseTree child : ctx.children) {
+            if (child instanceof TerminalNodeImpl) {
+                Token openBrace = ((TerminalNodeImpl) child).getSymbol();
+                Location openBraceLocation = ListenerUtil.getTokenLocation(openBrace);
+                ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(child);
+                Location leftSiblingLocation = ListenerUtil.getContextStopLocation(leftSibling);
+                if (openBraceLocation.line != leftSiblingLocation.line) {
+                    this.printer.warn(Messages.ENUM + Messages.BRACKET_STYLE, openBraceLocation);
+                }
+                break;
+            }
+        }
+    }
+
+    void verifyRawStyleEnumOpenBraceStyle(RawValueStyleEnumContext ctx) {
         for (ParseTree child : ctx.children) {
             if (child instanceof TerminalNodeImpl) {
                 Token openBrace = ((TerminalNodeImpl) child).getSymbol();

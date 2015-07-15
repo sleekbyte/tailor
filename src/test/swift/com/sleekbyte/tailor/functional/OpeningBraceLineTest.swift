@@ -266,3 +266,11 @@ applyMutliplication(
   value * 3
 })
 
+enum ExampleEnum: Int
+{
+    case A, B, C = 5, D
+}
+
+enum ExampleEnum: Int {
+    case A, B, C = 5, D
+}
