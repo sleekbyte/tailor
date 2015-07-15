@@ -449,13 +449,13 @@ class MainListenerHelper {
         Location colonLocation = ListenerUtil.getTokenLocation(colon);
 
         if (checkLeftSpaces(left, colon, 0)) {
-            printer.error(Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " "
-                + Messages.NO_SPACE_BEFORE, ListenerUtil.getTokenLocation(colon));
+            printer.error(Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " " + Messages.NO_SPACE_BEFORE,
+                colonLocation);
         }
 
         if (checkRightSpaces(right, colon, 1)) {
-            printer.error(Messages.COLON + Messages.AT_COLUMN + colonLocation.column +
-                " "  + Messages.SPACE_AFTER, ListenerUtil.getTokenLocation(colon));
+            printer.error(Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " " + Messages.SPACE_AFTER,
+                colonLocation);
         }
     }
 
