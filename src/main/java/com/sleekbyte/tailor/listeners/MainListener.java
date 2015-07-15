@@ -161,7 +161,7 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterConstantDeclaration(SwiftParser.ConstantDeclarationContext ctx) {
         listenerHelper.evaluatePatternInitializerList(ctx.patternInitializerList(),
-            new ConstantDecListener(this.printer, this.maxLengths));
+                                                             new ConstantDecListener(this.printer, this.maxLengths));
     }
 
     @Override
@@ -170,7 +170,7 @@ public class MainListener extends SwiftBaseListener {
             return;
         }
         listenerHelper.evaluatePatternInitializerList(ctx.patternInitializerList(),
-            new VariableDecListener(this.printer, this.maxLengths));
+                                                             new VariableDecListener(this.printer, this.maxLengths));
     }
 
     @Override
@@ -334,6 +334,16 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterStructDeclaration(SwiftParser.StructDeclarationContext ctx) {
         listenerHelper.verifyStructOpenBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterOperatorDeclaration(SwiftParser.OperatorDeclarationContext ctx) {
+        listenerHelper.checkWhitespaceAroundOperator(ctx);
+    }
+
+    @Override
+    public void enterTypeAnnotation(SwiftParser.TypeAnnotationContext ctx) {
+        listenerHelper.checkWhitespaceAroundColon(ctx);
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.CharFormatUtil;
+import com.sleekbyte.tailor.utils.ListenerUtil;
 
 /**
  * Listener for variable declarations.
@@ -32,7 +33,7 @@ public class VariableDecListener extends SwiftBaseListener {
     @Override
     public void enterIdentifier(SwiftParser.IdentifierContext ctx) {
         String variableName = ctx.getText();
-        Location location = listenerHelper.getContextStartLocation(ctx);
+        Location location = ListenerUtil.getContextStartLocation(ctx);
 
         if (!CharFormatUtil.isLowerCamelCase(variableName)) {
             this.printer.error(Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE, location);

@@ -87,7 +87,7 @@ struct Rect {
 }
 
 class MyClass {
-    var MyValue:String {
+    var MyValue: String {
         willSet(newVal) {
             println("myValue will change")
         }

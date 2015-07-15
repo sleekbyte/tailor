@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import com.sleekbyte.tailor.common.Severity;
 import org.junit.Before;
@@ -64,10 +65,16 @@ public class ViolationMessageTest {
     @Test
     public void testCompareToMessageWithEqualLineAndColumnNumbers() {
         // global message has equal line number and column number wrt test message
-        ViolationMessage messageWithEqualLineColumnNumber =
-            new ViolationMessage("/usr/bin/local", 10, 1, Severity.WARNING, "warningMsg");
-        int ret = this.violationMessage.compareTo(messageWithEqualLineColumnNumber);
-        assertEquals(ret, 0);
+        ViolationMessage messageWithEqualLineColumnNumberButDifferentText =
+            new ViolationMessage("/usr/bin/local", 10, 1, Severity.ERROR, "warningMsg");
+        int ret = this.violationMessage.compareTo(messageWithEqualLineColumnNumberButDifferentText);
+        assertTrue(ret < 0);
+        ret = this.violationMessage.compareTo(this.violationMessage);
+        assertEquals(0, ret);
+        ViolationMessage messageWithEqualLineColumnNumberAndSameTextButDifferentSeverity =
+            new ViolationMessage("/usr/bin/local", 10, 1, Severity.WARNING, "errorMsg");
+        ret = this.violationMessage.compareTo(messageWithEqualLineColumnNumberAndSameTextButDifferentSeverity);
+        assertTrue(ret < 0);
     }
 
     @Test
