@@ -293,15 +293,11 @@ class MainListenerHelper {
     }
 
     void verifyClassOpenBraceStyle(ClassBodyContext ctx) {
-        ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(ctx);
-        Location classLocation = ListenerUtil.getContextStopLocation(leftSibling);
-        verifyCodeBlockOpenBraceStyle(Messages.CLASS, classLocation, ctx);
+        verifyBodyOpenBraceStyle(ctx, Messages.CLASS);
     }
 
     void verifyStructOpenBraceStyle(StructBodyContext ctx) {
-        ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(ctx);
-        Location structLocation = ListenerUtil.getContextStopLocation(leftSibling);
-        verifyCodeBlockOpenBraceStyle(Messages.STRUCT, structLocation, ctx);
+        verifyBodyOpenBraceStyle(ctx, Messages.STRUCT);
     }
 
     void verifyForLoopOpenBraceStyle(ForStatementContext ctx) {
@@ -322,9 +318,13 @@ class MainListenerHelper {
     }
 
     void verifyProtocolOpenBraceStyle(ProtocolBodyContext ctx) {
+        verifyBodyOpenBraceStyle(ctx, Messages.PROTOCOL);
+    }
+
+    private void verifyBodyOpenBraceStyle(ParserRuleContext ctx, String constructName) {
         ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(ctx);
-        Location protocolLocation = ListenerUtil.getContextStopLocation(leftSibling);
-        verifyCodeBlockOpenBraceStyle(Messages.PROTOCOL, protocolLocation, ctx);
+        Location constructLocation = ListenerUtil.getContextStopLocation(leftSibling);
+        verifyCodeBlockOpenBraceStyle(constructName, constructLocation, ctx);
     }
 
     void verifyUnionStyleEnumOpenBraceStyle(UnionStyleEnumContext ctx) {
