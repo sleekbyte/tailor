@@ -371,4 +371,9 @@ public class MainListener extends SwiftBaseListener {
     public void enterExpressionElement(SwiftParser.ExpressionElementContext ctx) {
         listenerHelper.checkWhitespaceAroundColon(ctx);
     }
+
+    @Override
+    public void enterGenericParameter(SwiftParser.GenericParameterContext ctx) {
+        listenerHelper.checkWhitespaceAroundColon(ctx);
+    }
 }

@@ -104,6 +104,13 @@ public class WhitespaceTest extends RuleTest {
         addExpectedColonMessage(start + 2, 32, Messages.SPACE_AFTER);
         addExpectedColonMessage(start + 3, 45, Messages.NO_SPACE_BEFORE);
         addExpectedColonMessage(start + 3, 83, Messages.SPACE_AFTER);
+
+        // generics
+        start = 169;
+        addExpectedColonMessage(start + 2, 21, Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start + 2, 35, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 4, 20, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 7, 8, Messages.NO_SPACE_BEFORE);
     }
 
     private void addExpectedColonMessage(int line, int column, String msg) {

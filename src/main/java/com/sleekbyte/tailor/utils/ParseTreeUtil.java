@@ -52,6 +52,12 @@ public final class ParseTreeUtil {
         return null;
     }
 
+    /**
+     * Gets right sibling of a parse tree node.
+     *
+     * @param ctx A node.
+     * @return Right sibling of a node, or null if no sibling is found
+     */
     public static ParseTree getRightSibling(ParseTree ctx) {
         if (ctx == null || ctx.getParent() == null) {
             return null;

@@ -165,3 +165,15 @@ let http200Status = (statusCode: 200, description: "OK")
 let http200Status = (statusCode : 200, description:"OK")
 let http200Status = (statusCode:  200, description: "OK")
 let tupleception = (statusCode: (statusCode : 200, description: "OK"), description:  "NOT OK")
+
+func someFunction<T: SomeClass, U: SomeProtocol>(someT: T, someU: U) {
+}
+func someFunction<T : SomeClass, U:protocol<SomeProtocol> >(someT: T, someU: U) {
+}
+func someFunction<T:  SomeClass, U: SomeProtocol>(someT: T, someU: U) {
+}
+func allItemsMatch<
+    C1 : Container, C2: Container
+    where C1.ItemType == C2.ItemType, C1.ItemType: Equatable>
+    (someContainer: C1, _ anotherContainer: C2) -> Bool {
+}

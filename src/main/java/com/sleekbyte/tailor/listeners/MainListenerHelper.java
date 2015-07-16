@@ -12,6 +12,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser.ForInStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ForStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.FunctionDeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.GenericParameterClauseContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.GenericParameterContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.IfStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ImportDeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.InitializerDeclarationContext;
@@ -466,6 +467,16 @@ class MainListenerHelper {
             Token colon = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
             Token left = ctx.identifier().getStop();
             Token right = ctx.expression().getStart();
+
+            verifyColonLeftAssociation(left, right, colon);
+        }
+    }
+
+    void checkWhitespaceAroundColon(GenericParameterContext ctx) {
+        if (ctx.getChildCount() == 3) {
+            Token colon = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
+            Token left = ctx.typeName().getStop();
+            Token right = ((ParserRuleContext) ctx.getChild(2)).getStart();
 
             verifyColonLeftAssociation(left, right, colon);
         }
