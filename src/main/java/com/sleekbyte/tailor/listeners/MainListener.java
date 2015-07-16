@@ -104,11 +104,13 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterClassBody(SwiftParser.ClassBodyContext ctx) {
         listenerHelper.verifyConstructLength(Messages.CLASS, this.maxLengths.maxClassLength, ctx);
+        listenerHelper.verifyClassOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterClosureExpression(SwiftParser.ClosureExpressionContext ctx) {
         listenerHelper.verifyConstructLength(Messages.CLOSURE, this.maxLengths.maxClosureLength, ctx);
+        listenerHelper.verifyClosureExpressionOpenBraceStyle(ctx);
     }
 
     @Override
@@ -119,6 +121,7 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterStructBody(SwiftParser.StructBodyContext ctx) {
         listenerHelper.verifyConstructLength(Messages.STRUCT, this.maxLengths.maxStructLength, ctx);
+        listenerHelper.verifyStructOpenBraceStyle(ctx);
     }
 
     @Override
@@ -328,16 +331,6 @@ public class MainListener extends SwiftBaseListener {
     }
 
     @Override
-    public void enterClassDeclaration(SwiftParser.ClassDeclarationContext ctx) {
-        listenerHelper.verifyClassOpenBraceStyle(ctx);
-    }
-
-    @Override
-    public void enterStructDeclaration(SwiftParser.StructDeclarationContext ctx) {
-        listenerHelper.verifyStructOpenBraceStyle(ctx);
-    }
-
-    @Override
     public void enterOperatorDeclaration(SwiftParser.OperatorDeclarationContext ctx) {
         listenerHelper.checkWhitespaceAroundOperator(ctx);
     }
@@ -345,6 +338,21 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterTypeAnnotation(SwiftParser.TypeAnnotationContext ctx) {
         listenerHelper.checkWhitespaceAroundColon(ctx);
+    }
+
+    @Override
+    public void enterProtocolBody(SwiftParser.ProtocolBodyContext ctx) {
+        listenerHelper.verifyProtocolOpenBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterUnionStyleEnum(SwiftParser.UnionStyleEnumContext ctx) {
+        listenerHelper.verifyEnumOpenBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterRawValueStyleEnum(SwiftParser.RawValueStyleEnumContext ctx) {
+        listenerHelper.verifyEnumOpenBraceStyle(ctx);
     }
 
     @Override

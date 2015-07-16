@@ -164,3 +164,139 @@ struct Hello
 <T>
    {
    }
+
+protocol SomeProtocol {
+
+}
+
+protocol SomeOtherProtocol : X {
+
+}
+
+protocol
+SomeProtocol {
+
+}
+
+protocol SomeProtocol
+{
+
+}
+
+protocol
+SomeOtherProtocol : X {
+
+}
+
+protocol SomeOtherProtocol
+: X {
+
+}
+
+protocol SomeOtherProtocol : X
+{
+
+}
+
+enum SomeEnum {
+    case SomeCase
+}
+
+enum SomeOtherEnum : Int {
+    case SomeCase
+}
+
+enum SomeEnum
+{
+    case SomeCase
+}
+
+enum SomeOtherEnum : Int
+{
+    case SomeCase
+}
+
+enum SomeOtherEnum :
+Int
+{
+    case SomeCase
+}
+
+class SomeClass :
+SomeProtocol, SomeOtherProtocol {
+
+}
+
+enum SomeOtherEnum :
+Int {
+    case SomeCase
+}
+
+struct SomeStruct :
+SomeProtocol, SomeOtherProtocol {
+
+}
+
+func someFunction () -> ()
+{
+// closure
+}
+
+func someFunction () -> () {
+// closure
+}
+
+let padawans = ["Knox", "Avitla", "Mennaus"]
+padawans.map({
+  (padawan: String) -> String in
+  "\(padawan) has been trained!"
+})
+
+func applyMutliplication(value: Int, multFunction: Int -> Int) -> Int {
+  return multFunction(value)
+}
+
+applyMutliplication(2,
+{ value in
+  value * 3
+})
+
+applyMutliplication(
+2, { value in
+  value * 3
+})
+
+enum ExampleEnum: Int
+{
+    case A, B, C = 5, D
+}
+
+enum ExampleEnum: Int {
+    case A, B, C = 5, D
+}
+
+padawans.map()
+{
+  (padawan: String) -> String in
+  "\(padawan) has been trained!"
+}
+
+padawans.map
+{
+  (padawan: String) -> String in
+  "\(padawan) has been trained!"
+}
+
+func max<T, U : Comparable>(f: T -> U ) -> U? {
+    return nil
+}
+
+func max<T, U : Comparable>(f: T -> U ) -> U?
+{
+    return nil
+}
+
+enum SomeEnum<A>
+{
+
+}
