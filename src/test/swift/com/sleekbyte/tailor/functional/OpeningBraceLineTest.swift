@@ -296,3 +296,7 @@ func max<T, U : Comparable>(f: T -> U ) -> U?
     return nil
 }
 
+enum SomeEnum<A>
+{
+
+}
