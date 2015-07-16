@@ -1,7 +1,6 @@
 package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
-import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClassBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClosureExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ConditionalOperatorContext;
