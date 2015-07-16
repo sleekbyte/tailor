@@ -329,3 +329,21 @@ SomeExtension : X
 {
 
 }
+
+set
+{
+    someVariable = newValue * 2
+}
+
+get
+{
+    return someVariable / 2
+}
+
+set {
+    someVariable = newValue * 2
+}
+
+get {
+    return someVariable / 2
+}
