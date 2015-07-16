@@ -1,36 +1,39 @@
 package com.sleekbyte.tailor.listeners;
 
-import static com.sleekbyte.tailor.antlr.SwiftParser.ElseClauseContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.ForInStatementContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.ForStatementContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.FunctionDeclarationContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.IfStatementContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.ImportDeclarationContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.InitializerDeclarationContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingContinuationContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingHeadContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.ParenthesizedExpressionContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.PatternContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerListContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.RepeatWhileStatementContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
-import static com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
-
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClassBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClosureExpressionContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryLiteralItemContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryTypeContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ElseClauseContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementListContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ForInStatementContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ForStatementContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.FunctionDeclarationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.IfStatementContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ImportDeclarationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.InitializerDeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorDeclarationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingContinuationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingHeadContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ParenthesizedExpressionContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.PatternContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerListContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ProtocolBodyContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.RepeatWhileStatementContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.StatementsContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.StructBodyContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.SwitchCaseContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TypeAnnotationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
@@ -403,14 +406,12 @@ class MainListenerHelper {
                 Token before = ((TerminalNodeImpl) ctx.getChild(0).getChild(i - 1)).getSymbol();
                 Token after = ((TerminalNodeImpl) ctx.getChild(0).getChild(i + 1)).getSymbol();
 
-                int leftMargin = op.getStart().getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(before);
-                if (op.getStart().getLine() == before.getLine() && leftMargin != 2) {
+                if (checkLeftSpaces(before, op.getStart(), 1)) {
                     printer.error(Messages.OPERATOR + Messages.SPACE_BEFORE,
                         ListenerUtil.getContextStopLocation(op));
                 }
 
-                int rightMargin = after.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(op.getStart());
-                if (after.getLine() == op.getStart().getLine() && rightMargin != 2) {
+                if (checkRightSpaces(after, op.getStart(), 1)) {
                     printer.error(Messages.OPERATOR + Messages.SPACE_AFTER,
                         ListenerUtil.getContextStopLocation(op));
                 }
@@ -432,15 +433,70 @@ class MainListenerHelper {
 
         Token colonToken = colon.getSymbol();
 
-        if (colonToken.getLine() == left.getLine()
-                && colonToken.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(left) != 1) {
-            printer.error(Messages.COLON + Messages.NO_SPACE_BEFORE, ListenerUtil.getTokenLocation(colonToken));
+        verifyColonLeftAssociation(left, right, colonToken);
+    }
+
+    void checkWhitespaceAroundColon(DictionaryLiteralItemContext ctx) {
+        Token left = ctx.expression(0).getStop();
+        Token right = ctx.expression(1).getStart();
+        Token colon = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
+
+        verifyColonLeftAssociation(left, right, colon);
+    }
+
+    void checkWhitespaceAroundColon(DictionaryTypeContext ctx) {
+        Token left = ctx.sType(0).getStop();
+        Token right = ctx.sType(1).getStart();
+        Token colon = ((TerminalNodeImpl) ctx.getChild(2)).getSymbol();
+
+        verifyColonLeftAssociation(left, right, colon);
+    }
+
+    void checkWhitespaceAroundColon(SwitchCaseContext ctx) {
+        Token left = null;
+        Token right = null;
+        Token colon = null;
+
+        if (ctx.caseLabel() != null) {
+            left = ctx.caseLabel().caseItemList().getStop();
+            ParseTree rightChild = ctx.getChild(1);
+            // right child can be statements or a semi colon
+            right = rightChild instanceof StatementsContext ? ((StatementsContext) rightChild).getStart()
+                    : ((TerminalNodeImpl) rightChild).getSymbol();
+            colon = ((TerminalNodeImpl) ctx.caseLabel().getChild(2)).getSymbol();
+        } else {
+            left = ((TerminalNodeImpl) ctx.defaultLabel().getChild(0)).getSymbol();
+            ParseTree rightChild = ctx.getChild(1);
+            right = rightChild instanceof StatementsContext ? ((StatementsContext) rightChild).getStart()
+                : ((TerminalNodeImpl) rightChild).getSymbol();
+            colon = ((TerminalNodeImpl) ctx.defaultLabel().getChild(1)).getSymbol();
         }
 
-        if (right.getLine() == colonToken.getLine()
-                && right.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(colonToken) != 2) {
-            printer.error(Messages.COLON + Messages.SPACE_AFTER, ListenerUtil.getTokenLocation(colonToken));
+        verifyColonLeftAssociation(left, right, colon);
+    }
+
+    private void verifyColonLeftAssociation(Token left, Token right, Token colon) {
+        Location colonLocation = ListenerUtil.getTokenLocation(colon);
+
+        if (checkLeftSpaces(left, colon, 0)) {
+            printer.error(Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " " + Messages.NO_SPACE_BEFORE,
+                colonLocation);
         }
+
+        if (checkRightSpaces(right, colon, 1)) {
+            printer.error(Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " " + Messages.SPACE_AFTER,
+                colonLocation);
+        }
+    }
+
+    private boolean checkLeftSpaces(Token left, Token op, int numSpaces) {
+        return op.getLine() == left.getLine()
+            && op.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(left) != numSpaces + 1;
+    }
+
+    private boolean checkRightSpaces(Token right, Token op, int numSpaces) {
+        return right.getLine() == op.getLine()
+            && right.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(op) != numSpaces + 1;
     }
     //endregion
 }

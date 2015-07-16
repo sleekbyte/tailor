@@ -58,6 +58,9 @@ public class Messages {
     public static final String IMPORTS = "Imports ";
     public static final String STATEMENTS = "Statements ";
 
+    // Message connector
+    public static final String AT_COLUMN = "at column ";
+
     // Message descriptions
     public static final String UPPER_CAMEL_CASE = "should be UpperCamelCase";
     public static final String LOWER_CAMEL_CASE = "should be lowerCamelCase";

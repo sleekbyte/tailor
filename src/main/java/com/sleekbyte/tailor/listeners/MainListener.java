@@ -287,6 +287,7 @@ public class MainListener extends SwiftBaseListener {
         for (SwiftParser.ExpressionContext expressionContext : ctx.expression()) {
             listenerHelper.verifyRedundantExpressionParenthesis(Messages.DICTIONARY_LITERAL, expressionContext);
         }
+        listenerHelper.checkWhitespaceAroundColon(ctx);
     }
 
     @Override
@@ -352,5 +353,15 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterRawValueStyleEnum(SwiftParser.RawValueStyleEnumContext ctx) {
         listenerHelper.verifyEnumOpenBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterDictionaryType(SwiftParser.DictionaryTypeContext ctx) {
+        listenerHelper.checkWhitespaceAroundColon(ctx);
+    }
+
+    @Override
+    public void enterSwitchCase(SwiftParser.SwitchCaseContext ctx) {
+        listenerHelper.checkWhitespaceAroundColon(ctx);
     }
 }
