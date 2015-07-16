@@ -347,3 +347,16 @@ set {
 get {
     return someVariable / 2
 }
+
+didSet {
+    if someVariable >= 1000  {
+       someVariable = 999
+    }
+}
+
+didSet
+{
+    if someVariable >= 1000  {
+       someVariable = 999
+    }
+}
