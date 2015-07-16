@@ -360,3 +360,16 @@ didSet
        someVariable = 999
     }
 }
+
+willSet
+{
+    if someVariable >= 1000  {
+       someVariable = 999
+    }
+}
+
+willSet {
+    if someVariable >= 1000  {
+       someVariable = 999
+    }
+}
