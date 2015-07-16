@@ -1,17 +1,19 @@
 package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
-import com.sleekbyte.tailor.antlr.SwiftParser.ClassDeclarationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.antlr.SwiftParser.ClassBodyContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ClosureExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ConditionalOperatorContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryLiteralItemContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryTypeContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ElseClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ForInStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ForStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.FunctionDeclarationContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.GenericParameterClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.GenericParameterContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.IfStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ImportDeclarationContext;
@@ -26,9 +28,10 @@ import com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ProtocolBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.RepeatWhileStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.StatementsContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.StructDeclarationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.StructBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.SwitchCaseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
@@ -240,21 +243,16 @@ class MainListenerHelper {
     //region Open brace style check
     void verifySwitchStatementOpenBraceStyle(SwitchStatementContext ctx) {
         Location switchExpLocation = ListenerUtil.getTokenLocation(ctx.expression().getStop());
-        Location openBraceLocation = getLocationOfChildToken(2, ctx);
+        Location openBraceLocation = ListenerUtil.getLocationOfChildToken(ctx, 2);
 
         if (switchExpLocation.line != openBraceLocation.line) {
             this.printer.warn(Messages.SWITCH_STATEMENT + Messages.BRACKET_STYLE, openBraceLocation);
         }
     }
 
-    private Location getLocationOfChildToken(int childNumber, ParserRuleContext ctx) {
-        Token token = ((TerminalNodeImpl) ctx.getChild(childNumber)).getSymbol();
-        return ListenerUtil.getTokenLocation(token);
-    }
-
     private void verifyCodeBlockOpenBraceStyle(String constructName, Location constructLocation,
                                                ParserRuleContext codeBlockCtx) {
-        Location openBraceLocation = getLocationOfChildToken(0, codeBlockCtx);
+        Location openBraceLocation = ListenerUtil.getLocationOfChildToken(codeBlockCtx, 0);
 
         if (constructLocation.line != openBraceLocation.line) {
             this.printer.warn(constructName + Messages.BRACKET_STYLE, openBraceLocation);
@@ -300,34 +298,12 @@ class MainListenerHelper {
         verifyCodeBlockOpenBraceStyle(Messages.FUNCTION, functionDeclarationLocation, ctx.functionBody().codeBlock());
     }
 
-    void verifyClassOpenBraceStyle(ClassDeclarationContext ctx) {
-        GenericParameterClauseContext genericParameterClauseContext = ctx.genericParameterClause();
-        TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
-        Location classLocation;
-        if (typeInheritanceClauseContext != null) {
-            classLocation = ListenerUtil.getContextStopLocation(typeInheritanceClauseContext);
-        } else if (genericParameterClauseContext != null) {
-            classLocation = ListenerUtil.getContextStopLocation(genericParameterClauseContext);
-        } else {
-            classLocation = ListenerUtil.getContextStopLocation(ctx.className());
-        }
-
-        verifyCodeBlockOpenBraceStyle(Messages.CLASS, classLocation, ctx.classBody());
+    void verifyClassOpenBraceStyle(ClassBodyContext ctx) {
+        verifyBodyOpenBraceStyle(ctx, Messages.CLASS);
     }
 
-    void verifyStructOpenBraceStyle(StructDeclarationContext ctx) {
-        GenericParameterClauseContext genericParameterClauseContext = ctx.genericParameterClause();
-        TypeInheritanceClauseContext typeInheritanceClauseContext = ctx.typeInheritanceClause();
-        Location structLocation;
-        if (typeInheritanceClauseContext != null) {
-            structLocation = ListenerUtil.getContextStopLocation(typeInheritanceClauseContext);
-        } else if (genericParameterClauseContext != null) {
-            structLocation = ListenerUtil.getContextStopLocation(genericParameterClauseContext);
-        } else {
-            structLocation = ListenerUtil.getContextStopLocation(ctx.structName());
-        }
-
-        verifyCodeBlockOpenBraceStyle(Messages.STRUCT, structLocation, ctx.structBody());
+    void verifyStructOpenBraceStyle(StructBodyContext ctx) {
+        verifyBodyOpenBraceStyle(ctx, Messages.STRUCT);
     }
 
     void verifyForLoopOpenBraceStyle(ForStatementContext ctx) {
@@ -345,6 +321,64 @@ class MainListenerHelper {
             loopEndLocation = ListenerUtil.getContextStopLocation(expressionContext);
         }
         verifyCodeBlockOpenBraceStyle(Messages.FOR_LOOP, loopEndLocation, ctx.codeBlock());
+    }
+
+    void verifyProtocolOpenBraceStyle(ProtocolBodyContext ctx) {
+        verifyBodyOpenBraceStyle(ctx, Messages.PROTOCOL);
+    }
+
+    private void verifyBodyOpenBraceStyle(ParserRuleContext ctx, String constructName) {
+        ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(ctx);
+        Location constructLocation = ListenerUtil.getContextStopLocation(leftSibling);
+        verifyCodeBlockOpenBraceStyle(constructName, constructLocation, ctx);
+    }
+
+    void verifyEnumOpenBraceStyle(ParserRuleContext ctx) {
+        for (ParseTree child : ctx.children) {
+            if (child instanceof TerminalNodeImpl) {
+                Token openBrace = ((TerminalNodeImpl) child).getSymbol();
+                Location openBraceLocation = ListenerUtil.getTokenLocation(openBrace);
+                ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(child);
+                Location leftSiblingLocation = ListenerUtil.getContextStopLocation(leftSibling);
+                if (openBraceLocation.line != leftSiblingLocation.line) {
+                    this.printer.warn(Messages.ENUM + Messages.BRACKET_STYLE, openBraceLocation);
+                }
+                break;
+            }
+        }
+    }
+
+    void verifyClosureExpressionOpenBraceStyle(ClosureExpressionContext ctx) {
+        ParseTree sixthAncestor = ParseTreeUtil.getNthParent(ctx, 6);
+
+        if (sixthAncestor == null || !(sixthAncestor instanceof ExpressionElementListContext)) {
+            ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(ctx);
+            if (leftSibling != null) {
+                Location leftSiblingLocation = ListenerUtil.getContextStopLocation(leftSibling);
+                verifyCodeBlockOpenBraceStyle(Messages.CLOSURE, leftSiblingLocation, ctx);
+            }
+            return;
+        }
+
+        ExpressionElementListContext expressionElementListContext = (ExpressionElementListContext) sixthAncestor;
+
+        ParseTree expElementListLeftSibling = ParseTreeUtil.getLeftSibling(expressionElementListContext);
+
+        if (expElementListLeftSibling == null) {
+            return;
+        }
+
+        Location expElementLeftSiblingLocation;
+
+        if (expElementListLeftSibling instanceof TerminalNodeImpl) {
+            Token leftToken = ((TerminalNodeImpl) expElementListLeftSibling).getSymbol();
+            expElementLeftSiblingLocation = ListenerUtil.getTokenLocation(leftToken);
+        } else {
+            ParserRuleContext leftContext = (ParserRuleContext) expElementListLeftSibling;
+            expElementLeftSiblingLocation = ListenerUtil.getContextStopLocation(leftContext);
+        }
+
+        verifyCodeBlockOpenBraceStyle(Messages.CLOSURE, expElementLeftSiblingLocation, ctx);
     }
     //endregion
 
