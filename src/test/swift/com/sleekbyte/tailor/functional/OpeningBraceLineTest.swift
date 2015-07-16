@@ -1,4 +1,4 @@
-class Rectangle : Shape
+class Rectangle: Shape
 {
     let length: Double
     let breadth: Double

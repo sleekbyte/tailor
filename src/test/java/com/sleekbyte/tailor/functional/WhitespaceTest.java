@@ -87,6 +87,23 @@ public class WhitespaceTest extends RuleTest {
         start = 148;
         addExpectedColonMessage(start + 3, 20, Messages.NO_SPACE_BEFORE);
         addExpectedColonMessage(start + 6, 19, Messages.SPACE_AFTER);
+
+        // ternary operator
+        start = 157;
+        addExpectedColonMessage(start, 48, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start, 48, Messages.SPACE_BEFORE);
+        addExpectedColonMessage(start + 1, 14, Messages.SPACE_BEFORE);
+        addExpectedColonMessage(start + 2, 15, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 4, 30, Messages.SPACE_BEFORE);
+        addExpectedColonMessage(start + 5, 31, Messages.SPACE_AFTER);
+
+        // tuples
+        start = 164;
+        addExpectedColonMessage(start + 1, 33, Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start + 1, 51, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 2, 32, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 3, 45, Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start + 3, 83, Messages.SPACE_AFTER);
     }
 
     private void addExpectedColonMessage(int line, int column, String msg) {

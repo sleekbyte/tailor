@@ -153,3 +153,15 @@ extension SomeType : SomeProtocol, AnotherProtocol {
 
 extension SomeType:  SomeProtocol, AnotherProtocol {
 }
+
+let rowHeight = contentHeight + (hasHeader ? 50:20)
+a != nil ? a!: b
+a != nil ? a! :  b
+let light = status ? getRed() : getGreen()
+let light = status ? getRed(): getGreen()
+let light = status ? getRed() :  getGreen()
+
+let http200Status = (statusCode: 200, description: "OK")
+let http200Status = (statusCode : 200, description:"OK")
+let http200Status = (statusCode:  200, description: "OK")
+let tupleception = (statusCode: (statusCode : 200, description: "OK"), description:  "NOT OK")

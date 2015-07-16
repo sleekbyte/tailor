@@ -51,4 +51,21 @@ public final class ParseTreeUtil {
         }
         return null;
     }
+
+    public static ParseTree getRightSibling(ParseTree ctx) {
+        if (ctx == null || ctx.getParent() == null) {
+            return null;
+        }
+        ParseTree parent = ctx.getParent();
+        for (int i = 0; i < parent.getChildCount(); i++) {
+            if (parent.getChild(i) == ctx) {
+                if (i >= parent.getChildCount() - 1) {
+                    return null;
+                } else {
+                    return parent.getChild(i + 1);
+                }
+            }
+        }
+        return null;
+    }
 }

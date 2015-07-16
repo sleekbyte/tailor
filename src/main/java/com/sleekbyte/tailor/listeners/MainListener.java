@@ -361,4 +361,14 @@ public class MainListener extends SwiftBaseListener {
     public void enterTypeInheritanceClause(SwiftParser.TypeInheritanceClauseContext ctx) {
         listenerHelper.checkWhitespaceAroundColon(ctx);
     }
+
+    @Override
+    public void enterConditionalOperator(SwiftParser.ConditionalOperatorContext ctx) {
+        listenerHelper.checkWhitespaceAroundColon(ctx);
+    }
+
+    @Override
+    public void enterExpressionElement(SwiftParser.ExpressionElementContext ctx) {
+        listenerHelper.checkWhitespaceAroundColon(ctx);
+    }
 }
