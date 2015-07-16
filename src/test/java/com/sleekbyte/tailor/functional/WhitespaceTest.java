@@ -44,9 +44,10 @@ public class WhitespaceTest extends RuleTest {
         addExpectedMsg(start + 1, 25, Messages.COLON + Messages.AT_COLUMN + 25 + " " + Messages.SPACE_AFTER);
         addExpectedMsg(start + 3, 26, Messages.COLON + Messages.AT_COLUMN + 26 + " " + Messages.NO_SPACE_BEFORE);
         addExpectedMsg(start + 4, 19, Messages.COLON + Messages.AT_COLUMN + 19 + " " + Messages.SPACE_AFTER);
+        addExpectedMsg(start + 5, 41, Messages.COLON + Messages.AT_COLUMN + 41 + " " + Messages.NO_SPACE_BEFORE);
 
         // Switch case colons
-        start = 64;
+        start = 66;
         addExpectedMsg(start + 1, 17, Messages.COLON + Messages.AT_COLUMN + 17 + " " + Messages.NO_SPACE_BEFORE);
         addExpectedMsg(start + 2, 16, Messages.COLON + Messages.AT_COLUMN + 16 + " " + Messages.SPACE_AFTER);
         addExpectedMsg(start + 4, 9, Messages.COLON + Messages.AT_COLUMN + 9 + " " + Messages.NO_SPACE_BEFORE);

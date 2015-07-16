@@ -432,14 +432,12 @@ class MainListenerHelper {
             right = rightChild instanceof StatementsContext ? ((StatementsContext) rightChild).getStart()
                     : ((TerminalNodeImpl) rightChild).getSymbol();
             colon = ((TerminalNodeImpl) ctx.caseLabel().getChild(2)).getSymbol();
-        } else if (ctx.defaultLabel() != null) {
+        } else {
             left = ((TerminalNodeImpl) ctx.defaultLabel().getChild(0)).getSymbol();
             ParseTree rightChild = ctx.getChild(1);
             right = rightChild instanceof StatementsContext ? ((StatementsContext) rightChild).getStart()
                 : ((TerminalNodeImpl) rightChild).getSymbol();
             colon = ((TerminalNodeImpl) ctx.defaultLabel().getChild(1)).getSymbol();
-        } else {
-            return;
         }
 
         verifyColonLeftAssociation(left, right, colon);

@@ -60,6 +60,8 @@ var capitals = ["Canada":  "Ottawa", "India":
   "New Delhi"]
 var frequencies: [String : Int]
 var marks: [String:  Int]
+var airports: [String: String] = ["YYZ" : "Toronto Pearson", "DUB"
+: "Dublin"]
 
 switch anotherPoint {
 case (let x, 0) : print("on the x-axis with an x value of \(x)")
