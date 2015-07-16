@@ -274,3 +274,25 @@ enum ExampleEnum: Int
 enum ExampleEnum: Int {
     case A, B, C = 5, D
 }
+
+padawans.map()
+{
+  (padawan: String) -> String in
+  "\(padawan) has been trained!"
+}
+
+padawans.map
+{
+  (padawan: String) -> String in
+  "\(padawan) has been trained!"
+}
+
+func max<T, U : Comparable>(f: T -> U ) -> U? {
+    return nil
+}
+
+func max<T, U : Comparable>(f: T -> U ) -> U?
+{
+    return nil
+}
+

@@ -29,10 +29,8 @@ import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorDeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ProtocolBodyContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.RawValueStyleEnumContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.StructBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TypeAnnotationContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.UnionStyleEnumContext;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
@@ -327,22 +325,7 @@ class MainListenerHelper {
         verifyCodeBlockOpenBraceStyle(constructName, constructLocation, ctx);
     }
 
-    void verifyUnionStyleEnumOpenBraceStyle(UnionStyleEnumContext ctx) {
-        for (ParseTree child : ctx.children) {
-            if (child instanceof TerminalNodeImpl) {
-                Token openBrace = ((TerminalNodeImpl) child).getSymbol();
-                Location openBraceLocation = ListenerUtil.getTokenLocation(openBrace);
-                ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(child);
-                Location leftSiblingLocation = ListenerUtil.getContextStopLocation(leftSibling);
-                if (openBraceLocation.line != leftSiblingLocation.line) {
-                    this.printer.warn(Messages.ENUM + Messages.BRACKET_STYLE, openBraceLocation);
-                }
-                break;
-            }
-        }
-    }
-
-    void verifyRawStyleEnumOpenBraceStyle(RawValueStyleEnumContext ctx) {
+    void verifyEnumOpenBraceStyle(ParserRuleContext ctx) {
         for (ParseTree child : ctx.children) {
             if (child instanceof TerminalNodeImpl) {
                 Token openBrace = ((TerminalNodeImpl) child).getSymbol();
@@ -361,6 +344,11 @@ class MainListenerHelper {
         ParseTree sixthAncestor = ParseTreeUtil.getNthParent(ctx, 6);
 
         if (sixthAncestor == null || !(sixthAncestor instanceof ExpressionElementListContext)) {
+            ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(ctx);
+            if (leftSibling != null) {
+                Location leftSiblingLocation = ListenerUtil.getContextStopLocation(leftSibling);
+                verifyCodeBlockOpenBraceStyle(Messages.CLOSURE, leftSiblingLocation, ctx);
+            }
             return;
         }
 

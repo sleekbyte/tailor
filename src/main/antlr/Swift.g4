@@ -623,9 +623,9 @@ wildcardExpression : '_'  ;
 
 postfixExpression
  : primaryExpression                                             # primary
- | postfixExpression postfixOperator                            # postfixOperation
- | postfixExpression parenthesizedExpression                    # functionCallExpression
- | postfixExpression parenthesizedExpression? closureExpression # functionCallWithClosureExpression
+ | postfixExpression postfixOperator                             # postfixOperation
+ | postfixExpression parenthesizedExpression? closureExpression  # functionCallWithClosureExpression
+ | postfixExpression parenthesizedExpression                     # functionCallExpression
  | postfixExpression '.' 'init'                                  # initializerExpression
  // TODO: don't allow '_' here in DecimalLiteral:
  | postfixExpression '.' DecimalLiteral                         # explicitMemberExpression1
