@@ -443,6 +443,14 @@ class MainListenerHelper {
         verifyColonLeftAssociation(left, right, colon);
     }
 
+    void checkWhitespaceAroundColon(TypeInheritanceClauseContext ctx) {
+        Token colon = ((TerminalNodeImpl) ctx.getChild(0)).getSymbol();
+        Token right = ((ParserRuleContext) ctx.getChild(1)).getStart();
+        Token left = ((ParserRuleContext) ParseTreeUtil.getLeftSibling(ctx)).getStop();
+
+        verifyColonLeftAssociation(left, right, colon);
+    }
+
     private void verifyColonLeftAssociation(Token left, Token right, Token colon) {
         Location colonLocation = ListenerUtil.getTokenLocation(colon);
 

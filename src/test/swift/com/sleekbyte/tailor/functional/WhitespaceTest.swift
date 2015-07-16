@@ -87,3 +87,69 @@ switch character {
   case "s": ;
   default:;
 }
+
+class ClassOne<T>:  ParentOne, ParentTwo {
+  func hello() {
+    return "hello"
+  }
+}
+
+class ClassTwo : ParentOne {
+}
+
+class ClassThree: ParentOne {
+}
+
+struct StructOne<T> : ParentStruct {
+}
+
+struct StructOne<T>:ParentStruct {
+}
+
+
+struct StructTwo : ParentStruct {
+}
+
+struct StructThree:  ParentStruct {
+}
+
+enum EnumOne : Int {
+  case A, B, C = 5, D
+}
+
+enum CompassPoint:  Direction {
+    case North
+    case South
+    case East
+    case West
+}
+
+protocol SomeClassOnlyProtocol:  class, SomeInheritedProtocol {
+}
+
+protocol SomeClassOnlyProtocol : class, SomeInheritedProtocol {
+}
+
+protocol SomeClassOnlyProtocol: class, SomeInheritedProtocol {
+}
+
+protocol InheritingProtocol:  SomeProtocol, AnotherProtocol {
+}
+
+protocol InheritingProtocol : SomeProtocol, AnotherProtocol {
+}
+
+protocol InheritingProtocol:SomeProtocol, AnotherProtocol {
+}
+
+protocol InheritingProtocol: SomeProtocol, AnotherProtocol {
+}
+
+extension SomeType: SomeProtocol, AnotherProtocol {
+}
+
+extension SomeType : SomeProtocol, AnotherProtocol {
+}
+
+extension SomeType:  SomeProtocol, AnotherProtocol {
+}

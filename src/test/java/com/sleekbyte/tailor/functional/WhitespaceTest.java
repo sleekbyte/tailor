@@ -24,37 +24,73 @@ public class WhitespaceTest extends RuleTest {
 
         // Colons in type annotations
         int start = 35;
-        addExpectedMsg(start, 7, Messages.COLON + Messages.AT_COLUMN + 7 + " " + Messages.NO_SPACE_BEFORE);
-        addExpectedMsg(start + 1, 6, Messages.COLON + Messages.AT_COLUMN + 6 + " " + Messages.SPACE_AFTER);
-        addExpectedMsg(start + 4, 11, Messages.COLON + Messages.AT_COLUMN + 11 + " " + Messages.SPACE_AFTER);
-        addExpectedMsg(start + 5, 17, Messages.COLON + Messages.AT_COLUMN + 17 + " " + Messages.SPACE_AFTER);
-        addExpectedMsg(start + 8, 13, Messages.COLON + Messages.AT_COLUMN + 13 + " " + Messages.SPACE_AFTER);
-        addExpectedMsg(start + 9, 14, Messages.COLON + Messages.AT_COLUMN + 14 + " " + Messages.NO_SPACE_BEFORE);
-        addExpectedMsg(start + 12, 44, Messages.COLON + Messages.AT_COLUMN + 44 + " " + Messages.SPACE_AFTER);
-        addExpectedMsg(start + 12, 44, Messages.COLON + Messages.AT_COLUMN + 44 + " " + Messages.NO_SPACE_BEFORE);
-        addExpectedMsg(start + 13, 17, Messages.COLON + Messages.AT_COLUMN + 17 + " " + Messages.NO_SPACE_BEFORE);
-        addExpectedMsg(start + 16, 13, Messages.COLON + Messages.AT_COLUMN + 13 + " " + Messages.SPACE_AFTER);
-        addExpectedMsg(start + 16, 13, Messages.COLON + Messages.AT_COLUMN + 13 + " " + Messages.NO_SPACE_BEFORE);
-        addExpectedMsg(start + 16, 37, Messages.COLON + Messages.AT_COLUMN + 37 + " " + Messages.SPACE_AFTER);
-        addExpectedMsg(start + 20, 33, Messages.COLON + Messages.AT_COLUMN + 33 + " " + Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start, 7, Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start + 1, 6, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 4, 11, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 5, 17, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 8, 13, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 9, 14, Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start + 12, 44, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 12, 44, Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start + 13, 17, Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start + 16, 13, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 16, 13, Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start + 16, 37, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 20, 33, Messages.NO_SPACE_BEFORE);
 
         // Colons in dictionaries
         start = 58;
-        addExpectedMsg(start, 41, Messages.COLON + Messages.AT_COLUMN + 41 + " " + Messages.NO_SPACE_BEFORE);
-        addExpectedMsg(start + 1, 25, Messages.COLON + Messages.AT_COLUMN + 25 + " " + Messages.SPACE_AFTER);
-        addExpectedMsg(start + 3, 26, Messages.COLON + Messages.AT_COLUMN + 26 + " " + Messages.NO_SPACE_BEFORE);
-        addExpectedMsg(start + 4, 19, Messages.COLON + Messages.AT_COLUMN + 19 + " " + Messages.SPACE_AFTER);
-        addExpectedMsg(start + 5, 41, Messages.COLON + Messages.AT_COLUMN + 41 + " " + Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start, 41, Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start + 1, 25, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 3, 26, Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start + 4, 19, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 5, 41, Messages.NO_SPACE_BEFORE);
 
         // Switch case colons
         start = 66;
-        addExpectedMsg(start + 1, 17, Messages.COLON + Messages.AT_COLUMN + 17 + " " + Messages.NO_SPACE_BEFORE);
-        addExpectedMsg(start + 2, 16, Messages.COLON + Messages.AT_COLUMN + 16 + " " + Messages.SPACE_AFTER);
-        addExpectedMsg(start + 4, 9, Messages.COLON + Messages.AT_COLUMN + 9 + " " + Messages.NO_SPACE_BEFORE);
-        addExpectedMsg(start + 9, 34, Messages.COLON + Messages.AT_COLUMN + 34 + " " + Messages.SPACE_AFTER);
-        addExpectedMsg(start + 10, 8, Messages.COLON + Messages.AT_COLUMN +  8 + " " + Messages.SPACE_AFTER);
-        addExpectedMsg(start + 20, 11, Messages.COLON + Messages.AT_COLUMN + 11 + " " + Messages.SPACE_AFTER);
-        addExpectedMsg(start + 22, 10, Messages.COLON + Messages.AT_COLUMN + 10 + " " + Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 1, 17, Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start + 2, 16, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 4, 9, Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start + 9, 34, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 10, 8, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 20, 11, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 22, 10, Messages.SPACE_AFTER);
+
+        // Type Inheritance clause colons
+
+        // classes
+        start = 91;
+        addExpectedColonMessage(start, 18, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 6, 16, Messages.NO_SPACE_BEFORE);
+
+        // structs
+        start = 103;
+        addExpectedColonMessage(start, 21, Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start + 3, 20, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 7, 18, Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start + 10, 19, Messages.SPACE_AFTER);
+
+        // enums
+        start = 116;
+        addExpectedColonMessage(start, 14, Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start + 4, 18, Messages.SPACE_AFTER);
+
+        // protocols
+        start = 127;
+        addExpectedColonMessage(start, 31, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 3, 32, Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start + 9, 28, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 12, 29, Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start + 15, 28, Messages.SPACE_AFTER);
+
+        // extensions
+        start = 148;
+        addExpectedColonMessage(start + 3, 20, Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start + 6, 19, Messages.SPACE_AFTER);
+    }
+
+    private void addExpectedColonMessage(int line, int column, String msg) {
+        addExpectedMsg(line, column, Messages.COLON + Messages.AT_COLUMN + column + " " + msg);
     }
 
     private void addExpectedMsg(int line, int column, String msg) {
