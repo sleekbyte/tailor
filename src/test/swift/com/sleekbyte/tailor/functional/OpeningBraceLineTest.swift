@@ -300,3 +300,32 @@ enum SomeEnum<A>
 {
 
 }
+
+public extension SomeExtension {
+
+}
+
+extension SomeExtension : X {
+
+}
+
+extension SomeExtension
+{
+
+}
+
+extension SomeExtension : X
+{
+
+}
+
+extension
+SomeExtension : X {
+
+}
+
+extension
+SomeExtension : X
+{
+
+}

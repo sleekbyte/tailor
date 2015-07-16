@@ -53,6 +53,7 @@ public class Messages {
     public static final String FOR_IN_LOOP = "For-in loop ";
     public static final String OPERATOR = "Operator ";
     public static final String COLON = "Colon ";
+    public static final String EXTENSION = "Extension ";
 
     // Plural constructs
     public static final String IMPORTS = "Imports ";

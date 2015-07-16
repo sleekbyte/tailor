@@ -164,7 +164,7 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterConstantDeclaration(SwiftParser.ConstantDeclarationContext ctx) {
         listenerHelper.evaluatePatternInitializerList(ctx.patternInitializerList(),
-            new ConstantDecListener(this.printer, this.maxLengths));
+                                                             new ConstantDecListener(this.printer, this.maxLengths));
     }
 
     @Override
@@ -363,5 +363,10 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterSwitchCase(SwiftParser.SwitchCaseContext ctx) {
         listenerHelper.checkWhitespaceAroundColon(ctx);
+    }
+
+    @Override
+    public void enterExtensionBody(SwiftParser.ExtensionBodyContext ctx) {
+        listenerHelper.verifyExtensionOpenBraceStyle(ctx);
     }
 }
