@@ -62,34 +62,38 @@ public class WhitespaceTest extends RuleTest {
         start = 91;
         addExpectedColonMessage(start, 18, Messages.SPACE_AFTER);
         addExpectedColonMessage(start + 6, 16, Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start + 12, 16, Messages.NO_SPACE_BEFORE);
 
         // structs
-        start = 103;
+        start = 107;
         addExpectedColonMessage(start, 21, Messages.NO_SPACE_BEFORE);
         addExpectedColonMessage(start + 3, 20, Messages.SPACE_AFTER);
         addExpectedColonMessage(start + 7, 18, Messages.NO_SPACE_BEFORE);
         addExpectedColonMessage(start + 10, 19, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 13, 21, Messages.NO_SPACE_BEFORE);
 
         // enums
-        start = 116;
+        start = 128;
         addExpectedColonMessage(start, 14, Messages.NO_SPACE_BEFORE);
         addExpectedColonMessage(start + 4, 18, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 11, 14, Messages.NO_SPACE_BEFORE);
 
         // protocols
-        start = 127;
+        start = 152;
         addExpectedColonMessage(start, 31, Messages.SPACE_AFTER);
         addExpectedColonMessage(start + 3, 32, Messages.NO_SPACE_BEFORE);
         addExpectedColonMessage(start + 9, 28, Messages.SPACE_AFTER);
         addExpectedColonMessage(start + 12, 29, Messages.NO_SPACE_BEFORE);
         addExpectedColonMessage(start + 15, 28, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 26, 1, Messages.SPACE_AFTER);
 
         // extensions
-        start = 148;
+        start = 181;
         addExpectedColonMessage(start + 3, 20, Messages.NO_SPACE_BEFORE);
         addExpectedColonMessage(start + 6, 19, Messages.SPACE_AFTER);
 
         // ternary operator
-        start = 157;
+        start = 190;
         addExpectedColonMessage(start, 48, Messages.SPACE_AFTER);
         addExpectedColonMessage(start, 48, Messages.SPACE_BEFORE);
         addExpectedColonMessage(start + 1, 14, Messages.SPACE_BEFORE);
@@ -98,7 +102,7 @@ public class WhitespaceTest extends RuleTest {
         addExpectedColonMessage(start + 5, 31, Messages.SPACE_AFTER);
 
         // tuples
-        start = 164;
+        start = 197;
         addExpectedColonMessage(start + 1, 33, Messages.NO_SPACE_BEFORE);
         addExpectedColonMessage(start + 1, 51, Messages.SPACE_AFTER);
         addExpectedColonMessage(start + 2, 32, Messages.SPACE_AFTER);
@@ -106,7 +110,7 @@ public class WhitespaceTest extends RuleTest {
         addExpectedColonMessage(start + 3, 83, Messages.SPACE_AFTER);
 
         // generics
-        start = 169;
+        start = 202;
         addExpectedColonMessage(start + 2, 21, Messages.NO_SPACE_BEFORE);
         addExpectedColonMessage(start + 2, 35, Messages.SPACE_AFTER);
         addExpectedColonMessage(start + 4, 20, Messages.SPACE_AFTER);

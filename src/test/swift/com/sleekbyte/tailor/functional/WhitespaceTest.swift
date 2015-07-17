@@ -100,6 +100,10 @@ class ClassTwo : ParentOne {
 class ClassThree: ParentOne {
 }
 
+class ClassTwo :
+ParentOne {
+}
+
 struct StructOne<T> : ParentStruct {
 }
 
@@ -113,11 +117,32 @@ struct StructTwo : ParentStruct {
 struct StructThree:  ParentStruct {
 }
 
+struct StructOne<T> :
+  ParentStruct {
+}
+
+struct StructOne<T>:
+  ParentStruct {
+}
+
 enum EnumOne : Int {
   case A, B, C = 5, D
 }
 
 enum CompassPoint:  Direction {
+    case North
+    case South
+    case East
+    case West
+}
+
+enum EnumOne :
+Int {
+  case A, B, C = 5, D
+}
+
+enum CompassPoint:
+  Direction {
     case North
     case South
     case East
@@ -143,6 +168,14 @@ protocol InheritingProtocol:SomeProtocol, AnotherProtocol {
 }
 
 protocol InheritingProtocol: SomeProtocol, AnotherProtocol {
+}
+
+protocol SomeClassOnlyProtocol
+: class, SomeInheritedProtocol {
+}
+
+protocol SomeClassOnlyProtocol
+:class, SomeInheritedProtocol {
 }
 
 extension SomeType: SomeProtocol, AnotherProtocol {
