@@ -11,9 +11,9 @@ public final class ParseTreeUtil {
     /**
      * Return parent `nval` levels above ctx.
      *
-     * @param ctx Child node
-     * @param nval 'n' value, number of levels to go up the tree
-     * @return Parent node or null if parent does not exist
+     * @param ctx Child node.
+     * @param nval 'n' value, number of levels to go up the tree.
+     * @return Parent node or null if parent does not exist.
      */
     public static ParserRuleContext getNthParent(ParserRuleContext ctx, int nval) {
         if (ctx == null) {
@@ -33,7 +33,7 @@ public final class ParseTreeUtil {
      * Returns node's index with in its parent's child array.
      *
      * @param node A child node.
-     * @return Node's index or -1 if node is null or doesn't have a parent
+     * @return Node's index or -1 if node is null or doesn't have a parent.
      */
     public static int getNodeIndex(ParseTree node) {
         if (node == null || node.getParent() == null) {
@@ -52,7 +52,7 @@ public final class ParseTreeUtil {
      * Gets left sibling of a parse tree node.
      *
      * @param ctx A node.
-     * @return Left sibling of a node, or null if no sibling is found
+     * @return Left sibling of a node, or null if no sibling is found.
      */
     public static ParseTree getLeftSibling(ParseTree ctx) {
         int index = ParseTreeUtil.getNodeIndex(ctx);
@@ -66,7 +66,7 @@ public final class ParseTreeUtil {
      * Gets right sibling of a parse tree node.
      *
      * @param ctx A node.
-     * @return Right sibling of a node, or null if no sibling is found
+     * @return Right sibling of a node, or null if no sibling is found.
      */
     public static ParseTree getRightSibling(ParseTree ctx) {
         int index = ParseTreeUtil.getNodeIndex(ctx);
@@ -77,4 +77,16 @@ public final class ParseTreeUtil {
         return parent.getChild(index + 1);
     }
 
+    /**
+     * Gets last child of a parse tree node.
+     *
+     * @param ctx A node.
+     * @return Last child of a node, or null if node has no children.
+     */
+    public static ParseTree getLastChild(ParseTree ctx) {
+        if (ctx.getChildCount() == 0) {
+            return null;
+        }
+        return ctx.getChild(ctx.getChildCount() - 1);
+    }
 }
