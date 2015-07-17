@@ -104,13 +104,13 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterClassBody(SwiftParser.ClassBodyContext ctx) {
         listenerHelper.verifyConstructLength(Messages.CLASS, this.maxLengths.maxClassLength, ctx);
-        listenerHelper.verifyClassOpenBraceStyle(ctx);
+        listenerHelper.verifyClassBraceStyle(ctx);
     }
 
     @Override
     public void enterClosureExpression(SwiftParser.ClosureExpressionContext ctx) {
         listenerHelper.verifyConstructLength(Messages.CLOSURE, this.maxLengths.maxClosureLength, ctx);
-        listenerHelper.verifyClosureExpressionOpenBraceStyle(ctx);
+        listenerHelper.verifyClosureExpressionBraceStyle(ctx);
     }
 
     @Override
@@ -121,7 +121,7 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterStructBody(SwiftParser.StructBodyContext ctx) {
         listenerHelper.verifyConstructLength(Messages.STRUCT, this.maxLengths.maxStructLength, ctx);
-        listenerHelper.verifyStructOpenBraceStyle(ctx);
+        listenerHelper.verifyStructBraceStyle(ctx);
     }
 
     @Override
@@ -253,13 +253,13 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterSwitchStatement(SwiftParser.SwitchStatementContext ctx) {
         listenerHelper.verifyRedundantExpressionParenthesis(Messages.SWITCH_EXPRESSION, ctx.expression());
-        listenerHelper.verifySwitchStatementOpenBraceStyle(ctx);
+        listenerHelper.verifySwitchStatementBraceStyle(ctx);
     }
 
     @Override
     public void enterForStatement(SwiftParser.ForStatementContext ctx) {
         listenerHelper.verifyRedundantForLoopParenthesis(ctx);
-        listenerHelper.verifyForLoopOpenBraceStyle(ctx);
+        listenerHelper.verifyForLoopBraceStyle(ctx);
     }
 
     @Override
@@ -297,37 +297,37 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterFunctionDeclaration(SwiftParser.FunctionDeclarationContext ctx) {
-        listenerHelper.verifyFunctionOpenBraceStyle(ctx);
+        listenerHelper.verifyFunctionBraceStyle(ctx);
     }
 
     @Override
     public void enterElseClause(SwiftParser.ElseClauseContext ctx) {
-        listenerHelper.verifyElseClauseOpenBraceStyle(ctx);
+        listenerHelper.verifyElseClauseBraceStyle(ctx);
     }
 
     @Override
     public void enterIfStatement(SwiftParser.IfStatementContext ctx) {
-        listenerHelper.verifyIfStatementOpenBraceStyle(ctx);
+        listenerHelper.verifyIfStatementBraceStyle(ctx);
     }
 
     @Override
     public void enterWhileStatement(SwiftParser.WhileStatementContext ctx) {
-        listenerHelper.verifyWhileLoopOpenBraceStyle(ctx);
+        listenerHelper.verifyWhileLoopBraceStyle(ctx);
     }
 
     @Override
     public void enterRepeatWhileStatement(SwiftParser.RepeatWhileStatementContext ctx) {
-        listenerHelper.verifyRepeatWhileLoopOpenBraceStyle(ctx);
+        listenerHelper.verifyRepeatWhileLoopBraceStyle(ctx);
     }
 
     @Override
     public void enterInitializerDeclaration(SwiftParser.InitializerDeclarationContext ctx) {
-        listenerHelper.verifyInitializerOpenBraceStyle(ctx);
+        listenerHelper.verifyInitializerBraceStyle(ctx);
     }
 
     @Override
     public void enterForInStatement(SwiftParser.ForInStatementContext ctx) {
-        listenerHelper.verifyForInStatementOpenBraceStyle(ctx);
+        listenerHelper.verifyForInStatementBraceStyle(ctx);
     }
 
     @Override
@@ -342,17 +342,17 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterProtocolBody(SwiftParser.ProtocolBodyContext ctx) {
-        listenerHelper.verifyProtocolOpenBraceStyle(ctx);
+        listenerHelper.verifyProtocolBraceStyle(ctx);
     }
 
     @Override
     public void enterUnionStyleEnum(SwiftParser.UnionStyleEnumContext ctx) {
-        listenerHelper.verifyEnumOpenBraceStyle(ctx);
+        listenerHelper.verifyEnumBraceStyle(ctx);
     }
 
     @Override
     public void enterRawValueStyleEnum(SwiftParser.RawValueStyleEnumContext ctx) {
-        listenerHelper.verifyEnumOpenBraceStyle(ctx);
+        listenerHelper.verifyEnumBraceStyle(ctx);
     }
 
     @Override
@@ -367,16 +367,16 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterExtensionBody(SwiftParser.ExtensionBodyContext ctx) {
-        listenerHelper.verifyExtensionOpenBraceStyle(ctx);
+        listenerHelper.verifyExtensionBraceStyle(ctx);
     }
 
     @Override
     public void enterGetterClause(SwiftParser.GetterClauseContext ctx) {
-        listenerHelper.verifyGetterOpenBraceStyle(ctx);
+        listenerHelper.verifyGetterBraceStyle(ctx);
     }
 
     @Override
     public void enterSetterClause(SwiftParser.SetterClauseContext ctx) {
-        listenerHelper.verifySetterOpenBraceStyle(ctx);
+        listenerHelper.verifySetterBraceStyle(ctx);
     }
 }
