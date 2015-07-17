@@ -55,3 +55,22 @@ SomeOtherProtocol: X { }
 
 protocol SomeOtherProtocol
 : X { }
+
+public extension SomeExtension {
+
+}
+
+extension SomeExtension: X { }
+
+extension
+SomeExtension {}
+
+extension SomeExtension: X { }
+
+extension
+SomeExtension: X { }
+
+extension
+SomeExtension: X {
+
+}

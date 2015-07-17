@@ -386,6 +386,7 @@ class MainListenerHelper {
 
     void verifyExtensionBraceStyle(ExtensionBodyContext ctx) {
         verifyBodyOpenBraceStyle(ctx, Messages.EXTENSION);
+        verifyBodyCloseBraceStyle(ctx, Messages.EXTENSION);
     }
 
     void verifyGetterBraceStyle(GetterClauseContext ctx) {
