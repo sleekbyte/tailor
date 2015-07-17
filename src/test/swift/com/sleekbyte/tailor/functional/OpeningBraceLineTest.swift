@@ -300,3 +300,196 @@ enum SomeEnum<A>
 {
 
 }
+
+public extension SomeExtension {
+
+}
+
+extension SomeExtension : X {
+
+}
+
+extension SomeExtension
+{
+
+}
+
+extension SomeExtension : X
+{
+
+}
+
+extension
+SomeExtension : X {
+
+}
+
+extension
+SomeExtension : X
+{
+
+}
+
+set
+{
+    someVariable = newValue * 2
+}
+
+get
+{
+    return someVariable / 2
+}
+
+set {
+    someVariable = newValue * 2
+}
+
+get {
+    return someVariable / 2
+}
+
+didSet {
+    if someVariable >= 1000  {
+       someVariable = 999
+    }
+}
+
+didSet
+{
+    if someVariable >= 1000  {
+       someVariable = 999
+    }
+}
+
+willSet
+{
+    if someVariable >= 1000  {
+       someVariable = 999
+    }
+}
+
+willSet {
+    if someVariable >= 1000  {
+       someVariable = 999
+    }
+}
+
+class SomeClass {
+    var x: Int {
+        set {
+            self.x = 10
+        }
+
+        get {
+            return 10
+        }
+    }
+}
+
+class SomeClass {
+    var x: Int {
+        set
+         {
+            x = 10
+        }
+
+        get
+         {
+            return 10
+        }
+    }
+}
+
+struct SomeStruct {
+    var x: Int {
+        set {
+            x = 10
+        }
+
+        get
+         {
+            return 10
+        }
+    }
+}
+
+struct SomeStruct {
+    var x: Int {
+        get
+        {
+            return 10
+        }
+    }
+}
+
+@objc
+class ExampleClass {
+    var enabled: Bool {
+        @objc(isEnabled)
+        get {
+            return true
+        }
+        set {
+            self.enabled = true
+        }
+    }
+}
+
+@objc
+class SomeClass {
+    var enabled: Bool {
+        @objc(isEnabled)
+        get
+        {
+            return true
+        }
+        set
+        {
+            self.enabled = true
+        }
+    }
+}
+
+@objc
+class SomeClass {
+    var enabled: Bool {
+        @objc(isEnabled)
+        set
+        {
+            self.enabled = true
+        }
+        get
+        {
+            return true
+        }
+    }
+}
+
+struct Rect {
+    var center: Point {
+        get {
+            let centerX = origin.x + (size.width / 2)
+            var centerY = origin.y + (size.height / 2)
+            return Point(x: centerX, y: centerY)
+        }
+        set(newCenter) {
+            var origin.x = newCenter.x - (size.width / 2)
+            var origin.y = newCenter.y - (size.height / 2)
+        }
+    }
+}
+
+struct Rect {
+    var center: Point {
+        get {
+            let centerX = origin.x + (size.width / 2)
+            var centerY = origin.y + (size.height / 2)
+            return Point(x: centerX, y: centerY)
+        }
+        set(newCenter)
+        {
+            var origin.x = newCenter.x - (size.width / 2)
+            var origin.y = newCenter.y - (size.height / 2)
+        }
+    }
+}

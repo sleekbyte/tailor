@@ -44,6 +44,22 @@ public class OpeningBraceLineTest extends RuleTest {
         addExpectedMsg(285, 1, Severity.WARNING, Messages.CLOSURE);
         addExpectedMsg(295, 1, Severity.WARNING, Messages.FUNCTION);
         addExpectedMsg(300, 1, Severity.WARNING, Messages.ENUM);
+        addExpectedMsg(313, 1, Severity.WARNING, Messages.EXTENSION);
+        addExpectedMsg(318, 1, Severity.WARNING, Messages.EXTENSION);
+        addExpectedMsg(329, 1, Severity.WARNING, Messages.EXTENSION);
+        addExpectedMsg(334, 1, Severity.WARNING, Messages.CLOSURE);
+        addExpectedMsg(339, 1, Severity.WARNING, Messages.CLOSURE);
+        addExpectedMsg(358, 1, Severity.WARNING, Messages.CLOSURE);
+        addExpectedMsg(365, 1, Severity.WARNING, Messages.CLOSURE);
+        addExpectedMsg(392, 10, Severity.WARNING, Messages.SETTER);
+        addExpectedMsg(397, 10, Severity.WARNING, Messages.GETTER);
+        addExpectedMsg(410, 10, Severity.WARNING, Messages.GETTER);
+        addExpectedMsg(419, 9, Severity.WARNING, Messages.GETTER);
+        addExpectedMsg(443, 9, Severity.WARNING, Messages.GETTER);
+        addExpectedMsg(447, 9, Severity.WARNING, Messages.SETTER);
+        addExpectedMsg(458, 9, Severity.WARNING, Messages.SETTER);
+        addExpectedMsg(462, 9, Severity.WARNING, Messages.GETTER);
+        addExpectedMsg(490, 9, Severity.WARNING, Messages.SETTER);
     }
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg) {
