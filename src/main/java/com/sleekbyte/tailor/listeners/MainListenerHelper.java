@@ -265,25 +265,6 @@ class MainListenerHelper {
 
     }
 
-    private void verifyCodeBlockOpenBraceStyle(String constructName, Location constructLocation,
-                                               ParserRuleContext codeBlockCtx) {
-        Location openBraceLocation = ListenerUtil.getLocationOfChildToken(codeBlockCtx, 0);
-        if (constructLocation.line != openBraceLocation.line) {
-            this.printer.warn(constructName + Messages.OPEN_BRACKET_STYLE, openBraceLocation);
-        }
-    }
-
-    private void verifyBodyCloseBraceStyle(ParserRuleContext ctx, String constructName) {
-        TerminalNodeImpl closeBraceImpl = (TerminalNodeImpl) ctx.getChild(ctx.getChildCount() - 1);
-        Location closeBraceLocation = ListenerUtil.getTokenLocation(closeBraceImpl.getSymbol());
-        ParseTree leftSibling = ParseTreeUtil.getLeftSibling(closeBraceImpl);
-        Location leftSiblingLocation = ListenerUtil.getParseTreeStopLocation(leftSibling);
-
-        if (closeBraceLocation.line == leftSiblingLocation.line) {
-            this.printer.warn(constructName + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
-        }
-    }
-
     void verifyForInStatementBraceStyle(ForInStatementContext ctx) {
         Location expressionLocation = ListenerUtil.getContextStopLocation(ctx.expression());
         verifyCodeBlockOpenBraceStyle(Messages.FOR_IN_LOOP, expressionLocation, ctx.codeBlock());
@@ -355,12 +336,6 @@ class MainListenerHelper {
         verifyBodyCloseBraceStyle(ctx, Messages.PROTOCOL);
     }
 
-    private void verifyBodyOpenBraceStyle(ParserRuleContext ctx, String constructName) {
-        ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(ctx);
-        Location constructLocation = ListenerUtil.getContextStopLocation(leftSibling);
-        verifyCodeBlockOpenBraceStyle(constructName, constructLocation, ctx);
-    }
-
     void verifyEnumBraceStyle(ParserRuleContext ctx) {
         for (ParseTree child : ctx.children) {
             if (child instanceof TerminalNodeImpl) {
@@ -425,6 +400,31 @@ class MainListenerHelper {
                                     ? ListenerUtil.getTokenLocation(((TerminalNodeImpl) leftSibling).getSymbol()) :
                                       ListenerUtil.getContextStopLocation((ParserRuleContext) leftSibling);
         verifyCodeBlockOpenBraceStyle(Messages.SETTER, setLocation, ctx.codeBlock());
+    }
+
+    private void verifyCodeBlockOpenBraceStyle(String constructName, Location constructLocation,
+                                               ParserRuleContext codeBlockCtx) {
+        Location openBraceLocation = ListenerUtil.getLocationOfChildToken(codeBlockCtx, 0);
+        if (constructLocation.line != openBraceLocation.line) {
+            this.printer.warn(constructName + Messages.OPEN_BRACKET_STYLE, openBraceLocation);
+        }
+    }
+
+    private void verifyBodyCloseBraceStyle(ParserRuleContext ctx, String constructName) {
+        TerminalNodeImpl closeBraceImpl = (TerminalNodeImpl) ctx.getChild(ctx.getChildCount() - 1);
+        Location closeBraceLocation = ListenerUtil.getTokenLocation(closeBraceImpl.getSymbol());
+        ParseTree leftSibling = ParseTreeUtil.getLeftSibling(closeBraceImpl);
+        Location leftSiblingLocation = ListenerUtil.getParseTreeStopLocation(leftSibling);
+
+        if (closeBraceLocation.line == leftSiblingLocation.line) {
+            this.printer.warn(constructName + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
+        }
+    }
+
+    private void verifyBodyOpenBraceStyle(ParserRuleContext ctx, String constructName) {
+        ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(ctx);
+        Location constructLocation = ListenerUtil.getContextStopLocation(leftSibling);
+        verifyCodeBlockOpenBraceStyle(constructName, constructLocation, ctx);
     }
     //endregion
 
