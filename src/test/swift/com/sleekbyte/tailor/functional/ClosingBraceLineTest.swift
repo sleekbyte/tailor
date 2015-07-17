@@ -39,7 +39,7 @@ protocol SomeProtocol {
 
 }
 
-protocol SomeOtherProtocol : X {
+protocol SomeOtherProtocol: X {
 
 }
 
@@ -51,7 +51,7 @@ SomeProtocol {
 protocol SomeProtocol { }
 
 protocol
-SomeOtherProtocol : X { }
+SomeOtherProtocol: X { }
 
 protocol SomeOtherProtocol
 : X { }

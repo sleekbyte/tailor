@@ -21,7 +21,7 @@ public class ClosingBraceLineTest extends RuleTest {
         addExpectedMsg(30, 7, Severity.WARNING, Messages.STRUCT);
         addExpectedMsg(32, 20, Severity.WARNING, Messages.STRUCT);
         addExpectedMsg(51, 25, Severity.WARNING, Messages.PROTOCOL);
-        addExpectedMsg(54, 25, Severity.WARNING, Messages.PROTOCOL);
+        addExpectedMsg(54, 24, Severity.WARNING, Messages.PROTOCOL);
         addExpectedMsg(57, 7, Severity.WARNING, Messages.PROTOCOL);
     }
 

@@ -87,3 +87,126 @@ switch character {
   case "s": ;
   default:;
 }
+
+class ClassOne<T>:  ParentOne, ParentTwo {
+  func hello() {
+    return "hello"
+  }
+}
+
+class ClassTwo : ParentOne {
+}
+
+class ClassThree: ParentOne {
+}
+
+class ClassTwo :
+ParentOne {
+}
+
+struct StructOne<T> : ParentStruct {
+}
+
+struct StructOne<T>:ParentStruct {
+}
+
+
+struct StructTwo : ParentStruct {
+}
+
+struct StructThree:  ParentStruct {
+}
+
+struct StructOne<T> :
+  ParentStruct {
+}
+
+struct StructOne<T>:
+  ParentStruct {
+}
+
+enum EnumOne : Int {
+  case A, B, C = 5, D
+}
+
+enum CompassPoint:  Direction {
+    case North
+    case South
+    case East
+    case West
+}
+
+enum EnumOne :
+Int {
+  case A, B, C = 5, D
+}
+
+enum CompassPoint:
+  Direction {
+    case North
+    case South
+    case East
+    case West
+}
+
+protocol SomeClassOnlyProtocol:  class, SomeInheritedProtocol {
+}
+
+protocol SomeClassOnlyProtocol : class, SomeInheritedProtocol {
+}
+
+protocol SomeClassOnlyProtocol: class, SomeInheritedProtocol {
+}
+
+protocol InheritingProtocol:  SomeProtocol, AnotherProtocol {
+}
+
+protocol InheritingProtocol : SomeProtocol, AnotherProtocol {
+}
+
+protocol InheritingProtocol:SomeProtocol, AnotherProtocol {
+}
+
+protocol InheritingProtocol: SomeProtocol, AnotherProtocol {
+}
+
+protocol SomeClassOnlyProtocol
+: class, SomeInheritedProtocol {
+}
+
+protocol SomeClassOnlyProtocol
+:class, SomeInheritedProtocol {
+}
+
+extension SomeType: SomeProtocol, AnotherProtocol {
+}
+
+extension SomeType : SomeProtocol, AnotherProtocol {
+}
+
+extension SomeType:  SomeProtocol, AnotherProtocol {
+}
+
+let rowHeight = contentHeight + (hasHeader ? 50:20)
+a != nil ? a!: b
+a != nil ? a! :  b
+let light = status ? getRed() : getGreen()
+let light = status ? getRed(): getGreen()
+let light = status ? getRed() :  getGreen()
+
+let http200Status = (statusCode: 200, description: "OK")
+let http200Status = (statusCode : 200, description:"OK")
+let http200Status = (statusCode:  200, description: "OK")
+let tupleception = (statusCode: (statusCode : 200, description: "OK"), description:  "NOT OK")
+
+func someFunction<T: SomeClass, U: SomeProtocol>(someT: T, someU: U) {
+}
+func someFunction<T : SomeClass, U:protocol<SomeProtocol> >(someT: T, someU: U) {
+}
+func someFunction<T:  SomeClass, U: SomeProtocol>(someT: T, someU: U) {
+}
+func allItemsMatch<
+    C1 : Container, C2: Container
+    where C1.ItemType == C2.ItemType, C1.ItemType: Equatable>
+    (someContainer: C1, _ anotherContainer: C2) -> Bool {
+}

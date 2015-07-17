@@ -1,4 +1,4 @@
-class Rectangle : Shape
+class Rectangle: Shape
 {
     let length: Double
     let breadth: Double
@@ -169,7 +169,7 @@ protocol SomeProtocol {
 
 }
 
-protocol SomeOtherProtocol : X {
+protocol SomeOtherProtocol: X {
 
 }
 
@@ -184,7 +184,7 @@ protocol SomeProtocol
 }
 
 protocol
-SomeOtherProtocol : X {
+SomeOtherProtocol: X {
 
 }
 
@@ -193,7 +193,7 @@ protocol SomeOtherProtocol
 
 }
 
-protocol SomeOtherProtocol : X
+protocol SomeOtherProtocol: X
 {
 
 }
@@ -202,7 +202,7 @@ enum SomeEnum {
     case SomeCase
 }
 
-enum SomeOtherEnum : Int {
+enum SomeOtherEnum: Int {
     case SomeCase
 }
 
@@ -211,28 +211,28 @@ enum SomeEnum
     case SomeCase
 }
 
-enum SomeOtherEnum : Int
+enum SomeOtherEnum: Int
 {
     case SomeCase
 }
 
-enum SomeOtherEnum :
+enum SomeOtherEnum:
 Int
 {
     case SomeCase
 }
 
-class SomeClass :
+class SomeClass:
 SomeProtocol, SomeOtherProtocol {
 
 }
 
-enum SomeOtherEnum :
+enum SomeOtherEnum:
 Int {
     case SomeCase
 }
 
-struct SomeStruct :
+struct SomeStruct:
 SomeProtocol, SomeOtherProtocol {
 
 }
@@ -287,11 +287,11 @@ padawans.map
   "\(padawan) has been trained!"
 }
 
-func max<T, U : Comparable>(f: T -> U ) -> U? {
+func max<T, U: Comparable>(f: T -> U ) -> U? {
     return nil
 }
 
-func max<T, U : Comparable>(f: T -> U ) -> U?
+func max<T, U: Comparable>(f: T -> U ) -> U?
 {
     return nil
 }
@@ -305,7 +305,7 @@ public extension SomeExtension {
 
 }
 
-extension SomeExtension : X {
+extension SomeExtension: X {
 
 }
 
@@ -314,18 +314,18 @@ extension SomeExtension
 
 }
 
-extension SomeExtension : X
+extension SomeExtension: X
 {
 
 }
 
 extension
-SomeExtension : X {
+SomeExtension: X {
 
 }
 
 extension
-SomeExtension : X
+SomeExtension: X
 {
 
 }
