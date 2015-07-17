@@ -421,3 +421,75 @@ struct SomeStruct {
         }
     }
 }
+
+@objc
+class ExampleClass {
+    var enabled: Bool {
+        @objc(isEnabled)
+        get {
+            return true
+        }
+        set {
+            self.enabled = true
+        }
+    }
+}
+
+@objc
+class SomeClass {
+    var enabled: Bool {
+        @objc(isEnabled)
+        get
+        {
+            return true
+        }
+        set
+        {
+            self.enabled = true
+        }
+    }
+}
+
+@objc
+class SomeClass {
+    var enabled: Bool {
+        @objc(isEnabled)
+        set
+        {
+            self.enabled = true
+        }
+        get
+        {
+            return true
+        }
+    }
+}
+
+struct Rect {
+    var center: Point {
+        get {
+            let centerX = origin.x + (size.width / 2)
+            var centerY = origin.y + (size.height / 2)
+            return Point(x: centerX, y: centerY)
+        }
+        set(newCenter) {
+            var origin.x = newCenter.x - (size.width / 2)
+            var origin.y = newCenter.y - (size.height / 2)
+        }
+    }
+}
+
+struct Rect {
+    var center: Point {
+        get {
+            let centerX = origin.x + (size.width / 2)
+            var centerY = origin.y + (size.height / 2)
+            return Point(x: centerX, y: centerY)
+        }
+        set(newCenter)
+        {
+            var origin.x = newCenter.x - (size.width / 2)
+            var origin.y = newCenter.y - (size.height / 2)
+        }
+    }
+}

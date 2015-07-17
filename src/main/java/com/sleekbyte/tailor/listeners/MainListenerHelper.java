@@ -383,12 +383,16 @@ class MainListenerHelper {
     }
 
     void verifyGetterOpenBraceStyle(GetterClauseContext ctx) {
-        Location getLocation = ListenerUtil.getContextStartLocation(ctx);
+        TerminalNodeImpl get = (TerminalNodeImpl) ParseTreeUtil.getLeftSibling(ctx.codeBlock());
+        Location getLocation = ListenerUtil.getTokenLocation(get.getSymbol());
         verifyCodeBlockOpenBraceStyle(Messages.GETTER, getLocation, ctx.codeBlock());
     }
 
     void verifySetterOpenBraceStyle(SetterClauseContext ctx) {
-        Location setLocation = ListenerUtil.getContextStartLocation(ctx);
+        ParseTree leftSibling = ParseTreeUtil.getLeftSibling(ctx.codeBlock());
+        Location setLocation =  (leftSibling instanceof TerminalNodeImpl)
+                                    ? ListenerUtil.getTokenLocation(((TerminalNodeImpl) leftSibling).getSymbol()) :
+                                      ListenerUtil.getContextStopLocation((ParserRuleContext) leftSibling);
         verifyCodeBlockOpenBraceStyle(Messages.SETTER, setLocation, ctx.codeBlock());
     }
     //endregion

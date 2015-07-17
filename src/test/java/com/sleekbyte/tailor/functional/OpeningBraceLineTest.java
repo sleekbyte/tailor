@@ -55,6 +55,11 @@ public class OpeningBraceLineTest extends RuleTest {
         addExpectedMsg(397, 10, Severity.WARNING, Messages.GETTER);
         addExpectedMsg(410, 10, Severity.WARNING, Messages.GETTER);
         addExpectedMsg(419, 9, Severity.WARNING, Messages.GETTER);
+        addExpectedMsg(443, 9, Severity.WARNING, Messages.GETTER);
+        addExpectedMsg(447, 9, Severity.WARNING, Messages.SETTER);
+        addExpectedMsg(458, 9, Severity.WARNING, Messages.SETTER);
+        addExpectedMsg(462, 9, Severity.WARNING, Messages.GETTER);
+        addExpectedMsg(490, 9, Severity.WARNING, Messages.SETTER);
     }
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg) {
