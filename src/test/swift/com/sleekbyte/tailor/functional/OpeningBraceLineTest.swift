@@ -373,3 +373,51 @@ willSet {
        someVariable = 999
     }
 }
+
+class SomeClass {
+    var x: Int {
+        set {
+            self.x = 10
+        }
+
+        get {
+            return 10
+        }
+    }
+}
+
+class SomeClass {
+    var x: Int {
+        set
+         {
+            x = 10
+        }
+
+        get
+         {
+            return 10
+        }
+    }
+}
+
+struct SomeStruct {
+    var x: Int {
+        set {
+            x = 10
+        }
+
+        get
+         {
+            return 10
+        }
+    }
+}
+
+struct SomeStruct {
+    var x: Int {
+        get
+        {
+            return 10
+        }
+    }
+}

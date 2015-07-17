@@ -12,6 +12,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser.ExtensionBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ForInStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ForStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.FunctionDeclarationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.GetterClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.IfStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ImportDeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.InitializerDeclarationContext;
@@ -27,6 +28,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ProtocolBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.RepeatWhileStatementContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.SetterClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.StatementsContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.StructBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.SwitchCaseContext;
@@ -249,7 +251,6 @@ class MainListenerHelper {
     private void verifyCodeBlockOpenBraceStyle(String constructName, Location constructLocation,
                                                ParserRuleContext codeBlockCtx) {
         Location openBraceLocation = ListenerUtil.getLocationOfChildToken(codeBlockCtx, 0);
-
         if (constructLocation.line != openBraceLocation.line) {
             this.printer.warn(constructName + Messages.BRACKET_STYLE, openBraceLocation);
         }
@@ -377,8 +378,18 @@ class MainListenerHelper {
         verifyCodeBlockOpenBraceStyle(Messages.CLOSURE, expElementLeftSiblingLocation, ctx);
     }
 
-    public void verifyExtensionOpenBraceStyle(ExtensionBodyContext ctx) {
+    void verifyExtensionOpenBraceStyle(ExtensionBodyContext ctx) {
         verifyBodyOpenBraceStyle(ctx, Messages.EXTENSION);
+    }
+
+    void verifyGetterOpenBraceStyle(GetterClauseContext ctx) {
+        Location getLocation = ListenerUtil.getContextStartLocation(ctx);
+        verifyCodeBlockOpenBraceStyle(Messages.GETTER, getLocation, ctx.codeBlock());
+    }
+
+    void verifySetterOpenBraceStyle(SetterClauseContext ctx) {
+        Location setLocation = ListenerUtil.getContextStartLocation(ctx);
+        verifyCodeBlockOpenBraceStyle(Messages.SETTER, setLocation, ctx.codeBlock());
     }
     //endregion
 
