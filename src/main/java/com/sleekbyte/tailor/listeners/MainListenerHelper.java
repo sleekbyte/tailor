@@ -276,7 +276,7 @@ class MainListenerHelper {
         Location leftSiblingLocation = ListenerUtil.getParseTreeStopLocation(leftSibling);
 
         if (closeBraceLocation.line == leftSiblingLocation.line) {
-            this.printer.warn(Messages.CLASS + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
+            this.printer.warn(constructName + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
         }
     }
 
@@ -326,6 +326,7 @@ class MainListenerHelper {
 
     void verifyStructBraceStyle(StructBodyContext ctx) {
         verifyBodyOpenBraceStyle(ctx, Messages.STRUCT);
+        verifyBodyCloseBraceStyle(ctx, Messages.STRUCT);
     }
 
     void verifyForLoopBraceStyle(ForStatementContext ctx) {

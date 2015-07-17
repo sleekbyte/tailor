@@ -23,11 +23,14 @@ class Hello
 class Hello
 <T>: SomeProtocol { }
 
+struct SomeStruct {
+ let x = 2 }
+
+struct SomeStruct
+<T> { }
+
 struct Hello <T> { }
 
 struct Hello
-<T>{
+<T> {
 }
-
-struct Hello
-<T> { }
