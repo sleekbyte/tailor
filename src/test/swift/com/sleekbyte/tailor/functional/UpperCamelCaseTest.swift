@@ -13,7 +13,7 @@ class UpperCamelCase {
   var bar: String
 }
 
-class UpperCamelCase : SuperClass {
+class UpperCamelCase: SuperClass {
   var foo: Int
   var bar: String
 }

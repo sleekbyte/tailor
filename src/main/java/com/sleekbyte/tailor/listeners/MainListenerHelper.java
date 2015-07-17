@@ -3,15 +3,18 @@ package com.sleekbyte.tailor.listeners;
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClassBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClosureExpressionContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ConditionalOperatorContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryLiteralItemContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryTypeContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ElseClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExtensionBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ForInStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ForStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.FunctionDeclarationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.GenericParameterContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.GetterClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.IfStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ImportDeclarationContext;
@@ -36,6 +39,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TypeAnnotationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.TypeInheritanceClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
@@ -493,6 +497,56 @@ class MainListenerHelper {
         }
 
         verifyColonLeftAssociation(left, right, colon);
+    }
+
+    void checkWhitespaceAroundColon(TypeInheritanceClauseContext ctx) {
+        Token colon = ((TerminalNodeImpl) ctx.getChild(0)).getSymbol();
+        Token right = ((ParserRuleContext) ctx.getChild(1)).getStart();
+        Token left = ((ParserRuleContext) ParseTreeUtil.getLeftSibling(ctx)).getStop();
+
+        verifyColonLeftAssociation(left, right, colon);
+    }
+
+    void checkWhitespaceAroundColon(ConditionalOperatorContext ctx) {
+        Token colon = ((TerminalNodeImpl) ctx.getChild(2)).getSymbol();
+        Token left = ctx.expression().getStop();
+        Token right = ((ParserRuleContext) ParseTreeUtil.getRightSibling(ctx)).getStart();
+
+        verifyColonIsSpaceDelimited(left, right, colon);
+    }
+
+    void checkWhitespaceAroundColon(ExpressionElementContext ctx) {
+        if (ctx.identifier() != null) {
+            Token colon = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
+            Token left = ctx.identifier().getStop();
+            Token right = ctx.expression().getStart();
+
+            verifyColonLeftAssociation(left, right, colon);
+        }
+    }
+
+    void checkWhitespaceAroundColon(GenericParameterContext ctx) {
+        if (ctx.getChildCount() == 3) {
+            Token colon = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
+            Token left = ctx.typeName().getStop();
+            Token right = ((ParserRuleContext) ctx.getChild(2)).getStart();
+
+            verifyColonLeftAssociation(left, right, colon);
+        }
+    }
+
+    private void verifyColonIsSpaceDelimited(Token left, Token right, Token colon) {
+        Location colonLocation = ListenerUtil.getTokenLocation(colon);
+
+        if (checkLeftSpaces(left, colon, 1)) {
+            printer.error(Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " " + Messages.SPACE_BEFORE,
+                colonLocation);
+        }
+
+        if (checkRightSpaces(right, colon, 1)) {
+            printer.error(Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " " + Messages.SPACE_AFTER,
+                colonLocation);
+        }
     }
 
     private void verifyColonLeftAssociation(Token left, Token right, Token colon) {
