@@ -384,4 +384,19 @@ public class MainListener extends SwiftBaseListener {
     public void enterGenericParameter(SwiftParser.GenericParameterContext ctx) {
         listenerHelper.checkWhitespaceAroundColon(ctx);
     }
+
+    @Override
+    public void enterExtensionBody(SwiftParser.ExtensionBodyContext ctx) {
+        listenerHelper.verifyExtensionOpenBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterGetterClause(SwiftParser.GetterClauseContext ctx) {
+        listenerHelper.verifyGetterOpenBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterSetterClause(SwiftParser.SetterClauseContext ctx) {
+        listenerHelper.verifySetterOpenBraceStyle(ctx);
+    }
 }
