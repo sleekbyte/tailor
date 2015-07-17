@@ -538,12 +538,12 @@ class MainListenerHelper {
     private void verifyColonIsSpaceDelimited(Token left, Token right, Token colon) {
         Location colonLocation = ListenerUtil.getTokenLocation(colon);
 
-        if (checkLeftSpaces(left, colon , 1)) {
+        if (checkLeftSpaces(left, colon, 1)) {
             printer.error(Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " " + Messages.SPACE_BEFORE,
                 colonLocation);
         }
 
-        if (checkRightSpaces(right, colon ,1)) {
+        if (checkRightSpaces(right, colon, 1)) {
             printer.error(Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " " + Messages.SPACE_AFTER,
                 colonLocation);
         }
