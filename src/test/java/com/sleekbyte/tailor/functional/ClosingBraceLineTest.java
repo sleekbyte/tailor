@@ -20,6 +20,9 @@ public class ClosingBraceLineTest extends RuleTest {
         addExpectedMsg(27, 12, Severity.WARNING, Messages.STRUCT);
         addExpectedMsg(30, 7, Severity.WARNING, Messages.STRUCT);
         addExpectedMsg(32, 20, Severity.WARNING, Messages.STRUCT);
+        addExpectedMsg(51, 25, Severity.WARNING, Messages.PROTOCOL);
+        addExpectedMsg(54, 25, Severity.WARNING, Messages.PROTOCOL);
+        addExpectedMsg(57, 7, Severity.WARNING, Messages.PROTOCOL);
     }
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg) {

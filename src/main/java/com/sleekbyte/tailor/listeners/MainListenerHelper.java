@@ -348,6 +348,7 @@ class MainListenerHelper {
 
     void verifyProtocolBraceStyle(ProtocolBodyContext ctx) {
         verifyBodyOpenBraceStyle(ctx, Messages.PROTOCOL);
+        verifyBodyCloseBraceStyle(ctx, Messages.PROTOCOL);
     }
 
     private void verifyBodyOpenBraceStyle(ParserRuleContext ctx, String constructName) {
