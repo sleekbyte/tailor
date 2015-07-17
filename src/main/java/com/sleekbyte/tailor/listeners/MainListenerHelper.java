@@ -240,19 +240,32 @@ class MainListenerHelper {
 
     //region Brace style check
     void verifySwitchStatementBraceStyle(SwitchStatementContext ctx) {
+        // Open brace
         Location switchExpLocation = ListenerUtil.getTokenLocation(ctx.expression().getStop());
         Location openBraceLocation = ListenerUtil.getLocationOfChildToken(ctx, 2);
 
         if (switchExpLocation.line != openBraceLocation.line) {
-            this.printer.warn(Messages.SWITCH_STATEMENT + Messages.BRACKET_STYLE, openBraceLocation);
+            this.printer.warn(Messages.SWITCH_STATEMENT + Messages.OPEN_BRACKET_STYLE, openBraceLocation);
         }
+
+        // Close brace
+        int closeBraceIndex = ctx.getChildCount() - 1;
+        ParseTree closeBrace = ctx.getChild(closeBraceIndex);
+
+        Location closeBraceLocation = ListenerUtil.getLocationOfChildToken(ctx, closeBraceIndex);
+        Location leftSiblingLocation = ListenerUtil.getParseTreeStopLocation(ParseTreeUtil.getLeftSibling(closeBrace));
+
+        if (leftSiblingLocation.line == closeBraceLocation.line) {
+            this.printer.warn(Messages.SWITCH_STATEMENT + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
+        }
+
     }
 
     private void verifyCodeBlockOpenBraceStyle(String constructName, Location constructLocation,
                                                ParserRuleContext codeBlockCtx) {
         Location openBraceLocation = ListenerUtil.getLocationOfChildToken(codeBlockCtx, 0);
         if (constructLocation.line != openBraceLocation.line) {
-            this.printer.warn(constructName + Messages.BRACKET_STYLE, openBraceLocation);
+            this.printer.warn(constructName + Messages.OPEN_BRACKET_STYLE, openBraceLocation);
         }
     }
 
@@ -338,7 +351,7 @@ class MainListenerHelper {
                 ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(child);
                 Location leftSiblingLocation = ListenerUtil.getContextStopLocation(leftSibling);
                 if (openBraceLocation.line != leftSiblingLocation.line) {
-                    this.printer.warn(Messages.ENUM + Messages.BRACKET_STYLE, openBraceLocation);
+                    this.printer.warn(Messages.ENUM + Messages.OPEN_BRACKET_STYLE, openBraceLocation);
                 }
                 break;
             }

@@ -4,6 +4,7 @@ package com.sleekbyte.tailor.utils;
 import com.sleekbyte.tailor.common.Location;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 /**
@@ -31,4 +32,16 @@ public final class ListenerUtil {
         Token token = ((TerminalNodeImpl) ctx.getChild(childNumber)).getSymbol();
         return ListenerUtil.getTokenLocation(token);
     }
+
+    public static Location getParseTreeStartLocation(ParseTree parseTree) {
+        return (parseTree instanceof TerminalNodeImpl) ? getTokenLocation(((TerminalNodeImpl) parseTree).getSymbol())
+                                                       : getContextStartLocation((ParserRuleContext) parseTree);
+    }
+
+    public static Location getParseTreeStopLocation(ParseTree parseTree) {
+        return (parseTree instanceof TerminalNodeImpl) ? getTokenLocation(((TerminalNodeImpl) parseTree).getSymbol())
+                                                       : getContextStopLocation((ParserRuleContext) parseTree);
+    }
+
+
 }
