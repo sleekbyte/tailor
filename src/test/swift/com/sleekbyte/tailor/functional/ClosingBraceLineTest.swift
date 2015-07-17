@@ -12,3 +12,22 @@ func printAreaSwitchStatement() {
             default:
                 println ("Area is \(area) sq units") }
 }
+
+class SomeClass {
+ let x = 2 }
+
+class Hello
+<T>: SomeProtocol {
+}
+
+class Hello
+<T>: SomeProtocol { }
+
+struct Hello <T> { }
+
+struct Hello
+<T>{
+}
+
+struct Hello
+<T> { }

@@ -269,6 +269,21 @@ class MainListenerHelper {
         }
     }
 
+    private void verifyBodyCloseBraceStyle(ParserRuleContext ctx, String constructName) {
+        TerminalNodeImpl closeBraceImpl = (TerminalNodeImpl) ctx.getChild(ctx.getChildCount() - 1);
+        Location closeBraceLocation = ListenerUtil.getTokenLocation(closeBraceImpl.getSymbol());
+        ParseTree leftSibling = ParseTreeUtil.getLeftSibling(closeBraceImpl);
+        Location leftSiblingLocation;
+
+        leftSiblingLocation = (leftSibling instanceof ParserRuleContext) ?
+                                      ListenerUtil.getContextStopLocation((ParserRuleContext) leftSibling):
+                                      ListenerUtil.getTokenLocation(((TerminalNodeImpl) leftSibling).getSymbol());
+
+        if (closeBraceLocation.line == leftSiblingLocation.line) {
+            this.printer.warn(Messages.CLASS + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
+        }
+    }
+
     void verifyForInStatementBraceStyle(ForInStatementContext ctx) {
         Location expressionLocation = ListenerUtil.getContextStopLocation(ctx.expression());
         verifyCodeBlockOpenBraceStyle(Messages.FOR_IN_LOOP, expressionLocation, ctx.codeBlock());
@@ -310,6 +325,7 @@ class MainListenerHelper {
 
     void verifyClassBraceStyle(ClassBodyContext ctx) {
         verifyBodyOpenBraceStyle(ctx, Messages.CLASS);
+        verifyBodyCloseBraceStyle(ctx, Messages.CLASS);
     }
 
     void verifyStructBraceStyle(StructBodyContext ctx) {

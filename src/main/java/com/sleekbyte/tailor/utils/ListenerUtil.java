@@ -42,6 +42,4 @@ public final class ListenerUtil {
         return (parseTree instanceof TerminalNodeImpl) ? getTokenLocation(((TerminalNodeImpl) parseTree).getSymbol())
                                                        : getContextStopLocation((ParserRuleContext) parseTree);
     }
-
-
 }
