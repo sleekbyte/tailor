@@ -273,11 +273,7 @@ class MainListenerHelper {
         TerminalNodeImpl closeBraceImpl = (TerminalNodeImpl) ctx.getChild(ctx.getChildCount() - 1);
         Location closeBraceLocation = ListenerUtil.getTokenLocation(closeBraceImpl.getSymbol());
         ParseTree leftSibling = ParseTreeUtil.getLeftSibling(closeBraceImpl);
-        Location leftSiblingLocation;
-
-        leftSiblingLocation = (leftSibling instanceof ParserRuleContext) ?
-                                      ListenerUtil.getContextStopLocation((ParserRuleContext) leftSibling):
-                                      ListenerUtil.getTokenLocation(((TerminalNodeImpl) leftSibling).getSymbol());
+        Location leftSiblingLocation = ListenerUtil.getParseTreeStopLocation(leftSibling);
 
         if (closeBraceLocation.line == leftSiblingLocation.line) {
             this.printer.warn(Messages.CLASS + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
