@@ -12,13 +12,13 @@ import com.sleekbyte.tailor.utils.ListenerUtil;
  */
 public class VariableDecListener extends SwiftBaseListener {
 
-    private ListenerHelper helper;
+    private ParseTreeVerifier verifier;
 
     /**
-     * Creates a VariableDecListener object and retrieves the listener helper singleton.
+     * Creates a VariableDecListener object and retrieves the listener verifier singleton.
      */
     VariableDecListener() {
-        this.helper = ListenerHelper.INSTANCE;
+        this.verifier = ParseTreeVerifier.INSTANCE;
     }
 
     @Override
@@ -27,8 +27,8 @@ public class VariableDecListener extends SwiftBaseListener {
         Location location = ListenerUtil.getContextStartLocation(ctx);
 
         if (!CharFormatUtil.isLowerCamelCase(variableName)) {
-            helper.printer.error(Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE, location);
+            verifier.printer.error(Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE, location);
         }
-        helper.verifyNameLength(Messages.VARIABLE + Messages.NAME, helper.maxLengths.maxNameLength, ctx);
+        verifier.verifyNameLength(Messages.VARIABLE + Messages.NAME, verifier.maxLengths.maxNameLength, ctx);
     }
 }

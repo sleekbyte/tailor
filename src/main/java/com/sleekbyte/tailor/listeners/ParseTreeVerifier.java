@@ -60,16 +60,16 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Helper class for {@link MainListener}.
+ * Verifier class for listeners that extend {@link SwiftBaseListener}.
  */
-class ListenerHelper {
+class ParseTreeVerifier {
 
     private Set<Integer> importLineNumbers = new HashSet<>();
     Printer printer;
     MaxLengths maxLengths;
-    static final ListenerHelper INSTANCE = new ListenerHelper();
+    static final ParseTreeVerifier INSTANCE = new ParseTreeVerifier();
 
-    private ListenerHelper() {
+    private ParseTreeVerifier() {
         // Exists only to defeat instantiation.
     }
 
