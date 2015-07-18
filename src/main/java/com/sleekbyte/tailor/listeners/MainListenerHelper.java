@@ -253,13 +253,7 @@ class MainListenerHelper {
         }
 
         // Close brace
-        ParseTree closeBrace = ParseTreeUtil.getLastChild(ctx);
-        Location closeBraceLocation = ListenerUtil.getParseTreeStartLocation(closeBrace);
-        Location leftSiblingLocation = ListenerUtil.getParseTreeStopLocation(ParseTreeUtil.getLeftSibling(closeBrace));
-
-        if (leftSiblingLocation.line == closeBraceLocation.line) {
-            this.printer.warn(Messages.SWITCH_STATEMENT + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
-        }
+        verifyBodyCloseBraceStyle(ctx, Messages.SWITCH_STATEMENT);
 
     }
 
