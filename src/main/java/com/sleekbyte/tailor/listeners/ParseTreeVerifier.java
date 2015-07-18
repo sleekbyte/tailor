@@ -581,6 +581,38 @@ class ParseTreeVerifier {
         return right.getLine() == op.getLine()
             && right.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(op) != numSpaces + 1;
     }
+
+    public void verifyNewlinesAroundFunction(FunctionDeclarationContext ctx) {
+        ParseTree child = ctx;
+        while(true) {
+            ParseTree parent = child.getParent();
+            if (parent == null) {
+                return;
+            }
+            if (parent.getChildCount() > 1) {
+                break;
+            }
+            child = parent;
+        }
+        ParseTree left = ParseTreeUtil.getLeftSibling(child);
+        if (left != null) {
+            Token leftToken = left instanceof ParserRuleContext ? ((ParserRuleContext) left).getStop()
+                : ((TerminalNodeImpl) left).getSymbol();
+            Token start = ctx.getStart();
+            if (start.getLine() - leftToken.getLine() != 2) {
+                printer.error(Messages.FUNCTION + Messages.NEWLINE_BEFORE, ListenerUtil.getTokenLocation(start));
+            }
+        }
+        ParseTree right = ParseTreeUtil.getRightSibling(child);
+        if (right != null) {
+            Token rightToken = right instanceof ParserRuleContext ? ((ParserRuleContext) right).getStart()
+                : ((TerminalNodeImpl) right).getSymbol();
+            Token end = ctx.getStop();
+            if (rightToken.getLine() - end.getLine() != 2) {
+                printer.error(Messages.FUNCTION + Messages.NEWLINE_AFTER, ListenerUtil.getTokenLocation(end));
+            }
+        }
+    }
     //endregion
 
     //region Force type casting check
