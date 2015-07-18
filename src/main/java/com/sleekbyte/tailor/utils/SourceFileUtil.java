@@ -89,14 +89,26 @@ public class SourceFileUtil {
      * @return true if file is terminated with a newline
      * @throws IOException if the file cannot be read
      */
-    public static boolean newlineTerminated(File inputFile) throws IOException {
+    public static boolean singleNewlineTerminated(File inputFile) throws IOException {
         RandomAccessFile randomAccessFile = new RandomAccessFile(inputFile, READ_ONLY_MODE);
-
         if (inputFile.length() < 1) {
             return true;
         }
-        randomAccessFile.seek(inputFile.length() - 1);
-        byte fileTerminator = randomAccessFile.readByte();
-        return (Byte.compare(fileTerminator, NEWLINE_DELIMITER) == 0);
+
+        long indexOfLastByte = inputFile.length() - 1;
+        long numTerminatingNewlines = 0;
+        randomAccessFile.seek(indexOfLastByte);
+
+        while (Byte.compare(randomAccessFile.readByte(), NEWLINE_DELIMITER) == 0) {
+            numTerminatingNewlines++;
+            indexOfLastByte--;
+            // Return false if file contains only newline characters
+            if (indexOfLastByte < 0) {
+                return false;
+            }
+            randomAccessFile.seek(indexOfLastByte);
+        }
+
+        return (numTerminatingNewlines == 1L);
     }
 }
