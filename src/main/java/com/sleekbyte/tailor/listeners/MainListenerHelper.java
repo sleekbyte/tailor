@@ -579,7 +579,7 @@ class MainListenerHelper {
     void verifyForceTypeCasting(TypeCastingOperatorContext ctx) {
         ParseTree secondChild = ctx.getChild(1);
         if (secondChild.getText().equals("!")) {
-            // TODO: use util method that returns location of parse tree
+            // TODO: use util method that returns location of parse tree once {} check gets merged into master
             Location exclamationLocation = ListenerUtil.getTokenLocation(((TerminalNodeImpl)secondChild).getSymbol());
             printer.warn(Messages.FORCE_CAST, exclamationLocation);
         }
