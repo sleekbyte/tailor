@@ -302,6 +302,7 @@ class MainListenerHelper {
     void verifyFunctionBraceStyle(FunctionDeclarationContext ctx) {
         Location functionDeclarationLocation = ListenerUtil.getContextStopLocation(ctx.functionSignature());
         verifyCodeBlockOpenBraceStyle(ctx.functionBody().codeBlock(), functionDeclarationLocation, Messages.FUNCTION);
+        verifyBodyCloseBraceStyle(ctx.functionBody().codeBlock(), Messages.FUNCTION);
     }
 
     void verifyClassBraceStyle(ClassBodyContext ctx) {
@@ -411,21 +412,21 @@ class MainListenerHelper {
         }
     }
 
-    private void verifyBodyCloseBraceStyle(ParserRuleContext ctx, String constructName) {
-        TerminalNodeImpl closeBraceImpl = (TerminalNodeImpl) ctx.getChild(ctx.getChildCount() - 1);
-        Location closeBraceLocation = ListenerUtil.getTokenLocation(closeBraceImpl.getSymbol());
-        ParseTree leftSibling = ParseTreeUtil.getLeftSibling(closeBraceImpl);
-        Location leftSiblingLocation = ListenerUtil.getParseTreeStopLocation(leftSibling);
-
-        if (closeBraceLocation.line == leftSiblingLocation.line) {
-            this.printer.warn(constructName + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
-        }
-    }
-
     private void verifyBodyOpenBraceStyle(ParserRuleContext ctx, String constructName) {
         ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(ctx);
         Location constructLocation = ListenerUtil.getContextStopLocation(leftSibling);
         verifyCodeBlockOpenBraceStyle(ctx, constructLocation, constructName);
+    }
+
+    private void verifyBodyCloseBraceStyle(ParserRuleContext bodyCtx, String constructName) {
+        ParseTree closeBrace = ParseTreeUtil.getLastChild(bodyCtx);
+        Location closeBraceLocation = ListenerUtil.getParseTreeStartLocation(closeBrace);
+        ParseTree closeBraceLeftSibling = ParseTreeUtil.getLeftSibling(closeBrace);
+        Location closeBraceLeftSiblingLocation = ListenerUtil.getParseTreeStopLocation(closeBraceLeftSibling);
+
+        if (closeBraceLocation.line == closeBraceLeftSiblingLocation.line) {
+            this.printer.warn(constructName + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
+        }
     }
     //endregion
 

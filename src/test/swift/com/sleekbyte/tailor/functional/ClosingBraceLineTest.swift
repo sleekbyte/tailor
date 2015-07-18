@@ -74,3 +74,12 @@ extension
 SomeExtension: X {
 
 }
+
+func demo() {}
+
+func max<T, U: Comparable>(f: T -> U ) -> U? {
+    return nil
+}
+
+func max<T, U: Comparable>(f: T -> U ) -> U? {
+    return nil }
