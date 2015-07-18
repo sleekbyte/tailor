@@ -17,10 +17,10 @@ public class ForceCastTest extends RuleTest {
         addExpectedMsg(7, 18, Severity.WARNING);
         addExpectedMsg(10, 20, Severity.WARNING);
         addExpectedMsg(14, 38, Severity.WARNING);
-        addExpectedMsg(18, 97, Severity.WARNING);
-        addExpectedMsg(20, 133, Severity.WARNING);
-        addExpectedMsg(21, 54, Severity.WARNING);
-        addExpectedMsg(22, 53, Severity.WARNING);
+        addExpectedMsg(19, 97, Severity.WARNING);
+        addExpectedMsg(21, 133, Severity.WARNING);
+        addExpectedMsg(22, 54, Severity.WARNING);
+        addExpectedMsg(23, 53, Severity.WARNING);
     }
 
     private void addExpectedMsg(int line, int column, Severity classification) {

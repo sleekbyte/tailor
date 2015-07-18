@@ -13,6 +13,7 @@ print("Movie: '\(movie.name)', dir. \(movie.director)")
 func someFunction() {
     let someForceCast = NSNumber() as! Int
 }
+
 let someForceCast = NSNumber() as? Int
 
 let cell = tableView.dequeueReusableCellWithIdentifier("RecordCell", forIndexPath: indexPath) as! UITableViewCell
