@@ -15,7 +15,7 @@ public class MainListener extends SwiftBaseListener {
 
     private static final String LET = "let";
     private static final String VAR = "var";
-    private MainListenerHelper helper;
+    private ListenerHelper helper;
 
     /**
      * Creates a MainListener object and a new listener helper.
@@ -24,7 +24,7 @@ public class MainListener extends SwiftBaseListener {
      * @param maxLengths {@link MaxLengths} stores numbers for max length restrictions
      */
     public MainListener(Printer printer, MaxLengths maxLengths) {
-        this.helper = new MainListenerHelper(printer, maxLengths);
+        this.helper = new ListenerHelper(printer, maxLengths);
     }
 
     @Override

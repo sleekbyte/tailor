@@ -14,14 +14,14 @@ import org.antlr.v4.runtime.ParserRuleContext;
  */
 public class ConstantDecListener extends SwiftBaseListener {
 
-    private MainListenerHelper helper;
+    private ListenerHelper helper;
 
     /**
      * Creates a ConstantDecListener object and stores the listener helper.
      *
-     * @param helper {@link MainListenerHelper} helper class for listeners
+     * @param helper {@link ListenerHelper} helper class for listeners
      */
-    ConstantDecListener(MainListenerHelper helper) {
+    ConstantDecListener(ListenerHelper helper) {
         this.helper = helper;
     }
 

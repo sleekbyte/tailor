@@ -12,14 +12,14 @@ import com.sleekbyte.tailor.utils.ListenerUtil;
  */
 public class VariableDecListener extends SwiftBaseListener {
 
-    private MainListenerHelper helper;
+    private ListenerHelper helper;
 
     /**
      * Creates a VariableDecListener object and stores the listener helper.
      *
-     * @param helper {@link MainListenerHelper} helper class for listeners
+     * @param helper {@link ListenerHelper} helper class for listeners
      */
-    VariableDecListener(MainListenerHelper helper) {
+    VariableDecListener(ListenerHelper helper) {
         this.helper = helper;
     }
 

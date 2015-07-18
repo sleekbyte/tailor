@@ -62,13 +62,13 @@ import java.util.Set;
 /**
  * Helper class for {@link MainListener}.
  */
-class MainListenerHelper {
+class ListenerHelper {
 
     private Set<Integer> importLineNumbers = new HashSet<>();
     private Printer printer;
     private MaxLengths maxLengths;
 
-    MainListenerHelper(Printer printer, MaxLengths maxLengths) {
+    ListenerHelper(Printer printer, MaxLengths maxLengths) {
         this.printer = printer;
         this.maxLengths = maxLengths;
     }
