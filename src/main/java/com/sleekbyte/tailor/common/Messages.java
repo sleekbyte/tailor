@@ -78,6 +78,7 @@ public class Messages {
     public static final String SPACE_BEFORE = "must have exactly one space before it";
     public static final String SPACE_AFTER = "must have exactly one space after it";
     public static final String NO_SPACE_BEFORE = "must have no spaces before it";
+    public static final String FORCE_CAST = "Force casts should be avoided";
 
     // Usage messages
     public static final String CMD_LINE_SYNTAX = "tailor";

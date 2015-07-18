@@ -386,8 +386,13 @@ public class MainListener extends SwiftBaseListener {
     }
 
     @Override
+    public void enterTypeCastingOperator(SwiftParser.TypeCastingOperatorContext ctx) {
+        verifier.verifyForceTypeCasting(ctx);
+    }
+
+    @Override
     public void enterRawValueStyleEnumCase(SwiftParser.RawValueStyleEnumCaseContext ctx) {
-        verifier.verifyUpperCamelCase(Messages.ENUM_CASE+ Messages.NAMES, ctx.enumCaseName());
+        verifier.verifyUpperCamelCase(Messages.ENUM_CASE + Messages.NAMES, ctx.enumCaseName());
         verifier.verifyNameLength(Messages.ENUM_CASE + Messages.NAME, verifier.maxLengths.maxNameLength,
                                   ctx.enumCaseName());
     }
