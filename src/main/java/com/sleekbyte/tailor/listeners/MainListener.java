@@ -392,11 +392,11 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterRawValueStyleEnumCase(SwiftParser.RawValueStyleEnumCaseContext ctx) {
-        verifier.verifyUpperCamelCase(Messages.ENUM + Messages.NAMES, ctx.enumCaseName());
+        verifier.verifyUpperCamelCase(Messages.ENUM_CASE+ Messages.NAMES, ctx.enumCaseName());
     }
 
     @Override
     public void enterUnionStyleEnumCase(SwiftParser.UnionStyleEnumCaseContext ctx) {
-        verifier.verifyUpperCamelCase(Messages.ENUM + Messages.NAMES, ctx.enumCaseName());
+        verifier.verifyUpperCamelCase(Messages.ENUM_CASE + Messages.NAMES, ctx.enumCaseName());
     }
 }

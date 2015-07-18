@@ -102,3 +102,14 @@ protocol SCREAMING_SNAKE_CASE {
 protocol Num3ricalName {
     // protocol definition goes here
 }
+
+enum SomeEnum: Int {
+    case Some_Enum_Case
+    init (value: NSNumber) {
+        switch value.integerValue {
+        case Some_Enum_Case.rawValue:
+             self = Some_Enum_Case
+        }
+    }
+}
+
