@@ -162,7 +162,7 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterConstantDeclaration(SwiftParser.ConstantDeclarationContext ctx) {
-        helper.evaluatePatternInitializerList(ctx.patternInitializerList(), new ConstantDecListener(this.helper));
+        helper.evaluatePatternInitializerList(ctx.patternInitializerList(), new ConstantDecListener());
     }
 
     @Override
@@ -170,16 +170,16 @@ public class MainListener extends SwiftBaseListener {
         if (ctx.patternInitializerList() == null) {
             return;
         }
-        helper.evaluatePatternInitializerList(ctx.patternInitializerList(), new VariableDecListener(this.helper));
+        helper.evaluatePatternInitializerList(ctx.patternInitializerList(), new VariableDecListener());
     }
 
     @Override
     public void enterValueBindingPattern(SwiftParser.ValueBindingPatternContext ctx) {
         ParseTreeWalker walker = new ParseTreeWalker();
         if (ctx.getStart().getText().equals(LET)) {
-            helper.evaluatePattern(ctx.pattern(), walker, new ConstantDecListener(this.helper));
+            helper.evaluatePattern(ctx.pattern(), walker, new ConstantDecListener());
         } else if (ctx.getStart().getText().equals(VAR)) {
-            helper.evaluatePattern(ctx.pattern(), walker, new VariableDecListener(this.helper));
+            helper.evaluatePattern(ctx.pattern(), walker, new VariableDecListener());
         }
     }
 
@@ -197,9 +197,9 @@ public class MainListener extends SwiftBaseListener {
          */
         String currentBinding = helper.letOrVar(ctx.optionalBindingHead());
         if (currentBinding.equals(LET)) {
-            helper.evaluateOptionalBindingHead(ctx.optionalBindingHead(), new ConstantDecListener(this.helper));
+            helper.evaluateOptionalBindingHead(ctx.optionalBindingHead(), new ConstantDecListener());
         } else if (currentBinding.equals(VAR)) {
-            helper.evaluateOptionalBindingHead(ctx.optionalBindingHead(), new VariableDecListener(this.helper));
+            helper.evaluateOptionalBindingHead(ctx.optionalBindingHead(), new VariableDecListener());
         }
         SwiftParser.OptionalBindingContinuationListContext continuationList = ctx.optionalBindingContinuationList();
         if (continuationList != null) {
@@ -209,9 +209,9 @@ public class MainListener extends SwiftBaseListener {
                     currentBinding = helper.letOrVar(continuation.optionalBindingHead());
                 }
                 if (currentBinding.equals(LET)) {
-                    helper.evaluateOptionalBindingContinuation(continuation, new ConstantDecListener(this.helper));
+                    helper.evaluateOptionalBindingContinuation(continuation, new ConstantDecListener());
                 } else if (currentBinding.equals(VAR)) {
-                    helper.evaluateOptionalBindingContinuation(continuation, new VariableDecListener(this.helper));
+                    helper.evaluateOptionalBindingContinuation(continuation, new VariableDecListener());
                 }
             }
         }
@@ -222,12 +222,12 @@ public class MainListener extends SwiftBaseListener {
         SwiftBaseListener listener = null;
         for (ParseTree child : ctx.children) {
             if (child.getText().equals(VAR)) {
-                listener = new VariableDecListener(this.helper);
+                listener = new VariableDecListener();
                 break;
             }
         }
         if (listener == null) {
-            listener = new ConstantDecListener(this.helper);
+            listener = new ConstantDecListener();
         }
         ParseTreeWalker walker = new ParseTreeWalker();
         if (ctx.externalParameterName() != null) {

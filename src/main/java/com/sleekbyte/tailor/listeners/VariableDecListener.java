@@ -15,12 +15,10 @@ public class VariableDecListener extends SwiftBaseListener {
     private ListenerHelper helper;
 
     /**
-     * Creates a VariableDecListener object and stores the listener helper.
-     *
-     * @param helper {@link ListenerHelper} helper class for listeners
+     * Creates a VariableDecListener object and retrieves the listener helper singleton.
      */
-    VariableDecListener(ListenerHelper helper) {
-        this.helper = helper;
+    VariableDecListener() {
+        this.helper = ListenerHelper.INSTANCE;
     }
 
     @Override

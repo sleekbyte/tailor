@@ -17,12 +17,10 @@ public class ConstantDecListener extends SwiftBaseListener {
     private ListenerHelper helper;
 
     /**
-     * Creates a ConstantDecListener object and stores the listener helper.
-     *
-     * @param helper {@link ListenerHelper} helper class for listeners
+     * Creates a ConstantDecListener object and retrieves the listener helper singleton.
      */
-    ConstantDecListener(ListenerHelper helper) {
-        this.helper = helper;
+    ConstantDecListener() {
+        this.helper = ListenerHelper.INSTANCE;
     }
 
     @Override
