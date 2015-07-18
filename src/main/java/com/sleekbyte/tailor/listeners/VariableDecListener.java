@@ -3,9 +3,7 @@ package com.sleekbyte.tailor.listeners;
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.Location;
-import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
-import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.CharFormatUtil;
 import com.sleekbyte.tailor.utils.ListenerUtil;
 
@@ -14,20 +12,13 @@ import com.sleekbyte.tailor.utils.ListenerUtil;
  */
 public class VariableDecListener extends SwiftBaseListener {
 
-    private MaxLengths maxLengths;
-    private Printer printer;
-    private MainListenerHelper listenerHelper = new MainListenerHelper();
+    private ParseTreeVerifier verifier;
 
     /**
-     * Creates a VariableDecListener object and sets the printer in listenerHelper.
-     *
-     * @param printer    {@link Printer} used for outputting messages to user
-     * @param maxLengths {@link MaxLengths} stores numbers for max length restrictions
+     * Creates a VariableDecListener object and retrieves the listener verifier singleton.
      */
-    public VariableDecListener(Printer printer, MaxLengths maxLengths) {
-        listenerHelper.setPrinter(printer);
-        this.printer = printer;
-        this.maxLengths = maxLengths;
+    VariableDecListener() {
+        this.verifier = ParseTreeVerifier.INSTANCE;
     }
 
     @Override
@@ -36,8 +27,8 @@ public class VariableDecListener extends SwiftBaseListener {
         Location location = ListenerUtil.getContextStartLocation(ctx);
 
         if (!CharFormatUtil.isLowerCamelCase(variableName)) {
-            this.printer.error(Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE, location);
+            verifier.printer.error(Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE, location);
         }
-        listenerHelper.verifyNameLength(Messages.VARIABLE + Messages.NAME, maxLengths.maxNameLength, ctx);
+        verifier.verifyNameLength(Messages.VARIABLE + Messages.NAME, verifier.maxLengths.maxNameLength, ctx);
     }
 }
