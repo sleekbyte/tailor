@@ -31,6 +31,11 @@
  */
 grammar Swift;
 
+@lexer::members {
+   public static final int COMMENT = 1;
+   public static final int WHITESPACE = 2;
+}
+
 topLevel : (statement | expression)* EOF ;
 
 // Statements
@@ -941,8 +946,8 @@ EscapedCharacter : '\\' [0\\(tnr"']
  | '\\U' HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit
 ;
 
-WS : [ \n\r\t\u000B\u000C\u0000]+ -> channel(HIDDEN) ;
+WS : [ \n\r\t\u000B\u000C\u0000] -> channel(WHITESPACE) ;
 
-BlockComment : '/*' (BlockComment|.)*? '*/' -> channel(HIDDEN) ; // nesting allow
+BlockComment : '/*' (BlockComment|.)*? '*/' '\n'? -> channel(COMMENT) ; // nesting allow
 
-LineComment : '//' .*? '\n' -> channel(HIDDEN) ;
+LineComment : '//' .*? '\n' -> channel(COMMENT) ;

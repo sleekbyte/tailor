@@ -1,6 +1,7 @@
 package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
+import com.sleekbyte.tailor.antlr.SwiftLexer;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClassBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClosureExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ConditionalOperatorContext;
@@ -50,6 +51,7 @@ import com.sleekbyte.tailor.utils.CharFormatUtil;
 import com.sleekbyte.tailor.utils.ListenerUtil;
 import com.sleekbyte.tailor.utils.ParseTreeUtil;
 import com.sleekbyte.tailor.utils.SourceFileUtil;
+import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -68,6 +70,8 @@ class ParseTreeVerifier {
     private Set<Integer> importLineNumbers = new HashSet<>();
     Printer printer;
     MaxLengths maxLengths;
+    BufferedTokenStream tokenStream;
+
     static final ParseTreeVerifier INSTANCE = new ParseTreeVerifier();
 
     private ParseTreeVerifier() {
@@ -596,19 +600,23 @@ class ParseTreeVerifier {
         }
         ParseTree left = ParseTreeUtil.getLeftSibling(child);
         if (left != null) {
-            Token leftToken = left instanceof ParserRuleContext ? ((ParserRuleContext) left).getStop()
-                : ((TerminalNodeImpl) left).getSymbol();
             Token start = ctx.getStart();
-            if (start.getLine() - leftToken.getLine() != 2) {
+            long numberOfNewLineChars = tokenStream.getHiddenTokensToLeft(start.getTokenIndex(), SwiftLexer.WHITESPACE)
+                .stream()
+                .filter(token -> token.getText().equals("\n"))
+                .count();
+            if (numberOfNewLineChars < 2) {
                 printer.error(Messages.FUNCTION + Messages.NEWLINE_BEFORE, ListenerUtil.getTokenLocation(start));
             }
         }
         ParseTree right = ParseTreeUtil.getRightSibling(child);
         if (right != null) {
-            Token rightToken = right instanceof ParserRuleContext ? ((ParserRuleContext) right).getStart()
-                : ((TerminalNodeImpl) right).getSymbol();
             Token end = ctx.getStop();
-            if (rightToken.getLine() - end.getLine() != 2) {
+            long numberOfNewLineChars = tokenStream.getHiddenTokensToRight(end.getTokenIndex(), SwiftLexer.WHITESPACE)
+                .stream()
+                .filter(token -> token.getText().equals("\n"))
+                .count();
+            if (numberOfNewLineChars < 2) {
                 printer.error(Messages.FUNCTION + Messages.NEWLINE_AFTER, ListenerUtil.getTokenLocation(end));
             }
         }

@@ -31,4 +31,8 @@ public final class ListenerUtil {
         Token token = ((TerminalNodeImpl) ctx.getChild(childNumber)).getSymbol();
         return ListenerUtil.getTokenLocation(token);
     }
+
+    public static int getStopLineNumber(Token token) {
+        return token.getLine() + token.getText().split("\\n").length - 1;
+    }
 }
