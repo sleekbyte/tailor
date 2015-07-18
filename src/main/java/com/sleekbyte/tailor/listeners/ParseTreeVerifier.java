@@ -43,6 +43,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser.TypeCastingOperatorContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TypeInheritanceClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
 import com.sleekbyte.tailor.common.Location;
+import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.CharFormatUtil;
@@ -60,15 +61,22 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Helper class for {@link MainListener}.
+ * Verifier class for listeners that extend {@link SwiftBaseListener}.
  */
-class MainListenerHelper {
+class ParseTreeVerifier {
 
     private Set<Integer> importLineNumbers = new HashSet<>();
-    private Printer printer;
+    Printer printer;
+    MaxLengths maxLengths;
+    static final ParseTreeVerifier INSTANCE = new ParseTreeVerifier();
 
-    public void setPrinter(Printer printer) {
-        this.printer = printer;
+    private ParseTreeVerifier() {
+        // Exists only to defeat instantiation.
+    }
+
+    void reset() {
+        // Ensure that importLineNumbers is refreshed for each new source file.
+        importLineNumbers.clear();
     }
 
     //region UpperCamelCase name check
