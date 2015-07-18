@@ -42,6 +42,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser.TypeAnnotationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TypeInheritanceClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
 import com.sleekbyte.tailor.common.Location;
+import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.CharFormatUtil;
@@ -65,9 +66,19 @@ class MainListenerHelper {
 
     private Set<Integer> importLineNumbers = new HashSet<>();
     private Printer printer;
+    private MaxLengths maxLengths;
 
-    public void setPrinter(Printer printer) {
+    MainListenerHelper(Printer printer, MaxLengths maxLengths) {
         this.printer = printer;
+        this.maxLengths = maxLengths;
+    }
+
+    MaxLengths getMaxLengths() {
+        return maxLengths;
+    }
+
+    Printer getPrinter() {
+        return printer;
     }
 
     //region UpperCamelCase name check

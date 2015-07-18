@@ -15,156 +15,152 @@ public class MainListener extends SwiftBaseListener {
 
     private static final String LET = "let";
     private static final String VAR = "var";
-    private MainListenerHelper listenerHelper = new MainListenerHelper();
-    private MaxLengths maxLengths;
-    private Printer printer;
+    private MainListenerHelper helper;
 
     /**
-     * Creates a MainListener object and sets the printer in listenerHelper.
+     * Creates a MainListener object and a new listener helper.
      *
      * @param printer    {@link Printer} used for outputting messages to user
      * @param maxLengths {@link MaxLengths} stores numbers for max length restrictions
      */
     public MainListener(Printer printer, MaxLengths maxLengths) {
-        listenerHelper.setPrinter(printer);
-        this.printer = printer;
-        this.maxLengths = maxLengths;
+        this.helper = new MainListenerHelper(printer, maxLengths);
     }
 
     @Override
     public void enterClassName(SwiftParser.ClassNameContext ctx) {
-        listenerHelper.verifyUpperCamelCase(Messages.CLASS + Messages.NAMES, ctx);
-        listenerHelper.verifyNameLength(Messages.CLASS + Messages.NAME, maxLengths.maxNameLength, ctx);
+        helper.verifyUpperCamelCase(Messages.CLASS + Messages.NAMES, ctx);
+        helper.verifyNameLength(Messages.CLASS + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
     }
 
     @Override
     public void enterEnumName(SwiftParser.EnumNameContext ctx) {
-        listenerHelper.verifyUpperCamelCase(Messages.ENUM + Messages.NAMES, ctx);
-        listenerHelper.verifyNameLength(Messages.ENUM + Messages.NAME, maxLengths.maxNameLength, ctx);
+        helper.verifyUpperCamelCase(Messages.ENUM + Messages.NAMES, ctx);
+        helper.verifyNameLength(Messages.ENUM + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
     }
 
     @Override
     public void enterEnumCaseName(SwiftParser.EnumCaseNameContext ctx) {
-        listenerHelper.verifyUpperCamelCase(Messages.ENUM_CASE + Messages.NAMES, ctx);
-        listenerHelper.verifyNameLength(Messages.ENUM_CASE + Messages.NAME, maxLengths.maxNameLength, ctx);
+        helper.verifyUpperCamelCase(Messages.ENUM_CASE + Messages.NAMES, ctx);
+        helper.verifyNameLength(Messages.ENUM_CASE + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
     }
 
     @Override
     public void enterStructName(SwiftParser.StructNameContext ctx) {
-        listenerHelper.verifyUpperCamelCase(Messages.STRUCT + Messages.NAMES, ctx);
-        listenerHelper.verifyNameLength(Messages.STRUCT + Messages.NAME, maxLengths.maxNameLength, ctx);
+        helper.verifyUpperCamelCase(Messages.STRUCT + Messages.NAMES, ctx);
+        helper.verifyNameLength(Messages.STRUCT + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
     }
 
     @Override
     public void enterProtocolName(SwiftParser.ProtocolNameContext ctx) {
-        listenerHelper.verifyUpperCamelCase(Messages.PROTOCOL + Messages.NAMES, ctx);
-        listenerHelper.verifyNameLength(Messages.PROTOCOL + Messages.NAME, maxLengths.maxNameLength, ctx);
+        helper.verifyUpperCamelCase(Messages.PROTOCOL + Messages.NAMES, ctx);
+        helper.verifyNameLength(Messages.PROTOCOL + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
     }
 
     @Override
     public void enterStatement(SwiftParser.StatementContext ctx) {
-        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
+        helper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
     }
 
     @Override
     public void enterDeclaration(SwiftParser.DeclarationContext ctx) {
-        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
+        helper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
     }
 
     @Override
     public void enterLoopStatement(SwiftParser.LoopStatementContext ctx) {
-        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
+        helper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
     }
 
     @Override
     public void enterBranchStatement(SwiftParser.BranchStatementContext ctx) {
-        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
+        helper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
     }
 
     @Override
     public void enterLabeledStatement(SwiftParser.LabeledStatementContext ctx) {
-        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
+        helper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
     }
 
     @Override
     public void enterControlTransferStatement(SwiftParser.ControlTransferStatementContext ctx) {
-        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
+        helper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
     }
 
     @Override
     public void enterUnionStyleEnumMember(SwiftParser.UnionStyleEnumMemberContext ctx) {
-        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
+        helper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
     }
 
     @Override
     public void enterProtocolMemberDeclaration(SwiftParser.ProtocolMemberDeclarationContext ctx) {
-        listenerHelper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
+        helper.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
     }
 
     @Override
     public void enterClassBody(SwiftParser.ClassBodyContext ctx) {
-        listenerHelper.verifyConstructLength(Messages.CLASS, this.maxLengths.maxClassLength, ctx);
-        listenerHelper.verifyClassOpenBraceStyle(ctx);
+        helper.verifyConstructLength(Messages.CLASS, helper.getMaxLengths().maxClassLength, ctx);
+        helper.verifyClassOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterClosureExpression(SwiftParser.ClosureExpressionContext ctx) {
-        listenerHelper.verifyConstructLength(Messages.CLOSURE, this.maxLengths.maxClosureLength, ctx);
-        listenerHelper.verifyClosureExpressionOpenBraceStyle(ctx);
+        helper.verifyConstructLength(Messages.CLOSURE, helper.getMaxLengths().maxClosureLength, ctx);
+        helper.verifyClosureExpressionOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterFunctionBody(SwiftParser.FunctionBodyContext ctx) {
-        listenerHelper.verifyConstructLength(Messages.FUNCTION, this.maxLengths.maxFunctionLength, ctx);
+        helper.verifyConstructLength(Messages.FUNCTION, helper.getMaxLengths().maxFunctionLength, ctx);
     }
 
     @Override
     public void enterStructBody(SwiftParser.StructBodyContext ctx) {
-        listenerHelper.verifyConstructLength(Messages.STRUCT, this.maxLengths.maxStructLength, ctx);
-        listenerHelper.verifyStructOpenBraceStyle(ctx);
+        helper.verifyConstructLength(Messages.STRUCT, helper.getMaxLengths().maxStructLength, ctx);
+        helper.verifyStructOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterElementName(SwiftParser.ElementNameContext ctx) {
-        listenerHelper.verifyNameLength(Messages.ELEMENT + Messages.NAME, maxLengths.maxNameLength, ctx);
+        helper.verifyNameLength(Messages.ELEMENT + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
     }
 
     @Override
     public void enterFunctionName(SwiftParser.FunctionNameContext ctx) {
-        listenerHelper.verifyNameLength(Messages.FUNCTION + Messages.NAME, maxLengths.maxNameLength, ctx);
-        listenerHelper.verifyLowerCamelCase(Messages.FUNCTION + Messages.NAMES, ctx);
+        helper.verifyNameLength(Messages.FUNCTION + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
+        helper.verifyLowerCamelCase(Messages.FUNCTION + Messages.NAMES, ctx);
     }
 
     @Override
     public void enterLabelName(SwiftParser.LabelNameContext ctx) {
-        listenerHelper.verifyNameLength(Messages.LABEL + Messages.NAME, maxLengths.maxNameLength, ctx);
+        helper.verifyNameLength(Messages.LABEL + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
     }
 
     @Override
     public void enterSetterName(SwiftParser.SetterNameContext ctx) {
-        listenerHelper.verifyNameLength(Messages.SETTER + Messages.NAME, maxLengths.maxNameLength, ctx.identifier());
+        helper.verifyNameLength(Messages.SETTER + Messages.NAME, helper.getMaxLengths().maxNameLength,
+            ctx.identifier());
     }
 
     @Override
     public void enterTypeName(SwiftParser.TypeNameContext ctx) {
-        listenerHelper.verifyNameLength(Messages.TYPE + Messages.NAME, maxLengths.maxNameLength, ctx);
+        helper.verifyNameLength(Messages.TYPE + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
     }
 
     @Override
     public void enterTypealiasName(SwiftParser.TypealiasNameContext ctx) {
-        listenerHelper.verifyNameLength(Messages.TYPEALIAS + Messages.NAME, maxLengths.maxNameLength, ctx);
+        helper.verifyNameLength(Messages.TYPEALIAS + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
     }
 
     @Override
     public void enterVariableName(SwiftParser.VariableNameContext ctx) {
-        listenerHelper.verifyNameLength(Messages.VARIABLE + Messages.NAME, maxLengths.maxNameLength, ctx);
-        listenerHelper.verifyLowerCamelCase(Messages.VARIABLE + Messages.NAMES, ctx);
+        helper.verifyNameLength(Messages.VARIABLE + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
+        helper.verifyLowerCamelCase(Messages.VARIABLE + Messages.NAMES, ctx);
     }
 
     @Override
     public void enterConstantDeclaration(SwiftParser.ConstantDeclarationContext ctx) {
-        listenerHelper.evaluatePatternInitializerList(ctx.patternInitializerList(),
-            new ConstantDecListener(this.printer, this.maxLengths));
+        helper.evaluatePatternInitializerList(ctx.patternInitializerList(), new ConstantDecListener(this.helper));
     }
 
     @Override
@@ -172,19 +168,16 @@ public class MainListener extends SwiftBaseListener {
         if (ctx.patternInitializerList() == null) {
             return;
         }
-        listenerHelper.evaluatePatternInitializerList(ctx.patternInitializerList(),
-            new VariableDecListener(this.printer, this.maxLengths));
+        helper.evaluatePatternInitializerList(ctx.patternInitializerList(), new VariableDecListener(this.helper));
     }
 
     @Override
     public void enterValueBindingPattern(SwiftParser.ValueBindingPatternContext ctx) {
         ParseTreeWalker walker = new ParseTreeWalker();
         if (ctx.getStart().getText().equals(LET)) {
-            listenerHelper.evaluatePattern(ctx.pattern(), walker,
-                new ConstantDecListener(this.printer, this.maxLengths));
+            helper.evaluatePattern(ctx.pattern(), walker, new ConstantDecListener(this.helper));
         } else if (ctx.getStart().getText().equals(VAR)) {
-            listenerHelper.evaluatePattern(ctx.pattern(), walker,
-                new VariableDecListener(this.printer, this.maxLengths));
+            helper.evaluatePattern(ctx.pattern(), walker, new VariableDecListener(this.helper));
         }
     }
 
@@ -200,27 +193,23 @@ public class MainListener extends SwiftBaseListener {
             The code below iterates through each declared variable and applies rules based on the last seen binding,
             'let' or 'var'.
          */
-        String currentBinding = listenerHelper.letOrVar(ctx.optionalBindingHead());
+        String currentBinding = helper.letOrVar(ctx.optionalBindingHead());
         if (currentBinding.equals(LET)) {
-            listenerHelper.evaluateOptionalBindingHead(ctx.optionalBindingHead(),
-                new ConstantDecListener(this.printer, this.maxLengths));
+            helper.evaluateOptionalBindingHead(ctx.optionalBindingHead(), new ConstantDecListener(this.helper));
         } else if (currentBinding.equals(VAR)) {
-            listenerHelper.evaluateOptionalBindingHead(ctx.optionalBindingHead(),
-                new VariableDecListener(this.printer, this.maxLengths));
+            helper.evaluateOptionalBindingHead(ctx.optionalBindingHead(), new VariableDecListener(this.helper));
         }
         SwiftParser.OptionalBindingContinuationListContext continuationList = ctx.optionalBindingContinuationList();
         if (continuationList != null) {
             for (SwiftParser.OptionalBindingContinuationContext continuation :
                     continuationList.optionalBindingContinuation()) {
                 if (continuation.optionalBindingHead() != null) {
-                    currentBinding = listenerHelper.letOrVar(continuation.optionalBindingHead());
+                    currentBinding = helper.letOrVar(continuation.optionalBindingHead());
                 }
                 if (currentBinding.equals(LET)) {
-                    listenerHelper.evaluateOptionalBindingContinuation(continuation,
-                        new ConstantDecListener(this.printer, this.maxLengths));
+                    helper.evaluateOptionalBindingContinuation(continuation, new ConstantDecListener(this.helper));
                 } else if (currentBinding.equals(VAR)) {
-                    listenerHelper.evaluateOptionalBindingContinuation(continuation,
-                        new VariableDecListener(this.printer, this.maxLengths));
+                    helper.evaluateOptionalBindingContinuation(continuation, new VariableDecListener(this.helper));
                 }
             }
         }
@@ -231,172 +220,172 @@ public class MainListener extends SwiftBaseListener {
         SwiftBaseListener listener = null;
         for (ParseTree child : ctx.children) {
             if (child.getText().equals(VAR)) {
-                listener = new VariableDecListener(this.printer, this.maxLengths);
+                listener = new VariableDecListener(this.helper);
                 break;
             }
         }
         if (listener == null) {
-            listener = new ConstantDecListener(this.printer, this.maxLengths);
+            listener = new ConstantDecListener(this.helper);
         }
         ParseTreeWalker walker = new ParseTreeWalker();
         if (ctx.externalParameterName() != null) {
-            listenerHelper.walkListener(walker, ctx.externalParameterName(), listener);
+            helper.walkListener(walker, ctx.externalParameterName(), listener);
         }
-        listenerHelper.walkListener(walker, ctx.localParameterName(), listener);
+        helper.walkListener(walker, ctx.localParameterName(), listener);
     }
 
     @Override
     public void enterConditionClause(SwiftParser.ConditionClauseContext ctx) {
-        listenerHelper.verifyRedundantExpressionParenthesis(Messages.CONDITIONAL_CLAUSE, ctx.expression());
+        helper.verifyRedundantExpressionParenthesis(Messages.CONDITIONAL_CLAUSE, ctx.expression());
     }
 
     @Override
     public void enterSwitchStatement(SwiftParser.SwitchStatementContext ctx) {
-        listenerHelper.verifyRedundantExpressionParenthesis(Messages.SWITCH_EXPRESSION, ctx.expression());
-        listenerHelper.verifySwitchStatementOpenBraceStyle(ctx);
+        helper.verifyRedundantExpressionParenthesis(Messages.SWITCH_EXPRESSION, ctx.expression());
+        helper.verifySwitchStatementOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterForStatement(SwiftParser.ForStatementContext ctx) {
-        listenerHelper.verifyRedundantForLoopParenthesis(ctx);
-        listenerHelper.verifyForLoopOpenBraceStyle(ctx);
+        helper.verifyRedundantForLoopParenthesis(ctx);
+        helper.verifyForLoopOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterThrowStatement(SwiftParser.ThrowStatementContext ctx) {
-        listenerHelper.verifyRedundantExpressionParenthesis(Messages.THROW_STATEMENT, ctx.expression());
+        helper.verifyRedundantExpressionParenthesis(Messages.THROW_STATEMENT, ctx.expression());
     }
 
     @Override
     public void enterCatchClause(SwiftParser.CatchClauseContext ctx) {
-        listenerHelper.verifyRedundantCatchParentheses(ctx.pattern());
+        helper.verifyRedundantCatchParentheses(ctx.pattern());
     }
 
     @Override
     public void enterInitializer(SwiftParser.InitializerContext ctx) {
-        listenerHelper.verifyRedundantExpressionParenthesis(Messages.INITIALIZER_EXPRESSION, ctx.expression());
+        helper.verifyRedundantExpressionParenthesis(Messages.INITIALIZER_EXPRESSION, ctx.expression());
     }
 
     @Override
     public void enterArrayLiteralItem(SwiftParser.ArrayLiteralItemContext ctx) {
-        listenerHelper.verifyRedundantExpressionParenthesis(Messages.ARRAY_LITERAL, ctx.expression());
+        helper.verifyRedundantExpressionParenthesis(Messages.ARRAY_LITERAL, ctx.expression());
     }
 
     @Override
     public void enterDictionaryLiteralItem(SwiftParser.DictionaryLiteralItemContext ctx) {
         for (SwiftParser.ExpressionContext expressionContext : ctx.expression()) {
-            listenerHelper.verifyRedundantExpressionParenthesis(Messages.DICTIONARY_LITERAL, expressionContext);
+            helper.verifyRedundantExpressionParenthesis(Messages.DICTIONARY_LITERAL, expressionContext);
         }
-        listenerHelper.checkWhitespaceAroundColon(ctx);
+        helper.checkWhitespaceAroundColon(ctx);
     }
 
     @Override
     public void enterImportDeclaration(SwiftParser.ImportDeclarationContext ctx) {
-        listenerHelper.verifyMultipleImports(ctx);
+        helper.verifyMultipleImports(ctx);
     }
 
     @Override
     public void enterFunctionDeclaration(SwiftParser.FunctionDeclarationContext ctx) {
-        listenerHelper.verifyFunctionOpenBraceStyle(ctx);
+        helper.verifyFunctionOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterElseClause(SwiftParser.ElseClauseContext ctx) {
-        listenerHelper.verifyElseClauseOpenBraceStyle(ctx);
+        helper.verifyElseClauseOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterIfStatement(SwiftParser.IfStatementContext ctx) {
-        listenerHelper.verifyIfStatementOpenBraceStyle(ctx);
+        helper.verifyIfStatementOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterWhileStatement(SwiftParser.WhileStatementContext ctx) {
-        listenerHelper.verifyWhileLoopOpenBraceStyle(ctx);
+        helper.verifyWhileLoopOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterRepeatWhileStatement(SwiftParser.RepeatWhileStatementContext ctx) {
-        listenerHelper.verifyRepeatWhileLoopOpenBraceStyle(ctx);
+        helper.verifyRepeatWhileLoopOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterInitializerDeclaration(SwiftParser.InitializerDeclarationContext ctx) {
-        listenerHelper.verifyInitializerOpenBraceStyle(ctx);
+        helper.verifyInitializerOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterForInStatement(SwiftParser.ForInStatementContext ctx) {
-        listenerHelper.verifyForInStatementOpenBraceStyle(ctx);
+        helper.verifyForInStatementOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterOperatorDeclaration(SwiftParser.OperatorDeclarationContext ctx) {
-        listenerHelper.checkWhitespaceAroundOperator(ctx);
+        helper.checkWhitespaceAroundOperator(ctx);
     }
 
     @Override
     public void enterTypeAnnotation(SwiftParser.TypeAnnotationContext ctx) {
-        listenerHelper.checkWhitespaceAroundColon(ctx);
+        helper.checkWhitespaceAroundColon(ctx);
     }
 
     @Override
     public void enterProtocolBody(SwiftParser.ProtocolBodyContext ctx) {
-        listenerHelper.verifyProtocolOpenBraceStyle(ctx);
+        helper.verifyProtocolOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterUnionStyleEnum(SwiftParser.UnionStyleEnumContext ctx) {
-        listenerHelper.verifyEnumOpenBraceStyle(ctx);
+        helper.verifyEnumOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterRawValueStyleEnum(SwiftParser.RawValueStyleEnumContext ctx) {
-        listenerHelper.verifyEnumOpenBraceStyle(ctx);
+        helper.verifyEnumOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterDictionaryType(SwiftParser.DictionaryTypeContext ctx) {
-        listenerHelper.checkWhitespaceAroundColon(ctx);
+        helper.checkWhitespaceAroundColon(ctx);
     }
 
     @Override
     public void enterSwitchCase(SwiftParser.SwitchCaseContext ctx) {
-        listenerHelper.checkWhitespaceAroundColon(ctx);
+        helper.checkWhitespaceAroundColon(ctx);
     }
 
     @Override
     public void enterTypeInheritanceClause(SwiftParser.TypeInheritanceClauseContext ctx) {
-        listenerHelper.checkWhitespaceAroundColon(ctx);
+        helper.checkWhitespaceAroundColon(ctx);
     }
 
     @Override
     public void enterConditionalOperator(SwiftParser.ConditionalOperatorContext ctx) {
-        listenerHelper.checkWhitespaceAroundColon(ctx);
+        helper.checkWhitespaceAroundColon(ctx);
     }
 
     @Override
     public void enterExpressionElement(SwiftParser.ExpressionElementContext ctx) {
-        listenerHelper.checkWhitespaceAroundColon(ctx);
+        helper.checkWhitespaceAroundColon(ctx);
     }
 
     @Override
     public void enterGenericParameter(SwiftParser.GenericParameterContext ctx) {
-        listenerHelper.checkWhitespaceAroundColon(ctx);
+        helper.checkWhitespaceAroundColon(ctx);
     }
 
     @Override
     public void enterExtensionBody(SwiftParser.ExtensionBodyContext ctx) {
-        listenerHelper.verifyExtensionOpenBraceStyle(ctx);
+        helper.verifyExtensionOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterGetterClause(SwiftParser.GetterClauseContext ctx) {
-        listenerHelper.verifyGetterOpenBraceStyle(ctx);
+        helper.verifyGetterOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterSetterClause(SwiftParser.SetterClauseContext ctx) {
-        listenerHelper.verifySetterOpenBraceStyle(ctx);
+        helper.verifySetterOpenBraceStyle(ctx);
     }
 }
