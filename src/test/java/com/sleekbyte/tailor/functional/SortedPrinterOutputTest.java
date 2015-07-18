@@ -10,7 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * Functional tests for sorted printer output.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class SortedPrinterOutputTest extends RuleTest {
+public final class SortedPrinterOutputTest extends RuleTest {
 
     @Override
     protected void addAllExpectedMsgs() {

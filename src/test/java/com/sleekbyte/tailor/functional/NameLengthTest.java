@@ -10,7 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * Functional tests for name length rule.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class NameLengthTest extends RuleTest {
+public final class NameLengthTest extends RuleTest {
 
     @Override
     protected String[] getCommandArgs() {

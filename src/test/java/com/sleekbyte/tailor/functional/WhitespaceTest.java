@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class WhitespaceTest extends RuleTest {
+public final class WhitespaceTest extends RuleTest {
 
     @Override
     protected void addAllExpectedMsgs() {

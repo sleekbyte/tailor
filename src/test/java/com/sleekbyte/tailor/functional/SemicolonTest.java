@@ -10,7 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * Functional tests for semicolon rule.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class SemicolonTest extends RuleTest {
+public final class SemicolonTest extends RuleTest {
 
     @Override
     protected void addAllExpectedMsgs() {
