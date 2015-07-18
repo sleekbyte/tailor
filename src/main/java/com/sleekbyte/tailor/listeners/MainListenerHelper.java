@@ -39,6 +39,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TypeAnnotationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.TypeCastingOperatorContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TypeInheritanceClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
 import com.sleekbyte.tailor.common.Location;
@@ -571,6 +572,17 @@ class MainListenerHelper {
     private boolean checkRightSpaces(Token right, Token op, int numSpaces) {
         return right.getLine() == op.getLine()
             && right.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(op) != numSpaces + 1;
+    }
+    //endregion
+
+    //region Force type casting check
+    void verifyForceTypeCasting(TypeCastingOperatorContext ctx) {
+        ParseTree secondChild = ctx.getChild(1);
+        if (secondChild.getText().equals("!")) {
+            // TODO: use util method that returns location of parse tree
+            Location exclamationLocation = ListenerUtil.getTokenLocation(((TerminalNodeImpl)secondChild).getSymbol());
+            printer.warn(Messages.FORCE_CAST, exclamationLocation);
+        }
     }
     //endregion
 }

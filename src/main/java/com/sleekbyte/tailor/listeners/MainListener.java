@@ -164,7 +164,7 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterConstantDeclaration(SwiftParser.ConstantDeclarationContext ctx) {
         listenerHelper.evaluatePatternInitializerList(ctx.patternInitializerList(),
-            new ConstantDecListener(this.printer, this.maxLengths));
+                                                             new ConstantDecListener(this.printer, this.maxLengths));
     }
 
     @Override
@@ -398,5 +398,10 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterSetterClause(SwiftParser.SetterClauseContext ctx) {
         listenerHelper.verifySetterOpenBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterTypeCastingOperator(SwiftParser.TypeCastingOperatorContext ctx) {
+        listenerHelper.verifyForceTypeCasting(ctx);
     }
 }
