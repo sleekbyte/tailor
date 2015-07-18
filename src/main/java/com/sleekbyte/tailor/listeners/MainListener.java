@@ -24,7 +24,10 @@ public class MainListener extends SwiftBaseListener {
      * @param maxLengths {@link MaxLengths} stores numbers for max length restrictions
      */
     public MainListener(Printer printer, MaxLengths maxLengths) {
-        this.helper = new ListenerHelper(printer, maxLengths);
+        this.helper = ListenerHelper.INSTANCE;
+        helper.reset();
+        helper.setPrinter(printer);
+        helper.setMaxLengths(maxLengths);
     }
 
     @Override

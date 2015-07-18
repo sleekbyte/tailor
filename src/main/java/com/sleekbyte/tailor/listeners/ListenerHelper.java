@@ -67,18 +67,31 @@ class ListenerHelper {
     private Set<Integer> importLineNumbers = new HashSet<>();
     private Printer printer;
     private MaxLengths maxLengths;
+    static final ListenerHelper INSTANCE = new ListenerHelper();
 
-    ListenerHelper(Printer printer, MaxLengths maxLengths) {
+    private ListenerHelper() {
+        // Exists only to defeat instantiation.
+    }
+
+    Printer getPrinter() {
+        return printer;
+    }
+
+    void setPrinter(Printer printer) {
         this.printer = printer;
-        this.maxLengths = maxLengths;
     }
 
     MaxLengths getMaxLengths() {
         return maxLengths;
     }
 
-    Printer getPrinter() {
-        return printer;
+    void setMaxLengths(MaxLengths maxLengths) {
+        this.maxLengths = maxLengths;
+    }
+
+    void reset() {
+        // Ensure that importLineNumbers is refreshed for each new source file.
+        importLineNumbers.clear();
     }
 
     //region UpperCamelCase name check
