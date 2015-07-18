@@ -56,6 +56,15 @@ run {
     }
 }
 
+// Do not include ANTLR output class files in distribution
+distributions {
+    main {
+        contents {
+            exclude('com/')
+        }
+    }
+}
+
 // Use [Checkstyle](http://checkstyle.sourceforge.net) Plugin
 apply plugin: 'checkstyle'
 
