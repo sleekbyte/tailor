@@ -141,8 +141,7 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterSetterName(SwiftParser.SetterNameContext ctx) {
-        helper.verifyNameLength(Messages.SETTER + Messages.NAME, helper.maxLengths.maxNameLength,
-            ctx.identifier());
+        helper.verifyNameLength(Messages.SETTER + Messages.NAME, helper.maxLengths.maxNameLength, ctx.identifier());
     }
 
     @Override
