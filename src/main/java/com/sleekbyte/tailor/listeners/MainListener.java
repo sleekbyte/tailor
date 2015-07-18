@@ -26,38 +26,38 @@ public class MainListener extends SwiftBaseListener {
     public MainListener(Printer printer, MaxLengths maxLengths) {
         this.helper = ListenerHelper.INSTANCE;
         helper.reset();
-        helper.setPrinter(printer);
-        helper.setMaxLengths(maxLengths);
+        helper.printer = printer;
+        helper.maxLengths = maxLengths;
     }
 
     @Override
     public void enterClassName(SwiftParser.ClassNameContext ctx) {
         helper.verifyUpperCamelCase(Messages.CLASS + Messages.NAMES, ctx);
-        helper.verifyNameLength(Messages.CLASS + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
+        helper.verifyNameLength(Messages.CLASS + Messages.NAME, helper.maxLengths.maxNameLength, ctx);
     }
 
     @Override
     public void enterEnumName(SwiftParser.EnumNameContext ctx) {
         helper.verifyUpperCamelCase(Messages.ENUM + Messages.NAMES, ctx);
-        helper.verifyNameLength(Messages.ENUM + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
+        helper.verifyNameLength(Messages.ENUM + Messages.NAME, helper.maxLengths.maxNameLength, ctx);
     }
 
     @Override
     public void enterEnumCaseName(SwiftParser.EnumCaseNameContext ctx) {
         helper.verifyUpperCamelCase(Messages.ENUM_CASE + Messages.NAMES, ctx);
-        helper.verifyNameLength(Messages.ENUM_CASE + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
+        helper.verifyNameLength(Messages.ENUM_CASE + Messages.NAME, helper.maxLengths.maxNameLength, ctx);
     }
 
     @Override
     public void enterStructName(SwiftParser.StructNameContext ctx) {
         helper.verifyUpperCamelCase(Messages.STRUCT + Messages.NAMES, ctx);
-        helper.verifyNameLength(Messages.STRUCT + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
+        helper.verifyNameLength(Messages.STRUCT + Messages.NAME, helper.maxLengths.maxNameLength, ctx);
     }
 
     @Override
     public void enterProtocolName(SwiftParser.ProtocolNameContext ctx) {
         helper.verifyUpperCamelCase(Messages.PROTOCOL + Messages.NAMES, ctx);
-        helper.verifyNameLength(Messages.PROTOCOL + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
+        helper.verifyNameLength(Messages.PROTOCOL + Messages.NAME, helper.maxLengths.maxNameLength, ctx);
     }
 
     @Override
@@ -102,62 +102,62 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterClassBody(SwiftParser.ClassBodyContext ctx) {
-        helper.verifyConstructLength(Messages.CLASS, helper.getMaxLengths().maxClassLength, ctx);
+        helper.verifyConstructLength(Messages.CLASS, helper.maxLengths.maxClassLength, ctx);
         helper.verifyClassOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterClosureExpression(SwiftParser.ClosureExpressionContext ctx) {
-        helper.verifyConstructLength(Messages.CLOSURE, helper.getMaxLengths().maxClosureLength, ctx);
+        helper.verifyConstructLength(Messages.CLOSURE, helper.maxLengths.maxClosureLength, ctx);
         helper.verifyClosureExpressionOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterFunctionBody(SwiftParser.FunctionBodyContext ctx) {
-        helper.verifyConstructLength(Messages.FUNCTION, helper.getMaxLengths().maxFunctionLength, ctx);
+        helper.verifyConstructLength(Messages.FUNCTION, helper.maxLengths.maxFunctionLength, ctx);
     }
 
     @Override
     public void enterStructBody(SwiftParser.StructBodyContext ctx) {
-        helper.verifyConstructLength(Messages.STRUCT, helper.getMaxLengths().maxStructLength, ctx);
+        helper.verifyConstructLength(Messages.STRUCT, helper.maxLengths.maxStructLength, ctx);
         helper.verifyStructOpenBraceStyle(ctx);
     }
 
     @Override
     public void enterElementName(SwiftParser.ElementNameContext ctx) {
-        helper.verifyNameLength(Messages.ELEMENT + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
+        helper.verifyNameLength(Messages.ELEMENT + Messages.NAME, helper.maxLengths.maxNameLength, ctx);
     }
 
     @Override
     public void enterFunctionName(SwiftParser.FunctionNameContext ctx) {
-        helper.verifyNameLength(Messages.FUNCTION + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
+        helper.verifyNameLength(Messages.FUNCTION + Messages.NAME, helper.maxLengths.maxNameLength, ctx);
         helper.verifyLowerCamelCase(Messages.FUNCTION + Messages.NAMES, ctx);
     }
 
     @Override
     public void enterLabelName(SwiftParser.LabelNameContext ctx) {
-        helper.verifyNameLength(Messages.LABEL + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
+        helper.verifyNameLength(Messages.LABEL + Messages.NAME, helper.maxLengths.maxNameLength, ctx);
     }
 
     @Override
     public void enterSetterName(SwiftParser.SetterNameContext ctx) {
-        helper.verifyNameLength(Messages.SETTER + Messages.NAME, helper.getMaxLengths().maxNameLength,
+        helper.verifyNameLength(Messages.SETTER + Messages.NAME, helper.maxLengths.maxNameLength,
             ctx.identifier());
     }
 
     @Override
     public void enterTypeName(SwiftParser.TypeNameContext ctx) {
-        helper.verifyNameLength(Messages.TYPE + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
+        helper.verifyNameLength(Messages.TYPE + Messages.NAME, helper.maxLengths.maxNameLength, ctx);
     }
 
     @Override
     public void enterTypealiasName(SwiftParser.TypealiasNameContext ctx) {
-        helper.verifyNameLength(Messages.TYPEALIAS + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
+        helper.verifyNameLength(Messages.TYPEALIAS + Messages.NAME, helper.maxLengths.maxNameLength, ctx);
     }
 
     @Override
     public void enterVariableName(SwiftParser.VariableNameContext ctx) {
-        helper.verifyNameLength(Messages.VARIABLE + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
+        helper.verifyNameLength(Messages.VARIABLE + Messages.NAME, helper.maxLengths.maxNameLength, ctx);
         helper.verifyLowerCamelCase(Messages.VARIABLE + Messages.NAMES, ctx);
     }
 

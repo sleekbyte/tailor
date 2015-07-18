@@ -33,19 +33,18 @@ public class ConstantDecListener extends SwiftBaseListener {
 
         if (isGlobal(constantDecContext) || insideClass(constantDecContext) || insideStruct(constantDecContext)) {
             if (!CharFormatUtil.isUpperCamelCase(constantName) && !CharFormatUtil.isLowerCamelCase(constantName)) {
-                helper.getPrinter().error(Messages.GLOBAL + Messages.CONSTANT + Messages.GLOBAL_CONSTANT_NAMING,
-                    location);
+                helper.printer.error(Messages.GLOBAL + Messages.CONSTANT + Messages.GLOBAL_CONSTANT_NAMING, location);
             } else if (CharFormatUtil.isKPrefixed(constantName)) {
-                helper.getPrinter().warn(Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED, location);
+                helper.printer.warn(Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED, location);
             }
         } else {
             if (!CharFormatUtil.isLowerCamelCase(constantName)) {
-                helper.getPrinter().error(Messages.CONSTANT + Messages.LOWER_CAMEL_CASE, location);
+                helper.printer.error(Messages.CONSTANT + Messages.LOWER_CAMEL_CASE, location);
             } else if (CharFormatUtil.isKPrefixed(constantName)) {
-                helper.getPrinter().warn(Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED, location);
+                helper.printer.warn(Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED, location);
             }
         }
-        helper.verifyNameLength(Messages.CONSTANT + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
+        helper.verifyNameLength(Messages.CONSTANT + Messages.NAME, helper.maxLengths.maxNameLength, ctx);
     }
 
     private ParserRuleContext getConstantDeclaration(ParserRuleContext ctx) {

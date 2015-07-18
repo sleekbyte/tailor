@@ -29,8 +29,8 @@ public class VariableDecListener extends SwiftBaseListener {
         Location location = ListenerUtil.getContextStartLocation(ctx);
 
         if (!CharFormatUtil.isLowerCamelCase(variableName)) {
-            helper.getPrinter().error(Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE, location);
+            helper.printer.error(Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE, location);
         }
-        helper.verifyNameLength(Messages.VARIABLE + Messages.NAME, helper.getMaxLengths().maxNameLength, ctx);
+        helper.verifyNameLength(Messages.VARIABLE + Messages.NAME, helper.maxLengths.maxNameLength, ctx);
     }
 }

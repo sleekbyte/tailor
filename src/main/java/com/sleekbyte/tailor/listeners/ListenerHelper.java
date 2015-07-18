@@ -65,28 +65,12 @@ import java.util.Set;
 class ListenerHelper {
 
     private Set<Integer> importLineNumbers = new HashSet<>();
-    private Printer printer;
-    private MaxLengths maxLengths;
+    Printer printer;
+    MaxLengths maxLengths;
     static final ListenerHelper INSTANCE = new ListenerHelper();
 
     private ListenerHelper() {
         // Exists only to defeat instantiation.
-    }
-
-    Printer getPrinter() {
-        return printer;
-    }
-
-    void setPrinter(Printer printer) {
-        this.printer = printer;
-    }
-
-    MaxLengths getMaxLengths() {
-        return maxLengths;
-    }
-
-    void setMaxLengths(MaxLengths maxLengths) {
-        this.maxLengths = maxLengths;
     }
 
     void reset() {
