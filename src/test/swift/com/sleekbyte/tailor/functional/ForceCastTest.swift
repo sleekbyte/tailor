@@ -5,7 +5,7 @@ if let movie = item as? Movie {
 let trouble = "Objective C"
 let moreTrouble = s as AnyObject
 let crash = id as! NSDate
-var safe = id as? NSDate
+
 
 let movie = item as! Movie
 print("Movie: '\(movie.name)', dir. \(movie.director)")
