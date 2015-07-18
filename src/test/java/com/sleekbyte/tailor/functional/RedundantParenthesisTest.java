@@ -10,7 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * Functional tests for redundant parenthesis rule.
  */
 @RunWith(MockitoJUnitRunner.class)
-public final class RedundantParenthesisTest extends RuleTest {
+public class RedundantParenthesisTest extends RuleTest {
 
     @Override
     protected void addAllExpectedMsgs() {

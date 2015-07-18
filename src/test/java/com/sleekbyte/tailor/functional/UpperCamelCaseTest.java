@@ -10,7 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * Functional tests for UpperCamelCase rule.
  */
 @RunWith(MockitoJUnitRunner.class)
-public final class UpperCamelCaseTest extends RuleTest {
+public class UpperCamelCaseTest extends RuleTest {
 
     @Override
     protected void addAllExpectedMsgs() {

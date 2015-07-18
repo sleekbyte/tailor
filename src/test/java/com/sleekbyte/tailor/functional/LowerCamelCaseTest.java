@@ -10,7 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * Functional tests for lower camel case rule.
  */
 @RunWith(MockitoJUnitRunner.class)
-public final class LowerCamelCaseTest extends RuleTest {
+public class LowerCamelCaseTest extends RuleTest {
 
     @Override
     protected void addAllExpectedMsgs() {

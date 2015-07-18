@@ -10,7 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * Functional tests for multiple imports rule.
  */
 @RunWith(MockitoJUnitRunner.class)
-public final class MultipleImportTest extends RuleTest {
+public class MultipleImportTest extends RuleTest {
 
     @Override
     protected void addAllExpectedMsgs() {

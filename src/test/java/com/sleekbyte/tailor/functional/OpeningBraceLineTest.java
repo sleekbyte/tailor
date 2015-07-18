@@ -10,7 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * Functional tests for opening brace on same line rule.
  */
 @RunWith(MockitoJUnitRunner.class)
-public final class OpeningBraceLineTest extends RuleTest {
+public class OpeningBraceLineTest extends RuleTest {
 
     @Override
     protected void addAllExpectedMsgs() {
