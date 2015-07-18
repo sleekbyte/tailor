@@ -253,10 +253,8 @@ class MainListenerHelper {
         }
 
         // Close brace
-        int closeBraceIndex = ctx.getChildCount() - 1;
-        ParseTree closeBrace = ctx.getChild(closeBraceIndex);
-
-        Location closeBraceLocation = ListenerUtil.getLocationOfChildToken(ctx, closeBraceIndex);
+        ParseTree closeBrace = ParseTreeUtil.getLastChild(ctx);
+        Location closeBraceLocation = ListenerUtil.getParseTreeStartLocation(closeBrace);
         Location leftSiblingLocation = ListenerUtil.getParseTreeStopLocation(ParseTreeUtil.getLeftSibling(closeBrace));
 
         if (leftSiblingLocation.line == closeBraceLocation.line) {
