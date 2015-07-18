@@ -112,4 +112,3 @@ enum SomeEnum: Int {
         }
     }
 }
-

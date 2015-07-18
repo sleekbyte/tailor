@@ -51,3 +51,13 @@ func myFunctionNameIsAlsoLong(var longExternalParameterName aLongLocalParameterN
 
 let thisIsALongConstantName = 1
 var thisIsALongVariableName = 0
+
+enum SomeEnum: Int {
+    case SomeLongEnumCaseName
+    init (value: NSNumber) {
+        switch value.integerValue {
+        case SomeLongEnumCaseName:
+             self = Some_Enum_Case
+        }
+    }
+}

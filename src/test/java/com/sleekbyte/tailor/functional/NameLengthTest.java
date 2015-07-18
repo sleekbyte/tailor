@@ -47,6 +47,9 @@ public class NameLengthTest extends RuleTest {
         addExpectedMsg(48, 61, Severity.WARNING, Messages.VARIABLE + Messages.NAME, 23, 5); // local param
         addExpectedMsg(52, 5, Severity.WARNING, Messages.CONSTANT + Messages.NAME, 23, 5);
         addExpectedMsg(53, 5, Severity.WARNING, Messages.VARIABLE + Messages.NAME, 23, 5);
+        addExpectedMsg(55, 6, Severity.WARNING, Messages.ENUM + Messages.NAME, 8, 5);
+        addExpectedMsg(56, 10, Severity.WARNING, Messages.ENUM_CASE + Messages.NAME, 20, 5);
+        addExpectedMsg(57, 18, Severity.WARNING, Messages.TYPE + Messages.NAME, 8, 5);
     }
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg, int length, int limit) {
