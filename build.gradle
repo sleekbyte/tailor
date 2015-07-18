@@ -60,7 +60,7 @@ run {
 distributions {
     main {
         contents {
-            exclude('**/com/**')
+            exclude('com/')
         }
     }
 }
