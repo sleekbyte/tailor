@@ -77,4 +77,42 @@ public final class ParseTreeUtil {
         return parent.getChild(index + 1);
     }
 
+    /**
+     * Return node situated on the left of the input node (does not have to be at the same level as the current node).
+     *
+     * @param ctx A node.
+     * @return The left node.
+     */
+    public static ParseTree getLeftNode(ParseTree ctx) {
+        while (true) {
+            if (ctx == null) {
+                return null;
+            }
+            ParseTree left = getLeftSibling(ctx);
+            if (left != null) {
+                return left;
+            }
+            ctx = ctx.getParent();
+        }
+    }
+
+    /**
+     * Return node situated on the right of the input node (does not have to be at the level as the current node).
+     *
+     * @param ctx A node.
+     * @return The right node.
+     */
+    public static ParseTree getRightNode(ParseTree ctx) {
+        while (true) {
+            if (ctx == null) {
+                return null;
+            }
+            ParseTree right = getRightSibling(ctx);
+            if (right != null) {
+                return right;
+            }
+            ctx = ctx.getParent();
+        }
+    }
+
 }

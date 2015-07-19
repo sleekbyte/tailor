@@ -588,47 +588,33 @@ class ParseTreeVerifier {
 
     public void verifyNewlinesAroundFunction(FunctionDeclarationContext ctx) {
         DeclarationContext declCtx = (DeclarationContext) ctx.getParent();
-        ParseTree child = declCtx.getParent(); // start at declaration context to include semicolon
-        while(true) {
-            ParseTree parent = child.getParent();
-            if (parent == null) {
-                return;
-            }
-            if (parent.getChildCount() > 1) {
-                break;
-            }
-            child = parent;
-        }
 
-
-        ParseTree left = ParseTreeUtil.getLeftSibling(child);
+        ParseTree left = ParseTreeUtil.getLeftNode(declCtx);
         if (left != null) {
             Token start = declCtx.getStart();
             List<Token> tokens = tokenStream.getHiddenTokensToLeft(start.getTokenIndex());
-            long numberOfNewLineChars = 0;
+            long numberOfNewlineChars = 0;
             if (tokens != null) {
-                numberOfNewLineChars = tokens.stream().filter(token -> token.getText().equals("\n")).count();
+                numberOfNewlineChars = tokens.stream().filter(token -> token.getText().equals("\n")).count();
             }
-            if (numberOfNewLineChars < 2) {
+            if (numberOfNewlineChars < 2) {
                 printer.error(Messages.FUNCTION + Messages.NEWLINE_BEFORE, ListenerUtil.getTokenLocation(start));
             }
         }
 
-        ParseTree right = ParseTreeUtil.getRightSibling(child);
+        ParseTree right = ParseTreeUtil.getRightNode(declCtx);
         if (right != null) {
-            if (right instanceof TerminalNodeImpl) {
-                if (((TerminalNodeImpl) right).getText().equals("<EOF>")) { // function is at the end of the file
-                    return;
-                }
+            if (right.getText().equals("<EOF>")) { // function is at the end of the file
+                return;
             }
             Token end = declCtx.getStop();
-            long numberOfNewLineChars = 0;
+            long numberOfNewlineChars = 0;
             List<Token> tokens = tokenStream.getHiddenTokensToRight(end.getTokenIndex());
             if (tokens != null) {
-                numberOfNewLineChars = tokens.stream().filter(token -> token.getText().equals("\n")).count();
+                numberOfNewlineChars = tokens.stream().filter(token -> token.getText().equals("\n")).count();
             }
-            if (numberOfNewLineChars < 2) {
-                printer.error(Messages.FUNCTION + Messages.NEWLINE_AFTER, ListenerUtil.getTokenLocation(end));
+            if (numberOfNewlineChars < 2) {
+                printer.error(Messages.FUNCTION + Messages.NEWLINE_AFTER, ListenerUtil.getTokenEndLocation(end));
             }
         }
     }
@@ -639,7 +625,7 @@ class ParseTreeVerifier {
         ParseTree secondChild = ctx.getChild(1);
         if (secondChild.getText().equals("!")) {
             // TODO: use util method that returns location of parse tree once {} check gets merged into master
-            Location exclamationLocation = ListenerUtil.getTokenLocation(((TerminalNodeImpl)secondChild).getSymbol());
+            Location exclamationLocation = ListenerUtil.getTokenLocation(((TerminalNodeImpl) secondChild).getSymbol());
             printer.warn(Messages.FORCE_CAST, exclamationLocation);
         }
     }

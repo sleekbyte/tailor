@@ -15,6 +15,10 @@ public final class ListenerUtil {
         return new Location(token.getLine(), token.getCharPositionInLine() + 1);
     }
 
+    public static Location getTokenEndLocation(Token token) {
+        return new Location(token.getLine(), getLastCharPositionInLine(token) + 2);
+    }
+
     public static int getLastCharPositionInLine(Token token) {
         return token.getCharPositionInLine() + (token.getStopIndex() - token.getStartIndex());
     }
@@ -30,9 +34,5 @@ public final class ListenerUtil {
     public static Location getLocationOfChildToken(ParserRuleContext ctx, int childNumber) {
         Token token = ((TerminalNodeImpl) ctx.getChild(childNumber)).getSymbol();
         return ListenerUtil.getTokenLocation(token);
-    }
-
-    public static int getStopLineNumber(Token token) {
-        return token.getLine() + token.getText().split("\\n").length - 1;
     }
 }
