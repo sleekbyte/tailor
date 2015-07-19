@@ -205,6 +205,41 @@ public class SourceFileUtilTest {
         assertFalse(SourceFileUtil.singleNewlineTerminated(inputFile));
     }
 
+    @Test
+    public void testHasLeadingWhitespaceBlankFile() throws IOException {
+        assertFalse(SourceFileUtil.hasLeadingWhitespace(inputFile));
+    }
+
+    @Test
+    public void testHasLeadingWhitespaceOnlyNewline() throws IOException {
+        writeNumOfLines(1, "");
+        assertTrue(SourceFileUtil.hasLeadingWhitespace(inputFile));
+    }
+
+    @Test
+    public void testHasLeadingWhitespaceWithSingleLine() throws IOException {
+        writeNumOfLines(1, NORMAL_LINE);
+        assertFalse(SourceFileUtil.hasLeadingWhitespace(inputFile));
+    }
+
+    @Test
+    public void testHasLeadingWhitespaceWithSingleLineAndPrecedingNewline() throws IOException {
+        writeNumOfLines(1, "\n" + NORMAL_LINE);
+        assertTrue(SourceFileUtil.hasLeadingWhitespace(inputFile));
+    }
+
+    @Test
+    public void testHasLeadingWhitespaceWithSingleLineAndPrecedingSpace() throws IOException {
+        writeNumOfLines(1, " " + NORMAL_LINE);
+        assertTrue(SourceFileUtil.hasLeadingWhitespace(inputFile));
+    }
+
+    @Test
+    public void testHasLeadingWhitespaceWithSingleLineAndPrecedingTab() throws IOException {
+        writeNumOfLines(1, "\t" + NORMAL_LINE);
+        assertTrue(SourceFileUtil.hasLeadingWhitespace(inputFile));
+    }
+
     private void writeNumOfLines(int numOfLines, String data) {
         for (int i = 1; i <= numOfLines; i++) {
             writer.println(data);
