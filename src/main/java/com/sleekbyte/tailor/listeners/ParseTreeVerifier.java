@@ -593,11 +593,7 @@ class ParseTreeVerifier {
         if (left != null) {
             Token start = declCtx.getStart();
             List<Token> tokens = tokenStream.getHiddenTokensToLeft(start.getTokenIndex());
-            long numberOfNewlineChars = 0;
-            if (tokens != null) {
-                numberOfNewlineChars = tokens.stream().filter(token -> token.getText().equals("\n")).count();
-            }
-            if (numberOfNewlineChars < 2) {
+            if (getNumberOfBlankLines(tokens) < 1) {
                 printer.error(Messages.FUNCTION + Messages.BLANK_LINE_BEFORE, ListenerUtil.getTokenLocation(start));
             }
         }
@@ -608,15 +604,31 @@ class ParseTreeVerifier {
                 return;
             }
             Token end = declCtx.getStop();
-            long numberOfNewlineChars = 0;
             List<Token> tokens = tokenStream.getHiddenTokensToRight(end.getTokenIndex());
-            if (tokens != null) {
-                numberOfNewlineChars = tokens.stream().filter(token -> token.getText().equals("\n")).count();
-            }
-            if (numberOfNewlineChars < 2) {
+            if (getNumberOfBlankLines(tokens) < 1) {
                 printer.error(Messages.FUNCTION + Messages.BLANK_LINE_AFTER, ListenerUtil.getTokenEndLocation(end));
             }
         }
+    }
+
+    private static int getNumberOfBlankLines(List<Token> tokens) {
+        if (tokens == null || tokens.size() <= 1) {
+            return 0;
+        }
+
+        int firstNewlineOrCommentIndex = -1;
+        // skip tokens until it hits a newline or comment (skipping other whitespace)
+        for (int i = 0; i < tokens.size(); i++) {
+            Token token = tokens.get(i);
+            if (ListenerUtil.isComment(token) || ListenerUtil.isNewline(token)) {
+                firstNewlineOrCommentIndex = i;
+                break;
+            }
+        }
+        // skip first newline or comment
+        tokens = tokens.subList(firstNewlineOrCommentIndex + 1, tokens.size());
+
+        return (int) tokens.stream().filter(ListenerUtil::isNewline).count();
     }
     //endregion
 

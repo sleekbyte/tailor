@@ -72,5 +72,19 @@ struct SomeStruct {
 }
 
 func function15() {
+} /* Multi
+line
+comment*/ // single line comment
+
+/* Multi
+line
+comment*/ // single line comment
+func function16() {
+}
+
+func function17() {
+
+} 
+func function17() {
   // something goes here
 }

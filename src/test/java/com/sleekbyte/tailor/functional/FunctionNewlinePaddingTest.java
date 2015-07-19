@@ -18,6 +18,8 @@ public class FunctionNewlinePaddingTest extends RuleTest {
         addExpectedFunctionMsg(53, 3, Messages.BLANK_LINE_BEFORE);
         addExpectedFunctionMsg(59, 4, Messages.BLANK_LINE_AFTER);
         addExpectedMsg(70, 4, Messages.STATEMENTS + Messages.SEMICOLON);
+        addExpectedFunctionMsg(87, 2, Messages.BLANK_LINE_AFTER);
+        addExpectedFunctionMsg(88, 1, Messages.BLANK_LINE_BEFORE);
     }
 
     private void addExpectedFunctionMsg(int line, int column, String msg) {

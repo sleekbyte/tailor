@@ -35,4 +35,13 @@ public final class ListenerUtil {
         Token token = ((TerminalNodeImpl) ctx.getChild(childNumber)).getSymbol();
         return ListenerUtil.getTokenLocation(token);
     }
+
+    public static boolean isComment(Token token) {
+        String text = token.getText();
+        return text.startsWith("//") || text.startsWith("/*");
+    }
+
+    public static boolean isNewline(Token token) {
+        return token.getText().equals("\n");
+    }
 }

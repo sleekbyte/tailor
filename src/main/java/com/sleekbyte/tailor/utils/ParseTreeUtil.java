@@ -80,8 +80,8 @@ public final class ParseTreeUtil {
     /**
      * Return node situated on the left of the input node (does not have to be at the same level as the current node).
      *
-     * @param ctx A node.
-     * @return The left node.
+     * @param ctx A node
+     * @return The left node
      */
     public static ParseTree getLeftNode(ParseTree ctx) {
         while (true) {
@@ -99,8 +99,8 @@ public final class ParseTreeUtil {
     /**
      * Return node situated on the right of the input node (does not have to be at the level as the current node).
      *
-     * @param ctx A node.
-     * @return The right node.
+     * @param ctx A node
+     * @return The right node
      */
     public static ParseTree getRightNode(ParseTree ctx) {
         while (true) {
