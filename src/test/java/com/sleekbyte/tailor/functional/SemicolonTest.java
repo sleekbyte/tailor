@@ -31,16 +31,16 @@ public class SemicolonTest extends RuleTest {
         addExpectedMsg(34, 10, Severity.WARNING, Messages.STATEMENTS);
         addExpectedMsg(39, 21, Severity.WARNING, Messages.STATEMENTS);
         addExpectedMsg(40, 6, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(41, 2, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(46, 28, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(47, 14, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(51, 21, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(52, 10, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(55, 65, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(57, 73, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(59, 59, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(61, 6, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(62, 2, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(42, 2, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(47, 28, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(48, 14, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(52, 21, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(53, 10, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(56, 65, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(58, 73, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(60, 59, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(62, 6, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(64, 2, Severity.WARNING, Messages.STATEMENTS);
     }
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg) {

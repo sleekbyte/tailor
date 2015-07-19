@@ -1,10 +1,10 @@
 package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
-import com.sleekbyte.tailor.antlr.SwiftLexer;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClassBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClosureExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ConditionalOperatorContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.DeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryLiteralItemContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryTypeContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ElseClauseContext;
@@ -587,7 +587,8 @@ class ParseTreeVerifier {
     }
 
     public void verifyNewlinesAroundFunction(FunctionDeclarationContext ctx) {
-        ParseTree child = ctx;
+        DeclarationContext declCtx = (DeclarationContext) ctx.getParent();
+        ParseTree child = declCtx.getParent(); // start at declaration context to include semicolon
         while(true) {
             ParseTree parent = child.getParent();
             if (parent == null) {
@@ -598,24 +599,34 @@ class ParseTreeVerifier {
             }
             child = parent;
         }
+
+
         ParseTree left = ParseTreeUtil.getLeftSibling(child);
         if (left != null) {
-            Token start = ctx.getStart();
-            long numberOfNewLineChars = tokenStream.getHiddenTokensToLeft(start.getTokenIndex(), SwiftLexer.WHITESPACE)
-                .stream()
-                .filter(token -> token.getText().equals("\n"))
-                .count();
+            Token start = declCtx.getStart();
+            List<Token> tokens = tokenStream.getHiddenTokensToLeft(start.getTokenIndex());
+            long numberOfNewLineChars = 0;
+            if (tokens != null) {
+                numberOfNewLineChars = tokens.stream().filter(token -> token.getText().equals("\n")).count();
+            }
             if (numberOfNewLineChars < 2) {
                 printer.error(Messages.FUNCTION + Messages.NEWLINE_BEFORE, ListenerUtil.getTokenLocation(start));
             }
         }
+
         ParseTree right = ParseTreeUtil.getRightSibling(child);
         if (right != null) {
-            Token end = ctx.getStop();
-            long numberOfNewLineChars = tokenStream.getHiddenTokensToRight(end.getTokenIndex(), SwiftLexer.WHITESPACE)
-                .stream()
-                .filter(token -> token.getText().equals("\n"))
-                .count();
+            if (right instanceof TerminalNodeImpl) {
+                if (((TerminalNodeImpl) right).getText().equals("<EOF>")) { // function is at the end of the file
+                    return;
+                }
+            }
+            Token end = declCtx.getStop();
+            long numberOfNewLineChars = 0;
+            List<Token> tokens = tokenStream.getHiddenTokensToRight(end.getTokenIndex());
+            if (tokens != null) {
+                numberOfNewLineChars = tokens.stream().filter(token -> token.getText().equals("\n")).count();
+            }
             if (numberOfNewLineChars < 2) {
                 printer.error(Messages.FUNCTION + Messages.NEWLINE_AFTER, ListenerUtil.getTokenLocation(end));
             }
