@@ -81,6 +81,7 @@ public class Messages {
     public static final String FORCE_CAST = "Force casts should be avoided";
     public static final String BLANK_LINE_BEFORE = "must have at least one blank line before it";
     public static final String BLANK_LINE_AFTER = "must have at least one blank line after it";
+    public static final String LEADING_WHITESPACE = "should not start with whitespace";
 
     // Usage messages
     public static final String CMD_LINE_SYNTAX = "tailor";

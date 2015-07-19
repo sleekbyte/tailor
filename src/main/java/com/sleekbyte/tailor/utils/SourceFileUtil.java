@@ -2,6 +2,7 @@ package com.sleekbyte.tailor.utils;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.LineNumberReader;
@@ -109,5 +110,21 @@ public class SourceFileUtil {
         // More than one terminating newline
         randomAccessFile.seek(inputFile.length() - 2);
         return (Byte.compare(randomAccessFile.readByte(), NEWLINE_DELIMITER) != 0);
+    }
+
+    /**
+     * Checks whether a file contains any leading whitespace characters.
+     *
+     * @param inputFile the file to check for leading whitespace
+     * @return true if file starts with whitespace
+     * @throws IOException if the file cannot be read
+     */
+    public static boolean hasLeadingWhitespace(File inputFile) throws IOException {
+        BufferedReader reader = Files.newBufferedReader(inputFile.toPath());
+        int character = reader.read();
+        if (character != -1 && Character.isWhitespace((char) character)) {
+            return true;
+        }
+        return false;
     }
 }

@@ -40,6 +40,7 @@ public class FileListener {
         verifyFileLength(maxLengths.maxFileLength);
         verifyLineLengths(maxLengths.maxLineLength);
         verifyNewlineTerminated();
+        verifyNoLeadingWhitespace();
     }
 
     private void verifyFileLength(int maxLines) throws IOException {
@@ -68,6 +69,13 @@ public class FileListener {
         if (!SourceFileUtil.singleNewlineTerminated(this.inputFile)) {
             Location location = new Location(SourceFileUtil.numLinesInFile(this.inputFile));
             this.printer.error(Messages.FILE + Messages.NEWLINE_TERMINATOR, location);
+        }
+    }
+
+    private void verifyNoLeadingWhitespace() throws IOException {
+        if (SourceFileUtil.hasLeadingWhitespace(this.inputFile)) {
+            Location location = new Location(1, 1);
+            this.printer.warn(Messages.FILE + Messages.LEADING_WHITESPACE, location);
         }
     }
 
