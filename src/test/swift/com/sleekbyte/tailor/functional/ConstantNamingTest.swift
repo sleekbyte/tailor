@@ -30,7 +30,7 @@ func declarations(ExternalParam LocalParam: String) {
   let OddDigits: Set = [1, 3, 5, 7, 9]
   let airport_Codes = [String](airports.keys)
   let numberOfLegs = ["spider": 8, "ant": 6, "cat": 4]
-  let Movie = object as! Movie
+  let Movie = object as? Movie
 }
 
 let anotherPoint = (2, 0)
@@ -71,6 +71,7 @@ class Queue {
     func hello() {
         println("hello")
     }
+    
 }
 
 struct FixedLengthRange {
@@ -132,4 +133,5 @@ private struct Scaling {
         static let kFaceRadiusToMouthHeightRatio: CGFloat = 3
         static let KFaceRadiusToMouthOffsetRatio: CGFloat = 3
     }
+
 }

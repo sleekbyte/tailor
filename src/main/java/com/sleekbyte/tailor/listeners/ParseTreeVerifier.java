@@ -4,6 +4,7 @@ import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClassBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClosureExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ConditionalOperatorContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.DeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryLiteralItemContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryTypeContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ElseClauseContext;
@@ -39,6 +40,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TypeAnnotationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.TypeCastingOperatorContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TypeInheritanceClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
 import com.sleekbyte.tailor.common.Location;
@@ -49,6 +51,7 @@ import com.sleekbyte.tailor.utils.CharFormatUtil;
 import com.sleekbyte.tailor.utils.ListenerUtil;
 import com.sleekbyte.tailor.utils.ParseTreeUtil;
 import com.sleekbyte.tailor.utils.SourceFileUtil;
+import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -67,6 +70,8 @@ class ParseTreeVerifier {
     private Set<Integer> importLineNumbers = new HashSet<>();
     Printer printer;
     MaxLengths maxLengths;
+    BufferedTokenStream tokenStream;
+
     static final ParseTreeVerifier INSTANCE = new ParseTreeVerifier();
 
     private ParseTreeVerifier() {
@@ -579,6 +584,62 @@ class ParseTreeVerifier {
     private boolean checkRightSpaces(Token right, Token op, int numSpaces) {
         return right.getLine() == op.getLine()
             && right.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(op) != numSpaces + 1;
+    }
+
+    void verifyBlankLinesAroundFunction(FunctionDeclarationContext ctx) {
+        DeclarationContext declCtx = (DeclarationContext) ctx.getParent();
+
+        ParseTree left = ParseTreeUtil.getLeftNode(declCtx);
+        if (left != null) {
+            Token start = declCtx.getStart();
+            List<Token> tokens = tokenStream.getHiddenTokensToLeft(start.getTokenIndex());
+            if (getNumberOfBlankLines(tokens) < 1) {
+                printer.error(Messages.FUNCTION + Messages.BLANK_LINE_BEFORE, ListenerUtil.getTokenLocation(start));
+            }
+        }
+
+        ParseTree right = ParseTreeUtil.getRightNode(declCtx);
+        if (right != null) {
+            if (right.getText().equals("<EOF>")) { // function is at the end of the file
+                return;
+            }
+            Token end = declCtx.getStop();
+            List<Token> tokens = tokenStream.getHiddenTokensToRight(end.getTokenIndex());
+            if (getNumberOfBlankLines(tokens) < 1) {
+                printer.error(Messages.FUNCTION + Messages.BLANK_LINE_AFTER, ListenerUtil.getTokenEndLocation(end));
+            }
+        }
+    }
+
+    private static int getNumberOfBlankLines(List<Token> tokens) {
+        if (tokens == null || tokens.size() <= 1) {
+            return 0;
+        }
+
+        int firstNewlineOrCommentIndex = -1;
+        // skip tokens until it hits a newline or comment (skipping other whitespace)
+        for (int i = 0; i < tokens.size(); i++) {
+            Token token = tokens.get(i);
+            if (ListenerUtil.isComment(token) || ListenerUtil.isNewline(token)) {
+                firstNewlineOrCommentIndex = i;
+                break;
+            }
+        }
+        // skip first newline or comment
+        tokens = tokens.subList(firstNewlineOrCommentIndex + 1, tokens.size());
+
+        return (int) tokens.stream().filter(ListenerUtil::isNewline).count();
+    }
+    //endregion
+
+    //region Force type casting check
+    void verifyForceTypeCasting(TypeCastingOperatorContext ctx) {
+        ParseTree secondChild = ctx.getChild(1);
+        if (secondChild.getText().equals("!")) {
+            // TODO: use util method that returns location of parse tree once {} check gets merged into master
+            Location exclamationLocation = ListenerUtil.getTokenLocation(((TerminalNodeImpl) secondChild).getSymbol());
+            printer.warn(Messages.FORCE_CAST, exclamationLocation);
+        }
     }
     //endregion
 }

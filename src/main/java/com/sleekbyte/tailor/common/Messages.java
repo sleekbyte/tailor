@@ -78,6 +78,9 @@ public class Messages {
     public static final String SPACE_BEFORE = "must have exactly one space before it";
     public static final String SPACE_AFTER = "must have exactly one space after it";
     public static final String NO_SPACE_BEFORE = "must have no spaces before it";
+    public static final String FORCE_CAST = "Force casts should be avoided";
+    public static final String BLANK_LINE_BEFORE = "must have at least one blank line before it";
+    public static final String BLANK_LINE_AFTER = "must have at least one blank line after it";
     public static final String LEADING_WHITESPACE = "should not start with whitespace";
 
     // Usage messages

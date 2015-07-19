@@ -120,6 +120,7 @@ class Rectangle: Shape
    }
 
    struct Line {
+
          func obscureLoops() {
             for ; ; {
 
@@ -147,6 +148,7 @@ class Rectangle: Shape
 
             }
         }
+        
    }
 }
 
