@@ -285,7 +285,7 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterFunctionDeclaration(SwiftParser.FunctionDeclarationContext ctx) {
         verifier.verifyFunctionOpenBraceStyle(ctx);
-        verifier.verifyNewlinesAroundFunction(ctx);
+        verifier.verifyBlankLinesAroundFunction(ctx);
     }
 
     @Override

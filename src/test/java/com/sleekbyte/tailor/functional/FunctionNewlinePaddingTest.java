@@ -11,12 +11,12 @@ public class FunctionNewlinePaddingTest extends RuleTest {
 
     @Override
     protected void addAllExpectedMsgs() {
-        addExpectedFunctionMsg(8, 2, Messages.NEWLINE_AFTER);
-        addExpectedFunctionMsg(9, 1, Messages.NEWLINE_BEFORE);
-        addExpectedFunctionMsg(45, 3, Messages.NEWLINE_BEFORE);
-        addExpectedFunctionMsg(51, 4, Messages.NEWLINE_AFTER);
-        addExpectedFunctionMsg(53, 3, Messages.NEWLINE_BEFORE);
-        addExpectedFunctionMsg(59, 4, Messages.NEWLINE_AFTER);
+        addExpectedFunctionMsg(8, 2, Messages.BLANK_LINE_AFTER);
+        addExpectedFunctionMsg(9, 1, Messages.BLANK_LINE_BEFORE);
+        addExpectedFunctionMsg(45, 3, Messages.BLANK_LINE_BEFORE);
+        addExpectedFunctionMsg(51, 4, Messages.BLANK_LINE_AFTER);
+        addExpectedFunctionMsg(53, 3, Messages.BLANK_LINE_BEFORE);
+        addExpectedFunctionMsg(59, 4, Messages.BLANK_LINE_AFTER);
         addExpectedMsg(70, 4, Messages.STATEMENTS + Messages.SEMICOLON);
     }
 

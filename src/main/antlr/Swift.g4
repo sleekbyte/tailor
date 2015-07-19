@@ -943,6 +943,9 @@ EscapedCharacter : '\\' [0\\(tnr"']
 
 WS : [ \n\r\t\u000B\u000C\u0000] -> channel(HIDDEN) ;
 
+/* Added optional newline character to prevent the whitespace lexer rule from matching newline
+ * at the end of the comment. This affects how blank lines are counted around functions.
+ */
 BlockComment : '/*' (BlockComment|.)*? '*/' '\n'? -> channel(HIDDEN) ; // nesting allow
 
 LineComment : '//' .*? '\n' -> channel(HIDDEN) ;

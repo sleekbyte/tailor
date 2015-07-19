@@ -586,7 +586,7 @@ class ParseTreeVerifier {
             && right.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(op) != numSpaces + 1;
     }
 
-    public void verifyNewlinesAroundFunction(FunctionDeclarationContext ctx) {
+    void verifyBlankLinesAroundFunction(FunctionDeclarationContext ctx) {
         DeclarationContext declCtx = (DeclarationContext) ctx.getParent();
 
         ParseTree left = ParseTreeUtil.getLeftNode(declCtx);
@@ -598,7 +598,7 @@ class ParseTreeVerifier {
                 numberOfNewlineChars = tokens.stream().filter(token -> token.getText().equals("\n")).count();
             }
             if (numberOfNewlineChars < 2) {
-                printer.error(Messages.FUNCTION + Messages.NEWLINE_BEFORE, ListenerUtil.getTokenLocation(start));
+                printer.error(Messages.FUNCTION + Messages.BLANK_LINE_BEFORE, ListenerUtil.getTokenLocation(start));
             }
         }
 
@@ -614,7 +614,7 @@ class ParseTreeVerifier {
                 numberOfNewlineChars = tokens.stream().filter(token -> token.getText().equals("\n")).count();
             }
             if (numberOfNewlineChars < 2) {
-                printer.error(Messages.FUNCTION + Messages.NEWLINE_AFTER, ListenerUtil.getTokenEndLocation(end));
+                printer.error(Messages.FUNCTION + Messages.BLANK_LINE_AFTER, ListenerUtil.getTokenEndLocation(end));
             }
         }
     }
