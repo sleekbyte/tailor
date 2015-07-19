@@ -175,10 +175,16 @@ public class SourceFileUtilTest {
     }
 
     @Test
-    public void testNewLineTerminatedNoNewline() throws IOException {
+    public void testNewlineTerminatedNoNewline() throws IOException {
         writer.print("Line without a terminating newline.");
         writer.close();
         assertFalse(SourceFileUtil.singleNewlineTerminated(inputFile));
+    }
+
+    @Test
+    public void testNewlineTerminatedOnlyNewline() throws IOException {
+        writeNumOfLines(1, "");
+        assertTrue(SourceFileUtil.singleNewlineTerminated(inputFile));
     }
 
     @Test
@@ -189,14 +195,13 @@ public class SourceFileUtilTest {
 
     @Test
     public void testNewlineTerminatedWithNoContentAndMultipleNewlines() throws IOException {
-        writeNumOfLines(3, "");
+        writeNumOfLines(2, "");
         assertFalse(SourceFileUtil.singleNewlineTerminated(inputFile));
     }
 
     @Test
     public void testNewlineTerminatedWithSomeContentAndMultipleNewlines() throws IOException {
-        writer.print(NORMAL_LINE + "\n\n\n");
-        writer.close();
+        writeNumOfLines(1, NORMAL_LINE + "\n");
         assertFalse(SourceFileUtil.singleNewlineTerminated(inputFile));
     }
 

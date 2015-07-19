@@ -83,32 +83,31 @@ public class SourceFileUtil {
     }
 
     /**
-     * Checks whether a file is terminated with a trailing newline.
+     * Checks whether a file is terminated with exactly one trailing newline.
      *
      * @param inputFile the file to check for a trailing newline
-     * @return true if file is terminated with a newline
+     * @return true if file is terminated with exactly one newline
      * @throws IOException if the file cannot be read
      */
     public static boolean singleNewlineTerminated(File inputFile) throws IOException {
         RandomAccessFile randomAccessFile = new RandomAccessFile(inputFile, READ_ONLY_MODE);
+
+        // Zero terminating newlines
         if (inputFile.length() < 1) {
             return true;
         }
-
-        long indexOfLastByte = inputFile.length() - 1;
-        long numTerminatingNewlines = 0;
-        randomAccessFile.seek(indexOfLastByte);
-
-        while (Byte.compare(randomAccessFile.readByte(), NEWLINE_DELIMITER) == 0) {
-            numTerminatingNewlines++;
-            indexOfLastByte--;
-            // Return false if file contains only newline characters
-            if (indexOfLastByte < 0) {
-                return false;
-            }
-            randomAccessFile.seek(indexOfLastByte);
+        randomAccessFile.seek(inputFile.length() - 1);
+        if (Byte.compare(randomAccessFile.readByte(), NEWLINE_DELIMITER) != 0) {
+            return false;
         }
 
-        return (numTerminatingNewlines == 1L);
+        // File contains a single newline character and nothing else
+        if (inputFile.length() < 2) {
+            return true;
+        }
+
+        // More than one terminating newline
+        randomAccessFile.seek(inputFile.length() - 2);
+        return (Byte.compare(randomAccessFile.readByte(), NEWLINE_DELIMITER) != 0);
     }
 }
