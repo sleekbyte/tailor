@@ -171,20 +171,38 @@ public class SourceFileUtilTest {
 
     @Test
     public void testNewlineTerminatedBlankFile() throws IOException {
-        assertTrue(SourceFileUtil.newlineTerminated(inputFile));
+        assertTrue(SourceFileUtil.singleNewlineTerminated(inputFile));
     }
 
     @Test
-    public void testNewLineTerminatedNoNewline() throws IOException {
+    public void testNewlineTerminatedNoNewline() throws IOException {
         writer.print("Line without a terminating newline.");
         writer.close();
-        assertFalse(SourceFileUtil.newlineTerminated(inputFile));
+        assertFalse(SourceFileUtil.singleNewlineTerminated(inputFile));
+    }
+
+    @Test
+    public void testNewlineTerminatedOnlyNewline() throws IOException {
+        writeNumOfLines(1, "");
+        assertTrue(SourceFileUtil.singleNewlineTerminated(inputFile));
     }
 
     @Test
     public void testNewlineTerminatedWithNewline() throws IOException {
         writeNumOfLines(3, NORMAL_LINE);
-        assertTrue(SourceFileUtil.newlineTerminated(inputFile));
+        assertTrue(SourceFileUtil.singleNewlineTerminated(inputFile));
+    }
+
+    @Test
+    public void testNewlineTerminatedWithNoContentAndMultipleNewlines() throws IOException {
+        writeNumOfLines(2, "");
+        assertFalse(SourceFileUtil.singleNewlineTerminated(inputFile));
+    }
+
+    @Test
+    public void testNewlineTerminatedWithSomeContentAndMultipleNewlines() throws IOException {
+        writeNumOfLines(1, NORMAL_LINE + "\n");
+        assertFalse(SourceFileUtil.singleNewlineTerminated(inputFile));
     }
 
     private void writeNumOfLines(int numOfLines, String data) {

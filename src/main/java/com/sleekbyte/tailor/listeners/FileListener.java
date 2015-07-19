@@ -65,7 +65,7 @@ public class FileListener {
     }
 
     private void verifyNewlineTerminated() throws IOException {
-        if (!SourceFileUtil.newlineTerminated(this.inputFile)) {
+        if (!SourceFileUtil.singleNewlineTerminated(this.inputFile)) {
             Location location = new Location(SourceFileUtil.numLinesInFile(this.inputFile));
             this.printer.error(Messages.FILE + Messages.NEWLINE_TERMINATOR, location);
         }
