@@ -49,6 +49,7 @@ private struct Scaling {
         static var faceRadiusToMouthWidthRatio: CGFloat = 1
         static var KFaceRadiusToMouthOffsetRatio: CGFloat = 3
     }
+
 }
 
 var many_times = numbers.map {

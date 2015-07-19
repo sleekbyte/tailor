@@ -5,6 +5,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
+import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
@@ -23,11 +24,12 @@ public class MainListener extends SwiftBaseListener {
      * @param printer    {@link Printer} used for outputting messages to user
      * @param maxLengths {@link MaxLengths} stores numbers for max length restrictions
      */
-    public MainListener(Printer printer, MaxLengths maxLengths) {
+    public MainListener(Printer printer, MaxLengths maxLengths, BufferedTokenStream tokenStream) {
         this.verifier = ParseTreeVerifier.INSTANCE;
         verifier.reset();
         verifier.printer = printer;
         verifier.maxLengths = maxLengths;
+        verifier.tokenStream = tokenStream;
     }
 
     @Override
@@ -283,6 +285,7 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterFunctionDeclaration(SwiftParser.FunctionDeclarationContext ctx) {
         verifier.verifyFunctionOpenBraceStyle(ctx);
+        verifier.verifyBlankLinesAroundFunction(ctx);
     }
 
     @Override

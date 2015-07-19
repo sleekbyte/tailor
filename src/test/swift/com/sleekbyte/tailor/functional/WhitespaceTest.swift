@@ -89,9 +89,11 @@ switch character {
 }
 
 class ClassOne<T>:  ParentOne, ParentTwo {
+
   func hello() {
     return "hello"
   }
+
 }
 
 class ClassTwo : ParentOne {
@@ -201,10 +203,13 @@ let tupleception = (statusCode: (statusCode : 200, description: "OK"), descripti
 
 func someFunction<T: SomeClass, U: SomeProtocol>(someT: T, someU: U) {
 }
+
 func someFunction<T : SomeClass, U:protocol<SomeProtocol> >(someT: T, someU: U) {
 }
+
 func someFunction<T:  SomeClass, U: SomeProtocol>(someT: T, someU: U) {
 }
+
 func allItemsMatch<
     C1 : Container, C2: Container
     where C1.ItemType == C2.ItemType, C1.ItemType: Equatable>

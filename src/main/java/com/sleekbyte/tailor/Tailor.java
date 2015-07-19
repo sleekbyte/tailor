@@ -119,12 +119,12 @@ public class Tailor {
                 File inputFile = new File(filename);
                 FileInputStream inputStream = new FileInputStream(inputFile);
                 SwiftLexer lexer = new SwiftLexer(new ANTLRInputStream(inputStream));
-                CommonTokenStream stream = new CommonTokenStream(lexer);
-                SwiftParser swiftParser = new SwiftParser(stream);
+                CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+                SwiftParser swiftParser = new SwiftParser(tokenStream);
                 SwiftParser.TopLevelContext tree = swiftParser.topLevel();
 
                 try (Printer printer = new Printer(inputFile, maxSeverity)) {
-                    MainListener listener = new MainListener(printer, maxLengths);
+                    MainListener listener = new MainListener(printer, maxLengths, tokenStream);
                     ParseTreeWalker walker = new ParseTreeWalker();
                     walker.walk(listener, tree);
                     FileListener fileListener = new FileListener(printer, inputFile, maxLengths);

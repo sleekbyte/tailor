@@ -71,6 +71,7 @@ class Queue {
     func hello() {
         println("hello")
     }
+    
 }
 
 struct FixedLengthRange {
@@ -132,4 +133,5 @@ private struct Scaling {
         static let kFaceRadiusToMouthHeightRatio: CGFloat = 3
         static let KFaceRadiusToMouthOffsetRatio: CGFloat = 3
     }
+
 }

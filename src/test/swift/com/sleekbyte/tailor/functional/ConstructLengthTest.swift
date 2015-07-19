@@ -6,17 +6,21 @@ func sayHello(personName: String) -> String {
 
 // Check Class length
 class Greeting {
+
     // Check Function with Nested Function length
     func makeIncrementer(forIncrement amount: Int) -> Void -> Int {
         var runningTotal = 0
+
         func incrementer() -> Int {
             runningTotal += amount
             println(amount)
             println(runningTotal)
             return runningTotal
         }
+        
         return incrementer
     }
+
 }
 
 // Check Closure length
