@@ -43,12 +43,6 @@ public class MainListener extends SwiftBaseListener {
     }
 
     @Override
-    public void enterEnumCaseName(SwiftParser.EnumCaseNameContext ctx) {
-        verifier.verifyUpperCamelCase(Messages.ENUM_CASE + Messages.NAMES, ctx);
-        verifier.verifyNameLength(Messages.ENUM_CASE + Messages.NAME, verifier.maxLengths.maxNameLength, ctx);
-    }
-
-    @Override
     public void enterStructName(SwiftParser.StructNameContext ctx) {
         verifier.verifyUpperCamelCase(Messages.STRUCT + Messages.NAMES, ctx);
         verifier.verifyNameLength(Messages.STRUCT + Messages.NAME, verifier.maxLengths.maxNameLength, ctx);
@@ -389,5 +383,24 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterSetterClause(SwiftParser.SetterClauseContext ctx) {
         verifier.verifySetterBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterTypeCastingOperator(SwiftParser.TypeCastingOperatorContext ctx) {
+        verifier.verifyForceTypeCasting(ctx);
+    }
+
+    @Override
+    public void enterRawValueStyleEnumCase(SwiftParser.RawValueStyleEnumCaseContext ctx) {
+        verifier.verifyUpperCamelCase(Messages.ENUM_CASE + Messages.NAMES, ctx.enumCaseName());
+        verifier.verifyNameLength(Messages.ENUM_CASE + Messages.NAME, verifier.maxLengths.maxNameLength,
+                                  ctx.enumCaseName());
+    }
+
+    @Override
+    public void enterUnionStyleEnumCase(SwiftParser.UnionStyleEnumCaseContext ctx) {
+        verifier.verifyUpperCamelCase(Messages.ENUM_CASE + Messages.NAMES, ctx.enumCaseName());
+        verifier.verifyNameLength(Messages.ENUM_CASE + Messages.NAME, verifier.maxLengths.maxNameLength,
+                                  ctx.enumCaseName());
     }
 }
