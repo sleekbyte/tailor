@@ -56,13 +56,15 @@ run {
     }
 }
 
-// Do not include ANTLR output class files in distribution
-distributions {
-    main {
-        contents {
-            exclude('com/')
-        }
-    }
+// Exclude unnecessary compile/runtime dependencies from distribution
+distributions.main.contents {
+    exclude(
+        'antlr-runtime-3.5.2.jar',
+        'antlr4-4.5.jar',
+        'com/',
+        'ST4-4.0.8.jar',
+        'org.abego.treelayout.core-1.0.1.jar'
+    )
 }
 
 // Use [Checkstyle](http://checkstyle.sourceforge.net) Plugin
