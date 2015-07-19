@@ -87,3 +87,17 @@ func max<T, U: Comparable>(f: T -> U ) -> U? {
 protocol SomeProtocol {}
 
 extension SomeExtension: X { }
+
+class SomeClass {/*comment*/}
+
+class SomeClass {}
+
+class SomeClass {/* comment
+*/ }
+
+class DamSon {/* comment space comment
+*/ /* comment
+  comment */ }
+
+class DamSon {
+/* */}

@@ -424,8 +424,25 @@ class ParseTreeVerifier {
     }
 
     private void verifyBodyCloseBraceStyle(ParserRuleContext bodyCtx, String constructName) {
+
         ParseTree closeBrace = ParseTreeUtil.getLastChild(bodyCtx);
-        Location closeBraceLocation = ListenerUtil.getParseTreeStartLocation(closeBrace);
+        Token closeBraceToken = ((TerminalNodeImpl)closeBrace).getSymbol();
+        Location closeBraceLocation = ListenerUtil.getTokenLocation(closeBraceToken);
+
+        List<Token> tokens = tokenStream.getHiddenTokensToLeft(closeBraceToken.getTokenIndex());
+        // if comments are to the left of }
+        if (tokens != null) {
+            Token commentToken = getLastCommentToken(tokens);
+            if (commentToken != null) {
+                int commentEndLine = ListenerUtil.getEndLineOfToken(commentToken);
+                if (commentEndLine == closeBraceLocation.line) {
+                    this.printer.warn(constructName + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
+                    return;
+                }
+            }
+        }
+
+        // if no comments are to the left of }
         ParseTree closeBraceLeftSibling = ParseTreeUtil.getLeftSibling(closeBrace);
         Location closeBraceLeftSiblingLocation = ListenerUtil.getParseTreeStopLocation(closeBraceLeftSibling);
 
@@ -436,6 +453,16 @@ class ParseTreeVerifier {
                 this.printer.warn(Messages.EMPTY_BODY, closeBraceLeftSiblingLocation);
             }
         }
+    }
+
+    private Token getLastCommentToken(List<Token> tokens) {
+        for (int i = tokens.size() - 1; i >= 0; i--) {
+            if (ListenerUtil.isComment(tokens.get(i))) {
+                return tokens.get(i);
+            }
+        }
+
+        return null;
     }
     //endregion
 

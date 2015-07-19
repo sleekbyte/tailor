@@ -55,4 +55,28 @@ public final class ListenerUtil {
     public static boolean isNewline(Token token) {
         return token.getText().equals("\n");
     }
+
+
+    /**
+     * Get the line number on which the token ends.
+     * @param token A token
+     * @return The line number on which the token ends
+     */
+    public static int getEndLineOfToken(Token token) {
+        String tokenText = token.getText();
+        int numNewLine = 0;
+
+        for (int i = 0; i < tokenText.length(); i++){
+            char ch = tokenText.charAt(i);
+            if (ch == '\n') {
+                numNewLine += 1;
+            }
+        }
+
+        if (tokenText.charAt(tokenText.length() -1) == '\n' ) {
+            return token.getLine() + numNewLine - 1;
+        } else {
+            return token.getLine() + numNewLine;
+        }
+    }
 }
