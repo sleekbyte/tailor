@@ -426,7 +426,11 @@ class ParseTreeVerifier {
         Location closeBraceLeftSiblingLocation = ListenerUtil.getParseTreeStopLocation(closeBraceLeftSibling);
 
         if (closeBraceLocation.line == closeBraceLeftSiblingLocation.line) {
-            this.printer.warn(constructName + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
+            if (!closeBraceLeftSibling.getText().equals("{")) {
+                this.printer.warn(constructName + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
+            } else if (closeBraceLocation.column - closeBraceLeftSiblingLocation.column != 1) {
+                this.printer.warn(Messages.EMPTY_BODY, closeBraceLeftSiblingLocation);
+            }
         }
     }
     //endregion

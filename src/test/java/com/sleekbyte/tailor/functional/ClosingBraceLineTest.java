@@ -14,27 +14,31 @@ public class ClosingBraceLineTest extends RuleTest {
 
     @Override
     protected void addAllExpectedMsgs() {
-        addExpectedMsg(13, 54, Severity.WARNING, Messages.SWITCH_STATEMENT);
-        addExpectedMsg(17, 12, Severity.WARNING, Messages.CLASS);
-        addExpectedMsg(24, 21, Severity.WARNING, Messages.CLASS);
-        addExpectedMsg(27, 12, Severity.WARNING, Messages.STRUCT);
-        addExpectedMsg(30, 7, Severity.WARNING, Messages.STRUCT);
-        addExpectedMsg(32, 20, Severity.WARNING, Messages.STRUCT);
-        addExpectedMsg(51, 25, Severity.WARNING, Messages.PROTOCOL);
-        addExpectedMsg(54, 24, Severity.WARNING, Messages.PROTOCOL);
-        addExpectedMsg(57, 7, Severity.WARNING, Messages.PROTOCOL);
-        addExpectedMsg(63, 30, Severity.WARNING, Messages.EXTENSION);
-        addExpectedMsg(66, 16, Severity.WARNING, Messages.EXTENSION);
-        addExpectedMsg(68, 30, Severity.WARNING, Messages.EXTENSION);
-        addExpectedMsg(71, 20, Severity.WARNING, Messages.EXTENSION);
-        addExpectedMsg(78, 14, Severity.WARNING, Messages.FUNCTION);
-        addExpectedMsg(85, 16, Severity.WARNING, Messages.FUNCTION);
+        addExpectedBraceMsg(13, 54, Severity.WARNING, Messages.SWITCH_STATEMENT);
+        addExpectedBraceMsg(17, 12, Severity.WARNING, Messages.CLASS);
+        addExpectedEmptyConstructBodyMsg(24, 19, Severity.WARNING);
+        addExpectedBraceMsg(27, 12, Severity.WARNING, Messages.STRUCT);
+        addExpectedEmptyConstructBodyMsg(30, 5, Severity.WARNING);
+        addExpectedEmptyConstructBodyMsg(32, 18, Severity.WARNING);
+        addExpectedEmptyConstructBodyMsg(51, 23, Severity.WARNING);
+        addExpectedEmptyConstructBodyMsg(54, 22, Severity.WARNING);
+        addExpectedEmptyConstructBodyMsg(57, 5, Severity.WARNING);
+        addExpectedEmptyConstructBodyMsg(63, 28, Severity.WARNING);
+        addExpectedEmptyConstructBodyMsg(68, 28, Severity.WARNING);
+        addExpectedEmptyConstructBodyMsg(71, 18, Severity.WARNING);
+        addExpectedBraceMsg(85, 16, Severity.WARNING, Messages.FUNCTION);
+        addExpectedEmptyConstructBodyMsg(89, 28, Severity.WARNING);
     }
 
-    private void addExpectedMsg(int line, int column, Severity severity, String msg) {
+    private void addExpectedBraceMsg(int line, int column, Severity severity, String msg) {
         expectedMessages.add(
             Printer.genOutputStringForTest(inputFile.getName(), line, column, severity,
                                            msg + Messages.CLOSE_BRACKET_STYLE));
+    }
+
+    private void addExpectedEmptyConstructBodyMsg(int line, int column, Severity severity) {
+        expectedMessages.add(
+            Printer.genOutputStringForTest(inputFile.getName(), line, column, severity, Messages.EMPTY_BODY));
     }
 
 }

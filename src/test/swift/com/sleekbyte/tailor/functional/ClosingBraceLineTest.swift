@@ -83,3 +83,7 @@ func max<T, U: Comparable>(f: T -> U ) -> U? {
 
 func max<T, U: Comparable>(f: T -> U ) -> U? {
     return nil }
+
+protocol SomeProtocol {}
+
+extension SomeExtension: X { }
