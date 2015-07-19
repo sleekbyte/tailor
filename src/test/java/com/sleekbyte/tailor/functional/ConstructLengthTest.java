@@ -26,12 +26,12 @@ public class ConstructLengthTest extends RuleTest {
 
     @Override
     protected void addAllExpectedMsgs() {
-        addExpectedMsg(8, 16, Severity.WARNING, Messages.CLASS, 12, 8);
-        addExpectedMsg(10, 67, Severity.WARNING, Messages.FUNCTION, 9, 3);
-        addExpectedMsg(12, 35, Severity.WARNING, Messages.FUNCTION, 5, 3);
-        addExpectedMsg(24, 27, Severity.WARNING, Messages.CLOSURE, 8, 6);
-        addExpectedMsg(31, Severity.WARNING, Messages.FILE, 38, 30);
-        addExpectedMsg(35, 19, Severity.WARNING, Messages.STRUCT, 3, 1);
+        addExpectedMsg(8, 16, Severity.WARNING, Messages.CLASS, 16, 8);
+        addExpectedMsg(11, 67, Severity.WARNING, Messages.FUNCTION, 11, 3);
+        addExpectedMsg(14, 35, Severity.WARNING, Messages.FUNCTION, 5, 3);
+        addExpectedMsg(28, 27, Severity.WARNING, Messages.CLOSURE, 8, 6);
+        addExpectedMsg(31, Severity.WARNING, Messages.FILE, 42, 30);
+        addExpectedMsg(39, 19, Severity.WARNING, Messages.STRUCT, 3, 1);
     }
 
     private void addExpectedMsg(int line, Severity severity, String msg, int length, int limit) {

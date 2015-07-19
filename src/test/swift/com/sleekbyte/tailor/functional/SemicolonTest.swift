@@ -38,6 +38,7 @@ struct DemoStruct {
 
         } while true;
     };
+
 };
 
 // Class examples
@@ -59,4 +60,5 @@ class UpperCamelCase {
             println("It's not that cold. Wear a t-shirt.");
         }
     };
+
 };

@@ -16,6 +16,10 @@ public final class ListenerUtil {
         return new Location(token.getLine(), token.getCharPositionInLine() + 1);
     }
 
+    public static Location getTokenEndLocation(Token token) {
+        return new Location(token.getLine(), getLastCharPositionInLine(token) + 2);
+    }
+
     public static int getLastCharPositionInLine(Token token) {
         return token.getCharPositionInLine() + (token.getStopIndex() - token.getStartIndex());
     }
@@ -40,6 +44,15 @@ public final class ListenerUtil {
 
     public static Location getParseTreeStopLocation(ParseTree parseTree) {
         return (parseTree instanceof TerminalNodeImpl) ? getTokenLocation(((TerminalNodeImpl) parseTree).getSymbol())
-                                                       : getContextStopLocation((ParserRuleContext) parseTree);
+                       : getContextStopLocation((ParserRuleContext) parseTree);
+    }
+
+    public static boolean isComment(Token token) {
+        String text = token.getText();
+        return text.startsWith("//") || text.startsWith("/*");
+    }
+
+    public static boolean isNewline(Token token) {
+        return token.getText().equals("\n");
     }
 }

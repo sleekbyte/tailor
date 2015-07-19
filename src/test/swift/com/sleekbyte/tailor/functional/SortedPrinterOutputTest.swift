@@ -30,4 +30,5 @@ struct invalidStructName {
         for ; ; {
         };
     }
+
 };

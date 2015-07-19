@@ -70,7 +70,7 @@ public class Messages {
     public static final String EXCEEDS_LINE_LIMIT = "is over maximum line limit";
     public static final String EXCEEDS_CHARACTER_LIMIT = "is over maximum character limit";
     public static final String GLOBAL_CONSTANT_NAMING = "should be either lowerCamelCase or UpperCamelCase";
-    public static final String NEWLINE_TERMINATOR = "should terminate with a newline character ('\\n')";
+    public static final String NEWLINE_TERMINATOR = "should terminate with exactly one newline character ('\\n')";
     public static final String ENCLOSED_PARENTHESIS = "should not be enclosed within parentheses";
     public static final String K_PREFIXED = "should not be prefixed with 'k' or 'K'";
     public static final String MULTIPLE_IMPORTS = "should be on separate lines";
@@ -81,6 +81,8 @@ public class Messages {
     public static final String SPACE_AFTER = "must have exactly one space after it";
     public static final String NO_SPACE_BEFORE = "must have no spaces before it";
     public static final String FORCE_CAST = "Force casts should be avoided";
+    public static final String BLANK_LINE_BEFORE = "must have at least one blank line before it";
+    public static final String BLANK_LINE_AFTER = "must have at least one blank line after it";
 
     // Usage messages
     public static final String CMD_LINE_SYNTAX = "tailor";
