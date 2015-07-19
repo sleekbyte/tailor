@@ -8,6 +8,8 @@ import com.sleekbyte.tailor.utils.SourceFileUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.LineNumberReader;
+import java.nio.file.Files;
 import java.util.Map;
 import java.util.Set;
 
@@ -41,6 +43,7 @@ public class FileListener {
         verifyLineLengths(maxLengths.maxLineLength);
         verifyNewlineTerminated();
         verifyNoLeadingWhitespace();
+        verifyTrailingWhitespace();
     }
 
     private void verifyFileLength(int maxLines) throws IOException {
@@ -77,6 +80,22 @@ public class FileListener {
             Location location = new Location(1, 1);
             this.printer.warn(Messages.FILE + Messages.LEADING_WHITESPACE, location);
         }
+    }
+
+    private void verifyTrailingWhitespace() throws IOException {
+        LineNumberReader reader = new LineNumberReader(Files.newBufferedReader(inputFile.toPath()));
+        char lastCharacter;
+
+        for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+            if (line.length() > 0) {
+                lastCharacter = line.charAt(line.length() - 1);
+                if (Character.isWhitespace(lastCharacter)) {
+                    Location location = new Location(reader.getLineNumber(), line.length());
+                    this.printer.warn(Messages.LINE + Messages.TRAILING_WHITESPACE, location);
+                }
+            }
+        }
+        reader.close();
     }
 
 }

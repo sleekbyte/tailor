@@ -84,7 +84,7 @@ func function16() {
 
 func function17() {
 
-} 
+}
 func function17() {
   // something goes here
 }

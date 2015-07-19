@@ -17,7 +17,7 @@ class Greeting {
             println(runningTotal)
             return runningTotal
         }
-        
+
         return incrementer
     }
 

@@ -84,6 +84,7 @@ public class Messages {
     public static final String BLANK_LINE_BEFORE = "must have at least one blank line before it";
     public static final String BLANK_LINE_AFTER = "must have at least one blank line after it";
     public static final String LEADING_WHITESPACE = "should not start with whitespace";
+    public static final String TRAILING_WHITESPACE = "should not have any trailing whitespace";
 
     // Usage messages
     public static final String CMD_LINE_SYNTAX = "tailor";
