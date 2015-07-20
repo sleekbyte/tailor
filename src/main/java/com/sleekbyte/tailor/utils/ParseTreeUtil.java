@@ -32,7 +32,7 @@ public final class ParseTreeUtil {
     /**
      * Returns node's index with in its parent's child array.
      *
-     * @param node A child node.
+     * @param node A child node
      * @return Node's index or -1 if node is null or doesn't have a parent
      */
     public static int getNodeIndex(ParseTree node) {
@@ -51,7 +51,7 @@ public final class ParseTreeUtil {
     /**
      * Gets left sibling of a parse tree node.
      *
-     * @param ctx A node.
+     * @param ctx A node
      * @return Left sibling of a node, or null if no sibling is found
      */
     public static ParseTree getLeftSibling(ParseTree ctx) {
@@ -65,7 +65,7 @@ public final class ParseTreeUtil {
     /**
      * Gets right sibling of a parse tree node.
      *
-     * @param ctx A node.
+     * @param ctx A node
      * @return Right sibling of a node, or null if no sibling is found
      */
     public static ParseTree getRightSibling(ParseTree ctx) {
@@ -75,6 +75,19 @@ public final class ParseTreeUtil {
             return null;
         }
         return parent.getChild(index + 1);
+    }
+
+    /**
+     * Gets last child of a parse tree node.
+     *
+     * @param ctx A node
+     * @return Last child of a node, or null if node has no children
+     */
+    public static ParseTree getLastChild(ParseTree ctx) {
+        if (ctx.getChildCount() == 0) {
+            return null;
+        }
+        return ctx.getChild(ctx.getChildCount() - 1);
     }
 
     /**
@@ -114,5 +127,4 @@ public final class ParseTreeUtil {
             ctx = ctx.getParent();
         }
     }
-
 }

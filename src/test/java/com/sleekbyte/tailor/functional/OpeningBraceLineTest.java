@@ -64,7 +64,8 @@ public class OpeningBraceLineTest extends RuleTest {
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg) {
         expectedMessages.add(
-            Printer.genOutputStringForTest(inputFile.getName(), line, column, severity, msg + Messages.BRACKET_STYLE));
+            Printer.genOutputStringForTest(inputFile.getName(), line, column, severity,
+                                           msg + Messages.OPEN_BRACKET_STYLE));
     }
 
 }

@@ -74,7 +74,9 @@ public class Messages {
     public static final String ENCLOSED_PARENTHESIS = "should not be enclosed within parentheses";
     public static final String K_PREFIXED = "should not be prefixed with 'k' or 'K'";
     public static final String MULTIPLE_IMPORTS = "should be on separate lines";
-    public static final String BRACKET_STYLE = "should not have any line breaks before the opening brace";
+    public static final String OPEN_BRACKET_STYLE = "should not have any line breaks before the opening brace";
+    public static final String CLOSE_BRACKET_STYLE = "closing brace should be isolated on a separate line";
+    public static final String EMPTY_BODY = "Empty construct body should not contain any whitespace";
     public static final String SPACE_BEFORE = "must have exactly one space before it";
     public static final String SPACE_AFTER = "must have exactly one space after it";
     public static final String NO_SPACE_BEFORE = "must have no spaces before it";
