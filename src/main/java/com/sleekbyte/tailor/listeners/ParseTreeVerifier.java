@@ -399,6 +399,7 @@ class ParseTreeVerifier {
         TerminalNodeImpl get = (TerminalNodeImpl) ParseTreeUtil.getLeftSibling(ctx.codeBlock());
         Location getLocation = ListenerUtil.getTokenLocation(get.getSymbol());
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), getLocation, Messages.GETTER);
+        verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.GETTER);
     }
 
     void verifySetterBraceStyle(SetterClauseContext ctx) {
@@ -407,6 +408,7 @@ class ParseTreeVerifier {
                                     ? ListenerUtil.getTokenLocation(((TerminalNodeImpl) leftSibling).getSymbol()) :
                                       ListenerUtil.getContextStopLocation((ParserRuleContext) leftSibling);
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), setLocation, Messages.SETTER);
+        verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.SETTER);
     }
 
     private void verifyCodeBlockOpenBraceStyle(ParserRuleContext codeBlockCtx, Location constructLocation,

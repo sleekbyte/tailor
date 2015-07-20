@@ -95,9 +95,76 @@ class SomeClass {}
 class SomeClass {/* comment
 */ }
 
-class DamSon {/* comment space comment
+class SomeClass {/* comment space comment
 */ /* comment
   comment */ }
 
-class DamSon {
+class SomeClass {
 /* */}
+
+class SomeClass {
+    var x: Int {
+        set {
+            self.x = 10 }
+
+        get {
+            return 10 }
+    }
+}
+
+struct SomeStruct {
+    var x: Int {
+        set {
+            x = 10
+        }
+
+        get {
+            return 10
+        }
+    }
+}
+
+struct SomeStruct {
+    var x: Int {
+        get {
+            return 10 }
+    }
+}
+
+@objc
+class ExampleClass {
+    var enabled: Bool {
+        @objc(isEnabled)
+        get {
+            return true }
+        set {
+            self.enabled = true
+        }
+    }
+}
+
+@objc
+class SomeClass {
+    var enabled: Bool {
+        @objc(isEnabled)
+        get {
+            return true
+        }
+        set {
+            self.enabled = true
+        }
+    }
+}
+
+struct Rect {
+    var center: Point {
+        get {
+            let centerX = origin.x + (size.width / 2)
+            var centerY = origin.y + (size.height / 2)
+            return Point(x: centerX, y: centerY)
+        }
+        set(newCenter) {
+            var origin.x = newCenter.x - (size.width / 2)
+            var origin.y = newCenter.y - (size.height / 2) }
+    }
+}
