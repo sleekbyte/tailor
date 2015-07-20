@@ -2,8 +2,8 @@ func printAreaSwitchStatement() {
         var area = calculateArea()
         if area == Double.infinity {
             println("something went wrong!")
-            return }
-
+            return
+        }
         switch area {
             case 0:
                 println ("Area is zero")
@@ -168,3 +168,54 @@ struct Rect {
             var origin.y = newCenter.y - (size.height / 2) }
     }
 }
+
+
+init(length: Double, breadth: Double) {
+    //store the row and column of the square in the grid
+    self.length = length
+    self.breadth = breadth }
+
+init(length: Double, breadth: Double) {
+    //store the row and column of the square in the grid
+    self.length = length
+    self.breadth = breadth
+}
+
+func printAreaIfStatement() {
+        var area = calculateArea()
+        if area == Double.infinity {
+            println("something went wrong!")
+            return
+        }
+
+        if area == 0 {
+            println ("Area is zero") }
+
+        else if area == 1 {
+            println ("Area is 1") }
+
+        else if area == 2 {
+            println ("Area is 2")
+        }
+
+        else { println ("Area is \(area)") }
+}
+
+    func funWithLoops() {
+        let lengthArray = [0,1,2,3,4]
+        let breadthArray = [0,1,2,3,4]
+
+        for var x = 0; x < lengthArray.count; x+=1 {
+            println(x) }
+
+        for breadth in breadthArray {
+            println(breadth) }
+
+        while false {
+            println("Will never be executed") }
+
+        repeat { /* infinite loop */ } while true
+
+        repeat { /* infinite
+         loop */ } while true
+    }

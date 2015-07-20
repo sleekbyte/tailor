@@ -37,6 +37,14 @@ public class ClosingBraceLineTest extends RuleTest {
         addExpectedBraceMsg(130, 23, Severity.WARNING, Messages.GETTER);
         addExpectedBraceMsg(139, 25, Severity.WARNING, Messages.GETTER);
         addExpectedBraceMsg(168, 60, Severity.WARNING, Messages.SETTER);
+        addExpectedBraceMsg(176, 28, Severity.WARNING, Messages.INITIALIZER_BODY);
+        addExpectedBraceMsg(192, 38, Severity.WARNING, Messages.IF_STATEMENT);
+        addExpectedBraceMsg(195, 35, Severity.WARNING, Messages.IF_STATEMENT);
+        addExpectedBraceMsg(201, 44, Severity.WARNING, Messages.ELSE_CLAUSE);
+        addExpectedBraceMsg(212, 30, Severity.WARNING, Messages.FOR_IN_LOOP);
+        addExpectedBraceMsg(215, 47, Severity.WARNING, Messages.WHILE_STATEMENT);
+        addExpectedBraceMsg(217, 38, Severity.WARNING, Messages.REPEAT_WHILE_STATEMENT);
+        addExpectedBraceMsg(220, 18, Severity.WARNING, Messages.REPEAT_WHILE_STATEMENT);
     }
 
     private void addExpectedBraceMsg(int line, int column, Severity severity, String msg) {
