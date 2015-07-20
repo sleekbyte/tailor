@@ -429,15 +429,18 @@ class ParseTreeVerifier {
         Token closeBraceToken = ((TerminalNodeImpl)closeBrace).getSymbol();
         Location closeBraceLocation = ListenerUtil.getTokenLocation(closeBraceToken);
 
-        List<Token> tokens = tokenStream.getHiddenTokensToLeft(closeBraceToken.getTokenIndex());
-        // if comments are to the left of }
-        if (tokens != null) {
-            Token commentToken = getLastCommentToken(tokens);
-            if (commentToken != null) {
-                int commentEndLine = ListenerUtil.getEndLineOfToken(commentToken);
-                if (commentEndLine == closeBraceLocation.line) {
-                    this.printer.warn(constructName + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
-                    return;
+        int closeBraceTokenIndex = closeBraceToken.getTokenIndex();
+        if (closeBraceTokenIndex >= 0) {
+            List<Token> tokens = tokenStream.getHiddenTokensToLeft(closeBraceToken.getTokenIndex());
+            // if comments are to the left of }
+            if (tokens != null) {
+                Token commentToken = getLastCommentToken(tokens);
+                if (commentToken != null) {
+                    int commentEndLine = ListenerUtil.getEndLineOfToken(commentToken);
+                    if (commentEndLine == closeBraceLocation.line) {
+                        this.printer.warn(constructName + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
+                        return;
+                    }
                 }
             }
         }
