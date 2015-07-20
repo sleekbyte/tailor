@@ -1,3 +1,4 @@
+// Java Plugin {{{
 apply plugin: 'java'
 
 // Add ANTLR output as sourceSet
@@ -30,7 +31,9 @@ jar {
 
 // Ensure ANTLR output is generated before compilation
 compileGenJava.dependsOn 'generateGrammarSource'
+// }}}
 
+// ANTLR Plugin {{{
 // Generate ANTLR output based on Swift grammar
 apply plugin: 'antlr'
 
@@ -38,12 +41,9 @@ generateGrammarSource {
     arguments += ['-package', 'com.sleekbyte.tailor.antlr']
     outputDirectory = file('src/gen/java/com/sleekbyte/tailor/antlr')
 }
+// }}}
 
-// Ensure ANTLR output is deleted via clean
-clean {
-    delete file('src/gen')
-}
-
+// Application Plugin {{{
 // Add run task
 apply plugin: 'application'
 
@@ -66,18 +66,43 @@ distributions.main.contents {
         'org.abego.treelayout.core-1.0.1.jar'
     )
 }
+// }}}
 
+// Code Style Plugins {{{
 // Use [Checkstyle](http://checkstyle.sourceforge.net) Plugin
 apply plugin: 'checkstyle'
 
 checkstyle {
-    configFile = file('config/checkstyle/google_checks.xml')
     toolVersion = "6.7"
     // Exclude generated code from Checkstyle checks
     sourceSets -= sourceSets.gen
 }
 
-checkstyleTest.configFile = file('config/checkstyle/google_test_checks.xml')
+// Fail the build if checkstyleMain or checkstyleTest have warnings
+task verifyNoCheckstyleWarnings << {
+    def checkstyleMainWarningsFile = 'build/reports/checkstyle/main.xml'
+    def checkstyleTestWarningsFile = 'build/reports/checkstyle/test.xml'
+    File mainWarningsFile = file(checkstyleMainWarningsFile)
+    File testWarningsFile = file(checkstyleTestWarningsFile)
+    if (mainWarningsFile.exists() && mainWarningsFile.text.contains("<error ")) {
+        throw new GradleException("There were Checkstyle warnings! For more info check $mainWarningsFile")
+    }
+    if (testWarningsFile.exists() && testWarningsFile.text.contains("<error ")) {
+        throw new GradleException("There were Checkstyle warnings! For more info check $testWarningsFile")
+    }
+}
+
+checkstyleMain {
+    configFile = file('config/checkstyle/google_checks.xml')
+    // Always execute verifyNoCheckstyleWarnings task after this task
+    finalizedBy verifyNoCheckstyleWarnings
+}
+
+checkstyleTest {
+    configFile = file('config/checkstyle/google_test_checks.xml')
+    // Always execute verifyNoCheckstyleWarnings task after this task
+    finalizedBy verifyNoCheckstyleWarnings
+}
 
 // Use [FindBugs](http://findbugs.sourceforge.net/) Plugin
 apply plugin: 'findbugs'
@@ -113,6 +138,12 @@ tasks.withType(Pmd) {
         xml.enabled = false
         html.enabled = true
     }
+}
+// }}}
+
+// Ensure ANTLR output is deleted via clean
+clean {
+    delete file('src/gen')
 }
 
 repositories {
