@@ -431,7 +431,7 @@ class ParseTreeVerifier {
 
         int closeBraceTokenIndex = closeBraceToken.getTokenIndex();
         if (closeBraceTokenIndex >= 0) {
-            List<Token> tokens = tokenStream.getHiddenTokensToLeft(closeBraceToken.getTokenIndex());
+            List<Token> tokens = tokenStream.getHiddenTokensToLeft(closeBraceTokenIndex);
             // if comments are to the left of }
             if (tokens != null) {
                 Token commentToken = getLastCommentToken(tokens);
