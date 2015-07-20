@@ -135,22 +135,22 @@ public class WhitespaceTest extends RuleTest {
         addExpectedBraceMessage(start + 4, 38);
         addExpectedBraceMessage(start + 29, 22);
         addExpectedBraceMessage(start + 33, 17);
-//        addExpectedBraceMessage(start + 43, 17);
-//        addExpectedBraceMessage(start + 47, 26);
+        addExpectedBraceMessage(start + 43, 17);
+        addExpectedBraceMessage(start + 47, 26);
         addExpectedBraceMessage(start + 54, 22);
         addExpectedBraceMessage(start + 70, 20);
         addExpectedBraceMessage(start + 75, 18);
 
 //        // classes and structs with generic types
-//        start = 340;
-//        addExpectedBraceMessage(start, 6);
-//        addExpectedBraceMessage(start + 6, 5);
+        start = 340;
+        addExpectedBraceMessage(start, 6);
+        addExpectedBraceMessage(start + 3, 4);
 
         // protocols
-//        start = 349;
-//        addExpectedBraceMessage(start, 24);
-//        addExpectedBraceMessage(start + 4, 32);
-//        addExpectedBraceMessage(start + 13, 24);
+        start = 349;
+        addExpectedBraceMessage(start, 24);
+        addExpectedBraceMessage(start + 4, 32);
+        addExpectedBraceMessage(start + 13, 24);
 
 //        // enums
 //        start = 376;
@@ -168,16 +168,16 @@ public class WhitespaceTest extends RuleTest {
 
         // extensions
         start = 450;
-//        addExpectedBraceMessage(start, 26);
-//        addExpectedBraceMessage(start + 4, 29);
-//        addExpectedBraceMessage(start + 9, 19);
+        addExpectedBraceMessage(start, 26);
+        addExpectedBraceMessage(start + 4, 29);
+        addExpectedBraceMessage(start + 9, 19);
 
         // getters and setters
         start = 464;
 //        addExpectedBraceMessage(start, 8);
 //        addExpectedBraceMessage(start + 4, 8);
         addExpectedBraceMessage(start + 21, 14);
-//        addExpectedBraceMessage(start + 32, 21);
+        addExpectedBraceMessage(start + 32, 21);
         addExpectedBraceMessage(start + 51, 25);
     }
 

@@ -423,6 +423,7 @@ class ParseTreeVerifier {
     private void verifyBodyOpenBraceStyle(ParserRuleContext ctx, String constructName) {
         ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(ctx);
         Location constructLocation = ListenerUtil.getContextStopLocation(leftSibling);
+        verifySingleSpaceBeforeOpenBrace(ctx, leftSibling.getStop());
         verifyCodeBlockOpenBraceIsInline(ctx, constructLocation, constructName);
     }
 
