@@ -66,14 +66,14 @@ public final class ListenerUtil {
         String tokenText = token.getText();
         int numNewLine = 0;
 
-        for (int i = 0; i < tokenText.length(); i++){
+        for (int i = 0; i < tokenText.length(); i++) {
             char ch = tokenText.charAt(i);
             if (ch == '\n') {
                 numNewLine += 1;
             }
         }
 
-        if (tokenText.charAt(tokenText.length() -1) == '\n' ) {
+        if (tokenText.charAt(tokenText.length() - 1) == '\n' ) {
             return token.getLine() + numNewLine - 1;
         } else {
             return token.getLine() + numNewLine;
