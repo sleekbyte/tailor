@@ -273,27 +273,32 @@ class ParseTreeVerifier {
     void verifyForInStatementBraceStyle(ForInStatementContext ctx) {
         Location expressionLocation = ListenerUtil.getContextStopLocation(ctx.expression());
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), expressionLocation, Messages.FOR_IN_LOOP);
+        verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.FOR_IN_LOOP);
     }
 
     void verifyInitializerBraceStyle(InitializerDeclarationContext ctx) {
         Location parameterClauseLocation = ListenerUtil.getContextStopLocation(ctx.parameterClause());
         verifyCodeBlockOpenBraceStyle(ctx.initializerBody().codeBlock(), parameterClauseLocation,
                                       Messages.INITIALIZER_BODY);
+        verifyBodyCloseBraceStyle(ctx.initializerBody().codeBlock(), Messages.INITIALIZER_BODY);
     }
 
     void verifyRepeatWhileLoopBraceStyle(RepeatWhileStatementContext ctx) {
         Location repeatClause = ListenerUtil.getContextStartLocation(ctx);
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), repeatClause, Messages.REPEAT_WHILE_STATEMENT);
+        verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.REPEAT_WHILE_STATEMENT);
     }
 
     void verifyWhileLoopBraceStyle(WhileStatementContext ctx) {
         Location conditionClauseLocation = ListenerUtil.getContextStopLocation(ctx.conditionClause());
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), conditionClauseLocation, Messages.WHILE_STATEMENT);
+        verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.WHILE_STATEMENT);
     }
 
     void verifyIfStatementBraceStyle(IfStatementContext ctx) {
         Location conditionClauseLocation = ListenerUtil.getContextStopLocation(ctx.conditionClause());
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), conditionClauseLocation, Messages.IF_STATEMENT);
+        verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.IF_STATEMENT);
     }
 
     void verifyElseClauseBraceStyle(ElseClauseContext ctx) {
@@ -302,6 +307,7 @@ class ParseTreeVerifier {
         }
         Location elseClauseLocation = ListenerUtil.getContextStartLocation(ctx);
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), elseClauseLocation, Messages.ELSE_CLAUSE);
+        verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.ELSE_CLAUSE);
     }
 
     void verifyFunctionBraceStyle(FunctionDeclarationContext ctx) {
@@ -399,6 +405,7 @@ class ParseTreeVerifier {
         TerminalNodeImpl get = (TerminalNodeImpl) ParseTreeUtil.getLeftSibling(ctx.codeBlock());
         Location getLocation = ListenerUtil.getTokenLocation(get.getSymbol());
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), getLocation, Messages.GETTER);
+        verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.GETTER);
     }
 
     void verifySetterBraceStyle(SetterClauseContext ctx) {
@@ -407,6 +414,7 @@ class ParseTreeVerifier {
                                     ? ListenerUtil.getTokenLocation(((TerminalNodeImpl) leftSibling).getSymbol()) :
                                       ListenerUtil.getContextStopLocation((ParserRuleContext) leftSibling);
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), setLocation, Messages.SETTER);
+        verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.SETTER);
     }
 
     private void verifyCodeBlockOpenBraceStyle(ParserRuleContext codeBlockCtx, Location constructLocation,
