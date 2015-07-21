@@ -361,8 +361,6 @@ class ParseTreeVerifier {
                 break;
             }
         }
-
-
     }
 
     void verifyClosureExpressionBraceStyle(ClosureExpressionContext ctx) {
@@ -451,7 +449,6 @@ class ParseTreeVerifier {
                 }
             }
         }
-
 
         // if no comments are to the left of }
         ParseTree closeBraceLeftSibling = ParseTreeUtil.getLeftSibling(closeBrace);
