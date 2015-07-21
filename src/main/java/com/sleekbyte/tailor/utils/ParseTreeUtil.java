@@ -1,7 +1,9 @@
 package com.sleekbyte.tailor.utils;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 /**
  * Utils for traversing Parse Trees.
@@ -125,6 +127,34 @@ public final class ParseTreeUtil {
                 return right;
             }
             ctx = ctx.getParent();
+        }
+    }
+
+    /**
+     * Returns the starting token of the construct represented by node.
+     *
+     * @param node A node
+     * @return Start token
+     */
+    public static Token getStartTokenForNode(ParseTree node) {
+        if (node instanceof TerminalNodeImpl) {
+            return ((TerminalNodeImpl) node).getSymbol();
+        } else {
+            return ((ParserRuleContext) node).getStart();
+        }
+    }
+
+    /**
+     * Returns the last token of the construct represented by node.
+     *
+     * @param node A node
+     * @return Stop token
+     */
+    public static Token getStopTokenForNode(ParseTree node) {
+        if (node instanceof TerminalNodeImpl) {
+            return ((TerminalNodeImpl) node).getSymbol();
+        } else {
+            return ((ParserRuleContext) node).getStop();
         }
     }
 }

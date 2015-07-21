@@ -55,7 +55,7 @@ public class Messages {
     public static final String COLON = "Colon ";
     public static final String EXTENSION = "Extension ";
     public static final String GETTER = "Getter ";
-    public static final String OPEN_BRACE = "Open Brace ";
+    public static final String OPEN_BRACE = "Opening brace ";
 
     // Plural constructs
     public static final String IMPORTS = "Imports ";
