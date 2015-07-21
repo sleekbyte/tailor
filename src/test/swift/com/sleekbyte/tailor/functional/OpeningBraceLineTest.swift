@@ -160,7 +160,7 @@ class Hello
 {
 }
 struct Hello
-<T>{
+<T> {
 }
 struct Hello
 <T>

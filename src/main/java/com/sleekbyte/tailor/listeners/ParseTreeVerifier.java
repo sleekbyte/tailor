@@ -10,7 +10,6 @@ import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryTypeContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ElseClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExtensionBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ForInStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ForStatementContext;
@@ -342,8 +341,11 @@ class ParseTreeVerifier {
                 Location openBraceLocation = ListenerUtil.getTokenLocation(openBrace);
                 ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(child);
                 Location leftSiblingLocation = ListenerUtil.getContextStopLocation(leftSibling);
+
                 if (openBraceLocation.line != leftSiblingLocation.line) {
-                    this.printer.warn(Messages.ENUM + Messages.OPEN_BRACKET_STYLE, openBraceLocation);
+                    printer.warn(Messages.ENUM + Messages.OPEN_BRACKET_STYLE, openBraceLocation);
+                } else if (checkLeftSpaces(leftSibling.getStop(), openBrace, 1)) {
+                    printer.error(Messages.OPEN_BRACE + Messages.SPACE_BEFORE, openBraceLocation);
                 }
                 break;
             }
@@ -351,36 +353,36 @@ class ParseTreeVerifier {
     }
 
     void verifyClosureExpressionBraceStyle(ClosureExpressionContext ctx) {
-        ParseTree sixthAncestor = ParseTreeUtil.getNthParent(ctx, 6);
-
-        if (sixthAncestor == null || !(sixthAncestor instanceof ExpressionElementListContext)) {
-            ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(ctx);
-            if (leftSibling != null) {
-                Location leftSiblingLocation = ListenerUtil.getContextStopLocation(leftSibling);
-                verifyCodeBlockOpenBraceIsInline(ctx, leftSiblingLocation, Messages.CLOSURE);
-            }
+        ParseTree left = ParseTreeUtil.getLeftNode(ctx);
+        if (left == null) {
             return;
         }
 
-        ExpressionElementListContext expressionElementListContext = (ExpressionElementListContext) sixthAncestor;
-
-        ParseTree expElementListLeftSibling = ParseTreeUtil.getLeftSibling(expressionElementListContext);
-
-        if (expElementListLeftSibling == null) {
-            return;
-        }
-
-        Location expElementLeftSiblingLocation;
-
-        if (expElementListLeftSibling instanceof TerminalNodeImpl) {
-            Token leftToken = ((TerminalNodeImpl) expElementListLeftSibling).getSymbol();
-            expElementLeftSiblingLocation = ListenerUtil.getTokenLocation(leftToken);
+        Location leftLocation;
+        if (left instanceof TerminalNodeImpl) {
+            Token leftToken = ((TerminalNodeImpl) left).getSymbol();
+            leftLocation = ListenerUtil.getTokenLocation(leftToken);
         } else {
-            ParserRuleContext leftContext = (ParserRuleContext) expElementListLeftSibling;
-            expElementLeftSiblingLocation = ListenerUtil.getContextStopLocation(leftContext);
+            ParserRuleContext leftContext = (ParserRuleContext) left;
+            leftLocation = ListenerUtil.getContextStopLocation(leftContext);
         }
 
-        verifyCodeBlockOpenBraceIsInline(ctx, expElementLeftSiblingLocation, Messages.CLOSURE);
+        verifyCodeBlockOpenBraceIsInline(ctx, leftLocation, Messages.CLOSURE);
+
+        /* It doesn't always make sense to check if an opening brace for a closure has a single space before it.
+           Example: list.map({(element: Int) in element * 2})
+           Only places worth checking are scenarios like these:
+            list.map() {(element: Int) in element * 2}
+           or
+            list.map {(element: Int) in element * 2}
+         */
+        ParseTree leftSibling = ParseTreeUtil.getLeftSibling(ctx);
+        if (leftSibling != null && (leftSibling instanceof ParenthesizedExpressionContext
+            || leftSibling instanceof PostfixExpressionContext)) {
+            Token leftToken = ((ParserRuleContext) leftSibling).getStop();
+            verifySingleSpaceBeforeOpenBrace(ctx, leftToken);
+        }
+
     }
 
     void verifyExtensionBraceStyle(ExtensionBodyContext ctx) {
@@ -403,7 +405,7 @@ class ParseTreeVerifier {
     private void verifySingleSpaceBeforeOpenBrace(ParserRuleContext codeBlockCtx, Token left) {
         Token openBrace = codeBlockCtx.getStart();
         if (checkLeftSpaces(left, openBrace, 1)) {
-           printer.error(Messages.OPEN_BRACE + Messages.SPACE_BEFORE, ListenerUtil.getTokenLocation(openBrace));
+            printer.error(Messages.OPEN_BRACE + Messages.SPACE_BEFORE, ListenerUtil.getTokenLocation(openBrace));
         }
     }
 
