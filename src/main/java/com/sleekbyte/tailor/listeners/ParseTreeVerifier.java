@@ -271,23 +271,28 @@ class ParseTreeVerifier {
 
     void verifyForInStatementBraceStyle(ForInStatementContext ctx) {
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), ctx.expression().getStop(), Messages.FOR_IN_LOOP);
+        verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.FOR_IN_LOOP);
     }
 
     void verifyInitializerBraceStyle(InitializerDeclarationContext ctx) {
         verifyCodeBlockOpenBraceStyle(ctx.initializerBody().codeBlock(), ctx.parameterClause().getStop(),
             Messages.INITIALIZER_BODY);
+        verifyBodyCloseBraceStyle(ctx.initializerBody().codeBlock(), Messages.INITIALIZER_BODY);
     }
 
     void verifyRepeatWhileLoopBraceStyle(RepeatWhileStatementContext ctx) {
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), ctx.getStart(), Messages.REPEAT_WHILE_STATEMENT);
+        verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.REPEAT_WHILE_STATEMENT);
     }
 
     void verifyWhileLoopBraceStyle(WhileStatementContext ctx) {
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), ctx.conditionClause().getStop(), Messages.WHILE_STATEMENT);
+        verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.WHILE_STATEMENT);
     }
 
     void verifyIfStatementBraceStyle(IfStatementContext ctx) {
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), ctx.conditionClause().getStop(), Messages.IF_STATEMENT);
+        verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.IF_STATEMENT);
     }
 
     void verifyElseClauseBraceStyle(ElseClauseContext ctx) {
@@ -295,6 +300,7 @@ class ParseTreeVerifier {
             return;
         }
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), ctx.getStart(), Messages.ELSE_CLAUSE);
+        verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.ELSE_CLAUSE);
     }
 
     void verifyFunctionBraceStyle(FunctionDeclarationContext ctx) {
@@ -393,6 +399,7 @@ class ParseTreeVerifier {
     void verifyGetterBraceStyle(GetterClauseContext ctx) {
         TerminalNodeImpl get = (TerminalNodeImpl) ParseTreeUtil.getLeftSibling(ctx.codeBlock());
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), get.getSymbol(), Messages.GETTER);
+        verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.GETTER);
     }
 
     void verifySetterBraceStyle(SetterClauseContext ctx) {
@@ -400,6 +407,7 @@ class ParseTreeVerifier {
         Token set =  (leftSibling instanceof TerminalNodeImpl) ? ((TerminalNodeImpl) leftSibling).getSymbol()
             : ((ParserRuleContext) leftSibling).getStop();
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), set, Messages.SETTER);
+        verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.SETTER);
     }
 
     private void verifySingleSpaceBeforeOpenBrace(ParserRuleContext codeBlockCtx, Token left) {
