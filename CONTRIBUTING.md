@@ -28,7 +28,7 @@ script/test
 * The lexer, parser, and listener generated via ANTLR from the grammar are located in `src/gen/java/com/sleekbyte/tailor/antlr/`
 * If modifications to the [ANTLR](http://www.antlr.org) grammar are necessary, regenerate the lexer/parser/listener:
 ```bash
-gradle build
+./gradlew build
 ```
 
 * Ensure that all new code is tested via unit and/or functional tests (`src/test/java/`)
