@@ -221,7 +221,7 @@ class Rectangle: Shape {
     let breadth: Double
 
     init(length: Double, breadth: Double)  {
-        //store the row and column of the square in the grid
+        // store the row and column of the square in the grid
         self.length = length
         self.breadth = breadth
     }
@@ -518,3 +518,10 @@ struct Rect {
         }
     }
 }
+
+// This is a valid comment
+//This is an invalid comment
+  //also bad
+//  This is a valid comment
+   // also valid
+//

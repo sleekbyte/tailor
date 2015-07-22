@@ -56,6 +56,7 @@ public class Messages {
     public static final String EXTENSION = "Extension ";
     public static final String GETTER = "Getter ";
     public static final String OPEN_BRACE = "Opening brace ";
+    public static final String SINGLE_LINE_COMMENT = "Single-line comment ";
 
     // Plural constructs
     public static final String IMPORTS = "Imports ";
@@ -86,6 +87,7 @@ public class Messages {
     public static final String BLANK_LINE_AFTER = "must have at least one blank line after it";
     public static final String LEADING_WHITESPACE = "should not start with whitespace";
     public static final String TRAILING_WHITESPACE = "should not have any trailing whitespace";
+    public static final String START_SPACE = "should start with a single space";
 
     // Usage messages
     public static final String CMD_LINE_SYNTAX = "tailor";

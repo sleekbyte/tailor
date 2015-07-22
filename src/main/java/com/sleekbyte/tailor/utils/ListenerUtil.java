@@ -48,8 +48,17 @@ public final class ListenerUtil {
     }
 
     public static boolean isComment(Token token) {
+        return isSingleLineComment(token) || isMultilineComment(token);
+    }
+
+    public static boolean isSingleLineComment(Token token) {
         String text = token.getText();
-        return text.startsWith("//") || text.startsWith("/*");
+        return text.startsWith("//");
+    }
+
+    public static boolean isMultilineComment(Token token) {
+        String text = token.getText();
+        return text.startsWith("/*");
     }
 
     public static boolean isNewline(Token token) {

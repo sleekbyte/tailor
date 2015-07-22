@@ -171,12 +171,12 @@ struct Rect {
 
 
 init(length: Double, breadth: Double) {
-    //store the row and column of the square in the grid
+    // store the row and column of the square in the grid
     self.length = length
     self.breadth = breadth }
 
 init(length: Double, breadth: Double) {
-    //store the row and column of the square in the grid
+    // store the row and column of the square in the grid
     self.length = length
     self.breadth = breadth
 }
