@@ -71,7 +71,7 @@ class Queue {
     func hello() {
         println("hello")
     }
-    
+
 }
 
 struct FixedLengthRange {
