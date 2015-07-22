@@ -115,6 +115,75 @@ public class WhitespaceTest extends RuleTest {
         addExpectedColonMessage(start + 3, 35, Messages.SPACE_AFTER);
         addExpectedColonMessage(start + 6, 20, Messages.SPACE_AFTER);
         addExpectedColonMessage(start + 10, 8, Messages.NO_SPACE_BEFORE);
+
+        // Whitespace before open braces
+
+        // functions
+        start = 223;
+        addExpectedBraceMessage(start, 44);
+        addExpectedBraceMessage(start + 10, 34);
+
+        // if statements
+        start = 240;
+        addExpectedBraceMessage(start, 23);
+        addExpectedBraceMessage(start + 3, 26);
+        addExpectedBraceMessage(start + 6, 15);
+
+        // loops
+        start = 253;
+        addExpectedBraceMessage(start, 53);
+        addExpectedBraceMessage(start + 4, 38);
+        addExpectedBraceMessage(start + 29, 22);
+        addExpectedBraceMessage(start + 33, 17);
+        addExpectedBraceMessage(start + 43, 17);
+        addExpectedBraceMessage(start + 47, 26);
+        addExpectedBraceMessage(start + 54, 22);
+        addExpectedBraceMessage(start + 70, 20);
+        addExpectedBraceMessage(start + 75, 18);
+
+        // classes and structs with generic types
+        start = 340;
+        addExpectedBraceMessage(start, 6);
+        addExpectedBraceMessage(start + 3, 4);
+
+        // protocols
+        start = 349;
+        addExpectedBraceMessage(start, 24);
+        addExpectedBraceMessage(start + 4, 32);
+        addExpectedBraceMessage(start + 13, 24);
+
+        // enums
+        start = 376;
+        addExpectedBraceMessage(start, 16);
+        addExpectedBraceMessage(start + 4, 27);
+        addExpectedBraceMessage(start + 17, 6);
+        addExpectedBraceMessage(start + 26, 24);
+        addExpectedBraceMessage(start + 34, 19);
+
+        // closures
+        start = 414;
+        addExpectedBraceMessage(start, 29);
+        addExpectedBraceMessage(start + 14, 72);
+        addExpectedBraceMessage(start + 18, 17);
+
+        // extensions
+        start = 450;
+        addExpectedBraceMessage(start, 26);
+        addExpectedBraceMessage(start + 4, 29);
+        addExpectedBraceMessage(start + 9, 19);
+
+        // getters and setters
+        start = 464;
+        addExpectedBraceMessage(start, 8);
+        addExpectedBraceMessage(start + 4, 8);
+        addExpectedBraceMessage(start + 21, 14);
+        addExpectedBraceMessage(start + 32, 21);
+        addExpectedBraceMessage(start + 51, 25);
+    }
+
+
+    private void addExpectedBraceMessage(int line, int column) {
+        addExpectedMsg(line, column, Messages.OPEN_BRACE + Messages.SPACE_BEFORE);
     }
 
     private void addExpectedColonMessage(int line, int column, String msg) {

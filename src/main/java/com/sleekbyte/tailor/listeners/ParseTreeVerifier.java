@@ -10,7 +10,6 @@ import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryTypeContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ElseClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExtensionBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ForInStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ForStatementContext;
@@ -33,7 +32,6 @@ import com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ProtocolBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.RepeatWhileStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.SetterClauseContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.StatementsContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.StructBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.SwitchCaseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
@@ -271,33 +269,28 @@ class ParseTreeVerifier {
     }
 
     void verifyForInStatementBraceStyle(ForInStatementContext ctx) {
-        Location expressionLocation = ListenerUtil.getContextStopLocation(ctx.expression());
-        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), expressionLocation, Messages.FOR_IN_LOOP);
+        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), ctx.expression().getStop(), Messages.FOR_IN_LOOP);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.FOR_IN_LOOP);
     }
 
     void verifyInitializerBraceStyle(InitializerDeclarationContext ctx) {
-        Location parameterClauseLocation = ListenerUtil.getContextStopLocation(ctx.parameterClause());
-        verifyCodeBlockOpenBraceStyle(ctx.initializerBody().codeBlock(), parameterClauseLocation,
-                                      Messages.INITIALIZER_BODY);
+        verifyCodeBlockOpenBraceStyle(ctx.initializerBody().codeBlock(), ctx.parameterClause().getStop(),
+            Messages.INITIALIZER_BODY);
         verifyBodyCloseBraceStyle(ctx.initializerBody().codeBlock(), Messages.INITIALIZER_BODY);
     }
 
     void verifyRepeatWhileLoopBraceStyle(RepeatWhileStatementContext ctx) {
-        Location repeatClause = ListenerUtil.getContextStartLocation(ctx);
-        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), repeatClause, Messages.REPEAT_WHILE_STATEMENT);
+        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), ctx.getStart(), Messages.REPEAT_WHILE_STATEMENT);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.REPEAT_WHILE_STATEMENT);
     }
 
     void verifyWhileLoopBraceStyle(WhileStatementContext ctx) {
-        Location conditionClauseLocation = ListenerUtil.getContextStopLocation(ctx.conditionClause());
-        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), conditionClauseLocation, Messages.WHILE_STATEMENT);
+        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), ctx.conditionClause().getStop(), Messages.WHILE_STATEMENT);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.WHILE_STATEMENT);
     }
 
     void verifyIfStatementBraceStyle(IfStatementContext ctx) {
-        Location conditionClauseLocation = ListenerUtil.getContextStopLocation(ctx.conditionClause());
-        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), conditionClauseLocation, Messages.IF_STATEMENT);
+        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), ctx.conditionClause().getStop(), Messages.IF_STATEMENT);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.IF_STATEMENT);
     }
 
@@ -305,14 +298,13 @@ class ParseTreeVerifier {
         if (ctx.codeBlock() == null) {
             return;
         }
-        Location elseClauseLocation = ListenerUtil.getContextStartLocation(ctx);
-        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), elseClauseLocation, Messages.ELSE_CLAUSE);
+        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), ctx.getStart(), Messages.ELSE_CLAUSE);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.ELSE_CLAUSE);
     }
 
     void verifyFunctionBraceStyle(FunctionDeclarationContext ctx) {
-        Location functionDeclarationLocation = ListenerUtil.getContextStopLocation(ctx.functionSignature());
-        verifyCodeBlockOpenBraceStyle(ctx.functionBody().codeBlock(), functionDeclarationLocation, Messages.FUNCTION);
+        verifyCodeBlockOpenBraceStyle(ctx.functionBody().codeBlock(), ctx.functionSignature().getStop(),
+            Messages.FUNCTION);
         verifyBodyCloseBraceStyle(ctx.functionBody().codeBlock(), Messages.FUNCTION);
     }
 
@@ -328,19 +320,13 @@ class ParseTreeVerifier {
 
     void verifyForLoopBraceStyle(ForStatementContext ctx) {
         int numChildren = ctx.getChildCount();
-        Location loopEndLocation;
+        Token loopEndToken;
 
         // object at [numChildren - 1] index is codeBlock
         // object at [numChildren - 2] index is either an expression or ';'
         ParseTree constructBeforeOpenBrace = ctx.getChild(numChildren - 2);
-        if (constructBeforeOpenBrace instanceof TerminalNodeImpl) {
-            Token semicolon = ((TerminalNodeImpl) constructBeforeOpenBrace).getSymbol();
-            loopEndLocation = ListenerUtil.getTokenLocation(semicolon);
-        } else {
-            ExpressionContext expressionContext = (ExpressionContext) constructBeforeOpenBrace;
-            loopEndLocation = ListenerUtil.getContextStopLocation(expressionContext);
-        }
-        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), loopEndLocation, Messages.FOR_LOOP);
+        loopEndToken = ParseTreeUtil.getStopTokenForNode(constructBeforeOpenBrace);
+        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), loopEndToken, Messages.FOR_LOOP);
     }
 
     void verifyProtocolBraceStyle(ProtocolBodyContext ctx) {
@@ -355,8 +341,11 @@ class ParseTreeVerifier {
                 Location openBraceLocation = ListenerUtil.getTokenLocation(openBrace);
                 ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(child);
                 Location leftSiblingLocation = ListenerUtil.getContextStopLocation(leftSibling);
+
                 if (openBraceLocation.line != leftSiblingLocation.line) {
-                    this.printer.warn(Messages.ENUM + Messages.OPEN_BRACKET_STYLE, openBraceLocation);
+                    printer.warn(Messages.ENUM + Messages.OPEN_BRACKET_STYLE, openBraceLocation);
+                } else if (checkLeftSpaces(leftSibling.getStop(), openBrace, 1)) {
+                    printer.error(Messages.OPEN_BRACE + Messages.SPACE_BEFORE, openBraceLocation);
                 }
                 break;
             }
@@ -364,36 +353,28 @@ class ParseTreeVerifier {
     }
 
     void verifyClosureExpressionBraceStyle(ClosureExpressionContext ctx) {
-        ParseTree sixthAncestor = ParseTreeUtil.getNthParent(ctx, 6);
-
-        if (sixthAncestor == null || !(sixthAncestor instanceof ExpressionElementListContext)) {
-            ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(ctx);
-            if (leftSibling != null) {
-                Location leftSiblingLocation = ListenerUtil.getContextStopLocation(leftSibling);
-                verifyCodeBlockOpenBraceStyle(ctx, leftSiblingLocation, Messages.CLOSURE);
-            }
+        ParseTree left = ParseTreeUtil.getLeftNode(ctx);
+        if (left == null) {
             return;
         }
 
-        ExpressionElementListContext expressionElementListContext = (ExpressionElementListContext) sixthAncestor;
+        Location leftLocation = ListenerUtil.getTokenLocation(ParseTreeUtil.getStopTokenForNode(left));
+        verifyCodeBlockOpenBraceIsInline(ctx, leftLocation, Messages.CLOSURE);
 
-        ParseTree expElementListLeftSibling = ParseTreeUtil.getLeftSibling(expressionElementListContext);
-
-        if (expElementListLeftSibling == null) {
-            return;
+        /* It doesn't always make sense to check if an opening brace for a closure has a single space before it.
+           Example: list.map({(element: Int) in element * 2})
+           Only places worth checking are scenarios like these:
+            list.map() {(element: Int) in element * 2}
+           or
+            list.map {(element: Int) in element * 2}
+         */
+        ParseTree leftSibling = ParseTreeUtil.getLeftSibling(ctx);
+        if (leftSibling != null && (leftSibling instanceof ParenthesizedExpressionContext
+            || leftSibling instanceof PostfixExpressionContext)) {
+            Token leftToken = ((ParserRuleContext) leftSibling).getStop();
+            verifySingleSpaceBeforeOpenBrace(ctx, leftToken);
         }
 
-        Location expElementLeftSiblingLocation;
-
-        if (expElementListLeftSibling instanceof TerminalNodeImpl) {
-            Token leftToken = ((TerminalNodeImpl) expElementListLeftSibling).getSymbol();
-            expElementLeftSiblingLocation = ListenerUtil.getTokenLocation(leftToken);
-        } else {
-            ParserRuleContext leftContext = (ParserRuleContext) expElementListLeftSibling;
-            expElementLeftSiblingLocation = ListenerUtil.getContextStopLocation(leftContext);
-        }
-
-        verifyCodeBlockOpenBraceStyle(ctx, expElementLeftSiblingLocation, Messages.CLOSURE);
     }
 
     void verifyExtensionBraceStyle(ExtensionBodyContext ctx) {
@@ -403,32 +384,42 @@ class ParseTreeVerifier {
 
     void verifyGetterBraceStyle(GetterClauseContext ctx) {
         TerminalNodeImpl get = (TerminalNodeImpl) ParseTreeUtil.getLeftSibling(ctx.codeBlock());
-        Location getLocation = ListenerUtil.getTokenLocation(get.getSymbol());
-        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), getLocation, Messages.GETTER);
+        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), get.getSymbol(), Messages.GETTER);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.GETTER);
     }
 
     void verifySetterBraceStyle(SetterClauseContext ctx) {
         ParseTree leftSibling = ParseTreeUtil.getLeftSibling(ctx.codeBlock());
-        Location setLocation =  (leftSibling instanceof TerminalNodeImpl)
-                                    ? ListenerUtil.getTokenLocation(((TerminalNodeImpl) leftSibling).getSymbol()) :
-                                      ListenerUtil.getContextStopLocation((ParserRuleContext) leftSibling);
-        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), setLocation, Messages.SETTER);
+        Token set = ParseTreeUtil.getStopTokenForNode(leftSibling);
+        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), set, Messages.SETTER);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.SETTER);
     }
 
-    private void verifyCodeBlockOpenBraceStyle(ParserRuleContext codeBlockCtx, Location constructLocation,
-                                               String constructName) {
+    private void verifySingleSpaceBeforeOpenBrace(ParserRuleContext codeBlockCtx, Token left) {
+        Token openBrace = codeBlockCtx.getStart();
+        if (checkLeftSpaces(left, openBrace, 1)) {
+            printer.error(Messages.OPEN_BRACE + Messages.SPACE_BEFORE, ListenerUtil.getTokenLocation(openBrace));
+        }
+    }
+
+    private void verifyCodeBlockOpenBraceIsInline(ParserRuleContext codeBlockCtx, Location constructLocation,
+                                                  String constructName) {
         Location openBraceLocation = ListenerUtil.getLocationOfChildToken(codeBlockCtx, 0);
         if (constructLocation.line != openBraceLocation.line) {
             this.printer.warn(constructName + Messages.OPEN_BRACKET_STYLE, openBraceLocation);
         }
     }
 
+    private void verifyCodeBlockOpenBraceStyle(ParserRuleContext codeBlockCtx, Token construct, String constructName) {
+        verifyCodeBlockOpenBraceIsInline(codeBlockCtx, ListenerUtil.getTokenLocation(construct), constructName);
+        verifySingleSpaceBeforeOpenBrace(codeBlockCtx, construct);
+    }
+
     private void verifyBodyOpenBraceStyle(ParserRuleContext ctx, String constructName) {
         ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(ctx);
         Location constructLocation = ListenerUtil.getContextStopLocation(leftSibling);
-        verifyCodeBlockOpenBraceStyle(ctx, constructLocation, constructName);
+        verifyCodeBlockOpenBraceIsInline(ctx, constructLocation, constructName);
+        verifySingleSpaceBeforeOpenBrace(ctx, leftSibling.getStop());
     }
 
     private void verifyBodyCloseBraceStyle(ParserRuleContext bodyCtx, String constructName) {
@@ -523,11 +514,8 @@ class ParseTreeVerifier {
 
         assert !(parentLeftSibling == null || rightSibling == null);
 
-        Token left = parentLeftSibling instanceof ParserRuleContext ? ((ParserRuleContext) parentLeftSibling).getStop()
-            : ((TerminalNodeImpl) parentLeftSibling).getSymbol();
-        Token right = rightSibling instanceof ParserRuleContext ? ((ParserRuleContext) rightSibling).getStart() :
-            ((TerminalNodeImpl) rightSibling).getSymbol();
-
+        Token left = ParseTreeUtil.getStopTokenForNode(parentLeftSibling);
+        Token right = ParseTreeUtil.getStartTokenForNode(rightSibling);
         Token colonToken = colon.getSymbol();
 
         verifyColonLeftAssociation(left, right, colonToken);
@@ -558,14 +546,12 @@ class ParseTreeVerifier {
             left = ctx.caseLabel().caseItemList().getStop();
             ParseTree rightChild = ctx.getChild(1);
             // right child can be statements or a semi colon
-            right = rightChild instanceof StatementsContext ? ((StatementsContext) rightChild).getStart()
-                    : ((TerminalNodeImpl) rightChild).getSymbol();
+            right = ParseTreeUtil.getStartTokenForNode(rightChild);
             colon = ((TerminalNodeImpl) ctx.caseLabel().getChild(2)).getSymbol();
         } else {
             left = ((TerminalNodeImpl) ctx.defaultLabel().getChild(0)).getSymbol();
             ParseTree rightChild = ctx.getChild(1);
-            right = rightChild instanceof StatementsContext ? ((StatementsContext) rightChild).getStart()
-                : ((TerminalNodeImpl) rightChild).getSymbol();
+            right = ParseTreeUtil.getStartTokenForNode(rightChild);
             colon = ((TerminalNodeImpl) ctx.defaultLabel().getChild(1)).getSymbol();
         }
 

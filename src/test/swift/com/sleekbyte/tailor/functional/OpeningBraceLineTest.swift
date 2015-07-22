@@ -148,7 +148,7 @@ class Rectangle: Shape
 
             }
         }
-        
+
    }
 }
 
@@ -160,7 +160,7 @@ class Hello
 {
 }
 struct Hello
-<T>{
+<T> {
 }
 struct Hello
 <T>
@@ -351,27 +351,27 @@ get {
 }
 
 didSet {
-    if someVariable >= 1000  {
+    if someVariable >= 1000 {
        someVariable = 999
     }
 }
 
 didSet
 {
-    if someVariable >= 1000  {
+    if someVariable >= 1000 {
        someVariable = 999
     }
 }
 
 willSet
 {
-    if someVariable >= 1000  {
+    if someVariable >= 1000 {
        someVariable = 999
     }
 }
 
 willSet {
-    if someVariable >= 1000  {
+    if someVariable >= 1000 {
        someVariable = 999
     }
 }
