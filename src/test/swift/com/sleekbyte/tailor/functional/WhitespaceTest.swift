@@ -612,3 +612,19 @@ func something() -> (Int, Int) throws  -> (Int) {
 func something() -> (Int, Int) ->(Int) {
   // do something
 }
+
+struct TimesTable {
+    let multiplier: Int
+
+    subscript(index: Int) -> Int {
+        return multiplier * index
+    }
+
+    subscript(index: Int)-> Int {
+        return multiplier * index
+    }
+
+    subscript(index: Int) ->  Int {
+        return multiplier * index
+    }
+}

@@ -1,6 +1,7 @@
 package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
+import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClassBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClosureExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ConditionalOperatorContext;
@@ -32,7 +33,6 @@ import com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ProtocolBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.RepeatWhileStatementContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.STypeContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.SetterClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.StructBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.SwitchCaseContext;
@@ -681,6 +681,28 @@ class ParseTreeVerifier {
     }
 
     void checkWhitespaceAroundArrow(FunctionResultContext ctx) {
+        checkWhitespaceAroundReturnArrow(ctx);
+    }
+
+    void checkWhitespaceAroundArrow(SwiftParser.SubscriptResultContext ctx) {
+        checkWhitespaceAroundReturnArrow(ctx);
+    }
+
+    void checkWhitespaceAroundArrow(SwiftParser.STypeContext ctx) {
+        Optional<ParseTree> arrowOptional = ctx.children.stream()
+            .filter(node -> node.getText().equals("->"))
+            .findFirst();
+        if (!arrowOptional.isPresent()) {
+            return;
+        }
+        ParseTree arrow = arrowOptional.get();
+        Token left = ParseTreeUtil.getStopTokenForNode(ParseTreeUtil.getLeftSibling(arrow));
+        Token right = ParseTreeUtil.getStartTokenForNode(ParseTreeUtil.getRightSibling(arrow));
+
+        verifyArrowIsSpaceDelimited(left, right, ((TerminalNodeImpl) arrow).getSymbol());
+    }
+
+    private void checkWhitespaceAroundReturnArrow(ParserRuleContext ctx) {
         Token arrow = ((TerminalNodeImpl) ctx.getChild(0)).getSymbol();
         Token left = ParseTreeUtil.getStopTokenForNode(ParseTreeUtil.getLeftSibling(ctx));
         Token right = ParseTreeUtil.getStartTokenForNode(ctx.getChild(1));
@@ -688,17 +710,7 @@ class ParseTreeVerifier {
         verifyArrowIsSpaceDelimited(left, right, arrow);
     }
 
-    void checkWhitespaceAroundArrow(STypeContext ctx) {
-        Optional<ParseTree> arrowOptional = ctx.children.stream()
-            .filter(node -> node.getText().equals("->"))
-            .findFirst();
-        if (!arrowOptional.isPresent()) return;
-        ParseTree arrow = arrowOptional.get();
-        Token left = ParseTreeUtil.getStopTokenForNode(ParseTreeUtil.getLeftSibling(arrow));
-        Token right = ParseTreeUtil.getStartTokenForNode(ParseTreeUtil.getRightSibling(arrow));
 
-        verifyArrowIsSpaceDelimited(left, right, ((TerminalNodeImpl) arrow).getSymbol());
-    }
 
     private void verifyArrowIsSpaceDelimited(Token left, Token right, Token arrow) {
         if (checkLeftSpaces(left, arrow, 1)) {

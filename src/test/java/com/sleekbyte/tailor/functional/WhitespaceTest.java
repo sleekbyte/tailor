@@ -220,6 +220,11 @@ public class WhitespaceTest extends RuleTest {
         addExpectedArrowMessage(start + 4, 22, Messages.SPACE_AFTER);
         addExpectedArrowMessage(start + 8, 40, Messages.SPACE_BEFORE);
         addExpectedArrowMessage(start + 12, 34, Messages.SPACE_AFTER);
+
+        // Subscript result arrow
+        start = 623;
+        addExpectedArrowMessage(start, 26, Messages.SPACE_BEFORE);
+        addExpectedArrowMessage(start + 4, 29, Messages.SPACE_AFTER);
     }
 
     private void addExpectedArrowMessage(int line, int column, String msg) {
