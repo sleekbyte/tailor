@@ -273,3 +273,7 @@ enum ExampleEnum: Int {
 
 enum ExampleEnum: Int {
     case A, B, C = 5, D }
+
+enum SomeEnum {}
+
+enum SomeEnum { }
