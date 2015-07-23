@@ -19,6 +19,22 @@ test {
     }
 }
 
+// JaCoCo Plugin {{{
+apply plugin: 'jacoco'
+
+// Ensure both XML and HTML reports are generated
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
+// Generate a test coverage report
+test.finalizedBy jacocoTestReport
+jacocoTestReport.dependsOn test
+// }}}
+
 compileJava {
     // Enable compilation in a separate daemon process
     options.fork = true

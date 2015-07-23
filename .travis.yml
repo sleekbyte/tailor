@@ -1,4 +1,8 @@
 language: java
 jdk:
   - oraclejdk8
-before_install: gem update bundler
+before_install:
+  - gem update bundler
+  - pip install --user codecov
+after_success:
+  - codecov

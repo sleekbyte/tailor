@@ -69,7 +69,7 @@ script/cibuild
 
 ### Closing a PR
 
-* Once you have received two :+1:s and the Travis CI](https://travis-ci.org/sleekbyte/tailor) build has passed, you are responsible for merging your branch into `master` and subsequently deleting it from the remote
+* Once you have received two :+1:s and the [Travis CI](https://travis-ci.org/sleekbyte/tailor) build has passed, you are responsible for merging your branch into `master` and subsequently deleting it from the remote
 * When merging your branch, refer to the issue at the beginning of the commit description (e.g. "Fix #4: Integrate Travis CI")
 
 ## Triaging Issues
