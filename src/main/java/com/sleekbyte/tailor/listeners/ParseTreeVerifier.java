@@ -304,7 +304,7 @@ class ParseTreeVerifier {
 
     void verifyFunctionBraceStyle(FunctionDeclarationContext ctx) {
         verifyCodeBlockOpenBraceStyle(ctx.functionBody().codeBlock(), ctx.functionSignature().getStop(),
-            Messages.FUNCTION);
+                                             Messages.FUNCTION);
         verifyBodyCloseBraceStyle(ctx.functionBody().codeBlock(), Messages.FUNCTION);
     }
 
@@ -350,6 +350,14 @@ class ParseTreeVerifier {
                 }
                 break;
             }
+        }
+
+        ParseTree lastChild = ParseTreeUtil.getLastChild(ctx);
+        Location closeBraceLocation = ListenerUtil.getParseTreeStartLocation(lastChild);
+        Location closeBraceLeftSiblingLocation = ListenerUtil.getParseTreeStopLocation(
+                                                              ParseTreeUtil.getLeftSibling(lastChild));
+        if (closeBraceLocation.line == closeBraceLeftSiblingLocation.line) {
+            printer.warn(Messages.ENUM + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
         }
     }
 

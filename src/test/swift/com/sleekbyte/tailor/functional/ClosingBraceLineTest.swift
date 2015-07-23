@@ -251,3 +251,25 @@ applyMutliplication(
 value in
 value * 3
 })
+
+enum SomeEnum {
+    case SomeCase
+}
+
+enum SomeEnum {
+    case SomeCase }
+
+enum SomeOtherEnum: Int {
+    case SomeCase
+}
+
+enum SomeOtherEnum:
+Int {
+    case SomeCase }
+
+enum ExampleEnum: Int {
+    case A, B, C = 5, D
+}
+
+enum ExampleEnum: Int {
+    case A, B, C = 5, D }
