@@ -360,6 +360,7 @@ class ParseTreeVerifier {
 
         Location leftLocation = ListenerUtil.getTokenLocation(ParseTreeUtil.getStopTokenForNode(left));
         verifyCodeBlockOpenBraceIsInline(ctx, leftLocation, Messages.CLOSURE);
+        verifyBodyCloseBraceStyle(ctx, Messages.CLOSURE);
 
         /* It doesn't always make sense to check if an opening brace for a closure has a single space before it.
            Example: list.map({(element: Int) in element * 2})

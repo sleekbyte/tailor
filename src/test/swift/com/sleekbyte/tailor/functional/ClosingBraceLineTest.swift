@@ -219,3 +219,35 @@ func printAreaIfStatement() {
         repeat { /* infinite
          loop */ } while true
     }
+
+func someFunction () -> () {
+/* closure */ }
+
+func someFunction () -> () { var x = 2 }
+
+func someFunction () -> () {
+// closure
+}
+
+padawans.map() {
+  (padawan: String) -> String in
+  "\(padawan) has been trained!"
+}
+
+padawans.map() {
+  (padawan: String) -> String in
+  "\(padawan) has been trained!" }
+
+func applyMutliplication(value: Int, multFunction: Int -> Int) -> Int {
+  return multFunction(value)
+}
+
+applyMutliplication(2, {
+ value in
+ value * 3 })
+
+applyMutliplication(
+2, {
+value in
+value * 3
+})
