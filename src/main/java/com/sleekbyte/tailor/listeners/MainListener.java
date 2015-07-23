@@ -411,4 +411,9 @@ public class MainListener extends SwiftBaseListener {
     public void enterFunctionResult(SwiftParser.FunctionResultContext ctx) {
         verifier.checkWhitespaceAroundArrow(ctx);
     }
+
+    @Override
+    public void enterSType(SwiftParser.STypeContext ctx) {
+        verifier.checkWhitespaceAroundArrow(ctx);
+    }
 }

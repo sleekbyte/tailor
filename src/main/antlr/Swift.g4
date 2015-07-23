@@ -744,8 +744,6 @@ arrayType: '[' sType ']' ;
 
 dictionaryType: '[' sType ':' sType ']' ;
 
-functionType: sType 'throws'? '->' sType | sType 'rethrows' '->' sType ;
-
 optionalType: sType '?' ;
 
 implicitlyUnwrappedOptionalType: sType '!' ;

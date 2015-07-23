@@ -214,6 +214,12 @@ public class WhitespaceTest extends RuleTest {
         addExpectedArrowMessage(start + 10, 19, Messages.SPACE_BEFORE);
         addExpectedArrowMessage(start + 15, 20, Messages.SPACE_AFTER);
 
+        // Function type arrow
+        start = 600;
+        addExpectedArrowMessage(start, 19, Messages.SPACE_BEFORE);
+        addExpectedArrowMessage(start + 4, 22, Messages.SPACE_AFTER);
+        addExpectedArrowMessage(start + 8, 40, Messages.SPACE_BEFORE);
+        addExpectedArrowMessage(start + 12, 34, Messages.SPACE_AFTER);
     }
 
     private void addExpectedArrowMessage(int line, int column, String msg) {

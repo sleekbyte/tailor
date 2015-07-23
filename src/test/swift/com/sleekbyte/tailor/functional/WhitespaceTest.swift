@@ -596,4 +596,19 @@ names.map() {
   (name: String) ->Int in
   return 1
 }
->>>>>>> Check whitespace around return arrow for function result
+
+func map(a: String-> String) {
+  // do something
+}
+
+func map(a: String ->  String) {
+  // do something
+}
+
+func something() -> (Int, Int) throws  -> (Int) {
+  // do something
+}
+
+func something() -> (Int, Int) ->(Int) {
+  // do something
+}
