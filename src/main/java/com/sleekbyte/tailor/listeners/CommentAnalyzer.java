@@ -13,7 +13,7 @@ import java.util.List;
 /**
  *  Class for analyzing and verifying comments.
  */
-public class CommentAnalyzer {
+public final class CommentAnalyzer {
 
     private CommonTokenStream tokenStream;
     private Printer printer;
