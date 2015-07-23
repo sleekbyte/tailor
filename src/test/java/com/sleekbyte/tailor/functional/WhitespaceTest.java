@@ -197,6 +197,8 @@ public class WhitespaceTest extends RuleTest {
         addExpectedMsg(start + 9, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
         addExpectedMsg(start + 22, 15, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
         addExpectedMsg(start + 25, 8, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
+        addExpectedMsg(start + 26, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
+        addExpectedMsg(start + 26, 23, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
     }
 
 
