@@ -1,15 +1,15 @@
 let hello = false
-let hello_World = { (kVar1: String, kVar2: String) -> Bool in return hello
-}
+let hello_World = { (kVar1: String, kVar2: String) -> Bool in return hello }
+
 switch productBarcode {
 case let .UPCA(KNumberSystem, manufacturer, Product, check):
     println("UPC-A: \(numberSystem), \(manufacturer), \(product), \(check).")
 case let .QRCode(productCode):
     println("QR code: \(productCode).")
 }
+
 let (valid, in_valid) = (5 , "hello")
-let numX = 2, func_y = { x in println(x)
-}
+let numX = 2, func_y = { x in println(x) }
 
 func toMicroseconds(seconds: Int) -> Int {
     let SecondsToMicroseconds = 100000
