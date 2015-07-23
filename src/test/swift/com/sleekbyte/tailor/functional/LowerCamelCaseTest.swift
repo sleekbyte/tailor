@@ -71,8 +71,8 @@ protocol SomeProtocol {
     var DoesNotNeedToBeSettable: Int { get }
 }
 
-var ThisIsAFunction: (Int, Int) -> (Int) =  { (a, b) in return a + b }
-
+var ThisIsAFunction: (Int, Int) -> (Int) =  { (a, b) in return a + b
+}
 struct Rect {
     var Center: Point {
         get {

@@ -19,8 +19,8 @@ public class ConstantNamingTest extends RuleTest {
         addExpectedMsg(2, 37, Severity.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
         addExpectedMsg(5, 16, Severity.WARNING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE);
         addExpectedMsg(5, 45, Severity.WARNING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE);
-        addExpectedMsg(11, 13, Severity.WARNING, Messages.GLOBAL + Messages.CONSTANT + Messages.GLOBAL_CONSTANT_NAMING);
-        addExpectedMsg(12, 15, Severity.WARNING, Messages.GLOBAL + Messages.CONSTANT + Messages.GLOBAL_CONSTANT_NAMING);
+        addExpectedMsg(10, 13, Severity.WARNING, Messages.GLOBAL + Messages.CONSTANT + Messages.GLOBAL_CONSTANT_NAMING);
+        addExpectedMsg(11, 15, Severity.WARNING, Messages.GLOBAL + Messages.CONSTANT + Messages.GLOBAL_CONSTANT_NAMING);
         addExpectedMsg(15, 9, Severity.WARNING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE);
         addExpectedMsg(20, 5, Severity.WARNING, Messages.GLOBAL + Messages.CONSTANT + Messages.GLOBAL_CONSTANT_NAMING);
         addExpectedMsg(24, 5, Severity.WARNING, Messages.GLOBAL + Messages.CONSTANT + Messages.GLOBAL_CONSTANT_NAMING);

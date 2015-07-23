@@ -327,6 +327,7 @@ class ParseTreeVerifier {
         ParseTree constructBeforeOpenBrace = ctx.getChild(numChildren - 2);
         loopEndToken = ParseTreeUtil.getStopTokenForNode(constructBeforeOpenBrace);
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), loopEndToken, Messages.FOR_LOOP);
+        verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.FOR_LOOP);
     }
 
     void verifyProtocolBraceStyle(ProtocolBodyContext ctx) {

@@ -41,6 +41,7 @@ public class ClosingBraceLineTest extends RuleTest {
         addExpectedBraceMsg(192, 38, Severity.WARNING, Messages.IF_STATEMENT);
         addExpectedBraceMsg(195, 35, Severity.WARNING, Messages.IF_STATEMENT);
         addExpectedBraceMsg(201, 44, Severity.WARNING, Messages.ELSE_CLAUSE);
+        addExpectedBraceMsg(209, 24, Severity.WARNING, Messages.FOR_LOOP);
         addExpectedBraceMsg(212, 30, Severity.WARNING, Messages.FOR_IN_LOOP);
         addExpectedBraceMsg(215, 47, Severity.WARNING, Messages.WHILE_STATEMENT);
         addExpectedBraceMsg(217, 38, Severity.WARNING, Messages.REPEAT_WHILE_STATEMENT);
