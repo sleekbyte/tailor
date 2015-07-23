@@ -184,6 +184,19 @@ public class WhitespaceTest extends RuleTest {
         start = 523;
         addExpectedMsg(start, 3, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
         addExpectedMsg(start + 1, 5, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
+
+        // Multi line comments
+        start = 530;
+        addExpectedMsg(start, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
+        addExpectedMsg(start + 1, 35, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
+        addExpectedMsg(start + 2, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
+        addExpectedMsg(start + 2, 17, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
+        addExpectedMsg(start + 3, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
+        addExpectedMsg(start + 3, 24, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
+        addExpectedMsg(start + 8, 10, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
+        addExpectedMsg(start + 9, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
+        addExpectedMsg(start + 22, 15, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
+        addExpectedMsg(start + 25, 8, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
     }
 
 

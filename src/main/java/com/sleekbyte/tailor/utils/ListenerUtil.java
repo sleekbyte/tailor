@@ -88,4 +88,28 @@ public final class ListenerUtil {
             return token.getLine() + numNewLine;
         }
     }
+
+    /**
+     * Returns location of the end multiline comment symbol.
+     *
+     * @param comment A token representing a comment
+     * @return Location of the end symbol
+     */
+    public static Location getEndOfMultilineComment(Token comment) {
+        String commentText = comment.getText();
+        if (commentText.charAt(commentText.length() - 1) == '\n') {
+            commentText = commentText.substring(0, commentText.length() - 1);
+        }
+        int numNewlines = 0;
+        int lastNewlineIndex = -1;
+        for (int i = 0; i < commentText.length(); i++) {
+            if (commentText.charAt(i) == '\n') {
+                lastNewlineIndex = i;
+                numNewlines += 1;
+            }
+        }
+        String lastLine = commentText.substring(lastNewlineIndex + 1);
+        return new Location(comment.getLine() + numNewlines,
+            numNewlines == 0 ? comment.getCharPositionInLine() + lastLine.length() - 1 : lastLine.length() - 1);
+    }
 }

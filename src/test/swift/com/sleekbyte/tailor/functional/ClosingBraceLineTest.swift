@@ -88,7 +88,7 @@ protocol SomeProtocol {}
 
 extension SomeExtension: X { }
 
-class SomeClass {/*comment*/}
+class SomeClass {/* comment */}
 
 class SomeClass {}
 

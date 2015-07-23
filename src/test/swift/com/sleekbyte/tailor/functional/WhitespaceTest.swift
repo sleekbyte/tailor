@@ -525,3 +525,31 @@ struct Rect {
 //  This is a valid comment
    // also valid
 //
+
+/* this is a valid comment */
+/*this is an invalid comment */
+/* this is also an invalid comment*/
+/*so is this one*/
+/*so am I */ /* me too!*/ /* but I'm valid */
+
+/* this is a
+valid comment */
+/* this is
+not valid*/
+/*this is
+also not valid
+*/
+/* this is
+valid
+though
+*/
+/*
+valid
+
+
+*/
+
+/* valid */ /*invalid
+*/ /* valid
+*/ /*
+invalid*/
