@@ -406,4 +406,9 @@ public class MainListener extends SwiftBaseListener {
         verifier.verifyNameLength(Messages.ENUM_CASE + Messages.NAME, verifier.maxLengths.maxNameLength,
                                   ctx.enumCaseName());
     }
+
+    @Override
+    public void enterFunctionResult(SwiftParser.FunctionResultContext ctx) {
+        verifier.checkWhitespaceAroundArrow(ctx);
+    }
 }

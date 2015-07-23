@@ -14,6 +14,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser.ExtensionBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ForInStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ForStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.FunctionDeclarationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.FunctionResultContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.GenericParameterContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.GetterClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.IfStatementContext;
@@ -675,6 +676,23 @@ class ParseTreeVerifier {
         tokens = tokens.subList(firstNewlineOrCommentIndex + 1, tokens.size());
 
         return (int) tokens.stream().filter(ListenerUtil::isNewline).count();
+    }
+
+    void checkWhitespaceAroundArrow(FunctionResultContext ctx) {
+        Token arrow = ((TerminalNodeImpl) ctx.getChild(0)).getSymbol();
+        Token left = ParseTreeUtil.getStopTokenForNode(ParseTreeUtil.getLeftSibling(ctx));
+        Token right = ParseTreeUtil.getStartTokenForNode(ctx.getChild(1));
+
+        verifyArrowIsSpaceDelimited(left, right, arrow);
+    }
+
+    private void verifyArrowIsSpaceDelimited(Token left, Token right, Token arrow) {
+        if (checkLeftSpaces(left, arrow, 1)) {
+            printer.error(Messages.RETURN_ARROW + Messages.SPACE_BEFORE, ListenerUtil.getTokenLocation(arrow));
+        }
+        if (checkRightSpaces(right, arrow, 1)) {
+            printer.error(Messages.RETURN_ARROW + Messages.SPACE_AFTER, ListenerUtil.getTokenEndLocation(arrow));
+        }
     }
     //endregion
 

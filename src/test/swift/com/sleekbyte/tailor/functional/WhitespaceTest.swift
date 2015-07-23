@@ -560,3 +560,40 @@ invalid*/
 Commentception
 */
 */
+
+func onePlusTwo() -> Int {
+  return 1 + 2
+}
+
+func onePlusTwo()-> Int {
+  return 1 + 2
+}
+
+func onePlusTwo() ->Int {
+  return 1 + 2
+}
+
+func onePlusTwo()  ->  Int {
+  return 1 + 2
+}
+
+names.map() {
+  (name)-> Int in
+  return 1
+}
+
+names.map() {
+  (name) ->  Int in
+  return 1
+}
+
+names.map() {
+  (name: String)  -> Int in
+  return 1
+}
+
+names.map() {
+  (name: String) ->Int in
+  return 1
+}
+>>>>>>> Check whitespace around return arrow for function result
