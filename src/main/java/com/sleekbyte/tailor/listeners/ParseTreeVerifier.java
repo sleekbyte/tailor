@@ -354,8 +354,8 @@ class ParseTreeVerifier {
 
         ParseTree lastChild = ParseTreeUtil.getLastChild(ctx);
         Location closeBraceLocation = ListenerUtil.getParseTreeStartLocation(lastChild);
-        Location closeBraceLeftSiblingLocation = ListenerUtil.getParseTreeStopLocation(
-                                                              ParseTreeUtil.getLeftSibling(lastChild));
+        Location closeBraceLeftSiblingLocation =
+            ListenerUtil.getParseTreeStopLocation(ParseTreeUtil.getLeftSibling(lastChild));
         if (closeBraceLocation.line == closeBraceLeftSiblingLocation.line) {
             printer.warn(Messages.ENUM + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
         }
@@ -369,7 +369,6 @@ class ParseTreeVerifier {
 
         Location leftLocation = ListenerUtil.getTokenLocation(ParseTreeUtil.getStopTokenForNode(left));
         verifyCodeBlockOpenBraceIsInline(ctx, leftLocation, Messages.CLOSURE);
-        verifyBodyCloseBraceStyle(ctx, Messages.CLOSURE);
 
         /* It doesn't always make sense to check if an opening brace for a closure has a single space before it.
            Example: list.map({(element: Int) in element * 2})
