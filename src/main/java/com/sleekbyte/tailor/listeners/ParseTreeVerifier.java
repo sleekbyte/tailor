@@ -1,7 +1,6 @@
 package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
-import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClassBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClosureExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ConditionalOperatorContext;
@@ -33,8 +32,10 @@ import com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ProtocolBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.RepeatWhileStatementContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.STypeContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.SetterClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.StructBodyContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.SubscriptResultContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.SwitchCaseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
@@ -684,11 +685,11 @@ class ParseTreeVerifier {
         checkWhitespaceAroundReturnArrow(ctx);
     }
 
-    void checkWhitespaceAroundArrow(SwiftParser.SubscriptResultContext ctx) {
+    void checkWhitespaceAroundArrow(SubscriptResultContext ctx) {
         checkWhitespaceAroundReturnArrow(ctx);
     }
 
-    void checkWhitespaceAroundArrow(SwiftParser.STypeContext ctx) {
+    void checkWhitespaceAroundArrow(STypeContext ctx) {
         Optional<ParseTree> arrowOptional = ctx.children.stream()
             .filter(node -> node.getText().equals("->"))
             .findFirst();
