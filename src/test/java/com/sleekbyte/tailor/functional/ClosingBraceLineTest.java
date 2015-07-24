@@ -54,6 +54,7 @@ public class ClosingBraceLineTest extends RuleTest {
         addExpectedBraceMsg(268, 19, Severity.WARNING, Messages.ENUM);
         addExpectedBraceMsg(275, 25, Severity.WARNING, Messages.ENUM);
         addExpectedEmptyConstructBodyMsg(279, 15, Severity.WARNING);
+        addExpectedBraceMsg(285, 14, Severity.WARNING, Messages.CLOSURE);
     }
 
     private void addExpectedBraceMsg(int line, int column, Severity severity, String msg) {

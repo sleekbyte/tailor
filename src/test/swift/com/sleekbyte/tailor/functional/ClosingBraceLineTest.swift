@@ -279,3 +279,7 @@ enum SomeEnum {}
 enum SomeEnum { }
 
 applyMutliplication(2, { value in value * 3 })
+
+applyMutliplication(2, {
+ value in value * 3
+ /*comment*/ })
