@@ -366,7 +366,6 @@ class ParseTreeVerifier {
         verifyCodeBlockOpenBraceIsInline(ctx, leftLocation, Messages.CLOSURE);
 
         // close brace check
-
         ParseTree closeBrace = ParseTreeUtil.getLastChild(ctx);
         Token closeBraceToken = ((TerminalNodeImpl) closeBrace).getSymbol();
         if (!commentLeftOfCloseBrace(Messages.CLOSURE, closeBraceToken)) {
