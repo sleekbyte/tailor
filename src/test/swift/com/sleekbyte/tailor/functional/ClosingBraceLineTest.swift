@@ -277,3 +277,5 @@ enum ExampleEnum: Int {
 enum SomeEnum {}
 
 enum SomeEnum { }
+
+applyMutliplication(2, { value in value * 3 })

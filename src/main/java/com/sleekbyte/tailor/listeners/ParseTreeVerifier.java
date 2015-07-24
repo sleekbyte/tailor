@@ -304,7 +304,7 @@ class ParseTreeVerifier {
 
     void verifyFunctionBraceStyle(FunctionDeclarationContext ctx) {
         verifyCodeBlockOpenBraceStyle(ctx.functionBody().codeBlock(), ctx.functionSignature().getStop(),
-            Messages.FUNCTION);
+                                             Messages.FUNCTION);
         verifyBodyCloseBraceStyle(ctx.functionBody().codeBlock(), Messages.FUNCTION);
     }
 
@@ -364,6 +364,16 @@ class ParseTreeVerifier {
 
         Location leftLocation = ListenerUtil.getTokenLocation(ParseTreeUtil.getStopTokenForNode(left));
         verifyCodeBlockOpenBraceIsInline(ctx, leftLocation, Messages.CLOSURE);
+
+        // close brace check
+        ParseTree closeBrace = ParseTreeUtil.getLastChild(ctx);
+        Location openBraceLocation = ListenerUtil.getLocationOfChildToken(ctx, 0);
+        Location closeBraceLocation = ListenerUtil.getTokenLocation(((TerminalNodeImpl)closeBrace).getSymbol());
+        Location leftSiblingLocation = ListenerUtil.getParseTreeStopLocation(ParseTreeUtil.getLeftSibling(closeBrace));
+        if (leftSiblingLocation.line == closeBraceLocation.line
+            && openBraceLocation.line != closeBraceLocation.line) {
+            this.printer.warn(Messages.CLOSURE + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
+        }
 
         /* It doesn't always make sense to check if an opening brace for a closure has a single space before it.
            Example: list.map({(element: Int) in element * 2})
