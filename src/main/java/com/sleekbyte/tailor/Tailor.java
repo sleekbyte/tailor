@@ -4,6 +4,7 @@ import com.sleekbyte.tailor.antlr.SwiftLexer;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Severity;
+import com.sleekbyte.tailor.listeners.CommentAnalyzer;
 import com.sleekbyte.tailor.listeners.FileListener;
 import com.sleekbyte.tailor.listeners.MainListener;
 import com.sleekbyte.tailor.output.Printer;
@@ -129,6 +130,8 @@ public class Tailor {
                     walker.walk(listener, tree);
                     FileListener fileListener = new FileListener(printer, inputFile, maxLengths);
                     fileListener.verify();
+                    CommentAnalyzer commentAnalyzer = new CommentAnalyzer(tokenStream, printer);
+                    commentAnalyzer.analyze();
                     numErrors += printer.getNumErrorMessages();
                 }
             }

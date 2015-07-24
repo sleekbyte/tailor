@@ -74,11 +74,11 @@ struct SomeStruct {
 func function15() {
 } /* Multi
 line
-comment*/ // single line comment
+comment */ // single line comment
 
 /* Multi
 line
-comment*/ // single line comment
+comment */ // single line comment
 func function16() {
 }
 
