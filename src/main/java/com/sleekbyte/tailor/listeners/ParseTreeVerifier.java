@@ -304,7 +304,7 @@ class ParseTreeVerifier {
 
     void verifyFunctionBraceStyle(FunctionDeclarationContext ctx) {
         verifyCodeBlockOpenBraceStyle(ctx.functionBody().codeBlock(), ctx.functionSignature().getStop(),
-                                             Messages.FUNCTION);
+            Messages.FUNCTION);
         verifyBodyCloseBraceStyle(ctx.functionBody().codeBlock(), Messages.FUNCTION);
     }
 
