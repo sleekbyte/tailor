@@ -58,6 +58,7 @@ public class Messages {
     public static final String OPEN_BRACE = "Opening brace ";
     public static final String SINGLE_LINE_COMMENT = "Single-line comment ";
     public static final String MULTILINE_COMMENT = "Multiline comment ";
+    public static final String RETURN_ARROW = "Return arrow ";
 
     // Plural constructs
     public static final String IMPORTS = "Imports ";

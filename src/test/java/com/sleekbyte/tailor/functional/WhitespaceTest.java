@@ -199,8 +199,37 @@ public class WhitespaceTest extends RuleTest {
         addExpectedMsg(start + 25, 8, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
         addExpectedMsg(start + 26, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
         addExpectedMsg(start + 26, 23, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
+
+        // Function Result arrow
+        start = 568;
+        addExpectedArrowMessage(start, 18, Messages.SPACE_BEFORE);
+        addExpectedArrowMessage(start + 4, 21, Messages.SPACE_AFTER);
+        addExpectedArrowMessage(start + 8, 20, Messages.SPACE_BEFORE);
+        addExpectedArrowMessage(start + 8, 22, Messages.SPACE_AFTER);
+
+        // Closure result arrow
+        start = 581;
+        addExpectedArrowMessage(start, 9, Messages.SPACE_BEFORE);
+        addExpectedArrowMessage(start + 5, 12, Messages.SPACE_AFTER);
+        addExpectedArrowMessage(start + 10, 19, Messages.SPACE_BEFORE);
+        addExpectedArrowMessage(start + 15, 20, Messages.SPACE_AFTER);
+
+        // Function type arrow
+        start = 600;
+        addExpectedArrowMessage(start, 19, Messages.SPACE_BEFORE);
+        addExpectedArrowMessage(start + 4, 22, Messages.SPACE_AFTER);
+        addExpectedArrowMessage(start + 8, 40, Messages.SPACE_BEFORE);
+        addExpectedArrowMessage(start + 12, 34, Messages.SPACE_AFTER);
+
+        // Subscript result arrow
+        start = 623;
+        addExpectedArrowMessage(start, 26, Messages.SPACE_BEFORE);
+        addExpectedArrowMessage(start + 4, 29, Messages.SPACE_AFTER);
     }
 
+    private void addExpectedArrowMessage(int line, int column, String msg) {
+        addExpectedMsg(line, column, Messages.RETURN_ARROW + msg);
+    }
 
     private void addExpectedBraceMessage(int line, int column) {
         addExpectedMsg(line, column, Messages.OPEN_BRACE + Messages.SPACE_BEFORE);

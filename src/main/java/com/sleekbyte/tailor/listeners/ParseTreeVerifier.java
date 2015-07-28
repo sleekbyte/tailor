@@ -14,6 +14,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser.ExtensionBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ForInStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ForStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.FunctionDeclarationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.FunctionResultContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.GenericParameterContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.GetterClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.IfStatementContext;
@@ -31,8 +32,10 @@ import com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ProtocolBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.RepeatWhileStatementContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.STypeContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.SetterClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.StructBodyContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.SubscriptResultContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.SwitchCaseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
@@ -58,6 +61,7 @@ import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -675,6 +679,47 @@ class ParseTreeVerifier {
         tokens = tokens.subList(firstNewlineOrCommentIndex + 1, tokens.size());
 
         return (int) tokens.stream().filter(ListenerUtil::isNewline).count();
+    }
+
+    void checkWhitespaceAroundArrow(FunctionResultContext ctx) {
+        checkWhitespaceAroundReturnArrow(ctx);
+    }
+
+    void checkWhitespaceAroundArrow(SubscriptResultContext ctx) {
+        checkWhitespaceAroundReturnArrow(ctx);
+    }
+
+    void checkWhitespaceAroundArrow(STypeContext ctx) {
+        Optional<ParseTree> arrowOptional = ctx.children.stream()
+            .filter(node -> node.getText().equals("->"))
+            .findFirst();
+        if (!arrowOptional.isPresent()) {
+            return;
+        }
+        ParseTree arrow = arrowOptional.get();
+        Token left = ParseTreeUtil.getStopTokenForNode(ParseTreeUtil.getLeftSibling(arrow));
+        Token right = ParseTreeUtil.getStartTokenForNode(ParseTreeUtil.getRightSibling(arrow));
+
+        verifyArrowIsSpaceDelimited(left, right, ((TerminalNodeImpl) arrow).getSymbol());
+    }
+
+    private void checkWhitespaceAroundReturnArrow(ParserRuleContext ctx) {
+        Token arrow = ((TerminalNodeImpl) ctx.getChild(0)).getSymbol();
+        Token left = ParseTreeUtil.getStopTokenForNode(ParseTreeUtil.getLeftSibling(ctx));
+        Token right = ParseTreeUtil.getStartTokenForNode(ctx.getChild(1));
+
+        verifyArrowIsSpaceDelimited(left, right, arrow);
+    }
+
+
+
+    private void verifyArrowIsSpaceDelimited(Token left, Token right, Token arrow) {
+        if (checkLeftSpaces(left, arrow, 1)) {
+            printer.error(Messages.RETURN_ARROW + Messages.SPACE_BEFORE, ListenerUtil.getTokenLocation(arrow));
+        }
+        if (checkRightSpaces(right, arrow, 1)) {
+            printer.error(Messages.RETURN_ARROW + Messages.SPACE_AFTER, ListenerUtil.getTokenEndLocation(arrow));
+        }
     }
     //endregion
 
