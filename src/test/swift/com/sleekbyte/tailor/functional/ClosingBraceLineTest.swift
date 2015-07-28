@@ -283,3 +283,7 @@ applyMutliplication(2, { value in value * 3 })
 applyMutliplication(2, {
  value in value * 3
  /* comment */ })
+
+applyMutliplication(2, { value in value * 3 /* comment */ })
+
+applyMutliplication(2, { /* comment */ value in value * 3 })
