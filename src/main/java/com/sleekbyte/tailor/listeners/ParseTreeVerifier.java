@@ -331,6 +331,7 @@ class ParseTreeVerifier {
         ParseTree constructBeforeOpenBrace = ctx.getChild(numChildren - 2);
         loopEndToken = ParseTreeUtil.getStopTokenForNode(constructBeforeOpenBrace);
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), loopEndToken, Messages.FOR_LOOP);
+        verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.FOR_LOOP);
     }
 
     void verifyProtocolBraceStyle(ProtocolBodyContext ctx) {
@@ -354,6 +355,9 @@ class ParseTreeVerifier {
                 break;
             }
         }
+
+        ParseTree lastChild = ParseTreeUtil.getLastChild(ctx);
+        verifyCloseBraceStyle(lastChild, ParseTreeUtil.getLeftSibling(lastChild), Messages.ENUM);
     }
 
     void verifyClosureExpressionBraceStyle(ClosureExpressionContext ctx) {
@@ -362,8 +366,12 @@ class ParseTreeVerifier {
             return;
         }
 
+        // open brace style check
         Location leftLocation = ListenerUtil.getTokenLocation(ParseTreeUtil.getStopTokenForNode(left));
         verifyCodeBlockOpenBraceIsInline(ctx, leftLocation, Messages.CLOSURE);
+
+        // close brace style check
+        verifyClosureCloseBraceStyle(ctx);
 
         /* It doesn't always make sense to check if an opening brace for a closure has a single space before it.
            Example: list.map({(element: Int) in element * 2})
@@ -426,29 +434,16 @@ class ParseTreeVerifier {
         verifySingleSpaceBeforeOpenBrace(ctx, leftSibling.getStop());
     }
 
-    private void verifyBodyCloseBraceStyle(ParserRuleContext bodyCtx, String constructName) {
-
-        ParseTree closeBrace = ParseTreeUtil.getLastChild(bodyCtx);
+    private void verifyCloseBraceStyle(ParseTree closeBrace, ParseTree closeBraceLeftSibling, String constructName) {
         Token closeBraceToken = ((TerminalNodeImpl)closeBrace).getSymbol();
         Location closeBraceLocation = ListenerUtil.getTokenLocation(closeBraceToken);
 
-        List<Token> tokens = tokenStream.getHiddenTokensToLeft(closeBraceToken.getTokenIndex());
-        // if comments are to the left of }
-        if (tokens != null) {
-            Token commentToken = getLastCommentToken(tokens);
-            if (commentToken != null) {
-                int commentEndLine = ListenerUtil.getEndLineOfToken(commentToken);
-                if (commentEndLine == closeBraceLocation.line) {
-                    this.printer.warn(constructName + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
-                    return;
-                }
-            }
+        if (commentLeftOfCloseBrace(closeBraceToken)) {
+            this.printer.warn(constructName + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
+            return;
         }
 
-        // if no comments are to the left of }
-        ParseTree closeBraceLeftSibling = ParseTreeUtil.getLeftSibling(closeBrace);
         Location closeBraceLeftSiblingLocation = ListenerUtil.getParseTreeStopLocation(closeBraceLeftSibling);
-
         if (closeBraceLocation.line == closeBraceLeftSiblingLocation.line) {
             if (!closeBraceLeftSibling.getText().equals("{")) {
                 this.printer.warn(constructName + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
@@ -456,6 +451,45 @@ class ParseTreeVerifier {
                 this.printer.warn(Messages.EMPTY_BODY, closeBraceLeftSiblingLocation);
             }
         }
+    }
+
+    private void verifyClosureCloseBraceStyle(ClosureExpressionContext ctx) {
+        ParseTree closeBrace = ParseTreeUtil.getLastChild(ctx);
+        Token closeBraceToken = ((TerminalNodeImpl) closeBrace).getSymbol();
+        Location closeBraceLocation = ListenerUtil.getTokenLocation(closeBraceToken);
+        Location openBraceLocation = ListenerUtil.getLocationOfChildToken(ctx, 0);
+
+        if (openBraceLocation.line != closeBraceLocation.line && commentLeftOfCloseBrace(closeBraceToken)) {
+            this.printer.warn(Messages.CLOSURE + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
+            return;
+        }
+
+        Location leftSiblingLocation = ListenerUtil.getParseTreeStopLocation(ParseTreeUtil.getLeftSibling(closeBrace));
+        if (leftSiblingLocation.line == closeBraceLocation.line && openBraceLocation.line != closeBraceLocation.line) {
+            this.printer.warn(Messages.CLOSURE + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
+        }
+    }
+
+    private boolean commentLeftOfCloseBrace(Token closeBraceToken) {
+        Location closeBraceLocation = ListenerUtil.getTokenLocation(closeBraceToken);
+        List<Token> tokens = tokenStream.getHiddenTokensToLeft(closeBraceToken.getTokenIndex());
+        // if comments are to the left of }
+        if (tokens != null) {
+            Token commentToken = getLastCommentToken(tokens);
+            if (commentToken != null) {
+                int commentEndLine = ListenerUtil.getEndLineOfToken(commentToken);
+                if (commentEndLine == closeBraceLocation.line) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void verifyBodyCloseBraceStyle(ParserRuleContext bodyCtx, String constructName) {
+        ParseTree closeBrace = ParseTreeUtil.getLastChild(bodyCtx);
+        ParseTree closeBraceLeftSibling = ParseTreeUtil.getLeftSibling(closeBrace);
+        verifyCloseBraceStyle(closeBrace, closeBraceLeftSibling, constructName);
     }
 
     private Token getLastCommentToken(List<Token> tokens) {
