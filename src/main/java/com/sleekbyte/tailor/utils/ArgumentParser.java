@@ -27,7 +27,8 @@ public class ArgumentParser {
     private static final String MAX_STRUCT_LENGTH_OPT = "max-struct-length";
     private static final String MAX_SEVERITY_OPT = "max-severity";
     private static final String DEFAULT_INT_ARG = "0";
-    private static final String XCODE_INTEGRATION = "configure";
+    private static final String XCODE_INTEGRATION_OPT = "configure";
+    private static final String DEFAULT_XCODE_INTEGRATION_ARG = null;
 
     private Options options;
     private CommandLine cmd;
@@ -85,7 +86,7 @@ public class ArgumentParser {
         final Option maxNameLength = addArgument(MAX_NAME_LENGTH_OPT, Messages.MAX_NAME_LENGTH_DESC);
         final Option maxStructLength = addArgument(MAX_STRUCT_LENGTH_OPT, Messages.MAX_STRUCT_LENGTH_DESC);
         final Option maxSeverity = addArgument(MAX_SEVERITY_OPT, Messages.MAX_SEVERITY_DESC);
-        final Option xcodeIntegration = addArgument(XCODE_INTEGRATION, Messages.XCODE_INTEGRATION_DESC);
+        final Option xcodeIntegration = addArgument(XCODE_INTEGRATION_OPT, Messages.XCODE_INTEGRATION_DESC);
 
         options = new Options();
         options.addOption(help);
@@ -126,6 +127,20 @@ public class ArgumentParser {
             return Integer.parseInt(this.cmd.getOptionValue(opt, DEFAULT_INT_ARG));
         } catch (NumberFormatException e) {
             throw new ArgumentParserException("Invalid value provided for integer argument " + opt + ".");
+        }
+    }
+
+    /**
+     * Retrieve Xcode project path specified for --configuration
+     * @return path of Xcode project
+     * @throws ArgumentParserException if invalid Xcode project path specified for --configure
+     */
+    public String getXcodeprojPath() throws ArgumentParserException {
+        try {
+            return this.cmd.getOptionValue(XCODE_INTEGRATION_OPT, DEFAULT_XCODE_INTEGRATION_ARG);
+        } catch (NumberFormatException e) {
+            throw new ArgumentParserException("Invalid value provided for string argument " + XCODE_INTEGRATION_OPT
+                + ".");
         }
     }
 
