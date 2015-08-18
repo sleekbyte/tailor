@@ -27,6 +27,7 @@ public class ArgumentParser {
     private static final String MAX_STRUCT_LENGTH_OPT = "max-struct-length";
     private static final String MAX_SEVERITY_OPT = "max-severity";
     private static final String DEFAULT_INT_ARG = "0";
+    private static final String XCODE_INTEGRATION = "configure";
 
     private Options options;
     private CommandLine cmd;
@@ -84,6 +85,7 @@ public class ArgumentParser {
         final Option maxNameLength = addArgument(MAX_NAME_LENGTH_OPT, Messages.MAX_NAME_LENGTH_DESC);
         final Option maxStructLength = addArgument(MAX_STRUCT_LENGTH_OPT, Messages.MAX_STRUCT_LENGTH_DESC);
         final Option maxSeverity = addArgument(MAX_SEVERITY_OPT, Messages.MAX_SEVERITY_DESC);
+        final Option xcodeIntegration = addArgument(XCODE_INTEGRATION, Messages.XCODE_INTEGRATION_DESC);
 
         options = new Options();
         options.addOption(help);
@@ -95,6 +97,7 @@ public class ArgumentParser {
         options.addOption(maxNameLength);
         options.addOption(maxStructLength);
         options.addOption(maxSeverity);
+        options.addOption(xcodeIntegration);
     }
 
     /**
