@@ -131,7 +131,8 @@ public class ArgumentParser {
     }
 
     /**
-     * Retrieve Xcode project path specified for --configuration
+     * Retrieve Xcode project path specified for --configuration.
+     *
      * @return path of Xcode project
      * @throws ArgumentParserException if invalid Xcode project path specified for --configure
      */
