@@ -4,6 +4,7 @@ import com.sleekbyte.tailor.antlr.SwiftLexer;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Severity;
+import com.sleekbyte.tailor.integration.XcodeIntegrator;
 import com.sleekbyte.tailor.listeners.CommentAnalyzer;
 import com.sleekbyte.tailor.listeners.FileListener;
 import com.sleekbyte.tailor.listeners.MainListener;
@@ -104,7 +105,7 @@ public class Tailor {
             // Exit program after configuring Xcode project
             String xcodeprojPath = argumentParser.getXcodeprojPath();
             if (xcodeprojPath != null) {
-                // pass xcodeproj file path to configurator
+                XcodeIntegrator.setupXcode(xcodeprojPath);
                 return;
             }
 
