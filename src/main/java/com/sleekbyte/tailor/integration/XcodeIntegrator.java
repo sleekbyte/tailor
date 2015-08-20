@@ -2,6 +2,7 @@ package com.sleekbyte.tailor.integration;
 
 import com.sleekbyte.tailor.common.ExitCode;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -9,22 +10,33 @@ import java.io.IOException;
  */
 public final class XcodeIntegrator {
 
-    private static final String xcodeIntegrationRubyScriptPath = "path to ruby script";
+    private static final String xcodeIntegrationRubyScriptPath = "";
 
     /**
-     * Integrate Tailor into suppled Xcode project as a build phase run script.
+     * Integrate Tailor into supplied Xcode project as a build phase run script.
      *
      * @param relXcodeprojFilePath relative/absolute path to a xcodeproj file
      */
     public static void setupXcode(String relXcodeprojFilePath) {
-        String[] commands = {xcodeIntegrationRubyScriptPath, "absolute path to xcodeproj"};
+
         try {
-            Process process = Runtime.getRuntime().exec(commands);
-            process.waitFor();
-        } catch (IOException | InterruptedException e) {
-            System.err.println("Tailor - Xcode integration failed. Reason: " + e.getMessage());
+            String absXcodeprojFilePath = getAbsolutePath(relXcodeprojFilePath);
+            System.out.println("ABSOLUTE PATH: " + absXcodeprojFilePath);
+        } catch (IOException e) {
+            System.err.println("Tailor-Xcode Integration failed. Reason: " + e.getMessage());
             System.exit(ExitCode.FAILURE);
         }
+
         System.exit(ExitCode.SUCCESS);
+    }
+
+    private static String getAbsolutePath(String relativePath) throws IOException {
+        File file = new File(relativePath);
+        if (file.isDirectory()
+            && (relativePath.endsWith(".xcodeproj/") || relativePath.endsWith(".xcodeproj"))) {
+            return file.getAbsolutePath();
+        } else {
+            throw new IOException(relativePath + " is not a valid .xcodeproj");
+        }
     }
 }
