@@ -2,6 +2,6 @@
 
 import Foundation	
 
-class MyClass {
+class My_Class { // tailor:disable
     // Class definition goes here    
 }

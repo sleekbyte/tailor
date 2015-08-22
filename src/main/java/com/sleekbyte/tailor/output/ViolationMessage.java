@@ -46,6 +46,10 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
         this.violationMessage = violationMessage;
     }
 
+    public int getLineNumber() {
+        return lineNumber;
+    }
+
     public Severity getSeverity() {
         return severity;
     }

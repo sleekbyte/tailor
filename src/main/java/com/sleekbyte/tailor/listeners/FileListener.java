@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,11 +20,13 @@ import java.util.Set;
  */
 public class FileListener implements AutoCloseable {
 
+    private static final String SUPPRESS_VIOLATIONS = "// tailor:disable";
     private Printer printer;
     private File inputFile;
     private MaxLengths maxLengths;
     private LineNumberReader reader;
     private int numOfLines = 0;
+    private Set<Integer> ignoredLines = new HashSet<>(); // Set<lineNumber>
     private Map<Integer, Integer> longLines = new HashMap<>(); // Map<lineNumber, lineLength>
     private Map<Integer, Integer> trailingLines = new HashMap<>(); // Map<lineNumber, lineLength>
 
@@ -50,19 +53,27 @@ public class FileListener implements AutoCloseable {
     private void readFile() throws IOException {
         for (String line = this.reader.readLine(); line != null; line = this.reader.readLine()) {
             int lineLength = line.length();
+            int lineNumber = this.reader.getLineNumber();
             // Counts the number of lines in a file
             this.numOfLines++;
 
+            // Suppress all violations on lines ending with the given pattern
+            if (line.endsWith(SUPPRESS_VIOLATIONS)) {
+                this.ignoredLines.add(lineNumber);
+            }
+
             // Checks for lines in a source file that are longer than the specified maximum length
             if (this.maxLengths.maxLineLength > 0 && lineLength > this.maxLengths.maxLineLength) {
-                this.longLines.put(this.reader.getLineNumber(), lineLength);
+                this.longLines.put(lineNumber, lineLength);
             }
 
             // Checks whether a file contains any trailing whitespace characters
             if (lineLength > 0 && Character.isWhitespace(line.charAt(lineLength - 1))) {
-                this.trailingLines.put(this.reader.getLineNumber(), lineLength);
+                this.trailingLines.put(lineNumber, lineLength);
             }
         }
+
+        this.printer.ignoreLines(this.ignoredLines);
     }
 
     /**
