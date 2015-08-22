@@ -140,7 +140,7 @@ public class FileListenerTest {
     }
 
     @Test
-    public void testLinesWithTrailingWhitespace() throws IOException {
+    public void testLinesWithTrailingSpaces() throws IOException {
         MaxLengths maxLengths = new MaxLengths();
         writeNumOfLines(4, NORMAL_LINE + "    ");
         try (FileListener fileListener = new FileListener(null, inputFile, maxLengths)) {
@@ -151,6 +151,32 @@ public class FileListenerTest {
             assertThat(trailingLines, hasEntry(3, NORMAL_LINE.length() + 4));
             assertThat(trailingLines, hasEntry(4, NORMAL_LINE.length() + 4));
             assertEquals(trailingLines.entrySet().size(), 4);
+        }
+    }
+
+    @Test
+    public void testLinesWithTrailingTabs() throws IOException {
+        MaxLengths maxLengths = new MaxLengths();
+        writeNumOfLines(2, NORMAL_LINE + "\t\t");
+        try (FileListener fileListener = new FileListener(null, inputFile, maxLengths)) {
+            Map<Integer, Integer> trailingLines = fileListener.getTrailingLines();
+            assertFalse(trailingLines.isEmpty());
+            assertThat(trailingLines, hasEntry(1, NORMAL_LINE.length() + 2));
+            assertThat(trailingLines, hasEntry(2, NORMAL_LINE.length() + 2));
+            assertEquals(trailingLines.entrySet().size(), 2);
+        }
+    }
+
+    @Test
+    public void testLinesWithOnlySpaces() throws IOException {
+        MaxLengths maxLengths = new MaxLengths();
+        writeNumOfLines(2, "    ");
+        try (FileListener fileListener = new FileListener(null, inputFile, maxLengths)) {
+            Map<Integer, Integer> trailingLines = fileListener.getTrailingLines();
+            assertFalse(trailingLines.isEmpty());
+            assertThat(trailingLines, hasEntry(1, 4));
+            assertThat(trailingLines, hasEntry(2, 4));
+            assertEquals(trailingLines.entrySet().size(), 2);
         }
     }
 
