@@ -128,8 +128,9 @@ public class Tailor {
                     MainListener listener = new MainListener(printer, maxLengths, tokenStream);
                     ParseTreeWalker walker = new ParseTreeWalker();
                     walker.walk(listener, tree);
-                    FileListener fileListener = new FileListener(printer, inputFile, maxLengths);
-                    fileListener.verify();
+                    try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
+                        fileListener.verify();
+                    }
                     CommentAnalyzer commentAnalyzer = new CommentAnalyzer(tokenStream, printer);
                     commentAnalyzer.analyze();
                     numErrors += printer.getNumErrorMessages();
