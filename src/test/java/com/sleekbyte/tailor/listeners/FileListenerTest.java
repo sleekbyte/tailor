@@ -7,6 +7,8 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.sleekbyte.tailor.common.MaxLengths;
+import com.sleekbyte.tailor.common.Severity;
+import com.sleekbyte.tailor.output.Printer;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.junit.Before;
@@ -42,6 +44,7 @@ public class FileListenerTest {
 
     private File inputFile;
     private PrintWriter writer;
+    private Printer printer;
 
     @Mock
     private ParserRuleContext context;
@@ -52,12 +55,13 @@ public class FileListenerTest {
     public void setUp() throws NoSuchMethodException, IOException {
         Method method = this.getClass().getMethod(testName.getMethodName());
         inputFile = folder.newFile(method.getName() + "-" + INPUT_FILE);
+        printer = new Printer(inputFile, Severity.WARNING);
         writer = new PrintWriter(inputFile, Charset.defaultCharset().name());
     }
 
     @Test
     public void testNumLinesInFileZeroLines() throws IOException {
-        try (FileListener fileListener = new FileListener(null, inputFile, new MaxLengths())) {
+        try (FileListener fileListener = new FileListener(printer, inputFile, new MaxLengths())) {
             assertEquals(0, fileListener.getNumOfLines());
         }
     }
@@ -65,7 +69,7 @@ public class FileListenerTest {
     @Test
     public void testNumLinesInFileOneLine() throws IOException {
         writeNumOfLines(1, NORMAL_LINE);
-        try (FileListener fileListener = new FileListener(null, inputFile, new MaxLengths())) {
+        try (FileListener fileListener = new FileListener(printer, inputFile, new MaxLengths())) {
             assertEquals(1, fileListener.getNumOfLines());
         }
     }
@@ -73,7 +77,7 @@ public class FileListenerTest {
     @Test
     public void testNumLinesInFileMultipleLines() throws IOException {
         writeNumOfLines(4, NORMAL_LINE);
-        try (FileListener fileListener = new FileListener(null, inputFile, new MaxLengths())) {
+        try (FileListener fileListener = new FileListener(printer, inputFile, new MaxLengths())) {
             assertEquals(4, fileListener.getNumOfLines());
         }
     }
@@ -82,21 +86,21 @@ public class FileListenerTest {
     public void testLinesTooLongMaxLengthZeroOrNegative() throws IOException {
         MaxLengths maxLengths = new MaxLengths();
         maxLengths.setMaxLineLength(0);
-        try (FileListener fileListener = new FileListener(null, inputFile, maxLengths)) {
+        try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
             assertTrue(fileListener.getLongLines().isEmpty());
         }
         maxLengths.setMaxLineLength(-1);
-        try (FileListener fileListener = new FileListener(null, inputFile, maxLengths)) {
+        try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
             assertTrue(fileListener.getLongLines().isEmpty());
         }
 
         writeNumOfLines(4, LONG_LINE);
         maxLengths.setMaxLineLength(0);
-        try (FileListener fileListener = new FileListener(null, inputFile, maxLengths)) {
+        try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
             assertTrue(fileListener.getLongLines().isEmpty());
         }
         maxLengths.setMaxLineLength(-1);
-        try (FileListener fileListener = new FileListener(null, inputFile, maxLengths)) {
+        try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
             assertTrue(fileListener.getLongLines().isEmpty());
         }
     }
@@ -105,17 +109,17 @@ public class FileListenerTest {
     public void testLinesTooLongMaxLengthValid() throws IOException {
         MaxLengths maxLengths = new MaxLengths();
         maxLengths.setMaxLineLength(-1);
-        try (FileListener fileListener = new FileListener(null, inputFile, maxLengths)) {
+        try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
             assertTrue(fileListener.getLongLines().isEmpty());
         }
 
         writeNumOfLines(4, LONG_LINE);
         maxLengths.setMaxLineLength(LONG_LINE.length() + 10);
-        try (FileListener fileListener = new FileListener(null, inputFile, maxLengths)) {
+        try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
             assertTrue(fileListener.getLongLines().isEmpty());
         }
         maxLengths.setMaxLineLength(LONG_LINE.length() - 1);
-        try (FileListener fileListener = new FileListener(null, inputFile, maxLengths)) {
+        try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
             Map<Integer, Integer> longLines = fileListener.getLongLines();
             assertFalse(longLines.isEmpty());
             assertThat(longLines, hasEntry(1, LONG_LINE.length()));
@@ -129,12 +133,12 @@ public class FileListenerTest {
     @Test
     public void testLinesNoTrailingWhitespace() throws IOException {
         MaxLengths maxLengths = new MaxLengths();
-        try (FileListener fileListener = new FileListener(null, inputFile, maxLengths)) {
+        try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
             assertTrue(fileListener.getTrailingLines().isEmpty());
         }
 
         writeNumOfLines(4, "");
-        try (FileListener fileListener = new FileListener(null, inputFile, maxLengths)) {
+        try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
             assertTrue(fileListener.getTrailingLines().isEmpty());
         }
     }
@@ -143,7 +147,7 @@ public class FileListenerTest {
     public void testLinesWithTrailingSpaces() throws IOException {
         MaxLengths maxLengths = new MaxLengths();
         writeNumOfLines(4, NORMAL_LINE + "    ");
-        try (FileListener fileListener = new FileListener(null, inputFile, maxLengths)) {
+        try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
             Map<Integer, Integer> trailingLines = fileListener.getTrailingLines();
             assertFalse(trailingLines.isEmpty());
             assertThat(trailingLines, hasEntry(1, NORMAL_LINE.length() + 4));
@@ -158,7 +162,7 @@ public class FileListenerTest {
     public void testLinesWithTrailingTabs() throws IOException {
         MaxLengths maxLengths = new MaxLengths();
         writeNumOfLines(2, NORMAL_LINE + "\t\t");
-        try (FileListener fileListener = new FileListener(null, inputFile, maxLengths)) {
+        try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
             Map<Integer, Integer> trailingLines = fileListener.getTrailingLines();
             assertFalse(trailingLines.isEmpty());
             assertThat(trailingLines, hasEntry(1, NORMAL_LINE.length() + 2));
@@ -171,7 +175,7 @@ public class FileListenerTest {
     public void testLinesWithOnlySpaces() throws IOException {
         MaxLengths maxLengths = new MaxLengths();
         writeNumOfLines(2, "    ");
-        try (FileListener fileListener = new FileListener(null, inputFile, maxLengths)) {
+        try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
             Map<Integer, Integer> trailingLines = fileListener.getTrailingLines();
             assertFalse(trailingLines.isEmpty());
             assertThat(trailingLines, hasEntry(1, 4));
