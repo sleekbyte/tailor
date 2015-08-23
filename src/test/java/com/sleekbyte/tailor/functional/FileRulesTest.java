@@ -10,7 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * Functional tests for {@link com.sleekbyte.tailor.listeners.FileListener}.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class FileListenerTest extends RuleTest {
+public class FileRulesTest extends RuleTest {
 
     @Override
     protected String[] getCommandArgs() {

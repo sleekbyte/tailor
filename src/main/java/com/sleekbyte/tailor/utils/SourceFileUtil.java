@@ -5,11 +5,8 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.LineNumberReader;
 import java.io.RandomAccessFile;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Util class for source files.
@@ -18,65 +15,13 @@ public class SourceFileUtil {
 
     private static final String READ_ONLY_MODE = "r";
     private static final byte NEWLINE_DELIMITER = (byte) '\n';
-    private static File fileWithStoredLength;
-    private static int storedNumOfLines;
 
-    /**
-     * Counts the number of lines in a file.
-     * Opens and reads all lines of the file, then memoizes that count for the same file.
-     *
-     * @param inputFile the file in which to count the number of lines
-     * @return the number of lines in the file
-     * @throws IOException if the file cannot be read
-     */
-    public static int numLinesInFile(File inputFile) throws IOException {
-        if (inputFile.equals(fileWithStoredLength)) {
-            return storedNumOfLines;
-        }
-
-        LineNumberReader reader = new LineNumberReader(Files.newBufferedReader(inputFile.toPath()));
-        int numOfLines = 0;
-        while (reader.readLine() != null) {
-            numOfLines++;
-        }
-        reader.close();
-
-        // memoize length of inputFile
-        fileWithStoredLength = inputFile;
-        storedNumOfLines = numOfLines;
-
-        return numOfLines;
-    }
-
-    public static boolean fileTooLong(File inputFile, int maxLength) throws IOException {
-        return maxLength > 0 && numLinesInFile(inputFile) > maxLength;
+    public static boolean fileTooLong(int numOfLines, int maxLength) {
+        return maxLength > 0 && numOfLines > maxLength;
     }
 
     public static boolean constructTooLong(ParserRuleContext ctx, int maxLength) {
         return maxLength > 0 && (ctx.getStop().getLine() - ctx.getStart().getLine()) > maxLength;
-    }
-
-    /**
-     * Checks for lines in a source file that are longer than the specified maximum length.
-     *
-     * @param inputFile the file in which to count the lengths of each line
-     * @param maxLength the maximum allowed length for any line
-     * @return a map of line numbers to their lengths for lines exceeding the maximum allowed length
-     * @throws IOException if the file cannot be read
-     */
-    public static Map<Integer, Integer> linesTooLong(File inputFile, int maxLength) throws IOException {
-        // Map<lineNumber, lineLength>
-        Map<Integer, Integer> longLines = new HashMap<>();
-        if (maxLength > 0) {
-            LineNumberReader reader = new LineNumberReader(Files.newBufferedReader(inputFile.toPath()));
-            for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-                if (line.length() > maxLength) {
-                    longLines.put(reader.getLineNumber(), line.length());
-                }
-            }
-            reader.close();
-        }
-        return longLines;
     }
 
     public static boolean nameTooLong(ParserRuleContext ctx, int maxLength) {
@@ -125,6 +70,7 @@ public class SourceFileUtil {
         if (character != -1 && Character.isWhitespace((char) character)) {
             return true;
         }
+        reader.close();
         return false;
     }
 }
