@@ -116,6 +116,8 @@ public class Tailor {
             MaxLengths maxLengths = argumentParser.parseMaxLengths();
             Severity maxSeverity = argumentParser.getMaxSeverity();
 
+            List<String> enabledRules = argumentParser.getEnabledRules();
+
             for (String filename : filenames) {
                 File inputFile = new File(filename);
                 FileInputStream inputStream = new FileInputStream(inputFile);
@@ -126,6 +128,7 @@ public class Tailor {
 
                 try (Printer printer = new Printer(inputFile, maxSeverity)) {
                     MainListener listener = new MainListener(printer, maxLengths, tokenStream);
+
                     ParseTreeWalker walker = new ParseTreeWalker();
                     walker.walk(listener, tree);
                     try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {

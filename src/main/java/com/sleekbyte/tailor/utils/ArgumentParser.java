@@ -2,6 +2,7 @@ package com.sleekbyte.tailor.utils;
 
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
@@ -9,6 +10,12 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Parse command line options and arguments.
@@ -26,6 +33,8 @@ public class ArgumentParser {
     private static final String MAX_NAME_LENGTH_OPT = "max-name-length";
     private static final String MAX_STRUCT_LENGTH_OPT = "max-struct-length";
     private static final String MAX_SEVERITY_OPT = "max-severity";
+    private static final String ONLY_OPT = "only";
+    private static final String EXCLUDED_OPT = "excluded";
     private static final String DEFAULT_INT_ARG = "0";
 
     private Options options;
@@ -75,15 +84,17 @@ public class ArgumentParser {
             .desc(Messages.HELP_DESC)
             .build();
 
-        final Option maxClassLength = addArgument(MAX_CLASS_LENGTH_OPT, Messages.MAX_CLASS_LENGTH_DESC);
-        final Option maxClosureLength = addArgument(MAX_CLOSURE_LENGTH_OPT, Messages.MAX_CLOSURE_LENGTH_DESC);
-        final Option maxFileLength = addArgument(MAX_FILE_LENGTH_OPT, Messages.MAX_FILE_LENGTH_DESC);
-        final Option maxFunctionLength = addArgument(MAX_FUNCTION_LENGTH_OPT, Messages.MAX_FUNCTION_LENGTH_DESC);
-        final Option maxLineLength = addArgument(MAX_LINE_LENGTH_SHORT_OPT, MAX_LINE_LENGTH_LONG_OPT,
+        final Option maxClassLength = createOptionSingleArg(MAX_CLASS_LENGTH_OPT, Messages.MAX_CLASS_LENGTH_DESC);
+        final Option maxClosureLength = createOptionSingleArg(MAX_CLOSURE_LENGTH_OPT, Messages.MAX_CLOSURE_LENGTH_DESC);
+        final Option maxFileLength = createOptionSingleArg(MAX_FILE_LENGTH_OPT, Messages.MAX_FILE_LENGTH_DESC);
+        final Option maxFunctionLength = createOptionSingleArg(MAX_FUNCTION_LENGTH_OPT, Messages.MAX_FUNCTION_LENGTH_DESC);
+        final Option maxLineLength = createOptionSingleArg(MAX_LINE_LENGTH_SHORT_OPT, MAX_LINE_LENGTH_LONG_OPT,
             Messages.MAX_LINE_LENGTH_DESC);
-        final Option maxNameLength = addArgument(MAX_NAME_LENGTH_OPT, Messages.MAX_NAME_LENGTH_DESC);
-        final Option maxStructLength = addArgument(MAX_STRUCT_LENGTH_OPT, Messages.MAX_STRUCT_LENGTH_DESC);
-        final Option maxSeverity = addArgument(MAX_SEVERITY_OPT, Messages.MAX_SEVERITY_DESC);
+        final Option maxNameLength = createOptionSingleArg(MAX_NAME_LENGTH_OPT, Messages.MAX_NAME_LENGTH_DESC);
+        final Option maxStructLength = createOptionSingleArg(MAX_STRUCT_LENGTH_OPT, Messages.MAX_STRUCT_LENGTH_DESC);
+        final Option maxSeverity = createOptionSingleArg(MAX_SEVERITY_OPT, Messages.MAX_SEVERITY_DESC);
+        final Option onlySpecificRules = createOptionMultipleArgs(ONLY_OPT, Messages.ONLY_SPECIFIC_RULES_DESC);
+        final Option excludeRules = createOptionMultipleArgs(EXCLUDED_OPT, Messages.EXCLUDE_RULES_DESC);
 
         options = new Options();
         options.addOption(help);
@@ -95,27 +106,40 @@ public class ArgumentParser {
         options.addOption(maxNameLength);
         options.addOption(maxStructLength);
         options.addOption(maxSeverity);
+        options.addOption(onlySpecificRules);
+        options.addOption(excludeRules);
     }
 
     /**
-     * Add Integer argument with short and long name to command line options.
+     * Create command line option with short name, long name, and only one argument.
      *
      * @param shortOpt short version of option
      * @param longOpt  long version of option
      * @param desc     description of option
      */
-    private Option addArgument(String shortOpt, String longOpt, String desc) {
+    private Option createOptionSingleArg(String shortOpt, String longOpt, String desc) {
         return Option.builder(shortOpt).longOpt(longOpt).hasArg().desc(desc).build();
     }
 
     /**
-     * Add Integer argument with only long name to command line options.
+     * Create command line option with only long name and only one argument.
      *
      * @param longOpt long version of option
      * @param desc    description of option
      */
-    private Option addArgument(String longOpt, String desc) {
+    private Option createOptionSingleArg(String longOpt, String desc) {
         return Option.builder().longOpt(longOpt).hasArg().desc(desc).build();
+    }
+
+    /**
+     * Create command line option with only long name and multiple arguments.
+     * Multiple arguments can be separated by comma or by space.
+     *
+     * @param longOpt long version of option
+     * @param desc    description of option
+     */
+    private Option createOptionMultipleArgs(String longOpt, String desc) {
+        return Option.builder().longOpt(longOpt).hasArgs().valueSeparator(',').desc(desc).build();
     }
 
     private int getIntegerArgument(String opt) throws ArgumentParserException {
@@ -123,6 +147,44 @@ public class ArgumentParser {
             return Integer.parseInt(this.cmd.getOptionValue(opt, DEFAULT_INT_ARG));
         } catch (NumberFormatException e) {
             throw new ArgumentParserException("Invalid value provided for integer argument " + opt + ".");
+        }
+    }
+
+    /**
+     * Collects all rules enabled by default and then filters out rules according to command line options.
+     *
+     * @return list of enabled rules after filtering
+     * @throws ArgumentParserException if rule names specified in command line options are not valid
+     */
+    public List<String> getEnabledRules() throws ArgumentParserException {
+        List<String> enabledRules = Stream.of(Rules.values()).map(Rules::getName).collect(Collectors.toList());
+        String[] excludedRules = this.cmd.getOptionValues(EXCLUDED_OPT);
+        String[] onlySpecificRules = this.cmd.getOptionValues(ONLY_OPT);
+
+        if (onlySpecificRules != null) {
+            checkValidRules(enabledRules, new LinkedList<>(Arrays.asList(onlySpecificRules)));
+            return Arrays.asList(onlySpecificRules);
+        } else if (excludedRules != null) {
+            checkValidRules(enabledRules, new LinkedList<>(Arrays.asList(excludedRules)));
+            enabledRules.removeAll(Arrays.asList(excludedRules));
+        }
+
+        return enabledRules;
+    }
+
+    /**
+     * Checks if rules specified in command line option is valid
+     *
+     * @param enabledRules   all valid rule names
+     * @param specifiedRules rule names provided specified from command line
+     * @throws ArgumentParserException if rule name specified in command line is not valid
+     */
+    private void checkValidRules(List<String> enabledRules, List<String> specifiedRules)
+        throws ArgumentParserException {
+
+        if (!enabledRules.containsAll(specifiedRules)) {
+            specifiedRules.removeAll(enabledRules);
+            throw new ArgumentParserException("The following rules were not recognized: " + specifiedRules);
         }
     }
 

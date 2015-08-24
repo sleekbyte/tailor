@@ -108,5 +108,7 @@ public class Messages {
     public static final String MAX_NAME_LENGTH_DESC = MAXIMUM + IDENTIFIER_NAME + LENGTH + IN_CHARS_DESC;
     public static final String MAX_STRUCT_LENGTH_DESC = MAXIMUM + STRUCT + LENGTH + IN_CHARS_DESC;
     public static final String MAX_SEVERITY_DESC = MAXIMUM + SEVERITY + "[" + ERROR + "|" + WARNING + "]";
+    public static final String ONLY_SPECIFIC_RULES_DESC = "run only the specified rules";
+    public static final String EXCLUDE_RULES_DESC = "run all rules except the specified ones";
 
 }
