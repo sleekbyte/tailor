@@ -22,7 +22,7 @@ public class Printer implements AutoCloseable {
     private File inputFile;
     private Severity maxSeverity;
     private Map<String, ViolationMessage> msgBuffer = new HashMap<>();
-    private Set<Integer> ignoredLines = new HashSet<>();
+    private Set<Integer> ignoredLineNumbers = new HashSet<>();
 
     public Printer(File inputFile, Severity maxSeverity) {
         this.inputFile = inputFile;
@@ -77,7 +77,7 @@ public class Printer implements AutoCloseable {
     @Override
     public void close() {
         List<ViolationMessage> outputList = new ArrayList<>(this.msgBuffer.values().stream()
-            .filter(msg -> !ignoredLines.contains(msg.getLineNumber())).collect(Collectors.toList()));
+            .filter(msg -> !ignoredLineNumbers.contains(msg.getLineNumber())).collect(Collectors.toList()));
         Collections.sort(outputList);
         if (outputList.size() > 0) {
             System.out.println(getHeader(inputFile));
@@ -90,8 +90,8 @@ public class Printer implements AutoCloseable {
         return msgBuffer.values().stream().filter(msg -> msg.getSeverity().equals(Severity.ERROR)).count();
     }
 
-    public void ignoreLines(Set<Integer> ignoredLines) {
-        this.ignoredLines = ignoredLines;
+    public void ignoreLine(int ignoredLineNumber) {
+        this.ignoredLineNumbers.add(ignoredLineNumber);
     }
 
 }
