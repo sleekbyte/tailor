@@ -16,7 +16,7 @@ import java.nio.file.Files;
  */
 public class FileListener implements AutoCloseable {
 
-    private static final String SUPPRESS_VIOLATIONS = "// tailor:disable";
+    private static final String DISABLE_PATTERN = "// tailor:disable";
     private Printer printer;
     private File inputFile;
     private MaxLengths maxLengths;
@@ -55,7 +55,7 @@ public class FileListener implements AutoCloseable {
             this.numOfLines++;
 
             // Suppress all violations on lines ending with the given pattern
-            if (line.endsWith(SUPPRESS_VIOLATIONS)) {
+            if (line.trim().endsWith(DISABLE_PATTERN)) {
                 this.printer.ignoreLine(lineNumber);
             }
 
