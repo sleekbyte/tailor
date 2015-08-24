@@ -34,7 +34,6 @@ public class SourceFileUtilTest {
 
     private static final String INPUT_FILE = "inputFile.swift";
     private static final String NORMAL_LINE = "This is data for a file";
-    private static final String LONG_LINE = "This is really really really really long, it should not be this long";
     private static final String NAME = "variableName";
 
     private File inputFile;
@@ -54,26 +53,59 @@ public class SourceFileUtilTest {
     }
 
     @Test
-    public void testFileTooLongMaxLengthZeroOrNegativeEmptyFile() throws IOException {
+    public void testFileTooLongMaxLengthZeroOrNegativeEmptyFile() {
         assertFalse(SourceFileUtil.fileTooLong(0, 0));
         assertFalse(SourceFileUtil.fileTooLong(-1, -1));
     }
 
     @Test
-    public void testFileTooLongMaxLengthZeroOrNegative() throws IOException {
+    public void testFileTooLongMaxLengthZeroOrNegative() {
         assertFalse(SourceFileUtil.fileTooLong(1, 0));
         assertFalse(SourceFileUtil.fileTooLong(1, -1));
     }
 
     @Test
-    public void testFileTooLongMaxLengthValidEmptyFile() throws IOException {
+    public void testFileTooLongMaxLengthValidEmptyFile() {
         assertFalse(SourceFileUtil.fileTooLong(0, 2));
     }
 
     @Test
-    public void testFileTooLongMaxLengthValid() throws IOException {
+    public void testFileTooLongMaxLengthValid() {
         assertTrue(SourceFileUtil.fileTooLong(3, 2));
         assertFalse(SourceFileUtil.fileTooLong(3, 3));
+    }
+
+    @Test
+    public void testLineTooLongMaxLengthZeroOrNegative() {
+        assertFalse(SourceFileUtil.lineTooLong(20, 0));
+        assertFalse(SourceFileUtil.lineTooLong(20, -1));
+    }
+
+    @Test
+    public void testLineTooLongMaxLengthValid() {
+        assertFalse(SourceFileUtil.lineTooLong(25, 25));
+        assertTrue(SourceFileUtil.lineTooLong(26, 25));
+        assertTrue(SourceFileUtil.lineTooLong(50, 25));
+    }
+
+    @Test
+    public void testLineHasTrailingWhitespaceInvalid() {
+        String line = "";
+        assertFalse(SourceFileUtil.lineHasTrailingWhitespace(line.length(), line));
+        line = NORMAL_LINE;
+        assertFalse(SourceFileUtil.lineHasTrailingWhitespace(line.length(), line));
+    }
+
+    @Test
+    public void testLineHasTrailingWhitespaceValid() {
+        String line = "    ";
+        assertTrue(SourceFileUtil.lineHasTrailingWhitespace(line.length(), line));
+        line = "\t\t";
+        assertTrue(SourceFileUtil.lineHasTrailingWhitespace(line.length(), line));
+        line = NORMAL_LINE + "    ";
+        assertTrue(SourceFileUtil.lineHasTrailingWhitespace(line.length(), line));
+        line = NORMAL_LINE + "\t\t";
+        assertTrue(SourceFileUtil.lineHasTrailingWhitespace(line.length(), line));
     }
 
     @Test

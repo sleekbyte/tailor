@@ -8,8 +8,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Generates and outputs formatted analysis messages for Xcode.
@@ -19,6 +22,7 @@ public class Printer implements AutoCloseable {
     private File inputFile;
     private Severity maxSeverity;
     private Map<String, ViolationMessage> msgBuffer = new HashMap<>();
+    private Set<Integer> ignoredLineNumbers = new HashSet<>();
 
     public Printer(File inputFile, Severity maxSeverity) {
         this.inputFile = inputFile;
@@ -72,7 +76,8 @@ public class Printer implements AutoCloseable {
 
     @Override
     public void close() {
-        List<ViolationMessage> outputList = new ArrayList<>(this.msgBuffer.values());
+        List<ViolationMessage> outputList = new ArrayList<>(this.msgBuffer.values().stream()
+            .filter(msg -> !ignoredLineNumbers.contains(msg.getLineNumber())).collect(Collectors.toList()));
         Collections.sort(outputList);
         if (outputList.size() > 0) {
             System.out.println(getHeader(inputFile));
@@ -83,6 +88,10 @@ public class Printer implements AutoCloseable {
 
     public long getNumErrorMessages() {
         return msgBuffer.values().stream().filter(msg -> msg.getSeverity().equals(Severity.ERROR)).count();
+    }
+
+    public void ignoreLine(int ignoredLineNumber) {
+        this.ignoredLineNumbers.add(ignoredLineNumber);
     }
 
 }

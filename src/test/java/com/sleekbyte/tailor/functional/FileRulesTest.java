@@ -27,11 +27,13 @@ public class FileRulesTest extends RuleTest {
         addExpectedMsg(3, 16, Severity.WARNING, Messages.LINE + Messages.EXCEEDS_CHARACTER_LIMIT
             + " (" + 18 + "/" + 15 + ")");
         addExpectedMsg(3, 18, Severity.WARNING, Messages.LINE + Messages.TRAILING_WHITESPACE);
-        addExpectedMsg(6, Severity.WARNING, Messages.FILE + Messages.EXCEEDS_LINE_LIMIT + " (" + 7 + "/" + 5 + ")");
+        addExpectedMsg(6, Severity.WARNING, Messages.FILE + Messages.EXCEEDS_LINE_LIMIT + " (" + 11 + "/" + 5 + ")");
         addExpectedMsg(6, 16, Severity.WARNING, Messages.LINE + Messages.EXCEEDS_CHARACTER_LIMIT
             + " (" + 37 + "/" + 15 + ")");
         addExpectedMsg(6, 37, Severity.WARNING, Messages.LINE + Messages.TRAILING_WHITESPACE);
-        addExpectedMsg(7, Severity.WARNING, Messages.FILE + Messages.NEWLINE_TERMINATOR);
+        addExpectedMsg(9, 16, Severity.WARNING, Messages.LINE + Messages.EXCEEDS_CHARACTER_LIMIT
+            + " (" + 28 + "/" + 15 + ")");
+        addExpectedMsg(11, Severity.WARNING, Messages.FILE + Messages.NEWLINE_TERMINATOR);
     }
 
     private void addExpectedMsg(int line, Severity classification, String msg) {

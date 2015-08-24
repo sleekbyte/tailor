@@ -20,6 +20,14 @@ public class SourceFileUtil {
         return maxLength > 0 && numOfLines > maxLength;
     }
 
+    public static boolean lineTooLong(int lineLength, int maxLineLength) {
+        return (maxLineLength > 0) && (lineLength > maxLineLength);
+    }
+
+    public static boolean lineHasTrailingWhitespace(int lineLength, String line) {
+        return (lineLength > 0) && (Character.isWhitespace(line.charAt(lineLength - 1)));
+    }
+
     public static boolean constructTooLong(ParserRuleContext ctx, int maxLength) {
         return maxLength > 0 && (ctx.getStop().getLine() - ctx.getStart().getLine()) > maxLength;
     }
