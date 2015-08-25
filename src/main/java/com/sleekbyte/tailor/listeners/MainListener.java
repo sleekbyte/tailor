@@ -34,25 +34,21 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterClassName(SwiftParser.ClassNameContext ctx) {
-        verifier.verifyUpperCamelCase(Messages.CLASS + Messages.NAMES, ctx);
         verifier.verifyNameLength(Messages.CLASS + Messages.NAME, verifier.maxLengths.maxNameLength, ctx);
     }
 
     @Override
     public void enterEnumName(SwiftParser.EnumNameContext ctx) {
-        verifier.verifyUpperCamelCase(Messages.ENUM + Messages.NAMES, ctx);
         verifier.verifyNameLength(Messages.ENUM + Messages.NAME, verifier.maxLengths.maxNameLength, ctx);
     }
 
     @Override
     public void enterStructName(SwiftParser.StructNameContext ctx) {
-        verifier.verifyUpperCamelCase(Messages.STRUCT + Messages.NAMES, ctx);
         verifier.verifyNameLength(Messages.STRUCT + Messages.NAME, verifier.maxLengths.maxNameLength, ctx);
     }
 
     @Override
     public void enterProtocolName(SwiftParser.ProtocolNameContext ctx) {
-        verifier.verifyUpperCamelCase(Messages.PROTOCOL + Messages.NAMES, ctx);
         verifier.verifyNameLength(Messages.PROTOCOL + Messages.NAME, verifier.maxLengths.maxNameLength, ctx);
     }
 
@@ -395,14 +391,12 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterRawValueStyleEnumCase(SwiftParser.RawValueStyleEnumCaseContext ctx) {
-        verifier.verifyUpperCamelCase(Messages.ENUM_CASE + Messages.NAMES, ctx.enumCaseName());
         verifier.verifyNameLength(Messages.ENUM_CASE + Messages.NAME, verifier.maxLengths.maxNameLength,
                                   ctx.enumCaseName());
     }
 
     @Override
     public void enterUnionStyleEnumCase(SwiftParser.UnionStyleEnumCaseContext ctx) {
-        verifier.verifyUpperCamelCase(Messages.ENUM_CASE + Messages.NAMES, ctx.enumCaseName());
         verifier.verifyNameLength(Messages.ENUM_CASE + Messages.NAME, verifier.maxLengths.maxNameLength,
                                   ctx.enumCaseName());
     }

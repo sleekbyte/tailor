@@ -85,16 +85,6 @@ class ParseTreeVerifier {
         importLineNumbers.clear();
     }
 
-    //region UpperCamelCase name check
-    void verifyUpperCamelCase(String constructType, ParserRuleContext ctx) {
-        String constructName = ctx.getText();
-        if (!CharFormatUtil.isUpperCamelCase(constructName)) {
-            Location location = ListenerUtil.getContextStartLocation(ctx);
-            this.printer.error(constructType + Messages.UPPER_CAMEL_CASE, location);
-        }
-    }
-    //endregion
-
     //region Semicolon terminated statement check
     void verifyNotSemicolonTerminated(String constructType, ParserRuleContext ctx) {
         String construct = ctx.getText();

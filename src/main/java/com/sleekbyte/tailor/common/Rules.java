@@ -1,9 +1,12 @@
 package com.sleekbyte.tailor.common;
 
-import com.sleekbyte.tailor.listeners.MainListener;
+import com.sleekbyte.tailor.listeners.UpperCamelCaseListener;
 
+/**
+ * Enum for all rules implemented in Tailor.
+ */
 public enum Rules {
-    UPPER_CAMEL_CASE ("upperCamelCase", MainListener.class.getName());
+    UPPER_CAMEL_CASE ("upperCamelCase", UpperCamelCaseListener.class.getName());
 
     private String name;
     private String className;

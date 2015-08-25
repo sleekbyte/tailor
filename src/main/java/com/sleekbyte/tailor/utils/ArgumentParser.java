@@ -86,9 +86,10 @@ public class ArgumentParser {
         final Option maxClassLength = createOptionSingleArg(MAX_CLASS_LENGTH_OPT, Messages.MAX_CLASS_LENGTH_DESC);
         final Option maxClosureLength = createOptionSingleArg(MAX_CLOSURE_LENGTH_OPT, Messages.MAX_CLOSURE_LENGTH_DESC);
         final Option maxFileLength = createOptionSingleArg(MAX_FILE_LENGTH_OPT, Messages.MAX_FILE_LENGTH_DESC);
-        final Option maxFunctionLength = createOptionSingleArg(MAX_FUNCTION_LENGTH_OPT, Messages.MAX_FUNCTION_LENGTH_DESC);
-        final Option maxLineLength = createOptionSingleArg(MAX_LINE_LENGTH_SHORT_OPT, MAX_LINE_LENGTH_LONG_OPT,
-            Messages.MAX_LINE_LENGTH_DESC);
+        final Option maxFunctionLength =
+            createOptionSingleArg(MAX_FUNCTION_LENGTH_OPT, Messages.MAX_FUNCTION_LENGTH_DESC);
+        final Option maxLineLength =
+            createOptionSingleArg(MAX_LINE_LENGTH_SHORT_OPT, MAX_LINE_LENGTH_LONG_OPT, Messages.MAX_LINE_LENGTH_DESC);
         final Option maxNameLength = createOptionSingleArg(MAX_NAME_LENGTH_OPT, Messages.MAX_NAME_LENGTH_DESC);
         final Option maxStructLength = createOptionSingleArg(MAX_STRUCT_LENGTH_OPT, Messages.MAX_STRUCT_LENGTH_DESC);
         final Option maxSeverity = createOptionSingleArg(MAX_SEVERITY_OPT, Messages.MAX_SEVERITY_DESC);
@@ -176,7 +177,7 @@ public class ArgumentParser {
     }
 
     /**
-     * Checks if rules specified in command line option is valid
+     * Checks if rules specified in command line option is valid.
      *
      * @param enabledRules   all valid rule names
      * @param specifiedRules rule names provided specified from command line

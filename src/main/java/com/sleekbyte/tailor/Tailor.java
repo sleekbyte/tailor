@@ -8,11 +8,11 @@ import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.listeners.CommentAnalyzer;
 import com.sleekbyte.tailor.listeners.FileListener;
+import com.sleekbyte.tailor.listeners.MainListener;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ArgumentParser;
 import com.sleekbyte.tailor.utils.ArgumentParserException;
 import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.cli.CommandLine;
@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -89,19 +90,25 @@ public class Tailor {
         return filenames;
     }
 
-
+    /**
+     * Creates listeners according to the rules that are enabled.
+     *
+     * @param enabledRules list of enabled rules
+     * @param printer      passed into listener constructors
+     * @param maxLengths   passed into listener constructors
+     * @param tokenStream  passed into listener constructors
+     * @throws ArgumentParserException if listener for an enabled rule is not found
+     */
     public static List<SwiftBaseListener> createListeners(List<Rules> enabledRules, Printer printer,
                                                           MaxLengths maxLengths, CommonTokenStream tokenStream)
         throws ArgumentParserException {
         List<SwiftBaseListener> listeners = new LinkedList<>();
         for (Rules rule : enabledRules) {
             try {
-                Constructor listenerConstructor =
-                    Class.forName(rule.getClassName())
-                        .getConstructor(Printer.class, MaxLengths.class, BufferedTokenStream.class);
-
-                listeners.add( (SwiftBaseListener) listenerConstructor.newInstance(printer, maxLengths, tokenStream));
-            } catch (Exception e) {
+                Constructor listenerConstructor = Class.forName(rule.getClassName()).getConstructor(Printer.class);
+                listeners.add((SwiftBaseListener) listenerConstructor.newInstance(printer));
+            } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException |
+                     InstantiationException | IllegalAccessException e) {
                 throw new ArgumentParserException("Listeners were not successfully created: " + e);
             }
         }
@@ -150,8 +157,10 @@ public class Tailor {
                 SwiftParser.TopLevelContext tree = swiftParser.topLevel();
 
                 try (Printer printer = new Printer(inputFile, maxSeverity)) {
-//                    MainListener listener = new MainListener(printer, maxLengths, tokenStream);
                     List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, maxLengths, tokenStream);
+                    MainListener mainListener = new MainListener(printer, maxLengths, tokenStream);
+                    listeners.add(mainListener);
+
                     ParseTreeWalker walker = new ParseTreeWalker();
 
                     for (SwiftBaseListener listener : listeners) {
