@@ -115,6 +115,7 @@ public class Tailor {
             long numErrors = 0;
             MaxLengths maxLengths = argumentParser.parseMaxLengths();
             Severity maxSeverity = argumentParser.getMaxSeverity();
+            boolean colorOutput = argumentParser.shouldColorOutput();
 
             for (String filename : filenames) {
                 File inputFile = new File(filename);
@@ -124,7 +125,7 @@ public class Tailor {
                 SwiftParser swiftParser = new SwiftParser(tokenStream);
                 SwiftParser.TopLevelContext tree = swiftParser.topLevel();
 
-                try (Printer printer = new Printer(inputFile, maxSeverity)) {
+                try (Printer printer = new Printer(inputFile, maxSeverity, colorOutput)) {
                     MainListener listener = new MainListener(printer, maxLengths, tokenStream);
                     ParseTreeWalker walker = new ParseTreeWalker();
                     walker.walk(listener, tree);

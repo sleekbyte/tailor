@@ -12,6 +12,9 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
     private int columnNumber;
     private Severity severity = null;
     private String violationMessage = "";
+    private boolean colorOutput = false;
+    private int lineNumberWidth = 0;
+    private int columnNumberWidth = 0;
 
     /**
      * Constructs a ViolationMessage with the specified message components.
@@ -56,6 +59,18 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public void setColorOutput(boolean colorOutput) {
+        this.colorOutput = colorOutput;
+    }
+
+    public void setLineNumberWidth(int lineNumberWidth) {
+        this.lineNumberWidth = lineNumberWidth;
+    }
+
+    public void setColumnNumberWidth(int columnNumberWidth) {
+        this.columnNumberWidth = columnNumberWidth;
     }
 
     @Override
@@ -112,12 +127,64 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
             return "";
         }
 
-        if (this.columnNumber == 0) {
-            return String.format("%s:%d: %s: %s", this.filePath, this.lineNumber, this.severity,
-                this.violationMessage);
+        return String.format("%s%s%s %s %s", formattedFilePath(), formattedLineNumber(), formattedColumnNumber(),
+            formattedSeverity(), formattedViolationMessage());
+    }
+
+    private String formattedFilePath() {
+        return String.format("%s:", filePath);
+    }
+
+    private String formattedLineNumber() {
+        String res;
+        if (lineNumberWidth > 0 && colorOutput) {
+            res = String.format("%0" + lineNumberWidth + "d:", lineNumber);
+            res = "@|bg_blue,black " + res + "|@";
+        } else {
+            res = String.format("%d:", lineNumber);
         }
-        return String.format("%s:%d:%d: %s: %s", this.filePath, this.lineNumber, this.columnNumber, this.severity,
-            this.violationMessage);
+        return res;
+    }
+
+    private String formattedColumnNumber() {
+        String res;
+        if (columnNumber == 0) {
+            if (columnNumberWidth > 0 && colorOutput) {
+                res = String.format("%" + (columnNumberWidth + 1) + "s", "");
+                res = "@|bg_blue,black " + res + "|@";
+            } else {
+                res = "";
+            }
+        } else {
+            if (columnNumberWidth > 0 && colorOutput) {
+                res = String.format("%0" + columnNumberWidth + "d:", columnNumber);
+                res = "@|bg_blue,black " + res + "|@";
+            } else {
+                res = String.format("%d:", columnNumber);
+            }
+        }
+        return res;
+    }
+
+    private String formattedSeverity() {
+        String res;
+        if (colorOutput) {
+            res = String.format("%7s:", severity);
+            if (severity.equals(Severity.ERROR)) {
+                res = "@|bg_red,black " + res + "|@";
+            } else if (severity.equals(Severity.WARNING)) {
+                res = "@|bg_yellow,black " + res + "|@";
+            } else {
+                res = "@|bg_white,black " + res + "|@";
+            }
+        } else {
+            res = String.format("%s:", severity);
+        }
+        return res;
+    }
+
+    private String formattedViolationMessage() {
+        return violationMessage;
     }
 
 }

@@ -26,6 +26,7 @@ public class ArgumentParser {
     private static final String MAX_NAME_LENGTH_OPT = "max-name-length";
     private static final String MAX_STRUCT_LENGTH_OPT = "max-struct-length";
     private static final String MAX_SEVERITY_OPT = "max-severity";
+    private static final String NO_COLOR_OPT = "no-color";
     private static final String DEFAULT_INT_ARG = "0";
 
     private Options options;
@@ -84,6 +85,7 @@ public class ArgumentParser {
         final Option maxNameLength = addArgument(MAX_NAME_LENGTH_OPT, Messages.MAX_NAME_LENGTH_DESC);
         final Option maxStructLength = addArgument(MAX_STRUCT_LENGTH_OPT, Messages.MAX_STRUCT_LENGTH_DESC);
         final Option maxSeverity = addArgument(MAX_SEVERITY_OPT, Messages.MAX_SEVERITY_DESC);
+        final Option noColor = Option.builder().longOpt(NO_COLOR_OPT).desc(Messages.NO_COLOR_DESC).build();
 
         options = new Options();
         options.addOption(help);
@@ -95,10 +97,11 @@ public class ArgumentParser {
         options.addOption(maxNameLength);
         options.addOption(maxStructLength);
         options.addOption(maxSeverity);
+        options.addOption(noColor);
     }
 
     /**
-     * Add Integer argument with short and long name to command line options.
+     * Add argument with short and long name to command line options.
      *
      * @param shortOpt short version of option
      * @param longOpt  long version of option
@@ -109,7 +112,7 @@ public class ArgumentParser {
     }
 
     /**
-     * Add Integer argument with only long name to command line options.
+     * Add argument with only long name to command line options.
      *
      * @param longOpt long version of option
      * @param desc    description of option
@@ -138,6 +141,10 @@ public class ArgumentParser {
         } catch (Severity.IllegalSeverityException ex) {
             throw new ArgumentParserException("Invalid value provided for argument " + MAX_SEVERITY_OPT + ".");
         }
+    }
+
+    public boolean shouldColorOutput() {
+        return !this.cmd.hasOption(NO_COLOR_OPT);
     }
 
 }

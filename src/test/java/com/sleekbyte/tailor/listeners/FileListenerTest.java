@@ -49,7 +49,7 @@ public class FileListenerTest {
     public void setUp() throws NoSuchMethodException, IOException {
         Method method = this.getClass().getMethod(testName.getMethodName());
         inputFile = folder.newFile(method.getName() + "-" + INPUT_FILE);
-        printer = new Printer(inputFile, Severity.WARNING);
+        printer = new Printer(inputFile, Severity.WARNING, false);
         writer = new PrintWriter(inputFile, Charset.defaultCharset().name());
     }
 
