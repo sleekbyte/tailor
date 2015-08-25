@@ -53,46 +53,6 @@ public class MainListener extends SwiftBaseListener {
     }
 
     @Override
-    public void enterStatement(SwiftParser.StatementContext ctx) {
-        verifier.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
-    }
-
-    @Override
-    public void enterDeclaration(SwiftParser.DeclarationContext ctx) {
-        verifier.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
-    }
-
-    @Override
-    public void enterLoopStatement(SwiftParser.LoopStatementContext ctx) {
-        verifier.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
-    }
-
-    @Override
-    public void enterBranchStatement(SwiftParser.BranchStatementContext ctx) {
-        verifier.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
-    }
-
-    @Override
-    public void enterLabeledStatement(SwiftParser.LabeledStatementContext ctx) {
-        verifier.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
-    }
-
-    @Override
-    public void enterControlTransferStatement(SwiftParser.ControlTransferStatementContext ctx) {
-        verifier.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
-    }
-
-    @Override
-    public void enterUnionStyleEnumMember(SwiftParser.UnionStyleEnumMemberContext ctx) {
-        verifier.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
-    }
-
-    @Override
-    public void enterProtocolMemberDeclaration(SwiftParser.ProtocolMemberDeclarationContext ctx) {
-        verifier.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
-    }
-
-    @Override
     public void enterClassBody(SwiftParser.ClassBodyContext ctx) {
         verifier.verifyConstructLength(Messages.CLASS, verifier.maxLengths.maxClassLength, ctx);
         verifier.verifyClassBraceStyle(ctx);

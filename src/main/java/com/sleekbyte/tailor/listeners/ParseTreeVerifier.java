@@ -85,16 +85,6 @@ class ParseTreeVerifier {
         importLineNumbers.clear();
     }
 
-    //region Semicolon terminated statement check
-    void verifyNotSemicolonTerminated(String constructType, ParserRuleContext ctx) {
-        String construct = ctx.getText();
-        if (construct.endsWith(";")) {
-            Location location = ListenerUtil.getContextStopLocation(ctx);
-            this.printer.error(constructType + Messages.SEMICOLON, location);
-        }
-    }
-    //endregion
-
     //region Length checks
     void verifyConstructLength(String constructType, int maxLength, ParserRuleContext ctx) {
         if (SourceFileUtil.constructTooLong(ctx, maxLength)) {

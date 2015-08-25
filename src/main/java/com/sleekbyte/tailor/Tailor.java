@@ -107,8 +107,8 @@ public class Tailor {
             try {
                 Constructor listenerConstructor = Class.forName(rule.getClassName()).getConstructor(Printer.class);
                 listeners.add((SwiftBaseListener) listenerConstructor.newInstance(printer));
-            } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException |
-                     InstantiationException | IllegalAccessException e) {
+            } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException
+                    | InstantiationException | IllegalAccessException e) {
                 throw new ArgumentParserException("Listeners were not successfully created: " + e);
             }
         }
