@@ -43,7 +43,7 @@ public class GrammarTest {
         for (File swiftFile : swiftFiles) {
             errContent = new ByteArrayOutputStream();
             System.setErr(new PrintStream(errContent, false, Charset.defaultCharset().name()));
-            String[] command = { (TEST_INPUT_DIR + swiftFile.getName()) };
+            String[] command = { "-debug", (TEST_INPUT_DIR + swiftFile.getName()) };
             Tailor.main(command);
             assertThat(errContent.toString(Charset.defaultCharset().name()), IsEmptyString.isEmptyString());
             System.setErr(null);
