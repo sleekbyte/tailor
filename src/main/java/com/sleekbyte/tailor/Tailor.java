@@ -5,6 +5,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.listeners.CommentAnalyzer;
+import com.sleekbyte.tailor.listeners.ErrorListener;
 import com.sleekbyte.tailor.listeners.FileListener;
 import com.sleekbyte.tailor.listeners.MainListener;
 import com.sleekbyte.tailor.output.Printer;
@@ -85,6 +86,56 @@ public class Tailor {
         return filenames;
     }
 
+    public static SwiftParser.TopLevelContext getParseTree(CommonTokenStream tokenStream) {
+        SwiftParser swiftParser = new SwiftParser(tokenStream);
+        swiftParser.removeErrorListeners();
+        swiftParser.addErrorListener(new ErrorListener());
+
+        SwiftParser.TopLevelContext tree = null;
+        try {
+            tree = swiftParser.topLevel();
+        }
+        catch (ErrorListener.ParseException e) {}
+        return tree;
+    }
+
+    public static void analyzeFiles(Set<String> filenames) throws ArgumentParserException, IOException {
+        long numErrors = 0;
+        MaxLengths maxLengths = argumentParser.parseMaxLengths();
+        Severity maxSeverity = argumentParser.getMaxSeverity();
+
+        for (String filename : filenames) {
+            File inputFile = new File(filename);
+            FileInputStream inputStream = new FileInputStream(inputFile);
+            SwiftLexer lexer = new SwiftLexer(new ANTLRInputStream(inputStream));
+            CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+
+            SwiftParser.TopLevelContext tree = getParseTree(tokenStream);
+            if (tree == null) {
+                Printer printer = new Printer(inputFile, maxSeverity);
+                printer.printParseErrorMessage();
+                continue;
+            }
+
+            try (Printer printer = new Printer(inputFile, maxSeverity)) {
+                MainListener listener = new MainListener(printer, maxLengths, tokenStream);
+                ParseTreeWalker walker = new ParseTreeWalker();
+                walker.walk(listener, tree);
+                try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
+                    fileListener.verify();
+                }
+                CommentAnalyzer commentAnalyzer = new CommentAnalyzer(tokenStream, printer);
+                commentAnalyzer.analyze();
+                numErrors += printer.getNumErrorMessages();
+            }
+        }
+
+        if (numErrors >= 1L) {
+            // Non-zero exit status when any violation messages have Severity.ERROR, controlled by --max-severity
+            System.exit(EXIT_FAILURE);
+        }
+    }
+
     /**
      * Main runner for Tailor.
      *
@@ -112,35 +163,7 @@ public class Tailor {
                 exitWithMissingSourceFileError();
             }
 
-            long numErrors = 0;
-            MaxLengths maxLengths = argumentParser.parseMaxLengths();
-            Severity maxSeverity = argumentParser.getMaxSeverity();
-
-            for (String filename : filenames) {
-                File inputFile = new File(filename);
-                FileInputStream inputStream = new FileInputStream(inputFile);
-                SwiftLexer lexer = new SwiftLexer(new ANTLRInputStream(inputStream));
-                CommonTokenStream tokenStream = new CommonTokenStream(lexer);
-                SwiftParser swiftParser = new SwiftParser(tokenStream);
-                SwiftParser.TopLevelContext tree = swiftParser.topLevel();
-
-                try (Printer printer = new Printer(inputFile, maxSeverity)) {
-                    MainListener listener = new MainListener(printer, maxLengths, tokenStream);
-                    ParseTreeWalker walker = new ParseTreeWalker();
-                    walker.walk(listener, tree);
-                    try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
-                        fileListener.verify();
-                    }
-                    CommentAnalyzer commentAnalyzer = new CommentAnalyzer(tokenStream, printer);
-                    commentAnalyzer.analyze();
-                    numErrors += printer.getNumErrorMessages();
-                }
-            }
-
-            if (numErrors >= 1L) {
-                // Non-zero exit status when any violation messages have Severity.ERROR, controlled by --max-severity
-                System.exit(EXIT_FAILURE);
-            }
+            analyzeFiles(filenames);
 
         } catch (IOException e) {
             System.err.println("Source file analysis failed. Reason: " + e.getMessage());
