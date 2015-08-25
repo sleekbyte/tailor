@@ -9,6 +9,7 @@ import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.listeners.CommentAnalyzer;
 import com.sleekbyte.tailor.listeners.FileListener;
 import com.sleekbyte.tailor.listeners.MainListener;
+import com.sleekbyte.tailor.listeners.MaxLengthListener;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ArgumentParser;
 import com.sleekbyte.tailor.utils.ArgumentParserException;
@@ -158,8 +159,8 @@ public class Tailor {
 
                 try (Printer printer = new Printer(inputFile, maxSeverity)) {
                     List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, maxLengths, tokenStream);
-                    MainListener mainListener = new MainListener(printer, maxLengths, tokenStream);
-                    listeners.add(mainListener);
+                    listeners.add(new MaxLengthListener(printer, maxLengths));
+                    listeners.add(new MainListener(printer, maxLengths, tokenStream));
 
                     ParseTreeWalker walker = new ParseTreeWalker();
 
