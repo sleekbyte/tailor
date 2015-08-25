@@ -1,16 +1,18 @@
 package com.sleekbyte.tailor;
 
+import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftLexer;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.MaxLengths;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.listeners.CommentAnalyzer;
 import com.sleekbyte.tailor.listeners.FileListener;
-import com.sleekbyte.tailor.listeners.MainListener;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ArgumentParser;
 import com.sleekbyte.tailor.utils.ArgumentParserException;
 import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.cli.CommandLine;
@@ -19,10 +21,12 @@ import org.apache.commons.cli.ParseException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -85,6 +89,25 @@ public class Tailor {
         return filenames;
     }
 
+
+    public static List<SwiftBaseListener> createListeners(List<Rules> enabledRules, Printer printer,
+                                                          MaxLengths maxLengths, CommonTokenStream tokenStream)
+        throws ArgumentParserException {
+        List<SwiftBaseListener> listeners = new LinkedList<>();
+        for (Rules rule : enabledRules) {
+            try {
+                Constructor listenerConstructor =
+                    Class.forName(rule.getClassName())
+                        .getConstructor(Printer.class, MaxLengths.class, BufferedTokenStream.class);
+
+                listeners.add( (SwiftBaseListener) listenerConstructor.newInstance(printer, maxLengths, tokenStream));
+            } catch (Exception e) {
+                throw new ArgumentParserException("Listeners were not successfully created: " + e);
+            }
+        }
+        return listeners;
+    }
+
     /**
      * Main runner for Tailor.
      *
@@ -116,7 +139,7 @@ public class Tailor {
             MaxLengths maxLengths = argumentParser.parseMaxLengths();
             Severity maxSeverity = argumentParser.getMaxSeverity();
 
-            List<String> enabledRules = argumentParser.getEnabledRules();
+            List<Rules> enabledRules = argumentParser.getEnabledRules();
 
             for (String filename : filenames) {
                 File inputFile = new File(filename);
@@ -127,10 +150,13 @@ public class Tailor {
                 SwiftParser.TopLevelContext tree = swiftParser.topLevel();
 
                 try (Printer printer = new Printer(inputFile, maxSeverity)) {
-                    MainListener listener = new MainListener(printer, maxLengths, tokenStream);
-
+//                    MainListener listener = new MainListener(printer, maxLengths, tokenStream);
+                    List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, maxLengths, tokenStream);
                     ParseTreeWalker walker = new ParseTreeWalker();
-                    walker.walk(listener, tree);
+
+                    for (SwiftBaseListener listener : listeners) {
+                        walker.walk(listener, tree);
+                    }
                     try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
                         fileListener.verify();
                     }

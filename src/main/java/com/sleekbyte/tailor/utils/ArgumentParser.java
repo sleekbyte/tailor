@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Parse command line options and arguments.
@@ -156,17 +155,21 @@ public class ArgumentParser {
      * @return list of enabled rules after filtering
      * @throws ArgumentParserException if rule names specified in command line options are not valid
      */
-    public List<String> getEnabledRules() throws ArgumentParserException {
-        List<String> enabledRules = Stream.of(Rules.values()).map(Rules::getName).collect(Collectors.toList());
-        String[] excludedRules = this.cmd.getOptionValues(EXCLUDED_OPT);
-        String[] onlySpecificRules = this.cmd.getOptionValues(ONLY_OPT);
+    public List<Rules> getEnabledRules() throws ArgumentParserException {
+        List<Rules> enabledRules = new LinkedList<>(Arrays.asList(Rules.values()));
+        List<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toList());
 
-        if (onlySpecificRules != null) {
-            checkValidRules(enabledRules, new LinkedList<>(Arrays.asList(onlySpecificRules)));
-            return Arrays.asList(onlySpecificRules);
-        } else if (excludedRules != null) {
-            checkValidRules(enabledRules, new LinkedList<>(Arrays.asList(excludedRules)));
-            enabledRules.removeAll(Arrays.asList(excludedRules));
+        if (this.cmd.getOptionValues(ONLY_OPT) != null) {
+            List<String> onlySpecificRules = new LinkedList<>(Arrays.asList(this.cmd.getOptionValues(ONLY_OPT)));
+            checkValidRules(enabledRuleNames, onlySpecificRules);
+
+            return enabledRules.stream().filter(onlySpecificRules::contains).collect(Collectors.toList());
+        } else if (this.cmd.getOptionValues(EXCLUDED_OPT) != null) {
+            List<String> excludedRules = new LinkedList<>(Arrays.asList(this.cmd.getOptionValues(EXCLUDED_OPT)));
+            checkValidRules(enabledRuleNames, excludedRules);
+
+            return enabledRules.stream()
+                .filter( rule -> !excludedRules.contains(rule.getName())).collect(Collectors.toList());
         }
 
         return enabledRules;
