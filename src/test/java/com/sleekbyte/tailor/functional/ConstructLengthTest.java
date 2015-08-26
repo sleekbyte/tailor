@@ -6,6 +6,9 @@ import com.sleekbyte.tailor.output.Printer;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 /**
  * Functional tests for construct length rule.
  */
@@ -14,14 +17,13 @@ public class ConstructLengthTest extends RuleTest {
 
     @Override
     protected String[] getCommandArgs() {
-        return new String[] {
+        return Stream.concat(Arrays.stream(super.getCommandArgs()), Arrays.stream(new String[] {
             "--max-class-length", "8",
             "--max-closure-length", "6",
             "--max-file-length", "30",
             "--max-function-length", "3",
             "--max-struct-length", "1",
-            inputFile.getPath()
-        };
+        })).toArray(String[]::new);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.sleekbyte.tailor;
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftLexer;
 import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
@@ -161,6 +162,8 @@ public class Tailor {
         long numErrors = 0;
         MaxLengths maxLengths = argumentParser.parseMaxLengths();
         Severity maxSeverity = argumentParser.getMaxSeverity();
+        ColorSettings colorSettings =
+            new ColorSettings(argumentParser.shouldColorOutput(), argumentParser.shouldInvertColorOutput());
         Set<Rules> enabledRules = argumentParser.getEnabledRules();
 
         for (String filename : filenames) {
@@ -172,16 +175,15 @@ public class Tailor {
                 tokenStream = getTokenStream(inputFile);
                 tree = getParseTree(tokenStream);
             } catch (ErrorListener.ParseException e) {
-                Printer printer = new Printer(inputFile, maxSeverity);
+                Printer printer = new Printer(inputFile, maxSeverity, colorSettings);
                 printer.printParseErrorMessage();
                 continue;
             }
 
-            try (Printer printer = new Printer(inputFile, maxSeverity)) {
+            try (Printer printer = new Printer(inputFile, maxSeverity, colorSettings)) {
                 List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, tokenStream);
                 listeners.add(new MaxLengthListener(printer, maxLengths));
                 listeners.add(new MainListener(printer, maxLengths, tokenStream));
-
                 ParseTreeWalker walker = new ParseTreeWalker();
                 for (SwiftBaseListener listener : listeners) {
                     walker.walk(listener, tree);
@@ -216,7 +218,6 @@ public class Tailor {
                 argumentParser.printHelp();
                 System.exit(EXIT_SUCCESS);
             }
-
             if (cmd.getArgs().length >= 1) {
                 pathNames.addAll(Arrays.asList(cmd.getArgs()));
             }
@@ -237,6 +238,7 @@ public class Tailor {
             argumentParser.printHelp();
             System.exit(EXIT_FAILURE);
         }
+
     }
 
 }

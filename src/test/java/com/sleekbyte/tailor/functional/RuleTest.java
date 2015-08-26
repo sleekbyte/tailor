@@ -71,6 +71,7 @@ public abstract class RuleTest {
 
     protected String[] getCommandArgs() {
         return new String[]{
+            "--no-color",
             inputFile.getPath()
         };
     }

@@ -35,6 +35,8 @@ public class ArgumentParser {
     private static final String ONLY_OPT = "only";
     private static final String EXCLUDE_OPT = "exclude";
     private static final String DEBUG_OPT = "debug";
+    private static final String NO_COLOR_OPT = "no-color";
+    private static final String INVERT_COLOR_OPT = "invert-color";
     private static final String DEFAULT_INT_ARG = "0";
 
     private Options options;
@@ -79,11 +81,8 @@ public class ArgumentParser {
     }
 
     private void addOptions() {
-        Option help = Option.builder(HELP_SHORT_OPT)
-            .longOpt(HELP_LONG_OPT)
-            .desc(Messages.HELP_DESC)
-            .build();
 
+        final Option help = Option.builder(HELP_SHORT_OPT).longOpt(HELP_LONG_OPT).desc(Messages.HELP_DESC).build();
         final Option maxClassLength = createOptionWithSingleArg(MAX_CLASS_LENGTH_OPT, Messages.MAX_CLASS_LENGTH_DESC);
         final Option maxClosureLength =
             createOptionWithSingleArg(MAX_CLOSURE_LENGTH_OPT, Messages.MAX_CLOSURE_LENGTH_DESC);
@@ -99,11 +98,9 @@ public class ArgumentParser {
         final Option maxSeverity = createOptionWithSingleArg(MAX_SEVERITY_OPT, Messages.MAX_SEVERITY_DESC);
         final Option onlySpecificRules = createOptionWithMultipleArgs(ONLY_OPT, Messages.ONLY_SPECIFIC_RULES_DESC);
         final Option excludedRules = createOptionWithMultipleArgs(EXCLUDE_OPT, Messages.EXCLUDE_RULES_DESC);
-
-        final Option debug = Option.builder()
-            .longOpt(DEBUG_OPT)
-            .desc(Messages.DEBUG_DESC)
-            .build();
+        final Option debug = Option.builder().longOpt(DEBUG_OPT).desc(Messages.DEBUG_DESC).build();
+        final Option noColor = Option.builder().longOpt(NO_COLOR_OPT).desc(Messages.NO_COLOR_DESC).build();
+        final Option invertColor = Option.builder().longOpt(INVERT_COLOR_OPT).desc(Messages.INVERT_COLOR_DESC).build();
 
         options = new Options();
         options.addOption(help);
@@ -118,6 +115,8 @@ public class ArgumentParser {
         options.addOption(onlySpecificRules);
         options.addOption(excludedRules);
         options.addOption(debug);
+        options.addOption(noColor);
+        options.addOption(invertColor);
     }
 
     /**
@@ -218,6 +217,14 @@ public class ArgumentParser {
 
     public boolean debugFlagSet() throws ArgumentParserException {
         return cmd != null && cmd.hasOption(DEBUG_OPT);
+    }
+
+    public boolean shouldColorOutput() {
+        return cmd != null && !cmd.hasOption(NO_COLOR_OPT);
+    }
+
+    public boolean shouldInvertColorOutput() {
+        return cmd != null && cmd.hasOption(INVERT_COLOR_OPT);
     }
 
 }
