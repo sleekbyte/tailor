@@ -224,7 +224,7 @@ class ParseTreeVerifier {
         Location openBraceLocation = ListenerUtil.getLocationOfChildToken(ctx, 2);
 
         if (switchExpLocation.line != openBraceLocation.line) {
-            this.printer.warn(Messages.SWITCH_STATEMENT + Messages.OPEN_BRACKET_STYLE, openBraceLocation);
+            this.printer.warn(Messages.SWITCH_STATEMENT + Messages.OPEN_BRACE_STYLE, openBraceLocation);
         }
 
         // Close brace
@@ -308,7 +308,7 @@ class ParseTreeVerifier {
                 Location leftSiblingLocation = ListenerUtil.getContextStopLocation(leftSibling);
 
                 if (openBraceLocation.line != leftSiblingLocation.line) {
-                    printer.warn(Messages.ENUM + Messages.OPEN_BRACKET_STYLE, openBraceLocation);
+                    printer.warn(Messages.ENUM + Messages.OPEN_BRACE_STYLE, openBraceLocation);
                 } else if (checkLeftSpaces(leftSibling.getStop(), openBrace, 1)) {
                     printer.error(Messages.OPEN_BRACE + Messages.SPACE_BEFORE, openBraceLocation);
                 }
@@ -378,7 +378,7 @@ class ParseTreeVerifier {
                                                   String constructName) {
         Location openBraceLocation = ListenerUtil.getLocationOfChildToken(codeBlockCtx, 0);
         if (constructLocation.line != openBraceLocation.line) {
-            this.printer.warn(constructName + Messages.OPEN_BRACKET_STYLE, openBraceLocation);
+            this.printer.warn(constructName + Messages.OPEN_BRACE_STYLE, openBraceLocation);
         }
     }
 
@@ -399,14 +399,14 @@ class ParseTreeVerifier {
         Location closeBraceLocation = ListenerUtil.getTokenLocation(closeBraceToken);
 
         if (commentLeftOfCloseBrace(closeBraceToken)) {
-            this.printer.warn(constructName + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
+            this.printer.warn(constructName + Messages.CLOSE_BRACE_STYLE, closeBraceLocation);
             return;
         }
 
         Location closeBraceLeftSiblingLocation = ListenerUtil.getParseTreeStopLocation(closeBraceLeftSibling);
         if (closeBraceLocation.line == closeBraceLeftSiblingLocation.line) {
             if (!closeBraceLeftSibling.getText().equals("{")) {
-                this.printer.warn(constructName + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
+                this.printer.warn(constructName + Messages.CLOSE_BRACE_STYLE, closeBraceLocation);
             } else if (closeBraceLocation.column - closeBraceLeftSiblingLocation.column != 1) {
                 this.printer.warn(Messages.EMPTY_BODY, closeBraceLeftSiblingLocation);
             }
@@ -420,13 +420,13 @@ class ParseTreeVerifier {
         Location openBraceLocation = ListenerUtil.getLocationOfChildToken(ctx, 0);
 
         if (openBraceLocation.line != closeBraceLocation.line && commentLeftOfCloseBrace(closeBraceToken)) {
-            this.printer.warn(Messages.CLOSURE + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
+            this.printer.warn(Messages.CLOSURE + Messages.CLOSE_BRACE_STYLE, closeBraceLocation);
             return;
         }
 
         Location leftSiblingLocation = ListenerUtil.getParseTreeStopLocation(ParseTreeUtil.getLeftSibling(closeBrace));
         if (leftSiblingLocation.line == closeBraceLocation.line && openBraceLocation.line != closeBraceLocation.line) {
-            this.printer.warn(Messages.CLOSURE + Messages.CLOSE_BRACKET_STYLE, closeBraceLocation);
+            this.printer.warn(Messages.CLOSURE + Messages.CLOSE_BRACE_STYLE, closeBraceLocation);
         }
     }
 
