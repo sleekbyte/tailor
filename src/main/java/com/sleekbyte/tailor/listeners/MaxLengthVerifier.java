@@ -21,18 +21,21 @@ class MaxLengthVerifier {
     void verifyConstructLength(String constructType, int maxLength, ParserRuleContext ctx) {
         if (SourceFileUtil.constructTooLong(ctx, maxLength)) {
             int constructLength = ctx.getStop().getLine() - ctx.getStart().getLine();
-            String lengthVersusLimit = " (" + constructLength + "/" + maxLength + ")";
-            Location location = ListenerUtil.getContextStartLocation(ctx);
-            this.printer.error(constructType + Messages.EXCEEDS_LINE_LIMIT + lengthVersusLimit, location);
+            createErrorMessage(constructLength, ctx, constructType, maxLength, Messages.EXCEEDS_LINE_LIMIT);
         }
     }
 
     void verifyNameLength(String constructType, int maxLength, ParserRuleContext ctx) {
         if (SourceFileUtil.nameTooLong(ctx, maxLength)) {
-            String lengthVersusLimit = " (" + ctx.getText().length() + "/" + maxLength + ")";
-            Location location = ListenerUtil.getContextStartLocation(ctx);
-            this.printer.error(constructType + Messages.EXCEEDS_CHARACTER_LIMIT + lengthVersusLimit, location);
+            createErrorMessage(ctx.getText().length(), ctx, constructType, maxLength, Messages.EXCEEDS_CHARACTER_LIMIT);
         }
+    }
+
+    private void createErrorMessage(int constructLength, ParserRuleContext ctx, String constructType, int maxLength,
+                                    String msg) {
+        String lengthVersusLimit = " (" + constructLength + "/" + maxLength + ")";
+        Location location = ListenerUtil.getContextStartLocation(ctx);
+        this.printer.error(constructType + msg + lengthVersusLimit, location);
     }
 
 }

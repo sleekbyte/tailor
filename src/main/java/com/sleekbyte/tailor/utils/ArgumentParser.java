@@ -12,8 +12,8 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -83,18 +83,21 @@ public class ArgumentParser {
             .desc(Messages.HELP_DESC)
             .build();
 
-        final Option maxClassLength = createOptionSingleArg(MAX_CLASS_LENGTH_OPT, Messages.MAX_CLASS_LENGTH_DESC);
-        final Option maxClosureLength = createOptionSingleArg(MAX_CLOSURE_LENGTH_OPT, Messages.MAX_CLOSURE_LENGTH_DESC);
-        final Option maxFileLength = createOptionSingleArg(MAX_FILE_LENGTH_OPT, Messages.MAX_FILE_LENGTH_DESC);
+        final Option maxClassLength = createOptionWithSingleArg(MAX_CLASS_LENGTH_OPT, Messages.MAX_CLASS_LENGTH_DESC);
+        final Option maxClosureLength =
+            createOptionWithSingleArg(MAX_CLOSURE_LENGTH_OPT, Messages.MAX_CLOSURE_LENGTH_DESC);
+        final Option maxFileLength = createOptionWithSingleArg(MAX_FILE_LENGTH_OPT, Messages.MAX_FILE_LENGTH_DESC);
         final Option maxFunctionLength =
-            createOptionSingleArg(MAX_FUNCTION_LENGTH_OPT, Messages.MAX_FUNCTION_LENGTH_DESC);
+            createOptionWithSingleArg(MAX_FUNCTION_LENGTH_OPT, Messages.MAX_FUNCTION_LENGTH_DESC);
         final Option maxLineLength =
-            createOptionSingleArg(MAX_LINE_LENGTH_SHORT_OPT, MAX_LINE_LENGTH_LONG_OPT, Messages.MAX_LINE_LENGTH_DESC);
-        final Option maxNameLength = createOptionSingleArg(MAX_NAME_LENGTH_OPT, Messages.MAX_NAME_LENGTH_DESC);
-        final Option maxStructLength = createOptionSingleArg(MAX_STRUCT_LENGTH_OPT, Messages.MAX_STRUCT_LENGTH_DESC);
-        final Option maxSeverity = createOptionSingleArg(MAX_SEVERITY_OPT, Messages.MAX_SEVERITY_DESC);
-        final Option onlySpecificRules = createOptionMultipleArgs(ONLY_OPT, Messages.ONLY_SPECIFIC_RULES_DESC);
-        final Option excludedRules = createOptionMultipleArgs(EXCLUDE_OPT, Messages.EXCLUDE_RULES_DESC);
+            createOptionWithSingleArg(MAX_LINE_LENGTH_SHORT_OPT, MAX_LINE_LENGTH_LONG_OPT,
+                Messages.MAX_LINE_LENGTH_DESC);
+        final Option maxNameLength = createOptionWithSingleArg(MAX_NAME_LENGTH_OPT, Messages.MAX_NAME_LENGTH_DESC);
+        final Option maxStructLength =
+            createOptionWithSingleArg(MAX_STRUCT_LENGTH_OPT, Messages.MAX_STRUCT_LENGTH_DESC);
+        final Option maxSeverity = createOptionWithSingleArg(MAX_SEVERITY_OPT, Messages.MAX_SEVERITY_DESC);
+        final Option onlySpecificRules = createOptionWithMultipleArgs(ONLY_OPT, Messages.ONLY_SPECIFIC_RULES_DESC);
+        final Option excludedRules = createOptionWithMultipleArgs(EXCLUDE_OPT, Messages.EXCLUDE_RULES_DESC);
 
         options = new Options();
         options.addOption(help);
@@ -117,7 +120,7 @@ public class ArgumentParser {
      * @param longOpt  long version of option
      * @param desc     description of option
      */
-    private Option createOptionSingleArg(String shortOpt, String longOpt, String desc) {
+    private Option createOptionWithSingleArg(String shortOpt, String longOpt, String desc) {
         return Option.builder(shortOpt).longOpt(longOpt).hasArg().desc(desc).build();
     }
 
@@ -127,7 +130,7 @@ public class ArgumentParser {
      * @param longOpt long version of option
      * @param desc    description of option
      */
-    private Option createOptionSingleArg(String longOpt, String desc) {
+    private Option createOptionWithSingleArg(String longOpt, String desc) {
         return Option.builder().longOpt(longOpt).hasArg().desc(desc).build();
     }
 
@@ -138,7 +141,7 @@ public class ArgumentParser {
      * @param longOpt long version of option
      * @param desc    description of option
      */
-    private Option createOptionMultipleArgs(String longOpt, String desc) {
+    private Option createOptionWithMultipleArgs(String longOpt, String desc) {
         return Option.builder().longOpt(longOpt).hasArgs().valueSeparator(',').desc(desc).build();
     }
 
@@ -156,22 +159,22 @@ public class ArgumentParser {
      * @return list of enabled rules after filtering
      * @throws ArgumentParserException if rule names specified in command line options are not valid
      */
-    public List<Rules> getEnabledRules() throws ArgumentParserException {
-        List<Rules> enabledRules = new LinkedList<>(Arrays.asList(Rules.values()));
-        List<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toList());
+    public Set<Rules> getEnabledRules() throws ArgumentParserException {
+        Set<Rules> enabledRules = new HashSet<>(Arrays.asList(Rules.values()));
+        Set<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toSet());
 
         if (this.cmd.getOptionValues(ONLY_OPT) != null) {
-            List<String> onlySpecificRules = new LinkedList<>(Arrays.asList(this.cmd.getOptionValues(ONLY_OPT)));
+            Set<String> onlySpecificRules = new HashSet<>(Arrays.asList(this.cmd.getOptionValues(ONLY_OPT)));
             checkValidRules(enabledRuleNames, onlySpecificRules);
 
             return enabledRules.stream()
-                .filter(rule -> onlySpecificRules.contains(rule.getName())).collect(Collectors.toList());
+                .filter(rule -> onlySpecificRules.contains(rule.getName())).collect(Collectors.toSet());
         } else if (this.cmd.getOptionValues(EXCLUDE_OPT) != null) {
-            List<String> excludedRules = new LinkedList<>(Arrays.asList(this.cmd.getOptionValues(EXCLUDE_OPT)));
+            Set<String> excludedRules = new HashSet<>(Arrays.asList(this.cmd.getOptionValues(EXCLUDE_OPT)));
             checkValidRules(enabledRuleNames, excludedRules);
 
             return enabledRules.stream()
-                .filter(rule -> !excludedRules.contains(rule.getName())).collect(Collectors.toList());
+                .filter(rule -> !excludedRules.contains(rule.getName())).collect(Collectors.toSet());
         }
 
         return enabledRules;
@@ -184,7 +187,7 @@ public class ArgumentParser {
      * @param specifiedRules rule names specified from command line
      * @throws ArgumentParserException if rule name specified in command line is not valid
      */
-    private void checkValidRules(List<String> enabledRules, List<String> specifiedRules)
+    private void checkValidRules(Set<String> enabledRules, Set<String> specifiedRules)
         throws ArgumentParserException {
         if (!enabledRules.containsAll(specifiedRules)) {
             specifiedRules.removeAll(enabledRules);
