@@ -81,8 +81,8 @@ public class Printer implements AutoCloseable {
     }
 
     static String getHeader(File inputFile, boolean colorOutput, boolean invertColorOutput) {
-        String textColor = invertColorOutput ? "white" : "black";
         if (colorOutput) {
+            String textColor = invertColorOutput ? "white" : "black";
             return String.format("%n@|bg_blue," + textColor + " **********|@ @|bg_green," + textColor
                     + " %s|@ @|bg_blue," + textColor + " **********|@", inputFile.toString());
         } else {

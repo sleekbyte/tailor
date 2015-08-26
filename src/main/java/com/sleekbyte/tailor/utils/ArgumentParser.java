@@ -147,11 +147,11 @@ public class ArgumentParser {
     }
 
     public boolean shouldColorOutput() {
-        return !this.cmd.hasOption(NO_COLOR_OPT);
+        return cmd != null && !cmd.hasOption(NO_COLOR_OPT);
     }
 
     public boolean shouldInvertColorOutput() {
-        return this.cmd.hasOption(INVERT_COLOR_OPT);
+        return cmd != null && cmd.hasOption(INVERT_COLOR_OPT);
     }
 
 }
