@@ -106,10 +106,11 @@ public class Printer implements AutoCloseable {
             .filter(msg -> !ignoredLineNumbers.contains(msg.getLineNumber())).collect(Collectors.toList()));
         Collections.sort(outputList);
         if (outputList.size() > 0) {
+            String header = getHeader(inputFile, colorOutput, invertColorOutput);
             if (colorOutput) {
-                AnsiConsole.out.println(Ansi.ansi().render(getHeader(inputFile, colorOutput, invertColorOutput)));
+                AnsiConsole.out.println(Ansi.ansi().render(header));
             } else {
-                System.out.println(Ansi.ansi().render(getHeader(inputFile, colorOutput, invertColorOutput)));
+                System.out.println(header);
             }
         }
         if (colorOutput) {

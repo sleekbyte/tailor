@@ -184,7 +184,6 @@ public class Tailor {
                 argumentParser.printHelp();
                 System.exit(EXIT_SUCCESS);
             }
-
             if (cmd.getArgs().length >= 1) {
                 pathNames.addAll(Arrays.asList(cmd.getArgs()));
             }
@@ -206,6 +205,7 @@ public class Tailor {
             argumentParser.printHelp();
             System.exit(EXIT_FAILURE);
         }
+
     }
 
 }
