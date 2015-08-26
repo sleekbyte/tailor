@@ -78,7 +78,7 @@ public class PrinterTest {
     }
 
     private String expectedOutput(Severity severity, String msg, int line, int column) throws IOException {
-        return Printer.getHeader(inputFile, COLOR_OUTPUT) + "\n" + Printer.genOutputStringForTest(
+        return Printer.getHeader(inputFile, COLOR_OUTPUT, false) + "\n" + Printer.genOutputStringForTest(
             inputFile.getCanonicalPath(), line, column, severity, msg) + "\n";
     }
 

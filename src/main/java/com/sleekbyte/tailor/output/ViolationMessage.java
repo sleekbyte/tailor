@@ -15,6 +15,7 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
     private boolean colorOutput = false;
     private int lineNumberWidth = 0;
     private int columnNumberWidth = 0;
+    private String textColor = "black";
 
     /**
      * Constructs a ViolationMessage with the specified message components.
@@ -71,6 +72,10 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
 
     public void setColumnNumberWidth(int columnNumberWidth) {
         this.columnNumberWidth = columnNumberWidth;
+    }
+
+    public void invertColorOutput() {
+        textColor = textColor.equals("black") ? "white" : "black";
     }
 
     @Override
@@ -139,7 +144,7 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
         String res;
         if (lineNumberWidth > 0 && colorOutput) {
             res = String.format("%0" + lineNumberWidth + "d:", lineNumber);
-            res = "@|bg_blue,black " + res + "|@";
+            res = "@|bg_blue," + textColor + " " + res + "|@";
         } else {
             res = String.format("%d:", lineNumber);
         }
@@ -151,14 +156,14 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
         if (columnNumber == 0) {
             if (columnNumberWidth > 0 && colorOutput) {
                 res = String.format("%" + (columnNumberWidth + 1) + "s", "");
-                res = "@|bg_blue,black " + res + "|@";
+                res = "@|bg_blue," + textColor + " " + res + "|@";
             } else {
                 res = "";
             }
         } else {
             if (columnNumberWidth > 0 && colorOutput) {
                 res = String.format("%0" + columnNumberWidth + "d:", columnNumber);
-                res = "@|bg_blue,black " + res + "|@";
+                res = "@|bg_blue," + textColor + " " + res + "|@";
             } else {
                 res = String.format("%d:", columnNumber);
             }
@@ -171,11 +176,11 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
         if (colorOutput) {
             res = String.format("%7s:", severity);
             if (severity.equals(Severity.ERROR)) {
-                res = "@|bg_red,black " + res + "|@";
+                res = "@|bg_red," + textColor + " " + res + "|@";
             } else if (severity.equals(Severity.WARNING)) {
-                res = "@|bg_yellow,black " + res + "|@";
+                res = "@|bg_yellow," + textColor + " " + res + "|@";
             } else {
-                res = "@|bg_white,black " + res + "|@";
+                res = "@|bg_white," + textColor + " " + res + "|@";
             }
         } else {
             res = String.format("%s:", severity);

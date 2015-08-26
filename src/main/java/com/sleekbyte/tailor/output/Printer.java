@@ -28,6 +28,7 @@ public class Printer implements AutoCloseable {
     private boolean colorOutput = false;
     private int highestLineNumber = 0;
     private int highestColumnNumber = 0;
+    private boolean invertColorOutput = false;
 
     /**
      * Constructs a printer for the specified input file, maximum severity, and color setting.
@@ -79,10 +80,11 @@ public class Printer implements AutoCloseable {
         this.msgBuffer.put(violationMessage.toString(), violationMessage);
     }
 
-    static String getHeader(File inputFile, boolean colorOutput) {
+    static String getHeader(File inputFile, boolean colorOutput, boolean invertColorOutput) {
+        String textColor = invertColorOutput ? "white" : "black";
         if (colorOutput) {
-            return String.format("%n@|bg_blue,black **********|@ @|bg_green,black %s|@ @|bg_blue,black **********|@",
-                inputFile.toString());
+            return String.format("%n@|bg_blue," + textColor + " **********|@ @|bg_green," + textColor
+                    + " %s|@ @|bg_blue," + textColor + " **********|@", inputFile.toString());
         } else {
             return String.format("%n********** %s **********", inputFile.toString());
         }
@@ -105,14 +107,17 @@ public class Printer implements AutoCloseable {
         Collections.sort(outputList);
         if (outputList.size() > 0) {
             if (colorOutput) {
-                AnsiConsole.out.println(Ansi.ansi().render(getHeader(inputFile, colorOutput)));
+                AnsiConsole.out.println(Ansi.ansi().render(getHeader(inputFile, colorOutput, invertColorOutput)));
             } else {
-                System.out.println(Ansi.ansi().render(getHeader(inputFile, colorOutput)));
+                System.out.println(Ansi.ansi().render(getHeader(inputFile, colorOutput, invertColorOutput)));
             }
         }
         if (colorOutput) {
             for (ViolationMessage output : outputList) {
                 output.setColorOutput(colorOutput);
+                if (invertColorOutput) {
+                    output.invertColorOutput();
+                }
                 output.setLineNumberWidth(String.valueOf(highestLineNumber).length());
                 output.setColumnNumberWidth(String.valueOf(highestColumnNumber).length());
                 AnsiConsole.out.println(Ansi.ansi().render(output.toString()));
@@ -129,6 +134,10 @@ public class Printer implements AutoCloseable {
 
     public void ignoreLine(int ignoredLineNumber) {
         this.ignoredLineNumbers.add(ignoredLineNumber);
+    }
+
+    public void setInvertColorOutput(boolean invertColorOutput) {
+        this.invertColorOutput = invertColorOutput;
     }
 
 }

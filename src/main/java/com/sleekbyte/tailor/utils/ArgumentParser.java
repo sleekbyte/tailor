@@ -27,6 +27,7 @@ public class ArgumentParser {
     private static final String MAX_STRUCT_LENGTH_OPT = "max-struct-length";
     private static final String MAX_SEVERITY_OPT = "max-severity";
     private static final String NO_COLOR_OPT = "no-color";
+    private static final String INVERT_COLOR_OPT = "invert-color";
     private static final String DEFAULT_INT_ARG = "0";
 
     private Options options;
@@ -86,6 +87,7 @@ public class ArgumentParser {
         final Option maxStructLength = addArgument(MAX_STRUCT_LENGTH_OPT, Messages.MAX_STRUCT_LENGTH_DESC);
         final Option maxSeverity = addArgument(MAX_SEVERITY_OPT, Messages.MAX_SEVERITY_DESC);
         final Option noColor = Option.builder().longOpt(NO_COLOR_OPT).desc(Messages.NO_COLOR_DESC).build();
+        final Option invertColor = Option.builder().longOpt(INVERT_COLOR_OPT).desc(INVERT_COLOR_OPT).build();
 
         options = new Options();
         options.addOption(help);
@@ -98,6 +100,7 @@ public class ArgumentParser {
         options.addOption(maxStructLength);
         options.addOption(maxSeverity);
         options.addOption(noColor);
+        options.addOption(invertColor);
     }
 
     /**
@@ -145,6 +148,10 @@ public class ArgumentParser {
 
     public boolean shouldColorOutput() {
         return !this.cmd.hasOption(NO_COLOR_OPT);
+    }
+
+    public boolean shouldInvertColorOutput() {
+        return this.cmd.hasOption(INVERT_COLOR_OPT);
     }
 
 }
