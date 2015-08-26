@@ -34,6 +34,7 @@ public class ArgumentParser {
     private static final String MAX_SEVERITY_OPT = "max-severity";
     private static final String ONLY_OPT = "only";
     private static final String EXCLUDE_OPT = "exclude";
+    private static final String DEBUG_OPT = "debug";
     private static final String DEFAULT_INT_ARG = "0";
 
     private Options options;
@@ -99,6 +100,11 @@ public class ArgumentParser {
         final Option onlySpecificRules = createOptionWithMultipleArgs(ONLY_OPT, Messages.ONLY_SPECIFIC_RULES_DESC);
         final Option excludedRules = createOptionWithMultipleArgs(EXCLUDE_OPT, Messages.EXCLUDE_RULES_DESC);
 
+        final Option debug = Option.builder()
+            .longOpt(DEBUG_OPT)
+            .desc(Messages.DEBUG_DESC)
+            .build();
+
         options = new Options();
         options.addOption(help);
         options.addOption(maxClassLength);
@@ -111,6 +117,7 @@ public class ArgumentParser {
         options.addOption(maxSeverity);
         options.addOption(onlySpecificRules);
         options.addOption(excludedRules);
+        options.addOption(debug);
     }
 
     /**
@@ -207,6 +214,10 @@ public class ArgumentParser {
         } catch (Severity.IllegalSeverityException ex) {
             throw new ArgumentParserException("Invalid value provided for argument " + MAX_SEVERITY_OPT + ".");
         }
+    }
+
+    public boolean debugFlagSet() throws ArgumentParserException {
+        return cmd != null && cmd.hasOption(DEBUG_OPT);
     }
 
 }

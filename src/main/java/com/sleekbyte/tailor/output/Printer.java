@@ -86,6 +86,11 @@ public class Printer implements AutoCloseable {
         this.msgBuffer.clear();
     }
 
+    public void printParseErrorMessage() {
+        System.out.println(getHeader(inputFile));
+        System.out.println(inputFile + " could not be parsed successfully, skipping...");
+    }
+
     public long getNumErrorMessages() {
         return msgBuffer.values().stream().filter(msg -> msg.getSeverity().equals(Severity.ERROR)).count();
     }
