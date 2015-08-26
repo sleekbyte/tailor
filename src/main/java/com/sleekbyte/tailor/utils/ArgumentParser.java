@@ -98,9 +98,9 @@ public class ArgumentParser {
         final Option maxSeverity = createOptionWithSingleArg(MAX_SEVERITY_OPT, Messages.MAX_SEVERITY_DESC);
         final Option onlySpecificRules = createOptionWithMultipleArgs(ONLY_OPT, Messages.ONLY_SPECIFIC_RULES_DESC);
         final Option excludedRules = createOptionWithMultipleArgs(EXCLUDE_OPT, Messages.EXCLUDE_RULES_DESC);
-        final Option debug = Option.builder().longOpt(DEBUG_OPT).desc(Messages.DEBUG_DESC).build();
-        final Option noColor = Option.builder().longOpt(NO_COLOR_OPT).desc(Messages.NO_COLOR_DESC).build();
-        final Option invertColor = Option.builder().longOpt(INVERT_COLOR_OPT).desc(Messages.INVERT_COLOR_DESC).build();
+        final Option debug = createOptionWithNoArgs(DEBUG_OPT, Messages.DEBUG_DESC);
+        final Option noColor = createOptionWithNoArgs(NO_COLOR_OPT, Messages.NO_COLOR_DESC);
+        final Option invertColor = createOptionWithNoArgs(INVERT_COLOR_OPT, Messages.INVERT_COLOR_DESC);
 
         options = new Options();
         options.addOption(help);
@@ -149,6 +149,16 @@ public class ArgumentParser {
      */
     private Option createOptionWithMultipleArgs(String longOpt, String desc) {
         return Option.builder().longOpt(longOpt).hasArgs().valueSeparator(',').desc(desc).build();
+    }
+
+    /**
+     * Create command line option with long name and no argument.
+     *
+     * @param longOpt long version of option
+     * @param desc    description of option
+     */
+    private Option createOptionWithNoArgs(String longOpt, String desc) {
+        return Option.builder().longOpt(longOpt).desc(desc).build();
     }
 
     private int getIntegerArgument(String opt) throws ArgumentParserException {
