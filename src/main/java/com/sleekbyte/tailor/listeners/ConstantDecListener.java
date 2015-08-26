@@ -4,6 +4,7 @@ import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.utils.CharFormatUtil;
 import com.sleekbyte.tailor.utils.ListenerUtil;
 import com.sleekbyte.tailor.utils.ParseTreeUtil;
@@ -14,13 +15,13 @@ import org.antlr.v4.runtime.ParserRuleContext;
  */
 public class ConstantDecListener extends SwiftBaseListener {
 
-    private ParseTreeVerifier verifier;
+    private ConstructListener listener;
 
     /**
      * Creates a ConstantDecListener object and retrieves the listener verifier singleton.
      */
-    ConstantDecListener() {
-        this.verifier = ParseTreeVerifier.INSTANCE;
+    ConstantDecListener(ConstructListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -30,21 +31,24 @@ public class ConstantDecListener extends SwiftBaseListener {
         Location location = ListenerUtil.getContextStartLocation(ctx);
 
         if (isGlobal(constantDecContext) || insideClass(constantDecContext) || insideStruct(constantDecContext)) {
-            if (!CharFormatUtil.isUpperCamelCase(constantName) && !CharFormatUtil.isLowerCamelCase(constantName)) {
-                verifier.printer.error(Messages.GLOBAL + Messages.CONSTANT + Messages.GLOBAL_CONSTANT_NAMING, location);
-            } else if (CharFormatUtil.isKPrefixed(constantName)) {
-                verifier.printer.warn(Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED, location);
+            if (listener.ruleEnabled(Rules.GLOBAL_CONSTANT_NAMING)
+                && !CharFormatUtil.isUpperCamelCase(constantName)
+                && !CharFormatUtil.isLowerCamelCase(constantName)) {
+
+                listener.printer.error(Messages.GLOBAL + Messages.CONSTANT + Messages.GLOBAL_CONSTANT_NAMING, location);
+            } else if (listener.ruleEnabled(Rules.K_PREFIXED) && CharFormatUtil.isKPrefixed(constantName)) {
+                listener.printer.warn(Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED, location);
             }
         } else {
-            if (!CharFormatUtil.isLowerCamelCase(constantName)) {
-                verifier.printer.error(Messages.CONSTANT + Messages.LOWER_CAMEL_CASE, location);
-            } else if (CharFormatUtil.isKPrefixed(constantName)) {
-                verifier.printer.warn(Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED, location);
+            if (listener.ruleEnabled(Rules.CONSTANT_NAMING) && !CharFormatUtil.isLowerCamelCase(constantName)) {
+                listener.printer.error(Messages.CONSTANT + Messages.LOWER_CAMEL_CASE, location);
+            } else if (listener.ruleEnabled(Rules.K_PREFIXED) && CharFormatUtil.isKPrefixed(constantName)) {
+                listener.printer.warn(Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED, location);
             }
         }
 
-        (new MaxLengthVerifier(verifier.printer)).verifyNameLength(Messages.CONSTANT + Messages.NAME,
-            verifier.maxLengths.maxNameLength, ctx);
+        (new MaxLengthVerifier(listener.printer)).verifyNameLength(Messages.CONSTANT + Messages.NAME,
+            listener.maxLengths.maxNameLength, ctx);
     }
 
     private ParserRuleContext getConstantDeclaration(ParserRuleContext ctx) {

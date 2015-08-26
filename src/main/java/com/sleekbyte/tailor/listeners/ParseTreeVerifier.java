@@ -22,12 +22,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser.ImportDeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.InitializerDeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OperatorDeclarationContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingContinuationContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingHeadContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ParenthesizedExpressionContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.PatternContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ProtocolBodyContext;
@@ -38,8 +33,6 @@ import com.sleekbyte.tailor.antlr.SwiftParser.StructBodyContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.SubscriptResultContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.SwitchCaseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TypeAnnotationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TypeCastingOperatorContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TypeInheritanceClauseContext;
@@ -55,7 +48,6 @@ import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 import java.util.HashSet;
@@ -102,48 +94,6 @@ class ParseTreeVerifier {
             this.printer.warn(Messages.IMPORTS + Messages.MULTIPLE_IMPORTS, location);
         } else {
             importLineNumbers.add(lineNum);
-        }
-    }
-    //endregion
-
-    //region Tuple pattern evaluation
-    void walkListener(ParseTreeWalker walker, ParserRuleContext tree, SwiftBaseListener listener) {
-        walker.walk(listener, tree);
-    }
-
-    void evaluatePatternInitializerList(PatternInitializerListContext ctx, SwiftBaseListener listener) {
-        ParseTreeWalker walker = new ParseTreeWalker();
-        for (PatternInitializerContext context : ctx.patternInitializer()) {
-            PatternContext pattern = context.pattern();
-            evaluatePattern(pattern, walker, listener);
-        }
-    }
-
-    void evaluatePattern(PatternContext pattern, ParseTreeWalker walker, SwiftBaseListener listener) {
-        if (pattern.identifierPattern() != null) {
-            walkListener(walker, pattern.identifierPattern(), listener);
-
-        } else if (pattern.tuplePattern() != null && pattern.tuplePattern().tuplePatternElementList() != null) {
-            evaluateTuplePattern(pattern.tuplePattern(), walker, listener);
-
-        } else if (pattern.enumCasePattern() != null && pattern.enumCasePattern().tuplePattern() != null) {
-            evaluateTuplePattern(pattern.enumCasePattern().tuplePattern(), walker, listener);
-
-        } else if (pattern.pattern() != null) {
-            evaluatePattern(pattern.pattern(), walker, listener);
-
-        } else if (pattern.expressionPattern() != null) {
-            walkListener(walker, pattern.expressionPattern().expression().prefixExpression(), listener);
-        }
-    }
-
-    void evaluateTuplePattern(TuplePatternContext tuplePatternContext, ParseTreeWalker walker,
-                              SwiftBaseListener listener) {
-        List<TuplePatternElementContext> tuplePatternElementContexts =
-            tuplePatternContext.tuplePatternElementList().tuplePatternElement();
-
-        for (TuplePatternElementContext tuplePatternElement : tuplePatternElementContexts) {
-            evaluatePattern(tuplePatternElement.pattern(), walker, listener);
         }
     }
     //endregion
@@ -460,27 +410,6 @@ class ParseTreeVerifier {
         }
 
         return null;
-    }
-    //endregion
-
-    //region Optional binding condition evaluators
-    void evaluateOptionalBindingHead(OptionalBindingHeadContext ctx, SwiftBaseListener listener) {
-        ParseTreeWalker walker = new ParseTreeWalker();
-        evaluatePattern(ctx.pattern(), walker, listener);
-    }
-
-    void evaluateOptionalBindingContinuation(OptionalBindingContinuationContext ctx,
-                                             SwiftBaseListener listener) {
-        if (ctx.optionalBindingHead() != null) {
-            evaluateOptionalBindingHead(ctx.optionalBindingHead(), listener);
-        } else {
-            ParseTreeWalker walker = new ParseTreeWalker();
-            evaluatePattern(ctx.pattern(), walker, listener);
-        }
-    }
-
-    String letOrVar(OptionalBindingHeadContext ctx) {
-        return ctx.getChild(0).getText();
     }
     //endregion
 
