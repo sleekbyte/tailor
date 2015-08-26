@@ -96,12 +96,11 @@ public class Tailor {
      *
      * @param enabledRules list of enabled rules
      * @param printer      passed into listener constructors
-     * @param maxLengths   passed into listener constructors
      * @param tokenStream  passed into listener constructors
      * @throws ArgumentParserException if listener for an enabled rule is not found
      */
     public static List<SwiftBaseListener> createListeners(List<Rules> enabledRules, Printer printer,
-                                                          MaxLengths maxLengths, CommonTokenStream tokenStream)
+                                                          CommonTokenStream tokenStream)
         throws ArgumentParserException {
         List<SwiftBaseListener> listeners = new LinkedList<>();
         for (Rules rule : enabledRules) {
@@ -146,7 +145,6 @@ public class Tailor {
             long numErrors = 0;
             MaxLengths maxLengths = argumentParser.parseMaxLengths();
             Severity maxSeverity = argumentParser.getMaxSeverity();
-
             List<Rules> enabledRules = argumentParser.getEnabledRules();
 
             for (String filename : filenames) {
@@ -158,7 +156,7 @@ public class Tailor {
                 SwiftParser.TopLevelContext tree = swiftParser.topLevel();
 
                 try (Printer printer = new Printer(inputFile, maxSeverity)) {
-                    List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, maxLengths, tokenStream);
+                    List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, tokenStream);
                     listeners.add(new MaxLengthListener(printer, maxLengths));
                     listeners.add(new MainListener(printer, maxLengths, tokenStream));
 

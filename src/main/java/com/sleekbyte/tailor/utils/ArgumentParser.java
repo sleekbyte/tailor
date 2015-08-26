@@ -33,7 +33,7 @@ public class ArgumentParser {
     private static final String MAX_STRUCT_LENGTH_OPT = "max-struct-length";
     private static final String MAX_SEVERITY_OPT = "max-severity";
     private static final String ONLY_OPT = "only";
-    private static final String EXCLUDED_OPT = "excluded";
+    private static final String EXCLUDE_OPT = "exclude";
     private static final String DEFAULT_INT_ARG = "0";
 
     private Options options;
@@ -94,7 +94,7 @@ public class ArgumentParser {
         final Option maxStructLength = createOptionSingleArg(MAX_STRUCT_LENGTH_OPT, Messages.MAX_STRUCT_LENGTH_DESC);
         final Option maxSeverity = createOptionSingleArg(MAX_SEVERITY_OPT, Messages.MAX_SEVERITY_DESC);
         final Option onlySpecificRules = createOptionMultipleArgs(ONLY_OPT, Messages.ONLY_SPECIFIC_RULES_DESC);
-        final Option excludeRules = createOptionMultipleArgs(EXCLUDED_OPT, Messages.EXCLUDE_RULES_DESC);
+        final Option excludedRules = createOptionMultipleArgs(EXCLUDE_OPT, Messages.EXCLUDE_RULES_DESC);
 
         options = new Options();
         options.addOption(help);
@@ -107,7 +107,7 @@ public class ArgumentParser {
         options.addOption(maxStructLength);
         options.addOption(maxSeverity);
         options.addOption(onlySpecificRules);
-        options.addOption(excludeRules);
+        options.addOption(excludedRules);
     }
 
     /**
@@ -132,7 +132,7 @@ public class ArgumentParser {
     }
 
     /**
-     * Create command line option with only long name and multiple arguments.
+     * Create command line option with long name and multiple arguments.
      * Multiple arguments can be separated by comma or by space.
      *
      * @param longOpt long version of option
@@ -165,12 +165,12 @@ public class ArgumentParser {
             checkValidRules(enabledRuleNames, onlySpecificRules);
 
             return enabledRules.stream().filter(onlySpecificRules::contains).collect(Collectors.toList());
-        } else if (this.cmd.getOptionValues(EXCLUDED_OPT) != null) {
-            List<String> excludedRules = new LinkedList<>(Arrays.asList(this.cmd.getOptionValues(EXCLUDED_OPT)));
+        } else if (this.cmd.getOptionValues(EXCLUDE_OPT) != null) {
+            List<String> excludedRules = new LinkedList<>(Arrays.asList(this.cmd.getOptionValues(EXCLUDE_OPT)));
             checkValidRules(enabledRuleNames, excludedRules);
 
             return enabledRules.stream()
-                .filter( rule -> !excludedRules.contains(rule.getName())).collect(Collectors.toList());
+                .filter(rule -> !excludedRules.contains(rule.getName())).collect(Collectors.toList());
         }
 
         return enabledRules;
@@ -180,12 +180,11 @@ public class ArgumentParser {
      * Checks if rules specified in command line option is valid.
      *
      * @param enabledRules   all valid rule names
-     * @param specifiedRules rule names provided specified from command line
+     * @param specifiedRules rule names specified from command line
      * @throws ArgumentParserException if rule name specified in command line is not valid
      */
     private void checkValidRules(List<String> enabledRules, List<String> specifiedRules)
         throws ArgumentParserException {
-
         if (!enabledRules.containsAll(specifiedRules)) {
             specifiedRules.removeAll(enabledRules);
             throw new ArgumentParserException("The following rules were not recognized: " + specifiedRules);

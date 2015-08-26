@@ -76,8 +76,7 @@ public class MaxLengthListener extends SwiftBaseListener {
 
     @Override
     public void enterSetterName(SwiftParser.SetterNameContext ctx) {
-        this.verifier.verifyNameLength(Messages.SETTER + Messages.NAME, maxLengths.maxNameLength,
-            ctx.identifier());
+        this.verifier.verifyNameLength(Messages.SETTER + Messages.NAME, maxLengths.maxNameLength, ctx.identifier());
     }
 
     @Override
