@@ -86,7 +86,8 @@ public class ArgumentParser {
         final Option maxStructLength = addArgument(MAX_STRUCT_LENGTH_OPT, Messages.MAX_STRUCT_LENGTH_DESC);
         final Option maxSeverity = addArgument(MAX_SEVERITY_OPT, Messages.MAX_SEVERITY_DESC);
 
-        final Option debug = Option.builder(DEBUG_OPT)
+        final Option debug = Option.builder()
+            .longOpt(DEBUG_OPT)
             .desc(Messages.DEBUG_DESC)
             .build();
 

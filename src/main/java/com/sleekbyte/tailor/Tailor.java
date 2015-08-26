@@ -101,11 +101,7 @@ public class Tailor {
             lexer.removeErrorListeners();
             lexer.addErrorListener(new ErrorListener());
         }
-        try {
-            return new CommonTokenStream(lexer);
-        } catch (ErrorListener.ParseException e) {
-            return null;
-        }
+        return new CommonTokenStream(lexer);
     }
 
     /**
@@ -118,17 +114,11 @@ public class Tailor {
     public static SwiftParser.TopLevelContext getParseTree(CommonTokenStream tokenStream)
         throws ArgumentParserException {
         SwiftParser swiftParser = new SwiftParser(tokenStream);
-
         if (!argumentParser.debugFlagSet()) {
             swiftParser.removeErrorListeners();
             swiftParser.addErrorListener(new ErrorListener());
         }
-
-        try {
-            return swiftParser.topLevel();
-        } catch (ErrorListener.ParseException e) {
-            return null;
-        }
+        return swiftParser.topLevel();
     }
 
     /**
@@ -145,15 +135,13 @@ public class Tailor {
 
         for (String filename : filenames) {
             File inputFile = new File(filename);
-            CommonTokenStream tokenStream = getTokenStream(inputFile);
-            if (tokenStream == null) {
-                Printer printer = new Printer(inputFile, maxSeverity);
-                printer.printParseErrorMessage();
-                continue;
-            }
+            CommonTokenStream tokenStream;
+            SwiftParser.TopLevelContext tree;
 
-            SwiftParser.TopLevelContext tree = getParseTree(tokenStream);
-            if (tree == null) {
+            try {
+                tokenStream = getTokenStream(inputFile);
+                tree = getParseTree(tokenStream);
+            } catch (ErrorListener.ParseException e) {
                 Printer printer = new Printer(inputFile, maxSeverity);
                 printer.printParseErrorMessage();
                 continue;
