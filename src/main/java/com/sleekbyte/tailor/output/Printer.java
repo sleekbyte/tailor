@@ -1,5 +1,6 @@
 package com.sleekbyte.tailor.output;
 
+import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Severity;
 import org.fusesource.jansi.Ansi;
@@ -25,22 +26,21 @@ public class Printer implements AutoCloseable {
     private Severity maxSeverity;
     private Map<String, ViolationMessage> msgBuffer = new HashMap<>();
     private Set<Integer> ignoredLineNumbers = new HashSet<>();
-    private boolean colorOutput = false;
+    private ColorSettings colorSettings;
     private int highestLineNumber = 0;
     private int highestColumnNumber = 0;
-    private boolean invertColorOutput = false;
 
     /**
      * Constructs a printer for the specified input file, maximum severity, and color setting.
      *
      * @param inputFile the source file to verify
      * @param maxSeverity the maximum severity of any emitted violation messages
-     * @param colorOutput a flag to indicate whether to color console output
+     * @param colorSettings settings corresponding to colorized console output
      */
-    public Printer(File inputFile, Severity maxSeverity, boolean colorOutput) {
+    public Printer(File inputFile, Severity maxSeverity, ColorSettings colorSettings) {
         this.inputFile = inputFile;
         this.maxSeverity = maxSeverity;
-        this.colorOutput = colorOutput;
+        this.colorSettings = colorSettings;
     }
 
     /**
@@ -80,9 +80,9 @@ public class Printer implements AutoCloseable {
         this.msgBuffer.put(violationMessage.toString(), violationMessage);
     }
 
-    static String getHeader(File inputFile, boolean colorOutput, boolean invertColorOutput) {
-        if (colorOutput) {
-            String textColor = invertColorOutput ? "white" : "black";
+    static String getHeader(File inputFile, ColorSettings colorSettings) {
+        if (colorSettings.colorOutput) {
+            String textColor = colorSettings.invertColor ? "white" : "black";
             return String.format("%n@|bg_blue," + textColor + " **********|@ @|bg_green," + textColor
                     + " %s|@ @|bg_blue," + textColor + " **********|@", inputFile.toString());
         } else {
@@ -106,19 +106,11 @@ public class Printer implements AutoCloseable {
             .filter(msg -> !ignoredLineNumbers.contains(msg.getLineNumber())).collect(Collectors.toList()));
         Collections.sort(outputList);
         if (outputList.size() > 0) {
-            String header = getHeader(inputFile, colorOutput, invertColorOutput);
-            if (colorOutput) {
-                AnsiConsole.out.println(Ansi.ansi().render(header));
-            } else {
-                System.out.println(header);
-            }
+            printColoredMessage(getHeader(inputFile, colorSettings));
         }
-        if (colorOutput) {
+        if (colorSettings.colorOutput) {
             for (ViolationMessage output : outputList) {
-                output.setColorOutput(colorOutput);
-                if (invertColorOutput) {
-                    output.invertColorOutput();
-                }
+                output.setColorSettings(colorSettings);
                 output.setLineNumberWidth(String.valueOf(highestLineNumber).length());
                 output.setColumnNumberWidth(String.valueOf(highestColumnNumber).length());
                 AnsiConsole.out.println(Ansi.ansi().render(output.toString()));
@@ -133,12 +125,7 @@ public class Printer implements AutoCloseable {
      * Print error message to indicate parse failure.
      */
     public void printParseErrorMessage() {
-        String header = getHeader(inputFile, colorOutput, invertColorOutput);
-        if (colorOutput) {
-            AnsiConsole.out.println(Ansi.ansi().render(header));
-        } else {
-            System.out.println(header);
-        }
+        printColoredMessage(getHeader(inputFile, colorSettings));
         System.out.println(inputFile + " could not be parsed successfully, skipping...");
     }
 
@@ -150,8 +137,12 @@ public class Printer implements AutoCloseable {
         this.ignoredLineNumbers.add(ignoredLineNumber);
     }
 
-    public void setInvertColorOutput(boolean invertColorOutput) {
-        this.invertColorOutput = invertColorOutput;
+    private void printColoredMessage(String msg) {
+        if (colorSettings.colorOutput) {
+            AnsiConsole.out.println(Ansi.ansi().render(msg));
+        } else {
+            System.out.println(msg);
+        }
     }
 
 }

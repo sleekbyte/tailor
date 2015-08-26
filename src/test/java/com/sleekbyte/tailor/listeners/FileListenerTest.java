@@ -2,6 +2,7 @@ package com.sleekbyte.tailor.listeners;
 
 import static org.junit.Assert.assertEquals;
 
+import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.output.Printer;
@@ -49,7 +50,7 @@ public class FileListenerTest {
     public void setUp() throws NoSuchMethodException, IOException {
         Method method = this.getClass().getMethod(testName.getMethodName());
         inputFile = folder.newFile(method.getName() + "-" + INPUT_FILE);
-        printer = new Printer(inputFile, Severity.WARNING, false);
+        printer = new Printer(inputFile, Severity.WARNING, new ColorSettings(false, false));
         writer = new PrintWriter(inputFile, Charset.defaultCharset().name());
     }
 

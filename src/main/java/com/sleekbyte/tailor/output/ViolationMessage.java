@@ -1,5 +1,6 @@
 package com.sleekbyte.tailor.output;
 
+import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.Severity;
 
 /**
@@ -12,7 +13,7 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
     private int columnNumber;
     private Severity severity = null;
     private String violationMessage = "";
-    private boolean colorOutput = false;
+    private ColorSettings colorSettings = new ColorSettings(false, false);
     private int lineNumberWidth = 0;
     private int columnNumberWidth = 0;
     private String textColor = "black";
@@ -62,8 +63,9 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
         this.filePath = filePath;
     }
 
-    public void setColorOutput(boolean colorOutput) {
-        this.colorOutput = colorOutput;
+    public void setColorSettings(ColorSettings colorSettings) {
+        this.colorSettings = colorSettings;
+        textColor = colorSettings.invertColor ? "white" : "black";
     }
 
     public void setLineNumberWidth(int lineNumberWidth) {
@@ -72,10 +74,6 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
 
     public void setColumnNumberWidth(int columnNumberWidth) {
         this.columnNumberWidth = columnNumberWidth;
-    }
-
-    public void invertColorOutput() {
-        textColor = textColor.equals("black") ? "white" : "black";
     }
 
     @Override
@@ -142,7 +140,7 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
 
     private String formattedLineNumber() {
         String res;
-        if (lineNumberWidth > 0 && colorOutput) {
+        if (lineNumberWidth > 0 && colorSettings.colorOutput) {
             res = String.format("%0" + lineNumberWidth + "d:", lineNumber);
             res = "@|bg_blue," + textColor + " " + res + "|@";
         } else {
@@ -154,14 +152,14 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
     private String formattedColumnNumber() {
         String res;
         if (columnNumber == 0) {
-            if (columnNumberWidth > 0 && colorOutput) {
+            if (columnNumberWidth > 0 && colorSettings.colorOutput) {
                 res = String.format("%" + (columnNumberWidth + 1) + "s", "");
                 res = "@|bg_blue," + textColor + " " + res + "|@";
             } else {
                 res = "";
             }
         } else {
-            if (columnNumberWidth > 0 && colorOutput) {
+            if (columnNumberWidth > 0 && colorSettings.colorOutput) {
                 res = String.format("%0" + columnNumberWidth + "d:", columnNumber);
                 res = "@|bg_blue," + textColor + " " + res + "|@";
             } else {
@@ -173,7 +171,7 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
 
     private String formattedSeverity() {
         String res;
-        if (colorOutput) {
+        if (colorSettings.colorOutput) {
             res = String.format("%7s:", severity);
             if (severity.equals(Severity.ERROR)) {
                 res = "@|bg_red," + textColor + " " + res + "|@";

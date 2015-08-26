@@ -2,6 +2,7 @@ package com.sleekbyte.tailor;
 
 import com.sleekbyte.tailor.antlr.SwiftLexer;
 import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.listeners.CommentAnalyzer;
@@ -132,8 +133,8 @@ public class Tailor {
         long numErrors = 0;
         MaxLengths maxLengths = argumentParser.parseMaxLengths();
         Severity maxSeverity = argumentParser.getMaxSeverity();
-        boolean colorOutput = argumentParser.shouldColorOutput();
-        boolean invertColorOutput = argumentParser.shouldInvertColorOutput();
+        ColorSettings colorSettings =
+            new ColorSettings(argumentParser.shouldColorOutput(), argumentParser.shouldInvertColorOutput());
 
         for (String filename : filenames) {
             File inputFile = new File(filename);
@@ -144,13 +145,12 @@ public class Tailor {
                 tokenStream = getTokenStream(inputFile);
                 tree = getParseTree(tokenStream);
             } catch (ErrorListener.ParseException e) {
-                Printer printer = new Printer(inputFile, maxSeverity, colorOutput);
+                Printer printer = new Printer(inputFile, maxSeverity, colorSettings);
                 printer.printParseErrorMessage();
                 continue;
             }
 
-            try (Printer printer = new Printer(inputFile, maxSeverity, colorOutput)) {
-                printer.setInvertColorOutput(invertColorOutput);
+            try (Printer printer = new Printer(inputFile, maxSeverity, colorSettings)) {
                 MainListener listener = new MainListener(printer, maxLengths, tokenStream);
                 ParseTreeWalker walker = new ParseTreeWalker();
                 walker.walk(listener, tree);
