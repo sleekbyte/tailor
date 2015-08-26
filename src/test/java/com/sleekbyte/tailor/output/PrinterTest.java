@@ -2,6 +2,7 @@ package com.sleekbyte.tailor.output;
 
 import static org.junit.Assert.assertEquals;
 
+import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Severity;
 import org.junit.After;
@@ -27,10 +28,11 @@ public class PrinterTest {
     private static final String ERROR_MSG = "this is an error";
     private static final int LINE_NUMBER = 23;
     private static final int COLUMN_NUMBER = 13;
+    private static final ColorSettings colorSettings = new ColorSettings(false, false);
 
     private File inputFile = new File("abc.swift");
-    private Printer printer = new Printer(inputFile, Severity.ERROR);
-    private Printer warnPrinter = new Printer(inputFile, Severity.WARNING);
+    private Printer printer = new Printer(inputFile, Severity.ERROR, colorSettings);
+    private Printer warnPrinter = new Printer(inputFile, Severity.WARNING, colorSettings);
     private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     @Before
@@ -77,7 +79,7 @@ public class PrinterTest {
     }
 
     private String expectedOutput(Severity severity, String msg, int line, int column) throws IOException {
-        return Printer.getHeader(inputFile) + "\n" + Printer.genOutputStringForTest(
+        return Printer.getHeader(inputFile, colorSettings) + "\n" + Printer.genOutputStringForTest(
             inputFile.getCanonicalPath(), line, column, severity, msg) + "\n";
     }
 

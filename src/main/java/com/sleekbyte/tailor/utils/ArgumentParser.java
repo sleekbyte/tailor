@@ -27,6 +27,8 @@ public class ArgumentParser {
     private static final String MAX_STRUCT_LENGTH_OPT = "max-struct-length";
     private static final String MAX_SEVERITY_OPT = "max-severity";
     private static final String DEBUG_OPT = "debug";
+    private static final String NO_COLOR_OPT = "no-color";
+    private static final String INVERT_COLOR_OPT = "invert-color";
     private static final String DEFAULT_INT_ARG = "0";
 
     private Options options;
@@ -71,11 +73,7 @@ public class ArgumentParser {
     }
 
     private void addOptions() {
-        Option help = Option.builder(HELP_SHORT_OPT)
-            .longOpt(HELP_LONG_OPT)
-            .desc(Messages.HELP_DESC)
-            .build();
-
+        final Option help = Option.builder(HELP_SHORT_OPT).longOpt(HELP_LONG_OPT).desc(Messages.HELP_DESC).build();
         final Option maxClassLength = addArgument(MAX_CLASS_LENGTH_OPT, Messages.MAX_CLASS_LENGTH_DESC);
         final Option maxClosureLength = addArgument(MAX_CLOSURE_LENGTH_OPT, Messages.MAX_CLOSURE_LENGTH_DESC);
         final Option maxFileLength = addArgument(MAX_FILE_LENGTH_OPT, Messages.MAX_FILE_LENGTH_DESC);
@@ -85,11 +83,9 @@ public class ArgumentParser {
         final Option maxNameLength = addArgument(MAX_NAME_LENGTH_OPT, Messages.MAX_NAME_LENGTH_DESC);
         final Option maxStructLength = addArgument(MAX_STRUCT_LENGTH_OPT, Messages.MAX_STRUCT_LENGTH_DESC);
         final Option maxSeverity = addArgument(MAX_SEVERITY_OPT, Messages.MAX_SEVERITY_DESC);
-
-        final Option debug = Option.builder()
-            .longOpt(DEBUG_OPT)
-            .desc(Messages.DEBUG_DESC)
-            .build();
+        final Option debug = Option.builder().longOpt(DEBUG_OPT).desc(Messages.DEBUG_DESC).build();
+        final Option noColor = Option.builder().longOpt(NO_COLOR_OPT).desc(Messages.NO_COLOR_DESC).build();
+        final Option invertColor = Option.builder().longOpt(INVERT_COLOR_OPT).desc(Messages.INVERT_COLOR_DESC).build();
 
         options = new Options();
         options.addOption(help);
@@ -102,10 +98,12 @@ public class ArgumentParser {
         options.addOption(maxStructLength);
         options.addOption(maxSeverity);
         options.addOption(debug);
+        options.addOption(noColor);
+        options.addOption(invertColor);
     }
 
     /**
-     * Add Integer argument with short and long name to command line options.
+     * Add argument with short and long name to command line options.
      *
      * @param shortOpt short version of option
      * @param longOpt  long version of option
@@ -116,7 +114,7 @@ public class ArgumentParser {
     }
 
     /**
-     * Add Integer argument with only long name to command line options.
+     * Add argument with only long name to command line options.
      *
      * @param longOpt long version of option
      * @param desc    description of option
@@ -149,6 +147,14 @@ public class ArgumentParser {
 
     public boolean debugFlagSet() throws ArgumentParserException {
         return cmd != null && cmd.hasOption(DEBUG_OPT);
+    }
+
+    public boolean shouldColorOutput() {
+        return cmd != null && !cmd.hasOption(NO_COLOR_OPT);
+    }
+
+    public boolean shouldInvertColorOutput() {
+        return cmd != null && cmd.hasOption(INVERT_COLOR_OPT);
     }
 
 }

@@ -6,6 +6,9 @@ import com.sleekbyte.tailor.output.Printer;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 /**
  * Functional tests for name length rule.
  */
@@ -14,11 +17,10 @@ public class NameLengthTest extends RuleTest {
 
     @Override
     protected String[] getCommandArgs() {
-        return new String[] {
+        return Stream.concat(Arrays.stream(super.getCommandArgs()), Arrays.stream(new String[] {
             "--max-line-length", "40",
             "--max-name-length", "5",
-            inputFile.getPath()
-        };
+        })).toArray(String[]::new);
     }
 
     @Override
