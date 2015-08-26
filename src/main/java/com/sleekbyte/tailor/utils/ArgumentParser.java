@@ -164,7 +164,8 @@ public class ArgumentParser {
             List<String> onlySpecificRules = new LinkedList<>(Arrays.asList(this.cmd.getOptionValues(ONLY_OPT)));
             checkValidRules(enabledRuleNames, onlySpecificRules);
 
-            return enabledRules.stream().filter(onlySpecificRules::contains).collect(Collectors.toList());
+            return enabledRules.stream()
+                .filter(rule -> onlySpecificRules.contains(rule.getName())).collect(Collectors.toList());
         } else if (this.cmd.getOptionValues(EXCLUDE_OPT) != null) {
             List<String> excludedRules = new LinkedList<>(Arrays.asList(this.cmd.getOptionValues(EXCLUDE_OPT)));
             checkValidRules(enabledRuleNames, excludedRules);
