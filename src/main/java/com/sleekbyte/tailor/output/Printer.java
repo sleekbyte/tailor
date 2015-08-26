@@ -128,6 +128,19 @@ public class Printer implements AutoCloseable {
         this.msgBuffer.clear();
     }
 
+    /**
+     * Print error message to indicate parse failure.
+     */
+    public void printParseErrorMessage() {
+        String header = getHeader(inputFile, colorOutput, invertColorOutput);
+        if (colorOutput) {
+            AnsiConsole.out.println(Ansi.ansi().render(header));
+        } else {
+            System.out.println(header);
+        }
+        System.out.println(inputFile + " could not be parsed successfully, skipping...");
+    }
+
     public long getNumErrorMessages() {
         return msgBuffer.values().stream().filter(msg -> msg.getSeverity().equals(Severity.ERROR)).count();
     }
