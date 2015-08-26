@@ -26,6 +26,7 @@ public class ArgumentParser {
     private static final String MAX_NAME_LENGTH_OPT = "max-name-length";
     private static final String MAX_STRUCT_LENGTH_OPT = "max-struct-length";
     private static final String MAX_SEVERITY_OPT = "max-severity";
+    private static final String DEBUG_OPT = "debug";
     private static final String DEFAULT_INT_ARG = "0";
 
     private Options options;
@@ -85,6 +86,11 @@ public class ArgumentParser {
         final Option maxStructLength = addArgument(MAX_STRUCT_LENGTH_OPT, Messages.MAX_STRUCT_LENGTH_DESC);
         final Option maxSeverity = addArgument(MAX_SEVERITY_OPT, Messages.MAX_SEVERITY_DESC);
 
+        final Option debug = Option.builder()
+            .longOpt(DEBUG_OPT)
+            .desc(Messages.DEBUG_DESC)
+            .build();
+
         options = new Options();
         options.addOption(help);
         options.addOption(maxClassLength);
@@ -95,6 +101,7 @@ public class ArgumentParser {
         options.addOption(maxNameLength);
         options.addOption(maxStructLength);
         options.addOption(maxSeverity);
+        options.addOption(debug);
     }
 
     /**
@@ -138,6 +145,10 @@ public class ArgumentParser {
         } catch (Severity.IllegalSeverityException ex) {
             throw new ArgumentParserException("Invalid value provided for argument " + MAX_SEVERITY_OPT + ".");
         }
+    }
+
+    public boolean debugFlagSet() throws ArgumentParserException {
+        return cmd != null && cmd.hasOption(DEBUG_OPT);
     }
 
 }
