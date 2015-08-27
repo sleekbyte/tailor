@@ -15,6 +15,9 @@ import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 import java.util.List;
 
+/**
+ * Parse tree listener for brace style checks.
+ */
 public class BraceStyleListener extends SwiftBaseListener {
 
     private Printer printer;

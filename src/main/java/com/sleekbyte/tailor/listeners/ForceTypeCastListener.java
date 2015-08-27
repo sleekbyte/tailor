@@ -8,6 +8,9 @@ import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ListenerUtil;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+/**
+ * Parse tree listener for force type cast checks.
+ */
 public class ForceTypeCastListener extends SwiftBaseListener {
 
     private Printer printer;

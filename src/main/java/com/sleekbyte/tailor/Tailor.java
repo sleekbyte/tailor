@@ -104,7 +104,8 @@ public class Tailor {
      * @throws ArgumentParserException if listener for an enabled rule is not found
      */
     public static List<SwiftBaseListener> createListeners(Set<Rules> enabledRules, Printer printer,
-                                                          BufferedTokenStream tokenStream) throws ArgumentParserException {
+                                                          BufferedTokenStream tokenStream)
+        throws ArgumentParserException {
         List<SwiftBaseListener> listeners = new LinkedList<>();
         Set<String> classNames = enabledRules.stream().map(Rules::getClassName).collect(Collectors.toSet());
         for (String className : classNames) {
