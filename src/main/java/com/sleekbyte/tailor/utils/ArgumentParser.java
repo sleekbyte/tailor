@@ -179,13 +179,14 @@ public class ArgumentParser {
         Set<Rules> enabledRules = new HashSet<>(Arrays.asList(Rules.values()));
         Set<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toSet());
 
-        if (this.cmd.getOptionValues(ONLY_OPT) != null) {
+        // ONLY_OPT before EXCLUDE_OPT gives precedence to ONLY_OPT if both are specified on the command line
+        if (this.cmd.hasOption(ONLY_OPT)) {
             Set<String> onlySpecificRules = new HashSet<>(Arrays.asList(this.cmd.getOptionValues(ONLY_OPT)));
             checkValidRules(enabledRuleNames, onlySpecificRules);
 
             return enabledRules.stream()
                 .filter(rule -> onlySpecificRules.contains(rule.getName())).collect(Collectors.toSet());
-        } else if (this.cmd.getOptionValues(EXCLUDE_OPT) != null) {
+        } else if (this.cmd.hasOption(EXCLUDE_OPT)) {
             Set<String> excludedRules = new HashSet<>(Arrays.asList(this.cmd.getOptionValues(EXCLUDE_OPT)));
             checkValidRules(enabledRuleNames, excludedRules);
 

@@ -102,7 +102,6 @@ public class Tailor {
      * @param printer      passed into listener constructors
      * @throws ArgumentParserException if listener for an enabled rule is not found
      */
-
     public static List<SwiftBaseListener> createListeners(Set<Rules> enabledRules, Printer printer,
                                                           MaxLengths maxLengths) throws ArgumentParserException {
         List<SwiftBaseListener> listeners = new LinkedList<>();
