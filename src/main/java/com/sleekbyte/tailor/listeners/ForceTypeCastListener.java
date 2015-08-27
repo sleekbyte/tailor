@@ -7,7 +7,6 @@ import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ListenerUtil;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 public class ForceTypeCastListener extends SwiftBaseListener {
 
@@ -25,8 +24,7 @@ public class ForceTypeCastListener extends SwiftBaseListener {
     private void verifyForceTypeCasting(SwiftParser.TypeCastingOperatorContext ctx) {
         ParseTree secondChild = ctx.getChild(1);
         if (secondChild.getText().equals("!")) {
-            // TODO: use util method that returns location of parse tree once {} check gets merged into master
-            Location exclamationLocation = ListenerUtil.getTokenLocation(((TerminalNodeImpl) secondChild).getSymbol());
+            Location exclamationLocation = ListenerUtil.getParseTreeStartLocation(secondChild);
             printer.warn(Messages.FORCE_CAST, exclamationLocation);
         }
     }
