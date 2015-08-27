@@ -109,7 +109,7 @@ public class Messages {
     public static final String MAX_STRUCT_LENGTH_DESC = MAXIMUM + STRUCT + LENGTH + IN_LINES_DESC;
     public static final String MAX_SEVERITY_DESC = MAXIMUM + SEVERITY + "[" + ERROR + "|" + WARNING + "]";
     public static final String ONLY_SPECIFIC_RULES_DESC = "run only the specified rules";
-    public static final String EXCLUDE_RULES_DESC = "run all rules except the specified ones";
+    public static final String EXCEPT_RULES_DESC = "run all rules except the specified ones";
     public static final String DEBUG_DESC = "print ANTLR error messages when parsing error occurs";
     public static final String NO_COLOR_DESC = "disable colorized console output";
     public static final String INVERT_COLOR_DESC = "invert colorized console output";
