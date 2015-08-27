@@ -13,8 +13,8 @@ import com.sleekbyte.tailor.listeners.WhitespaceListener;
 public enum Rules {
     UPPER_CAMEL_CASE ("upperCamelCase", UpperCamelCaseListener.class.getName()),
     SEMICOLON_TERMINATED ("semicolonTerminated", SemicolonTerminatedListener.class.getName()),
-    REDUNDANT_PARENTHESIS ("redundantParenthesis", RedundantParenthesisListener.class.getName()),
-    MULTIPLE_IMPORT ("multipleImport", MultipleImportListener.class.getName()),
+    REDUNDANT_PARENTHESIS ("redundantParentheses", RedundantParenthesisListener.class.getName()),
+    MULTIPLE_IMPORT ("multipleImports", MultipleImportListener.class.getName()),
     BLANK_LINE_FUNCTION ("blankLinesAroundFunction", BlankLineListener.class.getName()),
     WHITESPACE ("whitespace", WhitespaceListener.class.getName());
 
