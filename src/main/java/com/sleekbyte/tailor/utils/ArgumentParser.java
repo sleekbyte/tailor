@@ -27,7 +27,7 @@ public class ArgumentParser {
     private static final String MAX_STRUCT_LENGTH_OPT = "max-struct-length";
     private static final String MAX_SEVERITY_OPT = "max-severity";
     private static final String DEFAULT_INT_ARG = "0";
-    private static final String XCODE_INTEGRATION_OPT = "Xcode";
+    private static final String XCODE_INTEGRATION_OPT = "xcode";
     private static final String DEFAULT_XCODE_INTEGRATION_ARG = null;
 
     private Options options;
