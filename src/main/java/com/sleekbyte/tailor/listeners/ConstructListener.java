@@ -102,6 +102,11 @@ public class ConstructListener extends SwiftBaseListener {
         }
     }
 
+    /**
+     * Checks if rule is enabled.
+     *
+     * @param rule
+     */
     public boolean ruleEnabled(Rules rule) {
         return enabledRules.contains(rule);
     }

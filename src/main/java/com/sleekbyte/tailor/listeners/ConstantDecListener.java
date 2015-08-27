@@ -18,7 +18,7 @@ public class ConstantDecListener extends SwiftBaseListener {
     private ConstructListener listener;
 
     /**
-     * Creates a ConstantDecListener object and retrieves the listener verifier singleton.
+     * Creates a ConstantDecListener object and saves a ConstructListener object.
      */
     ConstantDecListener(ConstructListener listener) {
         this.listener = listener;
