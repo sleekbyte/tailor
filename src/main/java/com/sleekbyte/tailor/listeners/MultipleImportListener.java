@@ -9,6 +9,9 @@ import com.sleekbyte.tailor.output.Printer;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Parse tree listener for multiple import style check.
+ */
 public class MultipleImportListener extends SwiftBaseListener {
 
     private Set<Integer> importLineNumbers = new HashSet<>();

@@ -14,6 +14,9 @@ import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 import java.util.Optional;
 
+/**
+ * Parse tree listener for whitespace checks.
+ */
 public class WhitespaceListener extends SwiftBaseListener {
 
     private Printer printer;

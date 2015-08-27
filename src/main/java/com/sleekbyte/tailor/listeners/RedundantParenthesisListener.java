@@ -10,6 +10,9 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
+/**
+ * Parse tree listener for redundant parenthesis checks.
+ */
 public class RedundantParenthesisListener extends SwiftBaseListener {
 
     private Printer printer;
@@ -76,7 +79,8 @@ public class RedundantParenthesisListener extends SwiftBaseListener {
             return;
         }
 
-        SwiftParser.PrimaryExpressionContext primaryExpression = (SwiftParser.PrimaryExpressionContext) postfixExpression.getChild(0);
+        SwiftParser.PrimaryExpressionContext primaryExpression =
+            (SwiftParser.PrimaryExpressionContext) postfixExpression.getChild(0);
 
         if (primaryExpression.getChildCount() != 1
             || !(primaryExpression.getChild(0) instanceof SwiftParser.ParenthesizedExpressionContext)) {

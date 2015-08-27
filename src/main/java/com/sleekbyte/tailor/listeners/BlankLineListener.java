@@ -12,6 +12,9 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.List;
 
+/**
+ * Parse tree listener for blank line checks.
+ */
 public class BlankLineListener extends SwiftBaseListener {
 
     private Printer printer;
