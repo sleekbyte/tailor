@@ -9,6 +9,9 @@ import com.sleekbyte.tailor.utils.CharFormatUtil;
 import com.sleekbyte.tailor.utils.ListenerUtil;
 import org.antlr.v4.runtime.ParserRuleContext;
 
+/**
+ * Parse tree listener for lower camel case checks.
+ */
 public class LowerCamelCaseListener extends SwiftBaseListener {
 
     private Printer printer;

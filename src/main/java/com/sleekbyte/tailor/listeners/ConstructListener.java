@@ -12,6 +12,9 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Parse tree listener for different constructs.
+ */
 public class ConstructListener extends SwiftBaseListener {
 
     private static final String LET = "let";
@@ -20,6 +23,13 @@ public class ConstructListener extends SwiftBaseListener {
     public Printer printer;
     public MaxLengths maxLengths;
 
+    /**
+     * Creates a ConstructListener object.
+     *
+     * @param printer      an instance of Printer
+     * @param enabledRules set of enabled rules
+     * @param maxLengths   maximum length values for constructs
+     */
     public ConstructListener(Printer printer, Set<Rules> enabledRules, MaxLengths maxLengths) {
         this.printer = printer;
         this.enabledRules = enabledRules;
@@ -104,8 +114,6 @@ public class ConstructListener extends SwiftBaseListener {
 
     /**
      * Checks if rule is enabled.
-     *
-     * @param rule
      */
     public boolean ruleEnabled(Rules rule) {
         return enabledRules.contains(rule);
