@@ -1,5 +1,7 @@
 package com.sleekbyte.tailor.common;
 
+import com.sleekbyte.tailor.listeners.BraceStyleListener;
+import com.sleekbyte.tailor.listeners.ForceTypeCastListener;
 import com.sleekbyte.tailor.listeners.SemicolonTerminatedListener;
 import com.sleekbyte.tailor.listeners.UpperCamelCaseListener;
 
@@ -8,7 +10,9 @@ import com.sleekbyte.tailor.listeners.UpperCamelCaseListener;
  */
 public enum Rules {
     UPPER_CAMEL_CASE ("upperCamelCase", UpperCamelCaseListener.class.getName()),
-    SEMICOLON_TERMINATED ("semicolonTerminated", SemicolonTerminatedListener.class.getName());
+    SEMICOLON_TERMINATED ("semicolonTerminated", SemicolonTerminatedListener.class.getName()),
+    BRACE_STYLE ("braceStyle", BraceStyleListener.class.getName()),
+    FORCE_TYPE_CAST ("forceTypeCast", ForceTypeCastListener.class.getName());
 
     private String name;
     private String className;

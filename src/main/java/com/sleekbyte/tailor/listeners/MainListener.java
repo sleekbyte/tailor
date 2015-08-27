@@ -33,21 +33,6 @@ public class MainListener extends SwiftBaseListener {
     }
 
     @Override
-    public void enterClassBody(SwiftParser.ClassBodyContext ctx) {
-        verifier.verifyClassBraceStyle(ctx);
-    }
-
-    @Override
-    public void enterClosureExpression(SwiftParser.ClosureExpressionContext ctx) {
-        verifier.verifyClosureExpressionBraceStyle(ctx);
-    }
-
-    @Override
-    public void enterStructBody(SwiftParser.StructBodyContext ctx) {
-        verifier.verifyStructBraceStyle(ctx);
-    }
-
-    @Override
     public void enterFunctionName(SwiftParser.FunctionNameContext ctx) {
         verifier.verifyLowerCamelCase(Messages.FUNCTION + Messages.NAMES, ctx);
     }
@@ -141,13 +126,11 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterSwitchStatement(SwiftParser.SwitchStatementContext ctx) {
         verifier.verifyRedundantExpressionParenthesis(Messages.SWITCH_EXPRESSION, ctx.expression());
-        verifier.verifySwitchStatementBraceStyle(ctx);
     }
 
     @Override
     public void enterForStatement(SwiftParser.ForStatementContext ctx) {
         verifier.verifyRedundantForLoopParenthesis(ctx);
-        verifier.verifyForLoopBraceStyle(ctx);
     }
 
     @Override
@@ -185,38 +168,7 @@ public class MainListener extends SwiftBaseListener {
 
     @Override
     public void enterFunctionDeclaration(SwiftParser.FunctionDeclarationContext ctx) {
-        verifier.verifyFunctionBraceStyle(ctx);
         verifier.verifyBlankLinesAroundFunction(ctx);
-    }
-
-    @Override
-    public void enterElseClause(SwiftParser.ElseClauseContext ctx) {
-        verifier.verifyElseClauseBraceStyle(ctx);
-    }
-
-    @Override
-    public void enterIfStatement(SwiftParser.IfStatementContext ctx) {
-        verifier.verifyIfStatementBraceStyle(ctx);
-    }
-
-    @Override
-    public void enterWhileStatement(SwiftParser.WhileStatementContext ctx) {
-        verifier.verifyWhileLoopBraceStyle(ctx);
-    }
-
-    @Override
-    public void enterRepeatWhileStatement(SwiftParser.RepeatWhileStatementContext ctx) {
-        verifier.verifyRepeatWhileLoopBraceStyle(ctx);
-    }
-
-    @Override
-    public void enterInitializerDeclaration(SwiftParser.InitializerDeclarationContext ctx) {
-        verifier.verifyInitializerBraceStyle(ctx);
-    }
-
-    @Override
-    public void enterForInStatement(SwiftParser.ForInStatementContext ctx) {
-        verifier.verifyForInStatementBraceStyle(ctx);
     }
 
     @Override
@@ -227,21 +179,6 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterTypeAnnotation(SwiftParser.TypeAnnotationContext ctx) {
         verifier.checkWhitespaceAroundColon(ctx);
-    }
-
-    @Override
-    public void enterProtocolBody(SwiftParser.ProtocolBodyContext ctx) {
-        verifier.verifyProtocolBraceStyle(ctx);
-    }
-
-    @Override
-    public void enterUnionStyleEnum(SwiftParser.UnionStyleEnumContext ctx) {
-        verifier.verifyEnumBraceStyle(ctx);
-    }
-
-    @Override
-    public void enterRawValueStyleEnum(SwiftParser.RawValueStyleEnumContext ctx) {
-        verifier.verifyEnumBraceStyle(ctx);
     }
 
     @Override
@@ -272,26 +209,6 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterGenericParameter(SwiftParser.GenericParameterContext ctx) {
         verifier.checkWhitespaceAroundColon(ctx);
-    }
-
-    @Override
-    public void enterExtensionBody(SwiftParser.ExtensionBodyContext ctx) {
-        verifier.verifyExtensionBraceStyle(ctx);
-    }
-
-    @Override
-    public void enterGetterClause(SwiftParser.GetterClauseContext ctx) {
-        verifier.verifyGetterBraceStyle(ctx);
-    }
-
-    @Override
-    public void enterSetterClause(SwiftParser.SetterClauseContext ctx) {
-        verifier.verifySetterBraceStyle(ctx);
-    }
-
-    @Override
-    public void enterTypeCastingOperator(SwiftParser.TypeCastingOperatorContext ctx) {
-        verifier.verifyForceTypeCasting(ctx);
     }
 
     @Override
