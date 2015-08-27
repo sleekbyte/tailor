@@ -63,6 +63,10 @@ public final class XcodeIntegrator {
         PrintWriter printWriter = new PrintWriter(streamWriter);
 
         printWriter.println("#!/usr/bin/env ruby");
+        printWriter.println("ENV['GEM_HOME'] = '/usr/local/tailor/gems/installed'");
+        printWriter.println("ENV['GEM_PATH'] = '/usr/local/tailor/gems/installed'");
+        printWriter.println("cmd = \"gem install --local --no-rdoc --no-ri xcodeproj-0.27.0.gem\"");
+        printWriter.println("Dir.chdir('/usr/local/tailor/gems/vendor/cache'){ %x[#{cmd}] }");
         printWriter.println("require 'xcodeproj'");
         printWriter.println("begin");
         printWriter.println(String.format("\tproject = Xcodeproj::Project.open(\"%s\")", absolutePath));
