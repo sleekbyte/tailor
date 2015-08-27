@@ -151,7 +151,8 @@ task gems(type: Exec) {
 
 // Ensure ANTLR output is deleted via clean
 clean {
-    delete file('src/gen')
+    delete file('src/gen/')
+    delete files('src/dist/gems/.bundle/', 'src/dist/gems/Gemfile.lock', 'src/dist/gems/vendor/')
 }
 
 repositories {
