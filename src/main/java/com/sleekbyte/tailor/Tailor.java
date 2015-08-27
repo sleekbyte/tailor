@@ -98,11 +98,9 @@ public class Tailor {
      *
      * @param enabledRules list of enabled rules
      * @param printer      passed into listener constructors
-     * @param tokenStream  passed into listener constructors
      * @throws ArgumentParserException if listener for an enabled rule is not found
      */
-    public static List<SwiftBaseListener> createListeners(Set<Rules> enabledRules, Printer printer,
-                                                          CommonTokenStream tokenStream)
+    public static List<SwiftBaseListener> createListeners(Set<Rules> enabledRules, Printer printer)
         throws ArgumentParserException {
         List<SwiftBaseListener> listeners = new LinkedList<>();
         for (Rules rule : enabledRules) {
@@ -181,7 +179,7 @@ public class Tailor {
             }
 
             try (Printer printer = new Printer(inputFile, maxSeverity, colorSettings)) {
-                List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, tokenStream);
+                List<SwiftBaseListener> listeners = createListeners(enabledRules, printer);
                 listeners.add(new MaxLengthListener(printer, maxLengths));
                 listeners.add(new MainListener(printer, maxLengths, tokenStream));
                 ParseTreeWalker walker = new ParseTreeWalker();
