@@ -41,7 +41,6 @@ import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
-import com.sleekbyte.tailor.utils.CharFormatUtil;
 import com.sleekbyte.tailor.utils.ListenerUtil;
 import com.sleekbyte.tailor.utils.ParseTreeUtil;
 import org.antlr.v4.runtime.BufferedTokenStream;
@@ -75,16 +74,6 @@ class ParseTreeVerifier {
         // Ensure that importLineNumbers is refreshed for each new source file.
         importLineNumbers.clear();
     }
-
-    //region Lowercamelcase check
-    void verifyLowerCamelCase(String constructType, ParserRuleContext ctx) {
-        String constructName = ctx.getText();
-        if (!CharFormatUtil.isLowerCamelCase(constructName)) {
-            Location location = ListenerUtil.getContextStartLocation(ctx);
-            this.printer.error(constructType + Messages.LOWER_CAMEL_CASE, location);
-        }
-    }
-    //endregion
 
     //region Multiple import check
     void verifyMultipleImports(ImportDeclarationContext ctx) {

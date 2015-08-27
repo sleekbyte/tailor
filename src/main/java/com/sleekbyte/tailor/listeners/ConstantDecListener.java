@@ -31,7 +31,7 @@ public class ConstantDecListener extends SwiftBaseListener {
         Location location = ListenerUtil.getContextStartLocation(ctx);
 
         if (isGlobal(constantDecContext) || insideClass(constantDecContext) || insideStruct(constantDecContext)) {
-            if (listener.ruleEnabled(Rules.GLOBAL_CONSTANT_NAMING)
+            if (listener.ruleEnabled(Rules.CONSTANT_NAMING)
                 && !CharFormatUtil.isUpperCamelCase(constantName)
                 && !CharFormatUtil.isLowerCamelCase(constantName)) {
 

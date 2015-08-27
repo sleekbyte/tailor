@@ -44,16 +44,6 @@ public class MainListener extends SwiftBaseListener {
     }
 
     @Override
-    public void enterFunctionName(SwiftParser.FunctionNameContext ctx) {
-        verifier.verifyLowerCamelCase(Messages.FUNCTION + Messages.NAMES, ctx);
-    }
-
-    @Override
-    public void enterVariableName(SwiftParser.VariableNameContext ctx) {
-        verifier.verifyLowerCamelCase(Messages.VARIABLE + Messages.NAMES, ctx);
-    }
-
-    @Override
     public void enterConditionClause(SwiftParser.ConditionClauseContext ctx) {
         verifier.verifyRedundantExpressionParenthesis(Messages.CONDITIONAL_CLAUSE, ctx.expression());
     }

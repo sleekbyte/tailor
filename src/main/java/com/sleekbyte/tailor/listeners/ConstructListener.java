@@ -16,7 +16,7 @@ public class ConstructListener extends SwiftBaseListener {
 
     private static final String LET = "let";
     private static final String VAR = "var";
-    public Set<Rules> enabledRules;
+    private Set<Rules> enabledRules;
     public Printer printer;
     public MaxLengths maxLengths;
 
@@ -36,7 +36,7 @@ public class ConstructListener extends SwiftBaseListener {
         if (ctx.patternInitializerList() == null) {
             return;
         }
-        evaluatePatternInitializerList(ctx.patternInitializerList(), new VariableDecListener());
+        evaluatePatternInitializerList(ctx.patternInitializerList(), new VariableDecListener(this));
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ConstructListener extends SwiftBaseListener {
         if (ctx.getStart().getText().equals(LET)) {
             evaluatePattern(ctx.pattern(), walker, new ConstantDecListener(this));
         } else if (ctx.getStart().getText().equals(VAR)) {
-            evaluatePattern(ctx.pattern(), walker, new VariableDecListener());
+            evaluatePattern(ctx.pattern(), walker, new VariableDecListener(this));
         }
     }
 
@@ -54,7 +54,7 @@ public class ConstructListener extends SwiftBaseListener {
         SwiftBaseListener listener = null;
         for (ParseTree child : ctx.children) {
             if (child.getText().equals(VAR)) {
-                listener = new VariableDecListener();
+                listener = new VariableDecListener(this);
                 break;
             }
         }
@@ -84,7 +84,7 @@ public class ConstructListener extends SwiftBaseListener {
         if (currentBinding.equals(LET)) {
             evaluateOptionalBindingHead(ctx.optionalBindingHead(), new ConstantDecListener(this));
         } else if (currentBinding.equals(VAR)) {
-            evaluateOptionalBindingHead(ctx.optionalBindingHead(), new VariableDecListener());
+            evaluateOptionalBindingHead(ctx.optionalBindingHead(), new VariableDecListener(this));
         }
         SwiftParser.OptionalBindingContinuationListContext continuationList = ctx.optionalBindingContinuationList();
         if (continuationList != null) {
@@ -96,7 +96,7 @@ public class ConstructListener extends SwiftBaseListener {
                 if (currentBinding.equals(LET)) {
                     evaluateOptionalBindingContinuation(continuation, new ConstantDecListener(this));
                 } else if (currentBinding.equals(VAR)) {
-                    evaluateOptionalBindingContinuation(continuation, new VariableDecListener());
+                    evaluateOptionalBindingContinuation(continuation, new VariableDecListener(this));
                 }
             }
         }
