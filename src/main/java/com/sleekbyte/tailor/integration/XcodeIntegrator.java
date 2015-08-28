@@ -63,21 +63,23 @@ public final class XcodeIntegrator {
         Writer streamWriter = new OutputStreamWriter(new FileOutputStream(tempScript), Charset.forName("UTF-8"));
         PrintWriter printWriter = new PrintWriter(streamWriter);
 
-        printWriter.println("#!/usr/bin/env ruby");
-        printWriter.println("ENV['GEM_HOME'] = '/usr/local/tailor/gems/installed'");
-        printWriter.println("ENV['GEM_PATH'] = '/usr/local/tailor/gems/installed'");
-        printWriter.println("cmd = \"gem install --local --no-rdoc --no-ri xcodeproj-0.27.0.gem\"");
-        printWriter.println("Dir.chdir('/usr/local/tailor/gems/vendor/cache'){ %x[#{cmd}] }");
-        printWriter.println("require 'xcodeproj'");
-        printWriter.println("begin");
-        printWriter.println(String.format("\tproject = Xcodeproj::Project.open(\"%s\")", absolutePath));
-        printWriter.println("rescue");
-        printWriter.println("\tabort(\"Integration Error: Invalid .xcodeproj file\")");
-        printWriter.println("end");
-        printWriter.println("main_target = project.targets.first");
-        printWriter.println("phase = main_target.new_shell_script_build_phase(\"Tailor\")");
-        printWriter.println("phase.shell_script = \"/usr/local/bin/tailor\"");
-        printWriter.println("project.save()");
+        printWriter.print(String.join(System.getProperty("line.separator"),
+            "#!/usr/bin/env ruby",
+            "ENV['GEM_HOME'] = '/usr/local/tailor/gems/installed'",
+            "ENV['GEM_PATH'] = '/usr/local/tailor/gems/installed'",
+            "cmd = \"gem install --local --no-rdoc --no-ri xcodeproj-0.27.1.gem\"",
+            "Dir.chdir('/usr/local/tailor/gems/vendor/cache'){ %x[#{cmd}] }",
+            "require 'xcodeproj'",
+            "begin",
+            String.format("\tproject = Xcodeproj::Project.open(\"%s\")", absolutePath),
+            "rescue",
+            "\tabort(\"Integration Error: Invalid .xcodeproj file\")",
+            "end",
+            "main_target = project.targets.first",
+            "phase = main_target.new_shell_script_build_phase(\"Tailor\")",
+            "phase.shell_script = \"/usr/local/bin/tailor\"",
+            "project.save()"
+        ));
 
         printWriter.close();
         streamWriter.close();
