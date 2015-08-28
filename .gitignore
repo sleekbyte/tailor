@@ -31,5 +31,6 @@ gradle-app.setting
 # Ruby
 
 ## Bundler
+.bundle/
 Gemfile.lock
 cache/
