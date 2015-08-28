@@ -67,7 +67,7 @@ public final class XcodeIntegrator {
             "#!/usr/bin/env ruby",
             "ENV['GEM_HOME'] = '/usr/local/tailor/gems/installed'",
             "ENV['GEM_PATH'] = '/usr/local/tailor/gems/installed'",
-            "cmd = \"gem install --local --no-rdoc --no-ri xcodeproj-0.27.1.gem\"",
+            "cmd = \"gem install --local --no-rdoc --no-ri xcodeproj-*.gem\"",
             "Dir.chdir('/usr/local/tailor/gems/vendor/cache'){ %x[#{cmd}] }",
             "require 'xcodeproj'",
             "begin",
