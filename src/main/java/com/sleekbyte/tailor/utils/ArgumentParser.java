@@ -33,7 +33,7 @@ public class ArgumentParser {
     private static final String MAX_STRUCT_LENGTH_OPT = "max-struct-length";
     private static final String MAX_SEVERITY_OPT = "max-severity";
     private static final String ONLY_OPT = "only";
-    private static final String EXCLUDE_OPT = "exclude";
+    private static final String EXCEPT_OPT = "except";
     private static final String DEBUG_OPT = "debug";
     private static final String NO_COLOR_OPT = "no-color";
     private static final String INVERT_COLOR_OPT = "invert-color";
@@ -97,7 +97,7 @@ public class ArgumentParser {
             createOptionWithSingleArg(MAX_STRUCT_LENGTH_OPT, Messages.MAX_STRUCT_LENGTH_DESC);
         final Option maxSeverity = createOptionWithSingleArg(MAX_SEVERITY_OPT, Messages.MAX_SEVERITY_DESC);
         final Option onlySpecificRules = createOptionWithMultipleArgs(ONLY_OPT, Messages.ONLY_SPECIFIC_RULES_DESC);
-        final Option excludedRules = createOptionWithMultipleArgs(EXCLUDE_OPT, Messages.EXCLUDE_RULES_DESC);
+        final Option excludedRules = createOptionWithMultipleArgs(EXCEPT_OPT, Messages.EXCEPT_RULES_DESC);
         final Option debug = createOptionWithNoArgs(DEBUG_OPT, Messages.DEBUG_DESC);
         final Option noColor = createOptionWithNoArgs(NO_COLOR_OPT, Messages.NO_COLOR_DESC);
         final Option invertColor = createOptionWithNoArgs(INVERT_COLOR_OPT, Messages.INVERT_COLOR_DESC);
@@ -179,15 +179,15 @@ public class ArgumentParser {
         Set<Rules> enabledRules = new HashSet<>(Arrays.asList(Rules.values()));
         Set<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toSet());
 
-        // ONLY_OPT before EXCLUDE_OPT gives precedence to ONLY_OPT if both are specified on the command line
+        // ONLY_OPT before EXCEPT_OPT gives precedence to ONLY_OPT if both are specified on the command line
         if (this.cmd.hasOption(ONLY_OPT)) {
             Set<String> onlySpecificRules = new HashSet<>(Arrays.asList(this.cmd.getOptionValues(ONLY_OPT)));
             checkValidRules(enabledRuleNames, onlySpecificRules);
 
             return enabledRules.stream()
                 .filter(rule -> onlySpecificRules.contains(rule.getName())).collect(Collectors.toSet());
-        } else if (this.cmd.hasOption(EXCLUDE_OPT)) {
-            Set<String> excludedRules = new HashSet<>(Arrays.asList(this.cmd.getOptionValues(EXCLUDE_OPT)));
+        } else if (this.cmd.hasOption(EXCEPT_OPT)) {
+            Set<String> excludedRules = new HashSet<>(Arrays.asList(this.cmd.getOptionValues(EXCEPT_OPT)));
             checkValidRules(enabledRuleNames, excludedRules);
 
             return enabledRules.stream()
