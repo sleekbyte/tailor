@@ -25,7 +25,8 @@ public final class XcodeIntegrator {
         try {
             integrateTailor(getAbsolutePath(xcodeprojPath));
         } catch (IOException | InterruptedException e) {
-            System.err.println("Source file analysis failed. Reason: " + e.getMessage());
+            System.err.println("Could not add Tailor Build Phase Run Script to " + xcodeprojPath + "\nReason: "
+                                + e.getMessage());
             return ExitCode.FAILURE;
         }
 
