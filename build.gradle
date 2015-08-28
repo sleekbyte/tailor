@@ -145,7 +145,7 @@ tasks.withType(Pmd) {
 task gems(type: Exec) {
     workingDir 'src/dist/gems/'
     executable 'sh'
-    args '-c', 'if gem list -i bundler >/dev/null; then bundle package --no-install; else echo "Run \'gem install bundler\'" && exit 1; fi'
+    args '-c', 'if gem list -i bundler >/dev/null; then bundle package; else echo "Run \'gem install bundler\'" && exit 1; fi'
 }
 // Ensure gems are packaged into distribution
 distZip.dependsOn 'gems'
@@ -156,7 +156,7 @@ installDist.dependsOn 'gems'
 // Ensure ANTLR output is deleted via clean
 clean {
     delete file('src/gen/')
-    delete files('src/dist/gems/.bundle/', 'src/dist/gems/Gemfile.lock', 'src/dist/gems/vendor/')
+    delete files('src/dist/gems/Gemfile.lock', 'src/dist/gems/vendor/')
 }
 
 repositories {
