@@ -34,6 +34,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  * Performs static analysis on Swift source files.
@@ -100,13 +101,22 @@ public class Tailor {
      * @param printer      passed into listener constructors
      * @throws ArgumentParserException if listener for an enabled rule is not found
      */
-    public static List<SwiftBaseListener> createListeners(Set<Rules> enabledRules, Printer printer)
+    public static List<SwiftBaseListener> createListeners(Set<Rules> enabledRules, Printer printer,
+                                                          CommonTokenStream commonTokenStream)
         throws ArgumentParserException {
         List<SwiftBaseListener> listeners = new LinkedList<>();
-        for (Rules rule : enabledRules) {
+        Set<String> classNames = enabledRules.stream().map(Rules::getClassName).collect(Collectors.toSet());
+        for (String className : classNames) {
             try {
-                Constructor listenerConstructor = Class.forName(rule.getClassName()).getConstructor(Printer.class);
-                listeners.add((SwiftBaseListener) listenerConstructor.newInstance(printer));
+
+                if (className.equals(CommentAnalyzer.class.getName())) {
+                    CommentAnalyzer commentAnalyzer = new CommentAnalyzer(commonTokenStream, printer);
+                    commentAnalyzer.analyze();
+                } else {
+                    Constructor listenerConstructor = Class.forName(className).getConstructor(Printer.class);
+                    listeners.add((SwiftBaseListener) listenerConstructor.newInstance(printer));
+                }
+
             } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException
                 | InstantiationException | IllegalAccessException e) {
                 throw new ArgumentParserException("Listeners were not successfully created: " + e);
@@ -179,7 +189,7 @@ public class Tailor {
             }
 
             try (Printer printer = new Printer(inputFile, maxSeverity, colorSettings)) {
-                List<SwiftBaseListener> listeners = createListeners(enabledRules, printer);
+                List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, tokenStream);
                 listeners.add(new MaxLengthListener(printer, maxLengths));
                 listeners.add(new MainListener(printer, maxLengths, tokenStream));
                 ParseTreeWalker walker = new ParseTreeWalker();
@@ -189,8 +199,7 @@ public class Tailor {
                 try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
                     fileListener.verify();
                 }
-                CommentAnalyzer commentAnalyzer = new CommentAnalyzer(tokenStream, printer);
-                commentAnalyzer.analyze();
+
                 numErrors += printer.getNumErrorMessages();
             }
         }

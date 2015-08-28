@@ -1,5 +1,6 @@
 package com.sleekbyte.tailor.common;
 
+import com.sleekbyte.tailor.listeners.CommentAnalyzer;
 import com.sleekbyte.tailor.listeners.SemicolonTerminatedListener;
 import com.sleekbyte.tailor.listeners.UpperCamelCaseListener;
 
@@ -8,7 +9,8 @@ import com.sleekbyte.tailor.listeners.UpperCamelCaseListener;
  */
 public enum Rules {
     UPPER_CAMEL_CASE ("upperCamelCase", UpperCamelCaseListener.class.getName()),
-    SEMICOLON_TERMINATED ("semicolonTerminated", SemicolonTerminatedListener.class.getName());
+    SEMICOLON_TERMINATED ("semicolonTerminated", SemicolonTerminatedListener.class.getName()),
+    WHITESPACE_IN_COMMENTS ("whitespaceInComments", CommentAnalyzer.class.getName());
 
     private String name;
     private String className;
