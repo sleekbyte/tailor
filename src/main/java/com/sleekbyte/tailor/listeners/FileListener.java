@@ -68,14 +68,19 @@ public class FileListener implements AutoCloseable {
                 lineLengthViolation(lineNumber, lineLength);
             }
 
-            if (SourceFileUtil.lineHasTrailingWhitespace(lineLength, line)) {
+            if (enabledRules.contains(Rules.TRAILING_WHITESPACE)
+                    && SourceFileUtil.lineHasTrailingWhitespace(lineLength, line)) {
                 trailingWhitespaceViolation(lineNumber, lineLength);
             }
         }
 
         verifyFileLength();
-        verifyNewlineTerminated();
-        verifyNoLeadingWhitespace();
+        if (enabledRules.contains(Rules.NEWLINE_TERMINATED)) {
+            verifyNewlineTerminated();
+        }
+        if (enabledRules.contains(Rules.NO_LEADING_WHITESPACE)) {
+            verifyNoLeadingWhitespace();
+        }
     }
 
     private void lineLengthViolation(int lineNumber, int lineLength) {

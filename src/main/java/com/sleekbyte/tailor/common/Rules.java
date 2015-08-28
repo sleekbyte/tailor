@@ -10,7 +10,9 @@ import com.sleekbyte.tailor.listeners.UpperCamelCaseListener;
 public enum Rules {
     UPPER_CAMEL_CASE ("upperCamelCase", UpperCamelCaseListener.class.getName()),
     SEMICOLON_TERMINATED ("semicolonTerminated", SemicolonTerminatedListener.class.getName()),
-    TRAILING_WHITESPACE ("trailingWhitespace", FileListener.class.getName());
+    TRAILING_WHITESPACE ("trailingWhitespace", FileListener.class.getName()),
+    NEWLINE_TERMINATED ("fileNewLineTerminated", FileListener.class.getName()),
+    NO_LEADING_WHITESPACE ("fileNoLeadingWhitespace", FileListener.class.getName());
 
     private String name;
     private String className;

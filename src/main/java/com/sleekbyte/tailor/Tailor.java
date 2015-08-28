@@ -34,6 +34,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  * Performs static analysis on Swift source files.
@@ -103,10 +104,17 @@ public class Tailor {
     public static List<SwiftBaseListener> createListeners(Set<Rules> enabledRules, Printer printer)
         throws ArgumentParserException {
         List<SwiftBaseListener> listeners = new LinkedList<>();
-        for (Rules rule : enabledRules) {
+        Set<String> classNames = enabledRules.stream().map(Rules::getClassName).collect(Collectors.toSet());
+        for (String className : classNames) {
             try {
-                Constructor listenerConstructor = Class.forName(rule.getClassName()).getConstructor(Printer.class);
-                listeners.add((SwiftBaseListener) listenerConstructor.newInstance(printer));
+
+                if (className.equals(FileListener.class.getName())) {
+                    continue;
+                } else {
+                    Constructor listenerConstructor = Class.forName(className).getConstructor(Printer.class);
+                    listeners.add((SwiftBaseListener) listenerConstructor.newInstance(printer));
+                }
+
             } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException
                 | InstantiationException | IllegalAccessException e) {
                 throw new ArgumentParserException("Listeners were not successfully created: " + e);
