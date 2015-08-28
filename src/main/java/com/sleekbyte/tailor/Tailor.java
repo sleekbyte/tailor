@@ -186,7 +186,7 @@ public class Tailor {
                 for (SwiftBaseListener listener : listeners) {
                     walker.walk(listener, tree);
                 }
-                try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
+                try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths, enabledRules)) {
                     fileListener.verify();
                 }
                 CommentAnalyzer commentAnalyzer = new CommentAnalyzer(tokenStream, printer);

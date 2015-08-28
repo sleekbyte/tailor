@@ -3,6 +3,7 @@ package com.sleekbyte.tailor.listeners;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.SourceFileUtil;
 
@@ -10,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.nio.file.Files;
+import java.util.Set;
 
 /**
  * Listener for verifying source files.
@@ -22,6 +24,7 @@ public class FileListener implements AutoCloseable {
     private MaxLengths maxLengths;
     private LineNumberReader reader;
     private int numOfLines = 0;
+    private Set<Rules> enabledRules;
 
     /**
      * Constructs a file listener with the specified printer, input file, and max lengths restrictions.
@@ -30,11 +33,13 @@ public class FileListener implements AutoCloseable {
      * @param inputFile  the source file to verify
      * @param maxLengths the restrictions for maximum lengths
      */
-    public FileListener(Printer printer, File inputFile, MaxLengths maxLengths) throws IOException {
+    public FileListener(Printer printer, File inputFile, MaxLengths maxLengths, Set<Rules> enabledRules)
+        throws IOException {
         this.printer = printer;
         this.inputFile = inputFile;
         this.maxLengths = maxLengths;
         this.reader = new LineNumberReader(Files.newBufferedReader(inputFile.toPath()));
+        this.enabledRules = enabledRules;
     }
 
     @Override
@@ -62,6 +67,7 @@ public class FileListener implements AutoCloseable {
             if (SourceFileUtil.lineTooLong(lineLength, this.maxLengths.maxLineLength)) {
                 lineLengthViolation(lineNumber, lineLength);
             }
+
             if (SourceFileUtil.lineHasTrailingWhitespace(lineLength, line)) {
                 trailingWhitespaceViolation(lineNumber, lineLength);
             }
