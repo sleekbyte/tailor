@@ -104,7 +104,7 @@ public class Tailor {
             // Exit program after configuring Xcode project
             String xcodeprojPath = argumentParser.getXcodeprojPath();
             if (xcodeprojPath != null) {
-                new XcodeIntegrator().setupXcode(xcodeprojPath);
+                System.exit(XcodeIntegrator.setupXcode(xcodeprojPath));
             }
 
             if (cmd.getArgs().length >= 1) {

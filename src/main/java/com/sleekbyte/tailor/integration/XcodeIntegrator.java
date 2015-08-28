@@ -21,18 +21,18 @@ public final class XcodeIntegrator {
      *
      * @param xcodeprojPath relative/absolute path to a xcodeproj file
      */
-    public void setupXcode(String xcodeprojPath) {
+    public static int setupXcode(String xcodeprojPath) {
         try {
             integrateTailor(getAbsolutePath(xcodeprojPath));
         } catch (IOException | InterruptedException e) {
-            System.err.println("Tailor-Xcode Integration failed. Reason: " + e.getMessage());
-            System.exit(ExitCode.FAILURE);
+            System.err.println("Source file analysis failed. Reason: " + e.getMessage());
+            return ExitCode.FAILURE;
         }
 
-        System.exit(ExitCode.SUCCESS);
+        return ExitCode.SUCCESS;
     }
 
-    private String getAbsolutePath(String path) throws IOException {
+    private static String getAbsolutePath(String path) throws IOException {
         File file = new File(path);
         if (file.isDirectory()
             && (path.endsWith(".xcodeproj/") || path.endsWith(".xcodeproj"))) {
@@ -42,7 +42,7 @@ public final class XcodeIntegrator {
         }
     }
 
-    private void integrateTailor(String absolutePath) throws IOException, InterruptedException {
+    private static void integrateTailor(String absolutePath) throws IOException, InterruptedException {
         File tempScript = createTempRubyScript(absolutePath);
 
         try {
@@ -57,7 +57,7 @@ public final class XcodeIntegrator {
         }
     }
 
-    private File createTempRubyScript(String absolutePath) throws IOException {
+    private static File createTempRubyScript(String absolutePath) throws IOException {
         File tempScript = File.createTempFile("xcode_integrate", "rb");
         Writer streamWriter = new OutputStreamWriter(new FileOutputStream(tempScript), Charset.forName("UTF-8"));
         PrintWriter printWriter = new PrintWriter(streamWriter);
