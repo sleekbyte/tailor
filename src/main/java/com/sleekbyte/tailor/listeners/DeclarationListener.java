@@ -9,7 +9,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import java.util.List;
 
 /**
- * Parse tree listener for different constructs.
+ * Parse tree listener for declaration constructs.
  */
 public class DeclarationListener extends SwiftBaseListener {
 
@@ -25,7 +25,7 @@ public class DeclarationListener extends SwiftBaseListener {
     /**
      * Creates a DeclarationListener object.
      *
-     * @param listeners list of all rule listeners that are enabled
+     * @param listeners list of all listeners that are enabled
      */
     public DeclarationListener(List<SwiftBaseListener> listeners) {
         this.enabledListeners = listeners;

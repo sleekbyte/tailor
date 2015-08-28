@@ -10,7 +10,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 public class ConstantDecHelper {
 
     /**
-     * Finds and returns the constant declaration from ParserRuleContext object.
+     * Finds and returns constant declaration from ParserRuleContext object.
      *
      * @param ctx context object
      */
@@ -24,21 +24,6 @@ public class ConstantDecHelper {
         } else {
             return null;
         }
-    }
-
-    public static boolean isGlobal(ParserRuleContext ctx) {
-        ParserRuleContext parentCtx = ParseTreeUtil.getNthParent(ctx, 3);
-        return parentCtx != null && (parentCtx instanceof SwiftParser.TopLevelContext);
-    }
-
-    public static boolean insideClass(ParserRuleContext ctx) {
-        ParserRuleContext rootCtx = ParseTreeUtil.getNthParent(getDeclarationRoot(ctx), 1);
-        return rootCtx != null && (rootCtx instanceof SwiftParser.ClassDeclarationContext);
-    }
-
-    public static boolean insideStruct(ParserRuleContext ctx) {
-        ParserRuleContext rootCtx = ParseTreeUtil.getNthParent(getDeclarationRoot(ctx), 1);
-        return rootCtx != null && (rootCtx instanceof SwiftParser.StructDeclarationContext);
     }
 
     /**
@@ -60,4 +45,18 @@ public class ConstantDecHelper {
         return ctx;
     }
 
+    public static boolean isGlobal(ParserRuleContext ctx) {
+        ParserRuleContext parentCtx = ParseTreeUtil.getNthParent(ctx, 3);
+        return parentCtx != null && (parentCtx instanceof SwiftParser.TopLevelContext);
+    }
+
+    public static boolean insideClass(ParserRuleContext ctx) {
+        ParserRuleContext rootCtx = ParseTreeUtil.getNthParent(getDeclarationRoot(ctx), 1);
+        return rootCtx != null && (rootCtx instanceof SwiftParser.ClassDeclarationContext);
+    }
+
+    public static boolean insideStruct(ParserRuleContext ctx) {
+        ParserRuleContext rootCtx = ParseTreeUtil.getNthParent(getDeclarationRoot(ctx), 1);
+        return rootCtx != null && (rootCtx instanceof SwiftParser.StructDeclarationContext);
+    }
 }

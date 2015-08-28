@@ -193,6 +193,7 @@ public class Tailor {
 
                 ParseTreeWalker walker = new ParseTreeWalker();
                 for (SwiftBaseListener listener : listeners) {
+                    // The following listeners are used by DeclarationListener to walk the tree
                     if (listener instanceof ConstantNamingListener || listener instanceof KPrefixListener) {
                         continue;
                     }

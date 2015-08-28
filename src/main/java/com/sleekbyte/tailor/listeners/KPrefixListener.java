@@ -23,7 +23,6 @@ public class KPrefixListener extends SwiftBaseListener {
     public void enterIdentifier(SwiftParser.IdentifierContext ctx) {
         String constantName = ctx.getText();
         Location location = ListenerUtil.getContextStartLocation(ctx);
-
         if (CharFormatUtil.isKPrefixed(constantName)) {
             printer.warn(Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED, location);
         }
