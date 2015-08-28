@@ -15,9 +15,14 @@ import org.antlr.v4.runtime.ParserRuleContext;
 public class LowerCamelCaseListener extends SwiftBaseListener {
 
     private Printer printer;
+    private boolean traversedTreeForVarDeclaration = false;
 
     public LowerCamelCaseListener(Printer printer) {
         this.printer = printer;
+    }
+
+    public void setTraversedTreeForVarDeclaration(boolean traversedTreeForVarDeclaration) {
+        this.traversedTreeForVarDeclaration = traversedTreeForVarDeclaration;
     }
 
     @Override
@@ -28,6 +33,14 @@ public class LowerCamelCaseListener extends SwiftBaseListener {
     @Override
     public void enterVariableName(SwiftParser.VariableNameContext ctx) {
         verifyLowerCamelCase(Messages.VARIABLE + Messages.NAMES, ctx);
+    }
+
+    @Override
+    public void enterIdentifier(SwiftParser.IdentifierContext ctx) {
+        if (traversedTreeForVarDeclaration) {
+            verifyLowerCamelCase(Messages.VARIABLE + Messages.NAMES, ctx);
+            traversedTreeForVarDeclaration = false;
+        }
     }
 
     private void verifyLowerCamelCase(String constructType, ParserRuleContext ctx) {

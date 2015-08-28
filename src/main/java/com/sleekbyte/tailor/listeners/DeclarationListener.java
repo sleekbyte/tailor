@@ -2,43 +2,38 @@ package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
-import com.sleekbyte.tailor.common.MaxLengths;
-import com.sleekbyte.tailor.common.Rules;
-import com.sleekbyte.tailor.output.Printer;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Parse tree listener for different constructs.
  */
-public class ConstructListener extends SwiftBaseListener {
+public class DeclarationListener extends SwiftBaseListener {
+
+    /**
+     * Declaration types handled by this listener.
+     */
+    private enum Declaration { VARIABLE_DEC, CONSTANT_DEC }
 
     private static final String LET = "let";
     private static final String VAR = "var";
-    private Set<Rules> enabledRules;
-    public Printer printer;
-    public MaxLengths maxLengths;
+    private List<SwiftBaseListener> enabledListeners;
 
     /**
-     * Creates a ConstructListener object.
+     * Creates a DeclarationListener object.
      *
-     * @param printer      an instance of Printer
-     * @param enabledRules set of enabled rules
-     * @param maxLengths   maximum length values for constructs
+     * @param listeners list of all rule listeners that are enabled
      */
-    public ConstructListener(Printer printer, Set<Rules> enabledRules, MaxLengths maxLengths) {
-        this.printer = printer;
-        this.enabledRules = enabledRules;
-        this.maxLengths = maxLengths;
+    public DeclarationListener(List<SwiftBaseListener> listeners) {
+        this.enabledListeners = listeners;
     }
 
     @Override
     public void enterConstantDeclaration(SwiftParser.ConstantDeclarationContext ctx) {
-        evaluatePatternInitializerList(ctx.patternInitializerList(), new ConstantDecListener(this));
+        evaluatePatternInitializerList(ctx.patternInitializerList(), Declaration.CONSTANT_DEC);
     }
 
     @Override
@@ -46,36 +41,36 @@ public class ConstructListener extends SwiftBaseListener {
         if (ctx.patternInitializerList() == null) {
             return;
         }
-        evaluatePatternInitializerList(ctx.patternInitializerList(), new VariableDecListener(this));
+        evaluatePatternInitializerList(ctx.patternInitializerList(), Declaration.VARIABLE_DEC);
     }
 
     @Override
     public void enterValueBindingPattern(SwiftParser.ValueBindingPatternContext ctx) {
         ParseTreeWalker walker = new ParseTreeWalker();
         if (ctx.getStart().getText().equals(LET)) {
-            evaluatePattern(ctx.pattern(), walker, new ConstantDecListener(this));
+            evaluatePattern(ctx.pattern(), walker, Declaration.CONSTANT_DEC);
         } else if (ctx.getStart().getText().equals(VAR)) {
-            evaluatePattern(ctx.pattern(), walker, new VariableDecListener(this));
+            evaluatePattern(ctx.pattern(), walker, Declaration.VARIABLE_DEC);
         }
     }
 
     @Override
     public void enterParameter(SwiftParser.ParameterContext ctx) {
-        SwiftBaseListener listener = null;
+        Declaration listenerType = null;
         for (ParseTree child : ctx.children) {
             if (child.getText().equals(VAR)) {
-                listener = new VariableDecListener(this);
+                listenerType = Declaration.VARIABLE_DEC;
                 break;
             }
         }
-        if (listener == null) {
-            listener = new ConstantDecListener(this);
+        if (listenerType == null) {
+            listenerType = Declaration.CONSTANT_DEC;
         }
         ParseTreeWalker walker = new ParseTreeWalker();
         if (ctx.externalParameterName() != null) {
-            walkListener(walker, ctx.externalParameterName(), listener);
+            walkListener(walker, ctx.externalParameterName(), listenerType);
         }
-        walkListener(walker, ctx.localParameterName(), listener);
+        walkListener(walker, ctx.localParameterName(), listenerType);
     }
 
     @Override
@@ -92,9 +87,9 @@ public class ConstructListener extends SwiftBaseListener {
          */
         String currentBinding = letOrVar(ctx.optionalBindingHead());
         if (currentBinding.equals(LET)) {
-            evaluateOptionalBindingHead(ctx.optionalBindingHead(), new ConstantDecListener(this));
+            evaluateOptionalBindingHead(ctx.optionalBindingHead(), Declaration.CONSTANT_DEC);
         } else if (currentBinding.equals(VAR)) {
-            evaluateOptionalBindingHead(ctx.optionalBindingHead(), new VariableDecListener(this));
+            evaluateOptionalBindingHead(ctx.optionalBindingHead(), Declaration.VARIABLE_DEC);
         }
         SwiftParser.OptionalBindingContinuationListContext continuationList = ctx.optionalBindingContinuationList();
         if (continuationList != null) {
@@ -104,33 +99,26 @@ public class ConstructListener extends SwiftBaseListener {
                     currentBinding = letOrVar(continuation.optionalBindingHead());
                 }
                 if (currentBinding.equals(LET)) {
-                    evaluateOptionalBindingContinuation(continuation, new ConstantDecListener(this));
+                    evaluateOptionalBindingContinuation(continuation, Declaration.CONSTANT_DEC);
                 } else if (currentBinding.equals(VAR)) {
-                    evaluateOptionalBindingContinuation(continuation, new VariableDecListener(this));
+                    evaluateOptionalBindingContinuation(continuation, Declaration.VARIABLE_DEC);
                 }
             }
         }
     }
 
-    /**
-     * Checks if rule is enabled.
-     */
-    public boolean ruleEnabled(Rules rule) {
-        return enabledRules.contains(rule);
-    }
-
-    private void evaluateOptionalBindingHead(SwiftParser.OptionalBindingHeadContext ctx, SwiftBaseListener listener) {
+    private void evaluateOptionalBindingHead(SwiftParser.OptionalBindingHeadContext ctx, Declaration listenerType) {
         ParseTreeWalker walker = new ParseTreeWalker();
-        evaluatePattern(ctx.pattern(), walker, listener);
+        evaluatePattern(ctx.pattern(), walker, listenerType);
     }
 
     private void evaluateOptionalBindingContinuation(SwiftParser.OptionalBindingContinuationContext ctx,
-                                             SwiftBaseListener listener) {
+                                                     Declaration listenerType) {
         if (ctx.optionalBindingHead() != null) {
-            evaluateOptionalBindingHead(ctx.optionalBindingHead(), listener);
+            evaluateOptionalBindingHead(ctx.optionalBindingHead(), listenerType);
         } else {
             ParseTreeWalker walker = new ParseTreeWalker();
-            evaluatePattern(ctx.pattern(), walker, listener);
+            evaluatePattern(ctx.pattern(), walker, listenerType);
         }
     }
 
@@ -138,46 +126,67 @@ public class ConstructListener extends SwiftBaseListener {
         return ctx.getChild(0).getText();
     }
 
-    private void walkListener(ParseTreeWalker walker, ParserRuleContext tree, SwiftBaseListener listener) {
-        walker.walk(listener, tree);
+    private void walkListener(ParseTreeWalker walker, ParserRuleContext tree, Declaration listenerType) {
+        for (SwiftBaseListener listener : enabledListeners) {
+            switch (listenerType) {
+                case CONSTANT_DEC:
+                    if (listener instanceof MaxLengthListener) {
+                        ((MaxLengthListener) listener).setTraversedTreeForConstantDeclaration(true);
+                        walker.walk(listener, tree);
+                    } else if (listener instanceof ConstantNamingListener || listener instanceof KPrefixListener) {
+                        walker.walk(listener, tree);
+                    }
+                    break;
+                case VARIABLE_DEC:
+                    if (listener instanceof LowerCamelCaseListener) {
+                        ((LowerCamelCaseListener) listener).setTraversedTreeForVarDeclaration(true);
+                        walker.walk(listener, tree);
+                    } else if (listener instanceof MaxLengthListener) {
+                        ((MaxLengthListener) listener).setTraversedTreeForVarDeclaration(true);
+                        walker.walk(listener, tree);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     private void evaluatePatternInitializerList(SwiftParser.PatternInitializerListContext ctx,
-                                                SwiftBaseListener listener) {
+                                                Declaration listenerType) {
         ParseTreeWalker walker = new ParseTreeWalker();
         for (SwiftParser.PatternInitializerContext context : ctx.patternInitializer()) {
             SwiftParser.PatternContext pattern = context.pattern();
-            evaluatePattern(pattern, walker, listener);
+            evaluatePattern(pattern, walker, listenerType);
         }
     }
 
     private void evaluatePattern(SwiftParser.PatternContext pattern, ParseTreeWalker walker,
-                                 SwiftBaseListener listener) {
+                                 Declaration listenerType) {
         if (pattern.identifierPattern() != null) {
-            walkListener(walker, pattern.identifierPattern(), listener);
+            walkListener(walker, pattern.identifierPattern(), listenerType);
 
         } else if (pattern.tuplePattern() != null && pattern.tuplePattern().tuplePatternElementList() != null) {
-            evaluateTuplePattern(pattern.tuplePattern(), walker, listener);
+            evaluateTuplePattern(pattern.tuplePattern(), walker, listenerType);
 
         } else if (pattern.enumCasePattern() != null && pattern.enumCasePattern().tuplePattern() != null) {
-            evaluateTuplePattern(pattern.enumCasePattern().tuplePattern(), walker, listener);
+            evaluateTuplePattern(pattern.enumCasePattern().tuplePattern(), walker, listenerType);
 
         } else if (pattern.pattern() != null) {
-            evaluatePattern(pattern.pattern(), walker, listener);
+            evaluatePattern(pattern.pattern(), walker, listenerType);
 
         } else if (pattern.expressionPattern() != null) {
-            walkListener(walker, pattern.expressionPattern().expression().prefixExpression(), listener);
+            walkListener(walker, pattern.expressionPattern().expression().prefixExpression(), listenerType);
         }
     }
 
     private void evaluateTuplePattern(SwiftParser.TuplePatternContext tuplePatternContext, ParseTreeWalker walker,
-                                      SwiftBaseListener listener) {
+                                      Declaration listenerType) {
         List<SwiftParser.TuplePatternElementContext> tuplePatternElementContexts =
             tuplePatternContext.tuplePatternElementList().tuplePatternElement();
 
         for (SwiftParser.TuplePatternElementContext tuplePatternElement : tuplePatternElementContexts) {
-            evaluatePattern(tuplePatternElement.pattern(), walker, listener);
+            evaluatePattern(tuplePatternElement.pattern(), walker, listenerType);
         }
     }
-
 }

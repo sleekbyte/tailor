@@ -17,6 +17,7 @@ public class ConstantNamingTest extends RuleTest {
         addExpectedMsg(2, 5, Severity.WARNING, Messages.GLOBAL + Messages.CONSTANT + Messages.GLOBAL_CONSTANT_NAMING);
         addExpectedMsg(2, 22, Severity.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
         addExpectedMsg(2, 37, Severity.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
+        addExpectedMsg(5, 16, Severity.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
         addExpectedMsg(5, 16, Severity.WARNING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE);
         addExpectedMsg(5, 45, Severity.WARNING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE);
         addExpectedMsg(11, 13, Severity.WARNING, Messages.GLOBAL + Messages.CONSTANT + Messages.GLOBAL_CONSTANT_NAMING);
@@ -48,6 +49,7 @@ public class ConstantNamingTest extends RuleTest {
         addExpectedMsg(127, 16, Severity.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
         addExpectedMsg(128, 16, Severity.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
         addExpectedMsg(133, 20, Severity.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
+        addExpectedMsg(134, 20, Severity.WARNING, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED);
         addExpectedMsg(134, 20, Severity.WARNING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE);
     }
 

@@ -8,9 +8,11 @@ import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.listeners.CommentAnalyzer;
-import com.sleekbyte.tailor.listeners.ConstructListener;
+import com.sleekbyte.tailor.listeners.ConstantNamingListener;
+import com.sleekbyte.tailor.listeners.DeclarationListener;
 import com.sleekbyte.tailor.listeners.ErrorListener;
 import com.sleekbyte.tailor.listeners.FileListener;
+import com.sleekbyte.tailor.listeners.KPrefixListener;
 import com.sleekbyte.tailor.listeners.MainListener;
 import com.sleekbyte.tailor.listeners.MaxLengthListener;
 import com.sleekbyte.tailor.output.Printer;
@@ -108,13 +110,8 @@ public class Tailor {
         Set<String> classNames = enabledRules.stream().map(Rules::getClassName).collect(Collectors.toSet());
         for (String className : classNames) {
             try {
-
-                if (className.equals(ConstructListener.class.getName())) {
-                    listeners.add(new ConstructListener(printer, enabledRules, maxLengths));
-                } else {
-                    Constructor listenerConstructor = Class.forName(className).getConstructor(Printer.class);
-                    listeners.add((SwiftBaseListener) listenerConstructor.newInstance(printer));
-                }
+                Constructor listenerConstructor = Class.forName(className).getConstructor(Printer.class);
+                listeners.add((SwiftBaseListener) listenerConstructor.newInstance(printer));
 
             } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException
                 | InstantiationException | IllegalAccessException e) {
@@ -190,11 +187,18 @@ public class Tailor {
             try (Printer printer = new Printer(inputFile, maxSeverity, colorSettings)) {
                 List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, maxLengths);
                 listeners.add(new MaxLengthListener(printer, maxLengths));
+                DeclarationListener decListener = new DeclarationListener(listeners);
+                listeners.add(decListener);
                 listeners.add(new MainListener(printer, maxLengths, tokenStream));
+
                 ParseTreeWalker walker = new ParseTreeWalker();
                 for (SwiftBaseListener listener : listeners) {
+                    if (listener instanceof ConstantNamingListener || listener instanceof KPrefixListener) {
+                        continue;
+                    }
                     walker.walk(listener, tree);
                 }
+
                 try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
                     fileListener.verify();
                 }
