@@ -45,16 +45,12 @@ public final class XcodeIntegrator {
 
     private static void integrateTailor(String absolutePath) throws IOException, InterruptedException {
         File tempScript = createTempRubyScript(absolutePath);
-
-        try {
-            ProcessBuilder pb = new ProcessBuilder("ruby", tempScript.toString());
-            pb.inheritIO();
-            Process process = pb.start();
-            process.waitFor();
-        } finally {
-            if (!tempScript.delete()) {
-                throw new FileNotFoundException("Failed to delete file " + tempScript );
-            }
+        ProcessBuilder pb = new ProcessBuilder("ruby", tempScript.toString());
+        pb.inheritIO();
+        Process process = pb.start();
+        process.waitFor();
+        if (!tempScript.delete()) {
+            throw new FileNotFoundException("Failed to delete file " + tempScript );
         }
     }
 
