@@ -23,7 +23,9 @@
     <exclude name="TestClassWithoutTestCases"/>
   </rule>
 
-  <rule ref="rulesets/java/strictexception.xml"/>
+  <rule ref="rulesets/java/strictexception.xml">
+    <exclude name="DoNotThrowExceptionInFinally" />
+  </rule>
 
   <rule ref="rulesets/java/typeresolution.xml"/>
 
