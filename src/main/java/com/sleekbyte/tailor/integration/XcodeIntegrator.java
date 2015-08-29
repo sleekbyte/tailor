@@ -50,7 +50,7 @@ public final class XcodeIntegrator {
         Process process = pb.start();
         process.waitFor();
         if (!tempScript.delete()) {
-            throw new FileNotFoundException("Failed to delete file " + tempScript );
+            throw new FileNotFoundException("Failed to delete file " + tempScript);
         }
     }
 
