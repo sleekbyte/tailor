@@ -10,17 +10,18 @@ import java.io.File;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.nio.file.Files;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Listener for verifying source files.
  */
-public class FileListener {
+public class FileListener implements AutoCloseable {
 
+    private static final String DISABLE_PATTERN = "// tailor:disable";
     private Printer printer;
     private File inputFile;
     private MaxLengths maxLengths;
+    private LineNumberReader reader;
+    private int numOfLines = 0;
 
     /**
      * Constructs a file listener with the specified printer, input file, and max lengths restrictions.
@@ -29,48 +30,72 @@ public class FileListener {
      * @param inputFile  the source file to verify
      * @param maxLengths the restrictions for maximum lengths
      */
-    public FileListener(Printer printer, File inputFile, MaxLengths maxLengths) {
+    public FileListener(Printer printer, File inputFile, MaxLengths maxLengths) throws IOException {
         this.printer = printer;
         this.inputFile = inputFile;
         this.maxLengths = maxLengths;
+        this.reader = new LineNumberReader(Files.newBufferedReader(inputFile.toPath()));
+    }
+
+    @Override
+    public void close() throws IOException {
+        this.reader.close();
     }
 
     /**
      * Verify that all source file specific rules are satisfied.
      */
     public void verify() throws IOException {
-        verifyFileLength(maxLengths.maxFileLength);
-        verifyLineLengths(maxLengths.maxLineLength);
+        int lineLength;
+        int lineNumber;
+        for (String line = this.reader.readLine(); line != null; line = this.reader.readLine()) {
+            lineLength = line.length();
+            lineNumber = this.reader.getLineNumber();
+            // Count the number of lines in a file
+            this.numOfLines++;
+
+            // Suppress all violations on lines ending with the given pattern
+            if (line.trim().endsWith(DISABLE_PATTERN)) {
+                this.printer.ignoreLine(lineNumber);
+            }
+
+            if (SourceFileUtil.lineTooLong(lineLength, this.maxLengths.maxLineLength)) {
+                lineLengthViolation(lineNumber, lineLength);
+            }
+            if (SourceFileUtil.lineHasTrailingWhitespace(lineLength, line)) {
+                trailingWhitespaceViolation(lineNumber, lineLength);
+            }
+        }
+
+        verifyFileLength();
         verifyNewlineTerminated();
         verifyNoLeadingWhitespace();
-        verifyTrailingWhitespace();
     }
 
-    private void verifyFileLength(int maxLines) throws IOException {
-        if (SourceFileUtil.fileTooLong(this.inputFile, maxLines)) {
-            String lengthVersusLimit = " (" + SourceFileUtil.numLinesInFile(this.inputFile) + "/" + maxLines + ")";
+    private void lineLengthViolation(int lineNumber, int lineLength) {
+        String lengthVersusLimit = " (" + lineLength + "/" + this.maxLengths.maxLineLength + ")";
+        // Mark error on first character beyond limit
+        Location location = new Location(lineNumber, this.maxLengths.maxLineLength + 1);
+        this.printer.error(Messages.LINE + Messages.EXCEEDS_CHARACTER_LIMIT + lengthVersusLimit, location);
+    }
+
+    private void trailingWhitespaceViolation(int lineNumber, int lineLength) {
+        Location location = new Location(lineNumber, lineLength);
+        this.printer.warn(Messages.LINE + Messages.TRAILING_WHITESPACE, location);
+    }
+
+    private void verifyFileLength() {
+        if (SourceFileUtil.fileTooLong(this.numOfLines, this.maxLengths.maxFileLength)) {
+            String lengthVersusLimit = " (" + this.numOfLines + "/" + this.maxLengths.maxFileLength + ")";
             // Mark error on first line beyond limit
-            Location location = new Location(maxLines + 1);
+            Location location = new Location(this.maxLengths.maxFileLength + 1);
             this.printer.error(Messages.FILE + Messages.EXCEEDS_LINE_LIMIT + lengthVersusLimit, location);
-        }
-    }
-
-    private void verifyLineLengths(int maxLineLength) throws IOException {
-        // Map<lineNumber, lineLength>
-        Set<Map.Entry<Integer, Integer>> longLines =
-            SourceFileUtil.linesTooLong(this.inputFile, maxLineLength).entrySet();
-
-        for (Map.Entry<Integer, Integer> entry : longLines) {
-            String lengthVersusLimit = " (" + entry.getValue() + "/" + maxLineLength + ")";
-            // Mark error on first character beyond limit
-            Location location = new Location(entry.getKey(), maxLineLength + 1);
-            this.printer.error(Messages.LINE + Messages.EXCEEDS_CHARACTER_LIMIT + lengthVersusLimit, location);
         }
     }
 
     private void verifyNewlineTerminated() throws IOException {
         if (!SourceFileUtil.singleNewlineTerminated(this.inputFile)) {
-            Location location = new Location(SourceFileUtil.numLinesInFile(this.inputFile));
+            Location location = new Location(this.numOfLines);
             this.printer.error(Messages.FILE + Messages.NEWLINE_TERMINATOR, location);
         }
     }
@@ -82,20 +107,8 @@ public class FileListener {
         }
     }
 
-    private void verifyTrailingWhitespace() throws IOException {
-        LineNumberReader reader = new LineNumberReader(Files.newBufferedReader(inputFile.toPath()));
-        char lastCharacter;
-
-        for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-            if (line.length() > 0) {
-                lastCharacter = line.charAt(line.length() - 1);
-                if (Character.isWhitespace(lastCharacter)) {
-                    Location location = new Location(reader.getLineNumber(), line.length());
-                    this.printer.warn(Messages.LINE + Messages.TRAILING_WHITESPACE, location);
-                }
-            }
-        }
-        reader.close();
+    int getNumOfLines() {
+        return numOfLines;
     }
 
 }

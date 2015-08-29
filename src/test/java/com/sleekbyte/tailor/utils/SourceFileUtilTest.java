@@ -1,8 +1,5 @@
 package com.sleekbyte.tailor.utils;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsMapContaining.hasEntry;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
@@ -23,7 +20,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
-import java.util.Map;
 
 /**
  * Tests for {@link SourceFileUtil}.
@@ -38,7 +34,6 @@ public class SourceFileUtilTest {
 
     private static final String INPUT_FILE = "inputFile.swift";
     private static final String NORMAL_LINE = "This is data for a file";
-    private static final String LONG_LINE = "This is really really really really long, it should not be this long";
     private static final String NAME = "variableName";
 
     private File inputFile;
@@ -58,45 +53,59 @@ public class SourceFileUtilTest {
     }
 
     @Test
-    public void testNumLinesInFileZeroLines() throws IOException {
-        assertEquals(0, SourceFileUtil.numLinesInFile(inputFile));
+    public void testFileTooLongMaxLengthZeroOrNegativeEmptyFile() {
+        assertFalse(SourceFileUtil.fileTooLong(0, 0));
+        assertFalse(SourceFileUtil.fileTooLong(-1, -1));
     }
 
     @Test
-    public void testNumLinesInFileOneLine() throws IOException {
-        writeNumOfLines(1, NORMAL_LINE);
-        assertEquals(1, SourceFileUtil.numLinesInFile(inputFile));
+    public void testFileTooLongMaxLengthZeroOrNegative() {
+        assertFalse(SourceFileUtil.fileTooLong(1, 0));
+        assertFalse(SourceFileUtil.fileTooLong(1, -1));
     }
 
     @Test
-    public void testNumLinesInFileMultipleLines() throws IOException {
-        writeNumOfLines(4, NORMAL_LINE);
-        assertEquals(4, SourceFileUtil.numLinesInFile(inputFile));
+    public void testFileTooLongMaxLengthValidEmptyFile() {
+        assertFalse(SourceFileUtil.fileTooLong(0, 2));
     }
 
     @Test
-    public void testFileTooLongMaxLengthZeroOrNegativeEmptyFile() throws IOException {
-        assertFalse(SourceFileUtil.fileTooLong(inputFile, 0));
-        assertFalse(SourceFileUtil.fileTooLong(inputFile, -1));
+    public void testFileTooLongMaxLengthValid() {
+        assertTrue(SourceFileUtil.fileTooLong(3, 2));
+        assertFalse(SourceFileUtil.fileTooLong(3, 3));
     }
 
     @Test
-    public void testFileTooLongMaxLengthZeroOrNegative() throws IOException {
-        writeNumOfLines(1, NORMAL_LINE);
-        assertFalse(SourceFileUtil.fileTooLong(inputFile, 0));
-        assertFalse(SourceFileUtil.fileTooLong(inputFile, -1));
+    public void testLineTooLongMaxLengthZeroOrNegative() {
+        assertFalse(SourceFileUtil.lineTooLong(20, 0));
+        assertFalse(SourceFileUtil.lineTooLong(20, -1));
     }
 
     @Test
-    public void testFileTooLongMaxLengthValidEmptyFile() throws IOException {
-        assertFalse(SourceFileUtil.fileTooLong(inputFile, 2));
+    public void testLineTooLongMaxLengthValid() {
+        assertFalse(SourceFileUtil.lineTooLong(25, 25));
+        assertTrue(SourceFileUtil.lineTooLong(26, 25));
+        assertTrue(SourceFileUtil.lineTooLong(50, 25));
     }
 
     @Test
-    public void testFileTooLongMaxLengthValid() throws IOException {
-        writeNumOfLines(3, NORMAL_LINE);
-        assertTrue(SourceFileUtil.fileTooLong(inputFile, 2));
-        assertFalse(SourceFileUtil.fileTooLong(inputFile, 3));
+    public void testLineHasTrailingWhitespaceInvalid() {
+        String line = "";
+        assertFalse(SourceFileUtil.lineHasTrailingWhitespace(line.length(), line));
+        line = NORMAL_LINE;
+        assertFalse(SourceFileUtil.lineHasTrailingWhitespace(line.length(), line));
+    }
+
+    @Test
+    public void testLineHasTrailingWhitespaceValid() {
+        String line = "    ";
+        assertTrue(SourceFileUtil.lineHasTrailingWhitespace(line.length(), line));
+        line = "\t\t";
+        assertTrue(SourceFileUtil.lineHasTrailingWhitespace(line.length(), line));
+        line = NORMAL_LINE + "    ";
+        assertTrue(SourceFileUtil.lineHasTrailingWhitespace(line.length(), line));
+        line = NORMAL_LINE + "\t\t";
+        assertTrue(SourceFileUtil.lineHasTrailingWhitespace(line.length(), line));
     }
 
     @Test
@@ -121,31 +130,6 @@ public class SourceFileUtilTest {
         when(stopToken.getLine()).thenReturn(20);
         assertTrue(SourceFileUtil.constructTooLong(context, 12));
         assertFalse(SourceFileUtil.constructTooLong(context, 19));
-    }
-
-    @Test
-    public void testLinesTooLongMaxLengthZeroOrNegative() throws IOException {
-        assertTrue(SourceFileUtil.linesTooLong(inputFile, 0).isEmpty());
-        assertTrue(SourceFileUtil.linesTooLong(inputFile, -1).isEmpty());
-
-        writeNumOfLines(4, LONG_LINE);
-        assertTrue(SourceFileUtil.linesTooLong(inputFile, 0).isEmpty());
-        assertTrue(SourceFileUtil.linesTooLong(inputFile, -1).isEmpty());
-    }
-
-    @Test
-    public void testLinesTooLongMaxLengthValid() throws IOException {
-        assertTrue(SourceFileUtil.linesTooLong(inputFile, 10).isEmpty());
-
-        writeNumOfLines(4, LONG_LINE);
-        assertTrue(SourceFileUtil.linesTooLong(inputFile, LONG_LINE.length() + 10).isEmpty());
-        Map<Integer, Integer> longLines = SourceFileUtil.linesTooLong(inputFile, LONG_LINE.length() - 1);
-        assertFalse(longLines.isEmpty());
-        assertThat(longLines, hasEntry(1, LONG_LINE.length()));
-        assertThat(longLines, hasEntry(2, LONG_LINE.length()));
-        assertThat(longLines, hasEntry(3, LONG_LINE.length()));
-        assertThat(longLines, hasEntry(4, LONG_LINE.length()));
-        assertEquals(longLines.entrySet().size(), 4);
     }
 
     @Test

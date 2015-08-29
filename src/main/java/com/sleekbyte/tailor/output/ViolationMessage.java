@@ -1,5 +1,6 @@
 package com.sleekbyte.tailor.output;
 
+import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.Severity;
 
 /**
@@ -12,6 +13,10 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
     private int columnNumber;
     private Severity severity = null;
     private String violationMessage = "";
+    private ColorSettings colorSettings = new ColorSettings(false, false);
+    private int lineNumberWidth = 0;
+    private int columnNumberWidth = 0;
+    private String textColor = "black";
 
     /**
      * Constructs a ViolationMessage with the specified message components.
@@ -46,12 +51,29 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
         this.violationMessage = violationMessage;
     }
 
+    public int getLineNumber() {
+        return lineNumber;
+    }
+
     public Severity getSeverity() {
         return severity;
     }
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public void setColorSettings(ColorSettings colorSettings) {
+        this.colorSettings = colorSettings;
+        textColor = colorSettings.invertColor ? "white" : "black";
+    }
+
+    public void setLineNumberWidth(int lineNumberWidth) {
+        this.lineNumberWidth = lineNumberWidth;
+    }
+
+    public void setColumnNumberWidth(int columnNumberWidth) {
+        this.columnNumberWidth = columnNumberWidth;
     }
 
     @Override
@@ -108,12 +130,64 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
             return "";
         }
 
-        if (this.columnNumber == 0) {
-            return String.format("%s:%d: %s: %s", this.filePath, this.lineNumber, this.severity,
-                this.violationMessage);
+        return String.format("%s%s%s %s %s", formattedFilePath(), formattedLineNumber(), formattedColumnNumber(),
+            formattedSeverity(), formattedViolationMessage());
+    }
+
+    private String formattedFilePath() {
+        return String.format("%s:", filePath);
+    }
+
+    private String formattedLineNumber() {
+        String res;
+        if (lineNumberWidth > 0 && colorSettings.colorOutput) {
+            res = String.format("%0" + lineNumberWidth + "d:", lineNumber);
+            res = "@|bg_blue," + textColor + " " + res + "|@";
+        } else {
+            res = String.format("%d:", lineNumber);
         }
-        return String.format("%s:%d:%d: %s: %s", this.filePath, this.lineNumber, this.columnNumber, this.severity,
-            this.violationMessage);
+        return res;
+    }
+
+    private String formattedColumnNumber() {
+        String res;
+        if (columnNumber == 0) {
+            if (columnNumberWidth > 0 && colorSettings.colorOutput) {
+                res = String.format("%" + (columnNumberWidth + 1) + "s", "");
+                res = "@|bg_blue," + textColor + " " + res + "|@";
+            } else {
+                res = "";
+            }
+        } else {
+            if (columnNumberWidth > 0 && colorSettings.colorOutput) {
+                res = String.format("%0" + columnNumberWidth + "d:", columnNumber);
+                res = "@|bg_blue," + textColor + " " + res + "|@";
+            } else {
+                res = String.format("%d:", columnNumber);
+            }
+        }
+        return res;
+    }
+
+    private String formattedSeverity() {
+        String res;
+        if (colorSettings.colorOutput) {
+            res = String.format("%7s:", severity);
+            if (severity.equals(Severity.ERROR)) {
+                res = "@|bg_red," + textColor + " " + res + "|@";
+            } else if (severity.equals(Severity.WARNING)) {
+                res = "@|bg_yellow," + textColor + " " + res + "|@";
+            } else {
+                res = "@|bg_white," + textColor + " " + res + "|@";
+            }
+        } else {
+            res = String.format("%s:", severity);
+        }
+        return res;
+    }
+
+    private String formattedViolationMessage() {
+        return violationMessage;
     }
 
 }

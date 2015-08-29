@@ -1,5 +1,5 @@
 -   repo: git://github.com/pre-commit/pre-commit-hooks
-    sha: c2992bd3a11e3c0c2533ee370c26ac2b12d3a1b3
+    sha: 616c1ebd1898c91de9a0548866a59cbd9f4547f6
     hooks:
     -   id: check-case-conflict
     -   id: check-merge-conflict
