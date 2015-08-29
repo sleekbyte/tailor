@@ -138,15 +138,9 @@ public class ArgumentParser {
      * Retrieve Xcode project path specified for --configuration.
      *
      * @return path of Xcode project
-     * @throws ArgumentParserException if invalid Xcode project path specified for --configure
      */
-    public String getXcodeprojPath() throws ArgumentParserException {
-        try {
-            return this.cmd.getOptionValue(XCODE_INTEGRATION_OPT);
-        } catch (NumberFormatException e) {
-            throw new ArgumentParserException("Invalid value provided for string argument " + XCODE_INTEGRATION_OPT
-                + ".");
-        }
+    public String getXcodeprojPath() {
+        return this.cmd.getOptionValue(XCODE_INTEGRATION_OPT);
     }
 
     /**
