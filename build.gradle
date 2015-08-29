@@ -143,6 +143,8 @@ tasks.withType(Pmd) {
 
 // RubyGems {{{
 task gems(type: Exec) {
+    inputs.file file('src/dist/gems/Gemfile')
+    outputs.dir file('src/dist/gems/vendor/')
     workingDir 'src/dist/gems/'
     executable 'sh'
     args '-c', 'if gem list -i bundler >/dev/null; then bundle package --no-install; else echo "Run \'gem install bundler\'" && exit 1; fi'
