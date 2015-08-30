@@ -140,7 +140,7 @@ public class ArgumentParser {
      * @return path of Xcode project
      */
     public String getXcodeprojPath() {
-        return this.cmd.getOptionValue(XCODE_INTEGRATION_OPT);
+        return cmd != null ? cmd.getOptionValue(XCODE_INTEGRATION_OPT) : null;
     }
 
     /**

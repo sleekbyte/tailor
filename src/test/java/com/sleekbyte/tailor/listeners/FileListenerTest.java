@@ -27,7 +27,7 @@ import java.nio.charset.Charset;
  * Tests for {@link FileListener}.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class FileRulesTest {
+public class FileListenerTest {
 
     @Rule
     public TestName testName = new TestName();

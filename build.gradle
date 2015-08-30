@@ -155,7 +155,7 @@ distTar.dependsOn 'gems'
 installDist.dependsOn 'gems'
 // }}}
 
-// Ensure ANTLR output is deleted via clean
+// Ensure ANTLR output and Ruby gems are deleted via clean
 clean {
     delete file('src/gen/')
     delete files('src/dist/gems/.bundle/', 'src/dist/gems/Gemfile.lock', 'src/dist/gems/vendor/')
