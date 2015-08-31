@@ -3,8 +3,10 @@ package com.sleekbyte.tailor;
 import com.sleekbyte.tailor.antlr.SwiftLexer;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.ColorSettings;
+import com.sleekbyte.tailor.common.ExitCode;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Severity;
+import com.sleekbyte.tailor.integration.XcodeIntegrator;
 import com.sleekbyte.tailor.listeners.CommentAnalyzer;
 import com.sleekbyte.tailor.listeners.ErrorListener;
 import com.sleekbyte.tailor.listeners.FileListener;
@@ -34,8 +36,6 @@ import java.util.TreeSet;
  */
 public class Tailor {
 
-    private static final int EXIT_SUCCESS = 0;
-    private static final int EXIT_FAILURE = 1;
     private static ArgumentParser argumentParser = new ArgumentParser();
     private static List<String> pathNames;
 
@@ -45,7 +45,7 @@ public class Tailor {
     public static void exitWithMissingSourceFileError() {
         System.err.println("Swift source file must be provided.");
         argumentParser.printHelp();
-        System.exit(EXIT_FAILURE);
+        System.exit(ExitCode.FAILURE);
     }
 
     /**
@@ -165,7 +165,7 @@ public class Tailor {
 
         if (numErrors >= 1L) {
             // Non-zero exit status when any violation messages have Severity.ERROR, controlled by --max-severity
-            System.exit(EXIT_FAILURE);
+            System.exit(ExitCode.FAILURE);
         }
     }
 
@@ -182,7 +182,13 @@ public class Tailor {
             CommandLine cmd = argumentParser.parseCommandLine(args);
             if (argumentParser.shouldPrintHelp()) {
                 argumentParser.printHelp();
-                System.exit(EXIT_SUCCESS);
+                System.exit(ExitCode.SUCCESS);
+            }
+
+            // Exit program after configuring Xcode project
+            String xcodeprojPath = argumentParser.getXcodeprojPath();
+            if (xcodeprojPath != null) {
+                System.exit(XcodeIntegrator.setupXcode(xcodeprojPath));
             }
             if (cmd.getArgs().length >= 1) {
                 pathNames.addAll(Arrays.asList(cmd.getArgs()));
@@ -199,11 +205,11 @@ public class Tailor {
 
         } catch (IOException e) {
             System.err.println("Source file analysis failed. Reason: " + e.getMessage());
-            System.exit(EXIT_FAILURE);
+            System.exit(ExitCode.FAILURE);
         } catch (ParseException | ArgumentParserException e) {
             System.err.println(e.getMessage());
             argumentParser.printHelp();
-            System.exit(EXIT_FAILURE);
+            System.exit(ExitCode.FAILURE);
         }
 
     }
