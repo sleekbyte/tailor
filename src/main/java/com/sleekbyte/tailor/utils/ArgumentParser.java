@@ -38,6 +38,7 @@ public class ArgumentParser {
     private static final String NO_COLOR_OPT = "no-color";
     private static final String INVERT_COLOR_OPT = "invert-color";
     private static final String DEFAULT_INT_ARG = "0";
+    private static final String XCODE_INTEGRATION_OPT = "xcode";
 
     private Options options;
     private CommandLine cmd;
@@ -98,6 +99,8 @@ public class ArgumentParser {
         final Option maxSeverity = createOptionWithSingleArg(MAX_SEVERITY_OPT, Messages.MAX_SEVERITY_DESC);
         final Option onlySpecificRules = createOptionWithMultipleArgs(ONLY_OPT, Messages.ONLY_SPECIFIC_RULES_DESC);
         final Option excludedRules = createOptionWithMultipleArgs(EXCEPT_OPT, Messages.EXCEPT_RULES_DESC);
+        final Option xcodeIntegration =
+            createOptionWithSingleArg(XCODE_INTEGRATION_OPT, Messages.XCODE_INTEGRATION_DESC);
         final Option debug = createOptionWithNoArgs(DEBUG_OPT, Messages.DEBUG_DESC);
         final Option noColor = createOptionWithNoArgs(NO_COLOR_OPT, Messages.NO_COLOR_DESC);
         final Option invertColor = createOptionWithNoArgs(INVERT_COLOR_OPT, Messages.INVERT_COLOR_DESC);
@@ -114,6 +117,7 @@ public class ArgumentParser {
         options.addOption(maxSeverity);
         options.addOption(onlySpecificRules);
         options.addOption(excludedRules);
+        options.addOption(xcodeIntegration);
         options.addOption(debug);
         options.addOption(noColor);
         options.addOption(invertColor);
@@ -210,6 +214,15 @@ public class ArgumentParser {
             specifiedRules.removeAll(enabledRules);
             throw new ArgumentParserException("The following rules were not recognized: " + specifiedRules);
         }
+    }
+
+    /*
+     * Retrieve Xcode project path specified for --configuration.
+     *
+     * @return path of Xcode project
+     */
+    public String getXcodeprojPath() {
+        return cmd != null ? cmd.getOptionValue(XCODE_INTEGRATION_OPT) : null;
     }
 
     /**
