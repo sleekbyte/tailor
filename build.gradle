@@ -141,9 +141,24 @@ tasks.withType(Pmd) {
 }
 // }}}
 
-// Ensure ANTLR output is deleted via clean
+// RubyGems {{{
+task gems(type: Exec) {
+    inputs.file file('src/dist/gems/Gemfile')
+    outputs.dir file('src/dist/gems/vendor/')
+    workingDir 'src/dist/gems/'
+    executable 'sh'
+    args '-c', 'if gem list -i bundler >/dev/null; then bundle package --no-install; else echo "Run \'gem install bundler\'" && exit 1; fi'
+}
+// Ensure gems are packaged into distribution
+distZip.dependsOn 'gems'
+distTar.dependsOn 'gems'
+installDist.dependsOn 'gems'
+// }}}
+
+// Ensure ANTLR output and Ruby gems are deleted via clean
 clean {
-    delete file('src/gen')
+    delete file('src/gen/')
+    delete files('src/dist/gems/.bundle/', 'src/dist/gems/Gemfile.lock', 'src/dist/gems/vendor/')
 }
 
 repositories {
