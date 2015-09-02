@@ -33,126 +33,27 @@ public class MainListener extends SwiftBaseListener {
     }
 
     @Override
-    public void enterClassName(SwiftParser.ClassNameContext ctx) {
-        verifier.verifyUpperCamelCase(Messages.CLASS + Messages.NAMES, ctx);
-        verifier.verifyNameLength(Messages.CLASS + Messages.NAME, verifier.maxLengths.maxNameLength, ctx);
-    }
-
-    @Override
-    public void enterEnumName(SwiftParser.EnumNameContext ctx) {
-        verifier.verifyUpperCamelCase(Messages.ENUM + Messages.NAMES, ctx);
-        verifier.verifyNameLength(Messages.ENUM + Messages.NAME, verifier.maxLengths.maxNameLength, ctx);
-    }
-
-    @Override
-    public void enterStructName(SwiftParser.StructNameContext ctx) {
-        verifier.verifyUpperCamelCase(Messages.STRUCT + Messages.NAMES, ctx);
-        verifier.verifyNameLength(Messages.STRUCT + Messages.NAME, verifier.maxLengths.maxNameLength, ctx);
-    }
-
-    @Override
-    public void enterProtocolName(SwiftParser.ProtocolNameContext ctx) {
-        verifier.verifyUpperCamelCase(Messages.PROTOCOL + Messages.NAMES, ctx);
-        verifier.verifyNameLength(Messages.PROTOCOL + Messages.NAME, verifier.maxLengths.maxNameLength, ctx);
-    }
-
-    @Override
-    public void enterStatement(SwiftParser.StatementContext ctx) {
-        verifier.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
-    }
-
-    @Override
-    public void enterDeclaration(SwiftParser.DeclarationContext ctx) {
-        verifier.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
-    }
-
-    @Override
-    public void enterLoopStatement(SwiftParser.LoopStatementContext ctx) {
-        verifier.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
-    }
-
-    @Override
-    public void enterBranchStatement(SwiftParser.BranchStatementContext ctx) {
-        verifier.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
-    }
-
-    @Override
-    public void enterLabeledStatement(SwiftParser.LabeledStatementContext ctx) {
-        verifier.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
-    }
-
-    @Override
-    public void enterControlTransferStatement(SwiftParser.ControlTransferStatementContext ctx) {
-        verifier.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
-    }
-
-    @Override
-    public void enterUnionStyleEnumMember(SwiftParser.UnionStyleEnumMemberContext ctx) {
-        verifier.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
-    }
-
-    @Override
-    public void enterProtocolMemberDeclaration(SwiftParser.ProtocolMemberDeclarationContext ctx) {
-        verifier.verifyNotSemicolonTerminated(Messages.STATEMENTS, ctx);
-    }
-
-    @Override
     public void enterClassBody(SwiftParser.ClassBodyContext ctx) {
-        verifier.verifyConstructLength(Messages.CLASS, verifier.maxLengths.maxClassLength, ctx);
         verifier.verifyClassBraceStyle(ctx);
     }
 
     @Override
     public void enterClosureExpression(SwiftParser.ClosureExpressionContext ctx) {
-        verifier.verifyConstructLength(Messages.CLOSURE, verifier.maxLengths.maxClosureLength, ctx);
         verifier.verifyClosureExpressionBraceStyle(ctx);
     }
 
     @Override
-    public void enterFunctionBody(SwiftParser.FunctionBodyContext ctx) {
-        verifier.verifyConstructLength(Messages.FUNCTION, verifier.maxLengths.maxFunctionLength, ctx);
-    }
-
-    @Override
     public void enterStructBody(SwiftParser.StructBodyContext ctx) {
-        verifier.verifyConstructLength(Messages.STRUCT, verifier.maxLengths.maxStructLength, ctx);
         verifier.verifyStructBraceStyle(ctx);
     }
 
     @Override
-    public void enterElementName(SwiftParser.ElementNameContext ctx) {
-        verifier.verifyNameLength(Messages.ELEMENT + Messages.NAME, verifier.maxLengths.maxNameLength, ctx);
-    }
-
-    @Override
     public void enterFunctionName(SwiftParser.FunctionNameContext ctx) {
-        verifier.verifyNameLength(Messages.FUNCTION + Messages.NAME, verifier.maxLengths.maxNameLength, ctx);
         verifier.verifyLowerCamelCase(Messages.FUNCTION + Messages.NAMES, ctx);
     }
 
     @Override
-    public void enterLabelName(SwiftParser.LabelNameContext ctx) {
-        verifier.verifyNameLength(Messages.LABEL + Messages.NAME, verifier.maxLengths.maxNameLength, ctx);
-    }
-
-    @Override
-    public void enterSetterName(SwiftParser.SetterNameContext ctx) {
-        verifier.verifyNameLength(Messages.SETTER + Messages.NAME, verifier.maxLengths.maxNameLength, ctx.identifier());
-    }
-
-    @Override
-    public void enterTypeName(SwiftParser.TypeNameContext ctx) {
-        verifier.verifyNameLength(Messages.TYPE + Messages.NAME, verifier.maxLengths.maxNameLength, ctx);
-    }
-
-    @Override
-    public void enterTypealiasName(SwiftParser.TypealiasNameContext ctx) {
-        verifier.verifyNameLength(Messages.TYPEALIAS + Messages.NAME, verifier.maxLengths.maxNameLength, ctx);
-    }
-
-    @Override
     public void enterVariableName(SwiftParser.VariableNameContext ctx) {
-        verifier.verifyNameLength(Messages.VARIABLE + Messages.NAME, verifier.maxLengths.maxNameLength, ctx);
         verifier.verifyLowerCamelCase(Messages.VARIABLE + Messages.NAMES, ctx);
     }
 
@@ -391,20 +292,6 @@ public class MainListener extends SwiftBaseListener {
     @Override
     public void enterTypeCastingOperator(SwiftParser.TypeCastingOperatorContext ctx) {
         verifier.verifyForceTypeCasting(ctx);
-    }
-
-    @Override
-    public void enterRawValueStyleEnumCase(SwiftParser.RawValueStyleEnumCaseContext ctx) {
-        verifier.verifyUpperCamelCase(Messages.ENUM_CASE + Messages.NAMES, ctx.enumCaseName());
-        verifier.verifyNameLength(Messages.ENUM_CASE + Messages.NAME, verifier.maxLengths.maxNameLength,
-                                  ctx.enumCaseName());
-    }
-
-    @Override
-    public void enterUnionStyleEnumCase(SwiftParser.UnionStyleEnumCaseContext ctx) {
-        verifier.verifyUpperCamelCase(Messages.ENUM_CASE + Messages.NAMES, ctx.enumCaseName());
-        verifier.verifyNameLength(Messages.ENUM_CASE + Messages.NAME, verifier.maxLengths.maxNameLength,
-                                  ctx.enumCaseName());
     }
 
     @Override

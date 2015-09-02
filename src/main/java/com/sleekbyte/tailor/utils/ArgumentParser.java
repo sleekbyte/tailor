@@ -2,6 +2,7 @@ package com.sleekbyte.tailor.utils;
 
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
@@ -9,6 +10,11 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Parse command line options and arguments.
@@ -26,6 +32,8 @@ public class ArgumentParser {
     private static final String MAX_NAME_LENGTH_OPT = "max-name-length";
     private static final String MAX_STRUCT_LENGTH_OPT = "max-struct-length";
     private static final String MAX_SEVERITY_OPT = "max-severity";
+    private static final String ONLY_OPT = "only";
+    private static final String EXCEPT_OPT = "except";
     private static final String DEBUG_OPT = "debug";
     private static final String NO_COLOR_OPT = "no-color";
     private static final String INVERT_COLOR_OPT = "invert-color";
@@ -74,20 +82,28 @@ public class ArgumentParser {
     }
 
     private void addOptions() {
+
         final Option help = Option.builder(HELP_SHORT_OPT).longOpt(HELP_LONG_OPT).desc(Messages.HELP_DESC).build();
-        final Option maxClassLength = addArgument(MAX_CLASS_LENGTH_OPT, Messages.MAX_CLASS_LENGTH_DESC);
-        final Option maxClosureLength = addArgument(MAX_CLOSURE_LENGTH_OPT, Messages.MAX_CLOSURE_LENGTH_DESC);
-        final Option maxFileLength = addArgument(MAX_FILE_LENGTH_OPT, Messages.MAX_FILE_LENGTH_DESC);
-        final Option maxFunctionLength = addArgument(MAX_FUNCTION_LENGTH_OPT, Messages.MAX_FUNCTION_LENGTH_DESC);
-        final Option maxLineLength = addArgument(MAX_LINE_LENGTH_SHORT_OPT, MAX_LINE_LENGTH_LONG_OPT,
-            Messages.MAX_LINE_LENGTH_DESC);
-        final Option maxNameLength = addArgument(MAX_NAME_LENGTH_OPT, Messages.MAX_NAME_LENGTH_DESC);
-        final Option maxStructLength = addArgument(MAX_STRUCT_LENGTH_OPT, Messages.MAX_STRUCT_LENGTH_DESC);
-        final Option maxSeverity = addArgument(MAX_SEVERITY_OPT, Messages.MAX_SEVERITY_DESC);
-        final Option xcodeIntegration = addArgument(XCODE_INTEGRATION_OPT, Messages.XCODE_INTEGRATION_DESC);
-        final Option debug = Option.builder().longOpt(DEBUG_OPT).desc(Messages.DEBUG_DESC).build();
-        final Option noColor = Option.builder().longOpt(NO_COLOR_OPT).desc(Messages.NO_COLOR_DESC).build();
-        final Option invertColor = Option.builder().longOpt(INVERT_COLOR_OPT).desc(Messages.INVERT_COLOR_DESC).build();
+        final Option maxClassLength = createOptionWithSingleArg(MAX_CLASS_LENGTH_OPT, Messages.MAX_CLASS_LENGTH_DESC);
+        final Option maxClosureLength =
+            createOptionWithSingleArg(MAX_CLOSURE_LENGTH_OPT, Messages.MAX_CLOSURE_LENGTH_DESC);
+        final Option maxFileLength = createOptionWithSingleArg(MAX_FILE_LENGTH_OPT, Messages.MAX_FILE_LENGTH_DESC);
+        final Option maxFunctionLength =
+            createOptionWithSingleArg(MAX_FUNCTION_LENGTH_OPT, Messages.MAX_FUNCTION_LENGTH_DESC);
+        final Option maxLineLength =
+            createOptionWithSingleArg(MAX_LINE_LENGTH_SHORT_OPT, MAX_LINE_LENGTH_LONG_OPT,
+                Messages.MAX_LINE_LENGTH_DESC);
+        final Option maxNameLength = createOptionWithSingleArg(MAX_NAME_LENGTH_OPT, Messages.MAX_NAME_LENGTH_DESC);
+        final Option maxStructLength =
+            createOptionWithSingleArg(MAX_STRUCT_LENGTH_OPT, Messages.MAX_STRUCT_LENGTH_DESC);
+        final Option maxSeverity = createOptionWithSingleArg(MAX_SEVERITY_OPT, Messages.MAX_SEVERITY_DESC);
+        final Option onlySpecificRules = createOptionWithMultipleArgs(ONLY_OPT, Messages.ONLY_SPECIFIC_RULES_DESC);
+        final Option excludedRules = createOptionWithMultipleArgs(EXCEPT_OPT, Messages.EXCEPT_RULES_DESC);
+        final Option xcodeIntegration =
+            createOptionWithSingleArg(XCODE_INTEGRATION_OPT, Messages.XCODE_INTEGRATION_DESC);
+        final Option debug = createOptionWithNoArgs(DEBUG_OPT, Messages.DEBUG_DESC);
+        final Option noColor = createOptionWithNoArgs(NO_COLOR_OPT, Messages.NO_COLOR_DESC);
+        final Option invertColor = createOptionWithNoArgs(INVERT_COLOR_OPT, Messages.INVERT_COLOR_DESC);
 
         options = new Options();
         options.addOption(help);
@@ -99,6 +115,8 @@ public class ArgumentParser {
         options.addOption(maxNameLength);
         options.addOption(maxStructLength);
         options.addOption(maxSeverity);
+        options.addOption(onlySpecificRules);
+        options.addOption(excludedRules);
         options.addOption(xcodeIntegration);
         options.addOption(debug);
         options.addOption(noColor);
@@ -106,24 +124,45 @@ public class ArgumentParser {
     }
 
     /**
-     * Add argument with short and long name to command line options.
+     * Create command line option with short name, long name, and only one argument.
      *
      * @param shortOpt short version of option
      * @param longOpt  long version of option
      * @param desc     description of option
      */
-    private Option addArgument(String shortOpt, String longOpt, String desc) {
+    private Option createOptionWithSingleArg(String shortOpt, String longOpt, String desc) {
         return Option.builder(shortOpt).longOpt(longOpt).hasArg().desc(desc).build();
     }
 
     /**
-     * Add argument with only long name to command line options.
+     * Create command line option with only long name and only one argument.
      *
      * @param longOpt long version of option
      * @param desc    description of option
      */
-    private Option addArgument(String longOpt, String desc) {
+    private Option createOptionWithSingleArg(String longOpt, String desc) {
         return Option.builder().longOpt(longOpt).hasArg().desc(desc).build();
+    }
+
+    /**
+     * Create command line option with long name and multiple arguments.
+     * Multiple arguments can be separated by comma or by space.
+     *
+     * @param longOpt long version of option
+     * @param desc    description of option
+     */
+    private Option createOptionWithMultipleArgs(String longOpt, String desc) {
+        return Option.builder().longOpt(longOpt).hasArgs().valueSeparator(',').desc(desc).build();
+    }
+
+    /**
+     * Create command line option with long name and no argument.
+     *
+     * @param longOpt long version of option
+     * @param desc    description of option
+     */
+    private Option createOptionWithNoArgs(String longOpt, String desc) {
+        return Option.builder().longOpt(longOpt).desc(desc).build();
     }
 
     private int getIntegerArgument(String opt) throws ArgumentParserException {
@@ -135,6 +174,49 @@ public class ArgumentParser {
     }
 
     /**
+     * Collects all rules enabled by default and then filters out rules according to command line options.
+     *
+     * @return list of enabled rules after filtering
+     * @throws ArgumentParserException if rule names specified in command line options are not valid
+     */
+    public Set<Rules> getEnabledRules() throws ArgumentParserException {
+        Set<Rules> enabledRules = new HashSet<>(Arrays.asList(Rules.values()));
+        Set<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toSet());
+
+        // ONLY_OPT before EXCEPT_OPT gives precedence to ONLY_OPT if both are specified on the command line
+        if (this.cmd.hasOption(ONLY_OPT)) {
+            Set<String> onlySpecificRules = new HashSet<>(Arrays.asList(this.cmd.getOptionValues(ONLY_OPT)));
+            checkValidRules(enabledRuleNames, onlySpecificRules);
+
+            return enabledRules.stream()
+                .filter(rule -> onlySpecificRules.contains(rule.getName())).collect(Collectors.toSet());
+        } else if (this.cmd.hasOption(EXCEPT_OPT)) {
+            Set<String> excludedRules = new HashSet<>(Arrays.asList(this.cmd.getOptionValues(EXCEPT_OPT)));
+            checkValidRules(enabledRuleNames, excludedRules);
+
+            return enabledRules.stream()
+                .filter(rule -> !excludedRules.contains(rule.getName())).collect(Collectors.toSet());
+        }
+
+        return enabledRules;
+    }
+
+    /**
+     * Checks if rules specified in command line option is valid.
+     *
+     * @param enabledRules   all valid rule names
+     * @param specifiedRules rule names specified from command line
+     * @throws ArgumentParserException if rule name specified in command line is not valid
+     */
+    private void checkValidRules(Set<String> enabledRules, Set<String> specifiedRules)
+        throws ArgumentParserException {
+        if (!enabledRules.containsAll(specifiedRules)) {
+            specifiedRules.removeAll(enabledRules);
+            throw new ArgumentParserException("The following rules were not recognized: " + specifiedRules);
+        }
+    }
+
+    /*
      * Retrieve Xcode project path specified for --configuration.
      *
      * @return path of Xcode project

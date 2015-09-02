@@ -29,6 +29,7 @@ public class VariableDecListener extends SwiftBaseListener {
         if (!CharFormatUtil.isLowerCamelCase(variableName)) {
             verifier.printer.error(Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE, location);
         }
-        verifier.verifyNameLength(Messages.VARIABLE + Messages.NAME, verifier.maxLengths.maxNameLength, ctx);
+        (new MaxLengthVerifier(verifier.printer)).verifyNameLength(Messages.VARIABLE + Messages.NAME,
+            verifier.maxLengths.maxNameLength, ctx);
     }
 }

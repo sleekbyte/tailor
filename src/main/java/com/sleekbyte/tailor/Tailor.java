@@ -1,16 +1,19 @@
 package com.sleekbyte.tailor;
 
+import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftLexer;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.ExitCode;
 import com.sleekbyte.tailor.common.MaxLengths;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.integration.XcodeIntegrator;
 import com.sleekbyte.tailor.listeners.CommentAnalyzer;
 import com.sleekbyte.tailor.listeners.ErrorListener;
 import com.sleekbyte.tailor.listeners.FileListener;
 import com.sleekbyte.tailor.listeners.MainListener;
+import com.sleekbyte.tailor.listeners.MaxLengthListener;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ArgumentParser;
 import com.sleekbyte.tailor.utils.ArgumentParserException;
@@ -23,10 +26,13 @@ import org.apache.commons.cli.ParseException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -88,7 +94,28 @@ public class Tailor {
     }
 
     /**
-     * Runs SwiftLexer on input file to generate token stream.
+     * Creates listeners according to the rules that are enabled.
+     *
+     * @param enabledRules list of enabled rules
+     * @param printer      passed into listener constructors
+     * @throws ArgumentParserException if listener for an enabled rule is not found
+     */
+    public static List<SwiftBaseListener> createListeners(Set<Rules> enabledRules, Printer printer)
+        throws ArgumentParserException {
+        List<SwiftBaseListener> listeners = new LinkedList<>();
+        for (Rules rule : enabledRules) {
+            try {
+                Constructor listenerConstructor = Class.forName(rule.getClassName()).getConstructor(Printer.class);
+                listeners.add((SwiftBaseListener) listenerConstructor.newInstance(printer));
+            } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException
+                | InstantiationException | IllegalAccessException e) {
+                throw new ArgumentParserException("Listeners were not successfully created: " + e);
+            }
+        }
+        return listeners;
+    }
+
+    /** Runs SwiftLexer on input file to generate token stream.
      *
      * @param inputFile Lexer input
      * @return Token stream
@@ -135,6 +162,7 @@ public class Tailor {
         Severity maxSeverity = argumentParser.getMaxSeverity();
         ColorSettings colorSettings =
             new ColorSettings(argumentParser.shouldColorOutput(), argumentParser.shouldInvertColorOutput());
+        Set<Rules> enabledRules = argumentParser.getEnabledRules();
 
         for (String filename : filenames) {
             File inputFile = new File(filename);
@@ -151,9 +179,13 @@ public class Tailor {
             }
 
             try (Printer printer = new Printer(inputFile, maxSeverity, colorSettings)) {
-                MainListener listener = new MainListener(printer, maxLengths, tokenStream);
+                List<SwiftBaseListener> listeners = createListeners(enabledRules, printer);
+                listeners.add(new MaxLengthListener(printer, maxLengths));
+                listeners.add(new MainListener(printer, maxLengths, tokenStream));
                 ParseTreeWalker walker = new ParseTreeWalker();
-                walker.walk(listener, tree);
+                for (SwiftBaseListener listener : listeners) {
+                    walker.walk(listener, tree);
+                }
                 try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
                     fileListener.verify();
                 }
@@ -202,7 +234,6 @@ public class Tailor {
             }
 
             analyzeFiles(filenames);
-
         } catch (IOException e) {
             System.err.println("Source file analysis failed. Reason: " + e.getMessage());
             System.exit(ExitCode.FAILURE);

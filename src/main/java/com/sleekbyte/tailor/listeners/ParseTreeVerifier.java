@@ -51,7 +51,6 @@ import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.CharFormatUtil;
 import com.sleekbyte.tailor.utils.ListenerUtil;
 import com.sleekbyte.tailor.utils.ParseTreeUtil;
-import com.sleekbyte.tailor.utils.SourceFileUtil;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
@@ -84,45 +83,6 @@ class ParseTreeVerifier {
         // Ensure that importLineNumbers is refreshed for each new source file.
         importLineNumbers.clear();
     }
-
-    //region UpperCamelCase name check
-    void verifyUpperCamelCase(String constructType, ParserRuleContext ctx) {
-        String constructName = ctx.getText();
-        if (!CharFormatUtil.isUpperCamelCase(constructName)) {
-            Location location = ListenerUtil.getContextStartLocation(ctx);
-            this.printer.error(constructType + Messages.UPPER_CAMEL_CASE, location);
-        }
-    }
-    //endregion
-
-    //region Semicolon terminated statement check
-    void verifyNotSemicolonTerminated(String constructType, ParserRuleContext ctx) {
-        String construct = ctx.getText();
-        if (construct.endsWith(";")) {
-            Location location = ListenerUtil.getContextStopLocation(ctx);
-            this.printer.error(constructType + Messages.SEMICOLON, location);
-        }
-    }
-    //endregion
-
-    //region Length checks
-    void verifyConstructLength(String constructType, int maxLength, ParserRuleContext ctx) {
-        if (SourceFileUtil.constructTooLong(ctx, maxLength)) {
-            int constructLength = ctx.getStop().getLine() - ctx.getStart().getLine();
-            String lengthVersusLimit = " (" + constructLength + "/" + maxLength + ")";
-            Location location = ListenerUtil.getContextStartLocation(ctx);
-            this.printer.error(constructType + Messages.EXCEEDS_LINE_LIMIT + lengthVersusLimit, location);
-        }
-    }
-
-    void verifyNameLength(String constructType, int maxLength, ParserRuleContext ctx) {
-        if (SourceFileUtil.nameTooLong(ctx, maxLength)) {
-            String lengthVersusLimit = " (" + ctx.getText().length() + "/" + maxLength + ")";
-            Location location = ListenerUtil.getContextStartLocation(ctx);
-            this.printer.error(constructType + Messages.EXCEEDS_CHARACTER_LIMIT + lengthVersusLimit, location);
-        }
-    }
-    //endregion
 
     //region Lowercamelcase check
     void verifyLowerCamelCase(String constructType, ParserRuleContext ctx) {

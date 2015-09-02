@@ -42,7 +42,9 @@ public class ConstantDecListener extends SwiftBaseListener {
                 verifier.printer.warn(Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED, location);
             }
         }
-        verifier.verifyNameLength(Messages.CONSTANT + Messages.NAME, verifier.maxLengths.maxNameLength, ctx);
+
+        (new MaxLengthVerifier(verifier.printer)).verifyNameLength(Messages.CONSTANT + Messages.NAME,
+            verifier.maxLengths.maxNameLength, ctx);
     }
 
     private ParserRuleContext getConstantDeclaration(ParserRuleContext ctx) {
