@@ -4,9 +4,12 @@ import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftLexer;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.ColorSettings;
+import com.sleekbyte.tailor.common.ExitCode;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
+import com.sleekbyte.tailor.integration.XcodeIntegrator;
+import com.sleekbyte.tailor.listeners.BlankLineListener;
 import com.sleekbyte.tailor.listeners.CommentAnalyzer;
 import com.sleekbyte.tailor.listeners.ConstantNamingListener;
 import com.sleekbyte.tailor.listeners.DeclarationListener;
@@ -19,6 +22,7 @@ import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ArgumentParser;
 import com.sleekbyte.tailor.utils.ArgumentParserException;
 import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.cli.CommandLine;
@@ -44,8 +48,6 @@ import java.util.stream.Collectors;
  */
 public class Tailor {
 
-    private static final int EXIT_SUCCESS = 0;
-    private static final int EXIT_FAILURE = 1;
     private static ArgumentParser argumentParser = new ArgumentParser();
     private static List<String> pathNames;
 
@@ -55,7 +57,7 @@ public class Tailor {
     public static void exitWithMissingSourceFileError() {
         System.err.println("Swift source file must be provided.");
         argumentParser.printHelp();
-        System.exit(EXIT_FAILURE);
+        System.exit(ExitCode.FAILURE);
     }
 
     /**
@@ -102,16 +104,23 @@ public class Tailor {
      *
      * @param enabledRules list of enabled rules
      * @param printer      passed into listener constructors
+     * @param tokenStream  passed into listener constructors
      * @throws ArgumentParserException if listener for an enabled rule is not found
      */
     public static List<SwiftBaseListener> createListeners(Set<Rules> enabledRules, Printer printer,
-                                                          MaxLengths maxLengths) throws ArgumentParserException {
+                                                          MaxLengths maxLengths, BufferedTokenStream tokenStream)
+        throws ArgumentParserException {
         List<SwiftBaseListener> listeners = new LinkedList<>();
         Set<String> classNames = enabledRules.stream().map(Rules::getClassName).collect(Collectors.toSet());
         for (String className : classNames) {
             try {
-                Constructor listenerConstructor = Class.forName(className).getConstructor(Printer.class);
-                listeners.add((SwiftBaseListener) listenerConstructor.newInstance(printer));
+
+                if (className.equals(BlankLineListener.class.getName())) {
+                    listeners.add(new BlankLineListener(printer, tokenStream));
+                } else {
+                    Constructor listenerConstructor = Class.forName(className).getConstructor(Printer.class);
+                    listeners.add((SwiftBaseListener) listenerConstructor.newInstance(printer));
+                }
 
             } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException
                 | InstantiationException | IllegalAccessException e) {
@@ -185,7 +194,7 @@ public class Tailor {
             }
 
             try (Printer printer = new Printer(inputFile, maxSeverity, colorSettings)) {
-                List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, maxLengths);
+                List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, maxLengths, tokenStream);
                 listeners.add(new MaxLengthListener(printer, maxLengths));
                 DeclarationListener decListener = new DeclarationListener(listeners);
                 listeners.add(decListener);
@@ -211,7 +220,7 @@ public class Tailor {
 
         if (numErrors >= 1L) {
             // Non-zero exit status when any violation messages have Severity.ERROR, controlled by --max-severity
-            System.exit(EXIT_FAILURE);
+            System.exit(ExitCode.FAILURE);
         }
     }
 
@@ -228,7 +237,13 @@ public class Tailor {
             CommandLine cmd = argumentParser.parseCommandLine(args);
             if (argumentParser.shouldPrintHelp()) {
                 argumentParser.printHelp();
-                System.exit(EXIT_SUCCESS);
+                System.exit(ExitCode.SUCCESS);
+            }
+
+            // Exit program after configuring Xcode project
+            String xcodeprojPath = argumentParser.getXcodeprojPath();
+            if (xcodeprojPath != null) {
+                System.exit(XcodeIntegrator.setupXcode(xcodeprojPath));
             }
             if (cmd.getArgs().length >= 1) {
                 pathNames.addAll(Arrays.asList(cmd.getArgs()));
@@ -245,11 +260,11 @@ public class Tailor {
 
         } catch (IOException e) {
             System.err.println("Source file analysis failed. Reason: " + e.getMessage());
-            System.exit(EXIT_FAILURE);
+            System.exit(ExitCode.FAILURE);
         } catch (ParseException | ArgumentParserException e) {
             System.err.println(e.getMessage());
             argumentParser.printHelp();
-            System.exit(EXIT_FAILURE);
+            System.exit(ExitCode.FAILURE);
         }
 
     }
