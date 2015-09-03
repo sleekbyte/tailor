@@ -22,7 +22,6 @@ public class MainListener extends SwiftBaseListener {
     public MainListener(Printer printer, MaxLengths maxLengths, BufferedTokenStream tokenStream) {
         this.verifier = ParseTreeVerifier.INSTANCE;
         verifier.printer = printer;
-        verifier.maxLengths = maxLengths;
         verifier.tokenStream = tokenStream;
     }
 
