@@ -17,7 +17,6 @@ import com.sleekbyte.tailor.listeners.DeclarationListener;
 import com.sleekbyte.tailor.listeners.ErrorListener;
 import com.sleekbyte.tailor.listeners.FileListener;
 import com.sleekbyte.tailor.listeners.KPrefixListener;
-import com.sleekbyte.tailor.listeners.MainListener;
 import com.sleekbyte.tailor.listeners.MaxLengthListener;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ArgumentParser;
@@ -201,7 +200,6 @@ public class Tailor {
                 listeners.add(new MaxLengthListener(printer, maxLengths));
                 DeclarationListener decListener = new DeclarationListener(listeners);
                 listeners.add(decListener);
-                listeners.add(new MainListener(printer, maxLengths, tokenStream));
 
                 ParseTreeWalker walker = new ParseTreeWalker();
                 for (SwiftBaseListener listener : listeners) {
