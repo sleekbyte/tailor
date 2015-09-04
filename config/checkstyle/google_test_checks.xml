@@ -147,7 +147,8 @@
             <!-- Differs from Google style: Modified basicOffset from 2 to 4 -->
             <property name="basicOffset" value="4"/>
             <property name="braceAdjustment" value="0"/>
-            <property name="caseIndent" value="2"/>
+            <!-- Differs from Google style: Modified caseIndent from 2 to 4 -->
+            <property name="caseIndent" value="4"/>
             <property name="throwsIndent" value="4"/>
             <property name="lineWrappingIndentation" value="4"/>
             <property name="arrayInitIndent" value="2"/>

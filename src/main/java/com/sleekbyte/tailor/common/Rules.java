@@ -1,8 +1,18 @@
 package com.sleekbyte.tailor.common;
 
+import com.sleekbyte.tailor.listeners.BlankLineListener;
+import com.sleekbyte.tailor.listeners.BraceStyleListener;
+import com.sleekbyte.tailor.listeners.CommentAnalyzer;
+import com.sleekbyte.tailor.listeners.ConstantNamingListener;
 import com.sleekbyte.tailor.listeners.FileListener;
+import com.sleekbyte.tailor.listeners.ForceTypeCastListener;
+import com.sleekbyte.tailor.listeners.KPrefixListener;
+import com.sleekbyte.tailor.listeners.LowerCamelCaseListener;
+import com.sleekbyte.tailor.listeners.MultipleImportListener;
+import com.sleekbyte.tailor.listeners.RedundantParenthesisListener;
 import com.sleekbyte.tailor.listeners.SemicolonTerminatedListener;
 import com.sleekbyte.tailor.listeners.UpperCamelCaseListener;
+import com.sleekbyte.tailor.listeners.WhitespaceListener;
 
 /**
  * Enum for all rules implemented in Tailor.
@@ -10,9 +20,19 @@ import com.sleekbyte.tailor.listeners.UpperCamelCaseListener;
 public enum Rules {
     UPPER_CAMEL_CASE ("upperCamelCase", UpperCamelCaseListener.class.getName()),
     SEMICOLON_TERMINATED ("semicolonTerminated", SemicolonTerminatedListener.class.getName()),
+    REDUNDANT_PARENTHESES ("redundantParentheses", RedundantParenthesisListener.class.getName()),
+    MULTIPLE_IMPORT ("multipleImports", MultipleImportListener.class.getName()),
+    BLANK_LINE_FUNCTION ("blankLinesAroundFunction", BlankLineListener.class.getName()),
+    WHITESPACE ("whitespace", WhitespaceListener.class.getName()),
+    CONSTANT_NAMING ("constantNaming", ConstantNamingListener.class.getName()),
+    K_PREFIXED ("kPrefixed", KPrefixListener.class.getName()),
+    LOWER_CAMEL_CASE ("lowerCamelCase", LowerCamelCaseListener.class.getName()),
+    BRACE_STYLE ("braceStyle", BraceStyleListener.class.getName()),
+    FORCE_TYPE_CAST ("forceTypeCast", ForceTypeCastListener.class.getName()),
     TRAILING_WHITESPACE ("trailingWhitespace", FileListener.class.getName()),
     NEWLINE_TERMINATED ("fileNewLineTerminated", FileListener.class.getName()),
-    NO_LEADING_WHITESPACE ("fileNoLeadingWhitespace", FileListener.class.getName());
+    NO_LEADING_WHITESPACE ("fileNoLeadingWhitespace", FileListener.class.getName()),
+    WHITESPACE_IN_COMMENTS ("whitespaceInComments", CommentAnalyzer.class.getName());
 
     private String name;
     private String className;

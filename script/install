@@ -8,7 +8,7 @@ set -ev
 ./gradlew distZip
 
 # Uninstall old versions if existent
-[ -d /usr/local/tailor ] && rm -r /usr/local/tailor
+[ -d /usr/local/tailor ] && rm -rf /usr/local/tailor
 [ -L /usr/local/bin/tailor ] && unlink /usr/local/bin/tailor
 
 # Unzip distribution to /usr/local/tailor

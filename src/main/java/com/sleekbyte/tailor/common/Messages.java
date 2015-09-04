@@ -78,8 +78,8 @@ public class Messages {
     public static final String ENCLOSED_PARENTHESIS = "should not be enclosed within parentheses";
     public static final String K_PREFIXED = "should not be prefixed with 'k' or 'K'";
     public static final String MULTIPLE_IMPORTS = "should be on separate lines";
-    public static final String OPEN_BRACKET_STYLE = "should not have any line breaks before the opening brace";
-    public static final String CLOSE_BRACKET_STYLE = "closing brace should be isolated on a separate line";
+    public static final String OPEN_BRACE_STYLE = "should not have any line breaks before the opening brace";
+    public static final String CLOSE_BRACE_STYLE = "closing brace should be isolated on a separate line";
     public static final String EMPTY_BODY = "Empty construct body should not contain any whitespace";
     public static final String SPACE_BEFORE = "must have exactly one space before it";
     public static final String SPACE_AFTER = "must have exactly one space after it";
@@ -110,6 +110,7 @@ public class Messages {
     public static final String MAX_SEVERITY_DESC = MAXIMUM + SEVERITY + "[" + ERROR + "|" + WARNING + "]";
     public static final String ONLY_SPECIFIC_RULES_DESC = "run only the specified rules";
     public static final String EXCEPT_RULES_DESC = "run all rules except the specified ones";
+    public static final String XCODE_INTEGRATION_DESC = "add Tailor Build Phase Run Script to Xcode Project";
     public static final String DEBUG_DESC = "print ANTLR error messages when parsing error occurs";
     public static final String NO_COLOR_DESC = "disable colorized console output";
     public static final String INVERT_COLOR_DESC = "invert colorized console output";

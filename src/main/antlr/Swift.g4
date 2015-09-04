@@ -248,13 +248,13 @@ initializer : '=' expression  ;
 // GRAMMAR OF A VARIABLE DECLARATION
 
 variableDeclaration
- : variableDeclarationHead patternInitializerList
- | variableDeclarationHead variableName typeAnnotation getterSetterBlock
+ : variableDeclarationHead variableName typeAnnotation getterSetterBlock
  | variableDeclarationHead variableName typeAnnotation getterSetterKeywordBlock
  | variableDeclarationHead variableName initializer willSetDidSetBlock
  | variableDeclarationHead variableName typeAnnotation initializer? willSetDidSetBlock
  // keep this below getter and setter rules for ambiguity reasons
  | variableDeclarationHead variableName typeAnnotation codeBlock
+ | variableDeclarationHead patternInitializerList
  ;
 
 variableDeclarationHead : attributes? declarationModifiers? 'var'  ;
@@ -326,7 +326,8 @@ structBody : '{' declarations?'}'  ;
 
 // GRAMMAR OF A CLASS DECLARATION
 
-classDeclaration : attributes? accessLevelModifier? 'class' className genericParameterClause? typeInheritanceClause? classBody  ;
+// declarationModifier missing in Swift Language Reference
+classDeclaration : attributes? declarationModifier? accessLevelModifier? 'class' className genericParameterClause? typeInheritanceClause? classBody  ;
 className : identifier ;
 classBody : '{' declarations? '}'  ;
 
