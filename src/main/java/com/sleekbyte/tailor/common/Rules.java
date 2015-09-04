@@ -4,6 +4,7 @@ import com.sleekbyte.tailor.listeners.BlankLineListener;
 import com.sleekbyte.tailor.listeners.BraceStyleListener;
 import com.sleekbyte.tailor.listeners.CommentAnalyzer;
 import com.sleekbyte.tailor.listeners.ConstantNamingListener;
+import com.sleekbyte.tailor.listeners.FileListener;
 import com.sleekbyte.tailor.listeners.ForceTypeCastListener;
 import com.sleekbyte.tailor.listeners.KPrefixListener;
 import com.sleekbyte.tailor.listeners.LowerCamelCaseListener;
@@ -28,6 +29,9 @@ public enum Rules {
     LOWER_CAMEL_CASE ("lowerCamelCase", LowerCamelCaseListener.class.getName()),
     BRACE_STYLE ("braceStyle", BraceStyleListener.class.getName()),
     FORCE_TYPE_CAST ("forceTypeCast", ForceTypeCastListener.class.getName()),
+    TRAILING_WHITESPACE ("trailingWhitespace", FileListener.class.getName()),
+    NEWLINE_TERMINATED ("fileNewLineTerminated", FileListener.class.getName()),
+    NO_LEADING_WHITESPACE ("fileNoLeadingWhitespace", FileListener.class.getName()),
     WHITESPACE_IN_COMMENTS ("whitespaceInComments", CommentAnalyzer.class.getName());
 
     private String name;

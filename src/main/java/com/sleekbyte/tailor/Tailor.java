@@ -114,7 +114,9 @@ public class Tailor {
         for (String className : classNames) {
             try {
 
-                if (className.equals(CommentAnalyzer.class.getName())) {
+                if (className.equals(FileListener.class.getName())) {
+                    continue;
+                } else if (className.equals(CommentAnalyzer.class.getName())) {
                     CommentAnalyzer commentAnalyzer = new CommentAnalyzer(tokenStream, printer);
                     commentAnalyzer.analyze();
                 } else if (className.equals(BraceStyleListener.class.getName())) {
@@ -211,8 +213,7 @@ public class Tailor {
                     }
                     walker.walk(listener, tree);
                 }
-
-                try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
+                try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths, enabledRules)) {
                     fileListener.verify();
                 }
 
