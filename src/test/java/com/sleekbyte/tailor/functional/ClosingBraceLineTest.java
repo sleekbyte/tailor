@@ -60,7 +60,7 @@ public class ClosingBraceLineTest extends RuleTest {
     private void addExpectedBraceMsg(int line, int column, Severity severity, String msg) {
         expectedMessages.add(
             Printer.genOutputStringForTest(inputFile.getName(), line, column, severity,
-                                           msg + Messages.CLOSE_BRACKET_STYLE));
+                                           msg + Messages.CLOSE_BRACE_STYLE));
     }
 
     private void addExpectedEmptyConstructBodyMsg(int line, int column, Severity severity) {
