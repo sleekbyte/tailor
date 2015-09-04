@@ -160,3 +160,8 @@ struct AudioChannel {
         }
     }
 }
+
+@objc final internal class World {
+  internal var exampleHooks: ExampleHooks {return configuration.exampleHooks }
+  internal var suiteHooks: SuiteHooks { return configuration.suiteHooks }
+}
