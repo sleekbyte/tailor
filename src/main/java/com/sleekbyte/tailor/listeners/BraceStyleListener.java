@@ -1,25 +1,7 @@
 package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
-import com.sleekbyte.tailor.antlr.SwiftParser.ClassBodyContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.ClosureExpressionContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.ElseClauseContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.ExtensionBodyContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.ForInStatementContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.ForStatementContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.FunctionDeclarationContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.GetterClauseContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.IfStatementContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.InitializerDeclarationContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.ParenthesizedExpressionContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.ProtocolBodyContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.RepeatWhileStatementContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.SetterClauseContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.StructBodyContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.TypeCastingOperatorContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.WhileStatementContext;
+import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
@@ -34,21 +16,109 @@ import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import java.util.List;
 
 /**
- * Verifier class for listeners that extend {@link SwiftBaseListener}.
+ * Parse tree listener for brace style checks.
  */
-class ParseTreeVerifier {
+public class BraceStyleListener extends SwiftBaseListener {
 
-    Printer printer;
-    BufferedTokenStream tokenStream;
+    private Printer printer;
+    private BufferedTokenStream tokenStream;
 
-    static final ParseTreeVerifier INSTANCE = new ParseTreeVerifier();
-
-    private ParseTreeVerifier() {
-        // Exists only to defeat instantiation.
+    public BraceStyleListener(Printer printer, BufferedTokenStream tokenStream) {
+        this.printer = printer;
+        this.tokenStream = tokenStream;
     }
 
-    //region Brace style check
-    void verifySwitchStatementBraceStyle(SwitchStatementContext ctx) {
+    @Override
+    public void enterClassBody(SwiftParser.ClassBodyContext ctx) {
+        verifyClassBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterClosureExpression(SwiftParser.ClosureExpressionContext ctx) {
+        verifyClosureExpressionBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterStructBody(SwiftParser.StructBodyContext ctx) {
+        verifyStructBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterSwitchStatement(SwiftParser.SwitchStatementContext ctx) {
+        verifySwitchStatementBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterForStatement(SwiftParser.ForStatementContext ctx) {
+        verifyForLoopBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterFunctionDeclaration(SwiftParser.FunctionDeclarationContext ctx) {
+        verifyFunctionBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterElseClause(SwiftParser.ElseClauseContext ctx) {
+        verifyElseClauseBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterIfStatement(SwiftParser.IfStatementContext ctx) {
+        verifyIfStatementBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterWhileStatement(SwiftParser.WhileStatementContext ctx) {
+        verifyWhileLoopBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterRepeatWhileStatement(SwiftParser.RepeatWhileStatementContext ctx) {
+        verifyRepeatWhileLoopBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterInitializerDeclaration(SwiftParser.InitializerDeclarationContext ctx) {
+        verifyInitializerBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterForInStatement(SwiftParser.ForInStatementContext ctx) {
+        verifyForInStatementBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterProtocolBody(SwiftParser.ProtocolBodyContext ctx) {
+        verifyProtocolBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterUnionStyleEnum(SwiftParser.UnionStyleEnumContext ctx) {
+        verifyEnumBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterRawValueStyleEnum(SwiftParser.RawValueStyleEnumContext ctx) {
+        verifyEnumBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterExtensionBody(SwiftParser.ExtensionBodyContext ctx) {
+        verifyExtensionBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterGetterClause(SwiftParser.GetterClauseContext ctx) {
+        verifyGetterBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterSetterClause(SwiftParser.SetterClauseContext ctx) {
+        verifySetterBraceStyle(ctx);
+    }
+
+    private void verifySwitchStatementBraceStyle(SwiftParser.SwitchStatementContext ctx) {
         // Open brace
         Location switchExpLocation = ListenerUtil.getTokenLocation(ctx.expression().getStop());
         Location openBraceLocation = ListenerUtil.getLocationOfChildToken(ctx, 2);
@@ -62,33 +132,33 @@ class ParseTreeVerifier {
 
     }
 
-    void verifyForInStatementBraceStyle(ForInStatementContext ctx) {
+    private void verifyForInStatementBraceStyle(SwiftParser.ForInStatementContext ctx) {
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), ctx.expression().getStop(), Messages.FOR_IN_LOOP);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.FOR_IN_LOOP);
     }
 
-    void verifyInitializerBraceStyle(InitializerDeclarationContext ctx) {
+    private void verifyInitializerBraceStyle(SwiftParser.InitializerDeclarationContext ctx) {
         verifyCodeBlockOpenBraceStyle(ctx.initializerBody().codeBlock(), ctx.parameterClause().getStop(),
             Messages.INITIALIZER_BODY);
         verifyBodyCloseBraceStyle(ctx.initializerBody().codeBlock(), Messages.INITIALIZER_BODY);
     }
 
-    void verifyRepeatWhileLoopBraceStyle(RepeatWhileStatementContext ctx) {
+    private void verifyRepeatWhileLoopBraceStyle(SwiftParser.RepeatWhileStatementContext ctx) {
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), ctx.getStart(), Messages.REPEAT_WHILE_STATEMENT);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.REPEAT_WHILE_STATEMENT);
     }
 
-    void verifyWhileLoopBraceStyle(WhileStatementContext ctx) {
+    private void verifyWhileLoopBraceStyle(SwiftParser.WhileStatementContext ctx) {
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), ctx.conditionClause().getStop(), Messages.WHILE_STATEMENT);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.WHILE_STATEMENT);
     }
 
-    void verifyIfStatementBraceStyle(IfStatementContext ctx) {
+    private void verifyIfStatementBraceStyle(SwiftParser.IfStatementContext ctx) {
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), ctx.conditionClause().getStop(), Messages.IF_STATEMENT);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.IF_STATEMENT);
     }
 
-    void verifyElseClauseBraceStyle(ElseClauseContext ctx) {
+    private void verifyElseClauseBraceStyle(SwiftParser.ElseClauseContext ctx) {
         if (ctx.codeBlock() == null) {
             return;
         }
@@ -96,23 +166,23 @@ class ParseTreeVerifier {
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.ELSE_CLAUSE);
     }
 
-    void verifyFunctionBraceStyle(FunctionDeclarationContext ctx) {
+    private void verifyFunctionBraceStyle(SwiftParser.FunctionDeclarationContext ctx) {
         verifyCodeBlockOpenBraceStyle(ctx.functionBody().codeBlock(), ctx.functionSignature().getStop(),
             Messages.FUNCTION);
         verifyBodyCloseBraceStyle(ctx.functionBody().codeBlock(), Messages.FUNCTION);
     }
 
-    void verifyClassBraceStyle(ClassBodyContext ctx) {
+    private void verifyClassBraceStyle(SwiftParser.ClassBodyContext ctx) {
         verifyBodyOpenBraceStyle(ctx, Messages.CLASS);
         verifyBodyCloseBraceStyle(ctx, Messages.CLASS);
     }
 
-    void verifyStructBraceStyle(StructBodyContext ctx) {
+    private void verifyStructBraceStyle(SwiftParser.StructBodyContext ctx) {
         verifyBodyOpenBraceStyle(ctx, Messages.STRUCT);
         verifyBodyCloseBraceStyle(ctx, Messages.STRUCT);
     }
 
-    void verifyForLoopBraceStyle(ForStatementContext ctx) {
+    private void verifyForLoopBraceStyle(SwiftParser.ForStatementContext ctx) {
         int numChildren = ctx.getChildCount();
         Token loopEndToken;
 
@@ -124,12 +194,12 @@ class ParseTreeVerifier {
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.FOR_LOOP);
     }
 
-    void verifyProtocolBraceStyle(ProtocolBodyContext ctx) {
+    private void verifyProtocolBraceStyle(SwiftParser.ProtocolBodyContext ctx) {
         verifyBodyOpenBraceStyle(ctx, Messages.PROTOCOL);
         verifyBodyCloseBraceStyle(ctx, Messages.PROTOCOL);
     }
 
-    void verifyEnumBraceStyle(ParserRuleContext ctx) {
+    private void verifyEnumBraceStyle(ParserRuleContext ctx) {
         for (ParseTree child : ctx.children) {
             if (child instanceof TerminalNodeImpl) {
                 Token openBrace = ((TerminalNodeImpl) child).getSymbol();
@@ -150,12 +220,7 @@ class ParseTreeVerifier {
         verifyCloseBraceStyle(lastChild, ParseTreeUtil.getLeftSibling(lastChild), Messages.ENUM);
     }
 
-    private boolean checkLeftSpaces(Token left, Token op, int numSpaces) {
-        return op.getLine() == left.getLine()
-            && op.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(left) != numSpaces + 1;
-    }
-
-    void verifyClosureExpressionBraceStyle(ClosureExpressionContext ctx) {
+    private void verifyClosureExpressionBraceStyle(SwiftParser.ClosureExpressionContext ctx) {
         ParseTree left = ParseTreeUtil.getLeftNode(ctx);
         if (left == null) {
             return;
@@ -176,26 +241,26 @@ class ParseTreeVerifier {
             list.map {(element: Int) in element * 2}
          */
         ParseTree leftSibling = ParseTreeUtil.getLeftSibling(ctx);
-        if (leftSibling != null && (leftSibling instanceof ParenthesizedExpressionContext
-            || leftSibling instanceof PostfixExpressionContext)) {
+        if (leftSibling != null && (leftSibling instanceof SwiftParser.ParenthesizedExpressionContext
+            || leftSibling instanceof SwiftParser.PostfixExpressionContext)) {
             Token leftToken = ((ParserRuleContext) leftSibling).getStop();
             verifySingleSpaceBeforeOpenBrace(ctx, leftToken);
         }
 
     }
 
-    void verifyExtensionBraceStyle(ExtensionBodyContext ctx) {
+    private void verifyExtensionBraceStyle(SwiftParser.ExtensionBodyContext ctx) {
         verifyBodyOpenBraceStyle(ctx, Messages.EXTENSION);
         verifyBodyCloseBraceStyle(ctx, Messages.EXTENSION);
     }
 
-    void verifyGetterBraceStyle(GetterClauseContext ctx) {
+    private void verifyGetterBraceStyle(SwiftParser.GetterClauseContext ctx) {
         TerminalNodeImpl get = (TerminalNodeImpl) ParseTreeUtil.getLeftSibling(ctx.codeBlock());
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), get.getSymbol(), Messages.GETTER);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.GETTER);
     }
 
-    void verifySetterBraceStyle(SetterClauseContext ctx) {
+    private void verifySetterBraceStyle(SwiftParser.SetterClauseContext ctx) {
         ParseTree leftSibling = ParseTreeUtil.getLeftSibling(ctx.codeBlock());
         Token set = ParseTreeUtil.getStopTokenForNode(leftSibling);
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), set, Messages.SETTER);
@@ -248,7 +313,7 @@ class ParseTreeVerifier {
         }
     }
 
-    private void verifyClosureCloseBraceStyle(ClosureExpressionContext ctx) {
+    private void verifyClosureCloseBraceStyle(SwiftParser.ClosureExpressionContext ctx) {
         ParseTree closeBrace = ParseTreeUtil.getLastChild(ctx);
         Token closeBraceToken = ((TerminalNodeImpl) closeBrace).getSymbol();
         Location closeBraceLocation = ListenerUtil.getTokenLocation(closeBraceToken);
@@ -296,16 +361,9 @@ class ParseTreeVerifier {
 
         return null;
     }
-    //endregion
 
-    //region Force type casting check
-    void verifyForceTypeCasting(TypeCastingOperatorContext ctx) {
-        ParseTree secondChild = ctx.getChild(1);
-        if (secondChild.getText().equals("!")) {
-            // TODO: use util method that returns location of parse tree once {} check gets merged into master
-            Location exclamationLocation = ListenerUtil.getTokenLocation(((TerminalNodeImpl) secondChild).getSymbol());
-            printer.warn(Messages.FORCE_CAST, exclamationLocation);
-        }
+    private boolean checkLeftSpaces(Token left, Token op, int numSpaces) {
+        return op.getLine() == left.getLine()
+            && op.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(left) != numSpaces + 1;
     }
-    //endregion
 }
