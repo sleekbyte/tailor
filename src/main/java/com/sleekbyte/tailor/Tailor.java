@@ -22,7 +22,6 @@ import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ArgumentParser;
 import com.sleekbyte.tailor.utils.ArgumentParserException;
 import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.cli.CommandLine;
@@ -108,14 +107,17 @@ public class Tailor {
      * @throws ArgumentParserException if listener for an enabled rule is not found
      */
     public static List<SwiftBaseListener> createListeners(Set<Rules> enabledRules, Printer printer,
-                                                          MaxLengths maxLengths, BufferedTokenStream tokenStream)
+                                                          CommonTokenStream tokenStream)
         throws ArgumentParserException {
         List<SwiftBaseListener> listeners = new LinkedList<>();
         Set<String> classNames = enabledRules.stream().map(Rules::getClassName).collect(Collectors.toSet());
         for (String className : classNames) {
             try {
 
-                if (className.equals(BraceStyleListener.class.getName())) {
+                if (className.equals(CommentAnalyzer.class.getName())) {
+                    CommentAnalyzer commentAnalyzer = new CommentAnalyzer(tokenStream, printer);
+                    commentAnalyzer.analyze();
+                } else if (className.equals(BraceStyleListener.class.getName())) {
                     listeners.add(new BraceStyleListener(printer, tokenStream));
                 } else if (className.equals(BlankLineListener.class.getName())) {
                     listeners.add(new BlankLineListener(printer, tokenStream));
@@ -196,7 +198,7 @@ public class Tailor {
             }
 
             try (Printer printer = new Printer(inputFile, maxSeverity, colorSettings)) {
-                List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, maxLengths, tokenStream);
+                List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, tokenStream);
                 listeners.add(new MaxLengthListener(printer, maxLengths));
                 DeclarationListener decListener = new DeclarationListener(listeners);
                 listeners.add(decListener);
@@ -213,8 +215,7 @@ public class Tailor {
                 try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
                     fileListener.verify();
                 }
-                CommentAnalyzer commentAnalyzer = new CommentAnalyzer(tokenStream, printer);
-                commentAnalyzer.analyze();
+
                 numErrors += printer.getNumErrorMessages();
             }
         }

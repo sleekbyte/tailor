@@ -2,6 +2,7 @@ package com.sleekbyte.tailor.common;
 
 import com.sleekbyte.tailor.listeners.BlankLineListener;
 import com.sleekbyte.tailor.listeners.BraceStyleListener;
+import com.sleekbyte.tailor.listeners.CommentAnalyzer;
 import com.sleekbyte.tailor.listeners.ConstantNamingListener;
 import com.sleekbyte.tailor.listeners.ForceTypeCastListener;
 import com.sleekbyte.tailor.listeners.KPrefixListener;
@@ -26,7 +27,8 @@ public enum Rules {
     K_PREFIXED ("kPrefixed", KPrefixListener.class.getName()),
     LOWER_CAMEL_CASE ("lowerCamelCase", LowerCamelCaseListener.class.getName()),
     BRACE_STYLE ("braceStyle", BraceStyleListener.class.getName()),
-    FORCE_TYPE_CAST ("forceTypeCast", ForceTypeCastListener.class.getName());
+    FORCE_TYPE_CAST ("forceTypeCast", ForceTypeCastListener.class.getName()),
+    WHITESPACE_IN_COMMENTS ("whitespaceInComments", CommentAnalyzer.class.getName());
 
     private String name;
     private String className;
