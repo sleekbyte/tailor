@@ -11,8 +11,11 @@ import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.integration.XcodeIntegrator;
 import com.sleekbyte.tailor.listeners.BlankLineListener;
 import com.sleekbyte.tailor.listeners.CommentAnalyzer;
+import com.sleekbyte.tailor.listeners.ConstantNamingListener;
+import com.sleekbyte.tailor.listeners.DeclarationListener;
 import com.sleekbyte.tailor.listeners.ErrorListener;
 import com.sleekbyte.tailor.listeners.FileListener;
+import com.sleekbyte.tailor.listeners.KPrefixListener;
 import com.sleekbyte.tailor.listeners.MainListener;
 import com.sleekbyte.tailor.listeners.MaxLengthListener;
 import com.sleekbyte.tailor.output.Printer;
@@ -105,7 +108,7 @@ public class Tailor {
      * @throws ArgumentParserException if listener for an enabled rule is not found
      */
     public static List<SwiftBaseListener> createListeners(Set<Rules> enabledRules, Printer printer,
-                                                          BufferedTokenStream tokenStream)
+                                                          MaxLengths maxLengths, BufferedTokenStream tokenStream)
         throws ArgumentParserException {
         List<SwiftBaseListener> listeners = new LinkedList<>();
         Set<String> classNames = enabledRules.stream().map(Rules::getClassName).collect(Collectors.toSet());
@@ -191,13 +194,21 @@ public class Tailor {
             }
 
             try (Printer printer = new Printer(inputFile, maxSeverity, colorSettings)) {
-                List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, tokenStream);
+                List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, maxLengths, tokenStream);
                 listeners.add(new MaxLengthListener(printer, maxLengths));
+                DeclarationListener decListener = new DeclarationListener(listeners);
+                listeners.add(decListener);
                 listeners.add(new MainListener(printer, maxLengths, tokenStream));
+
                 ParseTreeWalker walker = new ParseTreeWalker();
                 for (SwiftBaseListener listener : listeners) {
+                    // The following listeners are used by DeclarationListener to walk the tree
+                    if (listener instanceof ConstantNamingListener || listener instanceof KPrefixListener) {
+                        continue;
+                    }
                     walker.walk(listener, tree);
                 }
+
                 try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths)) {
                     fileListener.verify();
                 }
@@ -246,6 +257,7 @@ public class Tailor {
             }
 
             analyzeFiles(filenames);
+
         } catch (IOException e) {
             System.err.println("Source file analysis failed. Reason: " + e.getMessage());
             System.exit(ExitCode.FAILURE);
