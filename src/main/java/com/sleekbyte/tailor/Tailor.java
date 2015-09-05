@@ -99,7 +99,7 @@ public class Tailor {
     }
 
     public static void printSummary(long numFiles, long numViolations, long numSkipped) {
-        System.out.println(String.format("\nAnalyzed %d files, skipped %d files, and detected %d violations.\n",
+        System.out.println(String.format("%nAnalyzed %d files, skipped %d files, and detected %d violations.%n",
             numFiles - numSkipped, numSkipped, numViolations));
     }
 
