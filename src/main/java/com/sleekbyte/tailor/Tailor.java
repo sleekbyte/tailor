@@ -98,6 +98,11 @@ public class Tailor {
         return filenames;
     }
 
+    public static void printSummary(long numFiles, long numViolations, long numSkipped) {
+        System.out.println(String.format("\nAnalyzed %d files, skipped %d files, and detected %d violations.\n",
+            numFiles - numSkipped, numSkipped, numViolations));
+    }
+
     /**
      * Creates listeners according to the rules that are enabled.
      *
@@ -179,6 +184,8 @@ public class Tailor {
      */
     public static void analyzeFiles(Set<String> filenames) throws ArgumentParserException, IOException {
         long numErrors = 0;
+        long numSkippedFiles = 0;
+        long numViolations = 0;
         MaxLengths maxLengths = argumentParser.parseMaxLengths();
         Severity maxSeverity = argumentParser.getMaxSeverity();
         ColorSettings colorSettings =
@@ -196,6 +203,7 @@ public class Tailor {
             } catch (ErrorListener.ParseException e) {
                 Printer printer = new Printer(inputFile, maxSeverity, colorSettings);
                 printer.printParseErrorMessage();
+                numSkippedFiles++;
                 continue;
             }
 
@@ -218,8 +226,11 @@ public class Tailor {
                 }
 
                 numErrors += printer.getNumErrorMessages();
+                numViolations += printer.getNumViolations();
             }
         }
+
+        printSummary(filenames.size(), numViolations, numSkippedFiles);
 
         if (numErrors >= 1L) {
             // Non-zero exit status when any violation messages have Severity.ERROR, controlled by --max-severity

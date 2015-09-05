@@ -133,6 +133,10 @@ public class Printer implements AutoCloseable {
         return msgBuffer.values().stream().filter(msg -> msg.getSeverity().equals(Severity.ERROR)).count();
     }
 
+    public long getNumViolations() {
+        return msgBuffer.size();
+    }
+
     public void ignoreLine(int ignoredLineNumber) {
         this.ignoredLineNumbers.add(ignoredLineNumber);
     }
