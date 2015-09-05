@@ -75,10 +75,10 @@ public class FileListener implements AutoCloseable {
         }
 
         verifyFileLength();
-        if (enabledRules.contains(Rules.NEWLINE_TERMINATED)) {
+        if (enabledRules.contains(Rules.TERMINATING_NEWLINE)) {
             verifyNewlineTerminated();
         }
-        if (enabledRules.contains(Rules.NO_LEADING_WHITESPACE)) {
+        if (enabledRules.contains(Rules.LEADING_WHITESPACE)) {
             verifyNoLeadingWhitespace();
         }
     }

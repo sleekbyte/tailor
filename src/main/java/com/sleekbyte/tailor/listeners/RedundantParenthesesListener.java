@@ -11,34 +11,34 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 /**
- * Parse tree listener for redundant parenthesis checks.
+ * Parse tree listener for redundant parentheses checks.
  */
-public class RedundantParenthesisListener extends SwiftBaseListener {
+public class RedundantParenthesesListener extends SwiftBaseListener {
 
     private Printer printer;
 
-    public RedundantParenthesisListener(Printer printer) {
+    public RedundantParenthesesListener(Printer printer) {
         this.printer = printer;
     }
 
     @Override
     public void enterConditionClause(SwiftParser.ConditionClauseContext ctx) {
-        verifyRedundantExpressionParenthesis(Messages.CONDITIONAL_CLAUSE, ctx.expression());
+        verifyRedundantExpressionParentheses(Messages.CONDITIONAL_CLAUSE, ctx.expression());
     }
 
     @Override
     public void enterSwitchStatement(SwiftParser.SwitchStatementContext ctx) {
-        verifyRedundantExpressionParenthesis(Messages.SWITCH_EXPRESSION, ctx.expression());
+        verifyRedundantExpressionParentheses(Messages.SWITCH_EXPRESSION, ctx.expression());
     }
 
     @Override
     public void enterForStatement(SwiftParser.ForStatementContext ctx) {
-        verifyRedundantForLoopParenthesis(ctx);
+        verifyRedundantForLoopParentheses(ctx);
     }
 
     @Override
     public void enterThrowStatement(SwiftParser.ThrowStatementContext ctx) {
-        verifyRedundantExpressionParenthesis(Messages.THROW_STATEMENT, ctx.expression());
+        verifyRedundantExpressionParentheses(Messages.THROW_STATEMENT, ctx.expression());
     }
 
     @Override
@@ -48,22 +48,22 @@ public class RedundantParenthesisListener extends SwiftBaseListener {
 
     @Override
     public void enterInitializer(SwiftParser.InitializerContext ctx) {
-        verifyRedundantExpressionParenthesis(Messages.INITIALIZER_EXPRESSION, ctx.expression());
+        verifyRedundantExpressionParentheses(Messages.INITIALIZER_EXPRESSION, ctx.expression());
     }
 
     @Override
     public void enterArrayLiteralItem(SwiftParser.ArrayLiteralItemContext ctx) {
-        verifyRedundantExpressionParenthesis(Messages.ARRAY_LITERAL, ctx.expression());
+        verifyRedundantExpressionParentheses(Messages.ARRAY_LITERAL, ctx.expression());
     }
 
     @Override
     public void enterDictionaryLiteralItem(SwiftParser.DictionaryLiteralItemContext ctx) {
         for (SwiftParser.ExpressionContext expressionContext : ctx.expression()) {
-            verifyRedundantExpressionParenthesis(Messages.DICTIONARY_LITERAL, expressionContext);
+            verifyRedundantExpressionParentheses(Messages.DICTIONARY_LITERAL, expressionContext);
         }
     }
 
-    private void verifyRedundantExpressionParenthesis(String constructType, SwiftParser.ExpressionContext ctx) {
+    private void verifyRedundantExpressionParentheses(String constructType, SwiftParser.ExpressionContext ctx) {
         if (ctx == null
             || ctx.getChildCount() != 1
             || ctx.prefixExpression() == null
@@ -96,10 +96,10 @@ public class RedundantParenthesisListener extends SwiftBaseListener {
             return;
         }
 
-        printRedundantParenthesisWarning(ctx, constructType + Messages.ENCLOSED_PARENTHESIS);
+        printRedundantParenthesesWarning(ctx, constructType + Messages.ENCLOSED_PARENTHESES);
     }
 
-    private void verifyRedundantForLoopParenthesis(ParserRuleContext ctx) {
+    private void verifyRedundantForLoopParentheses(ParserRuleContext ctx) {
         if (!(ctx.getChild(1) instanceof TerminalNodeImpl)) {
             return;
         } // return if '(' not present
@@ -109,7 +109,7 @@ public class RedundantParenthesisListener extends SwiftBaseListener {
 
         if (firstCharacter == '(') {
             Location startLocation = ListenerUtil.getTokenLocation(openParenthesisToken);
-            this.printer.warn(Messages.FOR_LOOP + Messages.ENCLOSED_PARENTHESIS, startLocation);
+            this.printer.warn(Messages.FOR_LOOP + Messages.ENCLOSED_PARENTHESES, startLocation);
         }
     }
 
@@ -122,11 +122,11 @@ public class RedundantParenthesisListener extends SwiftBaseListener {
         char lastCharacter = pattern.charAt(pattern.length() - 1);
 
         if (firstCharacter == '(' && lastCharacter == ')') {
-            printRedundantParenthesisWarning(ctx, Messages.CATCH_CLAUSE + Messages.ENCLOSED_PARENTHESIS);
+            printRedundantParenthesesWarning(ctx, Messages.CATCH_CLAUSE + Messages.ENCLOSED_PARENTHESES);
         }
     }
 
-    private void printRedundantParenthesisWarning(ParserRuleContext ctx, String firstParenthesisMsg) {
+    private void printRedundantParenthesesWarning(ParserRuleContext ctx, String firstParenthesisMsg) {
         Location startLocation = ListenerUtil.getContextStartLocation(ctx);
         this.printer.warn(firstParenthesisMsg, startLocation);
     }
