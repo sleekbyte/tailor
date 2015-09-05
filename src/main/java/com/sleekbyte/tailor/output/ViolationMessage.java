@@ -134,12 +134,13 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
             return "";
         }
 
-        return String.format("%s%s%s%s %s %s %s", formattedFilePath(), formattedLineNumber(), formattedColumnNumber(),
-            formattedSeverity(), formattedViolationMessage());
+        return String.format("%s%s%s %s %s %s", formattedFilePath(), formattedLineNumber(), formattedColumnNumber(),
+            formattedSeverity(), formattedViolationMessage(), formattedRule());
     }
 
     private String formattedRule() {
-        return String.format("[%s]", this.rule);
+        if (rule == null) return "";
+        return String.format("[%s]", rule.getName());
     }
 
     private String formattedFilePath() {

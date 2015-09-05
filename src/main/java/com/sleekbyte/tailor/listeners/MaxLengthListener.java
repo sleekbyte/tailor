@@ -149,7 +149,7 @@ public class MaxLengthListener extends SwiftBaseListener {
                                     String msg) {
         String lengthVersusLimit = " (" + constructLength + "/" + maxLength + ")";
         Location location = ListenerUtil.getContextStartLocation(ctx);
-        printer.error(constructType + msg + lengthVersusLimit, location);
+        printer.error(null, constructType + msg + lengthVersusLimit, location);
     }
 
 }
