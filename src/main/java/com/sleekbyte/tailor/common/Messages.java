@@ -95,7 +95,13 @@ public class Messages {
     // Usage messages
     public static final String CMD_LINE_SYNTAX = "tailor [options] [--] [[file|directory] ...]";
     public static final String TAILOR_DESC = "Perform static analysis on Swift source files.";
+    public static final String TAILOR_ARGS_INFO =
+        "Invoking Tailor with at least one file or directory will analyze all Swift files at those paths."
+        + " If no paths are provided, Tailor will analyze all Swift files found in '$SRCROOT' (if defined),"
+        + " which is set by Xcode when run in a Build Phase. Tailor may be set up as an Xcode Build Phase automatically"
+        + " with the --xcode option.";
     public static final String HELP_DESC = "display help";
+    public static final String VERSION_DESC = "display version";
     public static final String MAXIMUM = "maximum ";
     public static final String LENGTH = "length";
     public static final String SEVERITY = "severity ";

@@ -21,11 +21,13 @@ import java.util.stream.Collectors;
  */
 public class ArgumentParser {
 
-    private static final String HELP_SHORT_OPT = "h";
-    private static final String HELP_LONG_OPT = "help";
     private static final String SYNTAX_PREFIX = "Usage: ";
     private static final String OPTIONS_PREFIX = "Options:";
     private static final int HELP_WIDTH = 99;
+    private static final String HELP_SHORT_OPT = "h";
+    private static final String HELP_LONG_OPT = "help";
+    private static final String VERSION_SHORT_OPT = "v";
+    private static final String VERSION_LONG_OPT = "version";
     private static final String MAX_CLASS_LENGTH_OPT = "max-class-length";
     private static final String MAX_CLOSURE_LENGTH_OPT = "max-closure-length";
     private static final String MAX_FILE_LENGTH_OPT = "max-file-length";
@@ -63,13 +65,22 @@ public class ArgumentParser {
     }
 
     /**
+     * Check if "-v" or "--version" option was specified.
+     */
+    public boolean shouldPrintVersion() {
+        return cmd != null && cmd.hasOption(VERSION_SHORT_OPT);
+    }
+
+    /**
      * Print usage message with flag descriptions to STDOUT.
      */
     public void printHelp() {
         HelpFormatter helpFormatter = new HelpFormatter();
         helpFormatter.setSyntaxPrefix(SYNTAX_PREFIX);
         String newLine = helpFormatter.getNewLine();
-        String header = newLine + Messages.TAILOR_DESC + newLine + newLine + OPTIONS_PREFIX;
+        String header = newLine + Messages.TAILOR_DESC + newLine + newLine + Messages.TAILOR_ARGS_INFO + newLine
+            + newLine + OPTIONS_PREFIX;
+        helpFormatter.setLongOptSeparator("=");
         helpFormatter.printHelp(HELP_WIDTH, Messages.CMD_LINE_SYNTAX, header, this.options, "");
     }
 
@@ -89,53 +100,35 @@ public class ArgumentParser {
     }
 
     private void addOptions() {
-        final Option help = createNoArgOpt(HELP_SHORT_OPT, HELP_LONG_OPT, Messages.HELP_DESC);
+        options = new Options();
+
+        options.addOption(createNoArgOpt(HELP_SHORT_OPT, HELP_LONG_OPT, Messages.HELP_DESC));
+        options.addOption(createNoArgOpt(VERSION_SHORT_OPT, VERSION_LONG_OPT, Messages.VERSION_DESC));
 
         String argName = "0-999";
-        final Option maxClassLength = createSingleArgOpt(MAX_CLASS_LENGTH_OPT, argName, Messages.MAX_CLASS_LENGTH_DESC);
-        final Option maxClosureLength = createSingleArgOpt(MAX_CLOSURE_LENGTH_OPT, argName,
-            Messages.MAX_CLOSURE_LENGTH_DESC);
-        final Option maxFileLength = createSingleArgOpt(MAX_FILE_LENGTH_OPT, argName, Messages.MAX_FILE_LENGTH_DESC);
-        final Option maxFunctionLength = createSingleArgOpt(MAX_FUNCTION_LENGTH_OPT, argName,
-            Messages.MAX_FUNCTION_LENGTH_DESC);
-        final Option maxLineLength = createSingleArgOpt(MAX_LINE_LENGTH_SHORT_OPT, MAX_LINE_LENGTH_LONG_OPT, argName,
-            Messages.MAX_LINE_LENGTH_DESC);
-        final Option maxNameLength = createSingleArgOpt(MAX_NAME_LENGTH_OPT, argName, Messages.MAX_NAME_LENGTH_DESC);
-        final Option maxStructLength = createSingleArgOpt(MAX_STRUCT_LENGTH_OPT, argName,
-            Messages.MAX_STRUCT_LENGTH_DESC);
+        options.addOption(createSingleArgOpt(MAX_CLASS_LENGTH_OPT, argName, Messages.MAX_CLASS_LENGTH_DESC));
+        options.addOption(createSingleArgOpt(MAX_CLOSURE_LENGTH_OPT, argName, Messages.MAX_CLOSURE_LENGTH_DESC));
+        options.addOption(createSingleArgOpt(MAX_FILE_LENGTH_OPT, argName, Messages.MAX_FILE_LENGTH_DESC));
+        options.addOption(createSingleArgOpt(MAX_FUNCTION_LENGTH_OPT, argName, Messages.MAX_FUNCTION_LENGTH_DESC));
+        options.addOption(createSingleArgOpt(
+            MAX_LINE_LENGTH_SHORT_OPT, MAX_LINE_LENGTH_LONG_OPT, argName, Messages.MAX_LINE_LENGTH_DESC));
+        options.addOption(createSingleArgOpt(MAX_NAME_LENGTH_OPT, argName, Messages.MAX_NAME_LENGTH_DESC));
+        options.addOption(createSingleArgOpt(MAX_STRUCT_LENGTH_OPT, argName, Messages.MAX_STRUCT_LENGTH_DESC));
 
         argName = "error|warning (default)";
-        final Option maxSeverity = createSingleArgOpt(MAX_SEVERITY_OPT, argName, Messages.MAX_SEVERITY_DESC);
+        options.addOption(createSingleArgOpt(MAX_SEVERITY_OPT, argName, Messages.MAX_SEVERITY_DESC));
 
         argName = "rule1,rule2,...";
-        final Option onlySpecificRules = createMultiArgOpt(ONLY_OPT, argName, Messages.ONLY_SPECIFIC_RULES_DESC);
-        final Option excludedRules = createMultiArgOpt(EXCEPT_OPT, argName, Messages.EXCEPT_RULES_DESC);
+        options.addOption(createMultiArgOpt(ONLY_OPT, argName, Messages.ONLY_SPECIFIC_RULES_DESC));
+        options.addOption(createMultiArgOpt(EXCEPT_OPT, argName, Messages.EXCEPT_RULES_DESC));
 
         argName = "path/to/project.xcodeproj";
-        final Option xcodeIntegration =
-            createSingleArgOpt(XCODE_INTEGRATION_OPT, argName, Messages.XCODE_INTEGRATION_DESC);
+        options.addOption(createSingleArgOpt(XCODE_INTEGRATION_OPT, argName, Messages.XCODE_INTEGRATION_DESC));
 
-        final Option debug = createNoArgOpt(DEBUG_OPT, Messages.DEBUG_DESC);
+        options.addOption(createNoArgOpt(DEBUG_OPT, Messages.DEBUG_DESC));
 
-        final Option noColor = createNoArgOpt(NO_COLOR_OPT, Messages.NO_COLOR_DESC);
-        final Option invertColor = createNoArgOpt(INVERT_COLOR_OPT, Messages.INVERT_COLOR_DESC);
-
-        options = new Options();
-        options.addOption(help);
-        options.addOption(maxClassLength);
-        options.addOption(maxClosureLength);
-        options.addOption(maxFileLength);
-        options.addOption(maxFunctionLength);
-        options.addOption(maxLineLength);
-        options.addOption(maxNameLength);
-        options.addOption(maxStructLength);
-        options.addOption(maxSeverity);
-        options.addOption(onlySpecificRules);
-        options.addOption(excludedRules);
-        options.addOption(xcodeIntegration);
-        options.addOption(debug);
-        options.addOption(noColor);
-        options.addOption(invertColor);
+        options.addOption(createNoArgOpt(NO_COLOR_OPT, Messages.NO_COLOR_DESC));
+        options.addOption(createNoArgOpt(INVERT_COLOR_OPT, Messages.INVERT_COLOR_DESC));
     }
 
     /**
