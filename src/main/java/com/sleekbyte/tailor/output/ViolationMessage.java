@@ -1,6 +1,7 @@
 package com.sleekbyte.tailor.output;
 
 import com.sleekbyte.tailor.common.ColorSettings;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 
 /**
@@ -17,6 +18,7 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
     private int lineNumberWidth = 0;
     private int columnNumberWidth = 0;
     private String textColor = "black";
+    private Rules rule;
 
     /**
      * Constructs a ViolationMessage with the specified message components.
@@ -26,7 +28,8 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
      * @param severity         the severity of the violation message
      * @param violationMessage the description of the violation message
      */
-    public ViolationMessage(int lineNumber, int columnNumber, Severity severity, String violationMessage) {
+    public ViolationMessage(Rules rule, int lineNumber, int columnNumber, Severity severity, String violationMessage) {
+        this.rule = rule;
         this.lineNumber = lineNumber;
         this.columnNumber = columnNumber;
         this.severity = severity;
@@ -42,8 +45,9 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
      * @param severity         the severity of the violation message
      * @param violationMessage the description of the violation message
      */
-    public ViolationMessage(String filePath, int lineNumber, int columnNumber, Severity severity,
+    public ViolationMessage(Rules rule, String filePath, int lineNumber, int columnNumber, Severity severity,
                             String violationMessage) {
+        this.rule = rule;
         this.filePath = filePath;
         this.lineNumber = lineNumber;
         this.columnNumber = columnNumber;
@@ -130,8 +134,12 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
             return "";
         }
 
-        return String.format("%s%s%s %s %s", formattedFilePath(), formattedLineNumber(), formattedColumnNumber(),
+        return String.format("%s%s%s%s %s %s %s", formattedFilePath(), formattedLineNumber(), formattedColumnNumber(),
             formattedSeverity(), formattedViolationMessage());
+    }
+
+    private String formattedRule() {
+        return String.format("[%s]", this.rule);
     }
 
     private String formattedFilePath() {
