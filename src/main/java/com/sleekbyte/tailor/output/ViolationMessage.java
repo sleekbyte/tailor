@@ -141,7 +141,7 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
         }
 
         return String.format("%s%s%s %s %s %s", formattedFilePath(), formattedLineNumber(), formattedColumnNumber(),
-            formattedSeverity(), formattedViolationMessage(), formattedRule());
+            formattedSeverity(), formattedRule(), formattedViolationMessage());
     }
 
     private String formattedRule() {

@@ -116,7 +116,7 @@ public class ViolationMessageTest {
 
     @Test
     public void testToString() {
-        String expectedOutput = "/usr/bin/local:10:1: error: errMsg [lower-camel-case]";
+        String expectedOutput = "/usr/bin/local:10:1: error: [lower-camel-case] errMsg";
         assertEquals(expectedOutput, this.violationMessage.toString());
     }
 }
