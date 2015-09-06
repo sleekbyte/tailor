@@ -64,7 +64,8 @@ public class FileListener implements AutoCloseable {
                 this.printer.ignoreLine(lineNumber);
             }
 
-            if (SourceFileUtil.lineTooLong(lineLength, this.maxLengths.maxLineLength)) {
+            if (enabledRules.contains(Rules.MAX_LINE_LENGTH)
+                && SourceFileUtil.lineTooLong(lineLength, this.maxLengths.maxLineLength)) {
                 lineLengthViolation(lineNumber, lineLength);
             }
 
@@ -74,10 +75,14 @@ public class FileListener implements AutoCloseable {
             }
         }
 
-        verifyFileLength();
+        if (enabledRules.contains(Rules.MAX_FILE_LENGTH)) {
+            verifyFileLength();
+        }
+
         if (enabledRules.contains(Rules.TERMINATING_NEWLINE)) {
             verifyNewlineTerminated();
         }
+
         if (enabledRules.contains(Rules.LEADING_WHITESPACE)) {
             verifyNoLeadingWhitespace();
         }
@@ -87,7 +92,7 @@ public class FileListener implements AutoCloseable {
         String lengthVersusLimit = " (" + lineLength + "/" + this.maxLengths.maxLineLength + ")";
         // Mark error on first character beyond limit
         Location location = new Location(lineNumber, this.maxLengths.maxLineLength + 1);
-        this.printer.error(null, Messages.LINE + Messages.EXCEEDS_CHARACTER_LIMIT + lengthVersusLimit, location);
+        this.printer.error(Rules.MAX_LINE_LENGTH, Messages.LINE + Messages.EXCEEDS_CHARACTER_LIMIT + lengthVersusLimit, location);
     }
 
     private void trailingWhitespaceViolation(int lineNumber, int lineLength) {
@@ -100,7 +105,7 @@ public class FileListener implements AutoCloseable {
             String lengthVersusLimit = " (" + this.numOfLines + "/" + this.maxLengths.maxFileLength + ")";
             // Mark error on first line beyond limit
             Location location = new Location(this.maxLengths.maxFileLength + 1);
-            this.printer.error(null, Messages.FILE + Messages.EXCEEDS_LINE_LIMIT + lengthVersusLimit, location);
+            this.printer.error(Rules.MAX_FILE_LENGTH, Messages.FILE + Messages.EXCEEDS_LINE_LIMIT + lengthVersusLimit, location);
         }
     }
 
