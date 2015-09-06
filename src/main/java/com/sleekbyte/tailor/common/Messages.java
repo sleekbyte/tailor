@@ -93,8 +93,15 @@ public class Messages {
     public static final String END_SPACE = "should end with whitespace";
 
     // Usage messages
-    public static final String CMD_LINE_SYNTAX = "tailor";
+    public static final String CMD_LINE_SYNTAX = "tailor [options] [--] [[file|directory] ...]";
+    public static final String TAILOR_DESC = "Perform static analysis on Swift source files.";
+    public static final String TAILOR_ARGS_INFO =
+        "Invoking Tailor with at least one file or directory will analyze all Swift files at those paths."
+        + " If no paths are provided, Tailor will analyze all Swift files found in '$SRCROOT' (if defined),"
+        + " which is set by Xcode when run in a Build Phase. Tailor may be set up as an Xcode Build Phase automatically"
+        + " with the --xcode option.";
     public static final String HELP_DESC = "display help";
+    public static final String VERSION_DESC = "display version";
     public static final String MAXIMUM = "maximum ";
     public static final String LENGTH = "length";
     public static final String SEVERITY = "severity ";
@@ -107,7 +114,7 @@ public class Messages {
     public static final String MAX_LINE_LENGTH_DESC = MAXIMUM + LINE + LENGTH + IN_CHARS_DESC;
     public static final String MAX_NAME_LENGTH_DESC = MAXIMUM + IDENTIFIER_NAME + LENGTH + IN_CHARS_DESC;
     public static final String MAX_STRUCT_LENGTH_DESC = MAXIMUM + STRUCT + LENGTH + IN_LINES_DESC;
-    public static final String MAX_SEVERITY_DESC = MAXIMUM + SEVERITY + "[" + ERROR + "|" + WARNING + "]";
+    public static final String MAX_SEVERITY_DESC = MAXIMUM + SEVERITY;
     public static final String ONLY_SPECIFIC_RULES_DESC = "run only the specified rules";
     public static final String EXCEPT_RULES_DESC = "run all rules except the specified ones";
     public static final String XCODE_INTEGRATION_DESC = "add Tailor Build Phase Run Script to Xcode Project";
