@@ -178,6 +178,7 @@ public class WhitespaceTest extends RuleTest {
         addExpectedBraceMessage(start + 4, 8);
         addExpectedBraceMessage(start + 21, 14);
         addExpectedBraceMessage(start + 32, 21);
+        addExpectedBraceMessage(start + 45, 24);
         addExpectedBraceMessage(start + 51, 25);
 
         // Single line comments

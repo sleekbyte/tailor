@@ -91,6 +91,8 @@ public class Messages {
     public static final String TRAILING_WHITESPACE = "should not have any trailing whitespace";
     public static final String START_SPACE = "should start with whitespace";
     public static final String END_SPACE = "should end with whitespace";
+    public static final String SUBSCRIPT = "Subscript ";
+    public static final String GETTER_SETTER_BLOCK = "Getter/Setter block ";
 
     // Usage messages
     public static final String CMD_LINE_SYNTAX = "tailor [options] [--] [[file|directory] ...]";

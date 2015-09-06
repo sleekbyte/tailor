@@ -2,6 +2,8 @@ package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.antlr.SwiftParser.GetterSetterBlockContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.SubscriptDeclarationContext;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
@@ -116,6 +118,16 @@ public class BraceStyleListener extends SwiftBaseListener {
     @Override
     public void enterSetterClause(SwiftParser.SetterClauseContext ctx) {
         verifySetterBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterSubscriptDeclaration(SwiftParser.SubscriptDeclarationContext ctx) {
+        verifySubscriptBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterGetterSetterBlock(SwiftParser.GetterSetterBlockContext ctx) {
+        verifyGetterSetterBraceStyle(ctx);
     }
 
     private void verifySwitchStatementBraceStyle(SwiftParser.SwitchStatementContext ctx) {
@@ -265,6 +277,16 @@ public class BraceStyleListener extends SwiftBaseListener {
         Token set = ParseTreeUtil.getStopTokenForNode(leftSibling);
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), set, Messages.SETTER);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.SETTER);
+    }
+
+    void verifySubscriptBraceStyle(SubscriptDeclarationContext ctx) {
+        verifyBodyOpenBraceStyle((ParserRuleContext) ParseTreeUtil.getLastChild(ctx), Messages.SUBSCRIPT);
+        verifyBodyCloseBraceStyle((ParserRuleContext) ParseTreeUtil.getLastChild(ctx), Messages.SUBSCRIPT);
+    }
+
+    void verifyGetterSetterBraceStyle(GetterSetterBlockContext ctx) {
+        verifyBodyOpenBraceStyle(ctx, Messages.GETTER_SETTER_BLOCK);
+        verifyBodyCloseBraceStyle(ctx, Messages.GETTER_SETTER_BLOCK);
     }
 
     private void verifySingleSpaceBeforeOpenBrace(ParserRuleContext codeBlockCtx, Token left) {
