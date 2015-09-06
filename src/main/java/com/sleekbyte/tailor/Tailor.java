@@ -47,6 +47,7 @@ import java.util.stream.Collectors;
  */
 public class Tailor {
 
+    public static final String VERSION = "0.1.0";
     private static ArgumentParser argumentParser = new ArgumentParser();
     private static List<String> pathNames;
 
@@ -248,9 +249,13 @@ public class Tailor {
         try {
             pathNames = new ArrayList<>();
 
-            CommandLine cmd = argumentParser.parseCommandLine(args);
+            final CommandLine cmd = argumentParser.parseCommandLine(args);
             if (argumentParser.shouldPrintHelp()) {
                 argumentParser.printHelp();
+                System.exit(ExitCode.SUCCESS);
+            }
+            if (argumentParser.shouldPrintVersion()) {
+                System.out.println(VERSION);
                 System.exit(ExitCode.SUCCESS);
             }
 
