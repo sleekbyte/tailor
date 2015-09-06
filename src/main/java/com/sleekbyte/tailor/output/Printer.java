@@ -129,12 +129,16 @@ public class Printer implements AutoCloseable {
         System.out.println(inputFile + " could not be parsed successfully, skipping...");
     }
 
-    public long getNumErrorMessages() {
-        return msgBuffer.values().stream().filter(msg -> msg.getSeverity().equals(Severity.ERROR)).count();
+    private long getNumMessagesWithSeverity(Severity severity) {
+        return msgBuffer.values().stream().filter(msg -> msg.getSeverity().equals(severity)).count();
     }
 
-    public long getNumViolations() {
-        return msgBuffer.size();
+    public long getNumErrorMessages() {
+        return getNumMessagesWithSeverity(Severity.ERROR);
+    }
+
+    public long getNumWarningMessages() {
+        return getNumMessagesWithSeverity(Severity.WARNING);
     }
 
     public void ignoreLine(int ignoredLineNumber) {

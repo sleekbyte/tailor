@@ -99,9 +99,28 @@ public class Tailor {
         return filenames;
     }
 
-    public static void printSummary(long numFiles, long numViolations, long numSkipped) {
-        System.out.println(String.format("%nAnalyzed %d files, skipped %d files, and detected %d violations.%n",
-            numFiles - numSkipped, numSkipped, numViolations));
+    private static String pluralize(long number, String singular, String plural) {
+        return String.format("%d %s", number, number == 1 ? singular : plural);
+    }
+
+    /**
+     * Print results of analysis.
+     *
+     * @param numFiles Number of swift files detected
+     * @param numSkipped Number of swift files skipped due to parsing errors
+     * @param numErrors Number of error violations
+     * @param numWarnings Number of warning violations
+     */
+    public static void printSummary(long numFiles, long numSkipped, long numErrors, long numWarnings) {
+        long numFilesAnalyzed = numFiles - numSkipped;
+        long numViolations = numErrors + numWarnings;
+        System.out.println(String.format("%nAnalyzed %s, skipped %s, and detected %s (%s, %s).%n",
+            pluralize(numFilesAnalyzed, "file", "files"),
+            pluralize(numSkipped, "file", "files"),
+            pluralize(numViolations, "violation", "violations"),
+            pluralize(numErrors, "error", "errors"),
+            pluralize(numWarnings, "warning", "warnings")
+        ));
     }
 
     /**
@@ -186,7 +205,7 @@ public class Tailor {
     public static void analyzeFiles(Set<String> filenames) throws ArgumentParserException, IOException {
         long numErrors = 0;
         long numSkippedFiles = 0;
-        long numViolations = 0;
+        long numWarnings = 0;
         MaxLengths maxLengths = argumentParser.parseMaxLengths();
         Severity maxSeverity = argumentParser.getMaxSeverity();
         ColorSettings colorSettings =
@@ -227,11 +246,11 @@ public class Tailor {
                 }
 
                 numErrors += printer.getNumErrorMessages();
-                numViolations += printer.getNumViolations();
+                numWarnings += printer.getNumWarningMessages();
             }
         }
 
-        printSummary(filenames.size(), numViolations, numSkippedFiles);
+        printSummary(filenames.size(), numSkippedFiles, numErrors, numWarnings);
 
         if (numErrors >= 1L) {
             // Non-zero exit status when any violation messages have Severity.ERROR, controlled by --max-severity
