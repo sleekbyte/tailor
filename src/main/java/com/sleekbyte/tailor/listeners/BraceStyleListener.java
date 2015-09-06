@@ -125,7 +125,8 @@ public class BraceStyleListener extends SwiftBaseListener {
         Location openBraceLocation = ListenerUtil.getLocationOfChildToken(ctx, 2);
 
         if (switchExpLocation.line != openBraceLocation.line) {
-            this.printer.warn(Rules.BRACE_STYLE, Messages.SWITCH_STATEMENT + Messages.OPEN_BRACE_STYLE, openBraceLocation);
+            this.printer.warn(Rules.BRACE_STYLE, Messages.SWITCH_STATEMENT + Messages.OPEN_BRACE_STYLE,
+                openBraceLocation);
         }
 
         // Close brace
@@ -271,7 +272,8 @@ public class BraceStyleListener extends SwiftBaseListener {
     private void verifySingleSpaceBeforeOpenBrace(ParserRuleContext codeBlockCtx, Token left) {
         Token openBrace = codeBlockCtx.getStart();
         if (checkLeftSpaces(left, openBrace, 1)) {
-            printer.error(Rules.BRACE_STYLE, Messages.OPEN_BRACE + Messages.SPACE_BEFORE, ListenerUtil.getTokenLocation(openBrace));
+            printer.error(Rules.BRACE_STYLE, Messages.OPEN_BRACE + Messages.SPACE_BEFORE,
+                ListenerUtil.getTokenLocation(openBrace));
         }
     }
 

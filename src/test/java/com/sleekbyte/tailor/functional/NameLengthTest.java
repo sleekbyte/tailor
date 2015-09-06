@@ -57,7 +57,7 @@ public class NameLengthTest extends RuleTest {
     private void addExpectedMsg(int line, int column, Severity severity, String msg, int length, int limit) {
         String lengthVersusLimit = " (" + length + "/" + limit + ")";
         msg += Messages.EXCEEDS_CHARACTER_LIMIT + lengthVersusLimit;
-        expectedMessages.add(Printer.genOutputStringForTest(inputFile.getName(), line, column, severity, msg));
+        expectedMessages.add(Printer.genOutputStringForTest(null, inputFile.getName(), line, column, severity, msg));
     }
 
 }

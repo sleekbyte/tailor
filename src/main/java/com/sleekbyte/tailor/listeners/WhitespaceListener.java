@@ -219,13 +219,13 @@ public class WhitespaceListener extends SwiftBaseListener {
         Location colonLocation = ListenerUtil.getTokenLocation(colon);
 
         if (checkLeftSpaces(left, colon, 1)) {
-            printer.error(Rules.WHITESPACE, Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " " + Messages.SPACE_BEFORE,
-                colonLocation);
+            printer.error(Rules.WHITESPACE, Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " "
+                    + Messages.SPACE_BEFORE, colonLocation);
         }
 
         if (checkRightSpaces(right, colon, 1)) {
-            printer.error(Rules.WHITESPACE, Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " " + Messages.SPACE_AFTER,
-                colonLocation);
+            printer.error(Rules.WHITESPACE, Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " "
+                    + Messages.SPACE_AFTER, colonLocation);
         }
     }
 
@@ -233,13 +233,13 @@ public class WhitespaceListener extends SwiftBaseListener {
         Location colonLocation = ListenerUtil.getTokenLocation(colon);
 
         if (checkLeftSpaces(left, colon, 0)) {
-            printer.error(Rules.WHITESPACE, Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " " + Messages.NO_SPACE_BEFORE,
-                colonLocation);
+            printer.error(Rules.WHITESPACE, Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " "
+                    + Messages.NO_SPACE_BEFORE, colonLocation);
         }
 
         if (checkRightSpaces(right, colon, 1)) {
-            printer.error(Rules.WHITESPACE, Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " " + Messages.SPACE_AFTER,
-                colonLocation);
+            printer.error(Rules.WHITESPACE, Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " "
+                    + Messages.SPACE_AFTER, colonLocation);
         }
     }
 
@@ -263,10 +263,12 @@ public class WhitespaceListener extends SwiftBaseListener {
 
     private void verifyArrowIsSpaceDelimited(Token left, Token right, Token arrow) {
         if (checkLeftSpaces(left, arrow, 1)) {
-            printer.error(Rules.WHITESPACE, Messages.RETURN_ARROW + Messages.SPACE_BEFORE, ListenerUtil.getTokenLocation(arrow));
+            printer.error(Rules.WHITESPACE, Messages.RETURN_ARROW + Messages.SPACE_BEFORE,
+                ListenerUtil.getTokenLocation(arrow));
         }
         if (checkRightSpaces(right, arrow, 1)) {
-            printer.error(Rules.WHITESPACE, Messages.RETURN_ARROW + Messages.SPACE_AFTER, ListenerUtil.getTokenEndLocation(arrow));
+            printer.error(Rules.WHITESPACE, Messages.RETURN_ARROW + Messages.SPACE_AFTER,
+                ListenerUtil.getTokenEndLocation(arrow));
         }
     }
 }

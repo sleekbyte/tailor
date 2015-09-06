@@ -23,6 +23,7 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
     /**
      * Constructs a ViolationMessage with the specified message components.
      *
+     * @param rule             the rule associated with the violation message
      * @param lineNumber       the logical line number in the source file
      * @param columnNumber     the logical column number in the source file
      * @param severity         the severity of the violation message
@@ -39,6 +40,7 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
     /**
      * Constructs a ViolationMessage with the specified message components.
      *
+     * @param rule             the rule associated with the violation
      * @param filePath         the path of the source file
      * @param lineNumber       the logical line number in the source file
      * @param columnNumber     the logical column number in the source file
@@ -90,7 +92,10 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
             ret = this.severity.toString().compareTo(message.severity.toString());
         }
         if (ret == 0) {
-            return this.violationMessage.compareTo(message.violationMessage);
+            ret = this.violationMessage.compareTo(message.violationMessage);
+        }
+        if (ret == 0) {
+            return this.rule.compareTo(message.rule);
         }
         return ret;
     }
@@ -124,7 +129,8 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
             && (this.columnNumber == candidateObject.columnNumber)
             && (this.filePath.equals(candidateObject.filePath))
             && (this.severity.equals(candidateObject.severity))
-            && (this.violationMessage.equals(candidateObject.violationMessage));
+            && (this.violationMessage.equals(candidateObject.violationMessage))
+            && (this.rule.equals(candidateObject.rule));
     }
 
     @Override
@@ -139,7 +145,9 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
     }
 
     private String formattedRule() {
-        if (rule == null) return "";
+        if (rule == null) {
+            return "";
+        }
         return String.format("[%s]", rule.getName());
     }
 

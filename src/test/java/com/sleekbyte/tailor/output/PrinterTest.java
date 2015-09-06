@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.Location;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import org.junit.After;
 import org.junit.Before;
@@ -48,38 +49,38 @@ public class PrinterTest {
 
     @Test
     public void testWarnWithLocationSuccess() throws IOException {
-        printer.warn(WARNING_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
+        printer.warn(Rules.LOWER_CAMEL_CASE, WARNING_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         printer.close();
-        assertEquals(expectedOutput(Severity.WARNING, WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER),
+        assertEquals(expectedOutput(Rules.LOWER_CAMEL_CASE, Severity.WARNING, WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER),
             outContent.toString(Charset.defaultCharset().name()));
     }
 
     @Test
     public void testErrorWithLocationSuccess() throws IOException {
-        printer.error(ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
+        printer.error(Rules.LOWER_CAMEL_CASE, ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         printer.close();
-        assertEquals(expectedOutput(Severity.ERROR, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER),
+        assertEquals(expectedOutput(Rules.LOWER_CAMEL_CASE, Severity.ERROR, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER),
             outContent.toString(Charset.defaultCharset().name()));
     }
 
     @Test
     public void testErrorWithMaxSeverityWarn() throws IOException {
-        warnPrinter.error(ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
+        warnPrinter.error(null, ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         warnPrinter.close();
-        assertEquals(expectedOutput(Severity.WARNING, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER),
+        assertEquals(expectedOutput(null, Severity.WARNING, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER),
             outContent.toString(Charset.defaultCharset().name()));
     }
 
     @Test
     public void testWarnWithMaxSeverityWarn() throws IOException {
-        warnPrinter.warn(WARNING_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
+        warnPrinter.warn(Rules.LOWER_CAMEL_CASE, WARNING_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         warnPrinter.close();
-        assertEquals(expectedOutput(Severity.WARNING, WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER),
+        assertEquals(expectedOutput(Rules.LOWER_CAMEL_CASE, Severity.WARNING, WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER),
             outContent.toString(Charset.defaultCharset().name()));
     }
 
-    private String expectedOutput(Severity severity, String msg, int line, int column) throws IOException {
-        return Printer.getHeader(inputFile, colorSettings) + "\n" + Printer.genOutputStringForTest(
+    private String expectedOutput(Rules rule, Severity severity, String msg, int line, int column) throws IOException {
+        return Printer.getHeader(inputFile, colorSettings) + "\n" + Printer.genOutputStringForTest(rule,
             inputFile.getCanonicalPath(), line, column, severity, msg) + "\n";
     }
 

@@ -1,6 +1,7 @@
 package com.sleekbyte.tailor.functional;
 
 import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.output.Printer;
 import org.junit.runner.RunWith;
@@ -12,15 +13,15 @@ public class WhitespaceTest extends RuleTest {
     @Override
     protected void addAllExpectedMsgs() {
         // Operator declarations
-        addExpectedMsg(3, 18, Messages.OPERATOR + Messages.SPACE_BEFORE);
-        addExpectedMsg(5, 17, Messages.OPERATOR + Messages.SPACE_AFTER);
-        addExpectedMsg(7, 18, Messages.OPERATOR + Messages.SPACE_AFTER);
-        addExpectedMsg(7, 18, Messages.OPERATOR + Messages.SPACE_BEFORE);
-        addExpectedMsg(9, 19, Messages.OPERATOR + Messages.SPACE_BEFORE);
-        addExpectedMsg(11, 16, Messages.OPERATOR + Messages.SPACE_AFTER);
-        addExpectedMsg(18, 16, Messages.OPERATOR + Messages.SPACE_BEFORE);
-        addExpectedMsg(21, 1, Messages.OPERATOR + Messages.SPACE_AFTER);
-        addExpectedMsg(26, 5, Messages.OPERATOR + Messages.SPACE_AFTER);
+        addExpectedMsg(Rules.WHITESPACE, 3, 18, Messages.OPERATOR + Messages.SPACE_BEFORE);
+        addExpectedMsg(Rules.WHITESPACE, 5, 17, Messages.OPERATOR + Messages.SPACE_AFTER);
+        addExpectedMsg(Rules.WHITESPACE, 7, 18, Messages.OPERATOR + Messages.SPACE_AFTER);
+        addExpectedMsg(Rules.WHITESPACE, 7, 18, Messages.OPERATOR + Messages.SPACE_BEFORE);
+        addExpectedMsg(Rules.WHITESPACE, 9, 19, Messages.OPERATOR + Messages.SPACE_BEFORE);
+        addExpectedMsg(Rules.WHITESPACE, 11, 16, Messages.OPERATOR + Messages.SPACE_AFTER);
+        addExpectedMsg(Rules.WHITESPACE, 18, 16, Messages.OPERATOR + Messages.SPACE_BEFORE);
+        addExpectedMsg(Rules.WHITESPACE, 21, 1, Messages.OPERATOR + Messages.SPACE_AFTER);
+        addExpectedMsg(Rules.WHITESPACE, 26, 5, Messages.OPERATOR + Messages.SPACE_AFTER);
 
         // Colons in type annotations
         int start = 35;
@@ -182,23 +183,23 @@ public class WhitespaceTest extends RuleTest {
 
         // Single line comments
         start = 523;
-        addExpectedMsg(start, 3, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
-        addExpectedMsg(start + 1, 5, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
+        addExpectedMsg(Rules.COMMENT_WHITESPACE, start, 3, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
+        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 1, 5, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
 
         // Multi line comments
         start = 530;
-        addExpectedMsg(start, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
-        addExpectedMsg(start + 1, 35, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
-        addExpectedMsg(start + 2, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
-        addExpectedMsg(start + 2, 17, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
-        addExpectedMsg(start + 3, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
-        addExpectedMsg(start + 3, 24, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
-        addExpectedMsg(start + 8, 10, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
-        addExpectedMsg(start + 9, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
-        addExpectedMsg(start + 22, 15, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
-        addExpectedMsg(start + 25, 8, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
-        addExpectedMsg(start + 26, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
-        addExpectedMsg(start + 26, 23, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
+        addExpectedMsg(Rules.COMMENT_WHITESPACE, start, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
+        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 1, 35, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
+        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 2, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
+        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 2, 17, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
+        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 3, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
+        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 3, 24, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
+        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 8, 10, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
+        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 9, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
+        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 22, 15, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
+        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 25, 8, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
+        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 26, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
+        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 26, 23, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
 
         // Function Result arrow
         start = 568;
@@ -228,19 +229,19 @@ public class WhitespaceTest extends RuleTest {
     }
 
     private void addExpectedArrowMessage(int line, int column, String msg) {
-        addExpectedMsg(line, column, Messages.RETURN_ARROW + msg);
+        addExpectedMsg(Rules.WHITESPACE, line, column, Messages.RETURN_ARROW + msg);
     }
 
     private void addExpectedBraceMessage(int line, int column) {
-        addExpectedMsg(line, column, Messages.OPEN_BRACE + Messages.SPACE_BEFORE);
+        addExpectedMsg(Rules.BRACE_STYLE, line, column, Messages.OPEN_BRACE + Messages.SPACE_BEFORE);
     }
 
     private void addExpectedColonMessage(int line, int column, String msg) {
-        addExpectedMsg(line, column, Messages.COLON + Messages.AT_COLUMN + column + " " + msg);
+        addExpectedMsg(Rules.WHITESPACE, line, column, Messages.COLON + Messages.AT_COLUMN + column + " " + msg);
     }
 
-    private void addExpectedMsg(int line, int column, String msg) {
-        this.expectedMessages.add(Printer.genOutputStringForTest(inputFile.getName(), line, column, Severity.WARNING,
-            msg));
+    private void addExpectedMsg(Rules rule, int line, int column, String msg) {
+        this.expectedMessages.add(Printer.genOutputStringForTest(rule, inputFile.getName(), line, column,
+            Severity.WARNING, msg));
     }
 }

@@ -39,13 +39,13 @@ public class ConstructLengthTest extends RuleTest {
     private void addExpectedMsg(int line, Severity severity, String msg, int length, int limit) {
         String lengthVersusLimit = " (" + length + "/" + limit + ")";
         msg += Messages.EXCEEDS_LINE_LIMIT + lengthVersusLimit;
-        expectedMessages.add(Printer.genOutputStringForTest(inputFile.getName(), line, severity, msg));
+        expectedMessages.add(Printer.genOutputStringForTest(null, inputFile.getName(), line, severity, msg));
     }
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg, int length, int limit) {
         String lengthVersusLimit = " (" + length + "/" + limit + ")";
         msg += Messages.EXCEEDS_LINE_LIMIT + lengthVersusLimit;
-        expectedMessages.add(Printer.genOutputStringForTest(inputFile.getName(), line, column, severity, msg));
+        expectedMessages.add(Printer.genOutputStringForTest(null, inputFile.getName(), line, column, severity, msg));
     }
 
 }

@@ -31,7 +31,8 @@ public class ConstantNamingListener extends SwiftBaseListener {
                 || ConstantDecHelper.insideClass(constantDecContext)
                 || ConstantDecHelper.insideStruct(constantDecContext)) {
             if (!CharFormatUtil.isUpperCamelCase(constantName) && !CharFormatUtil.isLowerCamelCase(constantName)) {
-                printer.error(Rules.CONSTANT_NAMING, Messages.GLOBAL + Messages.CONSTANT + Messages.GLOBAL_CONSTANT_NAMING, location);
+                printer.error(Rules.CONSTANT_NAMING, Messages.GLOBAL + Messages.CONSTANT
+                    + Messages.GLOBAL_CONSTANT_NAMING, location);
             }
         } else {
             if (!CharFormatUtil.isLowerCamelCase(constantName)) {

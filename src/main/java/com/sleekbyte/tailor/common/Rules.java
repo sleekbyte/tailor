@@ -49,5 +49,4 @@ public enum Rules {
     public String getClassName() {
         return this.className;
     }
-
 }

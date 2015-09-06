@@ -97,8 +97,9 @@ public class Printer implements AutoCloseable {
     }
 
     // Visible for testing only
-    public static String genOutputStringForTest(Rules rule, String filePath, int line, int column, Severity severity, String msg) {
-        return new ViolationMessage(rule, line, column, severity, msg).toString();
+    public static String genOutputStringForTest(Rules rule, String filePath, int line, int column, Severity severity,
+                                                String msg) {
+        return new ViolationMessage(rule, filePath, line, column, severity, msg).toString();
     }
 
     @Override
