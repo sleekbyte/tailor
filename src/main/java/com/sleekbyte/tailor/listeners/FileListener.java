@@ -92,7 +92,8 @@ public class FileListener implements AutoCloseable {
         String lengthVersusLimit = " (" + lineLength + "/" + this.maxLengths.maxLineLength + ")";
         // Mark error on first character beyond limit
         Location location = new Location(lineNumber, this.maxLengths.maxLineLength + 1);
-        this.printer.error(Rules.MAX_LINE_LENGTH, Messages.LINE + Messages.EXCEEDS_CHARACTER_LIMIT + lengthVersusLimit, location);
+        this.printer.error(Rules.MAX_LINE_LENGTH, Messages.LINE + Messages.EXCEEDS_CHARACTER_LIMIT + lengthVersusLimit,
+            location);
     }
 
     private void trailingWhitespaceViolation(int lineNumber, int lineLength) {
@@ -105,7 +106,8 @@ public class FileListener implements AutoCloseable {
             String lengthVersusLimit = " (" + this.numOfLines + "/" + this.maxLengths.maxFileLength + ")";
             // Mark error on first line beyond limit
             Location location = new Location(this.maxLengths.maxFileLength + 1);
-            this.printer.error(Rules.MAX_FILE_LENGTH, Messages.FILE + Messages.EXCEEDS_LINE_LIMIT + lengthVersusLimit, location);
+            this.printer.error(Rules.MAX_FILE_LENGTH, Messages.FILE + Messages.EXCEEDS_LINE_LIMIT + lengthVersusLimit,
+                location);
         }
     }
 

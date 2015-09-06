@@ -27,17 +27,17 @@ public class FileRulesTest extends RuleTest {
     @Override
     protected void addAllExpectedMsgs() {
         addExpectedMsg(Rules.LEADING_WHITESPACE, 1, 1, Severity.WARNING, Messages.FILE + Messages.LEADING_WHITESPACE);
-        addExpectedMsg(null, 3, 16, Severity.WARNING, Messages.LINE + Messages.EXCEEDS_CHARACTER_LIMIT
+        addExpectedMsg(Rules.MAX_LINE_LENGTH, 3, 16, Severity.WARNING, Messages.LINE + Messages.EXCEEDS_CHARACTER_LIMIT
             + " (" + 18 + "/" + 15 + ")");
         addExpectedMsg(Rules.TRAILING_WHITESPACE, 3, 18, Severity.WARNING, Messages.LINE
             + Messages.TRAILING_WHITESPACE);
-        addExpectedMsg(null, 6, Severity.WARNING, Messages.FILE + Messages.EXCEEDS_LINE_LIMIT
+        addExpectedMsg(Rules.MAX_FILE_LENGTH, 6, Severity.WARNING, Messages.FILE + Messages.EXCEEDS_LINE_LIMIT
             + " (" + 11 + "/" + 5 + ")");
-        addExpectedMsg(null, 6, 16, Severity.WARNING, Messages.LINE + Messages.EXCEEDS_CHARACTER_LIMIT
+        addExpectedMsg(Rules.MAX_LINE_LENGTH, 6, 16, Severity.WARNING, Messages.LINE + Messages.EXCEEDS_CHARACTER_LIMIT
             + " (" + 37 + "/" + 15 + ")");
         addExpectedMsg(Rules.TRAILING_WHITESPACE, 6, 37, Severity.WARNING, Messages.LINE
             + Messages.TRAILING_WHITESPACE);
-        addExpectedMsg(null, 9, 16, Severity.WARNING, Messages.LINE + Messages.EXCEEDS_CHARACTER_LIMIT
+        addExpectedMsg(Rules.MAX_LINE_LENGTH, 9, 16, Severity.WARNING, Messages.LINE + Messages.EXCEEDS_CHARACTER_LIMIT
             + " (" + 28 + "/" + 15 + ")");
         addExpectedMsg(Rules.TERMINATING_NEWLINE, 11, Severity.WARNING, Messages.FILE + Messages.NEWLINE_TERMINATOR);
     }

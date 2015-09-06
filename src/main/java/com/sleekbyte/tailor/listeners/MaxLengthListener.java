@@ -24,6 +24,13 @@ public class MaxLengthListener extends SwiftBaseListener {
     private boolean traversedTreeForVarDeclaration = false;
     private Set<Rules> enabledRules;
 
+    /**
+     * Listener that verifies name and construct lengths.
+     *
+     * @param printer Printer object
+     * @param maxLengths MaxLengths object
+     * @param enabledRules Set of enabled rules
+     */
     public MaxLengthListener(Printer printer, MaxLengths maxLengths, Set<Rules> enabledRules) {
         this.maxLengths = maxLengths;
         this.printer = printer;
@@ -154,12 +161,13 @@ public class MaxLengthListener extends SwiftBaseListener {
 
     private void verifyNameLength(String constructType, int maxLength, ParserRuleContext ctx) {
         if (enabledRules.contains(Rules.MAX_NAME_LENGTH) && SourceFileUtil.nameTooLong(ctx, maxLength)) {
-            createErrorMessage(Rules.MAX_NAME_LENGTH, ctx.getText().length(), ctx, constructType, maxLength, Messages.EXCEEDS_CHARACTER_LIMIT);
+            createErrorMessage(Rules.MAX_NAME_LENGTH, ctx.getText().length(), ctx, constructType, maxLength,
+                Messages.EXCEEDS_CHARACTER_LIMIT);
         }
     }
 
-    private void createErrorMessage(Rules rule, int constructLength, ParserRuleContext ctx, String constructType, int maxLength,
-                                    String msg) {
+    private void createErrorMessage(Rules rule, int constructLength, ParserRuleContext ctx, String constructType,
+                                    int maxLength, String msg) {
         String lengthVersusLimit = " (" + constructLength + "/" + maxLength + ")";
         Location location = ListenerUtil.getContextStartLocation(ctx);
         printer.error(rule, constructType + msg + lengthVersusLimit, location);
