@@ -14,6 +14,7 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -55,12 +56,13 @@ public abstract class RuleTest {
         Tailor.main(command);
 
         List<String> actualOutput = new ArrayList<>();
-        int lineNum = 0;
-        for (String msg : outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX)) {
-            // Skip the first two lines for file header
-            if (lineNum++ < 2) {
-                continue;
-            }
+
+        String[] msgs = outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
+
+        // Skip first two lines for file header, last two lines for summary
+        msgs = Arrays.copyOfRange(msgs, 2, msgs.length - 2);
+
+        for (String msg : msgs) {
             String truncatedMsg = msg.substring(msg.indexOf(inputFile.getName()));
             actualOutput.add(truncatedMsg);
         }
