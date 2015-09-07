@@ -441,7 +441,8 @@ tuplePatternElement : pattern  ;
 
 // GRAMMAR OF AN ENUMERATION CASE PATTERN
 
-enumCasePattern : typeIdentifier? '.' enumCaseName tuplePattern? ;
+// Swift Language Reference has '.' as mandatory
+enumCasePattern : typeIdentifier? '.'? enumCaseName tuplePattern? ;
 
 // GRAMMAR OF A TYPE CASTING PATTERN
 
@@ -758,7 +759,7 @@ typeAnnotation : ':' attributes? sType  ;
 typeIdentifier
  : typeName genericArgumentClause?
  | typeName genericArgumentClause? '.' typeIdentifier
- | 'Self'
+ | 'Self' // Swift Language Reference does not have this
  ;
 
 typeName : identifier ;
