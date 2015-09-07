@@ -593,7 +593,8 @@ superclassInitializerExpression : 'super' '.' 'init'  ;
 
 // GRAMMAR OF A CLOSURE EXPRESSION
 
-closureExpression : '{' closureSignature? statements '}'  ;
+// Statements are not optional in the Swift Language ReferenceWhit
+closureExpression : '{' closureSignature? statements? '}'  ;
 closureSignature
  : parameterClause functionResult? 'in'
  | identifierList functionResult? 'in'
@@ -849,7 +850,7 @@ Identifier : IdentifierHead IdentifierCharacters?
  | ImplicitParameterName
  ;
 
-identifierList : identifier | identifier ',' identifierList  ;
+identifierList : (identifier | '_') | (identifier | '_') ',' identifierList  ;
 
 fragment IdentifierHead : [a-zA-Z] | '_'
  | '\u00A8' | '\u00AA' | '\u00AD' | '\u00AF' | [\u00B2-\u00B5] | [\u00B7-\u00BA]

@@ -38,3 +38,7 @@ func makeIncrementer(forIncrement amount: Int) -> Void -> Int {
     }
     return incrementer
 }
+
+downloader?.downloadImage(URLRequest: URLRequest(.GET, "https://httpbin.org/image/png")) { _, _, _ in
+    // No-op
+}
