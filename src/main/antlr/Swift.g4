@@ -683,8 +683,14 @@ functionCallExpression
 // split the operators out into the individual tokens as some of those tokens
 // are also referenced individually. For example, type signatures use
 // <...>.
-operator: '==' | '<' | '>' | '!' | '...' | '*' | '&' | Operator;
 
+operatorHead: '=' | '<' | '>' | '!' | '*' | '&' | '==' | OperatorHead;
+operatorCharacter: operatorHead | OperatorCharacter;
+
+operator: operatorHead operatorCharacter*
+  | '..' (operatorCharacter)*
+  | '...'
+  ;
 
 // WHITESPACE scariness:
 
@@ -808,11 +814,6 @@ contextSensitiveKeyword :
  'nonmutating' | 'operator' | 'override' | 'postfix' | 'precedence' | 'prefix' | 'right' |
  'set' | 'unowned' | 'unowned(safe)' | 'unowned(unsafe)' | 'weak' | 'willSet' | 'required'
  ;
-
-Operator
-  : OperatorHead OperatorCharacter*
-  | '..' ('.'|OperatorCharacter)*
-  ;
 
 OperatorHead
   : '/' | '=' | '-' | '+' | '!' | '*' | '%' | '<' | '>' | '&' | '|' | '^' | '~' | '?'
