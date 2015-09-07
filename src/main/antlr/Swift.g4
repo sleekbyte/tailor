@@ -758,6 +758,7 @@ typeAnnotation : ':' attributes? sType  ;
 typeIdentifier
  : typeName genericArgumentClause?
  | typeName genericArgumentClause? '.' typeIdentifier
+ | 'Self'
  ;
 
 typeName : identifier ;
