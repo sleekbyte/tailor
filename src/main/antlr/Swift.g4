@@ -512,7 +512,7 @@ inOutExpression : '&' identifier ;
 
 // GRAMMAR OF A TRY EXPRESSION
 
-tryOperator : 'try' '!'? ;
+tryOperator : 'try' | 'try' '!' | 'try' '?' ;
 
 // GRAMMAR OF A BINARY EXPRESSION
 
