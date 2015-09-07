@@ -60,9 +60,10 @@ loopStatement : forStatement
 
 // GRAMMAR OF A FOR STATEMENT
 
+// Swift Language Reference has expression? instead of expressionList?
 forStatement
- : 'for' forInit? ';' expression? ';' expression? codeBlock
- | 'for' '(' forInit?';' expression? ';' expression? ')' codeBlock
+ : 'for' forInit? ';' expression? ';' expressionList? codeBlock
+ | 'for' '(' forInit?';' expression? ';' expressionList? ')' codeBlock
  ;
 
 forInit : variableDeclaration | expressionList  ;
