@@ -685,7 +685,7 @@ functionCallExpression
 // are also referenced individually. For example, type signatures use
 // <...>.
 
-operatorHead: '=' | '<' | '>' | '!' | '*' | '&' | '==' | OperatorHead;
+operatorHead: '=' | '<' | '>' | '!' | '*' | '&' | '==' | '?' | OperatorHead;
 operatorCharacter: operatorHead | OperatorCharacter;
 
 operator: operatorHead operatorCharacter*
