@@ -685,7 +685,7 @@ functionCallExpression
 // are also referenced individually. For example, type signatures use
 // <...>.
 
-operatorHead: '=' | '<' | '>' | '!' | '*' | '&' | '==' | '?' | OperatorHead;
+operatorHead: '=' | '<' | '>' | '!' | '*' | '&' | '==' | '?' | '-' | OperatorHead;
 operatorCharacter: operatorHead | OperatorCharacter;
 
 operator: operatorHead operatorCharacter*
@@ -884,9 +884,11 @@ ImplicitParameterName : '$' DecimalLiteral ; // TODO: don't allow '_' here
 
 // GRAMMAR OF A LITERAL
 
-literal : integerLiteral | FloatingPointLiteral | StringLiteral | BooleanLiteral | NilLiteral ;
+literal : numericLiteral | StringLiteral | BooleanLiteral | NilLiteral ;
 
 // GRAMMAR OF AN INTEGER LITERAL
+
+numericLiteral: '-'? integerLiteral | '-'? FloatingPointLiteral ;
 
 integerLiteral
  : BinaryLiteral
