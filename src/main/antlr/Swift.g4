@@ -377,8 +377,8 @@ deinitializerDeclaration : attributes? 'deinit' codeBlock  ;
 
 // GRAMMAR OF AN EXTENSION DECLARATION
 
-// requirementClause missing in the Swift Language Reference
-extensionDeclaration : accessLevelModifier? 'extension' typeIdentifier requirementClause? typeInheritanceClause? extensionBody  ;
+// attributes, requirementClause missing in the Swift Language Reference
+extensionDeclaration : attributes? accessLevelModifier? 'extension' typeIdentifier requirementClause? typeInheritanceClause? extensionBody  ;
 extensionBody : '{' declarations?'}'  ;
 
 // GRAMMAR OF A SUBSCRIPT DECLARATION
@@ -460,10 +460,11 @@ expressionPattern : expression  ;
 // GRAMMAR OF AN ATTRIBUTE
 
 attribute : '@' attributeName attributeArgumentClause? ;
-attributeName : identifier  ;
+attributeName : identifier ;
 attributeArgumentClause : '('  balancedTokens?  ')'  ;
 attributes : attribute+ ;
-balancedTokens : balancedToken+ ;
+// Swift Language Reference does not have ','
+balancedTokens : balancedToken ','? balancedTokens? ;
 balancedToken
  : '('  balancedTokens? ')'
  | '[' balancedTokens? ']'
@@ -813,7 +814,8 @@ keyword : 'convenience' | 'class' | 'deinit' | 'enum' | 'extension' | 'func' | '
 contextSensitiveKeyword :
  'associativity' | 'didSet' | 'get' | 'infix' | 'inout' | 'left' | 'mutating' | 'none' |
  'nonmutating' | 'operator' | 'override' | 'postfix' | 'precedence' | 'prefix' | 'right' |
- 'set' | 'unowned' | 'unowned(safe)' | 'unowned(unsafe)' | 'weak' | 'willSet' | 'required'
+ 'set' | 'unowned' | 'unowned(safe)' | 'unowned(unsafe)' | 'weak' | 'willSet' | 'required' |
+ 'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS'
  ;
 
 OperatorHead
