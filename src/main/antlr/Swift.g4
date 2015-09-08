@@ -328,7 +328,7 @@ structBody : '{' declarations?'}'  ;
 // GRAMMAR OF A CLASS DECLARATION
 
 // declarationModifier missing in Swift Language Reference
-classDeclaration : attributes? declarationModifier? accessLevelModifier? 'class' className genericParameterClause? typeInheritanceClause? classBody  ;
+classDeclaration : attributes? declarationModifier* 'class' className genericParameterClause? typeInheritanceClause? classBody  ;
 className : identifier ;
 classBody : '{' declarations? '}'  ;
 
