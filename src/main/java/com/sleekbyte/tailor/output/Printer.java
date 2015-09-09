@@ -47,6 +47,7 @@ public class Printer implements AutoCloseable {
     /**
      * Prints warning message.
      *
+     * @param rule rule associated with warning
      * @param warningMsg warning message to print
      * @param location   location object containing line and column number for printing
      */
@@ -57,6 +58,7 @@ public class Printer implements AutoCloseable {
     /**
      * Prints error message.
      *
+     * @param rule rule associated with error
      * @param errorMsg error message to print
      * @param location location object containing line and column number for printing
      */

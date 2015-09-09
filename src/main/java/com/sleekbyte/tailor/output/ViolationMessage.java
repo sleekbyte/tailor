@@ -145,9 +145,6 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
     }
 
     private String formattedRule() {
-        if (rule == null) {
-            return "";
-        }
         return String.format("[%s]", rule.getName());
     }
 

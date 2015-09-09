@@ -65,9 +65,9 @@ public class PrinterTest {
 
     @Test
     public void testErrorWithMaxSeverityWarn() throws IOException {
-        warnPrinter.error(null, ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
+        warnPrinter.error(Rules.LOWER_CAMEL_CASE, ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         warnPrinter.close();
-        assertEquals(expectedOutput(null, Severity.WARNING, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER),
+        assertEquals(expectedOutput(Rules.LOWER_CAMEL_CASE, Severity.WARNING, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER),
             outContent.toString(Charset.defaultCharset().name()));
     }
 

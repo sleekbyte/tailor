@@ -31,8 +31,7 @@ public class FunctionNewlinePaddingTest extends RuleTest {
     protected String[] getCommandArgs() {
         return new String[]{
             "--no-color",
-            "--except=terminating-semicolon",
-            "--",
+            "--only=function-whitespace",
             inputFile.getPath()
         };
     }

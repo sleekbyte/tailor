@@ -70,8 +70,7 @@ public class ConstantNamingTest extends RuleTest {
     protected String[] getCommandArgs() {
         return new String[]{
             "--no-color",
-            "--except=lower-camel-case",
-            "--",
+            "--only=constant-naming,constant-k-prefix",
             inputFile.getPath()
         };
     }

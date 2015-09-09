@@ -37,7 +37,7 @@ public enum Rules {
 
     // Max Length Rules
 
-    MAX_CLASS_LENGTH(ArgumentParser.MAX_NAME_LENGTH_OPT, FileListener.class.getName()),
+    MAX_CLASS_LENGTH(ArgumentParser.MAX_CLASS_LENGTH_OPT, FileListener.class.getName()),
     MAX_STRUCT_LENGTH(ArgumentParser.MAX_STRUCT_LENGTH_OPT, FileListener.class.getName()),
     MAX_CLOSURE_LENGTH(ArgumentParser.MAX_CLOSURE_LENGTH_OPT, FileListener.class.getName()),
     MAX_FUNCTION_LENGTH(ArgumentParser.MAX_FUNCTION_LENGTH_OPT, FileListener.class.getName()),
