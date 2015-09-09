@@ -93,6 +93,9 @@ public class Messages {
     public static final String END_SPACE = "should end with whitespace";
     public static final String SUBSCRIPT = "Subscript ";
     public static final String GETTER_SETTER_BLOCK = "Getter/Setter block ";
+    public static final String WILL_SET_CLAUSE = "WillSet clause ";
+    public static final String DID_SET_CLAUSE = "DidSet clause ";
+    public static final String WILLSET_DIDSET_BLOCK = "WillSet/DidSet block ";
 
     // Usage messages
     public static final String CMD_LINE_SYNTAX = "tailor [options] [--] [[file|directory] ...]";
