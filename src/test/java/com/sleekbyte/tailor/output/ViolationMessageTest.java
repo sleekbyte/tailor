@@ -83,29 +83,30 @@ public class ViolationMessageTest {
     public void testEqualsUnequalMessage() {
         // Unequal ViolationMessages, verify that each field is checked for differences
         ViolationMessage unequalViolationMessage =
-            new ViolationMessage(null, "/usr/bin/local", 12, 1, Severity.ERROR, "errMsg");
+            new ViolationMessage(Rules.LOWER_CAMEL_CASE, "/usr/bin/local", 12, 1, Severity.ERROR, "errMsg");
         assertNotEquals(this.violationMessage, unequalViolationMessage);
 
-        unequalViolationMessage = new ViolationMessage(null, "/usr/bin/local", 10, 5, Severity.ERROR, "errMsg");
+        unequalViolationMessage = new ViolationMessage(Rules.LOWER_CAMEL_CASE, "/usr/bin/local", 10, 5, Severity.ERROR,
+            "errMsg");
         assertNotEquals(this.violationMessage, unequalViolationMessage);
 
-        unequalViolationMessage = new ViolationMessage(null, "/usr/bin/local/diff", 10, 1, Severity.ERROR, "errMsg");
+        unequalViolationMessage = new ViolationMessage(Rules.LOWER_CAMEL_CASE, "/usr/bin/local/diff", 10, 1,
+            Severity.ERROR, "errMsg");
         assertNotEquals(this.violationMessage, unequalViolationMessage);
 
-        unequalViolationMessage = new ViolationMessage(null, "/usr/bin/local", 10, 1, Severity.WARNING, "errMsg");
+        unequalViolationMessage = new ViolationMessage(Rules.LOWER_CAMEL_CASE, "/usr/bin/local", 10, 1,
+            Severity.WARNING, "errMsg");
         assertNotEquals(this.violationMessage, unequalViolationMessage);
 
-        unequalViolationMessage = new ViolationMessage(null, "/usr/bin/local", 10, 1, Severity.ERROR, "warningMsg");
+        unequalViolationMessage = new ViolationMessage(Rules.LOWER_CAMEL_CASE, "/usr/bin/local", 10, 1,
+            Severity.ERROR, "warningMsg");
+        assertNotEquals(this.violationMessage, unequalViolationMessage);
+
+        unequalViolationMessage = new ViolationMessage(Rules.BRACE_STYLE, "/usr/bin/local", 12, 1,
+            Severity.ERROR, "errMsg");
         assertNotEquals(this.violationMessage, unequalViolationMessage);
     }
-
-    @Test
-    public void testEqualsUnequalRule() {
-        ViolationMessage unequalViolationMessage =
-            new ViolationMessage(null, "/usr/bin/local", 12, 1, Severity.ERROR, "errMsg");
-        assertNotEquals(this.violationMessage, unequalViolationMessage);
-    }
-
+    
     @Test
     public void testEqualsSameMessage() {
         // Equal ViolationMessages
