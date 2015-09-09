@@ -10,8 +10,10 @@ sourceSets {
     }
 }
 
-// Display useful test events and output on the console
 test {
+    // Restrict heap size for the test JVM(s)
+    maxHeapSize = "2g"
+    // Display useful test events and output on the console
     testLogging {
         events "skipped", "failed", "standardOut", "standardError"
     }
