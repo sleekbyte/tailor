@@ -593,7 +593,7 @@ superclassInitializerExpression : 'super' '.' 'init'  ;
 
 // GRAMMAR OF A CLOSURE EXPRESSION
 
-// Statements are not optional in the Swift Language ReferenceWhit
+// Statements are not optional in the Swift Language Reference
 closureExpression : '{' closureSignature? statements? '}'  ;
 closureSignature
  : parameterClause functionResult? 'in'
