@@ -16,6 +16,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Base class for functional rule tests.
@@ -50,7 +51,8 @@ public abstract class RuleTest {
 
     @Test
     public void testRule() throws IOException {
-        String[] command = getCommandArgs();
+        String[] command = Stream.concat(Arrays.stream(this.getCommandArgs()), Arrays.stream(this.getDefaultArgs()))
+            .toArray(String[]::new);
         addAllExpectedMsgs();
 
         Tailor.main(command);
@@ -71,11 +73,12 @@ public abstract class RuleTest {
             actualOutput.toArray());
     }
 
+    protected String[] getDefaultArgs() {
+        return new String[] {"--no-color", inputFile.getPath()};
+    }
+
     protected String[] getCommandArgs() {
-        return new String[]{
-            "--no-color",
-            inputFile.getPath()
-        };
+        return new String[]{};
     }
 
 }

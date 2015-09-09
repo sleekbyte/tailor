@@ -7,9 +7,6 @@ import com.sleekbyte.tailor.output.Printer;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.Arrays;
-import java.util.stream.Stream;
-
 /**
  * Functional tests for {@link com.sleekbyte.tailor.listeners.FileListener}.
  */
@@ -18,10 +15,10 @@ public class FileRulesTest extends RuleTest {
 
     @Override
     protected String[] getCommandArgs() {
-        return Stream.concat(Arrays.stream(super.getCommandArgs()), Arrays.stream(new String[] {
+        return new String[] {
             "--max-file-length", "5",
             "--max-line-length", "15",
-        })).toArray(String[]::new);
+        };
     }
 
     @Override

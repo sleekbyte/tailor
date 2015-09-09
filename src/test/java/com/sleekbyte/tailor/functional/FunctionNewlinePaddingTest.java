@@ -29,10 +29,6 @@ public class FunctionNewlinePaddingTest extends RuleTest {
 
     @Override
     protected String[] getCommandArgs() {
-        return new String[]{
-            "--no-color",
-            "--only=function-whitespace",
-            inputFile.getPath()
-        };
+        return new String[]{ "--only=function-whitespace" };
     }
 }

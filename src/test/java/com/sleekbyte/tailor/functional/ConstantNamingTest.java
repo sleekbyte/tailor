@@ -68,11 +68,7 @@ public class ConstantNamingTest extends RuleTest {
 
     @Override
     protected String[] getCommandArgs() {
-        return new String[]{
-            "--no-color",
-            "--only=constant-naming,constant-k-prefix",
-            inputFile.getPath()
-        };
+        return new String[]{ "--only=constant-naming,constant-k-prefix" };
     }
 
     private void addExpectedMsg(Rules rule, int line, int column, Severity severity, String msg) {
