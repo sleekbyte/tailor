@@ -602,4 +602,26 @@ struct Matrix {
             }
         }
     }
+
+    class StepCounter {
+            var totalSteps: Int = 0
+            {
+                didSet {
+                    if totalSteps > oldValue {
+                        println("Added \(totalSteps - oldValue) steps")
+                    }
+                }
+            }
+    }
+
+    class StepCounter {
+        var totalSteps: Int
+        = 0 {
+            didSet {
+                if totalSteps > oldValue {
+                    println("Added \(totalSteps - oldValue) steps")
+                }
+            }
+        }
+    }
 }

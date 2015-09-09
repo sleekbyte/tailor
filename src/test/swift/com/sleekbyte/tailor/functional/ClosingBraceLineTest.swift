@@ -355,3 +355,10 @@ class StepCounter {
             println("About to set totalSteps to \(newTotalSteps)") }
     }
 }
+
+class StepCounter {
+    var totalSteps: Int = 0 {
+        willSet(newTotalSteps) {
+            println("About to set totalSteps to \(newTotalSteps)")
+        } }
+}

@@ -6,6 +6,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser.DidSetClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.GetterSetterBlockContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.SubscriptDeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.WillSetClauseContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.WillSetDidSetBlockContext;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
@@ -140,6 +141,11 @@ public class BraceStyleListener extends SwiftBaseListener {
     @Override
     public void enterDidSetClause(SwiftParser.DidSetClauseContext ctx) {
         verifyDidSetClauseBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterWillSetDidSetBlock(SwiftParser.WillSetDidSetBlockContext ctx) {
+        verifyWillSetDidSetBlockBraceStyle(ctx);
     }
 
     private void verifySwitchStatementBraceStyle(SwiftParser.SwitchStatementContext ctx) {
@@ -312,6 +318,11 @@ public class BraceStyleListener extends SwiftBaseListener {
         TerminalNodeImpl leftSibling = (TerminalNodeImpl) ParseTreeUtil.getLeftSibling(ctx.codeBlock());
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), leftSibling.getSymbol(), Messages.DID_SET_CLAUSE);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.DID_SET_CLAUSE);
+    }
+
+    void verifyWillSetDidSetBlockBraceStyle(WillSetDidSetBlockContext ctx) {
+        verifyBodyOpenBraceStyle(ctx, Messages.WILLSET_DIDSET_BLOCK);
+        verifyBodyCloseBraceStyle(ctx, Messages.WILLSET_DIDSET_BLOCK);
     }
 
     private void verifySingleSpaceBeforeOpenBrace(ParserRuleContext codeBlockCtx, Token left) {
