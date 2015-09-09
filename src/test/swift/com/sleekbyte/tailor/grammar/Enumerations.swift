@@ -82,3 +82,40 @@ if let somePlanet = Planet(rawValue: positionToFind) {
 } else {
     print("There isn't a planet at position \(positionToFind)")
 }
+
+public enum ImageTransition {
+    case None
+    case CrossDissolve(NSTimeInterval)
+    case CurlDown(NSTimeInterval)
+    case CurlUp(NSTimeInterval)
+    case FlipFromBottom(NSTimeInterval)
+    case FlipFromLeft(NSTimeInterval)
+    case FlipFromRight(NSTimeInterval)
+    case FlipFromTop(NSTimeInterval)
+
+    private var duration: NSTimeInterval {
+        switch self {
+        case None:                         return 0.0
+        case CrossDissolve(let duration):  return duration
+        case CurlDown(let duration):       return duration
+        case CurlUp(let duration):         return duration
+        case FlipFromBottom(let duration): return duration
+        case FlipFromLeft(let duration):   return duration
+        case FlipFromRight(let duration):  return duration
+        case FlipFromTop(let duration):    return duration
+        }
+    }
+
+    private var animationOptions: UIViewAnimationOptions {
+        switch self {
+        case None:           return .TransitionNone
+        case CrossDissolve:  return .TransitionCrossDissolve
+        case CurlDown:       return .TransitionCurlDown
+        case CurlUp:         return .TransitionCurlUp
+        case FlipFromBottom: return .TransitionFlipFromBottom
+        case FlipFromLeft:   return .TransitionFlipFromLeft
+        case FlipFromRight:  return .TransitionFlipFromRight
+        case FlipFromTop:    return .TransitionFlipFromTop
+        }
+    }
+}

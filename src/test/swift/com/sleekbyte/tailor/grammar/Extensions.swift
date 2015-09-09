@@ -67,3 +67,22 @@ extension Int {
         }
     }
 }
+
+extension ImageFilter where Self: Roundable {
+    /// The unique idenitifier for an `ImageFilter` conforming to the `Roundable` protocol.
+    public var identifier: String {
+        let radius = Int64(round(self.radius))
+        return "\(self.dynamicType)-radius:(\(radius))"
+    }
+}
+
+extension ImageFilter where Self: Sizable, Self: Roundable {
+    /// The unique idenitifier for an `ImageFilter` conforming to both the `Sizable` and `Roundable` protocols.
+    public var identifier: String {
+        let width = Int64(round(size.width))
+        let height = Int64(round(size.height))
+        let radius = Int64(round(self.radius))
+
+        return "\(self.dynamicType)-size:(\(width)x\(height))-radius:(\(radius))"
+    }
+}
