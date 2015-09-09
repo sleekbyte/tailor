@@ -441,7 +441,8 @@ tuplePatternElement : pattern  ;
 
 // GRAMMAR OF AN ENUMERATION CASE PATTERN
 
-enumCasePattern : typeIdentifier? '.' enumCaseName tuplePattern? ;
+// Swift Language Reference has '.' as mandatory
+enumCasePattern : typeIdentifier? '.'? enumCaseName tuplePattern? ;
 
 // GRAMMAR OF A TYPE CASTING PATTERN
 
@@ -592,7 +593,8 @@ superclassInitializerExpression : 'super' '.' 'init'  ;
 
 // GRAMMAR OF A CLOSURE EXPRESSION
 
-closureExpression : '{' closureSignature? statements '}'  ;
+// Statements are not optional in the Swift Language Reference
+closureExpression : '{' closureSignature? statements? '}'  ;
 closureSignature
  : parameterClause functionResult? 'in'
  | identifierList functionResult? 'in'
@@ -758,6 +760,7 @@ typeAnnotation : ':' attributes? sType  ;
 typeIdentifier
  : typeName genericArgumentClause?
  | typeName genericArgumentClause? '.' typeIdentifier
+ | 'Self' // Swift Language Reference does not have this
  ;
 
 typeName : identifier ;
@@ -847,7 +850,7 @@ Identifier : IdentifierHead IdentifierCharacters?
  | ImplicitParameterName
  ;
 
-identifierList : identifier | identifier ',' identifierList  ;
+identifierList : (identifier | '_') | (identifier | '_') ',' identifierList  ;
 
 fragment IdentifierHead : [a-zA-Z] | '_'
  | '\u00A8' | '\u00AA' | '\u00AD' | '\u00AF' | [\u00B2-\u00B5] | [\u00B7-\u00BA]
