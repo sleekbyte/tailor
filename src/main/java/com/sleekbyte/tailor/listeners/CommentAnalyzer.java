@@ -2,6 +2,7 @@ package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ListenerUtil;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -76,12 +77,12 @@ public final class CommentAnalyzer {
 
     private void startingSpaceWarning(Token token, String commentType) {
         Location commentStart = new Location(token.getLine(), token.getCharPositionInLine() + 3);
-        printer.warn(commentType + Messages.START_SPACE, commentStart);
+        printer.warn(Rules.COMMENT_WHITESPACE, commentType + Messages.START_SPACE, commentStart);
     }
 
     private void endingSpaceWarning(Token token, String commentType) {
         Location commentEnd = ListenerUtil.getEndOfMultilineComment(token);
-        printer.warn(commentType + Messages.END_SPACE, commentEnd);
+        printer.warn(Rules.COMMENT_WHITESPACE, commentType + Messages.END_SPACE, commentEnd);
     }
 
 }

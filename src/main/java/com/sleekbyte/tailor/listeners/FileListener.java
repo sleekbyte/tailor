@@ -64,7 +64,8 @@ public class FileListener implements AutoCloseable {
                 this.printer.ignoreLine(lineNumber);
             }
 
-            if (SourceFileUtil.lineTooLong(lineLength, this.maxLengths.maxLineLength)) {
+            if (enabledRules.contains(Rules.MAX_LINE_LENGTH)
+                && SourceFileUtil.lineTooLong(lineLength, this.maxLengths.maxLineLength)) {
                 lineLengthViolation(lineNumber, lineLength);
             }
 
@@ -74,10 +75,14 @@ public class FileListener implements AutoCloseable {
             }
         }
 
-        verifyFileLength();
+        if (enabledRules.contains(Rules.MAX_FILE_LENGTH)) {
+            verifyFileLength();
+        }
+
         if (enabledRules.contains(Rules.TERMINATING_NEWLINE)) {
             verifyNewlineTerminated();
         }
+
         if (enabledRules.contains(Rules.LEADING_WHITESPACE)) {
             verifyNoLeadingWhitespace();
         }
@@ -87,12 +92,13 @@ public class FileListener implements AutoCloseable {
         String lengthVersusLimit = " (" + lineLength + "/" + this.maxLengths.maxLineLength + ")";
         // Mark error on first character beyond limit
         Location location = new Location(lineNumber, this.maxLengths.maxLineLength + 1);
-        this.printer.error(Messages.LINE + Messages.EXCEEDS_CHARACTER_LIMIT + lengthVersusLimit, location);
+        this.printer.error(Rules.MAX_LINE_LENGTH, Messages.LINE + Messages.EXCEEDS_CHARACTER_LIMIT + lengthVersusLimit,
+            location);
     }
 
     private void trailingWhitespaceViolation(int lineNumber, int lineLength) {
         Location location = new Location(lineNumber, lineLength);
-        this.printer.warn(Messages.LINE + Messages.TRAILING_WHITESPACE, location);
+        this.printer.warn(Rules.TRAILING_WHITESPACE, Messages.LINE + Messages.TRAILING_WHITESPACE, location);
     }
 
     private void verifyFileLength() {
@@ -100,21 +106,22 @@ public class FileListener implements AutoCloseable {
             String lengthVersusLimit = " (" + this.numOfLines + "/" + this.maxLengths.maxFileLength + ")";
             // Mark error on first line beyond limit
             Location location = new Location(this.maxLengths.maxFileLength + 1);
-            this.printer.error(Messages.FILE + Messages.EXCEEDS_LINE_LIMIT + lengthVersusLimit, location);
+            this.printer.error(Rules.MAX_FILE_LENGTH, Messages.FILE + Messages.EXCEEDS_LINE_LIMIT + lengthVersusLimit,
+                location);
         }
     }
 
     private void verifyNewlineTerminated() throws IOException {
         if (!SourceFileUtil.singleNewlineTerminated(this.inputFile)) {
             Location location = new Location(this.numOfLines);
-            this.printer.error(Messages.FILE + Messages.NEWLINE_TERMINATOR, location);
+            this.printer.error(Rules.TERMINATING_NEWLINE, Messages.FILE + Messages.NEWLINE_TERMINATOR, location);
         }
     }
 
     private void verifyNoLeadingWhitespace() throws IOException {
         if (SourceFileUtil.hasLeadingWhitespace(this.inputFile)) {
             Location location = new Location(1, 1);
-            this.printer.warn(Messages.FILE + Messages.LEADING_WHITESPACE, location);
+            this.printer.warn(Rules.LEADING_WHITESPACE, Messages.FILE + Messages.LEADING_WHITESPACE, location);
         }
     }
 

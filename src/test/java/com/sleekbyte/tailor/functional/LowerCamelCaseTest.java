@@ -1,6 +1,7 @@
 package com.sleekbyte.tailor.functional;
 
 import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.output.Printer;
 import org.junit.runner.RunWith;
@@ -42,7 +43,8 @@ public class LowerCamelCaseTest extends RuleTest {
     }
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg) {
-        this.expectedMessages.add(Printer.genOutputStringForTest(inputFile.getName(), line, column, severity, msg));
+        this.expectedMessages.add(Printer.genOutputStringForTest(Rules.LOWER_CAMEL_CASE, inputFile.getName(), line,
+            column, severity, msg));
     }
 
 }

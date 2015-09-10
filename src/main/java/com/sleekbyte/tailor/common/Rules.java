@@ -13,6 +13,7 @@ import com.sleekbyte.tailor.listeners.RedundantParenthesesListener;
 import com.sleekbyte.tailor.listeners.SemicolonTerminatedListener;
 import com.sleekbyte.tailor.listeners.UpperCamelCaseListener;
 import com.sleekbyte.tailor.listeners.WhitespaceListener;
+import com.sleekbyte.tailor.utils.ArgumentParser;
 
 /**
  * Enum for all rules implemented in Tailor.
@@ -32,7 +33,17 @@ public enum Rules {
     TRAILING_WHITESPACE("trailing-whitespace", FileListener.class.getName()),
     TERMINATING_NEWLINE("file-terminating-newline", FileListener.class.getName()),
     LEADING_WHITESPACE("file-leading-whitespace", FileListener.class.getName()),
-    COMMENT_WHITESPACE("comment-whitespace", CommentAnalyzer.class.getName());
+    COMMENT_WHITESPACE("comment-whitespace", CommentAnalyzer.class.getName()),
+
+    // Max Length Rules
+
+    MAX_CLASS_LENGTH(ArgumentParser.MAX_CLASS_LENGTH_OPT, FileListener.class.getName()),
+    MAX_STRUCT_LENGTH(ArgumentParser.MAX_STRUCT_LENGTH_OPT, FileListener.class.getName()),
+    MAX_CLOSURE_LENGTH(ArgumentParser.MAX_CLOSURE_LENGTH_OPT, FileListener.class.getName()),
+    MAX_FUNCTION_LENGTH(ArgumentParser.MAX_FUNCTION_LENGTH_OPT, FileListener.class.getName()),
+    MAX_FILE_LENGTH(ArgumentParser.MAX_FILE_LENGTH_OPT, FileListener.class.getName()),
+    MAX_LINE_LENGTH(ArgumentParser.MAX_LINE_LENGTH_LONG_OPT, FileListener.class.getName()),
+    MAX_NAME_LENGTH(ArgumentParser.MAX_NAME_LENGTH_OPT, FileListener.class.getName());
 
     private String name;
     private String className;
@@ -49,5 +60,4 @@ public enum Rules {
     public String getClassName() {
         return this.className;
     }
-
 }

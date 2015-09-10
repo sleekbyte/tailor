@@ -4,6 +4,7 @@ import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ListenerUtil;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -63,7 +64,7 @@ public class SemicolonTerminatedListener extends SwiftBaseListener {
         String construct = ctx.getText();
         if (construct.endsWith(";")) {
             Location location = ListenerUtil.getContextStopLocation(ctx);
-            this.printer.error(constructType + Messages.SEMICOLON, location);
+            this.printer.error(Rules.TERMINATING_SEMICOLON, constructType + Messages.SEMICOLON, location);
         }
     }
 }

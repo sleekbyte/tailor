@@ -1,6 +1,7 @@
 package com.sleekbyte.tailor.functional;
 
 import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.output.Printer;
 import org.junit.runner.RunWith;
@@ -59,13 +60,14 @@ public class ClosingBraceLineTest extends RuleTest {
 
     private void addExpectedBraceMsg(int line, int column, Severity severity, String msg) {
         expectedMessages.add(
-            Printer.genOutputStringForTest(inputFile.getName(), line, column, severity,
+            Printer.genOutputStringForTest(Rules.BRACE_STYLE, inputFile.getName(), line, column, severity,
                                            msg + Messages.CLOSE_BRACE_STYLE));
     }
 
     private void addExpectedEmptyConstructBodyMsg(int line, int column, Severity severity) {
         expectedMessages.add(
-            Printer.genOutputStringForTest(inputFile.getName(), line, column, severity, Messages.EMPTY_BODY));
+            Printer.genOutputStringForTest(Rules.BRACE_STYLE, inputFile.getName(), line, column, severity,
+                Messages.EMPTY_BODY));
     }
 
 }

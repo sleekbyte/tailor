@@ -4,6 +4,7 @@ import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ListenerUtil;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -109,7 +110,8 @@ public class RedundantParenthesesListener extends SwiftBaseListener {
 
         if (firstCharacter == '(') {
             Location startLocation = ListenerUtil.getTokenLocation(openParenthesisToken);
-            this.printer.warn(Messages.FOR_LOOP + Messages.ENCLOSED_PARENTHESES, startLocation);
+            this.printer.warn(Rules.REDUNDANT_PARENTHESES, Messages.FOR_LOOP + Messages.ENCLOSED_PARENTHESES,
+                startLocation);
         }
     }
 
@@ -128,7 +130,7 @@ public class RedundantParenthesesListener extends SwiftBaseListener {
 
     private void printRedundantParenthesesWarning(ParserRuleContext ctx, String firstParenthesisMsg) {
         Location startLocation = ListenerUtil.getContextStartLocation(ctx);
-        this.printer.warn(firstParenthesisMsg, startLocation);
+        this.printer.warn(Rules.REDUNDANT_PARENTHESES, firstParenthesisMsg, startLocation);
     }
 
 }

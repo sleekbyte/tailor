@@ -4,6 +4,7 @@ import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ListenerUtil;
 import com.sleekbyte.tailor.utils.ParseTreeUtil;
@@ -124,7 +125,8 @@ public class BraceStyleListener extends SwiftBaseListener {
         Location openBraceLocation = ListenerUtil.getLocationOfChildToken(ctx, 2);
 
         if (switchExpLocation.line != openBraceLocation.line) {
-            this.printer.warn(Messages.SWITCH_STATEMENT + Messages.OPEN_BRACE_STYLE, openBraceLocation);
+            this.printer.warn(Rules.BRACE_STYLE, Messages.SWITCH_STATEMENT + Messages.OPEN_BRACE_STYLE,
+                openBraceLocation);
         }
 
         // Close brace
@@ -208,9 +210,9 @@ public class BraceStyleListener extends SwiftBaseListener {
                 Location leftSiblingLocation = ListenerUtil.getContextStopLocation(leftSibling);
 
                 if (openBraceLocation.line != leftSiblingLocation.line) {
-                    printer.warn(Messages.ENUM + Messages.OPEN_BRACE_STYLE, openBraceLocation);
+                    printer.warn(Rules.BRACE_STYLE, Messages.ENUM + Messages.OPEN_BRACE_STYLE, openBraceLocation);
                 } else if (checkLeftSpaces(leftSibling.getStop(), openBrace, 1)) {
-                    printer.error(Messages.OPEN_BRACE + Messages.SPACE_BEFORE, openBraceLocation);
+                    printer.error(Rules.BRACE_STYLE, Messages.OPEN_BRACE + Messages.SPACE_BEFORE, openBraceLocation);
                 }
                 break;
             }
@@ -270,7 +272,8 @@ public class BraceStyleListener extends SwiftBaseListener {
     private void verifySingleSpaceBeforeOpenBrace(ParserRuleContext codeBlockCtx, Token left) {
         Token openBrace = codeBlockCtx.getStart();
         if (checkLeftSpaces(left, openBrace, 1)) {
-            printer.error(Messages.OPEN_BRACE + Messages.SPACE_BEFORE, ListenerUtil.getTokenLocation(openBrace));
+            printer.error(Rules.BRACE_STYLE, Messages.OPEN_BRACE + Messages.SPACE_BEFORE,
+                ListenerUtil.getTokenLocation(openBrace));
         }
     }
 
@@ -278,7 +281,7 @@ public class BraceStyleListener extends SwiftBaseListener {
                                                   String constructName) {
         Location openBraceLocation = ListenerUtil.getLocationOfChildToken(codeBlockCtx, 0);
         if (constructLocation.line != openBraceLocation.line) {
-            this.printer.warn(constructName + Messages.OPEN_BRACE_STYLE, openBraceLocation);
+            this.printer.warn(Rules.BRACE_STYLE, constructName + Messages.OPEN_BRACE_STYLE, openBraceLocation);
         }
     }
 
@@ -299,16 +302,16 @@ public class BraceStyleListener extends SwiftBaseListener {
         Location closeBraceLocation = ListenerUtil.getTokenLocation(closeBraceToken);
 
         if (commentLeftOfCloseBrace(closeBraceToken)) {
-            this.printer.warn(constructName + Messages.CLOSE_BRACE_STYLE, closeBraceLocation);
+            this.printer.warn(Rules.BRACE_STYLE, constructName + Messages.CLOSE_BRACE_STYLE, closeBraceLocation);
             return;
         }
 
         Location closeBraceLeftSiblingLocation = ListenerUtil.getParseTreeStopLocation(closeBraceLeftSibling);
         if (closeBraceLocation.line == closeBraceLeftSiblingLocation.line) {
             if (!closeBraceLeftSibling.getText().equals("{")) {
-                this.printer.warn(constructName + Messages.CLOSE_BRACE_STYLE, closeBraceLocation);
+                this.printer.warn(Rules.BRACE_STYLE, constructName + Messages.CLOSE_BRACE_STYLE, closeBraceLocation);
             } else if (closeBraceLocation.column - closeBraceLeftSiblingLocation.column != 1) {
-                this.printer.warn(Messages.EMPTY_BODY, closeBraceLeftSiblingLocation);
+                this.printer.warn(Rules.BRACE_STYLE, Messages.EMPTY_BODY, closeBraceLeftSiblingLocation);
             }
         }
     }
@@ -320,13 +323,13 @@ public class BraceStyleListener extends SwiftBaseListener {
         Location openBraceLocation = ListenerUtil.getLocationOfChildToken(ctx, 0);
 
         if (openBraceLocation.line != closeBraceLocation.line && commentLeftOfCloseBrace(closeBraceToken)) {
-            this.printer.warn(Messages.CLOSURE + Messages.CLOSE_BRACE_STYLE, closeBraceLocation);
+            this.printer.warn(Rules.BRACE_STYLE, Messages.CLOSURE + Messages.CLOSE_BRACE_STYLE, closeBraceLocation);
             return;
         }
 
         Location leftSiblingLocation = ListenerUtil.getParseTreeStopLocation(ParseTreeUtil.getLeftSibling(closeBrace));
         if (leftSiblingLocation.line == closeBraceLocation.line && openBraceLocation.line != closeBraceLocation.line) {
-            this.printer.warn(Messages.CLOSURE + Messages.CLOSE_BRACE_STYLE, closeBraceLocation);
+            this.printer.warn(Rules.BRACE_STYLE, Messages.CLOSURE + Messages.CLOSE_BRACE_STYLE, closeBraceLocation);
         }
     }
 

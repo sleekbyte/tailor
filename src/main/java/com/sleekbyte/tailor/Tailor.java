@@ -229,7 +229,7 @@ public class Tailor {
 
             try (Printer printer = new Printer(inputFile, maxSeverity, colorSettings)) {
                 List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, tokenStream);
-                listeners.add(new MaxLengthListener(printer, maxLengths));
+                listeners.add(new MaxLengthListener(printer, maxLengths, enabledRules));
                 DeclarationListener decListener = new DeclarationListener(listeners);
                 listeners.add(decListener);
 
