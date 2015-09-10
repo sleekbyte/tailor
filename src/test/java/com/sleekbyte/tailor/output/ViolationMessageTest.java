@@ -32,7 +32,7 @@ public class ViolationMessageTest {
     public void testCompareToMessageWithGreaterLineNumber() {
         // global message has lower line number than test message
         ViolationMessage messageWithGreaterLineNumber =
-            new ViolationMessage(null, "/usr/bin/local", 12, 5, Severity.ERROR, "errMsg");
+            new ViolationMessage(Rules.LOWER_CAMEL_CASE, "/usr/bin/local", 12, 5, Severity.ERROR, "errMsg");
         int ret = this.violationMessage.compareTo(messageWithGreaterLineNumber);
         assertThat(ret, lessThan(0));
     }
@@ -41,7 +41,7 @@ public class ViolationMessageTest {
     public void testCompareToMessageWithLesserLineNumber() {
         // global message has lower line number than test message
         ViolationMessage messageWithGreaterLineNumber =
-            new ViolationMessage(null, "/usr/bin/local", 12, 5, Severity.ERROR, "errMsg");
+            new ViolationMessage(Rules.LOWER_CAMEL_CASE, "/usr/bin/local", 12, 5, Severity.ERROR, "errMsg");
         int ret = this.violationMessage.compareTo(messageWithGreaterLineNumber);
         assertThat(ret, lessThan(0));
     }
@@ -50,7 +50,7 @@ public class ViolationMessageTest {
     public void testCompareToMessageWithGreaterColumnNumber() {
         // global message has equal line number but greater column number than test message
         ViolationMessage messageWithGreaterColumnNumber =
-            new ViolationMessage(null, "/usr/bin/local", 10, 2, Severity.ERROR, "errMsg");
+            new ViolationMessage(Rules.LOWER_CAMEL_CASE, "/usr/bin/local", 10, 2, Severity.ERROR, "errMsg");
         int ret = this.violationMessage.compareTo(messageWithGreaterColumnNumber);
         assertThat(ret, lessThan(0));
     }
@@ -59,7 +59,7 @@ public class ViolationMessageTest {
     public void testCompareToMessageWithLesserColumnNumber() {
         // global message has equal line number but lesser column number than test message
         ViolationMessage messageWithLesserColumnNumber =
-            new ViolationMessage(null, "/usr/bin/local", 10, 0, Severity.WARNING, "warningMsg");
+            new ViolationMessage(Rules.LOWER_CAMEL_CASE, "/usr/bin/local", 10, 0, Severity.WARNING, "warningMsg");
         int ret = this.violationMessage.compareTo(messageWithLesserColumnNumber);
         assertThat(ret, greaterThan(0));
     }
@@ -68,13 +68,13 @@ public class ViolationMessageTest {
     public void testCompareToMessageWithEqualLineAndColumnNumbers() {
         // global message has equal line number and column number wrt test message
         ViolationMessage messageWithEqualLineColumnNumberButDifferentText =
-            new ViolationMessage(null, "/usr/bin/local", 10, 1, Severity.ERROR, "warningMsg");
+            new ViolationMessage(Rules.LOWER_CAMEL_CASE, "/usr/bin/local", 10, 1, Severity.ERROR, "warningMsg");
         int ret = this.violationMessage.compareTo(messageWithEqualLineColumnNumberButDifferentText);
         assertTrue(ret < 0);
         ret = this.violationMessage.compareTo(this.violationMessage);
         assertEquals(0, ret);
         ViolationMessage messageWithEqualLineColumnNumberAndSameTextButDifferentSeverity =
-            new ViolationMessage(null, "/usr/bin/local", 10, 1, Severity.WARNING, "errorMsg");
+            new ViolationMessage(Rules.LOWER_CAMEL_CASE, "/usr/bin/local", 10, 1, Severity.WARNING, "errorMsg");
         ret = this.violationMessage.compareTo(messageWithEqualLineColumnNumberAndSameTextButDifferentSeverity);
         assertTrue(ret < 0);
     }
@@ -106,7 +106,7 @@ public class ViolationMessageTest {
             Severity.ERROR, "errMsg");
         assertNotEquals(this.violationMessage, unequalViolationMessage);
     }
-    
+
     @Test
     public void testEqualsSameMessage() {
         // Equal ViolationMessages
