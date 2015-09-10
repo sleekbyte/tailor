@@ -60,9 +60,10 @@ loopStatement : forStatement
 
 // GRAMMAR OF A FOR STATEMENT
 
+// Swift Language Reference has expression? instead of expressionList?
 forStatement
- : 'for' forInit? ';' expression? ';' expression? codeBlock
- | 'for' '(' forInit?';' expression? ';' expression? ')' codeBlock
+ : 'for' forInit? ';' expression? ';' expressionList? codeBlock
+ | 'for' '(' forInit?';' expression? ';' expressionList? ')' codeBlock
  ;
 
 forInit : variableDeclaration | expressionList  ;
@@ -512,7 +513,7 @@ inOutExpression : '&' identifier ;
 
 // GRAMMAR OF A TRY EXPRESSION
 
-tryOperator : 'try' '!'? ;
+tryOperator : 'try' ('?' | '!')? ;
 
 // GRAMMAR OF A BINARY EXPRESSION
 
@@ -683,8 +684,14 @@ functionCallExpression
 // split the operators out into the individual tokens as some of those tokens
 // are also referenced individually. For example, type signatures use
 // <...>.
-operator: '==' | '<' | '>' | '!' | '...' | '*' | '&' | Operator;
 
+operatorHead: '=' | '<' | '>' | '!' | '*' | '&' | '==' | OperatorHead;
+operatorCharacter: operatorHead | OperatorCharacter;
+
+operator: operatorHead operatorCharacter*
+  | '..' (operatorCharacter)*
+  | '...'
+  ;
 
 // WHITESPACE scariness:
 
@@ -808,11 +815,6 @@ contextSensitiveKeyword :
  'nonmutating' | 'operator' | 'override' | 'postfix' | 'precedence' | 'prefix' | 'right' |
  'set' | 'unowned' | 'unowned(safe)' | 'unowned(unsafe)' | 'weak' | 'willSet' | 'required'
  ;
-
-Operator
-  : OperatorHead OperatorCharacter*
-  | '..' ('.'|OperatorCharacter)*
-  ;
 
 OperatorHead
   : '/' | '=' | '-' | '+' | '!' | '*' | '%' | '<' | '>' | '&' | '|' | '^' | '~' | '?'
