@@ -2,6 +2,11 @@ package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.antlr.SwiftParser.DidSetClauseContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.GetterSetterBlockContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.SubscriptDeclarationContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.WillSetClauseContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.WillSetDidSetBlockContext;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.Printer;
@@ -116,6 +121,31 @@ public class BraceStyleListener extends SwiftBaseListener {
     @Override
     public void enterSetterClause(SwiftParser.SetterClauseContext ctx) {
         verifySetterBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterSubscriptDeclaration(SwiftParser.SubscriptDeclarationContext ctx) {
+        verifySubscriptBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterGetterSetterBlock(SwiftParser.GetterSetterBlockContext ctx) {
+        verifyGetterSetterBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterWillSetClause(SwiftParser.WillSetClauseContext ctx) {
+        verifyWillSetClauseBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterDidSetClause(SwiftParser.DidSetClauseContext ctx) {
+        verifyDidSetClauseBraceStyle(ctx);
+    }
+
+    @Override
+    public void enterWillSetDidSetBlock(SwiftParser.WillSetDidSetBlockContext ctx) {
+        verifyWillSetDidSetBlockBraceStyle(ctx);
     }
 
     private void verifySwitchStatementBraceStyle(SwiftParser.SwitchStatementContext ctx) {
@@ -265,6 +295,34 @@ public class BraceStyleListener extends SwiftBaseListener {
         Token set = ParseTreeUtil.getStopTokenForNode(leftSibling);
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), set, Messages.SETTER);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.SETTER);
+    }
+
+    void verifySubscriptBraceStyle(SubscriptDeclarationContext ctx) {
+        verifyBodyOpenBraceStyle((ParserRuleContext) ParseTreeUtil.getLastChild(ctx), Messages.SUBSCRIPT);
+        verifyBodyCloseBraceStyle((ParserRuleContext) ParseTreeUtil.getLastChild(ctx), Messages.SUBSCRIPT);
+    }
+
+    void verifyGetterSetterBraceStyle(GetterSetterBlockContext ctx) {
+        verifyBodyOpenBraceStyle(ctx, Messages.GETTER_SETTER_BLOCK);
+        verifyBodyCloseBraceStyle(ctx, Messages.GETTER_SETTER_BLOCK);
+    }
+
+    void verifyWillSetClauseBraceStyle(WillSetClauseContext ctx) {
+        ParseTree setterNameCtx = ParseTreeUtil.getLeftSibling(ctx.codeBlock());
+        Token setterNameCtxLastChild = ((TerminalNodeImpl) ParseTreeUtil.getLastChild(setterNameCtx)).getSymbol();
+        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), setterNameCtxLastChild, Messages.WILL_SET_CLAUSE);
+        verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.WILL_SET_CLAUSE);
+    }
+
+    void verifyDidSetClauseBraceStyle(DidSetClauseContext ctx) {
+        TerminalNodeImpl leftSibling = (TerminalNodeImpl) ParseTreeUtil.getLeftSibling(ctx.codeBlock());
+        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), leftSibling.getSymbol(), Messages.DID_SET_CLAUSE);
+        verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.DID_SET_CLAUSE);
+    }
+
+    void verifyWillSetDidSetBlockBraceStyle(WillSetDidSetBlockContext ctx) {
+        verifyBodyOpenBraceStyle(ctx, Messages.WILLSET_DIDSET_BLOCK);
+        verifyBodyCloseBraceStyle(ctx, Messages.WILLSET_DIDSET_BLOCK);
     }
 
     private void verifySingleSpaceBeforeOpenBrace(ParserRuleContext codeBlockCtx, Token left) {
