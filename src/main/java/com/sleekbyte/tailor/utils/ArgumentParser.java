@@ -10,6 +10,8 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.fusesource.jansi.Ansi;
+import org.fusesource.jansi.AnsiConsole;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -286,15 +288,13 @@ public class ArgumentParser {
     }
 
     public void printRules() {
-        System.out.println("# Available rules: __\n");
-        System.out.println(formatRuleDescription("Title", "Lorizzle ipsum dolor fo mah nizzle, consectetuer adipiscing elit. Nullizzle sapizzle velizzle, fo shizzle volutpat, suscipizzle black, gravida vizzle, break yo neck, yall. Pellentesque you son of a bizzle tortor. Sed erizzle. Away things dang dapibus crunk tempus go to hizzle. Maurizzle pellentesque nibh izzle turpis. Dope izzle tortizzle. Yo eleifend shizznit mah nizzle. In my shizz dawg its fo rizzle fo. Gangster dapibus. Curabitur tellus shizzlin dizzle, pretium eu, mattis ac, for sure own yo’, nunc. Shiz suscipizzle. Integizzle sempizzle we gonna chung sizzle purizzle.", "Link", true));
-        System.out.println(formatRuleDescription("Title", "Description", "Link", false));
-    }
+        Rules[] rules = Rules.values();
 
-    private String formatRuleDescription(String title, String description, String wikiLink, boolean status) {
-        return String.format("%s:\n" +
-                             "\t Description: %s\n\n" +
-                             "\t Style Guide: %s\n\n" +
-                             "\t Enabled: %s\n\n\n", title, description, wikiLink, status ? "True" : "False");
+        AnsiConsole.out.println(Ansi.ansi().render(String.format("@|bold # Available rules: %d|@\n", rules.length)));
+        for (Rules rule : rules) {
+            AnsiConsole.out.println(Ansi.ansi().render(String.format("@|bold %s|@:\n" +
+                "@|underline Description:|@ %s\n" +
+                "@|underline Style Guide:|@ %s\n", rule.getName(), rule.getDescription(), "link")));
+        }
     }
 }

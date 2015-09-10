@@ -19,38 +19,52 @@ import com.sleekbyte.tailor.utils.ArgumentParser;
  * Enum for all rules implemented in Tailor.
  */
 public enum Rules {
-    UPPER_CAMEL_CASE("upper-camel-case", UpperCamelCaseListener.class.getName()),
-    TERMINATING_SEMICOLON("terminating-semicolon", SemicolonTerminatedListener.class.getName()),
-    REDUNDANT_PARENTHESES("redundant-parentheses", RedundantParenthesesListener.class.getName()),
-    MULTIPLE_IMPORTS("multiple-imports", MultipleImportListener.class.getName()),
-    FUNCTION_WHITESPACE("function-whitespace", BlankLineListener.class.getName()),
-    WHITESPACE("whitespace", WhitespaceListener.class.getName()),
-    CONSTANT_NAMING("constant-naming", ConstantNamingListener.class.getName()),
-    CONSTANT_K_PREFIX("constant-k-prefix", KPrefixListener.class.getName()),
-    LOWER_CAMEL_CASE("lower-camel-case", LowerCamelCaseListener.class.getName()),
-    BRACE_STYLE("brace-style", BraceStyleListener.class.getName()),
-    FORCED_TYPE_CAST("forced-type-cast", ForceTypeCastListener.class.getName()),
-    TRAILING_WHITESPACE("trailing-whitespace", FileListener.class.getName()),
-    TERMINATING_NEWLINE("file-terminating-newline", FileListener.class.getName()),
-    LEADING_WHITESPACE("file-leading-whitespace", FileListener.class.getName()),
-    COMMENT_WHITESPACE("comment-whitespace", CommentAnalyzer.class.getName()),
+    UPPER_CAMEL_CASE("upper-camel-case", UpperCamelCaseListener.class.getName(),
+        "class, enum, enum value, struct, and protocol names should follow UpperCamelCase naming convention."),
+    TERMINATING_SEMICOLON("terminating-semicolon", SemicolonTerminatedListener.class.getName(),
+        "Statements should not be terminated by semicolons."),
+    REDUNDANT_PARENTHESES("redundant-parentheses", RedundantParenthesesListener.class.getName(), "Control flow " +
+        "constructs, exception handling constructs, and initializer(s) should not be enclosed in parentheses."),
+    MULTIPLE_IMPORTS("multiple-imports", MultipleImportListener.class.getName(),
+        "Multiple import statements should not be defined on a single line."),
+    FUNCTION_WHITESPACE("function-whitespace", BlankLineListener.class.getName(), ""),
+    WHITESPACE("whitespace", WhitespaceListener.class.getName(), ""),
+    CONSTANT_NAMING("constant-naming", ConstantNamingListener.class.getName(),
+        "Global constants should follow either UpperCamelCase or lowerCamelCase naming conventions. Local constants " +
+        "should follow lowerCamelCase naming conventions."),
+    CONSTANT_K_PREFIX("constant-k-prefix", KPrefixListener.class.getName(), "Flag constants with prefix k."),
+    LOWER_CAMEL_CASE("lower-camel-case", LowerCamelCaseListener.class.getName(),
+        "Method and variable names should follow lowerCamelCase naming convention"),
+    BRACE_STYLE("brace-style", BraceStyleListener.class.getName(),
+        "Definitions of constructs should follow the One True Brace (OTB) style."),
+    FORCED_TYPE_CAST("forced-type-cast", ForceTypeCastListener.class.getName(), "Flag force cast usages."),
+    TRAILING_WHITESPACE("trailing-whitespace", FileListener.class.getName(), ""),
+    TERMINATING_NEWLINE("file-terminating-newline", FileListener.class.getName(), ""),
+    LEADING_WHITESPACE("file-leading-whitespace", FileListener.class.getName(), ""),
+    COMMENT_WHITESPACE("comment-whitespace", CommentAnalyzer.class.getName(), ""),
 
     // Max Length Rules
 
-    MAX_CLASS_LENGTH(ArgumentParser.MAX_CLASS_LENGTH_OPT, FileListener.class.getName()),
-    MAX_STRUCT_LENGTH(ArgumentParser.MAX_STRUCT_LENGTH_OPT, FileListener.class.getName()),
-    MAX_CLOSURE_LENGTH(ArgumentParser.MAX_CLOSURE_LENGTH_OPT, FileListener.class.getName()),
-    MAX_FUNCTION_LENGTH(ArgumentParser.MAX_FUNCTION_LENGTH_OPT, FileListener.class.getName()),
-    MAX_FILE_LENGTH(ArgumentParser.MAX_FILE_LENGTH_OPT, FileListener.class.getName()),
-    MAX_LINE_LENGTH(ArgumentParser.MAX_LINE_LENGTH_LONG_OPT, FileListener.class.getName()),
-    MAX_NAME_LENGTH(ArgumentParser.MAX_NAME_LENGTH_OPT, FileListener.class.getName());
+    MAX_CLASS_LENGTH(ArgumentParser.MAX_CLASS_LENGTH_OPT, FileListener.class.getName(),
+        "Enforce a line limit on the lengths of class bodies."),
+    MAX_STRUCT_LENGTH(ArgumentParser.MAX_STRUCT_LENGTH_OPT, FileListener.class.getName(),
+        "Enforce a line limit on the lengths of struct bodies."),
+    MAX_CLOSURE_LENGTH(ArgumentParser.MAX_CLOSURE_LENGTH_OPT, FileListener.class.getName(),
+        "Enforce a line limit on the lengths of closure bodies."),
+    MAX_FUNCTION_LENGTH(ArgumentParser.MAX_FUNCTION_LENGTH_OPT, FileListener.class.getName(),
+        "Enforce a line limit on the lengths of function bodies."),
+    MAX_FILE_LENGTH(ArgumentParser.MAX_FILE_LENGTH_OPT, FileListener.class.getName(), ""),
+    MAX_LINE_LENGTH(ArgumentParser.MAX_LINE_LENGTH_LONG_OPT, FileListener.class.getName(), ""),
+    MAX_NAME_LENGTH(ArgumentParser.MAX_NAME_LENGTH_OPT, FileListener.class.getName(), "");
 
     private String name;
     private String className;
+    private String description;
 
-    Rules(String name, String className) {
+    Rules(String name, String className, String description) {
         this.name = name;
         this.className = className;
+        this.description = description;
     }
 
     public String getName() {
@@ -59,5 +73,9 @@ public enum Rules {
 
     public String getClassName() {
         return this.className;
+    }
+
+    public String getDescription() {
+        return this.description;
     }
 }
