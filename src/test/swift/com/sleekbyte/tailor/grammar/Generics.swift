@@ -85,3 +85,13 @@ func allItemsMatch<
         return true
 
 }
+
+func blendFrameDstBytes(dstBytes: Array<UnsafeMutablePointer<UInt8>>,
+                        srcBytes: Array<UnsafeMutablePointer<UInt8>>,
+                        blendOP: UInt8,
+                        offsetX: UInt32,
+                        offsetY: UInt32,
+                        width: UInt32,
+                        height: UInt32) {
+                          
+}

@@ -94,12 +94,12 @@ public class WhitespaceListener extends SwiftBaseListener {
 
                 if (checkLeftSpaces(before, op.getStart(), 1)) {
                     printer.error(Messages.OPERATOR + Messages.SPACE_BEFORE,
-                        ListenerUtil.getContextStopLocation(op));
+                        ListenerUtil.getContextStartLocation(op));
                 }
 
-                if (checkRightSpaces(after, op.getStart(), 1)) {
+                if (checkRightSpaces(after, op.getStop(), 1)) {
                     printer.error(Messages.OPERATOR + Messages.SPACE_AFTER,
-                        ListenerUtil.getContextStopLocation(op));
+                        ListenerUtil.getContextStartLocation(op));
                 }
             }
         }

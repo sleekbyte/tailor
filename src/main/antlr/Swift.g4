@@ -60,9 +60,10 @@ loopStatement : forStatement
 
 // GRAMMAR OF A FOR STATEMENT
 
+// Swift Language Reference has expression? instead of expressionList?
 forStatement
- : 'for' forInit? ';' expression? ';' expression? codeBlock
- | 'for' '(' forInit?';' expression? ';' expression? ')' codeBlock
+ : 'for' forInit? ';' expression? ';' expressionList? codeBlock
+ | 'for' '(' forInit?';' expression? ';' expressionList? ')' codeBlock
  ;
 
 forInit : variableDeclaration | expressionList  ;
@@ -441,7 +442,8 @@ tuplePatternElement : pattern  ;
 
 // GRAMMAR OF AN ENUMERATION CASE PATTERN
 
-enumCasePattern : typeIdentifier? '.' enumCaseName tuplePattern? ;
+// Swift Language Reference has '.' as mandatory
+enumCasePattern : typeIdentifier? '.'? enumCaseName tuplePattern? ;
 
 // GRAMMAR OF A TYPE CASTING PATTERN
 
@@ -511,7 +513,7 @@ inOutExpression : '&' identifier ;
 
 // GRAMMAR OF A TRY EXPRESSION
 
-tryOperator : 'try' '!'? ;
+tryOperator : 'try' ('?' | '!')? ;
 
 // GRAMMAR OF A BINARY EXPRESSION
 
@@ -592,7 +594,8 @@ superclassInitializerExpression : 'super' '.' 'init'  ;
 
 // GRAMMAR OF A CLOSURE EXPRESSION
 
-closureExpression : '{' closureSignature? statements '}'  ;
+// Statements are not optional in the Swift Language Reference
+closureExpression : '{' closureSignature? statements? '}'  ;
 closureSignature
  : parameterClause functionResult? 'in'
  | identifierList functionResult? 'in'
@@ -681,8 +684,14 @@ functionCallExpression
 // split the operators out into the individual tokens as some of those tokens
 // are also referenced individually. For example, type signatures use
 // <...>.
-operator: '==' | '<' | '>' | '!' | '...' | '*' | '&' | Operator;
 
+operatorHead: '=' | '<' | '>' | '!' | '*' | '&' | '==' | OperatorHead;
+operatorCharacter: operatorHead | OperatorCharacter;
+
+operator: operatorHead operatorCharacter*
+  | '..' (operatorCharacter)*
+  | '...'
+  ;
 
 // WHITESPACE scariness:
 
@@ -758,6 +767,7 @@ typeAnnotation : ':' attributes? sType  ;
 typeIdentifier
  : typeName genericArgumentClause?
  | typeName genericArgumentClause? '.' typeIdentifier
+ | 'Self' // Swift Language Reference does not have this
  ;
 
 typeName : identifier ;
@@ -806,11 +816,6 @@ contextSensitiveKeyword :
  'set' | 'unowned' | 'unowned(safe)' | 'unowned(unsafe)' | 'weak' | 'willSet' | 'required'
  ;
 
-Operator
-  : OperatorHead OperatorCharacter*
-  | '..' ('.'|OperatorCharacter)*
-  ;
-
 OperatorHead
   : '/' | '=' | '-' | '+' | '!' | '*' | '%' | '<' | '>' | '&' | '|' | '^' | '~' | '?'
   | [\u00A1-\u00A7]
@@ -847,7 +852,7 @@ Identifier : IdentifierHead IdentifierCharacters?
  | ImplicitParameterName
  ;
 
-identifierList : identifier | identifier ',' identifierList  ;
+identifierList : (identifier | '_') | (identifier | '_') ',' identifierList  ;
 
 fragment IdentifierHead : [a-zA-Z] | '_'
  | '\u00A8' | '\u00AA' | '\u00AD' | '\u00AF' | [\u00B2-\u00B5] | [\u00B7-\u00BA]
