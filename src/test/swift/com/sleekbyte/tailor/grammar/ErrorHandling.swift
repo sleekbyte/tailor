@@ -72,3 +72,14 @@ func processFile(filename: String) throws {
         // close(file) is called here, at the end of the scope.
     }
 }
+
+private func reduceRightToURL(str: String) -> NSURL? {
+    if let regex = try? NSRegularExpression(pattern: "(?i)https?://(?:www\\.)?\\S+(?:/|\\b)", options: [.CaseInsensitive]) {
+        let nsStr = str as NSString
+        let results = regex.matchesInString(str, options: [], range: NSRange(location: 0, length: nsStr.length))
+        if let result = results.map({ nsStr.substringWithRange($0.range) }).first, url = NSURL(string: result) {
+            return url
+        }
+    }
+    return nil
+}
