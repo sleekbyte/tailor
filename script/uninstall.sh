@@ -15,14 +15,8 @@ STARTSCRIPT="$TAILORDIR/bin/tailor"
 
 wait_for_user() {
   read -n 1 -a CONTINUE -p "Press [y/N] to continue: " < /dev/tty
-  echo "\n"
-  [ "$CONTINUE" == "y" ]
-}
-
-cecho() {
-  message=$1
-  color=${2:-$black}
-  echo "$color$message$reset"
+  echo; echo
+  [ "$CONTINUE" == "y" ] || [ "$CONTINUE" == "Y" ]
 }
 
 maybe_sudo() {
@@ -39,13 +33,19 @@ kill_sudo() {
   fi
 }
 
+cecho() {
+  message=$1
+  color=${2:-$black}
+  echo "$color$message$reset"
+}
+
 echo "Tailor will be uninstalled from: $blue$TAILORDIR/$reset"
 if wait_for_user; then
   maybe_sudo /bin/rm -rf "$TAILORDIR"
   maybe_sudo /bin/rm -f "$BINDIR"/tailor
   kill_sudo
 
-  cecho "Tailor removed." $green
+  cecho "Tailor uninstalled." $green
 else
-  cecho "Tailor removal cancelled." $red
+  cecho "Tailor uninstallation cancelled." $red
 fi
