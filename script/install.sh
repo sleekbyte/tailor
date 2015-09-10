@@ -65,6 +65,7 @@ echo "Tailor will be installed to: $blue$TAILORDIR/$reset"
 if wait_for_user; then
   verify_java
   maybe_sudo /bin/mkdir -p $BINDIR
+  cecho "Downloading tailor.zip to $PREFIX/..." $blue
   maybe_sudo /usr/bin/curl -#fLo "$PREFIX"/tailor.zip "$TAILORZIPURL"
   maybe_sudo /usr/bin/unzip -oqq "$PREFIX"/tailor.zip -d "$PREFIX"
   maybe_sudo /bin/rm -rf "$PREFIX"/tailor.zip
