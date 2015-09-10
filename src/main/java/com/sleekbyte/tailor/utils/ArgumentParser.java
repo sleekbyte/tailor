@@ -44,6 +44,7 @@ public class ArgumentParser {
     private static final String INVERT_COLOR_OPT = "invert-color";
     private static final String DEFAULT_INT_ARG = "0";
     private static final String XCODE_INTEGRATION_OPT = "xcode";
+    private static final String SHOW_RULES_OPT = "show-rules";
 
     private Options options;
     private CommandLine cmd;
@@ -69,6 +70,13 @@ public class ArgumentParser {
      */
     public boolean shouldPrintVersion() {
         return cmd != null && cmd.hasOption(VERSION_SHORT_OPT);
+    }
+
+    /**
+     * Check if "--show-rules" option was specified.
+     */
+    public boolean shouldPrintRules() {
+        return cmd != null && cmd.hasOption(SHOW_RULES_OPT);
     }
 
     /**
@@ -129,6 +137,8 @@ public class ArgumentParser {
 
         options.addOption(createNoArgOpt(NO_COLOR_OPT, Messages.NO_COLOR_DESC));
         options.addOption(createNoArgOpt(INVERT_COLOR_OPT, Messages.INVERT_COLOR_DESC));
+
+        options.addOption(createNoArgOpt(SHOW_RULES_OPT, Messages.SHOW_RULES_DESC));
     }
 
     /**
@@ -273,4 +283,16 @@ public class ArgumentParser {
         return cmd != null && cmd.hasOption(INVERT_COLOR_OPT);
     }
 
+    public void printRules() {
+        System.out.println("# Available rules: __\n");
+        System.out.println(formatRuleDescription("Title", "Lorizzle ipsum dolor fo mah nizzle, consectetuer adipiscing elit. Nullizzle sapizzle velizzle, fo shizzle volutpat, suscipizzle black, gravida vizzle, break yo neck, yall. Pellentesque you son of a bizzle tortor. Sed erizzle. Away things dang dapibus crunk tempus go to hizzle. Maurizzle pellentesque nibh izzle turpis. Dope izzle tortizzle. Yo eleifend shizznit mah nizzle. In my shizz dawg its fo rizzle fo. Gangster dapibus. Curabitur tellus shizzlin dizzle, pretium eu, mattis ac, for sure own yo’, nunc. Shiz suscipizzle. Integizzle sempizzle we gonna chung sizzle purizzle.", "Link", true));
+        System.out.println(formatRuleDescription("Title", "Description", "Link", false));
+    }
+
+    private String formatRuleDescription(String title, String description, String wikiLink, boolean status) {
+        return String.format("%s:\n" +
+                             "\t Description: %s\n\n" +
+                             "\t Style Guide: %s\n\n" +
+                             "\t Enabled: %s\n\n\n", title, description, wikiLink, status ? "True" : "False");
+    }
 }
