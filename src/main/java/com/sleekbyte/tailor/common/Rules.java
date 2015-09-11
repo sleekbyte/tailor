@@ -23,15 +23,15 @@ public enum Rules {
         "class, enum, enum value, struct, and protocol names should follow UpperCamelCase naming convention."),
     TERMINATING_SEMICOLON("terminating-semicolon", SemicolonTerminatedListener.class.getName(),
         "Statements should not be terminated by semicolons."),
-    REDUNDANT_PARENTHESES("redundant-parentheses", RedundantParenthesesListener.class.getName(), "Control flow " +
-        "constructs, exception handling constructs, and initializer(s) should not be enclosed in parentheses."),
+    REDUNDANT_PARENTHESES("redundant-parentheses", RedundantParenthesesListener.class.getName(), "Control flow "
+        + "constructs, exception handling constructs, and initializer(s) should not be enclosed in parentheses."),
     MULTIPLE_IMPORTS("multiple-imports", MultipleImportListener.class.getName(),
         "Multiple import statements should not be defined on a single line."),
     FUNCTION_WHITESPACE("function-whitespace", BlankLineListener.class.getName(), ""),
     WHITESPACE("whitespace", WhitespaceListener.class.getName(), ""),
     CONSTANT_NAMING("constant-naming", ConstantNamingListener.class.getName(),
-        "Global constants should follow either UpperCamelCase or lowerCamelCase naming conventions. Local constants " +
-        "should follow lowerCamelCase naming conventions."),
+        "Global constants should follow either UpperCamelCase or lowerCamelCase naming conventions. Local constants "
+        + "should follow lowerCamelCase naming conventions."),
     CONSTANT_K_PREFIX("constant-k-prefix", KPrefixListener.class.getName(), "Flag constants with prefix k."),
     LOWER_CAMEL_CASE("lower-camel-case", LowerCamelCaseListener.class.getName(),
         "Method and variable names should follow lowerCamelCase naming convention"),
