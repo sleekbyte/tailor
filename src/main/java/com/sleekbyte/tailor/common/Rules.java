@@ -34,14 +34,18 @@ public enum Rules {
         + "should follow lowerCamelCase naming conventions."),
     CONSTANT_K_PREFIX("constant-k-prefix", KPrefixListener.class.getName(), "Flag constants with prefix k."),
     LOWER_CAMEL_CASE("lower-camel-case", LowerCamelCaseListener.class.getName(),
-        "Method and variable names should follow lowerCamelCase naming convention"),
+        "Method and variable names should follow lowerCamelCase naming convention."),
     BRACE_STYLE("brace-style", BraceStyleListener.class.getName(),
         "Definitions of constructs should follow the One True Brace (OTB) style."),
     FORCED_TYPE_CAST("forced-type-cast", ForceTypeCastListener.class.getName(), "Flag force cast usages."),
-    TRAILING_WHITESPACE("trailing-whitespace", FileListener.class.getName(), ""),
-    TERMINATING_NEWLINE("file-terminating-newline", FileListener.class.getName(), ""),
-    LEADING_WHITESPACE("file-leading-whitespace", FileListener.class.getName(), ""),
-    COMMENT_WHITESPACE("comment-whitespace", CommentAnalyzer.class.getName(), ""),
+    TRAILING_WHITESPACE("trailing-whitespace", FileListener.class.getName(),
+        "Flag spaces or tabs after the last non-whitespace character on the line until the newline."),
+    TERMINATING_NEWLINE("file-terminating-newline", FileListener.class.getName(),
+        "Verify that source files terminate with a single \\n character"),
+    LEADING_WHITESPACE("file-leading-whitespace", FileListener.class.getName(),
+        "Verify that source files begins with a non whitespace character"),
+    COMMENT_WHITESPACE("comment-whitespace", CommentAnalyzer.class.getName(),
+        ""),
 
     // Max Length Rules
 
@@ -53,9 +57,12 @@ public enum Rules {
         "Enforce a line limit on the lengths of closure bodies."),
     MAX_FUNCTION_LENGTH(ArgumentParser.MAX_FUNCTION_LENGTH_OPT, FileListener.class.getName(),
         "Enforce a line limit on the lengths of function bodies."),
-    MAX_FILE_LENGTH(ArgumentParser.MAX_FILE_LENGTH_OPT, FileListener.class.getName(), ""),
-    MAX_LINE_LENGTH(ArgumentParser.MAX_LINE_LENGTH_LONG_OPT, FileListener.class.getName(), ""),
-    MAX_NAME_LENGTH(ArgumentParser.MAX_NAME_LENGTH_OPT, FileListener.class.getName(), "");
+    MAX_FILE_LENGTH(ArgumentParser.MAX_FILE_LENGTH_OPT, FileListener.class.getName(),
+        "Enforce a line limit on a file."),
+    MAX_LINE_LENGTH(ArgumentParser.MAX_LINE_LENGTH_LONG_OPT, FileListener.class.getName(),
+        "Enforce a character limit on the length of each line."),
+    MAX_NAME_LENGTH(ArgumentParser.MAX_NAME_LENGTH_OPT, FileListener.class.getName(),
+        "Enforce a character limit on the length of each construct name.");
 
     private String name;
     private String className;
