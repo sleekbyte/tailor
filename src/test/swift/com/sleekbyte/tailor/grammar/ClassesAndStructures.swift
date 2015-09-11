@@ -165,3 +165,7 @@ struct AudioChannel {
   internal var exampleHooks: ExampleHooks {return configuration.exampleHooks }
   internal var suiteHooks: SuiteHooks { return configuration.suiteHooks }
 }
+
+public final class SessionDelegate: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, NSURLSessionDataDelegate, NSURLSessionDownloadDelegate {
+    private var subdelegates: [Int: Request.TaskDelegate] = [:]
+}

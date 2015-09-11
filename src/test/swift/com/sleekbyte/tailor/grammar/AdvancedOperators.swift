@@ -65,3 +65,13 @@ func +- (left: Vector2D, right: Vector2D) -> Vector2D {
     return Vector2D(x: left.x + right.x, y: left.y - right.y)
 }
 let firstVector = Vector2D(x: 1.0, y: 2.0)
+
+public func getFormattedLabel(index: Int) -> String
+{
+    if (index < 0 || index >= entries.count)
+    {
+        return ""
+    }
+
+    return (valueFormatter ?? _defaultValueFormatter).stringFromNumber(entries[index])!
+}
