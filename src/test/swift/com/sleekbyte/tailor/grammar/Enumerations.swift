@@ -119,3 +119,14 @@ public enum ImageTransition {
         }
     }
 }
+
+public enum Code: Int {
+    case InputStreamReadFailed           = -6000
+    case OutputStreamWriteFailed         = -6001
+    case ContentTypeValidationFailed     = -6002
+    case StatusCodeValidationFailed      = -6003
+    case DataSerializationFailed         = -6004
+    case StringSerializationFailed       = -6005
+    case JSONSerializationFailed         = -6006
+    case PropertyListSerializationFailed = -6007
+}

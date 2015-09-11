@@ -287,3 +287,78 @@ applyMutliplication(2, {
 applyMutliplication(2, { value in value * 3 /* comment */ })
 
 applyMutliplication(2, { /* comment */ value in value * 3 })
+
+struct TimesTable {
+    let multiplier: Int
+
+    subscript(index: Int) -> Int {
+        return multiplier * index }
+
+    subscript(index: Int) -> Int {
+        return multiplier * index
+    }
+
+    subscript(index: Int) -> Int {
+        return multiplier * index
+    /* */}
+}
+
+struct Matrix {
+    let rows: Int, columns: Int
+    var grid: [Double]
+    init(rows: Int, columns: Int) {
+        self.rows = rows
+        self.columns = columns
+        grid = Array(count: rows * columns, repeatedValue: 0.0)
+    }
+
+    func indexIsValidForRow(row: Int, column: Int) -> Bool {
+        return row >= 0 && row < rows && column >= 0 && column < columns
+    }
+
+    subscript(row: Int, column: Int) -> Double {
+
+        get {
+            assert(indexIsValidForRow(row, column: column), "Index out of range")
+            return grid[(row * columns) + column]
+        }
+
+        set {
+            assert(indexIsValidForRow(row, column: column), "Index out of range")
+            grid[(row * columns) + column] = newValue
+        } }
+}
+
+class StepCounter {
+    var totalSteps: Int = 0 {
+        willSet(newTotalSteps) {
+            println("About to set totalSteps to \(newTotalSteps)") }
+        didSet {
+            if totalSteps > oldValue {
+                println("Added \(totalSteps - oldValue) steps")
+            } }
+    }
+}
+
+class StepCounter {
+    var totalSteps: Int = 0 {
+        didSet {
+            if totalSteps > oldValue {
+                println("Added \(totalSteps - oldValue) steps")
+            } }
+    }
+}
+
+class StepCounter {
+    var totalSteps: Int = 0 {
+        willSet(newTotalSteps) {
+            println("About to set totalSteps to \(newTotalSteps)") }
+    }
+}
+
+class StepCounter {
+    var totalSteps: Int = 0 {
+        willSet(newTotalSteps) {
+            println("About to set totalSteps to \(newTotalSteps)")
+        } }
+}

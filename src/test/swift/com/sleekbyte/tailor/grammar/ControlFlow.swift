@@ -208,3 +208,10 @@ if #available(iOS 9, OSX 10.10, *) {
 } else {
     // Fall back to earlier iOS and OS X APIs
 }
+
+for var i = 0; i < Int(width); i++, sp = sp.advancedBy(4), dp = dp.advancedBy(4) {
+    let srcAlpha = Int(sp.advancedBy(3).memory) // Blend alpha to dst
+    if srcAlpha == 0xff {
+        memcpy(dp, sp, 4)
+    }
+}

@@ -86,3 +86,11 @@ extension ImageFilter where Self: Sizable, Self: Roundable {
         return "\(self.dynamicType)-size:(\(width)x\(height))-radius:(\(radius))"
     }
 }
+
+@available(iOS 9.0, OSX 10.11, *)
+extension Manager {
+    private enum Streamable {
+        case Stream(String, Int)
+        case NetService(NSNetService)
+    }
+}
