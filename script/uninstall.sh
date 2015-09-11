@@ -9,9 +9,9 @@ blue='\033[1;34m'
 reset='\033[0m'
 
 PREFIX="/usr/local"
-TAILORDIR="$PREFIX/tailor"
-BINDIR="$PREFIX/bin"
-STARTSCRIPT="$TAILORDIR/bin/tailor"
+TAILOR_DIR="$PREFIX/tailor"
+BIN_DIR="$PREFIX/bin"
+START_SCRIPT="$TAILOR_DIR/bin/tailor"
 
 wait_for_user() {
   read -n 1 -a CONTINUE -p "Press [y/N] to continue: " < /dev/tty
@@ -39,10 +39,10 @@ cecho() {
   echo "$color$message$reset"
 }
 
-echo "Tailor will be uninstalled from: $blue$TAILORDIR/$reset"
+echo "Tailor will be uninstalled from: $blue$TAILOR_DIR/$reset"
 if wait_for_user; then
-  maybe_sudo /bin/rm -rf "$TAILORDIR"
-  maybe_sudo /bin/rm -f "$BINDIR"/tailor
+  maybe_sudo /bin/rm -rf "$TAILOR_DIR"
+  maybe_sudo /bin/rm -f "$BIN_DIR"/tailor
   kill_sudo
 
   cecho "Tailor uninstalled." $green

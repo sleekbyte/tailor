@@ -9,10 +9,10 @@ blue='\033[1;34m'
 reset='\033[0m'
 
 PREFIX="/usr/local"
-TAILORDIR="$PREFIX/tailor"
-BINDIR="$PREFIX/bin"
-STARTSCRIPT="$TAILORDIR/bin/tailor"
-TAILORZIPURL="https://github.com/sleekbyte/tailor/releases/download/v0.1.0/tailor.zip"
+TAILOR_DIR="$PREFIX/tailor"
+BIN_DIR="$PREFIX/bin"
+START_SCRIPT="$TAILOR_DIR/bin/tailor"
+TAILOR_ZIP_URL="https://github.com/sleekbyte/tailor/releases/download/v0.1.0/tailor.zip"
 JAVA_VERSION="1.8"
 
 wait_for_user() {
@@ -61,16 +61,16 @@ cecho() {
   echo "$color$message$reset"
 }
 
-echo "Tailor will be installed to: $blue$TAILORDIR/$reset"
+echo "Tailor will be installed to: $blue$TAILOR_DIR/$reset"
 if wait_for_user; then
   verify_java
-  maybe_sudo /bin/mkdir -p $BINDIR
+  maybe_sudo /bin/mkdir -p $BIN_DIR
   cecho "Downloading tailor.zip to $PREFIX/..." $blue
-  maybe_sudo /usr/bin/curl -#fLo "$PREFIX"/tailor.zip "$TAILORZIPURL"
+  maybe_sudo /usr/bin/curl -#fLo "$PREFIX"/tailor.zip "$TAILOR_ZIP_URL"
   maybe_sudo /usr/bin/unzip -oqq "$PREFIX"/tailor.zip -d "$PREFIX"
   maybe_sudo /bin/rm -rf "$PREFIX"/tailor.zip
-  maybe_sudo /bin/ln -fs "$STARTSCRIPT" "$BINDIR"/tailor
-  maybe_sudo /usr/sbin/chown -R $(/usr/bin/whoami) "$TAILORDIR"
+  maybe_sudo /bin/ln -fs "$START_SCRIPT" "$BIN_DIR"/tailor
+  maybe_sudo /usr/sbin/chown -R $(/usr/bin/whoami) "$TAILOR_DIR"
   kill_sudo
 
   cecho "Ready to Tailor your Swift!" $green
