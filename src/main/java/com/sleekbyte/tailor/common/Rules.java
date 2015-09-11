@@ -53,7 +53,8 @@ public enum Rules {
         BRACE_STYLE.className = BraceStyleListener.class.getName();
 
         COMMENT_WHITESPACE.name = "comment-whitespace";
-        COMMENT_WHITESPACE.description = "";
+        COMMENT_WHITESPACE.description = "Ensure at least one whitespace character after a comment opening symbol"
+            + " (// or /*) and at least one whitespace character before a comment closing symbol (*/).";
         COMMENT_WHITESPACE.link = baseStyleGuideLink + COMMENT_WHITESPACE.getName();
         COMMENT_WHITESPACE.className = CommentAnalyzer.class.getName();
 
@@ -74,7 +75,8 @@ public enum Rules {
         FORCED_TYPE_CAST.className = ForceTypeCastListener.class.getName();
 
         FUNCTION_WHITESPACE.name = "function-whitespace";
-        FUNCTION_WHITESPACE.description = "";
+        FUNCTION_WHITESPACE.description = "Every function declaration except those at the start and end of file "
+            + "should have one blank line before and after itself.";
         FUNCTION_WHITESPACE.link = baseStyleGuideLink + FUNCTION_WHITESPACE.getName();
         FUNCTION_WHITESPACE.className = BlankLineListener.class.getName();
 
@@ -157,7 +159,8 @@ public enum Rules {
         UPPER_CAMEL_CASE.className = UpperCamelCaseListener.class.getName();
 
         WHITESPACE.name = "whitespace";
-        WHITESPACE.description = "";
+        WHITESPACE.description = "Flag whitespace violations around colon (:), arrow (->), and between construct"
+            + " and opening brace ({)";
         WHITESPACE.link = baseStyleGuideLink + WHITESPACE.getName();
         WHITESPACE.className = WhitespaceListener.class.getName();
     }
