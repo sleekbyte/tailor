@@ -267,7 +267,7 @@ setterName : '(' identifier ')'  ;
 getterSetterKeywordBlock : '{' getterKeywordClause setterKeywordClause?'}' | '{' setterKeywordClause getterKeywordClause '}'  ;
 getterKeywordClause : attributes? 'get'  ;
 setterKeywordClause : attributes? 'set'  ;
-willSetDidSetBlock : '{' willSetClause didSetClause?'}' | '{' didSetClause willSetClause '}'  ;
+willSetDidSetBlock : '{' willSetClause didSetClause?'}' | '{' didSetClause willSetClause? '}'  ;
 willSetClause : attributes? 'willSet' setterName? codeBlock  ;
 didSetClause : attributes? 'didSet' setterName? codeBlock  ;
 
