@@ -4,6 +4,7 @@ import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.CharFormatUtil;
 import com.sleekbyte.tailor.utils.ListenerUtil;
@@ -54,7 +55,7 @@ public class UpperCamelCaseListener extends SwiftBaseListener {
         String constructName = ctx.getText();
         if (!CharFormatUtil.isUpperCamelCase(constructName)) {
             Location location = ListenerUtil.getContextStartLocation(ctx);
-            this.printer.error(constructType + Messages.UPPER_CAMEL_CASE, location);
+            this.printer.error(Rules.UPPER_CAMEL_CASE, constructType + Messages.UPPER_CAMEL_CASE, location);
         }
     }
 

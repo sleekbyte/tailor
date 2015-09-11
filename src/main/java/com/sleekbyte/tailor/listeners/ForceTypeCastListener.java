@@ -4,6 +4,7 @@ import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ListenerUtil;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -28,7 +29,7 @@ public class ForceTypeCastListener extends SwiftBaseListener {
         ParseTree secondChild = ctx.getChild(1);
         if (secondChild.getText().equals("!")) {
             Location exclamationLocation = ListenerUtil.getParseTreeStartLocation(secondChild);
-            printer.warn(Messages.FORCE_CAST, exclamationLocation);
+            printer.warn(Rules.FORCED_TYPE_CAST, Messages.FORCE_CAST, exclamationLocation);
         }
     }
 }

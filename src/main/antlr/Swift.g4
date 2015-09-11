@@ -328,7 +328,7 @@ structBody : '{' declarations?'}'  ;
 // GRAMMAR OF A CLASS DECLARATION
 
 // declarationModifier missing in Swift Language Reference
-classDeclaration : attributes? declarationModifier? accessLevelModifier? 'class' className genericParameterClause? typeInheritanceClause? classBody  ;
+classDeclaration : attributes? declarationModifier* 'class' className genericParameterClause? typeInheritanceClause? classBody  ;
 className : identifier ;
 classBody : '{' declarations? '}'  ;
 
@@ -377,8 +377,8 @@ deinitializerDeclaration : attributes? 'deinit' codeBlock  ;
 
 // GRAMMAR OF AN EXTENSION DECLARATION
 
-// requirementClause missing in the Swift Language Reference
-extensionDeclaration : accessLevelModifier? 'extension' typeIdentifier requirementClause? typeInheritanceClause? extensionBody  ;
+// attributes, requirementClause missing in the Swift Language Reference
+extensionDeclaration : attributes? accessLevelModifier? 'extension' typeIdentifier requirementClause? typeInheritanceClause? extensionBody  ;
 extensionBody : '{' declarations?'}'  ;
 
 // GRAMMAR OF A SUBSCRIPT DECLARATION
@@ -460,10 +460,11 @@ expressionPattern : expression  ;
 // GRAMMAR OF AN ATTRIBUTE
 
 attribute : '@' attributeName attributeArgumentClause? ;
-attributeName : identifier  ;
+attributeName : identifier ;
 attributeArgumentClause : '('  balancedTokens?  ')'  ;
 attributes : attribute+ ;
-balancedTokens : balancedToken+ ;
+// Swift Language Reference does not have ','
+balancedTokens : balancedToken ','? balancedTokens? ;
 balancedToken
  : '('  balancedTokens? ')'
  | '[' balancedTokens? ']'
@@ -685,7 +686,7 @@ functionCallExpression
 // are also referenced individually. For example, type signatures use
 // <...>.
 
-operatorHead: '=' | '<' | '>' | '!' | '*' | '&' | '==' | OperatorHead;
+operatorHead: '=' | '<' | '>' | '!' | '*' | '&' | '==' | '?' | '-' | OperatorHead;
 operatorCharacter: operatorHead | OperatorCharacter;
 
 operator: operatorHead operatorCharacter*
@@ -813,7 +814,8 @@ keyword : 'convenience' | 'class' | 'deinit' | 'enum' | 'extension' | 'func' | '
 contextSensitiveKeyword :
  'associativity' | 'didSet' | 'get' | 'infix' | 'inout' | 'left' | 'mutating' | 'none' |
  'nonmutating' | 'operator' | 'override' | 'postfix' | 'precedence' | 'prefix' | 'right' |
- 'set' | 'unowned' | 'unowned(safe)' | 'unowned(unsafe)' | 'weak' | 'willSet' | 'required'
+ 'set' | 'unowned' | 'unowned(safe)' | 'unowned(unsafe)' | 'weak' | 'willSet' | 'required' |
+ 'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS'
  ;
 
 OperatorHead
@@ -884,9 +886,11 @@ ImplicitParameterName : '$' DecimalLiteral ; // TODO: don't allow '_' here
 
 // GRAMMAR OF A LITERAL
 
-literal : integerLiteral | FloatingPointLiteral | StringLiteral | BooleanLiteral | NilLiteral ;
+literal : numericLiteral | StringLiteral | BooleanLiteral | NilLiteral ;
 
 // GRAMMAR OF AN INTEGER LITERAL
+
+numericLiteral: '-'? integerLiteral | '-'? FloatingPointLiteral ;
 
 integerLiteral
  : BinaryLiteral

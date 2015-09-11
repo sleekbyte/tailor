@@ -5,10 +5,13 @@ import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ListenerUtil;
 import com.sleekbyte.tailor.utils.SourceFileUtil;
 import org.antlr.v4.runtime.ParserRuleContext;
+
+import java.util.Set;
 
 /**
  * Parse tree listener for verifying maximum lengths of Swift constructs.
@@ -19,10 +22,19 @@ public class MaxLengthListener extends SwiftBaseListener {
     private Printer printer;
     private boolean traversedTreeForConstantDeclaration = false;
     private boolean traversedTreeForVarDeclaration = false;
+    private Set<Rules> enabledRules;
 
-    public MaxLengthListener(Printer printer, MaxLengths maxLengths) {
+    /**
+     * Listener that verifies name and construct lengths.
+     *
+     * @param printer Printer object
+     * @param maxLengths MaxLengths object
+     * @param enabledRules Set of enabled rules
+     */
+    public MaxLengthListener(Printer printer, MaxLengths maxLengths, Set<Rules> enabledRules) {
         this.maxLengths = maxLengths;
         this.printer = printer;
+        this.enabledRules = enabledRules;
     }
 
     public void setTraversedTreeForConstantDeclaration(boolean traversedTree) {
@@ -55,22 +67,30 @@ public class MaxLengthListener extends SwiftBaseListener {
 
     @Override
     public void enterClassBody(SwiftParser.ClassBodyContext ctx) {
-        verifyConstructLength(Messages.CLASS, maxLengths.maxClassLength, ctx);
+        if (enabledRules.contains(Rules.MAX_CLASS_LENGTH)) {
+            verifyConstructLength(Rules.MAX_CLASS_LENGTH, Messages.CLASS, maxLengths.maxClassLength, ctx);
+        }
     }
 
     @Override
     public void enterClosureExpression(SwiftParser.ClosureExpressionContext ctx) {
-        verifyConstructLength(Messages.CLOSURE, maxLengths.maxClosureLength, ctx);
+        if (enabledRules.contains(Rules.MAX_CLOSURE_LENGTH)) {
+            verifyConstructLength(Rules.MAX_CLOSURE_LENGTH, Messages.CLOSURE, maxLengths.maxClosureLength, ctx);
+        }
     }
 
     @Override
     public void enterFunctionBody(SwiftParser.FunctionBodyContext ctx) {
-        verifyConstructLength(Messages.FUNCTION, maxLengths.maxFunctionLength, ctx);
+        if (enabledRules.contains(Rules.MAX_FUNCTION_LENGTH)) {
+            verifyConstructLength(Rules.MAX_FUNCTION_LENGTH, Messages.FUNCTION, maxLengths.maxFunctionLength, ctx);
+        }
     }
 
     @Override
     public void enterStructBody(SwiftParser.StructBodyContext ctx) {
-        verifyConstructLength(Messages.STRUCT, maxLengths.maxStructLength, ctx);
+        if (enabledRules.contains(Rules.MAX_STRUCT_LENGTH)) {
+            verifyConstructLength(Rules.MAX_STRUCT_LENGTH, Messages.STRUCT, maxLengths.maxStructLength, ctx);
+        }
     }
 
     @Override
@@ -132,24 +152,25 @@ public class MaxLengthListener extends SwiftBaseListener {
         }
     }
 
-    private void verifyConstructLength(String constructType, int maxLength, ParserRuleContext ctx) {
+    private void verifyConstructLength(Rules rule, String constructType, int maxLength, ParserRuleContext ctx) {
         if (SourceFileUtil.constructTooLong(ctx, maxLength)) {
             int constructLength = ctx.getStop().getLine() - ctx.getStart().getLine();
-            createErrorMessage(constructLength, ctx, constructType, maxLength, Messages.EXCEEDS_LINE_LIMIT);
+            createErrorMessage(rule, constructLength, ctx, constructType, maxLength, Messages.EXCEEDS_LINE_LIMIT);
         }
     }
 
     private void verifyNameLength(String constructType, int maxLength, ParserRuleContext ctx) {
-        if (SourceFileUtil.nameTooLong(ctx, maxLength)) {
-            createErrorMessage(ctx.getText().length(), ctx, constructType, maxLength, Messages.EXCEEDS_CHARACTER_LIMIT);
+        if (enabledRules.contains(Rules.MAX_NAME_LENGTH) && SourceFileUtil.nameTooLong(ctx, maxLength)) {
+            createErrorMessage(Rules.MAX_NAME_LENGTH, ctx.getText().length(), ctx, constructType, maxLength,
+                Messages.EXCEEDS_CHARACTER_LIMIT);
         }
     }
 
-    private void createErrorMessage(int constructLength, ParserRuleContext ctx, String constructType, int maxLength,
-                                    String msg) {
+    private void createErrorMessage(Rules rule, int constructLength, ParserRuleContext ctx, String constructType,
+                                    int maxLength, String msg) {
         String lengthVersusLimit = " (" + constructLength + "/" + maxLength + ")";
         Location location = ListenerUtil.getContextStartLocation(ctx);
-        printer.error(constructType + msg + lengthVersusLimit, location);
+        printer.error(rule, constructType + msg + lengthVersusLimit, location);
     }
 
 }

@@ -58,7 +58,8 @@ public class FileListenerTest {
         printer = new Printer(inputFile, Severity.WARNING, new ColorSettings(false, false));
         writer = new PrintWriter(inputFile, Charset.defaultCharset().name());
         enabledRules = new HashSet<>(
-            Arrays.asList(Rules.TERMINATING_NEWLINE, Rules.LEADING_WHITESPACE, Rules.TRAILING_WHITESPACE));
+            Arrays.asList(Rules.TERMINATING_NEWLINE, Rules.LEADING_WHITESPACE, Rules.TRAILING_WHITESPACE,
+                Rules.MAX_FILE_LENGTH, Rules.MAX_LINE_LENGTH));
     }
 
     @Test
