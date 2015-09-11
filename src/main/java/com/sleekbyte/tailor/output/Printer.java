@@ -2,6 +2,7 @@ package com.sleekbyte.tailor.output;
 
 import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.Location;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
@@ -46,24 +47,26 @@ public class Printer implements AutoCloseable {
     /**
      * Prints warning message.
      *
+     * @param rule rule associated with warning
      * @param warningMsg warning message to print
      * @param location   location object containing line and column number for printing
      */
-    public void warn(String warningMsg, Location location) {
-        print(Severity.WARNING, warningMsg, location);
+    public void warn(Rules rule, String warningMsg, Location location) {
+        print(rule, Severity.WARNING, warningMsg, location);
     }
 
     /**
      * Prints error message.
      *
+     * @param rule rule associated with error
      * @param errorMsg error message to print
      * @param location location object containing line and column number for printing
      */
-    public void error(String errorMsg, Location location) {
-        print(Severity.min(Severity.ERROR, maxSeverity), errorMsg, location);
+    public void error(Rules rule, String errorMsg, Location location) {
+        print(rule, Severity.min(Severity.ERROR, maxSeverity), errorMsg, location);
     }
 
-    private void print(Severity severity, String msg, Location location) {
+    private void print(Rules rule, Severity severity, String msg, Location location) {
         if (location.line > this.highestLineNumber) {
             this.highestLineNumber = location.line;
         }
@@ -71,7 +74,7 @@ public class Printer implements AutoCloseable {
             this.highestColumnNumber = location.column;
         }
 
-        ViolationMessage violationMessage = new ViolationMessage(location.line, location.column, severity, msg);
+        ViolationMessage violationMessage = new ViolationMessage(rule, location.line, location.column, severity, msg);
         try {
             violationMessage.setFilePath(this.inputFile.getCanonicalPath());
         } catch (IOException e) {
@@ -91,13 +94,14 @@ public class Printer implements AutoCloseable {
     }
 
     // Visible for testing only
-    public static String genOutputStringForTest(String filePath, int line, Severity severity, String msg) {
-        return new ViolationMessage(filePath, line, 0, severity, msg).toString();
+    public static String genOutputStringForTest(Rules rule, String filePath, int line, Severity severity, String msg) {
+        return new ViolationMessage(rule, filePath, line, 0, severity, msg).toString();
     }
 
     // Visible for testing only
-    public static String genOutputStringForTest(String filePath, int line, int column, Severity severity, String msg) {
-        return new ViolationMessage(filePath, line, column, severity, msg).toString();
+    public static String genOutputStringForTest(Rules rule, String filePath, int line, int column, Severity severity,
+                                                String msg) {
+        return new ViolationMessage(rule, filePath, line, column, severity, msg).toString();
     }
 
     @Override

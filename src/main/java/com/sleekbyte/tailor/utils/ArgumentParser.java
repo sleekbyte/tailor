@@ -28,14 +28,16 @@ public class ArgumentParser {
     private static final String HELP_LONG_OPT = "help";
     private static final String VERSION_SHORT_OPT = "v";
     private static final String VERSION_LONG_OPT = "version";
-    private static final String MAX_CLASS_LENGTH_OPT = "max-class-length";
-    private static final String MAX_CLOSURE_LENGTH_OPT = "max-closure-length";
-    private static final String MAX_FILE_LENGTH_OPT = "max-file-length";
-    private static final String MAX_FUNCTION_LENGTH_OPT = "max-function-length";
+
+    public static final String MAX_CLASS_LENGTH_OPT = "max-class-length";
+    public static final String MAX_CLOSURE_LENGTH_OPT = "max-closure-length";
+    public static final String MAX_FILE_LENGTH_OPT = "max-file-length";
+    public static final String MAX_FUNCTION_LENGTH_OPT = "max-function-length";
     private static final String MAX_LINE_LENGTH_SHORT_OPT = "l";
-    private static final String MAX_LINE_LENGTH_LONG_OPT = "max-line-length";
-    private static final String MAX_NAME_LENGTH_OPT = "max-name-length";
-    private static final String MAX_STRUCT_LENGTH_OPT = "max-struct-length";
+    public static final String MAX_LINE_LENGTH_LONG_OPT = "max-line-length";
+    public static final String MAX_NAME_LENGTH_OPT = "max-name-length";
+    public static final String MAX_STRUCT_LENGTH_OPT = "max-struct-length";
+
     private static final String MAX_SEVERITY_OPT = "max-severity";
     private static final String ONLY_OPT = "only";
     private static final String EXCEPT_OPT = "except";

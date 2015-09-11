@@ -3,6 +3,7 @@ package com.sleekbyte.tailor.listeners;
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ListenerUtil;
 import com.sleekbyte.tailor.utils.ParseTreeUtil;
@@ -38,7 +39,8 @@ public class BlankLineListener extends SwiftBaseListener {
             Token start = declCtx.getStart();
             List<Token> tokens = tokenStream.getHiddenTokensToLeft(start.getTokenIndex());
             if (getNumberOfBlankLines(tokens) < 1) {
-                printer.error(Messages.FUNCTION + Messages.BLANK_LINE_BEFORE, ListenerUtil.getTokenLocation(start));
+                printer.error(Rules.FUNCTION_WHITESPACE, Messages.FUNCTION + Messages.BLANK_LINE_BEFORE,
+                    ListenerUtil.getTokenLocation(start));
             }
         }
 
@@ -50,7 +52,8 @@ public class BlankLineListener extends SwiftBaseListener {
             Token end = declCtx.getStop();
             List<Token> tokens = tokenStream.getHiddenTokensToRight(end.getTokenIndex());
             if (getNumberOfBlankLines(tokens) < 1) {
-                printer.error(Messages.FUNCTION + Messages.BLANK_LINE_AFTER, ListenerUtil.getTokenEndLocation(end));
+                printer.error(Rules.FUNCTION_WHITESPACE, Messages.FUNCTION + Messages.BLANK_LINE_AFTER,
+                    ListenerUtil.getTokenEndLocation(end));
             }
         }
     }

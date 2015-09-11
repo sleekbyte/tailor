@@ -4,6 +4,7 @@ import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.CharFormatUtil;
 import com.sleekbyte.tailor.utils.ListenerUtil;
@@ -30,11 +31,12 @@ public class ConstantNamingListener extends SwiftBaseListener {
                 || ConstantDecHelper.insideClass(constantDecContext)
                 || ConstantDecHelper.insideStruct(constantDecContext)) {
             if (!CharFormatUtil.isUpperCamelCase(constantName) && !CharFormatUtil.isLowerCamelCase(constantName)) {
-                printer.error(Messages.GLOBAL + Messages.CONSTANT + Messages.GLOBAL_CONSTANT_NAMING, location);
+                printer.error(Rules.CONSTANT_NAMING, Messages.GLOBAL + Messages.CONSTANT
+                    + Messages.GLOBAL_CONSTANT_NAMING, location);
             }
         } else {
             if (!CharFormatUtil.isLowerCamelCase(constantName)) {
-                printer.error(Messages.CONSTANT + Messages.LOWER_CAMEL_CASE, location);
+                printer.error(Rules.CONSTANT_NAMING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE, location);
             }
         }
     }

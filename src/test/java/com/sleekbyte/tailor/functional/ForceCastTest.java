@@ -1,6 +1,7 @@
 package com.sleekbyte.tailor.functional;
 
 import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.output.Printer;
 import org.junit.runner.RunWith;
@@ -24,8 +25,8 @@ public class ForceCastTest extends RuleTest {
     }
 
     private void addExpectedMsg(int line, int column, Severity classification) {
-        expectedMessages.add(Printer.genOutputStringForTest(inputFile.getName(), line, column, classification,
-                                                            Messages.FORCE_CAST));
+        expectedMessages.add(Printer.genOutputStringForTest(Rules.FORCED_TYPE_CAST, inputFile.getName(), line, column,
+            classification, Messages.FORCE_CAST));
     }
 
 }

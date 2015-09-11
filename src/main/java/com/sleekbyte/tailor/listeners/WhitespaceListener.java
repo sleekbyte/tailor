@@ -4,6 +4,7 @@ import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
+import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ListenerUtil;
 import com.sleekbyte.tailor.utils.ParseTreeUtil;
@@ -93,12 +94,12 @@ public class WhitespaceListener extends SwiftBaseListener {
                 Token after = ((TerminalNodeImpl) ctx.getChild(0).getChild(i + 1)).getSymbol();
 
                 if (checkLeftSpaces(before, op.getStart(), 1)) {
-                    printer.error(Messages.OPERATOR + Messages.SPACE_BEFORE,
+                    printer.error(Rules.WHITESPACE, Messages.OPERATOR + Messages.SPACE_BEFORE,
                         ListenerUtil.getContextStartLocation(op));
                 }
 
                 if (checkRightSpaces(after, op.getStop(), 1)) {
-                    printer.error(Messages.OPERATOR + Messages.SPACE_AFTER,
+                    printer.error(Rules.WHITESPACE, Messages.OPERATOR + Messages.SPACE_AFTER,
                         ListenerUtil.getContextStartLocation(op));
                 }
             }
@@ -218,13 +219,13 @@ public class WhitespaceListener extends SwiftBaseListener {
         Location colonLocation = ListenerUtil.getTokenLocation(colon);
 
         if (checkLeftSpaces(left, colon, 1)) {
-            printer.error(Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " " + Messages.SPACE_BEFORE,
-                colonLocation);
+            printer.error(Rules.WHITESPACE, Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " "
+                    + Messages.SPACE_BEFORE, colonLocation);
         }
 
         if (checkRightSpaces(right, colon, 1)) {
-            printer.error(Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " " + Messages.SPACE_AFTER,
-                colonLocation);
+            printer.error(Rules.WHITESPACE, Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " "
+                    + Messages.SPACE_AFTER, colonLocation);
         }
     }
 
@@ -232,13 +233,13 @@ public class WhitespaceListener extends SwiftBaseListener {
         Location colonLocation = ListenerUtil.getTokenLocation(colon);
 
         if (checkLeftSpaces(left, colon, 0)) {
-            printer.error(Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " " + Messages.NO_SPACE_BEFORE,
-                colonLocation);
+            printer.error(Rules.WHITESPACE, Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " "
+                    + Messages.NO_SPACE_BEFORE, colonLocation);
         }
 
         if (checkRightSpaces(right, colon, 1)) {
-            printer.error(Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " " + Messages.SPACE_AFTER,
-                colonLocation);
+            printer.error(Rules.WHITESPACE, Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " "
+                    + Messages.SPACE_AFTER, colonLocation);
         }
     }
 
@@ -262,10 +263,12 @@ public class WhitespaceListener extends SwiftBaseListener {
 
     private void verifyArrowIsSpaceDelimited(Token left, Token right, Token arrow) {
         if (checkLeftSpaces(left, arrow, 1)) {
-            printer.error(Messages.RETURN_ARROW + Messages.SPACE_BEFORE, ListenerUtil.getTokenLocation(arrow));
+            printer.error(Rules.WHITESPACE, Messages.RETURN_ARROW + Messages.SPACE_BEFORE,
+                ListenerUtil.getTokenLocation(arrow));
         }
         if (checkRightSpaces(right, arrow, 1)) {
-            printer.error(Messages.RETURN_ARROW + Messages.SPACE_AFTER, ListenerUtil.getTokenEndLocation(arrow));
+            printer.error(Rules.WHITESPACE, Messages.RETURN_ARROW + Messages.SPACE_AFTER,
+                ListenerUtil.getTokenEndLocation(arrow));
         }
     }
 }
