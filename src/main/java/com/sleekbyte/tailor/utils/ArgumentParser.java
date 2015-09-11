@@ -297,7 +297,7 @@ public class ArgumentParser {
         for (Rules rule : rules) {
             AnsiConsole.out.println(Ansi.ansi().render(String.format("@|bold %s|@:%n"
                 + "@|underline Description:|@ %s%n"
-                + "@|underline Style Guide:|@ %s%n", rule.getName(), rule.getDescription(), "link")));
+                + "@|underline Style Guide:|@ %s%n", rule.getName(), rule.getDescription(), rule.getLink())));
         }
     }
 }
