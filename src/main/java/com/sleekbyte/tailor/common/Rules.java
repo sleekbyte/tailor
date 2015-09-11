@@ -41,9 +41,9 @@ public enum Rules {
     TRAILING_WHITESPACE("trailing-whitespace", FileListener.class.getName(),
         "Flag spaces or tabs after the last non-whitespace character on the line until the newline."),
     TERMINATING_NEWLINE("file-terminating-newline", FileListener.class.getName(),
-        "Verify that source files terminate with a single \\n character"),
+        "Verify that source files terminate with a single \\n character."),
     LEADING_WHITESPACE("file-leading-whitespace", FileListener.class.getName(),
-        "Verify that source files begins with a non whitespace character"),
+        "Verify that source files begins with a non whitespace character."),
     COMMENT_WHITESPACE("comment-whitespace", CommentAnalyzer.class.getName(),
         ""),
 
