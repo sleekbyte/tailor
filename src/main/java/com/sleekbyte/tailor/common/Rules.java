@@ -90,7 +90,7 @@ public enum Rules {
         MAX_CLOSURE_LENGTH.className = FileListener.class.getName();
 
         MAX_FILE_LENGTH.name = ArgumentParser.MAX_FILE_LENGTH_OPT;
-        MAX_FILE_LENGTH.description = "Enforce a line limit on a file.";
+        MAX_FILE_LENGTH.description = "Enforce a line limit on each file.";
         MAX_FILE_LENGTH.className = FileListener.class.getName();
 
         MAX_FUNCTION_LENGTH.name = ArgumentParser.MAX_FUNCTION_LENGTH_OPT;
@@ -119,7 +119,7 @@ public enum Rules {
         REDUNDANT_PARENTHESES.className = RedundantParenthesesListener.class.getName();
 
         TERMINATING_NEWLINE.name = "terminating-newline";
-        TERMINATING_NEWLINE.description = "Verify that source files terminate with exactly one '\\n' character";
+        TERMINATING_NEWLINE.description = "Verify that source files terminate with exactly one '\\n' character.";
         TERMINATING_NEWLINE.className = FileListener.class.getName();
 
         TERMINATING_SEMICOLON.name = "terminating-semicolon";
