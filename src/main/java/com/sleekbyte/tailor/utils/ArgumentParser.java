@@ -293,9 +293,9 @@ public class ArgumentParser {
     public void printRules() {
         Rules[] rules = Rules.values();
 
-        AnsiConsole.out.println(Ansi.ansi().render(String.format("@|bold # Available rules: %d|@%n", rules.length)));
+        AnsiConsole.out.println(Ansi.ansi().render(String.format("@|bold %d rules available|@%n", rules.length)));
         for (Rules rule : rules) {
-            AnsiConsole.out.println(Ansi.ansi().render(String.format("@|bold %s|@:%n"
+            AnsiConsole.out.println(Ansi.ansi().render(String.format("@|bold %s|@%n"
                 + "@|underline Description:|@ %s%n"
                 + "@|underline Style Guide:|@ %s%n", rule.getName(), rule.getDescription(), rule.getLink())));
         }
