@@ -47,7 +47,7 @@ public enum Rules {
 
     static {
         BRACE_STYLE.name = "brace-style";
-        BRACE_STYLE.description = "Definitions of constructs should follow the One True Brace Style(1TBs).";
+        BRACE_STYLE.description = "Definitions of constructs should follow the One True Brace Style (1TBS).";
         BRACE_STYLE.className = BraceStyleListener.class.getName();
 
         COMMENT_WHITESPACE.name = "comment-whitespace";
