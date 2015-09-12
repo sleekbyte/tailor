@@ -127,8 +127,8 @@ public enum Rules {
         TERMINATING_SEMICOLON.className = SemicolonTerminatedListener.class.getName();
 
         TRAILING_WHITESPACE.name = "trailing-whitespace";
-        TRAILING_WHITESPACE.description = "Flag spaces or tabs after the last non-whitespace character on the line"
-            + " until the newline.";
+        TRAILING_WHITESPACE.description = "Flag whitespace after the last non-whitespace character on each line "
+            + "until the newline.";
         TRAILING_WHITESPACE.className = FileListener.class.getName();
 
         UPPER_CAMEL_CASE.name = "upper-camel-case";
