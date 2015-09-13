@@ -213,6 +213,7 @@ declaration
  | extensionDeclaration ';'?
  | subscriptDeclaration ';'?
  | operatorDeclaration ';'?
+ | macroDeclaration
  ;
 
 declarations : declaration declarations? ;
@@ -686,7 +687,7 @@ functionCallExpression
 // are also referenced individually. For example, type signatures use
 // <...>.
 
-operatorHead: '=' | '<' | '>' | '!' | '*' | '&' | '==' | '?' | '-' | OperatorHead;
+operatorHead: '=' | '<' | '>' | '!' | '*' | '&' | '==' | '?' | '-' | '&&' | '||' | OperatorHead;
 operatorCharacter: operatorHead | OperatorCharacter;
 
 operator: operatorHead operatorCharacter*
@@ -800,6 +801,18 @@ typeInheritanceClause : ':' classRequirement ',' typeInheritanceList
 typeInheritanceList : typeIdentifier (',' typeIdentifier)* ;
 classRequirement: 'class' ;
 
+// ------ Build Configurations (Macros) -------
+// Used http://apple.co/1M4GNVf as reference
+
+macroDeclaration: '#if' buildConfigurations statements? macroElseIfClause* macroElseClause? '#endif' ;
+macroElseIfClause: '#elseif' buildConfigurations statements? ;
+macroElseClause: '#else' statements? ;
+buildConfigurations: buildConfiguration (('&&' | '||') buildConfigurations)? ;
+buildConfiguration: '!'? macroFunction '(' macroArguments ')' ;
+macroFunction: 'os' | 'arch' ;
+macroArguments: macroArgument (',' macroArgument)* ;
+macroArgument: 'OSX' | 'iOS' | 'watchOS' | 'x86_64' | 'arm' | 'arm64' | 'i386' ;
+
 // ---------- Lexical Structure -----------
 
 BooleanLiteral: 'true' | 'false' ;
@@ -815,7 +828,8 @@ contextSensitiveKeyword :
  'associativity' | 'didSet' | 'get' | 'infix' | 'inout' | 'left' | 'mutating' | 'none' |
  'nonmutating' | 'operator' | 'override' | 'postfix' | 'precedence' | 'prefix' | 'right' |
  'set' | 'unowned' | 'unowned(safe)' | 'unowned(unsafe)' | 'weak' | 'willSet' | 'required' |
- 'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS'
+ 'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS' | 'x86_64' |
+ 'arm' | 'arm64' | 'i386' | 'os' | 'arch'
  ;
 
 OperatorHead
