@@ -46,6 +46,7 @@ public class ArgumentParser {
     private static final String INVERT_COLOR_OPT = "invert-color";
     private static final String DEFAULT_INT_ARG = "0";
     private static final String XCODE_INTEGRATION_OPT = "xcode";
+    private static final String SHOW_RULES_OPT = "show-rules";
 
     private Options options;
     private CommandLine cmd;
@@ -71,6 +72,13 @@ public class ArgumentParser {
      */
     public boolean shouldPrintVersion() {
         return cmd != null && cmd.hasOption(VERSION_SHORT_OPT);
+    }
+
+    /**
+     * Check if "--show-rules" option was specified.
+     */
+    public boolean shouldPrintRules() {
+        return cmd != null && cmd.hasOption(SHOW_RULES_OPT);
     }
 
     /**
@@ -131,6 +139,8 @@ public class ArgumentParser {
 
         options.addOption(createNoArgOpt(NO_COLOR_OPT, Messages.NO_COLOR_DESC));
         options.addOption(createNoArgOpt(INVERT_COLOR_OPT, Messages.INVERT_COLOR_DESC));
+
+        options.addOption(createNoArgOpt(SHOW_RULES_OPT, Messages.SHOW_RULES_DESC));
     }
 
     /**
@@ -274,5 +284,4 @@ public class ArgumentParser {
     public boolean shouldInvertColorOutput() {
         return cmd != null && cmd.hasOption(INVERT_COLOR_OPT);
     }
-
 }

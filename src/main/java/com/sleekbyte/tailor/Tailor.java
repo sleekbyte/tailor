@@ -277,6 +277,10 @@ public class Tailor {
                 System.out.println(VERSION);
                 System.exit(ExitCode.SUCCESS);
             }
+            if (argumentParser.shouldPrintRules()) {
+                Printer.printRules();
+                System.exit(ExitCode.SUCCESS);
+            }
 
             // Exit program after configuring Xcode project
             String xcodeprojPath = argumentParser.getXcodeprojPath();
