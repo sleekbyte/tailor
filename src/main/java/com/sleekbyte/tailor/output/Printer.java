@@ -157,4 +157,18 @@ public class Printer implements AutoCloseable {
         }
     }
 
+    /**
+     * Print all rules along with their descriptions to STDOUT.
+     */
+    public static void printRules() {
+        Rules[] rules = Rules.values();
+
+        AnsiConsole.out.println(Ansi.ansi().render(String.format("@|bold %d rules available|@%n", rules.length)));
+        for (Rules rule : rules) {
+            AnsiConsole.out.println(Ansi.ansi().render(String.format("@|bold %s|@%n"
+                + "@|underline Description:|@ %s%n"
+                + "@|underline Style Guide:|@ %s%n", rule.getName(), rule.getDescription(), rule.getLink())));
+        }
+    }
+
 }
