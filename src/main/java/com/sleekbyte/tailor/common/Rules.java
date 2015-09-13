@@ -115,7 +115,7 @@ public enum Rules {
 
         REDUNDANT_PARENTHESES.name = "redundant-parentheses";
         REDUNDANT_PARENTHESES.description = "Control flow constructs, exception handling constructs, and "
-            + "values assigned to variable/constant declarations should not be enclosed in parentheses.";
+            + "values assigned in variable/constant declarations should not be enclosed in parentheses.";
         REDUNDANT_PARENTHESES.className = RedundantParenthesesListener.class.getName();
 
         TERMINATING_NEWLINE.name = "terminating-newline";
