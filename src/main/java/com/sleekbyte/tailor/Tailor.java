@@ -278,7 +278,7 @@ public class Tailor {
                 System.exit(ExitCode.SUCCESS);
             }
             if (argumentParser.shouldPrintRules()) {
-                argumentParser.printRules();
+                Printer.printRules();
                 System.exit(ExitCode.SUCCESS);
             }
 
