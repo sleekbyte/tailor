@@ -66,3 +66,11 @@ self.totalBytes = {
 
     return totalBytes
 }()
+
+#if arch(x86_64)
+  let bytesPerPixel: CGFloat = 4.0
+#elseif arch(arm) || arch(arm64)
+  let bytesPerPixel: CGFloat = 4.0
+#else
+  let bytesPerPixel: CGFloat = 3.0
+#endif
