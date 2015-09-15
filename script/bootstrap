@@ -1,11 +1,8 @@
 #!/usr/bin/env sh
 # Usage: script/bootstrap
-# Installs ANTLR and Python 3, creates a virtualenv, and installs required modules for development.
+# Sets up required modules for development.
 
 set -e
-
-# Install ANTLR via Homebrew if nonexistent
-hash antlr4 2>/dev/null || brew install antlr
 
 # Enable the Gradle Daemon for the current user: https://docs.gradle.org/current/userguide/gradle_daemon.html
 GRADLE_PROPERTIES=~/.gradle/gradle.properties
@@ -14,23 +11,3 @@ mkdir -p ~/.gradle/ && touch "${GRADLE_PROPERTIES}"
 if ! grep "${GRADLE_DAEMON_ENABLE}" "${GRADLE_PROPERTIES}" >/dev/null; then
   echo "${GRADLE_DAEMON_ENABLE}" >> "${GRADLE_PROPERTIES}"
 fi
-
-# Install Python 3 via Homebrew if nonexistent
-hash python3 2>/dev/null || brew install python3
-
-# Create virtualenv if nonexistent
-[ -d venv ] || pyvenv venv
-
-# Activate virtualenv if deactivated
-[ ${VIRTUAL_ENV} ] || { [ -f venv/bin/activate ] && source venv/bin/activate; }
-
-# Update pip package manager
-pip --quiet install --upgrade pip
-
-# Install required runtime modules
-pip --quiet install --requirement requirements.txt
-
-# Install Git pre-commit hooks using http://pre-commit.com
-pre-commit install --hook-type pre-commit
-pre-commit install --hook-type pre-push
-pre-commit autoupdate
