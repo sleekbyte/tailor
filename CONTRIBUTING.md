@@ -69,9 +69,9 @@ script/cibuild
 
 ### Closing a PR
 
-* Once you have received two :+1:s and the [Travis CI](https://magnum.travis-ci.com/alykhank/tailor) build has passed, you are responsible for merging your branch into `master` and subsequently deleting it from the remote
+* Once you have received two :+1:s and the Travis CI](https://travis-ci.org/sleekbyte/tailor) build has passed, you are responsible for merging your branch into `master` and subsequently deleting it from the remote
 * When merging your branch, refer to the issue at the beginning of the commit description (e.g. "Fix #4: Integrate Travis CI")
 
 ## Triaging Issues
 
-Issues will be triaged during scrum from the Backlog and moved into Ready/In Progress using [Waffle](https://waffle.io/alykhank/tailor)
+Issues will be triaged during scrum from the Backlog and moved into Ready/In Progress using [Waffle](https://waffle.io/sleekbyte/tailor)

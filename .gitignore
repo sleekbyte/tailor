@@ -8,10 +8,6 @@ src/gen/
 ## Directory-based project format:
 .idea/
 
-# Python
-## pyvenv
-venv/
-
 # Java
 *.class
 
