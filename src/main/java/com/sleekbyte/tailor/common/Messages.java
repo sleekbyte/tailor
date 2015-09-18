@@ -59,6 +59,11 @@ public class Messages {
     public static final String SINGLE_LINE_COMMENT = "Single-line comment ";
     public static final String MULTILINE_COMMENT = "Multiline comment ";
     public static final String RETURN_ARROW = "Return arrow ";
+    public static final String SUBSCRIPT = "Subscript ";
+    public static final String GETTER_SETTER_BLOCK = "Getter/Setter block ";
+    public static final String WILL_SET_CLAUSE = "WillSet clause ";
+    public static final String DID_SET_CLAUSE = "DidSet clause ";
+    public static final String WILLSET_DIDSET_BLOCK = "WillSet/DidSet block ";
 
     // Plural constructs
     public static final String IMPORTS = "Imports ";
@@ -81,21 +86,16 @@ public class Messages {
     public static final String OPEN_BRACE_STYLE = "should not have any line breaks before the opening brace";
     public static final String CLOSE_BRACE_STYLE = "closing brace should be isolated on a separate line";
     public static final String EMPTY_BODY = "Empty construct body should not contain any whitespace";
-    public static final String SPACE_BEFORE = "must have exactly one space before it";
-    public static final String SPACE_AFTER = "must have exactly one space after it";
-    public static final String NO_SPACE_BEFORE = "must have no spaces before it";
+    public static final String SPACE_BEFORE = "should have exactly one space before it";
+    public static final String SPACE_AFTER = "should have exactly one space after it";
+    public static final String NO_SPACE_BEFORE = "should have no spaces before it";
     public static final String FORCE_CAST = "Force casts should be avoided";
-    public static final String BLANK_LINE_BEFORE = "must have at least one blank line before it";
-    public static final String BLANK_LINE_AFTER = "must have at least one blank line after it";
+    public static final String BLANK_LINE_BEFORE = "should have at least one blank line before it";
+    public static final String BLANK_LINE_AFTER = "should have at least one blank line after it";
     public static final String LEADING_WHITESPACE = "should not start with whitespace";
     public static final String TRAILING_WHITESPACE = "should not have any trailing whitespace";
     public static final String START_SPACE = "should start with whitespace";
     public static final String END_SPACE = "should end with whitespace";
-    public static final String SUBSCRIPT = "Subscript ";
-    public static final String GETTER_SETTER_BLOCK = "Getter/Setter block ";
-    public static final String WILL_SET_CLAUSE = "WillSet clause ";
-    public static final String DID_SET_CLAUSE = "DidSet clause ";
-    public static final String WILLSET_DIDSET_BLOCK = "WillSet/DidSet block ";
 
     // Usage messages
     public static final String CMD_LINE_SYNTAX = "tailor [options] [--] [[file|directory] ...]";
@@ -127,5 +127,5 @@ public class Messages {
     public static final String NO_COLOR_DESC = "disable colorized console output";
     public static final String INVERT_COLOR_DESC = "invert colorized console output";
     public static final String SHOW_RULES_DESC = "show description for each rule";
-
+    
 }
