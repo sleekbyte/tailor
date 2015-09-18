@@ -14,9 +14,14 @@ BIN_DIR="$PREFIX/bin"
 START_SCRIPT="$TAILOR_DIR/bin/tailor"
 
 wait_for_user() {
-  read -n 1 -a CONTINUE -p "Press [y/N] to continue: " < /dev/tty
+  if [ $(uname) = "Darwin" ]; then
+    read -n 1 -a CONTINUE -p "Press [y/N] to continue: " < /dev/tty
+  elif [ $(uname) = "Linux" ]; then
+    echo -n "Press [y/N] to continue: "
+    read CONTINUE < /dev/tty
+  fi
   echo; echo
-  [ "$CONTINUE" == "y" ] || [ "$CONTINUE" == "Y" ]
+  [ "$CONTINUE" = "y" ] || [ "$CONTINUE" = "Y" ]
 }
 
 maybe_sudo() {
