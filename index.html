@@ -16,7 +16,7 @@ layout: default
       <a href="{{ site.data.guides | last | map: 'url' }}" target="_blank">{{ site.data.guides | last | map: 'name' }}</a>
       style guides.
     </p>
-    <a href="{{ site.github_url }}" class="github-button btn btn-lg btn-primary">View on GitHub</a>
+    <a id="GitHub" href="{{ site.github_url }}" class="github-button btn btn-lg btn-primary">View on GitHub</a>
     <img class="center-block screencast img-responsive" src="/assets/images/screencast.gif" alt="Tailor screencast">
   </div>
 </div>
@@ -87,7 +87,7 @@ layout: default
     {% for member in site.data.members %}
       <div class="col-md-3 col-sm-6 col-xs-12 individual">
         <img class="img-circle" src="/assets/images/{{ member.name | downcase }}.jpg" alt="{{ member.name }}" width="140" height="140">
-        <h2><a href="{{ member.url }}" target="_blank">{{ member.name }}</a></h2>
+        <h2><a id="{{member.name}}" href="{{ member.url }}" target="_blank">{{ member.name }}</a></h2>
       </div>
     {% endfor %}
   </div>
@@ -100,3 +100,10 @@ layout: default
 </div>
 
 {% include newsletter.html %}
+
+<script>
+  mixpanel.track_links("#GitHub", "GitHub Click", {'Network': 'GitHub'});
+  {% for member in site.data.members %}
+    mixpanel.track_links("#{{member.name}}", "{{member.name}} Name Click", {'Network': 'Developer'});
+  {% endfor %}
+</script>

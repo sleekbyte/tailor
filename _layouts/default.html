@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   {% include head.html %}
+  <body onload="mixpanel.track('Page View', {'Page Name': '{{ page.pagename }}', 'URL': window.location.href});"
   <body>
     {% include navbar.html %}
     {{ content }}

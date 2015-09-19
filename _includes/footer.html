@@ -5,9 +5,14 @@
     </div>
     <div class="col-6 col-xs-12">
       <section class="contact">
-        <a href="{{ site.github_url }}" target="_blank">GitHub</a>
-        <a href="mailto:team@sleekbyte.com">Contact Us</a>
+        <a id="GitHub" href="{{ site.github_url }}" target="_blank">GitHub</a>
+        <a id="Email" href="mailto:team@sleekbyte.com">Contact Us</a>
       </section>
     </div>
   </div>
 </footer>
+
+<script>
+  mixpanel.track_links("#GitHub", "GitHub Click", {'Network': 'GitHub'});
+  mixpanel.track_links("#Email", "Email Click", {'Network': 'GitHub'});
+</script>

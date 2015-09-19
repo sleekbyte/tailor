@@ -10,9 +10,14 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
         <li class="active"><a href="/">Overview</a></li>
-        <li><a href="https://github.com/sleekbyte/tailor/wiki">Documentation</a></li>
-        <li><a href="https://github.com/sleekbyte/tailor/wiki/Rules">Rules</a></li>
+        <li><a id="Documentation" href="https://github.com/sleekbyte/tailor/wiki">Documentation</a></li>
+        <li><a id="Rules" href="https://github.com/sleekbyte/tailor/wiki/Rules">Rules</a></li>
       </ul>
     </div>
   </div>
 </nav>
+
+<script>
+  mixpanel.track_links("#Documentation", "Documentation Click", {'Network': 'GitHub'});
+  mixpanel.track_links("#Rules", "Rules Click", {'Network': 'GitHub'});
+</script>
