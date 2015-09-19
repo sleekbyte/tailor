@@ -20,7 +20,7 @@ function remove-path() {
 }
 
 ### Ask user if they want to proceed
-$response = read-host 'Press [y/Y] to continue'
+$response = read-host 'Press [y/N] to continue'
 
 if (($response -ne 'y') -or ($response -ne 'Y')) {
   abort 'Tailor uninstallation cancelled.'
