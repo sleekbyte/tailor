@@ -16,9 +16,14 @@ TAILOR_ZIP_URL="https://github.com/sleekbyte/tailor/releases/download/v0.1.0/tai
 JAVA_VERSION="1.8"
 
 wait_for_user() {
-  read -n 1 -a CONTINUE -p "Press [y/N] to continue: " < /dev/tty
+  if [ $(uname) = "Darwin" ]; then
+    read -n 1 -a CONTINUE -p "Press [y/N] to continue: " < /dev/tty
+  elif [ $(uname) = "Linux" ]; then
+    echo -n "Press [y/N] to continue: "
+    read CONTINUE < /dev/tty
+  fi
   echo; echo
-  [ "$CONTINUE" == "y" ] || [ "$CONTINUE" == "Y" ]
+  [ "$CONTINUE" = "y" ] || [ "$CONTINUE" = "Y" ]
 }
 
 err() {
@@ -70,7 +75,11 @@ if wait_for_user; then
   maybe_sudo /usr/bin/unzip -oqq "$PREFIX"/tailor.zip -d "$PREFIX"
   maybe_sudo /bin/rm -rf "$PREFIX"/tailor.zip
   maybe_sudo /bin/ln -fs "$START_SCRIPT" "$BIN_DIR"/tailor
-  maybe_sudo /usr/sbin/chown -R $(/usr/bin/whoami) "$TAILOR_DIR"
+  if [ $(uname) = "Darwin" ]; then
+    maybe_sudo /usr/sbin/chown -R $(/usr/bin/whoami) "$TAILOR_DIR"
+  elif [ $(uname) = "Linux" ]; then
+    maybe_sudo /bin/chown -R $(/usr/bin/whoami) "$TAILOR_DIR"
+  fi
   kill_sudo
 
   cecho "Ready to Tailor your Swift!" $green
