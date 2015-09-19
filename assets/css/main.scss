@@ -1,0 +1,248 @@
+---
+---
+
+/*******************************************************************************
+Variables
+*******************************************************************************/
+
+$slate-color: #1C88C2;
+$flat-black-color: #363636;
+$flat-gray-color: #656565;
+$apple-gray-color: #F2F2F2;
+$flat-light-gray-color: #9A9A9A;
+$flat-dark-gray-color: #676767;
+
+/*******************************************************************************
+GENERAL
+*******************************************************************************/
+
+@mixin set-swift-gradient(){
+  background-image: -webkit-linear-gradient(left, #FC4831 0%, #FB9C44 100%);
+  background-image: linear-gradient(to right, #FC4831 0%, #FB9C44 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FC4831',
+                                                     endColorstr='#FB9C44',
+                                                     GradientType=0);
+}
+
+body {
+  font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+}
+
+.logo {
+  width: 200px;
+}
+
+hr, .container, .jumbotron {
+  max-width: 60em;
+  margin: 20px auto;
+}
+
+.jumbotron {
+  background-color: white;
+  padding-top: 1.5rem;
+
+  .title {
+    margin: -1rem 0 2.5rem;
+    font-weight: 300;
+    color: $flat-black-color;
+  }
+
+  .description {
+    font-weight: 200;
+    line-height: 1.5em;
+    font-size: 2.25rem;
+    color: $flat-gray-color;
+  }
+
+  .github-button {
+    margin: 1.5em;
+  }
+
+  .screencast {
+    width: 600px;
+  }
+}
+
+.feature {
+  color: $flat-black-color;
+
+  h2 {
+    margin-bottom: 2rem;
+    font-weight: 200;
+  }
+
+  p {
+    font-weight: 300;
+    font-size: 16px;
+    margin-bottom: 4rem;
+  }
+  .xcode {
+    margin-bottom: 1em;
+  }
+}
+
+hr {
+  margin-bottom: 6rem;
+}
+
+.subtopic {
+  h2 {
+    text-align: center;
+    font-size: 6rem;
+    margin: -1rem 0 2.5rem;
+    font-weight: 300;
+    color: $flat-black-color;
+  }
+
+  p {
+    font-weight: 300;
+    font-size: 16px;
+  }
+}
+
+.team {
+  text-align: center;
+
+  h2 {
+  font-weight: 200;
+  }
+
+  a {
+    color: $flat-black-color;
+    text-decoration: none;
+    &:hover {
+      border-bottom: #bbc7cc 1px solid;
+    }
+  }
+
+  .individual {
+    margin-bottom: 4rem;
+  }
+}
+
+/*******************************************************************************
+NAVIGATION BAR
+*******************************************************************************/
+
+.navbar {
+  @include set-swift-gradient();
+  border: none;
+
+  .container {
+    margin-top: 0.55em;
+    margin-bottom: 0.1em;
+    max-width: 72.5em;
+  }
+
+  .nav > .active > a {
+    font-weight: bold;
+    background: none;
+    color: white;
+    &:hover {
+      color: white;
+      background: none;
+    }
+  }
+
+  .nav > li {
+    font-size: 14px;
+    font-weight: lighter;
+
+    a {
+      color: white;
+      text-shadow: none;
+      text-decoration: none;
+
+      &:hover {
+        background: none;
+        color: $slate-color;
+      }
+    }
+  }
+
+  .navbar-brand {
+    color: white;
+    font-weight: 300;
+    font-size: 32px;
+    &:hover {
+      color: white;
+    }
+  }
+}
+
+.navbar-nav > li > a {
+  padding-top: 20px !important;
+  padding-bottom: 0 !important;
+}
+
+.navbar-default .navbar-toggle,
+.navbar-default .navbar-toggle:focus,
+.navbar-default .navbar-toggle:hover {
+  border: none;
+  background: none;
+}
+
+/*******************************************************************************
+FOOTER
+*******************************************************************************/
+.footer {
+  background: $apple-gray-color;
+  padding: 1rem 15px;
+  font-size: 1.25rem;
+  line-height: 1.75em;
+
+  a {
+    color: $flat-dark-gray-color;
+    text-decoration: none;
+    &:hover {
+      border-bottom: #bbc7cc 1px solid;
+    }
+  }
+
+  .copyright {
+    font-weight: 100;
+    color: $flat-light-gray-color;
+    display: block;
+  }
+
+  .contact {
+    font-weight: 200;
+    display: block;
+
+    a {
+      margin:0 1em;
+    }
+  }
+}
+
+/*******************************************************************************
+MAIL CHIMP
+*******************************************************************************/
+#mc_embed_signup {
+  .button {
+    @include set-swift-gradient();
+    color: white;
+    display: inline-block;
+    font-size:15px;
+    font-weight: 300;
+    height: 38px;
+
+    &:hover {
+     opacity: 0.75;
+    }
+  }
+
+  p {
+    font-weight: 300;
+    font-size: 16px;
+  }
+
+  input.email {
+    display:inline;
+  }
+
+  input.button {
+    display:inline-block;
+  }
+}

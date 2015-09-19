@@ -1,0 +1,102 @@
+---
+layout: default
+---
+<div class="jumbotron text-center">
+  <div class="container">
+    <img class="center-block logo img-responsive" src="/assets/images/logo.png" alt="Tailor">
+    <h1 class="title">{{ site.name }}. {{ site.description }}.</h1>
+    <p class="description">
+      Tailor is Swift static code analyzer. It aims to enforce many of the guidelines outlined in the
+      {% for guide in site.data.guides %}
+        {% if forloop.last == false %}
+          <a href="{{ guide.url }}" target="_blank">{{ guide.name }}</a>,
+        {% endif %}
+      {% endfor %}
+      and
+      <a href="{{ site.data.guides | last | map: 'url' }}" target="_blank">{{ site.data.guides | last | map: 'name' }}</a>
+      style guides.
+    </p>
+    <a href="{{ site.github_url }}" class="github-button btn btn-lg btn-primary">View on GitHub</a>
+    <img class="center-block screencast img-responsive" src="/assets/images/screencast.gif" alt="Tailor screencast">
+  </div>
+</div>
+
+<hr>
+
+<div class="container subtopic text-center">
+  <h2>Installation</h2>
+  <p>Requires Java (JRE or JDK) Version 8 or above: <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank">Java SE Downloads</a></p>
+  Mac OS X (10.10+), Linux (Ubuntu, etc.)
+  <div onclick="selectText(this.firstElementChild)">
+    {% highlight bash %}
+    curl -fsSL http://tailor.sh/install.sh | sh
+    {% endhighlight %}
+  </div>
+  Windows (10+)
+  <div onclick="selectText(this.firstElementChild)">
+    {% highlight powershell %}
+    iex (new-object net.webclient).downloadstring('http://tailor.sh/install.ps1')
+    {% endhighlight %}
+  </div>
+  <br>
+  <h2>Usage</h2>
+  <p>Run Tailor with a list of files and directories to analyze, or via Xcode.</p>
+  <div onclick="selectText(this.firstElementChild)">
+    {% highlight bash %}
+    $ tailor [options] [--] [[file|directory] ...]
+    {% endhighlight %}
+  </div>
+</div>
+
+<hr>
+
+<div class="container subtopic">
+  <h2>Features</h2>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 feature">
+      <h2><span class="glyphicon glyphicon-globe" aria-hidden="true"></span>&nbsp;&nbsp;Cross-Platform</h2>
+      <p>Tailor may be used on Mac OS X via your shell or integrated with Xcode, as well as on Linux and Windows. Great news for when the Swift compiler comes to Linux later this year!</p>
+      <h2><span class="glyphicon glyphicon-text-background" aria-hidden="true"></span>&nbsp;&nbsp;Colourized Output</h2>
+      <img class="center-block img-responsive" src="/assets/images/colour-console.png" alt="Coloured console">
+    </div>
+    <div class="col-md-6 feature">
+      <h2><span class="glyphicon glyphicon-console" aria-hidden="true"></span>&nbsp;&nbsp;Automatic Xcode Integration</h2>
+      <p class="xcode">Tailor may be automatically integrated with Xcode projects as a Build Phase Run Script using the <code class="text-nowrap">--xcode</code> option.</p>
+      <div onclick="selectText(this.firstElementChild)">
+        {% highlight bash %}
+        tailor --xcode /path/to/demo.xcodeproj/
+        {% endhighlight %}
+      </div>
+      <p class="xcode">This adds the following Build Phase Run Script to your project's default target.</p>
+      <img class="center-block img-thumbnail img-responsive" src="/assets/images/run-script.png" alt="Xcode Build Phase Run Script">
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="container subtopic">
+  <h2>Creators</h2>
+</div>
+
+<div class="container team">
+  <div class="row">
+    {% for member in site.data.members %}
+      <div class="col-md-3 col-sm-6 col-xs-12 individual">
+        <img class="img-circle" src="/assets/images/{{ member.name | downcase }}.jpg" alt="{{ member.name }}" width="140" height="140">
+        <h2><a href="{{ member.url }}" target="_blank">{{ member.name }}</a></h2>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<hr>
+
+<div class="container subtopic">
+  <h2>Newsletter</h2>
+</div>
+
+{% include newsletter.html %}

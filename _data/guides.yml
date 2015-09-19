@@ -1,0 +1,10 @@
+- name: The Swift Programming Language
+  url: https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/
+- name: GitHub
+  url: https://github.com/github/swift-style-guide
+- name: Ray Wenderlich
+  url: https://github.com/raywenderlich/swift-style-guide
+- name: Jamie Forrest
+  url: https://github.com/jamieforrest/swift-style-guide
+- name: Coursera
+  url: https://github.com/coursera/swift-style-guide
