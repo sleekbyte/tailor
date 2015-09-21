@@ -1,6 +1,7 @@
 [![Tailor](https://cloud.githubusercontent.com/assets/1350704/9867389/18ae2e06-5b3b-11e5-9b37-72a3e9621b9c.png)](http://tailor.sh)
 
 [![Build Status](https://travis-ci.org/sleekbyte/tailor.svg?branch=master)](https://travis-ci.org/sleekbyte/tailor)
+[![Code Coverage](https://img.shields.io/codecov/c/github/sleekbyte/tailor/master.svg)](https://codecov.io/github/sleekbyte/tailor)
 
 # [Tailor](http://tailor.sh). Static analyzer for [Swift](https://developer.apple.com/swift/).
 Tailor supports Swift 2 out of the box and helps enforce style guidelines outlined in the [The Swift Programming Language](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/), [GitHub](https://github.com/github/swift-style-guide), [Ray Wenderlich](https://github.com/raywenderlich/swift-style-guide), [Jamie Forrest](https://github.com/jamieforrest/swift-style-guide), and [Coursera](https://github.com/coursera/swift-style-guide) style guides. It supports cross-platform usage and can be run on Windows and Linux.
@@ -143,6 +144,8 @@ Please review the [guidelines for contributing](https://github.com/sleekbyte/tai
 | [FindBugs](http://findbugs.sourceforge.net) | [GNU Lesser General Public License](http://findbugs.sourceforge.net/manual/license.html) |
 | [Checkstyle](http://checkstyle.sourceforge.net) | [GNU Lesser General Public License](http://checkstyle.sourceforge.net/license.html) |
 | [PMD](http://pmd.sourceforge.net) | [BSD-style](http://pmd.sourceforge.net/pmd-5.3.2/license.html) |
+| [JaCoCo](http://eclemma.org/jacoco/) | [Eclipse Public License v1.0](http://eclemma.org/license.html) |
+| [Codecov](https://codecov.io) | [Free for Open Source](https://codecov.io/#pricing) |
 | [Bundler](http://bundler.io) | [MIT](https://github.com/bundler/bundler/blob/master/LICENSE.md) |
 
 # License
