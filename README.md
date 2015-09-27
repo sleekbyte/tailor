@@ -131,6 +131,8 @@ Please review the [guidelines for contributing](https://github.com/sleekbyte/tai
 | [Apache Commons CLI](http://commons.apache.org/proper/commons-cli/) | [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0) |
 | [Jansi](https://github.com/fusesource/jansi) | [Apache License, Version 2.0](https://github.com/fusesource/jansi/blob/master/license.txt) |
 | [Xcodeproj](https://github.com/CocoaPods/Xcodeproj) | [MIT](https://github.com/CocoaPods/Xcodeproj/blob/master/LICENSE) |
+| [SnakeYAML](https://bitbucket.org/asomov/snakeyaml) | [Apache License, Version 2.0](https://bitbucket.org/asomov/snakeyaml/raw/8939e0aa430d25b3b49b353508b23e072dd02171/LICENSE.txt) |
+
 
 ### Development Only
 | Tool  | License |
