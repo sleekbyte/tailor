@@ -127,5 +127,6 @@ public class Messages {
     public static final String NO_COLOR_DESC = "disable colorized console output";
     public static final String INVERT_COLOR_DESC = "invert colorized console output";
     public static final String SHOW_RULES_DESC = "show description for each rule";
+    public static final String CONFIG_FILE_DESC = "specify configuration file";
 
 }

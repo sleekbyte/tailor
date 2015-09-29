@@ -49,6 +49,7 @@ is set by Xcode when run in a Build Phase. Tailor may be set up as an Xcode Buil
 automatically with the --xcode option.
 
 Options:
+    --config=<path/to/.tailor.yml>             specify configuration file
     --debug                                    print ANTLR error messages when parsing error occurs
     --except=<rule1,rule2,...>                 run all rules except the specified ones
  -h,--help                                     display help

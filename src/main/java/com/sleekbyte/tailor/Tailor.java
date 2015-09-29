@@ -298,6 +298,11 @@ public class Tailor {
                 exitWithMissingSourceFileError();
             }
 
+            String configFilePath = argumentParser.getConfigFilePath();
+            if (configFilePath != null) {
+                System.out.println("Parse config file here");
+            }
+
             analyzeFiles(filenames);
 
         } catch (IOException e) {

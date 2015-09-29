@@ -47,6 +47,7 @@ public class ArgumentParser {
     private static final String DEFAULT_INT_ARG = "0";
     private static final String XCODE_INTEGRATION_OPT = "xcode";
     private static final String SHOW_RULES_OPT = "show-rules";
+    private static final String CONFIG_OPT = "config";
 
     private Options options;
     private CommandLine cmd;
@@ -141,6 +142,9 @@ public class ArgumentParser {
         options.addOption(createNoArgOpt(INVERT_COLOR_OPT, Messages.INVERT_COLOR_DESC));
 
         options.addOption(createNoArgOpt(SHOW_RULES_OPT, Messages.SHOW_RULES_DESC));
+
+        argName = "path/to/.tailor.yml";
+        options.addOption(createSingleArgOpt(CONFIG_OPT, argName, Messages.CONFIG_FILE_DESC));
     }
 
     /**
@@ -251,12 +255,21 @@ public class ArgumentParser {
     }
 
     /*
-     * Retrieve Xcode project path specified for --configuration.
+     * Retrieve Xcode project path specified for --xcode.
      *
      * @return path of Xcode project
      */
     public String getXcodeprojPath() {
         return cmd != null ? cmd.getOptionValue(XCODE_INTEGRATION_OPT) : null;
+    }
+
+    /*
+     * Retrieve .tailor.yml config file path specified for --config.
+     *
+     * @return path of config file
+     */
+    public String getConfigFilePath() {
+        return cmd != null ? cmd.getOptionValue(CONFIG_OPT) : null;
     }
 
     /**
