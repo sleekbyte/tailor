@@ -28,7 +28,7 @@ public final class ConfigurationParser {
         // Verify that file provided is .tailor.yml
         Path path = Paths.get(filePath);
         Path fileName = path.getFileName();
-        if (fileName != null && !fileName.toString().equals(".tailor.yml")) {
+        if (fileName == null || !fileName.toString().equals(".tailor.yml")) {
             throw new YAMLException("Supplied file is not a .tailor.yml file.");
         }
 

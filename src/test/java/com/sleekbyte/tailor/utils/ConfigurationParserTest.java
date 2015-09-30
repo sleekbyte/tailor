@@ -34,6 +34,16 @@ public final class ConfigurationParserTest {
         ConfigurationParser.parseConfigurationFile(createConfigFile(".invalid-name.yml").getAbsolutePath());
     }
 
+    @Test(expected = YAMLException.class)
+    public void testParseConfigurationFileEmptyFolder() throws IOException {
+        ConfigurationParser.parseConfigurationFile(folder.toString());
+    }
+
+    @Test(expected = YAMLException.class)
+    public void testParseConfigurationFileEmptyFileName() throws IOException {
+        ConfigurationParser.parseConfigurationFile("");
+    }
+
     @Test
     public void testParseConfigurationFileValidConfigFile() throws IOException {
         Configuration config = ConfigurationParser.parseConfigurationFile(createConfigFile(".tailor.yml")
