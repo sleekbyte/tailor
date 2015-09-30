@@ -21,11 +21,14 @@ import com.sleekbyte.tailor.listeners.MaxLengthListener;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ArgumentParser;
 import com.sleekbyte.tailor.utils.ArgumentParserException;
+import com.sleekbyte.tailor.utils.Configuration;
+import com.sleekbyte.tailor.utils.ConfigurationParser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
+import org.yaml.snakeyaml.error.YAMLException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -300,17 +303,24 @@ public class Tailor {
 
             String configFilePath = argumentParser.getConfigFilePath();
             if (configFilePath != null) {
-                System.out.println("Parse config file here");
+                // Parse config file
+                Configuration config = ConfigurationParser.parseConfigurationFile(configFilePath);
+                System.out.println("include: " + config.getInclude());
+
+                // Modify list of files that need to be changed
+                // ...
             }
 
             analyzeFiles(filenames);
-
-        } catch (IOException e) {
-            System.err.println("Source file analysis failed. Reason: " + e.getMessage());
-            System.exit(ExitCode.FAILURE);
         } catch (ParseException | ArgumentParserException e) {
             System.err.println(e.getMessage());
             argumentParser.printHelp();
+            System.exit(ExitCode.FAILURE);
+        } catch (YAMLException e) {
+            System.err.println("Error parsing .tailor.yml\n" + e.getMessage());
+            System.exit(ExitCode.FAILURE);
+        } catch (IOException e) {
+            System.err.println("Source file analysis failed. Reason: " + e.getMessage());
             System.exit(ExitCode.FAILURE);
         }
 
