@@ -3,6 +3,7 @@ package com.sleekbyte.tailor.output;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -115,9 +116,30 @@ public class ViolationMessageTest {
         assertEquals(this.violationMessage, equalViolationMessage);
     }
 
+
     @Test
-    public void testToString() {
+    public void testToStringNonNullValues() {
         String expectedOutput = "/usr/bin/local:10:1: error: [lower-camel-case] errMsg";
         assertEquals(expectedOutput, this.violationMessage.toString());
+    }
+
+    @Test
+    public void testToStringNullValues() {
+        ViolationMessage violationMessage = new ViolationMessage(null, "", 0, 0, null, "");
+        String output = violationMessage.toString();
+        assertEquals("", output);
+    }
+
+    @Test
+    public void testEqualsNotInstanceOfViolationMessage() {
+        ViolationMessage violationMessage = new ViolationMessage(null, "", 0, 0, null, "");
+        assertFalse(violationMessage.equals(null));
+    }
+
+    @Test
+    public void testEqualsSameInstanceOfViolationMessage() {
+        ViolationMessage violationMessage = new ViolationMessage(Rules.LOWER_CAMEL_CASE, "/usr/bin/local", 10, 1,
+            Severity.ERROR, "errMsg");
+        assertEquals(violationMessage, violationMessage);
     }
 }
