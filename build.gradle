@@ -1,6 +1,8 @@
 // Java Plugin {{{
 apply plugin: 'java'
 
+archivesBaseName = 'tailor'
+
 // Add ANTLR output as sourceSet
 sourceSets {
     gen {
@@ -65,6 +67,7 @@ generateGrammarSource {
 // Add run task
 apply plugin: 'application'
 
+applicationName = 'tailor'
 mainClassName = 'com.sleekbyte.tailor.Tailor'
 
 // Allow arguments: `gradle run -Pargs="args"`
