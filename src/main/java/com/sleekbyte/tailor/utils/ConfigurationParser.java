@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -43,6 +45,14 @@ public final class ConfigurationParser {
         InputStream configFileStream = new FileInputStream(new File(filePath));
         Configuration config = (Configuration) yaml.load(configFileStream);
         configFileStream.close();
+
+        // If the user wants to include and exclude the same item then exit with error
+        Set<String> intersection = new HashSet<>(config.getInclude());
+        intersection.retainAll(config.getExclude());
+        if (intersection.size() > 0) {
+            throw new YAMLException("Trying to include and exclude the same item(s): " + intersection);
+        }
+
         return config;
     }
 

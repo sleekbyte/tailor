@@ -23,6 +23,7 @@ import com.sleekbyte.tailor.utils.ArgumentParser;
 import com.sleekbyte.tailor.utils.ArgumentParserException;
 import com.sleekbyte.tailor.utils.Configuration;
 import com.sleekbyte.tailor.utils.ConfigurationParser;
+import com.sleekbyte.tailor.utils.Finder;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -32,12 +33,10 @@ import org.yaml.snakeyaml.error.YAMLException;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -85,54 +84,41 @@ public class Tailor {
      * @throws IOException if path specified does not exist
      */
     public static Set<String> getSwiftSourceFiles() throws IOException {
-
+        Set<String> includedItems = new HashSet<>();
         Set<String> excludedItems = new HashSet<>();
+        Set<String> fileNames = new TreeSet<>();
 
-        // If config file pass via CLI
+        // If config file passed via CLI
         String configFilePath = argumentParser.getConfigFilePath();
         if (configFilePath != null) {
-            System.out.println(".tailor.yml passed via CLI");
             // Parse config file
             Configuration config = ConfigurationParser.parseConfigurationFile(configFilePath);
             excludedItems = config.getExclude();
-            System.out.println("exclude: " + config.getExclude());
-
-            // Modify list of files that need to be changed
-            // ...
+            includedItems = config.getInclude();
         } else {
             // Search for .tailor.yml config file in directory from where Tailor is invoked from
             File currentDirectory = Paths.get(".").toFile();
-            File[] files = currentDirectory.listFiles((dir, name) -> {
-                return name.equals(".tailor.yml");
-            });
+            File[] files = currentDirectory.listFiles((dir, name) -> { return name.equals(".tailor.yml"); });
 
-            if (files != null) {
+            if (files != null && files.length > 0) {
                 // .tailor.yml exists
                 Configuration config = ConfigurationParser.parseConfigurationFile(files[0].getAbsolutePath());
                 excludedItems = config.getExclude();
-                System.out.println("exclude: " + config.getExclude());
+                includedItems = config.getInclude();
             }
         }
 
-        // Filter files
-        Set<String> filenames = new TreeSet<>();
+        Finder finder = new Finder(includedItems, excludedItems);
         for (String pathName : pathNames) {
             File file = new File(pathName);
             if (file.isDirectory()) {
-                Files.walk(Paths.get(pathName))
-                    .filter(path -> path.toString().endsWith(".swift"))
-                    .filter(path -> {
-                            File tempFile = path.toFile();
-                            return tempFile.isFile() && tempFile.canRead();
-                        })
-                    .forEach(path -> filenames.add(path.toString()));
-            } else if (file.isFile() && pathName.endsWith(".swift") && file.canRead()) {
-                filenames.add(pathName);
-            } else {
-                throw new IOException("Cannot read " + pathName);
+                Files.walkFileTree(Paths.get(pathName), finder);
+                fileNames.addAll(finder.getFileNames());
+            } else if (file.canRead() && file.getName().endsWith(".swift")) {
+                fileNames.add(file.getAbsolutePath());
             }
         }
-        return filenames;
+        return fileNames;
     }
 
     private static String pluralize(long number, String singular, String plural) {
