@@ -47,17 +47,11 @@ public final class Finder extends SimpleFileVisitor<Path> {
         // If file under inspection is a whitelisted swift file then return true
         for (String pattern : includeSet) {
             if (FileSystems.getDefault().getPathMatcher("glob:" + pattern).matches(name)) {
-                if (!Files.isDirectory(file) && file.toString().endsWith(".swift")) {
-                    fileNames.add(file.toAbsolutePath().toString());
-                }
                 return true;
             }
         }
 
-        if (file.toString().endsWith(".swift")) {
-            fileNames.add(file.toAbsolutePath().toString());
-        }
-
+        // Handles the case where file/directory is a child of an "include" directory
         return true;
     }
 
@@ -68,7 +62,11 @@ public final class Finder extends SimpleFileVisitor<Path> {
         if (!Files.isReadable(file)) {
             throw new IOException("Cannot read " + file);
         }
-        entityOfInterest(file);
+
+        if (entityOfInterest(file) && file.toString().endsWith(".swift")) {
+            fileNames.add(file.toAbsolutePath().toString());
+        }
+
         return FileVisitResult.CONTINUE;
     }
 

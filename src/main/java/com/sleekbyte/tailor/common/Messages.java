@@ -129,4 +129,7 @@ public class Messages {
     public static final String SHOW_RULES_DESC = "show description for each rule";
     public static final String CONFIG_FILE_DESC = "specify configuration file";
 
+    // Runtime messages
+    public static final String TAILOR_CONFIG_LOCATION = "Using .tailor.yml configuration file at: ";
+
 }

@@ -6,6 +6,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.ExitCode;
 import com.sleekbyte.tailor.common.MaxLengths;
+import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.integration.XcodeIntegrator;
@@ -88,9 +89,11 @@ public class Tailor {
         Set<String> excludedItems = new HashSet<>();
         Set<String> fileNames = new TreeSet<>();
 
+        // Process config file if present
         // If config file passed via CLI
         String configFilePath = argumentParser.getConfigFilePath();
         if (configFilePath != null) {
+            System.out.println(Messages.TAILOR_CONFIG_LOCATION + configFilePath);
             // Parse config file
             Configuration config = ConfigurationParser.parseConfigurationFile(configFilePath);
             excludedItems = config.getExclude();
@@ -102,12 +105,14 @@ public class Tailor {
 
             if (files != null && files.length > 0) {
                 // .tailor.yml exists
+                System.out.println(Messages.TAILOR_CONFIG_LOCATION + Paths.get(".").toAbsolutePath());
                 Configuration config = ConfigurationParser.parseConfigurationFile(files[0].getAbsolutePath());
                 excludedItems = config.getExclude();
                 includedItems = config.getInclude();
             }
         }
 
+        // Walk file tree
         Finder finder = new Finder(includedItems, excludedItems);
         for (String pathName : pathNames) {
             File file = new File(pathName);

@@ -44,6 +44,11 @@ public final class ConfigurationParserTest {
         ConfigurationParser.parseConfigurationFile("");
     }
 
+    @Test(expected = YAMLException.class)
+    public void testParseConfigurationFileDuplicateIncludeExcludeFile() throws IOException {
+        ConfigurationParser.parseConfigurationFile(createConfigFileWithDuplicates(".tailor.yml").getAbsolutePath());
+    }
+
     @Test
     public void testParseConfigurationFileValidConfigFile() throws IOException {
         Configuration config = ConfigurationParser.parseConfigurationFile(createConfigFile(".tailor.yml")
@@ -65,6 +70,20 @@ public final class ConfigurationParserTest {
         printWriter.println("  - Source");
         printWriter.println("exclude:");
         printWriter.println("  - Carthage");
+        printWriter.println("  - Pods");
+        streamWriter.close();
+        printWriter.close();
+        return configFile;
+    }
+
+    private File createConfigFileWithDuplicates(String fileName) throws IOException {
+        File configFile = folder.newFile(fileName);
+        Writer streamWriter = new OutputStreamWriter(new FileOutputStream(configFile), Charset.forName("UTF-8"));
+        PrintWriter printWriter = new PrintWriter(streamWriter);
+        printWriter.println("include:");
+        printWriter.println("  - Source");
+        printWriter.println("exclude:");
+        printWriter.println("  - Source");
         printWriter.println("  - Pods");
         streamWriter.close();
         printWriter.close();
