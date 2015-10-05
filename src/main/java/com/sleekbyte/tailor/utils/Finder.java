@@ -52,7 +52,7 @@ public final class Finder extends SimpleFileVisitor<Path> {
         }
 
         // Handles the case where file/directory is a child of an "include" directory
-        return true;
+        return Files.isDirectory(file);
     }
 
     // Invoke the pattern matching method on each file.
