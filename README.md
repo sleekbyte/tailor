@@ -119,24 +119,27 @@ import Foundation; // tailor:disable
 ```
 
 ### Configuration
-The behavior of Tailor can be customized via the `.tailor.yml` configuration file. It enables you to include/exclude certain files and directories from analysis. You can tell Tailor which configuration file to use by specifying the its file path via the `--config` CLI option. By default, Tailor will look for the configuration file in the directory where you will run Tailor from.
+The behavior of Tailor can be customized via the `.tailor.yml` configuration file. It enables you to include/exclude certain files and directories from analysis. You can tell Tailor which configuration file to use by specifying its file path via the `--config` CLI option. By default, Tailor will look for the configuration file in the directory where you will run Tailor from.
 
 The file follows the [YAML 1.1](http://www.yaml.org/spec/1.1/) format.
 
 #### Including/Excluding files
-Tailor checks all files found by a recursive search starting from the directories given as command line arguments. However, it only analyzes Swift files that end in `.swift`. If you would like Tailor to check files that are not included by default, you will either have to pass them in on the command line, or add entries for them under `include`. Files and directories can also be ignored through `exclude`.
+Tailor checks all files found by a recursive search starting from the directories given as command line arguments. However, it only analyzes Swift files that end in `.swift`. If you would like Tailor to analyze specific files and directories, you will have to add entries for them under `include`. Files and directories can also be ignored through `exclude`.
 
 Here is an example that might be used for an iOS project:
 ```YAML
 include:
-    - Source        # Inspect all Swift files under "Source/"
+    - 'Source/**'         # Inspect all Swift files under "Source/"
 exclude:
-    - *Test.swift   # Ignore Swift files that end in "Test"
-    - Carthage      # Ignore Swift files under "Carthage/"
-    - Pods          # Ignore Swift files under "Pods/"
+    - '**/*Tests.swift'   # Ignore Swift files that end in "Tests"
+    - '**/Carthage'       # Ignore Swift files under "Carthage/"
+    - '**/Pods'           # Ignore Swift files under "Pods/"
 ```
-
 **Note:** Files and directories are specified relative to the `.tailor.yml` file.
+
+**Note:** If path(s) to a directory or Swift file is provided explicitly via CLI, the include/exclude rules in the configuration file will be ignored.
+
+**Note:** *Exclude* is given higher precedence over *Include*.
 
 **Note:** Tailor recognizes the [Java Glob](https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob) syntax.
 

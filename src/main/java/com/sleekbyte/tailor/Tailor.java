@@ -4,9 +4,9 @@ import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftLexer;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.ColorSettings;
+import com.sleekbyte.tailor.common.Configuration;
 import com.sleekbyte.tailor.common.ExitCode;
 import com.sleekbyte.tailor.common.MaxLengths;
-import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.integration.XcodeIntegrator;
@@ -22,8 +22,7 @@ import com.sleekbyte.tailor.listeners.MaxLengthListener;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ArgumentParser;
 import com.sleekbyte.tailor.utils.ArgumentParserException;
-import com.sleekbyte.tailor.utils.Configuration;
-import com.sleekbyte.tailor.utils.ConfigurationParser;
+import com.sleekbyte.tailor.utils.ConfigurationFileManager;
 import com.sleekbyte.tailor.utils.Finder;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -41,7 +40,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -56,6 +54,7 @@ public class Tailor {
     public static final String VERSION = "0.1.0";
     private static ArgumentParser argumentParser = new ArgumentParser();
     private static List<String> pathNames;
+    private static boolean SCROOTDefined = false;
 
     /**
      * Prints error indicating no source file was provided, and exits.
@@ -73,8 +72,9 @@ public class Tailor {
     public static void checkSrcRoot() {
         String srcRoot = System.getenv("SRCROOT");
         if (srcRoot == null || srcRoot.equals("")) {
-            exitWithMissingSourceFileError();
+            return;
         }
+        SCROOTDefined = true;
         pathNames.add(srcRoot);
     }
 
@@ -85,44 +85,48 @@ public class Tailor {
      * @throws IOException if path specified does not exist
      */
     public static Set<String> getSwiftSourceFiles() throws IOException {
-        Set<String> includedItems = new HashSet<>();
-        Set<String> excludedItems = new HashSet<>();
         Set<String> fileNames = new TreeSet<>();
 
-        // Process config file if present
-        // If config file passed via CLI
-        String configFilePath = argumentParser.getConfigFilePath();
-        if (configFilePath != null) {
-            System.out.println(Messages.TAILOR_CONFIG_LOCATION + configFilePath);
-            // Parse config file
-            Configuration config = ConfigurationParser.parseConfigurationFile(configFilePath);
-            excludedItems = config.getExclude();
-            includedItems = config.getInclude();
-        } else {
-            // Search for .tailor.yml config file in directory from where Tailor is invoked from
-            File currentDirectory = Paths.get(".").toFile();
-            File[] files = currentDirectory.listFiles((dir, name) -> { return name.equals(".tailor.yml"); });
-
-            if (files != null && files.length > 0) {
-                // .tailor.yml exists
-                System.out.println(Messages.TAILOR_CONFIG_LOCATION + Paths.get(".").toAbsolutePath());
-                Configuration config = ConfigurationParser.parseConfigurationFile(files[0].getAbsolutePath());
-                excludedItems = config.getExclude();
-                includedItems = config.getInclude();
+        Configuration config = ConfigurationFileManager.getConfigurationFile(argumentParser.getConfigFilePath());
+        if ((pathNames.size() >= 1 && !SCROOTDefined)
+            || (pathNames.size() == 1 && SCROOTDefined && config == null)) {
+            /* Scenarios:
+            Tailor run from:
+            1. CLI with path arguments
+            2. Xcode project with path args
+            3. Xcode project with no path args and no config
+            */
+            config = ConfigurationFileManager.getDefaultConfigurationFile();
+            // Walk file tree
+            Finder finder = new Finder(config.getInclude(), config.getExclude(), config.getFileLocation());
+            for (String pathName : pathNames) {
+                File file = new File(pathName);
+                if (file.isDirectory()) {
+                    Files.walkFileTree(Paths.get(pathName), finder);
+                    fileNames.addAll(finder.getFileNames());
+                } else if (file.canRead() && file.getName().endsWith(".swift")) {
+                    fileNames.add(file.getAbsolutePath());
+                }
             }
+        } else if (config != null) {
+            Finder finder = new Finder(config.getInclude(), config.getExclude(), config.getFileLocation());
+            if (pathNames.size() == 1 && SCROOTDefined) {
+                /* Scenario:
+                Tailor run from:
+                Xcode project with valid config and no path args
+                Respect path preferences in config file
+                */
+                Files.walkFileTree(Paths.get(pathNames.get(0)).toAbsolutePath(), finder);
+            } else {
+                /* Scenario:
+                Tailor run from:
+                CLI with valid config and no path args
+                */
+                Files.walkFileTree(Paths.get(".").toAbsolutePath(), finder);
+            }
+            fileNames.addAll(finder.getFileNames());
         }
 
-        // Walk file tree
-        Finder finder = new Finder(includedItems, excludedItems);
-        for (String pathName : pathNames) {
-            File file = new File(pathName);
-            if (file.isDirectory()) {
-                Files.walkFileTree(Paths.get(pathName), finder);
-                fileNames.addAll(finder.getFileNames());
-            } else if (file.canRead() && file.getName().endsWith(".swift")) {
-                fileNames.add(file.getAbsolutePath());
-            }
-        }
         return fileNames;
     }
 

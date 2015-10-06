@@ -31,16 +31,16 @@ import java.util.stream.Stream;
 
 /**
  * Tests for {@link Tailor} configuration file flow.
- * Create config file that will only lint UpperCamelCase.swift functional test file.
+ * Create config file that will only lint UpperCamelCaseTest.swift functional test file.
  */
 @RunWith(MockitoJUnitRunner.class)
-public final class TailorConfigTest {
+public final class TailorConfigurationTest {
     private File configurationFile;
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
 
-    protected static final String TEST_INPUT_DIR = "src/test/swift/com/sleekbyte/tailor/functional/";
+    protected static final String TEST_INPUT_DIR = "src/test/swift/com/sleekbyte/tailor/functional";
     protected static final String NEWLINE_REGEX = "\\r?\\n";
 
     protected ByteArrayOutputStream outContent;
@@ -88,8 +88,7 @@ public final class TailorConfigTest {
     protected String[] getCommandArgs() {
         return new String[] {
             "--config", configurationFile.getAbsolutePath(),
-            "--no-color",
-            inputFile.getPath()
+            "--no-color"
         };
     }
 
@@ -125,9 +124,9 @@ public final class TailorConfigTest {
         Writer streamWriter = new OutputStreamWriter(new FileOutputStream(configFile), Charset.forName("UTF-8"));
         PrintWriter printWriter = new PrintWriter(streamWriter);
         printWriter.println("include:");
-        printWriter.println("  - UpperCamelCaseTest.swift");
+        printWriter.println("  - '**/UpperCamelCaseTest.swift'");
         printWriter.println("exclude:");
-        printWriter.println("  - NameLengthTest.swift");
+        printWriter.println("  - '**/NameLengthTest.swift'");
         streamWriter.close();
         printWriter.close();
         return configFile;
