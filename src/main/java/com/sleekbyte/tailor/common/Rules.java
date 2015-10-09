@@ -2,7 +2,7 @@ package com.sleekbyte.tailor.common;
 
 import com.sleekbyte.tailor.listeners.BlankLineListener;
 import com.sleekbyte.tailor.listeners.BraceStyleListener;
-import com.sleekbyte.tailor.listeners.CommentAnalyzer;
+import com.sleekbyte.tailor.listeners.CommentWhitespaceListener;
 import com.sleekbyte.tailor.listeners.ConstantNamingListener;
 import com.sleekbyte.tailor.listeners.FileListener;
 import com.sleekbyte.tailor.listeners.ForceTypeCastListener;
@@ -11,6 +11,7 @@ import com.sleekbyte.tailor.listeners.LowerCamelCaseListener;
 import com.sleekbyte.tailor.listeners.MultipleImportListener;
 import com.sleekbyte.tailor.listeners.RedundantParenthesesListener;
 import com.sleekbyte.tailor.listeners.SemicolonTerminatedListener;
+import com.sleekbyte.tailor.listeners.TodoCommentListener;
 import com.sleekbyte.tailor.listeners.UpperCamelCaseListener;
 import com.sleekbyte.tailor.listeners.WhitespaceListener;
 import com.sleekbyte.tailor.utils.ArgumentParser;
@@ -22,7 +23,7 @@ public enum Rules {
     BRACE_STYLE, COMMENT_WHITESPACE, CONSTANT_K_PREFIX, CONSTANT_NAMING, FORCED_TYPE_CAST, FUNCTION_WHITESPACE,
     LEADING_WHITESPACE, LOWER_CAMEL_CASE, MAX_CLASS_LENGTH, MAX_CLOSURE_LENGTH, MAX_FILE_LENGTH, MAX_FUNCTION_LENGTH,
     MAX_LINE_LENGTH, MAX_NAME_LENGTH, MAX_STRUCT_LENGTH, MULTIPLE_IMPORTS, REDUNDANT_PARENTHESES, TERMINATING_NEWLINE,
-    TERMINATING_SEMICOLON, TRAILING_WHITESPACE, UPPER_CAMEL_CASE, WHITESPACE;
+    TERMINATING_SEMICOLON, TODO_SYNTAX, TRAILING_WHITESPACE, UPPER_CAMEL_CASE, WHITESPACE;
 
     private static final String BASE_STYLE_GUIDE_LINK = "https://github.com/sleekbyte/tailor/wiki/Rules#";
     private String name;
@@ -53,7 +54,7 @@ public enum Rules {
         COMMENT_WHITESPACE.name = "comment-whitespace";
         COMMENT_WHITESPACE.description = "Ensure at least one whitespace character after a comment opening symbol"
             + " (// or /*) and at least one whitespace character before a comment closing symbol (*/).";
-        COMMENT_WHITESPACE.className = CommentAnalyzer.class.getName();
+        COMMENT_WHITESPACE.className = CommentWhitespaceListener.class.getName();
 
         CONSTANT_K_PREFIX.name = "constant-k-prefix";
         CONSTANT_K_PREFIX.description = "Flag constants with prefix k.";
@@ -125,6 +126,10 @@ public enum Rules {
         TERMINATING_SEMICOLON.name = "terminating-semicolon";
         TERMINATING_SEMICOLON.description = "Statements should not be terminated with semicolons.";
         TERMINATING_SEMICOLON.className = SemicolonTerminatedListener.class.getName();
+
+        TODO_SYNTAX.name = "todo-syntax";
+        TODO_SYNTAX.description = "Todo comments should follow <TODO_SYNTAX: description> format.";
+        TODO_SYNTAX.className = TodoCommentListener.class.getName();
 
         TRAILING_WHITESPACE.name = "trailing-whitespace";
         TRAILING_WHITESPACE.description = "Flag whitespace after the last non-whitespace character on each line "

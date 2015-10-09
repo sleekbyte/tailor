@@ -64,6 +64,7 @@ public class Messages {
     public static final String WILL_SET_CLAUSE = "WillSet clause ";
     public static final String DID_SET_CLAUSE = "DidSet clause ";
     public static final String WILLSET_DIDSET_BLOCK = "WillSet/DidSet block ";
+    public static final String TODOS = "Todo ";
 
     // Plural constructs
     public static final String IMPORTS = "Imports ";
@@ -96,6 +97,7 @@ public class Messages {
     public static final String TRAILING_WHITESPACE = "should not have any trailing whitespace";
     public static final String START_SPACE = "should start with whitespace";
     public static final String END_SPACE = "should end with whitespace";
+    public static final String TODO_SYNTAX = "should be formatted as <TODO: description>";
 
     // Usage messages
     public static final String CMD_LINE_SYNTAX = "tailor [options] [--] [[file|directory] ...]";

@@ -173,7 +173,7 @@ availabilityCondition: '#available' '(' availabilityArguments ')' ;
 availabilityArguments: availabilityArgument (',' availabilityArguments)? ;
 availabilityArgument: platformName platformVersion | '*' ;
 platformName: 'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS' ;
-platformVersion: VersionLiteral | DecimalLiteral | FloatingPointLiteral ; // TODO: Find a way to make this only VersionLiteral
+platformVersion: VersionLiteral | DecimalLiteral | FloatingPointLiteral ; // TODO_SYNTAX: Find a way to make this only VersionLiteral
 
 // Generic Parameters and Arguments
 
@@ -634,7 +634,7 @@ postfixExpression
  | postfixExpression parenthesizedExpression? closureExpression  # functionCallWithClosureExpression
  | postfixExpression parenthesizedExpression                     # functionCallExpression
  | postfixExpression '.' 'init'                                  # initializerExpression
- // TODO: don't allow '_' here in DecimalLiteral:
+ // TODO_SYNTAX: don't allow '_' here in DecimalLiteral:
  | postfixExpression '.' DecimalLiteral                         # explicitMemberExpression1
  | postfixExpression '.' identifier genericArgumentClause?     # explicitMemberExpression2
  | postfixExpression '.' 'self'                                  # postfixSelfExpression
@@ -658,7 +658,7 @@ functionCallExpression
 //initializer_expression : postfix_expression '.' 'init' ;
 
 /*explicitMemberExpression
-  : postfixExpression '.' DecimalLiteral // TODO: don't allow '_' here in DecimalLiteral
+  : postfixExpression '.' DecimalLiteral // TODO_SYNTAX: don't allow '_' here in DecimalLiteral
   | postfixExpression '.' identifier genericArgumentClause?
   ;
   */
@@ -896,7 +896,7 @@ fragment IdentifierCharacter : [0-9]
 
 fragment IdentifierCharacters : IdentifierCharacter+ ;
 
-ImplicitParameterName : '$' DecimalLiteral ; // TODO: don't allow '_' here
+ImplicitParameterName : '$' DecimalLiteral ; // TODO_SYNTAX: don't allow '_' here
 
 // GRAMMAR OF A LITERAL
 
