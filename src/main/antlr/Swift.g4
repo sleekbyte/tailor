@@ -472,7 +472,7 @@ balancedToken
  | '{' balancedTokens? '}'
  | identifier | expression | contextSensitiveKeyword | literal | operator
  // | Any punctuation except ( ,  ')' , '[' , ']' , { , or }
- // Punctuation is very ambiguous, thus using punctuation defined in www.thepunctuationguide.com)
+ // Punctuation is very ambiguous, interpreting punctuation as defined in www.thepunctuationguide.com
  | ':' | ';' | ',' | '!' | '<' | '>' | '-' | '\'' | '/' | '...' | '"'
  ;
 
