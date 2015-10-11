@@ -959,8 +959,7 @@ fragment QuotedTextItem : EscapedCharacter
  ;
 EscapedCharacter : '\\' [0\\(tnr"']
  | '\\x' HexadecimalDigit HexadecimalDigit
- | '\\u' HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit
- | '\\U' HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit
+ | '\\u' '{' HexadecimalDigit HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? '}'
 ;
 
 WS : [ \n\r\t\u000B\u000C\u0000] -> channel(HIDDEN) ;
