@@ -465,13 +465,15 @@ attributeName : identifier ;
 attributeArgumentClause : '('  balancedTokens?  ')'  ;
 attributes : attribute+ ;
 // Swift Language Reference does not have ','
-balancedTokens : balancedToken ','? balancedTokens? ;
+balancedTokens : balancedToken balancedTokens? ;
 balancedToken
  : '('  balancedTokens? ')'
  | '[' balancedTokens? ']'
  | '{' balancedTokens? '}'
  | identifier | expression | contextSensitiveKeyword | literal | operator
-// | Any punctuation except ( ,  ')' , '[' , ']' , { , or }
+ // | Any punctuation except ( ,  ')' , '[' , ']' , { , or }
+ // Punctuation is very ambiguous, thus using punctuation defined in www.thepunctuationguide.com)
+ | ':' | ';' | ',' | '!' | '<' | '>' | '-' | '\'' | '/' | '...' | '"'
  ;
 
 // Expressions
@@ -687,7 +689,7 @@ functionCallExpression
 // are also referenced individually. For example, type signatures use
 // <...>.
 
-operatorHead: '=' | '<' | '>' | '!' | '*' | '&' | '==' | '?' | '-' | '&&' | '||' | OperatorHead;
+operatorHead: '=' | '<' | '>' | '!' | '*' | '&' | '==' | '?' | '-' | '&&' | '||' | '/' | OperatorHead;
 operatorCharacter: operatorHead | OperatorCharacter;
 
 operator: operatorHead operatorCharacter*
