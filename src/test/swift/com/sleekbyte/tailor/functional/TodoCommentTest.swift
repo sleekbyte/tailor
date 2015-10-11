@@ -21,4 +21,25 @@ class SomeClass {
         return -1
     }
 
+    // TODO(aditya): this is a valid TODO syntax
+    /* TODO(aditya): this too is a valid multiline TODO syntax */
+
+    // TODO : invalid
+
+    // TODO(): invalid
+
+    /* TODO(): invalid */
+
+    /*
+    TODO(aditya): valid
+    */
+
+    /*
+    TODO(): invalid
+    */
+
+    /*
+    TODO: valid
+    */
+
 }

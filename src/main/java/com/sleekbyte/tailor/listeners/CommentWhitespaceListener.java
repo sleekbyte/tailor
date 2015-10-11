@@ -5,21 +5,23 @@ import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ListenerUtil;
-import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
+
+import java.util.List;
 
 /**
  * Class to analyze whitespace in comments.
  */
 public final class CommentWhitespaceListener extends CommentAnalyzer {
     /**
-     * Create instance of CommentAnalyzer.
+     * Create instance of CommentWhitespaceListener.
      *
-     * @param tokenStream Token stream obtained from lexer
      * @param printer     An instance of Printer
+     * @param singleLineComments List of // comments
+     * @param multilineComments List of /* comments
      */
-    public CommentWhitespaceListener(CommonTokenStream tokenStream, Printer printer) {
-        super(tokenStream, printer);
+    public CommentWhitespaceListener(Printer printer, List<Token> singleLineComments, List<Token> multilineComments) {
+        super(printer, singleLineComments, multilineComments);
     }
 
     @Override

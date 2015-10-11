@@ -23,6 +23,7 @@ import com.sleekbyte.tailor.listeners.TodoCommentListener;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ArgumentParser;
 import com.sleekbyte.tailor.utils.ArgumentParserException;
+import com.sleekbyte.tailor.utils.CommentExtractor;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -141,13 +142,16 @@ public class Tailor {
         for (String className : classNames) {
             try {
 
+                CommentExtractor commentExtractor = new CommentExtractor(tokenStream);
                 if (className.equals(FileListener.class.getName())) {
                     continue;
                 } else if (className.equals(CommentWhitespaceListener.class.getName())) {
-                    CommentAnalyzer commentAnalyzer = new CommentWhitespaceListener(tokenStream, printer);
+                    CommentAnalyzer commentAnalyzer = new CommentWhitespaceListener(printer,
+                        commentExtractor.getSingleLineComments(), commentExtractor.getMultilineComments());
                     commentAnalyzer.analyze();
                 } else if (className.equals(TodoCommentListener.class.getName())) {
-                    CommentAnalyzer todoCommentListener = new TodoCommentListener(tokenStream, printer);
+                    CommentAnalyzer todoCommentListener = new TodoCommentListener(printer,
+                        commentExtractor.getSingleLineComments(), commentExtractor.getMultilineComments());
                     todoCommentListener.analyze();
                 } else if (className.equals(BraceStyleListener.class.getName())) {
                     listeners.add(new BraceStyleListener(printer, tokenStream));

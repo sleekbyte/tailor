@@ -1,8 +1,6 @@
 package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.output.Printer;
-import com.sleekbyte.tailor.utils.ListenerUtil;
-import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 
 import java.util.ArrayList;
@@ -13,7 +11,6 @@ import java.util.List;
  */
 public abstract class CommentAnalyzer {
 
-    private CommonTokenStream tokenStream;
     protected Printer printer;
     protected List<Token> singleLineComments = new ArrayList<>();
     protected List<Token> multilineComments = new ArrayList<>();
@@ -21,28 +18,16 @@ public abstract class CommentAnalyzer {
     /**
      * Create instance of CommentAnalyzer.
      *
-     * @param tokenStream Token stream obtained from lexer
-     * @param printer An instance of Printer
+     * @param printer     An instance of Printer
+     * @param singleLineComments List of // comments
+     * @param multilineComments List of /* comments
      */
-    public CommentAnalyzer(CommonTokenStream tokenStream, Printer printer) {
-        this.tokenStream = tokenStream;
+    public CommentAnalyzer(Printer printer, List<Token> singleLineComments, List<Token> multilineComments) {
         this.printer = printer;
-        extractComments();
+        this.singleLineComments = singleLineComments;
+        this.multilineComments = multilineComments;
     }
 
     public abstract void analyze();
 
-    private void extractComments() {
-        for (Token token : tokenStream.getTokens()) {
-            if (token.getChannel() != Token.HIDDEN_CHANNEL) {
-                continue;
-            }
-            if (ListenerUtil.isSingleLineComment(token)) {
-                singleLineComments.add(token);
-            }
-            if (ListenerUtil.isMultilineComment(token)) {
-                multilineComments.add(token);
-            }
-        }
-    }
 }

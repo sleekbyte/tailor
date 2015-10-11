@@ -128,7 +128,8 @@ public enum Rules {
         TERMINATING_SEMICOLON.className = SemicolonTerminatedListener.class.getName();
 
         TODO_SYNTAX.name = "todo-syntax";
-        TODO_SYNTAX.description = "Todo comments should follow <TODO_SYNTAX: description> format.";
+        TODO_SYNTAX.description = "Todo comments should follow either <TODO: description> or"
+            + " <TODO(dev-name): description> format.";
         TODO_SYNTAX.className = TodoCommentListener.class.getName();
 
         TRAILING_WHITESPACE.name = "trailing-whitespace";

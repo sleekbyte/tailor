@@ -5,7 +5,6 @@ import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ListenerUtil;
-import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 
 import java.util.List;
@@ -15,13 +14,14 @@ import java.util.List;
  */
 public final class TodoCommentListener extends CommentAnalyzer {
     /**
-     * Create instance of CommentAnalyzer.
+     * Create instance of TodoCommentListener.
      *
-     * @param tokenStream Token stream obtained from lexer
      * @param printer     An instance of Printer
+     * @param singleLineComments List of // comments
+     * @param multilineComments List of /* comments
      */
-    public TodoCommentListener(CommonTokenStream tokenStream, Printer printer) {
-        super(tokenStream, printer);
+    public TodoCommentListener(Printer printer, List<Token> singleLineComments, List<Token> multilineComments) {
+        super(printer, singleLineComments, multilineComments);
     }
 
     @Override
@@ -31,12 +31,12 @@ public final class TodoCommentListener extends CommentAnalyzer {
     }
 
     private void checkTodoSyntaxInSingleLineComments() {
-        String todoRegex = "(?s)// TODO: [^\\s].+";
+        String todoRegex = "(?s:// TODO: \\S.+|// TODO\\(\\S+\\): \\S.+)";
         filterTodoSyntax(todoRegex, singleLineComments);
     }
 
     private void checkTodoSyntaxInMultiLineComments() {
-        String todoRegex = "(?s)/\\* TODO: [^\\s\\*].+";
+        String todoRegex = "(?s:/\\*\\s*TODO: [\\S\\*].+|/\\*\\s*TODO\\(\\S+\\): [\\S\\*].+)";
         filterTodoSyntax(todoRegex, multilineComments);
     }
 
