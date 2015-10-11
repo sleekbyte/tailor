@@ -806,9 +806,10 @@ classRequirement: 'class' ;
 // ------ Build Configurations (Macros) -------
 // Used http://apple.co/1M4GNVf as reference
 
-macroDeclaration: '#if' buildConfigurations statements? macroElseIfClause* macroElseClause? '#endif' ;
-macroElseIfClause: '#elseif' buildConfigurations statements? ;
+macroDeclaration: '#if' macroConditional statements? macroElseIfClause* macroElseClause? '#endif' ;
+macroElseIfClause: '#elseif' macroConditional statements? ;
 macroElseClause: '#else' statements? ;
+macroConditional: buildConfigurations | conditionClause ; // currently unclear exactly what a macro conditional could be
 buildConfigurations: buildConfiguration (('&&' | '||') buildConfigurations)? ;
 buildConfiguration: '!'? macroFunction '(' macroArguments ')' ;
 macroFunction: 'os' | 'arch' ;
@@ -827,9 +828,9 @@ identifier : Identifier | contextSensitiveKeyword ;
 keyword : 'convenience' | 'class' | 'deinit' | 'enum' | 'extension' | 'func' | 'import' | 'init' | 'let' | 'protocol' | 'static' | 'struct' | 'subscript' | 'typealias' | 'var' | 'break' | 'case' | 'continue' | 'default' | 'do' | 'else' | 'fallthrough' | 'if' | 'in' | 'for' | 'return' | 'switch' | 'where' | 'while' | 'as' | 'dynamicType' | 'is' | 'new' | 'super' | 'self' | 'Self' | 'Type' | 'repeat' ;
 
 contextSensitiveKeyword :
- 'associativity' | 'didSet' | 'get' | 'infix' | 'inout' | 'left' | 'mutating' | 'none' |
- 'nonmutating' | 'operator' | 'override' | 'postfix' | 'precedence' | 'prefix' | 'right' |
- 'set' | 'unowned' | 'unowned(safe)' | 'unowned(unsafe)' | 'weak' | 'willSet' | 'required' |
+ 'associativity' | 'convenience' | 'dynamic' | 'didSet' | 'final' | 'get' | 'infix' | 'indirect' |
+ 'lazy' | 'left' | 'mutating' | 'none' | 'nonmutating' | 'optional' | 'operator' | 'override' | 'postfix' | 'precedence' |
+ 'prefix' | 'Protocol' | 'required' | 'right' | 'set' | 'Type' | 'unowned' | 'weak' | 'willSet' |
  'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS' | 'x86_64' |
  'arm' | 'arm64' | 'i386' | 'os' | 'arch'
  ;
