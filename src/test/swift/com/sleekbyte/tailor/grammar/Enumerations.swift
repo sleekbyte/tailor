@@ -130,3 +130,8 @@ public enum Code: Int {
     case JSONSerializationFailed         = -6006
     case PropertyListSerializationFailed = -6007
 }
+
+internal indirect enum Either<L, R> {
+	case Left(L)
+	case Right(R)
+}

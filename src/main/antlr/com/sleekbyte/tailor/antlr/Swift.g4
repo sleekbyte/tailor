@@ -176,7 +176,8 @@ whereExpression: expression ;
 availabilityCondition: '#available' '(' availabilityArguments ')' ;
 availabilityArguments: availabilityArgument (',' availabilityArguments)? ;
 availabilityArgument: platformName platformVersion | '*' ;
-platformName: 'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS' ;
+platformName: 'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension' | 'watchOS'
+ | 'watchOSApplicationExtension' | 'tvOS' | 'tvOSApplicationExtension' ;
 platformVersion: VersionLiteral | DecimalLiteral | FloatingPointLiteral ; // TODO: Find a way to make this only VersionLiteral
 
 // Generic Parameters and Arguments
@@ -306,18 +307,18 @@ defaultArgumentClause : '=' expression  ;
 
 // GRAMMAR OF AN ENUMERATION DECLARATION
 
-enumDeclaration : attributes? accessLevelModifier? 'enum' enumDef  ;
+enumDeclaration : attributes? accessLevelModifier? enumDef  ;
 enumDef: unionStyleEnum | rawValueStyleEnum  ;
-unionStyleEnum : enumName genericParameterClause? typeInheritanceClause? '{' unionStyleEnumMembers?'}'  ;
+unionStyleEnum : 'indirect'? 'enum' enumName genericParameterClause? typeInheritanceClause? '{' unionStyleEnumMembers?'}'  ;
 unionStyleEnumMembers : unionStyleEnumMember unionStyleEnumMembers? ;
 unionStyleEnumMember : declaration | unionStyleEnumCaseClause ';'? ;
-unionStyleEnumCaseClause : attributes? 'case' unionStyleEnumCaseList  ;
+unionStyleEnumCaseClause : attributes? 'indirect'? 'case' unionStyleEnumCaseList  ;
 unionStyleEnumCaseList : unionStyleEnumCase | unionStyleEnumCase ',' unionStyleEnumCaseList  ;
 unionStyleEnumCase : enumCaseName tupleType? ;
 enumName : identifier  ;
 enumCaseName : identifier  ;
 // typeInheritanceClause is not optional in the Swift Language Reference
-rawValueStyleEnum : enumName genericParameterClause? typeInheritanceClause? '{' rawValueStyleEnumMembers?'}'  ;
+rawValueStyleEnum : 'enum' enumName genericParameterClause? typeInheritanceClause? '{' rawValueStyleEnumMembers?'}'  ;
 rawValueStyleEnumMembers : rawValueStyleEnumMember rawValueStyleEnumMembers? ;
 rawValueStyleEnumMember : declaration | rawValueStyleEnumCaseClause  ;
 rawValueStyleEnumCaseClause : attributes? 'case' rawValueStyleEnumCaseList  ;
