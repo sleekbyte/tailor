@@ -136,3 +136,10 @@ public init(path: String = ".swiftlint.yml", optional: Bool = true) {}
 public func beforeEach(closure: BeforeExampleWithMetadataClosure) {
   exampleHooks.appendBefore(closure)
 }
+
+public func success(@noescape closure: T -> Void) {
+    switch self {
+    case .Value(let value): closure(value)
+    default: break
+    }
+}

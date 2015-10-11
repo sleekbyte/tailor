@@ -295,7 +295,8 @@ functionBody : codeBlock  ;
 parameterClauses : parameterClause parameterClauses? ;
 parameterClause : '(' ')' |  '(' parameterList '...'? ')'  ;
 parameterList : parameter | parameter ',' parameterList  ;
-parameter : 'inout'? 'let'? '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?
+// Parameters don't have attributes in the Swift Language Reference
+parameter : attributes? 'inout'? 'let'? '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?
  | 'inout'? 'var' '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?
  | attributes? sType
  ;
