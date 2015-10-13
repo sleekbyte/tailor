@@ -10,7 +10,7 @@ import org.antlr.v4.runtime.Token;
 import java.util.List;
 
 /**
- * Class to analyze TODO_SYNTAX comments.
+ * Class to analyze TODO comments.
  */
 public final class TodoCommentListener extends CommentAnalyzer {
     /**
@@ -31,19 +31,19 @@ public final class TodoCommentListener extends CommentAnalyzer {
     }
 
     private void checkTodoSyntaxInSingleLineComments() {
-        String todoRegex = "(?s:// TODO: \\S.+|// TODO\\(\\S+\\): \\S.+)";
+        String todoRegex = "(?s)// TODO(?:\\(\\S+\\))?: \\S.*";
         filterTodoSyntax(todoRegex, singleLineComments);
     }
 
     private void checkTodoSyntaxInMultiLineComments() {
-        String todoRegex = "(?s:/\\*\\s*TODO: [\\S\\*].+|/\\*\\s*TODO\\(\\S+\\): [\\S\\*].+)";
+        String todoRegex = "(?s)/\\*\\s+TODO(?:\\(\\S+\\))?: \\S.*\\s+\\*/";
         filterTodoSyntax(todoRegex, multilineComments);
     }
 
     private void filterTodoSyntax(String todoRegex, List<Token> comments) {
         comments.stream()
             .filter(token -> token.getText().toLowerCase().contains("todo"))
-            .filter(token -> !token.getText().matches(todoRegex))
+            .filter(token -> !token.getText().trim().matches(todoRegex))
             .forEach(token -> todoContentWarning(token, Messages.TODOS));
     }
 

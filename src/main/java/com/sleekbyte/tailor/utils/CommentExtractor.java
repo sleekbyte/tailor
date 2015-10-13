@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Extract comments form Swift files.
+ * Extract comments from Swift files.
  */
 public final class CommentExtractor {
 

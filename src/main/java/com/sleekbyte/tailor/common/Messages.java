@@ -64,7 +64,7 @@ public class Messages {
     public static final String WILL_SET_CLAUSE = "WillSet clause ";
     public static final String DID_SET_CLAUSE = "DidSet clause ";
     public static final String WILLSET_DIDSET_BLOCK = "WillSet/DidSet block ";
-    public static final String TODOS = "TODO comment ";
+    public static final String TODOS = "TODO comments ";
 
     // Plural constructs
     public static final String IMPORTS = "Imports ";
