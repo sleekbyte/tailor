@@ -129,3 +129,10 @@ while currentValue != 0 {
     currentValue = moveNearerToZero(currentValue)
 }
 print("zero!")
+
+public init(path: String = ".swiftlint.yml", optional: Bool = true) {}
+
+@objc(beforeEachWithMetadata:)
+public func beforeEach(closure: BeforeExampleWithMetadataClosure) {
+  exampleHooks.appendBefore(closure)
+}
