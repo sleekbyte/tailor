@@ -137,7 +137,7 @@ exclude:
 ```
 **Note:** Files and directories are specified relative to the `.tailor.yml` file.
 
-**Note:** If path(s) to a directory or Swift file is provided explicitly via CLI, the include/exclude rules in the configuration file will be ignored.
+**Note:** Paths to directories or Swift files provided explicitly via CLI will cause the `include`/`exclude` rules specfied in `.tailor.yml` to be ignored.
 
 **Note:** *Exclude* is given higher precedence over *Include*.
 
