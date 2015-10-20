@@ -67,6 +67,14 @@ public class Tailor {
     }
 
     /**
+     * Prints error indicating no source file was found that satisfied rules in config file, and exits.
+     */
+    public static void exitWithNoEligibleSourceFileError() {
+        System.err.println("No Swift source file found using the supplied configuration file.");
+        System.exit(ExitCode.FAILURE);
+    }
+
+    /**
      * Checks environment variable SRCROOT (set by Xcode) for the top-level path to the source code and adds path to
      * pathNames.
      */
@@ -127,6 +135,10 @@ public class Tailor {
                 Files.walkFileTree(Paths.get(".").toAbsolutePath(), finder);
             }
             fileNames.addAll(finder.getFileNames());
+
+            if (fileNames.size() == 0) {
+                exitWithNoEligibleSourceFileError();
+            }
         }
 
         return fileNames;
