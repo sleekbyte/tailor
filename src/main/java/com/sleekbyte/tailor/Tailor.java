@@ -7,6 +7,7 @@ import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.Configuration;
 import com.sleekbyte.tailor.common.ExitCode;
 import com.sleekbyte.tailor.common.MaxLengths;
+import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.integration.XcodeIntegrator;
@@ -54,7 +55,7 @@ public class Tailor {
     public static final String VERSION = "0.1.0";
     private static ArgumentParser argumentParser = new ArgumentParser();
     private static List<String> pathNames;
-    private static boolean SCROOTDefined = false;
+    private static boolean isSrcRootDefined = false;
 
     /**
      * Prints error indicating no source file was provided, and exits.
@@ -74,7 +75,7 @@ public class Tailor {
         if (srcRoot == null || srcRoot.equals("")) {
             return;
         }
-        SCROOTDefined = true;
+        isSrcRootDefined = true;
         pathNames.add(srcRoot);
     }
 
@@ -88,8 +89,8 @@ public class Tailor {
         Set<String> fileNames = new TreeSet<>();
 
         Configuration config = ConfigurationFileManager.getConfigurationFile(argumentParser.getConfigFilePath());
-        if ((pathNames.size() >= 1 && !SCROOTDefined)
-            || (pathNames.size() == 1 && SCROOTDefined && config == null)) {
+        if ((pathNames.size() >= 1 && !isSrcRootDefined)
+            || (pathNames.size() == 1 && isSrcRootDefined && config == null)) {
             /* Scenarios:
             Tailor run from:
             1. CLI with path arguments
@@ -110,7 +111,8 @@ public class Tailor {
             }
         } else if (config != null) {
             Finder finder = new Finder(config.getInclude(), config.getExclude(), config.getFileLocation());
-            if (pathNames.size() == 1 && SCROOTDefined) {
+            System.out.println(Messages.TAILOR_CONFIG_LOCATION + config.getFileLocation().replace("/./","/"));
+            if (pathNames.size() == 1 && isSrcRootDefined) {
                 /* Scenario:
                 Tailor run from:
                 Xcode project with valid config and no path args

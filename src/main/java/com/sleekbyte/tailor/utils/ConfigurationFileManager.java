@@ -1,7 +1,6 @@
 package com.sleekbyte.tailor.utils;
 
 import com.sleekbyte.tailor.common.Configuration;
-import com.sleekbyte.tailor.common.Messages;
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -35,7 +34,6 @@ public final class ConfigurationFileManager {
         Configuration config = null;
         // Check whether config file passed via CLI
         if (configFilePath != null) {
-            System.out.println(Messages.TAILOR_CONFIG_LOCATION + configFilePath);
             // Parse config file
             config = ConfigurationFileManager.parseConfigurationFile(configFilePath);
         } else {
@@ -45,7 +43,6 @@ public final class ConfigurationFileManager {
 
             if (files != null && files.length > 0) {
                 // .tailor.yml exists => parse config file
-                System.out.println(Messages.TAILOR_CONFIG_LOCATION + Paths.get(".").toAbsolutePath());
                 config = ConfigurationFileManager.parseConfigurationFile(files[0].getAbsolutePath());
             }
         }
@@ -88,7 +85,7 @@ public final class ConfigurationFileManager {
 
         InputStream configFileStream = new FileInputStream(new File(filePath));
         Configuration config = (Configuration) yaml.load(configFileStream);
-        config.setFileLocation(filePath);
+        config.setFileLocation(path.toAbsolutePath().toString());
         // Ignore items in DEFAULT_EXCLUDE_LIST
         config.setExclude(new HashSet<>(Arrays.asList(DEFAULT_EXCLUDE_LIST)));
         // Lint all files and directories by default

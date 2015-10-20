@@ -47,7 +47,8 @@ public class ArgumentParser {
     private static final String DEFAULT_INT_ARG = "0";
     private static final String XCODE_INTEGRATION_OPT = "xcode";
     private static final String SHOW_RULES_OPT = "show-rules";
-    private static final String CONFIG_OPT = "config";
+    private static final String CONFIG_SHORT_OPT = "c";
+    private static final String CONFIG_LONG_OPT = "config";
 
     private Options options;
     private CommandLine cmd;
@@ -144,7 +145,7 @@ public class ArgumentParser {
         options.addOption(createNoArgOpt(SHOW_RULES_OPT, Messages.SHOW_RULES_DESC));
 
         argName = "path/to/.tailor.yml";
-        options.addOption(createSingleArgOpt(CONFIG_OPT, argName, Messages.CONFIG_FILE_DESC));
+        options.addOption(createSingleArgOpt(CONFIG_SHORT_OPT, CONFIG_LONG_OPT, argName, Messages.CONFIG_FILE_DESC));
     }
 
     /**
@@ -269,7 +270,7 @@ public class ArgumentParser {
      * @return path of config file
      */
     public String getConfigFilePath() {
-        return cmd != null ? cmd.getOptionValue(CONFIG_OPT) : null;
+        return cmd != null ? cmd.getOptionValue(CONFIG_LONG_OPT) : null;
     }
 
     /**
