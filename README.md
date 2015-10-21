@@ -135,7 +135,7 @@ exclude:
     - '**/Carthage'       # Ignore Swift files under "Carthage/"
     - '**/Pods'           # Ignore Swift files under "Pods/"
 ```
-**Note:** Files and directories are specified relative to the `.tailor.yml` file.
+**Note:** Files and directories are specified relative to the where `Tailor` is run from.
 
 **Note:** Paths to directories or Swift files provided explicitly via CLI will cause the `include`/`exclude` rules specfied in `.tailor.yml` to be ignored.
 

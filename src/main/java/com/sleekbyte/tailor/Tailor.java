@@ -95,6 +95,7 @@ public class Tailor {
      */
     public static Set<String> getSwiftSourceFiles() throws IOException {
         Set<String> fileNames = new TreeSet<>();
+        File currentDirector = new File(".");
 
         Configuration config = ConfigurationFileManager.getConfigurationFile(argumentParser.getConfigFilePath());
         if ((pathNames.size() >= 1 && !isSrcRootDefined)
@@ -107,7 +108,7 @@ public class Tailor {
             */
             config = ConfigurationFileManager.getDefaultConfigurationFile();
             // Walk file tree
-            Finder finder = new Finder(config.getInclude(), config.getExclude(), config.getFileLocation());
+            Finder finder = new Finder(config.getInclude(), config.getExclude(), currentDirector.getCanonicalPath());
             for (String pathName : pathNames) {
                 File file = new File(pathName);
                 if (file.isDirectory()) {
@@ -118,7 +119,7 @@ public class Tailor {
                 }
             }
         } else if (config != null) {
-            Finder finder = new Finder(config.getInclude(), config.getExclude(), config.getFileLocation());
+            Finder finder = new Finder(config.getInclude(), config.getExclude(), currentDirector.getCanonicalPath());
             System.out.println(Messages.TAILOR_CONFIG_LOCATION + config.getFileLocation());
             if (pathNames.size() == 1 && isSrcRootDefined) {
                 /* Scenario:

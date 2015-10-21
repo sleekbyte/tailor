@@ -33,9 +33,7 @@ public final class Finder extends SimpleFileVisitor<Path> {
     public Finder(Set<String> includeSet, Set<String> excludeSet, String base) {
         this.includeSet = includeSet;
         this.excludeSet = excludeSet;
-        if (base != null && !base.equals(".tailor.yml")) {
-            this.base = base.substring(0, base.length() - ".tailor.yml".length() - 1);
-        }
+        this.base = base;
     }
 
     public Set<String> getFileNames() {
