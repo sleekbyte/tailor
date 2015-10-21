@@ -92,7 +92,7 @@ public final class Finder extends SimpleFileVisitor<Path> {
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
         // Do not analyze the directory's children if blacklisted.
         Path dirName = dir.getFileName();
-        if (dirName != null && !dirName.toString().equals(".") && !entityOfInterest(dir)) {
+        if (dirName != null && !entityOfInterest(dir)) {
             return FileVisitResult.SKIP_SUBTREE;
         } else {
             return FileVisitResult.CONTINUE;

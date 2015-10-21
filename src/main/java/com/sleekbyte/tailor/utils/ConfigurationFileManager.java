@@ -85,8 +85,9 @@ public final class ConfigurationFileManager {
 
         InputStream configFileStream = new FileInputStream(new File(filePath));
         Configuration config = (Configuration) yaml.load(configFileStream);
+        configFileStream.close();
         if (config != null) {
-            config.setFileLocation(path.toAbsolutePath().toString());
+            config.setFileLocation(new File(path.toString()).getCanonicalPath());
             // Ignore items in DEFAULT_EXCLUDE_LIST
             config.setExclude(new HashSet<>(Arrays.asList(DEFAULT_EXCLUDE_LIST)));
             // Lint all files and directories by default
@@ -94,7 +95,6 @@ public final class ConfigurationFileManager {
                 config.setInclude(new HashSet<>(Arrays.asList(DEFAULT_INCLUDE_LIST)));
             }
         }
-        configFileStream.close();
         return config;
     }
 

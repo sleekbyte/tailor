@@ -114,25 +114,25 @@ public class Tailor {
                     Files.walkFileTree(Paths.get(pathName), finder);
                     fileNames.addAll(finder.getFileNames());
                 } else if (file.canRead() && file.getName().endsWith(".swift")) {
-                    fileNames.add(file.getAbsolutePath());
+                    fileNames.add(file.getCanonicalPath());
                 }
             }
         } else if (config != null) {
             Finder finder = new Finder(config.getInclude(), config.getExclude(), config.getFileLocation());
-            System.out.println(Messages.TAILOR_CONFIG_LOCATION + config.getFileLocation().replace("/./","/"));
+            System.out.println(Messages.TAILOR_CONFIG_LOCATION + config.getFileLocation());
             if (pathNames.size() == 1 && isSrcRootDefined) {
                 /* Scenario:
                 Tailor run from:
                 Xcode project with valid config and no path args
                 Respect path preferences in config file
                 */
-                Files.walkFileTree(Paths.get(pathNames.get(0)).toAbsolutePath(), finder);
+                Files.walkFileTree(Paths.get(new File(pathNames.get(0)).getCanonicalPath()), finder);
             } else {
                 /* Scenario:
                 Tailor run from:
                 CLI with valid config and no path args
                 */
-                Files.walkFileTree(Paths.get(".").toAbsolutePath(), finder);
+                Files.walkFileTree(Paths.get(new File(".").getCanonicalPath()), finder);
             }
             fileNames.addAll(finder.getFileNames());
 

@@ -37,7 +37,7 @@ public final class XcodeIntegrator {
         File file = new File(path);
         if (file.isDirectory()
             && (path.endsWith(".xcodeproj/") || path.endsWith(".xcodeproj"))) {
-            return file.getAbsolutePath();
+            return file.getCanonicalPath();
         } else {
             throw new IOException(path + " is not a valid .xcodeproj");
         }
