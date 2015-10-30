@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.yaml.snakeyaml.error.YAMLException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,6 +18,7 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -30,31 +30,21 @@ public final class ConfigurationFileManagerTest {
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
 
-    @Test(expected = YAMLException.class)
-    public void testParseConfigurationFileInvalidName() throws IOException {
-        ConfigurationFileManager.parseConfigurationFile(createConfigFile(".invalid-name.yml").getAbsolutePath());
-    }
-
-    @Test(expected = YAMLException.class)
+    @Test(expected = IOException.class)
     public void testParseConfigurationFileEmptyFolder() throws IOException {
-        ConfigurationFileManager.parseConfigurationFile(folder.toString());
-    }
-
-    @Test(expected = YAMLException.class)
-    public void testParseConfigurationFileEmptyFileName() throws IOException {
-        ConfigurationFileManager.parseConfigurationFile("");
+        ConfigurationFileManager.getConfiguration(Optional.of(folder.getRoot().getPath()));
     }
 
     @Test
     public void testParseConfigurationFileValidConfigFile() throws IOException {
-        Configuration config = ConfigurationFileManager.parseConfigurationFile(createConfigFile(".tailor.yml")
-            .getAbsolutePath());
+        Configuration config = ConfigurationFileManager
+                .getConfiguration(Optional.of(createConfigFile(".tailor.yml").toString()))
+                .orElse(new Configuration());
 
         Set<String> actualIncludeList = config.getInclude();
         Set<String> actualExcludeList = config.getExclude();
-        Set<String> expectedIncludeList = new HashSet<String>(Arrays.asList("Source"));
-        Set<String> expectedExcludeList = new HashSet<String>(Arrays.asList("Carthage", "Pods", "**.{svn,git}",
-            "**/*.{lproj,xcassets,framework,xcodeproj}"));
+        Set<String> expectedIncludeList = new HashSet<>(Arrays.asList("Source"));
+        Set<String> expectedExcludeList = new HashSet<>(Arrays.asList("Carthage", "Pods"));
         assertEquals(expectedIncludeList, actualIncludeList);
         assertEquals(expectedExcludeList, actualExcludeList);
     }

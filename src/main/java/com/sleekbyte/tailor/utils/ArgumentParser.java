@@ -13,6 +13,7 @@ import org.apache.commons.cli.ParseException;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -49,6 +50,7 @@ public class ArgumentParser {
     private static final String SHOW_RULES_OPT = "show-rules";
     private static final String CONFIG_SHORT_OPT = "c";
     private static final String CONFIG_LONG_OPT = "config";
+    private static final String LIST_FILES_OPT = "list-files";
 
     private Options options;
     private CommandLine cmd;
@@ -81,6 +83,13 @@ public class ArgumentParser {
      */
     public boolean shouldPrintRules() {
         return cmd != null && cmd.hasOption(SHOW_RULES_OPT);
+    }
+
+    /**
+     * Check if "--list-files" option was specified.
+     */
+    public boolean shouldListFiles() {
+        return cmd != null && cmd.hasOption(LIST_FILES_OPT);
     }
 
     /**
@@ -146,6 +155,8 @@ public class ArgumentParser {
 
         argName = "path/to/.tailor.yml";
         options.addOption(createSingleArgOpt(CONFIG_SHORT_OPT, CONFIG_LONG_OPT, argName, Messages.CONFIG_FILE_DESC));
+
+        options.addOption(createNoArgOpt(LIST_FILES_OPT, Messages.LIST_FILES_DESC));
     }
 
     /**
@@ -269,8 +280,8 @@ public class ArgumentParser {
      *
      * @return path of config file
      */
-    public String getConfigFilePath() {
-        return cmd != null ? cmd.getOptionValue(CONFIG_LONG_OPT) : null;
+    public Optional<String> getConfigFilePath() {
+        return cmd != null ? Optional.ofNullable(cmd.getOptionValue(CONFIG_LONG_OPT)) : Optional.empty();
     }
 
     /**

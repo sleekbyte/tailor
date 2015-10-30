@@ -50,12 +50,13 @@ is set by Xcode when run in a Build Phase. Tailor may be set up as an Xcode Buil
 automatically with the --xcode option.
 
 Options:
-    --config=<path/to/.tailor.yml>             specify configuration file
+ -c,--config=<path/to/.tailor.yml>             specify configuration file
     --debug                                    print ANTLR error messages when parsing error occurs
     --except=<rule1,rule2,...>                 run all rules except the specified ones
  -h,--help                                     display help
     --invert-color                             invert colorized console output
  -l,--max-line-length=<0-999>                  maximum Line length (in characters)
+    --list-files                               display Swift source files to be analyzed
     --max-class-length=<0-999>                 maximum Class length (in lines)
     --max-closure-length=<0-999>               maximum Closure length (in lines)
     --max-file-length=<0-999>                  maximum File length (in lines)
@@ -129,15 +130,15 @@ Tailor checks all files found by a recursive search starting from the directorie
 Here is an example that might be used for an iOS project:
 ```YAML
 include:
-    - 'Source/**'         # Inspect all Swift files under "Source/"
+    - Source            # Inspect all Swift files under "Source/"
 exclude:
-    - '**/*Tests.swift'   # Ignore Swift files that end in "Tests"
-    - '**/Carthage'       # Ignore Swift files under "Carthage/"
-    - '**/Pods'           # Ignore Swift files under "Pods/"
+    - '**Tests.swift'   # Ignore Swift files that end in "Tests"
+    - Carthage          # Ignore Swift files under "Carthage/"
+    - Pods              # Ignore Swift files under "Pods/"
 ```
 **Note:** Files and directories are specified relative to the where `Tailor` is run from.
 
-**Note:** Paths to directories or Swift files provided explicitly via CLI will cause the `include`/`exclude` rules specfied in `.tailor.yml` to be ignored.
+**Note:** Paths to directories or Swift files provided explicitly via CLI will cause the `include`/`exclude` rules specified in `.tailor.yml` to be ignored.
 
 **Note:** *Exclude* is given higher precedence over *Include*.
 

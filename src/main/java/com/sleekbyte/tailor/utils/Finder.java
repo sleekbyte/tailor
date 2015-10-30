@@ -1,27 +1,30 @@
 package com.sleekbyte.tailor.utils;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  * Finds all files that match the specified pattern.
  */
 public final class Finder extends SimpleFileVisitor<Path> {
 
-    private Set<String> includeSet = new HashSet<>();
-    private Set<String> excludeSet = new HashSet<>();
     private Set<String> fileNames = new TreeSet<>();
-    private String base = "";
+    private Set<PathMatcher> includeMatcher;
+    private Set<PathMatcher> excludeMatcher;
+    private URI base;
+    private Map<Path, Boolean> isParentIncluded = new HashMap<>();
 
     /**
      * Finder constructor.
@@ -30,9 +33,15 @@ public final class Finder extends SimpleFileVisitor<Path> {
      * @param excludeSet file paths that should be ignored
      * @param base location of .tailor.yml file
      */
-    public Finder(Set<String> includeSet, Set<String> excludeSet, String base) {
-        this.includeSet = includeSet;
-        this.excludeSet = excludeSet;
+    public Finder(Set<String> includeSet, Set<String> excludeSet, URI base) {
+        this.includeMatcher = includeSet
+            .stream()
+            .map(includePattern -> FileSystems.getDefault().getPathMatcher("glob:" + includePattern))
+            .collect(Collectors.toSet());
+        this.excludeMatcher = excludeSet
+            .stream()
+            .map(excludePattern -> FileSystems.getDefault().getPathMatcher("glob:" + excludePattern))
+            .collect(Collectors.toSet());
         this.base = base;
     }
 
@@ -40,61 +49,40 @@ public final class Finder extends SimpleFileVisitor<Path> {
         return fileNames;
     }
 
-    // Compares the glob pattern against the file or directory name.
-    boolean entityOfInterest(Path file) {
-        // Extract relative path of file
-        Path relative = Paths.get(new File(base).toURI()
-            .relativize(new File(file.toAbsolutePath().toString()).toURI())
-            .getPath());
-
-        if (relative == null) {
-            return false;
-        }
-
-        // If file under inspection is a blacklisted file then return false
-        for (String pattern : excludeSet) {
-            if (FileSystems.getDefault().getPathMatcher("glob:" + pattern).matches(relative)) {
-                return false;
-            }
-        }
-
-        // If file under inspection is a whitelisted swift file then return true
-        for (String pattern : includeSet) {
-            if (FileSystems.getDefault().getPathMatcher("glob:" + pattern).matches(relative)) {
-                return true;
-            }
-        }
-
-        // Traverse through included directory children
-        return Files.isDirectory(file);
-    }
-
     // Invoke the pattern matching method on each file.
     @Override
-    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        // If file cannot be read then throw IOException
-        if (!Files.isReadable(file)) {
-            throw new IOException("Cannot read " + file);
+    public FileVisitResult visitFile(Path file, BasicFileAttributes attributes) throws IOException {
+        Path relative = Paths.get(base.relativize(file.toUri()).getPath());
+        if (excludeMatcher.stream().anyMatch(pathMatcher -> pathMatcher.matches(relative))) {
+            return FileVisitResult.CONTINUE;
         }
-
-        // Ensure only Swift files are linted
-        if (entityOfInterest(file) && file.toString().endsWith(".swift")) {
-            fileNames.add(file.toAbsolutePath().toString());
+        if ((isParentIncluded.getOrDefault(file.getParent(), false)
+            || includeMatcher.stream().anyMatch(pathMatcher -> pathMatcher.matches(relative)))
+            && (file.toFile().getCanonicalPath().endsWith(".swift") && file.toFile().canRead())) {
+            fileNames.add(file.toFile().getCanonicalPath());
         }
-
         return FileVisitResult.CONTINUE;
     }
 
     // Invoke the pattern matching method on each directory.
     @Override
-    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
-        // Do not analyze the directory's children if blacklisted.
-        Path dirName = dir.getFileName();
-        if (dirName != null && !entityOfInterest(dir)) {
+    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attributes) {
+        Path relative = Paths.get(base.relativize(dir.toUri()).getPath());
+        if (excludeMatcher.stream().anyMatch(pathMatcher -> pathMatcher.matches(relative))) {
             return FileVisitResult.SKIP_SUBTREE;
-        } else {
+        }
+        if (isParentIncluded.getOrDefault(dir.getParent(), false)
+            || includeMatcher.stream().anyMatch(pathMatcher -> pathMatcher.matches(relative))) {
+            isParentIncluded.put(dir, true);
             return FileVisitResult.CONTINUE;
         }
+        return FileVisitResult.CONTINUE;
+    }
+
+    @Override
+    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+        isParentIncluded.put(dir, false);
+        return super.postVisitDirectory(dir, exc);
     }
 
     @Override
