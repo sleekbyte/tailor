@@ -54,7 +54,7 @@ public final class CommentAnalyzer {
 
     private void checkWhitespaceInSingleLineComments() {
         // Matches single-line comments that start with at least one whitespace or are empty
-        String startingSpaceRegex = "(?s)(^//\\s.*$)|(^//$)"; // (?s) activates Pattern.DOTALL flag
+        String startingSpaceRegex = "(?s)(^///?\\s.*$)|(^///?$)"; // (?s) activates Pattern.DOTALL flag
         singleLineComments.stream()
             .filter(token -> !token.getText().matches(startingSpaceRegex))
             .forEach(token -> startingSpaceWarning(token, Messages.SINGLE_LINE_COMMENT));
@@ -62,7 +62,7 @@ public final class CommentAnalyzer {
 
     private void checkWhitespaceInMultilineComments() {
         // Matches multiline comments that start with at least one whitespace or are empty
-        String startingSpaceRegex = "(?s)(^/\\*\\s.*$)|(^/\\*\\*/$)";
+        String startingSpaceRegex = "(?s)(^/\\*\\*?\\s.*$)|(^/\\*\\*\\*?/$)";
         // Matches multiline comments that end with at least one whitespace character or are empty
         String endSpaceRegex = "(?s)(^.*\\s\\*/\\n?$)|(^/\\*\\*/\\n?$)";
 

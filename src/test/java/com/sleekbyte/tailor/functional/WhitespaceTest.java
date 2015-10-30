@@ -227,6 +227,15 @@ public class WhitespaceTest extends RuleTest {
         start = 623;
         addExpectedArrowMessage(start, 26, Messages.SPACE_BEFORE);
         addExpectedArrowMessage(start + 4, 29, Messages.SPACE_AFTER);
+
+        // Documentation comments
+        start = 643;
+        addExpectedMsg(Rules.COMMENT_WHITESPACE, start, 3, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
+        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 2, 3, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
+        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 4, 3, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
+        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 6, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
+        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 11, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
+        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 16, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
     }
 
     private void addExpectedArrowMessage(int line, int column, String msg) {
