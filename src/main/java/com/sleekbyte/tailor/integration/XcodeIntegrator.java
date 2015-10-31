@@ -33,17 +33,17 @@ public final class XcodeIntegrator {
         return ExitCode.SUCCESS;
     }
 
-    private static String getAbsolutePath(String path) throws IOException {
+    static String getAbsolutePath(String path) throws IOException {
         File file = new File(path);
         if (file.isDirectory()
             && (path.endsWith(".xcodeproj/") || path.endsWith(".xcodeproj"))) {
-            return file.getAbsolutePath();
+            return file.getCanonicalPath();
         } else {
             throw new IOException(path + " is not a valid .xcodeproj");
         }
     }
 
-    private static void integrateTailor(String absolutePath) throws IOException, InterruptedException {
+    static void integrateTailor(String absolutePath) throws IOException, InterruptedException {
         File tempScript = createTempRubyScript(absolutePath);
         ProcessBuilder pb = new ProcessBuilder("ruby", tempScript.toString());
         pb.inheritIO();
@@ -54,7 +54,7 @@ public final class XcodeIntegrator {
         }
     }
 
-    private static File createTempRubyScript(String absolutePath) throws IOException {
+    static File createTempRubyScript(String absolutePath) throws IOException {
         File tempScript = File.createTempFile("xcode_integrate", "rb");
         Writer streamWriter = new OutputStreamWriter(new FileOutputStream(tempScript), Charset.forName("UTF-8"));
         PrintWriter printWriter = new PrintWriter(streamWriter);

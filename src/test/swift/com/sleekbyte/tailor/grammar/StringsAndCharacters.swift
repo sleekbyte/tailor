@@ -74,3 +74,5 @@ for scalar in dogString.unicodeScalars {
     print("\(scalar.value) ", appendNewline: false)
 }
 print("")
+
+private let FAIcons = ["\u{f26e}", "\u{f0426}", "\u{f}", "\u{f0372992}"]

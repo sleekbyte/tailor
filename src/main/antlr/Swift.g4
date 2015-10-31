@@ -465,13 +465,15 @@ attributeName : identifier ;
 attributeArgumentClause : '('  balancedTokens?  ')'  ;
 attributes : attribute+ ;
 // Swift Language Reference does not have ','
-balancedTokens : balancedToken ','? balancedTokens? ;
+balancedTokens : balancedToken balancedTokens? ;
 balancedToken
  : '('  balancedTokens? ')'
  | '[' balancedTokens? ']'
  | '{' balancedTokens? '}'
  | identifier | expression | contextSensitiveKeyword | literal | operator
-// | Any punctuation except ( ,  ')' , '[' , ']' , { , or }
+ // | Any punctuation except ( ,  ')' , '[' , ']' , { , or }
+ // Punctuation is very ambiguous, interpreting punctuation as defined in www.thepunctuationguide.com
+ | ':' | ';' | ',' | '!' | '<' | '>' | '-' | '\'' | '/' | '...' | '"'
  ;
 
 // Expressions
@@ -687,7 +689,7 @@ functionCallExpression
 // are also referenced individually. For example, type signatures use
 // <...>.
 
-operatorHead: '=' | '<' | '>' | '!' | '*' | '&' | '==' | '?' | '-' | '&&' | '||' | OperatorHead;
+operatorHead: '=' | '<' | '>' | '!' | '*' | '&' | '==' | '?' | '-' | '&&' | '||' | '/' | OperatorHead;
 operatorCharacter: operatorHead | OperatorCharacter;
 
 operator: operatorHead operatorCharacter*
@@ -804,9 +806,10 @@ classRequirement: 'class' ;
 // ------ Build Configurations (Macros) -------
 // Used http://apple.co/1M4GNVf as reference
 
-macroDeclaration: '#if' buildConfigurations statements? macroElseIfClause* macroElseClause? '#endif' ;
-macroElseIfClause: '#elseif' buildConfigurations statements? ;
+macroDeclaration: '#if' macroConditional statements? macroElseIfClause* macroElseClause? '#endif' ;
+macroElseIfClause: '#elseif' macroConditional statements? ;
 macroElseClause: '#else' statements? ;
+macroConditional: buildConfigurations | conditionClause ; // currently unclear exactly what a macro conditional could be
 buildConfigurations: buildConfiguration (('&&' | '||') buildConfigurations)? ;
 buildConfiguration: '!'? macroFunction '(' macroArguments ')' ;
 macroFunction: 'os' | 'arch' ;
@@ -825,9 +828,9 @@ identifier : Identifier | contextSensitiveKeyword ;
 keyword : 'convenience' | 'class' | 'deinit' | 'enum' | 'extension' | 'func' | 'import' | 'init' | 'let' | 'protocol' | 'static' | 'struct' | 'subscript' | 'typealias' | 'var' | 'break' | 'case' | 'continue' | 'default' | 'do' | 'else' | 'fallthrough' | 'if' | 'in' | 'for' | 'return' | 'switch' | 'where' | 'while' | 'as' | 'dynamicType' | 'is' | 'new' | 'super' | 'self' | 'Self' | 'Type' | 'repeat' ;
 
 contextSensitiveKeyword :
- 'associativity' | 'didSet' | 'get' | 'infix' | 'inout' | 'left' | 'mutating' | 'none' |
- 'nonmutating' | 'operator' | 'override' | 'postfix' | 'precedence' | 'prefix' | 'right' |
- 'set' | 'unowned' | 'unowned(safe)' | 'unowned(unsafe)' | 'weak' | 'willSet' | 'required' |
+ 'associativity' | 'convenience' | 'dynamic' | 'didSet' | 'final' | 'get' | 'infix' | 'indirect' |
+ 'lazy' | 'left' | 'mutating' | 'none' | 'nonmutating' | 'optional' | 'operator' | 'override' | 'postfix' | 'precedence' |
+ 'prefix' | 'Protocol' | 'required' | 'right' | 'set' | 'Type' | 'unowned' | 'weak' | 'willSet' |
  'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS' | 'x86_64' |
  'arm' | 'arm64' | 'i386' | 'os' | 'arch'
  ;
@@ -959,8 +962,7 @@ fragment QuotedTextItem : EscapedCharacter
  ;
 EscapedCharacter : '\\' [0\\(tnr"']
  | '\\x' HexadecimalDigit HexadecimalDigit
- | '\\u' HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit
- | '\\U' HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit
+ | '\\u' '{' HexadecimalDigit HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? '}'
 ;
 
 WS : [ \n\r\t\u000B\u000C\u0000] -> channel(HIDDEN) ;

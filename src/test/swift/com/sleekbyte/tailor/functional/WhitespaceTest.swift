@@ -628,3 +628,35 @@ struct TimesTable {
         return multiplier * index
     }
 }
+
+/// Valid single line documentation comment.
+
+/**
+    Valid multiline documentation comment.
+*/
+
+/** Valid
+multi-line documentation
+comment
+*/
+
+///Invalid single line documentation comment.
+
+////Invalid single line documentation comment.
+
+//// Invalid single line documentation comment.
+
+/**Invalid
+multi-line documentation
+comment
+*/
+
+/***Invalid
+multi-line documentation
+comment
+*/
+
+/*** Invalid
+multi-line documentation
+comment
+*/

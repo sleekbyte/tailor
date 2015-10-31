@@ -4,8 +4,10 @@ import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftLexer;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.ColorSettings;
+import com.sleekbyte.tailor.common.Configuration;
 import com.sleekbyte.tailor.common.ExitCode;
 import com.sleekbyte.tailor.common.MaxLengths;
+import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.integration.XcodeIntegrator;
@@ -24,23 +26,29 @@ import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ArgumentParser;
 import com.sleekbyte.tailor.utils.ArgumentParserException;
 import com.sleekbyte.tailor.utils.CommentExtractor;
+import com.sleekbyte.tailor.utils.ConfigurationFileManager;
+import com.sleekbyte.tailor.utils.Finder;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
+import org.yaml.snakeyaml.error.YAMLException;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -50,15 +58,15 @@ import java.util.stream.Collectors;
  */
 public class Tailor {
 
-    public static final String VERSION = "0.1.0";
+    public static final String VERSION = "0.2.0";
     private static ArgumentParser argumentParser = new ArgumentParser();
     private static List<String> pathNames;
 
     /**
      * Prints error indicating no source file was provided, and exits.
      */
-    public static void exitWithMissingSourceFileError() {
-        System.err.println("Swift source file must be provided.");
+    public static void exitWithNoSourceFilesError() {
+        System.err.println("No Swift source files were found.");
         argumentParser.printHelp();
         System.exit(ExitCode.FAILURE);
     }
@@ -67,12 +75,12 @@ public class Tailor {
      * Checks environment variable SRCROOT (set by Xcode) for the top-level path to the source code and adds path to
      * pathNames.
      */
-    public static void checkSrcRoot() {
+    public static Optional<String> getSrcRoot() {
         String srcRoot = System.getenv("SRCROOT");
         if (srcRoot == null || srcRoot.equals("")) {
-            exitWithMissingSourceFileError();
+            return Optional.empty();
         }
-        pathNames.add(srcRoot);
+        return Optional.of(srcRoot);
     }
 
     /**
@@ -81,8 +89,37 @@ public class Tailor {
      * @return Swift file names
      * @throws IOException if path specified does not exist
      */
-    public static Set<String> getSwiftSourceFiles() throws IOException {
-        Set<String> filenames = new TreeSet<>();
+    public static Set<String> getSwiftSourceFiles(String[] cliPaths) throws IOException {
+        if (cliPaths.length >= 1) {
+            pathNames.addAll(Arrays.asList(cliPaths));
+        }
+        Set<String> fileNames = new TreeSet<>();
+
+        Optional<Configuration> optionalConfig =
+            ConfigurationFileManager.getConfiguration(argumentParser.getConfigFilePath());
+        Optional<String> srcRoot = getSrcRoot();
+        if (pathNames.size() >= 1) {
+            fileNames.addAll(findFilesInPaths());
+        } else if (optionalConfig.isPresent()) {
+            Configuration config = optionalConfig.get();
+            Optional<String> configFileLocation = config.getFileLocation();
+            if (configFileLocation.isPresent()) {
+                System.out.println(Messages.TAILOR_CONFIG_LOCATION + configFileLocation.get());
+            }
+            URI rootUri = new File(srcRoot.orElse(".")).toURI();
+            Finder finder = new Finder(config.getInclude(), config.getExclude(), rootUri);
+            Files.walkFileTree(Paths.get(rootUri), finder);
+            fileNames.addAll(finder.getFileNames().stream().collect(Collectors.toList()));
+        } else if (srcRoot.isPresent()) {
+            pathNames.add(srcRoot.get());
+            fileNames.addAll(findFilesInPaths());
+        }
+
+        return fileNames;
+    }
+
+    private static Set<String> findFilesInPaths() throws IOException {
+        Set<String> fileNames = new HashSet<>();
         for (String pathName : pathNames) {
             File file = new File(pathName);
             if (file.isDirectory()) {
@@ -92,14 +129,12 @@ public class Tailor {
                             File tempFile = path.toFile();
                             return tempFile.isFile() && tempFile.canRead();
                         })
-                    .forEach(path -> filenames.add(path.toString()));
+                    .forEach(path -> fileNames.add(path.toString()));
             } else if (file.isFile() && pathName.endsWith(".swift") && file.canRead()) {
-                filenames.add(pathName);
-            } else {
-                throw new IOException("Cannot read " + pathName);
+                fileNames.add(pathName);
             }
         }
-        return filenames;
+        return fileNames;
     }
 
     private static String pluralize(long number, String singular, String plural) {
@@ -207,11 +242,11 @@ public class Tailor {
     /**
      * Analyze files with SwiftLexer, SwiftParser and Listeners.
      *
-     * @param filenames List of files to analyze
+     * @param fileNames List of files to analyze
      * @throws ArgumentParserException if an error occurs when parsing cmd line arguments
      * @throws IOException if a file cannot be opened
      */
-    public static void analyzeFiles(Set<String> filenames) throws ArgumentParserException, IOException {
+    public static void analyzeFiles(Set<String> fileNames) throws ArgumentParserException, IOException {
         long numErrors = 0;
         long numSkippedFiles = 0;
         long numWarnings = 0;
@@ -221,8 +256,8 @@ public class Tailor {
             new ColorSettings(argumentParser.shouldColorOutput(), argumentParser.shouldInvertColorOutput());
         Set<Rules> enabledRules = argumentParser.getEnabledRules();
 
-        for (String filename : filenames) {
-            File inputFile = new File(filename);
+        for (String fileName : fileNames) {
+            File inputFile = new File(fileName);
             CommonTokenStream tokenStream;
             SwiftParser.TopLevelContext tree;
 
@@ -259,7 +294,7 @@ public class Tailor {
             }
         }
 
-        printSummary(filenames.size(), numSkippedFiles, numErrors, numWarnings);
+        printSummary(fileNames.size(), numSkippedFiles, numErrors, numWarnings);
 
         if (numErrors >= 1L) {
             // Non-zero exit status when any violation messages have Severity.ERROR, controlled by --max-severity
@@ -296,25 +331,28 @@ public class Tailor {
             if (xcodeprojPath != null) {
                 System.exit(XcodeIntegrator.setupXcode(xcodeprojPath));
             }
-            if (cmd.getArgs().length >= 1) {
-                pathNames.addAll(Arrays.asList(cmd.getArgs()));
-            }
-            if (pathNames.size() == 0) {
-                checkSrcRoot();
-            }
-            Set<String> filenames = getSwiftSourceFiles();
-            if (filenames.size() == 0) {
-                exitWithMissingSourceFileError();
+            Set<String> fileNames = getSwiftSourceFiles(cmd.getArgs());
+            if (fileNames.size() == 0) {
+                exitWithNoSourceFilesError();
             }
 
-            analyzeFiles(filenames);
+            if (argumentParser.shouldListFiles()) {
+                System.out.println(Messages.FILES_TO_BE_ANALYZED);
+                fileNames.forEach(System.out::println);
+                System.exit(ExitCode.SUCCESS);
+            }
 
-        } catch (IOException e) {
-            System.err.println("Source file analysis failed. Reason: " + e.getMessage());
-            System.exit(ExitCode.FAILURE);
+            analyzeFiles(fileNames);
         } catch (ParseException | ArgumentParserException e) {
             System.err.println(e.getMessage());
             argumentParser.printHelp();
+            System.exit(ExitCode.FAILURE);
+        } catch (YAMLException e) {
+            System.err.println("Error parsing .tailor.yml:");
+            System.err.println(e.getMessage());
+            System.exit(ExitCode.FAILURE);
+        } catch (IOException e) {
+            System.err.println("Source file analysis failed. Reason: " + e.getMessage());
             System.exit(ExitCode.FAILURE);
         }
 

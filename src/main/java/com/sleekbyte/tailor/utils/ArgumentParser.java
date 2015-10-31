@@ -13,6 +13,7 @@ import org.apache.commons.cli.ParseException;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -47,6 +48,9 @@ public class ArgumentParser {
     private static final String DEFAULT_INT_ARG = "0";
     private static final String XCODE_INTEGRATION_OPT = "xcode";
     private static final String SHOW_RULES_OPT = "show-rules";
+    private static final String CONFIG_SHORT_OPT = "c";
+    private static final String CONFIG_LONG_OPT = "config";
+    private static final String LIST_FILES_OPT = "list-files";
 
     private Options options;
     private CommandLine cmd;
@@ -79,6 +83,13 @@ public class ArgumentParser {
      */
     public boolean shouldPrintRules() {
         return cmd != null && cmd.hasOption(SHOW_RULES_OPT);
+    }
+
+    /**
+     * Check if "--list-files" option was specified.
+     */
+    public boolean shouldListFiles() {
+        return cmd != null && cmd.hasOption(LIST_FILES_OPT);
     }
 
     /**
@@ -141,6 +152,11 @@ public class ArgumentParser {
         options.addOption(createNoArgOpt(INVERT_COLOR_OPT, Messages.INVERT_COLOR_DESC));
 
         options.addOption(createNoArgOpt(SHOW_RULES_OPT, Messages.SHOW_RULES_DESC));
+
+        argName = "path/to/.tailor.yml";
+        options.addOption(createSingleArgOpt(CONFIG_SHORT_OPT, CONFIG_LONG_OPT, argName, Messages.CONFIG_FILE_DESC));
+
+        options.addOption(createNoArgOpt(LIST_FILES_OPT, Messages.LIST_FILES_DESC));
     }
 
     /**
@@ -251,12 +267,21 @@ public class ArgumentParser {
     }
 
     /*
-     * Retrieve Xcode project path specified for --configuration.
+     * Retrieve Xcode project path specified for --xcode.
      *
      * @return path of Xcode project
      */
     public String getXcodeprojPath() {
         return cmd != null ? cmd.getOptionValue(XCODE_INTEGRATION_OPT) : null;
+    }
+
+    /*
+     * Retrieve .tailor.yml config file path specified for --config.
+     *
+     * @return path of config file
+     */
+    public Optional<String> getConfigFilePath() {
+        return cmd != null ? Optional.ofNullable(cmd.getOptionValue(CONFIG_LONG_OPT)) : Optional.empty();
     }
 
     /**

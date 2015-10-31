@@ -50,11 +50,13 @@ is set by Xcode when run in a Build Phase. Tailor may be set up as an Xcode Buil
 automatically with the --xcode option.
 
 Options:
+ -c,--config=<path/to/.tailor.yml>             specify configuration file
     --debug                                    print ANTLR error messages when parsing error occurs
     --except=<rule1,rule2,...>                 run all rules except the specified ones
  -h,--help                                     display help
     --invert-color                             invert colorized console output
  -l,--max-line-length=<0-999>                  maximum Line length (in characters)
+    --list-files                               display Swift source files to be analyzed
     --max-class-length=<0-999>                 maximum Class length (in lines)
     --max-closure-length=<0-999>               maximum Closure length (in lines)
     --max-file-length=<0-999>                  maximum File length (in lines)
@@ -76,6 +78,7 @@ Options:
 * [Colourized Output](#colourized-output)
 * [Warnings, Errors, and Failing the Build](#warnings-errors-and-failing-the-build)
 * [Disable Violations within Source Code](#disable-violations-within-source-code)
+* [Configuration](#configuration)
 
 ### Cross-Platform
 Tailor may be used on Mac OS X via your shell or integrated with Xcode, as well as on Windows and Linux. Great news for when the Swift compiler comes to Linux later this year!
@@ -116,6 +119,31 @@ Violations on a specific line may be disabled with a **trailing** single-line co
 import Foundation; // tailor:disable
 ```
 
+### Configuration
+The behavior of Tailor can be customized via the `.tailor.yml` configuration file. It enables you to include/exclude certain files and directories from analysis. You can tell Tailor which configuration file to use by specifying its file path via the `--config` CLI option. By default, Tailor will look for the configuration file in the directory where you will run Tailor from.
+
+The file follows the [YAML 1.1](http://www.yaml.org/spec/1.1/) format.
+
+#### Including/Excluding files
+Tailor checks all files found by a recursive search starting from the directories given as command line arguments. However, it only analyzes Swift files that end in `.swift`. If you would like Tailor to analyze specific files and directories, you will have to add entries for them under `include`. Files and directories can also be ignored through `exclude`.
+
+Here is an example that might be used for an iOS project:
+```YAML
+include:
+    - Source            # Inspect all Swift files under "Source/"
+exclude:
+    - '**Tests.swift'   # Ignore Swift files that end in "Tests"
+    - Carthage          # Ignore Swift files under "Carthage/"
+    - Pods              # Ignore Swift files under "Pods/"
+```
+**Note:** Files and directories are specified relative to the where `Tailor` is run from.
+
+**Note:** Paths to directories or Swift files provided explicitly via CLI will cause the `include`/`exclude` rules specified in `.tailor.yml` to be ignored.
+
+**Note:** *Exclude* is given higher precedence over *Include*.
+
+**Note:** Tailor recognizes the [Java Glob](https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob) syntax.
+
 # Developers
 Please review the [guidelines for contributing](https://github.com/sleekbyte/tailor/blob/master/CONTRIBUTING.md) to this repository.
 
@@ -132,6 +160,8 @@ Please review the [guidelines for contributing](https://github.com/sleekbyte/tai
 | [Apache Commons CLI](http://commons.apache.org/proper/commons-cli/) | [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0) |
 | [Jansi](https://github.com/fusesource/jansi) | [Apache License, Version 2.0](https://github.com/fusesource/jansi/blob/master/license.txt) |
 | [Xcodeproj](https://github.com/CocoaPods/Xcodeproj) | [MIT](https://github.com/CocoaPods/Xcodeproj/blob/master/LICENSE) |
+| [SnakeYAML](https://bitbucket.org/asomov/snakeyaml) | [Apache License, Version 2.0](https://bitbucket.org/asomov/snakeyaml/raw/8939e0aa430d25b3b49b353508b23e072dd02171/LICENSE.txt) |
+
 
 ### Development Only
 | Tool  | License |
