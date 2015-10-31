@@ -94,6 +94,7 @@ public class Tailor {
 
         Optional<Configuration> optionalConfig =
             ConfigurationFileManager.getConfiguration(argumentParser.getConfigFilePath());
+        Optional<String> srcRoot = getSrcRoot();
         if (pathNames.size() >= 1) {
             fileNames.addAll(findFilesInPaths());
         } else if (optionalConfig.isPresent()) {
@@ -102,11 +103,13 @@ public class Tailor {
             if (configFileLocation.isPresent()) {
                 System.out.println(Messages.TAILOR_CONFIG_LOCATION + configFileLocation.get());
             }
-            Optional<String> srcRoot = getSrcRoot();
             URI rootUri = new File(srcRoot.orElse(".")).toURI();
             Finder finder = new Finder(config.getInclude(), config.getExclude(), rootUri);
             Files.walkFileTree(Paths.get(rootUri), finder);
             fileNames.addAll(finder.getFileNames().stream().collect(Collectors.toList()));
+        } else if (srcRoot.isPresent()) {
+            pathNames.add(srcRoot.get());
+            fileNames.addAll(findFilesInPaths());
         }
 
         return fileNames;
