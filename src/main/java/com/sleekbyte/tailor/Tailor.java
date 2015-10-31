@@ -55,7 +55,7 @@ import java.util.stream.Collectors;
  */
 public class Tailor {
 
-    public static final String VERSION = "0.1.0";
+    public static final String VERSION = "0.2.0";
     private static ArgumentParser argumentParser = new ArgumentParser();
     private static List<String> pathNames;
 
