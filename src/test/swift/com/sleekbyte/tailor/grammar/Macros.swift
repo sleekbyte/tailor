@@ -74,3 +74,11 @@ self.totalBytes = {
 #else
   let bytesPerPixel: CGFloat = 3.0
 #endif
+
+public var isRunningOnDevice: Bool = {
+	#if TARGET_IPHONE_SIMULATOR
+		return false
+	#else
+		return true
+	#endif
+}()
