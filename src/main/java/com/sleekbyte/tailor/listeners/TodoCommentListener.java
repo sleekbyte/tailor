@@ -27,17 +27,11 @@ public final class TodoCommentListener extends CommentAnalyzer {
     @Override
     public void analyze() {
         checkTodoSyntaxInSingleLineComments();
-        checkTodoSyntaxInMultiLineComments();
     }
 
     private void checkTodoSyntaxInSingleLineComments() {
         String todoRegex = "(?s)// TODO(?:\\(\\S+\\))?: \\S.*";
         filterTodoSyntax(todoRegex, singleLineComments);
-    }
-
-    private void checkTodoSyntaxInMultiLineComments() {
-        String todoRegex = "(?s)/\\*\\s+TODO(?:\\(\\S+\\))?: \\S.*\\s+\\*/";
-        filterTodoSyntax(todoRegex, multilineComments);
     }
 
     private void filterTodoSyntax(String todoRegex, List<Token> comments) {
