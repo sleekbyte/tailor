@@ -83,11 +83,11 @@ public class Printer implements AutoCloseable {
         this.msgBuffer.put(violationMessage.toString(), violationMessage);
     }
 
-    static String getHeader(File inputFile, ColorSettings colorSettings) {
+    static String getHeader(File inputFile, ColorSettings colorSettings) throws IOException {
         if (colorSettings.colorOutput) {
             String textColor = colorSettings.invertColor ? "white" : "black";
             return String.format("%n@|bg_blue," + textColor + " **********|@ @|bg_green," + textColor
-                    + " %s|@ @|bg_blue," + textColor + " **********|@", inputFile.toString());
+                    + " %s|@ @|bg_blue," + textColor + " **********|@", inputFile.getCanonicalPath());
         } else {
             return String.format("%n********** %s **********", inputFile.toString());
         }
@@ -105,7 +105,7 @@ public class Printer implements AutoCloseable {
     }
 
     @Override
-    public void close() {
+    public void close() throws IOException {
         List<ViolationMessage> outputList = new ArrayList<>(this.msgBuffer.values().stream()
             .filter(msg -> !ignoredLineNumbers.contains(msg.getLineNumber())).collect(Collectors.toList()));
         Collections.sort(outputList);
@@ -128,7 +128,7 @@ public class Printer implements AutoCloseable {
     /**
      * Print error message to indicate parse failure.
      */
-    public void printParseErrorMessage() {
+    public void printParseErrorMessage() throws IOException {
         printColoredMessage(getHeader(inputFile, colorSettings));
         System.out.println(inputFile + " could not be parsed successfully, skipping...");
     }

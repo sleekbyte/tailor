@@ -79,6 +79,15 @@ public class PrinterTest {
             outContent.toString(Charset.defaultCharset().name()));
     }
 
+    @Test
+    public void testPrintParseErrorMessageNoColor() throws IOException {
+        printer.printParseErrorMessage();
+        printer.close();
+        String expectedOutput = Printer.getHeader(inputFile, colorSettings) + "\n" + inputFile
+            + " could not be parsed successfully, skipping...\n";
+        assertEquals(expectedOutput, outContent.toString(Charset.defaultCharset().name()));
+    }
+
     private String expectedOutput(Rules rule, Severity severity, String msg, int line, int column) throws IOException {
         return Printer.getHeader(inputFile, colorSettings) + "\n" + Printer.genOutputStringForTest(rule,
             inputFile.getCanonicalPath(), line, column, severity, msg) + "\n";

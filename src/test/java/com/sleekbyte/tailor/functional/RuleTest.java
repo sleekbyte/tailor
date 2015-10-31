@@ -37,7 +37,7 @@ public abstract class RuleTest {
     }
 
     @Before
-    public void setUp() throws UnsupportedEncodingException {
+    public void setUp() throws UnsupportedEncodingException, IOException {
         inputFile = new File(TEST_INPUT_DIR + getInputFilePath());
         expectedMessages = new ArrayList<>();
         outContent = new ByteArrayOutputStream();
