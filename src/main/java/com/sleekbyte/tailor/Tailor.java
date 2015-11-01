@@ -13,7 +13,6 @@ import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.integration.XcodeIntegrator;
 import com.sleekbyte.tailor.listeners.BlankLineListener;
 import com.sleekbyte.tailor.listeners.BraceStyleListener;
-import com.sleekbyte.tailor.listeners.CommentAnalyzer;
 import com.sleekbyte.tailor.listeners.CommentWhitespaceListener;
 import com.sleekbyte.tailor.listeners.ConstantNamingListener;
 import com.sleekbyte.tailor.listeners.DeclarationListener;
@@ -181,11 +180,11 @@ public class Tailor {
                 if (className.equals(FileListener.class.getName())) {
                     continue;
                 } else if (className.equals(CommentWhitespaceListener.class.getName())) {
-                    CommentAnalyzer commentAnalyzer = new CommentWhitespaceListener(printer,
+                    CommentWhitespaceListener commentWhitespaceListener = new CommentWhitespaceListener(printer,
                         commentExtractor.getSingleLineComments(), commentExtractor.getMultilineComments());
-                    commentAnalyzer.analyze();
+                    commentWhitespaceListener.analyze();
                 } else if (className.equals(TodoCommentListener.class.getName())) {
-                    CommentAnalyzer todoCommentListener = new TodoCommentListener(printer,
+                    TodoCommentListener todoCommentListener = new TodoCommentListener(printer,
                         commentExtractor.getSingleLineComments(), commentExtractor.getMultilineComments());
                     todoCommentListener.analyze();
                 } else if (className.equals(BraceStyleListener.class.getName())) {

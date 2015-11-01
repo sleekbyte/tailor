@@ -22,6 +22,10 @@ public class TodoCommentTest extends RuleTest {
         addExpectedMsg(27);
         addExpectedMsg(29);
         addExpectedMsg(31);
+        addExpectedMsg(33);
+        addExpectedMsg(35);
+        addExpectedMsg(37);
+        addExpectedMsg(39);
     }
 
     private void addExpectedMsg(int line) {

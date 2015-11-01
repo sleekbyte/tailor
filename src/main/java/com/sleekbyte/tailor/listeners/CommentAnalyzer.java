@@ -29,5 +29,4 @@ public abstract class CommentAnalyzer {
     }
 
     public abstract void analyze();
-
 }

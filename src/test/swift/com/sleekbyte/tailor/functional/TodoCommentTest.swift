@@ -29,4 +29,12 @@ class SomeClass {
     // TODO(): invalid
 
     /// TODO: documentation comments should not have tasks to be done
+
+    // // TODO: Nested single line comments will get flagged.
+
+    /// // TODO:Nested single line comments will get flagged.
+
+    // comment with // nested internal todo comment will get flagged
+
+    // comment that ends with // TODO: do flag
 }

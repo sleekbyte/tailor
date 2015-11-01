@@ -642,9 +642,9 @@ comment
 
 ///Invalid single line documentation comment.
 
-////Invalid single line documentation comment.
+////nested single line comments will get flagged.
 
-//// Invalid single line documentation comment.
+//// Nested single line comments will get flagged.
 
 /**Invalid
 multi-line documentation
