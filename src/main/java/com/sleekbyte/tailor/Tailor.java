@@ -13,16 +13,18 @@ import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.integration.XcodeIntegrator;
 import com.sleekbyte.tailor.listeners.BlankLineListener;
 import com.sleekbyte.tailor.listeners.BraceStyleListener;
-import com.sleekbyte.tailor.listeners.CommentAnalyzer;
+import com.sleekbyte.tailor.listeners.CommentWhitespaceListener;
 import com.sleekbyte.tailor.listeners.ConstantNamingListener;
 import com.sleekbyte.tailor.listeners.DeclarationListener;
 import com.sleekbyte.tailor.listeners.ErrorListener;
 import com.sleekbyte.tailor.listeners.FileListener;
 import com.sleekbyte.tailor.listeners.KPrefixListener;
 import com.sleekbyte.tailor.listeners.MaxLengthListener;
+import com.sleekbyte.tailor.listeners.TodoCommentListener;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ArgumentParser;
 import com.sleekbyte.tailor.utils.ArgumentParserException;
+import com.sleekbyte.tailor.utils.CommentExtractor;
 import com.sleekbyte.tailor.utils.ConfigurationFileManager;
 import com.sleekbyte.tailor.utils.Finder;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -174,11 +176,17 @@ public class Tailor {
         for (String className : classNames) {
             try {
 
+                CommentExtractor commentExtractor = new CommentExtractor(tokenStream);
                 if (className.equals(FileListener.class.getName())) {
                     continue;
-                } else if (className.equals(CommentAnalyzer.class.getName())) {
-                    CommentAnalyzer commentAnalyzer = new CommentAnalyzer(tokenStream, printer);
-                    commentAnalyzer.analyze();
+                } else if (className.equals(CommentWhitespaceListener.class.getName())) {
+                    CommentWhitespaceListener commentWhitespaceListener = new CommentWhitespaceListener(printer,
+                        commentExtractor.getSingleLineComments(), commentExtractor.getMultilineComments());
+                    commentWhitespaceListener.analyze();
+                } else if (className.equals(TodoCommentListener.class.getName())) {
+                    TodoCommentListener todoCommentListener = new TodoCommentListener(printer,
+                        commentExtractor.getSingleLineComments(), commentExtractor.getMultilineComments());
+                    todoCommentListener.analyze();
                 } else if (className.equals(BraceStyleListener.class.getName())) {
                     listeners.add(new BraceStyleListener(printer, tokenStream));
                 } else if (className.equals(BlankLineListener.class.getName())) {
