@@ -13,19 +13,25 @@ Tailor supports Swift 2 out of the box and helps enforce style guidelines outlin
 ## Installation
 
 Requires Java (JRE or JDK) Version 8 or above: [Java SE Downloads](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+#### Homebrew
 
-Mac OS X (10.10+), Linux (Ubuntu, etc.)
+```bash
+brew install tailor
+```
+
+#### Mac OS X (10.10+), Linux (Ubuntu, etc.)
 
 ```bash
 curl -fsSL http://tailor.sh/install.sh | sh
 ```
 
-Windows (10+)
+#### Windows (10+)
 
 ```powershell
 iex (new-object net.webclient).downloadstring('http://tailor.sh/install.ps1')
 ```
 
+#### Manually
 You may also download Tailor via [GitHub Releases](https://github.com/sleekbyte/tailor/releases), then unzip, and symlink the `tailor/bin/tailor` shell script to a location in your `$PATH`.
 
 ## Usage
