@@ -51,6 +51,11 @@ public class UpperCamelCaseListener extends SwiftBaseListener {
         verifyUpperCamelCase(Messages.ENUM_CASE + Messages.NAMES, ctx.enumCaseName());
     }
 
+    @Override
+    public void enterGenericParameter(SwiftParser.GenericParameterContext ctx) {
+        verifyUpperCamelCase(Messages.GENERIC_PARAMETERS + Messages.NAMES, ctx.typeName());
+    }
+
     private void verifyUpperCamelCase(String constructType, ParserRuleContext ctx) {
         String constructName = ctx.getText();
         if (!CharFormatUtil.isUpperCamelCase(constructName)) {

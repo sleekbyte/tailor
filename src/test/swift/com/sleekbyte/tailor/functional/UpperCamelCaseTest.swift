@@ -112,3 +112,27 @@ enum SomeEnum: Int {
         }
     }
 }
+
+class Dictionary<Key, Value> {
+}
+
+class Dictionary<key, v4lue> {
+}
+
+func swapTwoValues<T>(inout a: T, inout _ b: T) {
+    let temporaryA = a
+    a = b
+    b = temporaryA
+}
+
+func swapTwoValues<type>(inout a: type, inout _ b: type) {
+    let temporaryA = a
+    a = b
+    b = temporaryA
+}
+
+struct Stack<Element>: Container {
+}
+
+struct Stack<El_ement>: Container {
+}
