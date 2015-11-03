@@ -33,6 +33,10 @@ public class UpperCamelCaseTest extends RuleTest {
         addExpectedMsg(94, 10, Severity.WARNING, Messages.PROTOCOL + Messages.NAMES);
         addExpectedMsg(98, 10, Severity.WARNING, Messages.PROTOCOL + Messages.NAMES);
         addExpectedMsg(107, 10, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
+        addExpectedMsg(119, 18, Severity.WARNING, Messages.GENERIC_PARAMETERS + Messages.NAMES);
+        addExpectedMsg(119, 23, Severity.WARNING, Messages.GENERIC_PARAMETERS + Messages.NAMES);
+        addExpectedMsg(128, 20, Severity.WARNING, Messages.GENERIC_PARAMETERS + Messages.NAMES);
+        addExpectedMsg(137, 14, Severity.WARNING, Messages.GENERIC_PARAMETERS + Messages.NAMES);
     }
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg) {
