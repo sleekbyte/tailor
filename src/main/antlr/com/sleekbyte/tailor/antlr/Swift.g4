@@ -31,6 +31,10 @@
  */
 grammar Swift;
 
+@header {
+package com.sleekbyte.tailor.antlr;
+}
+
 topLevel : (statement | expression)* EOF ;
 
 // Statements

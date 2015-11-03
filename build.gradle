@@ -58,8 +58,7 @@ compileGenJava.dependsOn 'generateGrammarSource'
 apply plugin: 'antlr'
 
 generateGrammarSource {
-    arguments += ['-package', 'com.sleekbyte.tailor.antlr']
-    outputDirectory = file('src/gen/java/com/sleekbyte/tailor/antlr')
+    outputDirectory = file('src/gen/java')
 }
 // }}}
 
