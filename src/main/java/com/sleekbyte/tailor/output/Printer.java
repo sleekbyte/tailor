@@ -134,7 +134,9 @@ public class Printer implements AutoCloseable {
     }
 
     private long getNumMessagesWithSeverity(Severity severity) {
-        return msgBuffer.values().stream().filter(msg -> msg.getSeverity().equals(severity)).count();
+        return msgBuffer.values().stream()
+            .filter(msg -> !ignoredLineNumbers.contains(msg.getLineNumber()))
+            .filter(msg -> msg.getSeverity().equals(severity)).count();
     }
 
     public long getNumErrorMessages() {
