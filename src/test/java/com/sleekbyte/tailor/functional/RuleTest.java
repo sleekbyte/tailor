@@ -1,6 +1,7 @@
 package com.sleekbyte.tailor.functional;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.sleekbyte.tailor.Tailor;
 import org.junit.After;
@@ -60,7 +61,7 @@ public abstract class RuleTest {
         List<String> actualOutput = new ArrayList<>();
 
         String[] msgs = outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
-
+        String summary = msgs[msgs.length - 1];
         // Skip first two lines for file header, last two lines for summary
         msgs = Arrays.copyOfRange(msgs, 2, msgs.length - 2);
 
@@ -69,6 +70,8 @@ public abstract class RuleTest {
             actualOutput.add(truncatedMsg);
         }
 
+        // Ensure number of warnings in summary equals actual number of warnings in the output
+        assertTrue(summary.contains(expectedMessages.size() + " violation"));
         assertArrayEquals(outContent.toString(Charset.defaultCharset().name()), this.expectedMessages.toArray(),
             actualOutput.toArray());
     }
