@@ -1,6 +1,5 @@
 name: Tailor
 description: Static analyzer for Swift
-domain_name: "http://tailor.sh"
 github_url: "https://github.com/sleekbyte/tailor"
 
 baseurl: "/"
