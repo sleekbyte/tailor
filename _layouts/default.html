@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
   {% include head.html %}
-  <body onload="mixpanel.track('Page View', {'Page Name': '{{ page.pagename }}', 'URL': window.location.href});"
-  <body>
+  <body onload="mixpanel.track('Page View', {'Page Name': '{{ page.pagename }}', 'URL': window.location.href});">
     {% include navbar.html %}
     {{ content }}
     {% include footer.html %}
+    {% include script.html %}
   </body>
 </html>
