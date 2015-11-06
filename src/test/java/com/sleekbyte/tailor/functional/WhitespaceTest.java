@@ -236,6 +236,18 @@ public class WhitespaceTest extends RuleTest {
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 6, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 11, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 16, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
+
+        // Type inheritance commas
+        start = 672;
+        addExpectedCommaMessage(start, 24, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 4, 23, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 8, 23, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 16, 33, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 29, 22, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 37, 17, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 42, 27, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 46, 22, Messages.NO_SPACE_BEFORE);
+
     }
 
     private void addExpectedArrowMessage(int line, int column, String msg) {
@@ -248,6 +260,10 @@ public class WhitespaceTest extends RuleTest {
 
     private void addExpectedColonMessage(int line, int column, String msg) {
         addExpectedMsg(Rules.WHITESPACE, line, column, Messages.COLON + Messages.AT_COLUMN + column + " " + msg);
+    }
+
+    private void addExpectedCommaMessage(int line, int column, String msg) {
+        addExpectedMsg(Rules.WHITESPACE, line, column, Messages.COMMA + Messages.AT_COLUMN + column + " " + msg);
     }
 
     private void addExpectedMsg(Rules rule, int line, int column, String msg) {

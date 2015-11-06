@@ -660,3 +660,61 @@ comment
 multi-line documentation
 comment
 */
+
+class Bicycle: Vehicle {
+    var hasBasket = false
+}
+
+class Bicycle: Vehicle, Commute {
+    var hasBasket = false
+}
+
+class Bicycle: Vehicle , Commute {
+    var hasBasket = false
+}
+
+class Bicycle: Vehicle,Commute {
+    var hasBasket = false
+}
+
+class Bicycle: Vehicle,  Commute {
+    var hasBasket = false
+}
+
+class Bicycle: Vehicle, Commute, Object {
+    var hasBasket = false
+}
+
+class Bicycle: Vehicle, Commute , Object {
+    var hasBasket = false
+}
+
+class Bicycle: Vehicle, Commute,
+               Object {
+    var hasBasket = false
+}
+
+class Bicycle: class {
+    var hasBasket = false
+}
+
+class Bicycle: class , Vehicle {
+    var hasBasket = false
+}
+
+enum Planet: Int {
+    case Mercury = 1, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune
+}
+
+enum Planet: Int,Int {
+    case Mercury = 1, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune
+}
+
+public final class SessionDelegate: NSObject, NSURLSessionDelegate,
+  NSURLSessionTaskDelegate,  NSURLSessionDataDelegate, NSURLSessionDownloadDelegate {
+    var subdelegates: [Int: Request.TaskDelegate] = [:]
+}
+
+struct Whale: Mammal , Fish {
+  var flippers = 2
+}

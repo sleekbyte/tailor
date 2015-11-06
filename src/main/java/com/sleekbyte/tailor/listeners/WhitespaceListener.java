@@ -54,6 +54,7 @@ public class WhitespaceListener extends SwiftBaseListener {
     @Override
     public void enterTypeInheritanceClause(SwiftParser.TypeInheritanceClauseContext ctx) {
         checkWhitespaceAroundColon(ctx);
+        checkWhitespaceAroundCommas(ctx);
     }
 
     @Override
@@ -85,6 +86,7 @@ public class WhitespaceListener extends SwiftBaseListener {
     public void enterSubscriptResult(SwiftParser.SubscriptResultContext ctx) {
         checkWhitespaceAroundArrow(ctx);
     }
+
 
     private void checkWhitespaceAroundOperator(SwiftParser.OperatorDeclarationContext ctx) {
         for (int i = 0; i < ctx.getChild(0).getChildCount(); i++) {
@@ -193,6 +195,27 @@ public class WhitespaceListener extends SwiftBaseListener {
         }
     }
 
+    private void checkWhitespaceAroundCommas(SwiftParser.TypeInheritanceClauseContext ctx) {
+        if (ctx.classRequirement() != null && ctx.typeInheritanceList() != null) {
+            Token left = ParseTreeUtil.getStopTokenForNode(ctx.classRequirement());
+            Token right = ParseTreeUtil.getStartTokenForNode(ctx.typeInheritanceList());
+            Token comma = ((TerminalNodeImpl) ctx.getChild(2)).getSymbol();
+
+            verifyCommaLeftAssociation(left, right, comma);
+        }
+
+        if (ctx.typeInheritanceList() != null) {
+            SwiftParser.TypeInheritanceListContext inheritanceList = ctx.typeInheritanceList();
+            for (int i = 0; i < inheritanceList.children.size() - 2; i += 2) {
+                Token left = ParseTreeUtil.getStopTokenForNode(inheritanceList.typeIdentifier(i/2));
+                Token right = ParseTreeUtil.getStartTokenForNode(inheritanceList.typeIdentifier(i / 2 + 1));
+                Token comma = ((TerminalNodeImpl) inheritanceList.getChild(i+1)).getSymbol();
+
+                verifyCommaLeftAssociation(left, right, comma);
+            }
+        }
+    }
+
     private void checkWhitespaceAroundArrow(SwiftParser.FunctionResultContext ctx) {
         checkWhitespaceAroundReturnArrow(ctx);
     }
@@ -230,16 +253,24 @@ public class WhitespaceListener extends SwiftBaseListener {
     }
 
     private void verifyColonLeftAssociation(Token left, Token right, Token colon) {
-        Location colonLocation = ListenerUtil.getTokenLocation(colon);
+        verifyPunctuationLeftAssociation(left, right, colon, Messages.COLON);
+    }
 
-        if (checkLeftSpaces(left, colon, 0)) {
-            printer.error(Rules.WHITESPACE, Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " "
-                    + Messages.NO_SPACE_BEFORE, colonLocation);
+    private void verifyCommaLeftAssociation(Token left, Token right, Token comma) {
+        verifyPunctuationLeftAssociation(left, right, comma, Messages.COMMA);
+    }
+
+    private void verifyPunctuationLeftAssociation(Token left, Token right, Token punc, String puncStr) {
+        Location puncLocation = ListenerUtil.getTokenLocation(punc);
+
+        if (checkLeftSpaces(left, punc, 0)) {
+            printer.error(Rules.WHITESPACE, puncStr + Messages.AT_COLUMN + puncLocation.column + " "
+                + Messages.NO_SPACE_BEFORE, puncLocation);
         }
 
-        if (checkRightSpaces(right, colon, 1)) {
-            printer.error(Rules.WHITESPACE, Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " "
-                    + Messages.SPACE_AFTER, colonLocation);
+        if (checkRightSpaces(right, punc, 1)) {
+            printer.error(Rules.WHITESPACE, puncStr + Messages.AT_COLUMN + puncLocation.column + " "
+                + Messages.SPACE_AFTER, puncLocation);
         }
     }
 
