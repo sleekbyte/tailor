@@ -66,6 +66,7 @@ public class Messages {
     public static final String WILLSET_DIDSET_BLOCK = "WillSet/DidSet block ";
     public static final String TODOS = "TODO comments ";
     public static final String GENERIC_PARAMETERS = "Generic parameters ";
+    public static final String COMMA = "Comma ";
 
     // Plural constructs
     public static final String IMPORTS = "Imports ";

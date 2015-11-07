@@ -54,6 +54,7 @@ public class WhitespaceListener extends SwiftBaseListener {
     @Override
     public void enterTypeInheritanceClause(SwiftParser.TypeInheritanceClauseContext ctx) {
         checkWhitespaceAroundColon(ctx);
+        checkWhitespaceAroundCommas(ctx);
     }
 
     @Override
@@ -84,6 +85,16 @@ public class WhitespaceListener extends SwiftBaseListener {
     @Override
     public void enterSubscriptResult(SwiftParser.SubscriptResultContext ctx) {
         checkWhitespaceAroundArrow(ctx);
+    }
+
+    @Override
+    public void enterGenericParameterList(SwiftParser.GenericParameterListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterRequirementList(SwiftParser.RequirementListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
     }
 
     private void checkWhitespaceAroundOperator(SwiftParser.OperatorDeclarationContext ctx) {
@@ -193,6 +204,30 @@ public class WhitespaceListener extends SwiftBaseListener {
         }
     }
 
+    private void checkWhitespaceAroundCommas(SwiftParser.TypeInheritanceClauseContext ctx) {
+        if (ctx.classRequirement() != null && ctx.typeInheritanceList() != null) {
+            Token left = ParseTreeUtil.getStopTokenForNode(ctx.classRequirement());
+            Token right = ParseTreeUtil.getStartTokenForNode(ctx.typeInheritanceList());
+            Token comma = ((TerminalNodeImpl) ctx.getChild(2)).getSymbol();
+
+            verifyCommaLeftAssociation(left, right, comma);
+        }
+
+        if (ctx.typeInheritanceList() != null) {
+            checkWhitespaceAroundCommaSeparatedList(ctx.typeInheritanceList());
+        }
+    }
+
+    private void checkWhitespaceAroundCommaSeparatedList(ParserRuleContext ctx) {
+        for (int i = 0; i < ctx.children.size() - 2; i += 2) {
+            Token left = ParseTreeUtil.getStopTokenForNode(ctx.getChild(i));
+            Token right = ParseTreeUtil.getStartTokenForNode(ctx.getChild(i + 2));
+            Token comma = ((TerminalNodeImpl) ctx.getChild(i + 1)).getSymbol();
+
+            verifyCommaLeftAssociation(left, right, comma);
+        }
+    }
+
     private void checkWhitespaceAroundArrow(SwiftParser.FunctionResultContext ctx) {
         checkWhitespaceAroundReturnArrow(ctx);
     }
@@ -230,16 +265,24 @@ public class WhitespaceListener extends SwiftBaseListener {
     }
 
     private void verifyColonLeftAssociation(Token left, Token right, Token colon) {
-        Location colonLocation = ListenerUtil.getTokenLocation(colon);
+        verifyPunctuationLeftAssociation(left, right, colon, Messages.COLON);
+    }
 
-        if (checkLeftSpaces(left, colon, 0)) {
-            printer.error(Rules.WHITESPACE, Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " "
-                    + Messages.NO_SPACE_BEFORE, colonLocation);
+    private void verifyCommaLeftAssociation(Token left, Token right, Token comma) {
+        verifyPunctuationLeftAssociation(left, right, comma, Messages.COMMA);
+    }
+
+    private void verifyPunctuationLeftAssociation(Token left, Token right, Token punc, String puncStr) {
+        Location puncLocation = ListenerUtil.getTokenLocation(punc);
+
+        if (checkIfInline(left, punc) || checkLeftSpaces(left, punc, 0)) {
+            printer.error(Rules.WHITESPACE, puncStr + Messages.AT_COLUMN + puncLocation.column + " "
+                + Messages.NO_SPACE_BEFORE, puncLocation);
         }
 
-        if (checkRightSpaces(right, colon, 1)) {
-            printer.error(Rules.WHITESPACE, Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " "
-                    + Messages.SPACE_AFTER, colonLocation);
+        if (checkRightSpaces(right, punc, 1)) {
+            printer.error(Rules.WHITESPACE, puncStr + Messages.AT_COLUMN + puncLocation.column + " "
+                + Messages.SPACE_AFTER, puncLocation);
         }
     }
 
@@ -251,6 +294,10 @@ public class WhitespaceListener extends SwiftBaseListener {
     private boolean checkRightSpaces(Token right, Token op, int numSpaces) {
         return right.getLine() == op.getLine()
             && right.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(op) != numSpaces + 1;
+    }
+
+    private boolean checkIfInline(Token one, Token two) {
+        return one.getLine() != two.getLine();
     }
 
     private void checkWhitespaceAroundReturnArrow(ParserRuleContext ctx) {
