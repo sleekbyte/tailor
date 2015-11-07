@@ -14,6 +14,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class OpeningBraceLineTest extends RuleTest {
 
     @Override
+    protected String[] getCommandArgs() {
+        return new String[]{ "--only=brace-style" };
+    }
+
+    @Override
     protected void addAllExpectedMsgs() {
         addExpectedMsg(2, 1, Severity.WARNING, Messages.CLASS);
         addExpectedMsg(7, 5, Severity.WARNING, Messages.INITIALIZER_BODY);

@@ -275,7 +275,7 @@ public class WhitespaceListener extends SwiftBaseListener {
     private void verifyPunctuationLeftAssociation(Token left, Token right, Token punc, String puncStr) {
         Location puncLocation = ListenerUtil.getTokenLocation(punc);
 
-        if (checkLeftSpaces(left, punc, 0)) {
+        if (checkIfInline(left, punc) || checkLeftSpaces(left, punc, 0)) {
             printer.error(Rules.WHITESPACE, puncStr + Messages.AT_COLUMN + puncLocation.column + " "
                 + Messages.NO_SPACE_BEFORE, puncLocation);
         }
@@ -294,6 +294,10 @@ public class WhitespaceListener extends SwiftBaseListener {
     private boolean checkRightSpaces(Token right, Token op, int numSpaces) {
         return right.getLine() == op.getLine()
             && right.getCharPositionInLine() - ListenerUtil.getLastCharPositionInLine(op) != numSpaces + 1;
+    }
+
+    private boolean checkIfInline(Token one, Token two) {
+        return one.getLine() != two.getLine();
     }
 
     private void checkWhitespaceAroundReturnArrow(ParserRuleContext ctx) {

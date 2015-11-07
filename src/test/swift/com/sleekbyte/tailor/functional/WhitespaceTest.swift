@@ -368,8 +368,8 @@ SomeOtherProtocol: X {
 
 }
 
-protocol SomeOtherProtocol
-: X {
+protocol SomeOtherProtocol:
+X {
 
 }
 
@@ -747,4 +747,14 @@ func allItemsMatch<C1: Container, C2: Container
 }
 
 extension ImageFilter where Self: Sizable ,   Self: Roundable {
+}
+
+func someFunction<T: SomeClass, U: SomeProtocol
+, V: AnotherClass>(someT: T, someU: U) {
+    // function body goes here
+}
+
+func someFunction<T: SomeClass, U: SomeProtocol,
+V: AnotherClass>(someT: T, someU: U) {
+    // function body goes here
 }

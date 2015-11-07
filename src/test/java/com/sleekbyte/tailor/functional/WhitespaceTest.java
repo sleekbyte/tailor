@@ -46,6 +46,7 @@ public class WhitespaceTest extends RuleTest {
         addExpectedColonMessage(start + 3, 26, Messages.NO_SPACE_BEFORE);
         addExpectedColonMessage(start + 4, 19, Messages.SPACE_AFTER);
         addExpectedColonMessage(start + 5, 41, Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start + 6, 1, Messages.NO_SPACE_BEFORE);
 
         // Switch case colons
         start = 66;
@@ -86,7 +87,9 @@ public class WhitespaceTest extends RuleTest {
         addExpectedColonMessage(start + 9, 28, Messages.SPACE_AFTER);
         addExpectedColonMessage(start + 12, 29, Messages.NO_SPACE_BEFORE);
         addExpectedColonMessage(start + 15, 28, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 22, 1, Messages.NO_SPACE_BEFORE);
         addExpectedColonMessage(start + 26, 1, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 26, 1, Messages.NO_SPACE_BEFORE);
 
         // extensions
         start = 183;
@@ -259,6 +262,7 @@ public class WhitespaceTest extends RuleTest {
         addExpectedCommaMessage(start, 37, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 4, 43, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 4, 43, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 8, 1, Messages.NO_SPACE_BEFORE);
     }
 
     private void addExpectedArrowMessage(int line, int column, String msg) {
