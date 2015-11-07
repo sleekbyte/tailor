@@ -4,22 +4,28 @@
 [![Code Coverage](https://img.shields.io/codecov/c/github/sleekbyte/tailor/master.svg)](https://codecov.io/github/sleekbyte/tailor)
 
 # [Tailor](https://tailor.sh). Static analyzer for [Swift](https://developer.apple.com/swift/).
-Tailor supports Swift 2 out of the box and helps enforce style guidelines outlined in the [The Swift Programming Language](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/), [GitHub](https://github.com/github/swift-style-guide), [Ray Wenderlich](https://github.com/raywenderlich/swift-style-guide), [Jamie Forrest](https://github.com/jamieforrest/swift-style-guide), and [Coursera](https://github.com/coursera/swift-style-guide) style guides. It supports cross-platform usage and can be run on Windows and Linux.
+Tailor supports Swift 2 out of the box and helps enforce style guidelines outlined in the [The Swift Programming Language](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/), [GitHub](https://github.com/github/swift-style-guide), [Ray Wenderlich](https://github.com/raywenderlich/swift-style-guide), [Jamie Forrest](https://github.com/jamieforrest/swift-style-guide), and [Coursera](https://github.com/coursera/swift-style-guide) style guides. It supports cross-platform usage and can be run on Mac OS X via your shell or integrated with Xcode, as well as on Linux and Windows.
 
-**See the [wiki](https://github.com/sleekbyte/tailor/wiki) for full documentation.**
+Tailor parses Swift source code using the primary Java target of [ANTLR](http://www.antlr.org):
+
+> ANTLR is a powerful parser generator [ . . . ] widely used in academia and industry to build all sorts of languages, tools, and frameworks.
+
+— [About the ANTLR Parser Generator](http://www.antlr.org/about.html)
+
+**See the [wiki](https://github.com/sleekbyte/tailor/wiki) for the full documentation.**
 
 # Getting Started
 
 ## Installation
 
 Requires Java (JRE or JDK) Version 8 or above: [Java SE Downloads](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
-#### Homebrew
+#### [Homebrew](http://brew.sh)
 
 ```bash
 brew install tailor
 ```
 
-#### Mac OS X (10.10+), Linux (Ubuntu, etc.)
+#### Mac OS X (10.10+), Linux
 
 ```bash
 curl -fsSL https://tailor.sh/install.sh | sh
@@ -32,7 +38,28 @@ iex (new-object net.webclient).downloadstring('https://tailor.sh/install.ps1')
 ```
 
 #### Manually
-You may also download Tailor via [GitHub Releases](https://github.com/sleekbyte/tailor/releases), then unzip, and symlink the `tailor/bin/tailor` shell script to a location in your `$PATH`.
+You may also download Tailor via [GitHub Releases](https://github.com/sleekbyte/tailor/releases), extract the archive, and symlink the `tailor/bin/tailor` shell script to a location in your `$PATH`.
+
+#### Continuous Integration
+
+If your continuous integration server supports [Homebrew](http://brew.sh) installation, you may use the following snippet:
+
+```yaml
+before_install:
+  - brew update
+  - brew install tailor
+```
+
+In other cases, use this snippet:
+
+Replace `${TAILOR_RELEASE_ARCHIVE}` with the URL of the release you would like to install, e.g. `https://github.com/sleekbyte/tailor/releases/download/v0.1.0/tailor.tar`.
+
+```yaml
+before_script:
+  - wget ${TAILOR_RELEASE_ARCHIVE} -O /tmp/tailor.tar
+  - tar -xvf /tmp/tailor.tar
+  - export PATH=$PATH:$PWD/tailor/bin/
+```
 
 ## Usage
 
@@ -78,22 +105,38 @@ Options:
 ```
 
 # Features
-* [Rules](https://github.com/sleekbyte/tailor/wiki/Rules)
+* [Rules](#rules)
 * [Cross-Platform](#cross-platform)
 * [Automatic Xcode Integration](#automatic-xcode-integration)
-* [Colourized Output](#colourized-output)
+* [Colorized Output](#colorized-output)
 * [Warnings, Errors, and Failing the Build](#warnings-errors-and-failing-the-build)
 * [Disable Violations within Source Code](#disable-violations-within-source-code)
 * [Configuration](#configuration)
 
-### Cross-Platform
-Tailor may be used on Mac OS X via your shell or integrated with Xcode, as well as on Windows and Linux. Great news for when the Swift compiler comes to Linux later this year!
+### Rules
 
-#### Windows
-<img width="918" alt="windows" src="https://cloud.githubusercontent.com/assets/1791760/9913016/2ff0e9a8-5cc8-11e5-8722-d5a6f9d84027.PNG">
+**Rule identifiers and "preferred/not preferred" code samples may be found on the [Rules](https://github.com/sleekbyte/tailor/wiki/Rules) page.**
+
+Rules may be individually disabled (blacklist) or enabled (whitelist) via the `--except` and `--only` command-line flags.
+
+#### Except
+```bash
+tailor --except=brace-style,trailing-whitespace main.swift
+```
+
+#### Only
+```bash
+tailor --only=redundant-parentheses,terminating-semicolon main.swift
+```
+
+### Cross-Platform
+Tailor may be used on Mac OS X via your shell or integrated with Xcode, as well as on Linux and Windows. Great news for when the Swift compiler comes to Linux later this year!
 
 #### Linux
 ![Tailor on Ubuntu](https://cloud.githubusercontent.com/assets/1350704/9894130/2b959794-5bee-11e5-9ed2-84d035895239.png)
+
+#### Windows
+![Tailor on Windows](https://cloud.githubusercontent.com/assets/1791760/9913016/2ff0e9a8-5cc8-11e5-8722-d5a6f9d84027.PNG)
 
 ### Automatic Xcode Integration
 Tailor can be integrated with Xcode projects using the `--xcode` option.
@@ -101,18 +144,21 @@ Tailor can be integrated with Xcode projects using the `--xcode` option.
 tailor --xcode /path/to/demo.xcodeproj/
 ```
 This adds the following Build Phase Run Script to your project's default target.
-![run-script](https://cloud.githubusercontent.com/assets/1791760/9933657/f7f29216-5d69-11e5-90f6-705a76473cb7.png)
+![Run Script](https://cloud.githubusercontent.com/assets/1791760/9933657/f7f29216-5d69-11e5-90f6-705a76473cb7.png)
+
+Tailor's output will be displayed inline within the Xcode Editor Area and as a list in the Log Navigator.
+![Xcode messages](https://cloud.githubusercontent.com/assets/1350704/11017260/b79cb162-8599-11e5-94fa-e7cf77fdc657.png)
 
 
-### Colourized Output
-Tailor uses the following colour schemes to format CLI output:
+### Colorized Output
+Tailor uses the following color schemes to format CLI output:
 
 * **Dark theme** (enabled by default)
-<img width="962" alt="dark-color" src="https://cloud.githubusercontent.com/assets/1791760/9807444/fde82de6-5870-11e5-9e20-05a9d736e136.png">
+![Dark theme](https://cloud.githubusercontent.com/assets/1791760/9807444/fde82de6-5870-11e5-9e20-05a9d736e136.png)
 * **Light theme** (enabled via `--invert-color` option)
-<img width="962" alt="light-color" src="https://cloud.githubusercontent.com/assets/1791760/9807312/129ce45e-586f-11e5-8e26-fe818af0ec09.png">
-* **No colour theme** (enabled via `--no-color` option)
-<img width="962" alt="no-color" src="https://cloud.githubusercontent.com/assets/1791760/9807318/261811d4-586f-11e5-9010-0e627431bbb9.png">
+![Light theme](https://cloud.githubusercontent.com/assets/1791760/9807312/129ce45e-586f-11e5-8e26-fe818af0ec09.png)
+* **No color theme** (enabled via `--no-color` option)
+![No color](https://cloud.githubusercontent.com/assets/1791760/9807318/261811d4-586f-11e5-9010-0e627431bbb9.png)
 
 ### Warnings, Errors, and Failing the Build
 `--max-severity` can be used to control the maximum severity of violation messages. It can be set to `error` or `warning` (by default, it is set to `warning`). Setting it to `error` allows you to distinguish between lower and higher priority messages. It also fails the build in Xcode, if any errors are reported (similar to how a compiler error fails the build in Xcode). With `max-severity` set to `warning`, all violation messages are warnings and the Xcode build will never fail.
@@ -139,16 +185,15 @@ include:
     - Source            # Inspect all Swift files under "Source/"
 exclude:
     - '**Tests.swift'   # Ignore Swift files that end in "Tests"
-    - Carthage          # Ignore Swift files under "Carthage/"
-    - Pods              # Ignore Swift files under "Pods/"
+    - Source/Carthage   # Ignore Swift files under "Source/Carthage/"
+    - Source/Pods       # Ignore Swift files under "Source/Pods/"
 ```
-**Note:** Files and directories are specified relative to the where `Tailor` is run from.
 
-**Note:** Paths to directories or Swift files provided explicitly via CLI will cause the `include`/`exclude` rules specified in `.tailor.yml` to be ignored.
-
-**Note:** *Exclude* is given higher precedence over *Include*.
-
-**Note:** Tailor recognizes the [Java Glob](https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob) syntax.
+##### Notes
+* Files and directories are specified relative to where `tailor` is run from
+* Paths to directories or Swift files provided explicitly via CLI will cause the `include`/`exclude` rules specified in `.tailor.yml` to be ignored
+* *Exclude* is given higher precedence than *Include*
+* Tailor recognizes the [Java Glob](https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob) syntax
 
 # Developers
 Please review the [guidelines for contributing](https://github.com/sleekbyte/tailor/blob/master/CONTRIBUTING.md) to this repository.
@@ -167,7 +212,6 @@ Please review the [guidelines for contributing](https://github.com/sleekbyte/tai
 | [Jansi](https://github.com/fusesource/jansi) | [Apache License, Version 2.0](https://github.com/fusesource/jansi/blob/master/license.txt) |
 | [Xcodeproj](https://github.com/CocoaPods/Xcodeproj) | [MIT](https://github.com/CocoaPods/Xcodeproj/blob/master/LICENSE) |
 | [SnakeYAML](https://bitbucket.org/asomov/snakeyaml) | [Apache License, Version 2.0](https://bitbucket.org/asomov/snakeyaml/raw/8939e0aa430d25b3b49b353508b23e072dd02171/LICENSE.txt) |
-
 
 ### Development Only
 | Tool  | License |
