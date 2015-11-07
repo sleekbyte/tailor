@@ -46,6 +46,7 @@ public class WhitespaceTest extends RuleTest {
         addExpectedColonMessage(start + 3, 26, Messages.NO_SPACE_BEFORE);
         addExpectedColonMessage(start + 4, 19, Messages.SPACE_AFTER);
         addExpectedColonMessage(start + 5, 41, Messages.NO_SPACE_BEFORE);
+        addExpectedColonMessage(start + 6, 1, Messages.NO_SPACE_BEFORE);
 
         // Switch case colons
         start = 66;
@@ -86,7 +87,9 @@ public class WhitespaceTest extends RuleTest {
         addExpectedColonMessage(start + 9, 28, Messages.SPACE_AFTER);
         addExpectedColonMessage(start + 12, 29, Messages.NO_SPACE_BEFORE);
         addExpectedColonMessage(start + 15, 28, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 22, 1, Messages.NO_SPACE_BEFORE);
         addExpectedColonMessage(start + 26, 1, Messages.SPACE_AFTER);
+        addExpectedColonMessage(start + 26, 1, Messages.NO_SPACE_BEFORE);
 
         // extensions
         start = 183;
@@ -236,6 +239,30 @@ public class WhitespaceTest extends RuleTest {
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 6, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 11, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 16, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
+
+        // Type inheritance commas
+        start = 672;
+        addExpectedCommaMessage(start, 24, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 4, 23, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 8, 23, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 16, 33, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 29, 22, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 37, 17, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 42, 53, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 46, 22, Messages.NO_SPACE_BEFORE);
+
+        // Generic list commas
+        start = 726;
+        addExpectedCommaMessage(start, 31, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 4, 31, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 8, 32, Messages.NO_SPACE_BEFORE);
+
+        // Requirement list commas
+        start = 745;
+        addExpectedCommaMessage(start, 37, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 4, 43, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 4, 43, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 8, 1, Messages.NO_SPACE_BEFORE);
     }
 
     private void addExpectedArrowMessage(int line, int column, String msg) {
@@ -248,6 +275,10 @@ public class WhitespaceTest extends RuleTest {
 
     private void addExpectedColonMessage(int line, int column, String msg) {
         addExpectedMsg(Rules.WHITESPACE, line, column, Messages.COLON + Messages.AT_COLUMN + column + " " + msg);
+    }
+
+    private void addExpectedCommaMessage(int line, int column, String msg) {
+        addExpectedMsg(Rules.WHITESPACE, line, column, Messages.COMMA + Messages.AT_COLUMN + column + " " + msg);
     }
 
     private void addExpectedMsg(Rules rule, int line, int column, String msg) {

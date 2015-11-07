@@ -184,10 +184,10 @@ platformVersion: VersionLiteral | DecimalLiteral | FloatingPointLiteral ; // TOD
 // GRAMMAR OF A GENERIC PARAMETER CLAUSE
 
 genericParameterClause : '<' genericParameterList requirementClause? '>'  ;
-genericParameterList : genericParameter | genericParameter ',' genericParameterList  ;
+genericParameterList : genericParameter (',' genericParameter)*  ;
 genericParameter : typeName | typeName ':' typeIdentifier | typeName ':' protocolCompositionType  ;
 requirementClause : 'where' requirementList  ;
-requirementList : requirement | requirement ',' requirementList  ;
+requirementList : requirement (',' requirement)*  ;
 requirement : conformanceRequirement | sameTypeRequirement  ;
 conformanceRequirement : typeIdentifier ':' typeIdentifier | typeIdentifier ':' protocolCompositionType  ;
 sameTypeRequirement : typeIdentifier '==' sType  ;
