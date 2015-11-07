@@ -245,9 +245,20 @@ public class WhitespaceTest extends RuleTest {
         addExpectedCommaMessage(start + 16, 33, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 29, 22, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 37, 17, Messages.SPACE_AFTER);
-        addExpectedCommaMessage(start + 42, 27, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 42, 53, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 46, 22, Messages.NO_SPACE_BEFORE);
 
+        // Generic list commas
+        start = 726;
+        addExpectedCommaMessage(start, 31, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 4, 31, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 8, 32, Messages.NO_SPACE_BEFORE);
+
+        // Requirement list commas
+        start = 745;
+        addExpectedCommaMessage(start, 37, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 4, 43, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 4, 43, Messages.NO_SPACE_BEFORE);
     }
 
     private void addExpectedArrowMessage(int line, int column, String msg) {

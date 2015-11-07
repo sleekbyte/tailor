@@ -87,6 +87,15 @@ public class WhitespaceListener extends SwiftBaseListener {
         checkWhitespaceAroundArrow(ctx);
     }
 
+    @Override
+    public void enterGenericParameterList(SwiftParser.GenericParameterListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterRequirementList(SwiftParser.RequirementListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
 
     private void checkWhitespaceAroundOperator(SwiftParser.OperatorDeclarationContext ctx) {
         for (int i = 0; i < ctx.getChild(0).getChildCount(); i++) {
@@ -205,14 +214,17 @@ public class WhitespaceListener extends SwiftBaseListener {
         }
 
         if (ctx.typeInheritanceList() != null) {
-            SwiftParser.TypeInheritanceListContext inheritanceList = ctx.typeInheritanceList();
-            for (int i = 0; i < inheritanceList.children.size() - 2; i += 2) {
-                Token left = ParseTreeUtil.getStopTokenForNode(inheritanceList.typeIdentifier(i/2));
-                Token right = ParseTreeUtil.getStartTokenForNode(inheritanceList.typeIdentifier(i / 2 + 1));
-                Token comma = ((TerminalNodeImpl) inheritanceList.getChild(i+1)).getSymbol();
+            checkWhitespaceAroundCommaSeparatedList(ctx.typeInheritanceList());
+        }
+    }
 
-                verifyCommaLeftAssociation(left, right, comma);
-            }
+    private void checkWhitespaceAroundCommaSeparatedList(ParserRuleContext ctx) {
+        for (int i = 0; i < ctx.children.size() - 2; i += 2) {
+            Token left = ParseTreeUtil.getStopTokenForNode(ctx.getChild(i));
+            Token right = ParseTreeUtil.getStartTokenForNode(ctx.getChild(i + 2));
+            Token comma = ((TerminalNodeImpl) ctx.getChild(i + 1)).getSymbol();
+
+            verifyCommaLeftAssociation(left, right, comma);
         }
     }
 
