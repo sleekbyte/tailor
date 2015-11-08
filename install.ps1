@@ -5,7 +5,7 @@ $erroractionpreference = 'stop' # Quit if anything goes wrong
 ### Variables
 $appdatadir = $env:localappdata.tolower()
 $tailorbindir = "$appdatadir\tailor\bin"
-$zipurl = 'https://github.com/sleekbyte/tailor/releases/download/v0.2.1/tailor.zip'
+$zipurl = 'https://github.com/sleekbyte/tailor/releases/download/v0.2.2/tailor.zip'
 $zipfile = "$env:temp\tailor.zip"
 $javaversion='1.8'
 
