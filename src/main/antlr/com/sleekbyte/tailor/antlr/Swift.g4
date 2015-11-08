@@ -49,6 +49,7 @@ statement
  | controlTransferStatement ';'?
  | deferStatement ';' ?
  | doStatement ':'?
+ | compilerControlStatement ';'?
  | expression ';'?  // Keep expression last to handle ambiguity
  ;
 
@@ -176,7 +177,8 @@ whereExpression: expression ;
 availabilityCondition: '#available' '(' availabilityArguments ')' ;
 availabilityArguments: availabilityArgument (',' availabilityArguments)? ;
 availabilityArgument: platformName platformVersion | '*' ;
-platformName: 'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS' ;
+platformName: 'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension' | 'watchOS'
+ | 'watchOSApplicationExtension' | 'tvOS' | 'tvOSApplicationExtension' ;
 platformVersion: VersionLiteral | DecimalLiteral | FloatingPointLiteral ; // TODO: Find a way to make this only VersionLiteral
 
 // Generic Parameters and Arguments
@@ -217,7 +219,8 @@ declaration
  | extensionDeclaration ';'?
  | subscriptDeclaration ';'?
  | operatorDeclaration ';'?
- | macroDeclaration
+ // compiler-control-statement not in Swift Language Reference
+ | compilerControlStatement ';'?
  ;
 
 declarations : declaration declarations? ;
@@ -285,7 +288,13 @@ typealiasAssignment : '=' sType  ;
 
 // GRAMMAR OF A FUNCTION DECLARATION
 
-functionDeclaration : functionHead functionName genericParameterClause? functionSignature functionBody ;
+/* HACK: functionBody? is intentionally not used to force the parser to try and match a functionBody first
+ * This can be removed once we figure out how to enforce that statements are either separated by semi colons or new line characters
+ */
+functionDeclaration : functionHead functionName genericParameterClause? functionSignature functionBody
+ | functionHead functionName genericParameterClause? functionSignature
+ ;
+
 functionHead : attributes? declarationModifiers? 'func'  ;
 functionName : identifier |  operator  ;
 // rethrows is not marked as optional in the Swift Language Reference
@@ -295,7 +304,8 @@ functionBody : codeBlock  ;
 parameterClauses : parameterClause parameterClauses? ;
 parameterClause : '(' ')' |  '(' parameterList '...'? ')'  ;
 parameterList : parameter | parameter ',' parameterList  ;
-parameter : 'inout'? 'let'? '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?
+// Parameters don't have attributes in the Swift Language Reference
+parameter : attributes? 'inout'? 'let'? '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?
  | 'inout'? 'var' '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?
  | attributes? sType
  ;
@@ -305,18 +315,18 @@ defaultArgumentClause : '=' expression  ;
 
 // GRAMMAR OF AN ENUMERATION DECLARATION
 
-enumDeclaration : attributes? accessLevelModifier? 'enum' enumDef  ;
+enumDeclaration : attributes? accessLevelModifier? enumDef  ;
 enumDef: unionStyleEnum | rawValueStyleEnum  ;
-unionStyleEnum : enumName genericParameterClause? typeInheritanceClause? '{' unionStyleEnumMembers?'}'  ;
+unionStyleEnum : 'indirect'? 'enum' enumName genericParameterClause? typeInheritanceClause? '{' unionStyleEnumMembers?'}'  ;
 unionStyleEnumMembers : unionStyleEnumMember unionStyleEnumMembers? ;
 unionStyleEnumMember : declaration | unionStyleEnumCaseClause ';'? ;
-unionStyleEnumCaseClause : attributes? 'case' unionStyleEnumCaseList  ;
+unionStyleEnumCaseClause : attributes? 'indirect'? 'case' unionStyleEnumCaseList  ;
 unionStyleEnumCaseList : unionStyleEnumCase | unionStyleEnumCase ',' unionStyleEnumCaseList  ;
 unionStyleEnumCase : enumCaseName tupleType? ;
 enumName : identifier  ;
 enumCaseName : identifier  ;
 // typeInheritanceClause is not optional in the Swift Language Reference
-rawValueStyleEnum : enumName genericParameterClause? typeInheritanceClause? '{' rawValueStyleEnumMembers?'}'  ;
+rawValueStyleEnum : 'enum' enumName genericParameterClause? typeInheritanceClause? '{' rawValueStyleEnumMembers?'}'  ;
 rawValueStyleEnumMembers : rawValueStyleEnumMember rawValueStyleEnumMembers? ;
 rawValueStyleEnumMember : declaration | rawValueStyleEnumCaseClause  ;
 rawValueStyleEnumCaseClause : attributes? 'case' rawValueStyleEnumCaseList  ;
@@ -360,7 +370,7 @@ protocolMethodDeclaration : functionHead functionName genericParameterClause? fu
 
 // GRAMMAR OF A PROTOCOL INITIALIZER DECLARATION
 
-protocolInitializerDeclaration : initializerHead genericParameterClause? parameterClause  ;
+protocolInitializerDeclaration : initializerHead genericParameterClause? parameterClause ('throws' | 'rethrows')? ;
 
 // GRAMMAR OF A PROTOCOL SUBSCRIPT DECLARATION
 
@@ -372,7 +382,7 @@ protocolAssociatedTypeDeclaration : typealiasHead typeInheritanceClause? typeali
 
 // GRAMMAR OF AN INITIALIZER DECLARATION
 
-initializerDeclaration : initializerHead genericParameterClause? parameterClause initializerBody  ;
+initializerDeclaration : initializerHead genericParameterClause? parameterClause ('throws' | 'rethrows')? initializerBody  ;
 initializerHead : attributes? declarationModifiers? 'init' ('?' | '!')?  ;
 initializerBody : codeBlock  ;
 
@@ -538,7 +548,7 @@ assignmentOperator : '='  ;
 
 // GRAMMAR OF A CONDITIONAL OPERATOR
 
-conditionalOperator : '?' expression ':' ;
+conditionalOperator : '?' tryOperator? expression ':' ;
 
 // GRAMMAR OF A TYPE_CASTING OPERATOR
 
@@ -584,7 +594,7 @@ dictionaryLiteralItem : expression ':' expression  ;
 selfExpression
  : 'self'
  | 'self' '.' identifier
- | 'self' '[' expression ']'
+ | 'self' '[' expressionList ']'
  | 'self' '.' 'init'
  ;
 
@@ -597,7 +607,7 @@ superclassExpression
   ;
 
 superclassMethodExpression : 'super' '.' identifier  ;
-superclassSubscriptExpression : 'super' '[' expression ']'  ;
+superclassSubscriptExpression : 'super' '[' expressionList ']'  ;
 superclassInitializerExpression : 'super' '.' 'init'  ;
 
 // GRAMMAR OF A CLOSURE EXPRESSION
@@ -612,9 +622,9 @@ closureSignature
  | captureList 'in'
  ;
 
-// The Swift Language Reference only allows one captureSpecifier expression pair
-captureList : '[' captureSpecifier expression (',' captureSpecifier expression)* ']'  ;
-
+captureList : '[' captureListItems ']' ;
+captureListItems: captureListItem (',' captureListItem)? ;
+captureListItem: captureSpecifier? expression ;
 captureSpecifier : 'weak' | 'unowned' | 'unowned(safe)' | 'unowned(unsafe)'  ;
 
 // GRAMMAR OF A IMPLICIT MEMBER EXPRESSION
@@ -808,17 +818,26 @@ typeInheritanceList : typeIdentifier (',' typeIdentifier)* ;
 classRequirement: 'class' ;
 
 // ------ Build Configurations (Macros) -------
-// Used http://apple.co/1M4GNVf as reference
 
-macroDeclaration: '#if' macroConditional statements? macroElseIfClause* macroElseClause? '#endif' ;
-macroElseIfClause: '#elseif' macroConditional statements? ;
-macroElseClause: '#else' statements? ;
-macroConditional: buildConfigurations | conditionClause ; // currently unclear exactly what a macro conditional could be
-buildConfigurations: buildConfiguration (('&&' | '||') buildConfigurations)? ;
-buildConfiguration: '!'? macroFunction '(' macroArguments ')' ;
-macroFunction: 'os' | 'arch' ;
-macroArguments: macroArgument (',' macroArgument)* ;
-macroArgument: 'OSX' | 'iOS' | 'watchOS' | 'x86_64' | 'arm' | 'arm64' | 'i386' ;
+compilerControlStatement: buildConfigurationStatement | lineControlStatement ;
+buildConfigurationStatement: '#if' buildConfiguration statements? buildConfigurationElseIfClauses? buildConfigurationElseClause? '#endif' ;
+buildConfigurationElseIfClauses: buildConfigurationElseIfClause+ ;
+buildConfigurationElseIfClause: '#elseif' buildConfiguration statements? ;
+buildConfigurationElseClause: '#else' statements? ;
+
+buildConfiguration: platformTestingFunction | identifier | booleanLiteral
+ | '(' buildConfiguration ')'
+ | '!' buildConfiguration
+ | buildConfiguration ('&&' | '||') buildConfiguration
+ ;
+
+platformTestingFunction: 'os' '(' operatingSystem ')' | 'arch' '(' architecture ')' ;
+operatingSystem: 'OSX' | 'iOS' | 'watchOS' | 'tvOS' ;
+architecture: 'i386' | 'x86_64' | 'arm' | 'arm64' ;
+
+lineControlStatement: '#line' (lineNumber fileName)? ;
+lineNumber: integerLiteral ;
+fileName: StringLiteral ;
 
 // ---------- Lexical Structure -----------
 
@@ -907,6 +926,7 @@ ImplicitParameterName : '$' DecimalLiteral ; // TODO: don't allow '_' here
 
 // GRAMMAR OF A LITERAL
 
+booleanLiteral: BooleanLiteral ;
 literal : numericLiteral | StringLiteral | BooleanLiteral | NilLiteral ;
 
 // GRAMMAR OF AN INTEGER LITERAL

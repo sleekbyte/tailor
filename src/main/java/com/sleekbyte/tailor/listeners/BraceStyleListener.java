@@ -194,6 +194,9 @@ public class BraceStyleListener extends SwiftBaseListener {
     }
 
     private void verifyFunctionBraceStyle(SwiftParser.FunctionDeclarationContext ctx) {
+        if (ctx.functionBody() == null) {
+            return;
+        }
         verifyCodeBlockOpenBraceStyle(ctx.functionBody().codeBlock(), ctx.functionSignature().getStop(),
             Messages.FUNCTION);
         verifyBodyCloseBraceStyle(ctx.functionBody().codeBlock(), Messages.FUNCTION);
@@ -228,7 +231,7 @@ public class BraceStyleListener extends SwiftBaseListener {
 
     private void verifyEnumBraceStyle(ParserRuleContext ctx) {
         for (ParseTree child : ctx.children) {
-            if (child instanceof TerminalNodeImpl) {
+            if (child instanceof TerminalNodeImpl && child.getText().equals("{")) {
                 Token openBrace = ((TerminalNodeImpl) child).getSymbol();
                 Location openBraceLocation = ListenerUtil.getTokenLocation(openBrace);
                 ParserRuleContext leftSibling = (ParserRuleContext) ParseTreeUtil.getLeftSibling(child);

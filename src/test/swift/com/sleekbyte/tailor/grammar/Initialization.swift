@@ -192,3 +192,15 @@ class SomeSubclass: SomeClass {
         // subclass implementation of the required initializer goes here
     }
 }
+
+struct Celsius {
+    var temperatureInCelsius: Double
+
+    init(fromFahrenheit fahrenheit: Double) throws {
+        temperatureInCelsius = (fahrenheit - 32.0) / 1.8
+    }
+
+    init(_: (Int) throws -> Bool) rethrows {
+        temperatureInCelsius = 2;
+    }
+}
