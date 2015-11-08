@@ -1,6 +1,6 @@
 name: Tailor
 company_name: Sleekbyte
-company_url: "http://sleekbyte.com"
+company_url: "https://sleekbyte.com"
 description: Static analyzer for Swift
 github_url: "https://github.com/sleekbyte/tailor"
 
