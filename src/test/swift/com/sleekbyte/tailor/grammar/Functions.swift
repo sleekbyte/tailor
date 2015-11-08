@@ -143,3 +143,7 @@ public func success(@noescape closure: T -> Void) {
     default: break
     }
 }
+
+public prefix func <-<R: FallibleSendable>(channel: R) throws -> R.T? {
+    return try channel.send()
+}

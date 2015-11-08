@@ -49,6 +49,7 @@ statement
  | controlTransferStatement ';'?
  | deferStatement ';' ?
  | doStatement ':'?
+ | compilerControlStatement ';'?
  | expression ';'?  // Keep expression last to handle ambiguity
  ;
 
@@ -218,7 +219,8 @@ declaration
  | extensionDeclaration ';'?
  | subscriptDeclaration ';'?
  | operatorDeclaration ';'?
- | compilerControlStatement
+ // compiler-control-statement not in Swift Language Reference
+ | compilerControlStatement ';'?
  ;
 
 declarations : declaration declarations? ;
@@ -286,7 +288,13 @@ typealiasAssignment : '=' sType  ;
 
 // GRAMMAR OF A FUNCTION DECLARATION
 
-functionDeclaration : functionHead functionName genericParameterClause? functionSignature functionBody ;
+/* HACK: functionBody? is intentionally not used to force the parser to try and match a functionBody first
+ * This can be removed once we figure out how to enforce that statements are either separated by semi colons or new line characters
+ */
+functionDeclaration : functionHead functionName genericParameterClause? functionSignature functionBody
+ | functionHead functionName genericParameterClause? functionSignature
+ ;
+
 functionHead : attributes? declarationModifiers? 'func'  ;
 functionName : identifier |  operator  ;
 // rethrows is not marked as optional in the Swift Language Reference
@@ -362,7 +370,7 @@ protocolMethodDeclaration : functionHead functionName genericParameterClause? fu
 
 // GRAMMAR OF A PROTOCOL INITIALIZER DECLARATION
 
-protocolInitializerDeclaration : initializerHead genericParameterClause? parameterClause  ;
+protocolInitializerDeclaration : initializerHead genericParameterClause? parameterClause ('throws' | 'rethrows')? ;
 
 // GRAMMAR OF A PROTOCOL SUBSCRIPT DECLARATION
 
@@ -374,7 +382,7 @@ protocolAssociatedTypeDeclaration : typealiasHead typeInheritanceClause? typeali
 
 // GRAMMAR OF AN INITIALIZER DECLARATION
 
-initializerDeclaration : initializerHead genericParameterClause? parameterClause initializerBody  ;
+initializerDeclaration : initializerHead genericParameterClause? parameterClause ('throws' | 'rethrows')? initializerBody  ;
 initializerHead : attributes? declarationModifiers? 'init' ('?' | '!')?  ;
 initializerBody : codeBlock  ;
 
@@ -540,7 +548,7 @@ assignmentOperator : '='  ;
 
 // GRAMMAR OF A CONDITIONAL OPERATOR
 
-conditionalOperator : '?' expression ':' ;
+conditionalOperator : '?' tryOperator? expression ':' ;
 
 // GRAMMAR OF A TYPE_CASTING OPERATOR
 
@@ -586,7 +594,7 @@ dictionaryLiteralItem : expression ':' expression  ;
 selfExpression
  : 'self'
  | 'self' '.' identifier
- | 'self' '[' expression ']'
+ | 'self' '[' expressionList ']'
  | 'self' '.' 'init'
  ;
 
@@ -599,7 +607,7 @@ superclassExpression
   ;
 
 superclassMethodExpression : 'super' '.' identifier  ;
-superclassSubscriptExpression : 'super' '[' expression ']'  ;
+superclassSubscriptExpression : 'super' '[' expressionList ']'  ;
 superclassInitializerExpression : 'super' '.' 'init'  ;
 
 // GRAMMAR OF A CLOSURE EXPRESSION
@@ -614,9 +622,9 @@ closureSignature
  | captureList 'in'
  ;
 
-// The Swift Language Reference only allows one captureSpecifier expression pair
-captureList : '[' captureSpecifier expression (',' captureSpecifier expression)* ']'  ;
-
+captureList : '[' captureListItems ']' ;
+captureListItems: captureListItem (',' captureListItem)? ;
+captureListItem: captureSpecifier? expression ;
 captureSpecifier : 'weak' | 'unowned' | 'unowned(safe)' | 'unowned(unsafe)'  ;
 
 // GRAMMAR OF A IMPLICIT MEMBER EXPRESSION

@@ -194,6 +194,9 @@ public class BraceStyleListener extends SwiftBaseListener {
     }
 
     private void verifyFunctionBraceStyle(SwiftParser.FunctionDeclarationContext ctx) {
+        if (ctx.functionBody() == null) {
+            return;
+        }
         verifyCodeBlockOpenBraceStyle(ctx.functionBody().codeBlock(), ctx.functionSignature().getStop(),
             Messages.FUNCTION);
         verifyBodyCloseBraceStyle(ctx.functionBody().codeBlock(), Messages.FUNCTION);
