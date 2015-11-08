@@ -218,7 +218,7 @@ declaration
  | extensionDeclaration ';'?
  | subscriptDeclaration ';'?
  | operatorDeclaration ';'?
- | macroDeclaration
+ | compilerControlStatement
  ;
 
 declarations : declaration declarations? ;
@@ -810,17 +810,26 @@ typeInheritanceList : typeIdentifier (',' typeIdentifier)* ;
 classRequirement: 'class' ;
 
 // ------ Build Configurations (Macros) -------
-// Used http://apple.co/1M4GNVf as reference
 
-macroDeclaration: '#if' macroConditional statements? macroElseIfClause* macroElseClause? '#endif' ;
-macroElseIfClause: '#elseif' macroConditional statements? ;
-macroElseClause: '#else' statements? ;
-macroConditional: buildConfigurations | conditionClause ; // currently unclear exactly what a macro conditional could be
-buildConfigurations: buildConfiguration (('&&' | '||') buildConfigurations)? ;
-buildConfiguration: '!'? macroFunction '(' macroArguments ')' ;
-macroFunction: 'os' | 'arch' ;
-macroArguments: macroArgument (',' macroArgument)* ;
-macroArgument: 'OSX' | 'iOS' | 'watchOS' | 'x86_64' | 'arm' | 'arm64' | 'i386' ;
+compilerControlStatement: buildConfigurationStatement | lineControlStatement ;
+buildConfigurationStatement: '#if' buildConfiguration statements? buildConfigurationElseIfClauses? buildConfigurationElseClause? '#endif' ;
+buildConfigurationElseIfClauses: buildConfigurationElseIfClause+ ;
+buildConfigurationElseIfClause: '#elseif' buildConfiguration statements? ;
+buildConfigurationElseClause: '#else' statements? ;
+
+buildConfiguration: platformTestingFunction | identifier | booleanLiteral
+ | '(' buildConfiguration ')'
+ | '!' buildConfiguration
+ | buildConfiguration ('&&' | '||') buildConfiguration
+ ;
+
+platformTestingFunction: 'os' '(' operatingSystem ')' | 'arch' '(' architecture ')' ;
+operatingSystem: 'OSX' | 'iOS' | 'watchOS' | 'tvOS' ;
+architecture: 'i386' | 'x86_64' | 'arm' | 'arm64' ;
+
+lineControlStatement: '#line' (lineNumber fileName)? ;
+lineNumber: integerLiteral ;
+fileName: StringLiteral ;
 
 // ---------- Lexical Structure -----------
 
@@ -909,6 +918,7 @@ ImplicitParameterName : '$' DecimalLiteral ; // TODO: don't allow '_' here
 
 // GRAMMAR OF A LITERAL
 
+booleanLiteral: BooleanLiteral ;
 literal : numericLiteral | StringLiteral | BooleanLiteral | NilLiteral ;
 
 // GRAMMAR OF AN INTEGER LITERAL
