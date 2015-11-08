@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Usage: script/cibuild
+# Emulates a continuous integration build.
+
+set -e
+
+bundle exec jekyll build
+bundle exec htmlproof ./_site

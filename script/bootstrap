@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Usage: script/bootstrap
+# Sets up required modules for development.
+
+set -e
+
+bundle install --path vendor/bundle
