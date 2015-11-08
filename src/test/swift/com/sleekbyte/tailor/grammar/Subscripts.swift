@@ -39,3 +39,21 @@ matrix[1, 0] = 3.2
 func indexIsValidForRow(row: Int, column: Int) -> Bool {
     return row >= 0 && row < rows && column >= 0 && column < columns
 }
+
+struct Celsius {
+    var temperatureInCelsius: Double = 4
+    var temperatureInKelvin: Double = 5
+
+    func doSomething() {
+        self[temperatureInCelsius, temperatureInKelvin]
+    }
+
+    subscript(celsius: Double, farenheit: Double) -> Int {
+        get {
+            return 2
+        }
+        set(newValue) {
+            // perform a suitable setting action here
+        }
+    }
+}
