@@ -1,10 +1,11 @@
 name: Tailor
+description: Static analyzer for Swift
+url: "https://tailor.sh"
+github_url: "https://github.com/sleekbyte/tailor"
 company_name: Sleekbyte
 company_url: "https://sleekbyte.com"
-description: Static analyzer for Swift
-github_url: "https://github.com/sleekbyte/tailor"
 
 exclude: [README.md, LICENSE.md, CNAME, Gemfile, Gemfile.lock, vendor, script]
 
 sass:
-  style: :compressed
+  style: compressed
