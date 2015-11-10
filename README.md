@@ -144,7 +144,7 @@ Tailor can be integrated with Xcode projects using the `--xcode` option.
 tailor --xcode /path/to/demo.xcodeproj/
 ```
 This adds the following Build Phase Run Script to your project's default target.
-![Run Script](https://cloud.githubusercontent.com/assets/1791760/9933657/f7f29216-5d69-11e5-90f6-705a76473cb7.png)
+![Run Script](https://cloud.githubusercontent.com/assets/1350704/11074861/5bae6b24-87f2-11e5-8167-4328b9b01174.png)
 
 Tailor's output will be displayed inline within the Xcode Editor Area and as a list in the Log Navigator.
 ![Xcode messages](https://cloud.githubusercontent.com/assets/1350704/11017260/b79cb162-8599-11e5-94fa-e7cf77fdc657.png)
