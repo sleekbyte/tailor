@@ -4,6 +4,7 @@ import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftLexer;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.ColorSettings;
+import com.sleekbyte.tailor.common.ConfigProperties;
 import com.sleekbyte.tailor.common.Configuration;
 import com.sleekbyte.tailor.common.ExitCode;
 import com.sleekbyte.tailor.common.MaxLengths;
@@ -57,7 +58,6 @@ import java.util.stream.Collectors;
  */
 public class Tailor {
 
-    public static final String VERSION = "0.2.2";
     private static ArgumentParser argumentParser = new ArgumentParser();
     private static List<String> pathNames;
 
@@ -317,7 +317,7 @@ public class Tailor {
                 System.exit(ExitCode.SUCCESS);
             }
             if (argumentParser.shouldPrintVersion()) {
-                System.out.println(VERSION);
+                System.out.println(new ConfigProperties().getVersion());
                 System.exit(ExitCode.SUCCESS);
             }
             if (argumentParser.shouldPrintRules()) {

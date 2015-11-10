@@ -2,6 +2,10 @@
 apply plugin: 'java'
 
 archivesBaseName = 'tailor'
+def props = new Properties()
+def config = file('src/main/resources/config.properties')
+props.load(new FileInputStream(config))
+version = props.getProperty('version')
 
 // Add ANTLR output as sourceSet
 sourceSets {
@@ -170,6 +174,46 @@ task gems(type: Exec) {
 distZip.dependsOn 'gems'
 distTar.dependsOn 'gems'
 installDist.dependsOn 'gems'
+// }}}
+
+// Update Version Number {{{
+task setVersion {
+    doFirst {
+        println "Enter new version number:"
+        def writer = new FileWriter(config)
+        version = "${System.in.newReader().readLine()}"
+        try {
+            props.setProperty("version", "${version}")
+                props.store(writer, null)
+                writer.flush()
+        } finally {
+            writer.close()
+        }
+        updateInstallScripts.execute()
+    }
+}
+
+task updateInstallScripts(type: Exec) {
+    doFirst {
+        executable 'sh'
+        args '-c', "sed -i '' 's/[0-9]\\{1,\\}\\.[0-9]\\{1,\\}\\.[0-9]\\{1,\\}/${version}/g' script/install.sh script/install.ps1"
+    }
+}
+// }}}
+
+// Install Globally {{{
+task extractGlobally(type: Sync) {
+    from zipTree("${buildDir}/distributions/tailor-${version}.zip")
+    into '/usr/local/tailor'
+}
+
+task install(type: Exec) {
+    executable 'sh'
+    args '-c', "ln -fs /usr/local/tailor/tailor-${version}/bin/tailor /usr/local/bin/tailor"
+}
+
+extractGlobally.dependsOn distZip
+install.dependsOn extractGlobally
 // }}}
 
 // Ensure ANTLR output and Ruby gems are deleted via clean
