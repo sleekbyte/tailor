@@ -6,7 +6,6 @@ import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.ConfigProperties;
 import com.sleekbyte.tailor.common.Configuration;
-import com.sleekbyte.tailor.common.ExitCode;
 import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
@@ -23,6 +22,7 @@ import com.sleekbyte.tailor.listeners.KPrefixListener;
 import com.sleekbyte.tailor.listeners.MaxLengthListener;
 import com.sleekbyte.tailor.listeners.TodoCommentListener;
 import com.sleekbyte.tailor.output.Printer;
+import com.sleekbyte.tailor.output.TailorExit;
 import com.sleekbyte.tailor.utils.ArgumentParser;
 import com.sleekbyte.tailor.utils.ArgumentParserException;
 import com.sleekbyte.tailor.utils.CommentExtractor;
@@ -67,7 +67,7 @@ public class Tailor {
     public static void exitWithNoSourceFilesError() {
         System.err.println("No Swift source files were found.");
         argumentParser.printHelp();
-        System.exit(ExitCode.FAILURE);
+        TailorExit.failure();
     }
 
     /**
@@ -297,7 +297,7 @@ public class Tailor {
 
         if (numErrors >= 1L) {
             // Non-zero exit status when any violation messages have Severity.ERROR, controlled by --max-severity
-            System.exit(ExitCode.FAILURE);
+            TailorExit.failure();
         }
     }
 
@@ -314,21 +314,21 @@ public class Tailor {
             final CommandLine cmd = argumentParser.parseCommandLine(args);
             if (argumentParser.shouldPrintHelp()) {
                 argumentParser.printHelp();
-                System.exit(ExitCode.SUCCESS);
+                TailorExit.success();
             }
             if (argumentParser.shouldPrintVersion()) {
                 System.out.println(new ConfigProperties().getVersion());
-                System.exit(ExitCode.SUCCESS);
+                TailorExit.success();
             }
             if (argumentParser.shouldPrintRules()) {
                 Printer.printRules();
-                System.exit(ExitCode.SUCCESS);
+                TailorExit.success();
             }
 
             // Exit program after configuring Xcode project
             String xcodeprojPath = argumentParser.getXcodeprojPath();
             if (xcodeprojPath != null) {
-                System.exit(XcodeIntegrator.setupXcode(xcodeprojPath));
+                TailorExit.exit(XcodeIntegrator.setupXcode(xcodeprojPath));
             }
             Set<String> fileNames = getSwiftSourceFiles(cmd.getArgs());
             if (fileNames.size() == 0) {
@@ -338,21 +338,21 @@ public class Tailor {
             if (argumentParser.shouldListFiles()) {
                 System.out.println(Messages.FILES_TO_BE_ANALYZED);
                 fileNames.forEach(System.out::println);
-                System.exit(ExitCode.SUCCESS);
+                TailorExit.success();
             }
 
             analyzeFiles(fileNames);
         } catch (ParseException | ArgumentParserException e) {
             System.err.println(e.getMessage());
             argumentParser.printHelp();
-            System.exit(ExitCode.FAILURE);
+            TailorExit.failure();
         } catch (YAMLException e) {
             System.err.println("Error parsing .tailor.yml:");
             System.err.println(e.getMessage());
-            System.exit(ExitCode.FAILURE);
+            TailorExit.failure();
         } catch (IOException e) {
             System.err.println("Source file analysis failed. Reason: " + e.getMessage());
-            System.exit(ExitCode.FAILURE);
+            TailorExit.failure();
         }
 
     }
