@@ -3,7 +3,8 @@ package com.sleekbyte.tailor.cli;
 import static org.junit.Assert.assertEquals;
 
 import com.sleekbyte.tailor.Tailor;
-import com.sleekbyte.tailor.output.TailorExit.ExitCode;
+import com.sleekbyte.tailor.common.ExitCode;
+import com.sleekbyte.tailor.common.Messages;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -42,13 +43,13 @@ public final class HelpMessageTest {
 
     @Test
     public void testHelpMessage() throws IOException {
-        exit.expectSystemExitWithStatus(ExitCode.SUCCESS.ordinal());
+        exit.expectSystemExitWithStatus(ExitCode.SUCCESS);
         String[] command = { "--help" };
 
         exit.checkAssertionAfterwards(() -> {
                 String[] msgs = outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
                 String actualUsageMessage = msgs[0];
-                String expectedUsageMessage = "Usage: tailor [options] [--] [[file|directory] ...]";
+                String expectedUsageMessage = "Usage: " + Messages.CMD_LINE_SYNTAX;
                 assertEquals(expectedUsageMessage, actualUsageMessage);
             });
 

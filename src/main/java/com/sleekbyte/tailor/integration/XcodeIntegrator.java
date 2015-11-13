@@ -1,6 +1,6 @@
 package com.sleekbyte.tailor.integration;
 
-import com.sleekbyte.tailor.output.TailorExit.ExitCode;
+import com.sleekbyte.tailor.common.ExitCode;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,7 +21,7 @@ public final class XcodeIntegrator {
      *
      * @param xcodeprojPath relative/absolute path to a xcodeproj file
      */
-    public static ExitCode setupXcode(String xcodeprojPath) {
+    public static int setupXcode(String xcodeprojPath) {
         try {
             integrateTailor(getAbsolutePath(xcodeprojPath));
         } catch (IOException | InterruptedException e) {

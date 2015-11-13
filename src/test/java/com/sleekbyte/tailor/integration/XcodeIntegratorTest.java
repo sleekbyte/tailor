@@ -4,8 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-
-import com.sleekbyte.tailor.output.TailorExit.ExitCode;
+import com.sleekbyte.tailor.common.ExitCode;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -64,7 +63,7 @@ public final class XcodeIntegratorTest {
 
     @Test
     public void testSetupXcodeInvalidXcodeprojFile() throws  IOException {
-        ExitCode ret = XcodeIntegrator.setupXcode(createFolder("testDir").getPath());
+        int ret = XcodeIntegrator.setupXcode(createFolder("testDir").getPath());
         assertEquals(ExitCode.FAILURE, ret);
     }
 
