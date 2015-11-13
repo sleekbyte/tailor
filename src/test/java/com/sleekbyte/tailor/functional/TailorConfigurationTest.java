@@ -27,7 +27,6 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Tests for {@link Tailor} configuration file flow.
@@ -63,8 +62,10 @@ public final class TailorConfigurationTest {
 
     @Test
     public void testConfigInfrastructure() throws IOException {
-        String[] command = Stream.concat(Arrays.stream(this.getCommandArgs()), Arrays.stream(getCommandArgs()))
-            .toArray(String[]::new);
+        String[] command = new String[] {
+            "--config", configurationFile.getAbsolutePath(),
+            "--no-color"
+        };
         addAllExpectedMsgs();
 
         Tailor.main(command);
@@ -83,13 +84,6 @@ public final class TailorConfigurationTest {
 
         assertArrayEquals(outContent.toString(Charset.defaultCharset().name()), this.expectedMessages.toArray(),
             actualOutput.toArray());
-    }
-
-    protected String[] getCommandArgs() {
-        return new String[] {
-            "--config", configurationFile.getAbsolutePath(),
-            "--no-color"
-        };
     }
 
     protected void addAllExpectedMsgs() {

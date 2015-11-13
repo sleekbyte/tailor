@@ -65,7 +65,7 @@ public class Tailor {
      * Prints error indicating no source file was provided, and exits.
      */
     public static void exitWithNoSourceFilesError() {
-        System.err.println("No Swift source files were found.");
+        System.err.println(Messages.NO_SWIFT_FILES_FOUND);
         argumentParser.printHelp();
         System.exit(ExitCode.failure());
     }
