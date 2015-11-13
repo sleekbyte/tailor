@@ -43,7 +43,7 @@ public final class HelpMessageTest {
 
     @Test
     public void testHelpMessage() throws IOException {
-        exit.expectSystemExitWithStatus(ExitCode.SUCCESS);
+        exit.expectSystemExitWithStatus(ExitCode.success());
         String[] command = { "--help" };
 
         exit.checkAssertionAfterwards(() -> {

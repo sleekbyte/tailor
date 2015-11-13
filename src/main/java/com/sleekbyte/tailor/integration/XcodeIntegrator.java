@@ -29,10 +29,10 @@ public final class XcodeIntegrator {
         } catch (IOException | InterruptedException e) {
             System.err.println("Could not add Tailor Build Phase Run Script to " + xcodeprojPath + "\nReason: "
                 + e.getMessage());
-            return ExitCode.FAILURE;
+            return ExitCode.failure();
         }
 
-        return ExitCode.SUCCESS;
+        return ExitCode.success();
     }
 
     static String getAbsolutePath(String path) throws IOException {
