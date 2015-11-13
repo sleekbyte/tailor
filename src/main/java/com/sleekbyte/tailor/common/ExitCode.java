@@ -1,9 +1,18 @@
 package com.sleekbyte.tailor.common;
 
+
 /**
  * Exit codes.
  */
-public final class ExitCode {
-    public static final int SUCCESS = 0;
-    public static final int FAILURE = 1;
+public enum ExitCode {
+    SUCCESS, FAILURE;
+
+    public static int success() {
+        return SUCCESS.ordinal();
+    }
+
+    public static int failure() {
+        return FAILURE.ordinal();
+    }
+
 }

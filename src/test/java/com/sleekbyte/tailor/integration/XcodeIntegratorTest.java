@@ -62,7 +62,7 @@ public final class XcodeIntegratorTest {
     @Test
     public void testSetupXcodeInvalidXcodeprojFile() throws  IOException {
         int ret = XcodeIntegrator.setupXcode(createFolder("testDir").getPath());
-        assertEquals(ExitCode.FAILURE, ret);
+        assertEquals(ExitCode.failure(), ret);
     }
 
     @Test

@@ -67,7 +67,7 @@ public class Tailor {
     public static void exitWithNoSourceFilesError() {
         System.err.println("No Swift source files were found.");
         argumentParser.printHelp();
-        System.exit(ExitCode.FAILURE);
+        System.exit(ExitCode.failure());
     }
 
     /**
@@ -297,7 +297,7 @@ public class Tailor {
 
         if (numErrors >= 1L) {
             // Non-zero exit status when any violation messages have Severity.ERROR, controlled by --max-severity
-            System.exit(ExitCode.FAILURE);
+            System.exit(ExitCode.failure());
         }
     }
 
@@ -314,15 +314,15 @@ public class Tailor {
             final CommandLine cmd = argumentParser.parseCommandLine(args);
             if (argumentParser.shouldPrintHelp()) {
                 argumentParser.printHelp();
-                System.exit(ExitCode.SUCCESS);
+                System.exit(ExitCode.success());
             }
             if (argumentParser.shouldPrintVersion()) {
                 System.out.println(new ConfigProperties().getVersion());
-                System.exit(ExitCode.SUCCESS);
+                System.exit(ExitCode.success());
             }
             if (argumentParser.shouldPrintRules()) {
                 Printer.printRules();
-                System.exit(ExitCode.SUCCESS);
+                System.exit(ExitCode.success());
             }
 
             // Exit program after configuring Xcode project
@@ -338,21 +338,21 @@ public class Tailor {
             if (argumentParser.shouldListFiles()) {
                 System.out.println(Messages.FILES_TO_BE_ANALYZED);
                 fileNames.forEach(System.out::println);
-                System.exit(ExitCode.SUCCESS);
+                System.exit(ExitCode.success());
             }
 
             analyzeFiles(fileNames);
         } catch (ParseException | ArgumentParserException e) {
             System.err.println(e.getMessage());
             argumentParser.printHelp();
-            System.exit(ExitCode.FAILURE);
+            System.exit(ExitCode.failure());
         } catch (YAMLException e) {
             System.err.println("Error parsing .tailor.yml:");
             System.err.println(e.getMessage());
-            System.exit(ExitCode.FAILURE);
+            System.exit(ExitCode.failure());
         } catch (IOException e) {
             System.err.println("Source file analysis failed. Reason: " + e.getMessage());
-            System.exit(ExitCode.FAILURE);
+            System.exit(ExitCode.failure());
         }
 
     }
