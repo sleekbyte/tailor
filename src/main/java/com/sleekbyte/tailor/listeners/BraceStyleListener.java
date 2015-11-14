@@ -308,15 +308,14 @@ public class BraceStyleListener extends SwiftBaseListener {
     }
 
     void verifyWillSetClauseBraceStyle(SwiftParser.WillSetClauseContext ctx) {
-        ParseTree setterNameCtx = ParseTreeUtil.getLeftSibling(ctx.codeBlock());
-        Token setterNameCtxLastChild = ((TerminalNodeImpl) ParseTreeUtil.getLastChild(setterNameCtx)).getSymbol();
-        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), setterNameCtxLastChild, Messages.WILL_SET_CLAUSE);
+        Token left = ParseTreeUtil.getStopTokenForNode(ParseTreeUtil.getLeftSibling(ctx.codeBlock()));
+        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), left, Messages.WILL_SET_CLAUSE);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.WILL_SET_CLAUSE);
     }
 
     void verifyDidSetClauseBraceStyle(SwiftParser.DidSetClauseContext ctx) {
-        TerminalNodeImpl leftSibling = (TerminalNodeImpl) ParseTreeUtil.getLeftSibling(ctx.codeBlock());
-        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), leftSibling.getSymbol(), Messages.DID_SET_CLAUSE);
+        Token left = ParseTreeUtil.getStopTokenForNode(ParseTreeUtil.getLeftSibling(ctx.codeBlock()));
+        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), left, Messages.DID_SET_CLAUSE);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.DID_SET_CLAUSE);
     }
 
