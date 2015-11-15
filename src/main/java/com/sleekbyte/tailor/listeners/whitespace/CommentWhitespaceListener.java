@@ -1,8 +1,9 @@
-package com.sleekbyte.tailor.listeners;
+package com.sleekbyte.tailor.listeners.whitespace;
 
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
+import com.sleekbyte.tailor.listeners.CommentAnalyzer;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ListenerUtil;
 import org.antlr.v4.runtime.Token;
