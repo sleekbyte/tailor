@@ -10,10 +10,7 @@ import com.sleekbyte.tailor.utils.ListenerUtil;
 import com.sleekbyte.tailor.utils.ParseTreeUtil;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
-
-import java.util.Optional;
 
 /**
  * Parse tree listener for whitespace checks.
@@ -34,21 +31,6 @@ public class WhitespaceListener extends SwiftBaseListener {
     @Override
     public void enterTypeInheritanceClause(SwiftParser.TypeInheritanceClauseContext ctx) {
         checkWhitespaceAroundCommas(ctx);
-    }
-
-    @Override
-    public void enterFunctionResult(SwiftParser.FunctionResultContext ctx) {
-        checkWhitespaceAroundArrow(ctx);
-    }
-
-    @Override
-    public void enterSType(SwiftParser.STypeContext ctx) {
-        checkWhitespaceAroundArrow(ctx);
-    }
-
-    @Override
-    public void enterSubscriptResult(SwiftParser.SubscriptResultContext ctx) {
-        checkWhitespaceAroundArrow(ctx);
     }
 
     @Override
@@ -105,28 +87,6 @@ public class WhitespaceListener extends SwiftBaseListener {
         }
     }
 
-    private void checkWhitespaceAroundArrow(SwiftParser.FunctionResultContext ctx) {
-        checkWhitespaceAroundReturnArrow(ctx);
-    }
-
-    private void checkWhitespaceAroundArrow(SwiftParser.SubscriptResultContext ctx) {
-        checkWhitespaceAroundReturnArrow(ctx);
-    }
-
-    private void checkWhitespaceAroundArrow(SwiftParser.STypeContext ctx) {
-        Optional<ParseTree> arrowOptional = ctx.children.stream()
-            .filter(node -> node.getText().equals("->"))
-            .findFirst();
-        if (!arrowOptional.isPresent()) {
-            return;
-        }
-        ParseTree arrow = arrowOptional.get();
-        Token left = ParseTreeUtil.getStopTokenForNode(ParseTreeUtil.getLeftSibling(arrow));
-        Token right = ParseTreeUtil.getStartTokenForNode(ParseTreeUtil.getRightSibling(arrow));
-
-        verifyArrowIsSpaceDelimited(left, right, ((TerminalNodeImpl) arrow).getSymbol());
-    }
-
     private void verifyCommaLeftAssociation(Token left, Token right, Token comma) {
         verifyPunctuationLeftAssociation(left, right, comma, Messages.COMMA);
     }
@@ -157,24 +117,5 @@ public class WhitespaceListener extends SwiftBaseListener {
 
     private boolean checkIfInline(Token one, Token two) {
         return one.getLine() != two.getLine();
-    }
-
-    private void checkWhitespaceAroundReturnArrow(ParserRuleContext ctx) {
-        Token arrow = ((TerminalNodeImpl) ctx.getChild(0)).getSymbol();
-        Token left = ParseTreeUtil.getStopTokenForNode(ParseTreeUtil.getLeftSibling(ctx));
-        Token right = ParseTreeUtil.getStartTokenForNode(ctx.getChild(1));
-
-        verifyArrowIsSpaceDelimited(left, right, arrow);
-    }
-
-    private void verifyArrowIsSpaceDelimited(Token left, Token right, Token arrow) {
-        if (checkLeftSpaces(left, arrow, 1)) {
-            printer.error(Rules.WHITESPACE, Messages.RETURN_ARROW + Messages.SPACE_BEFORE,
-                ListenerUtil.getTokenLocation(arrow));
-        }
-        if (checkRightSpaces(right, arrow, 1)) {
-            printer.error(Rules.WHITESPACE, Messages.RETURN_ARROW + Messages.SPACE_AFTER,
-                ListenerUtil.getTokenEndLocation(arrow));
-        }
     }
 }
