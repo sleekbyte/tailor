@@ -1,5 +1,6 @@
 package com.sleekbyte.tailor.common;
 
+import com.sleekbyte.tailor.listeners.ArrowWhitespaceListener;
 import com.sleekbyte.tailor.listeners.BlankLineListener;
 import com.sleekbyte.tailor.listeners.BraceStyleListener;
 import com.sleekbyte.tailor.listeners.ColonWhitespaceListener;
@@ -21,10 +22,31 @@ import com.sleekbyte.tailor.utils.ArgumentParser;
  * Enum for all rules implemented in Tailor.
  */
 public enum Rules {
-    BRACE_STYLE, COMMENT_WHITESPACE, CONSTANT_K_PREFIX, CONSTANT_NAMING, FORCED_TYPE_CAST, FUNCTION_WHITESPACE,
-    LEADING_WHITESPACE, LOWER_CAMEL_CASE, MAX_CLASS_LENGTH, MAX_CLOSURE_LENGTH, MAX_FILE_LENGTH, MAX_FUNCTION_LENGTH,
-    MAX_LINE_LENGTH, MAX_NAME_LENGTH, MAX_STRUCT_LENGTH, MULTIPLE_IMPORTS, REDUNDANT_PARENTHESES, TERMINATING_NEWLINE,
-    TERMINATING_SEMICOLON, TODO_SYNTAX, TRAILING_WHITESPACE, UPPER_CAMEL_CASE, WHITESPACE, COLON_WHITESPACE;
+    ARROW_WHITESPACE,
+    BRACE_STYLE,
+    COLON_WHITESPACE,
+    COMMENT_WHITESPACE,
+    CONSTANT_K_PREFIX,
+    CONSTANT_NAMING,
+    FORCED_TYPE_CAST,
+    FUNCTION_WHITESPACE,
+    LEADING_WHITESPACE,
+    LOWER_CAMEL_CASE,
+    MAX_CLASS_LENGTH,
+    MAX_CLOSURE_LENGTH,
+    MAX_FILE_LENGTH,
+    MAX_FUNCTION_LENGTH,
+    MAX_LINE_LENGTH,
+    MAX_NAME_LENGTH,
+    MAX_STRUCT_LENGTH,
+    MULTIPLE_IMPORTS,
+    REDUNDANT_PARENTHESES,
+    TERMINATING_NEWLINE,
+    TERMINATING_SEMICOLON,
+    TODO_SYNTAX,
+    TRAILING_WHITESPACE,
+    UPPER_CAMEL_CASE,
+    WHITESPACE;
 
     private static final String BASE_STYLE_GUIDE_LINK = "https://github.com/sleekbyte/tailor/wiki/Rules#";
     private String name;
@@ -48,12 +70,16 @@ public enum Rules {
     }
 
     static {
+        ARROW_WHITESPACE.name = "arrow-whitespace";
+        ARROW_WHITESPACE.description = "Flags all return arrows (->) that are not space delimited.";
+        ARROW_WHITESPACE.className = ArrowWhitespaceListener.class.getName();
+
         BRACE_STYLE.name = "brace-style";
         BRACE_STYLE.description = "Definitions of constructs should follow the One True Brace Style (1TBS).";
         BRACE_STYLE.className = BraceStyleListener.class.getName();
 
         COLON_WHITESPACE.name = "colon-whitespace";
-        COLON_WHITESPACE.description = "Flag whitespace violations around colons (:)";
+        COLON_WHITESPACE.description = "Flag whitespace violations around colons (:).";
         COLON_WHITESPACE.className = ColonWhitespaceListener.class.getName();
 
         COMMENT_WHITESPACE.name = "comment-whitespace";

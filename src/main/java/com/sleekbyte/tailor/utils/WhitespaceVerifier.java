@@ -65,7 +65,6 @@ public class WhitespaceVerifier {
      */
     public void verifyPunctuationIsSpaceDelimited(Token left, Token right, Token punc, String puncStr) {
         Location puncLocation = ListenerUtil.getTokenLocation(punc);
-
         if (checkLeftSpaces(left, punc, 1)) {
             printer.error(rule, puncStr + Messages.AT_COLUMN + puncLocation.column + " "
                 + Messages.SPACE_BEFORE, puncLocation);
