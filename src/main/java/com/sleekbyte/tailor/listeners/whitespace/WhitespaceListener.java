@@ -1,4 +1,4 @@
-package com.sleekbyte.tailor.listeners;
+package com.sleekbyte.tailor.listeners.whitespace;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
