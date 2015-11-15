@@ -1,9 +1,9 @@
 package com.sleekbyte.tailor.common;
 
-import com.sleekbyte.tailor.listeners.ArrowWhitespaceListener;
+import com.sleekbyte.tailor.listeners.whitespace.ArrowWhitespaceListener;
 import com.sleekbyte.tailor.listeners.BlankLineListener;
 import com.sleekbyte.tailor.listeners.BraceStyleListener;
-import com.sleekbyte.tailor.listeners.ColonWhitespaceListener;
+import com.sleekbyte.tailor.listeners.whitespace.ColonWhitespaceListener;
 import com.sleekbyte.tailor.listeners.CommentWhitespaceListener;
 import com.sleekbyte.tailor.listeners.ConstantNamingListener;
 import com.sleekbyte.tailor.listeners.FileListener;
@@ -15,7 +15,7 @@ import com.sleekbyte.tailor.listeners.RedundantParenthesesListener;
 import com.sleekbyte.tailor.listeners.SemicolonTerminatedListener;
 import com.sleekbyte.tailor.listeners.TodoCommentListener;
 import com.sleekbyte.tailor.listeners.UpperCamelCaseListener;
-import com.sleekbyte.tailor.listeners.WhitespaceListener;
+import com.sleekbyte.tailor.listeners.whitespace.WhitespaceListener;
 import com.sleekbyte.tailor.utils.ArgumentParser;
 
 /**
