@@ -1,10 +1,7 @@
 package com.sleekbyte.tailor.common;
 
-import com.sleekbyte.tailor.listeners.whitespace.ArrowWhitespaceListener;
 import com.sleekbyte.tailor.listeners.BlankLineListener;
 import com.sleekbyte.tailor.listeners.BraceStyleListener;
-import com.sleekbyte.tailor.listeners.whitespace.ColonWhitespaceListener;
-import com.sleekbyte.tailor.listeners.CommentWhitespaceListener;
 import com.sleekbyte.tailor.listeners.ConstantNamingListener;
 import com.sleekbyte.tailor.listeners.FileListener;
 import com.sleekbyte.tailor.listeners.ForceTypeCastListener;
@@ -15,6 +12,10 @@ import com.sleekbyte.tailor.listeners.RedundantParenthesesListener;
 import com.sleekbyte.tailor.listeners.SemicolonTerminatedListener;
 import com.sleekbyte.tailor.listeners.TodoCommentListener;
 import com.sleekbyte.tailor.listeners.UpperCamelCaseListener;
+import com.sleekbyte.tailor.listeners.whitespace.ArrowWhitespaceListener;
+import com.sleekbyte.tailor.listeners.whitespace.ColonWhitespaceListener;
+import com.sleekbyte.tailor.listeners.whitespace.CommaWhitespaceListener;
+import com.sleekbyte.tailor.listeners.whitespace.CommentWhitespaceListener;
 import com.sleekbyte.tailor.listeners.whitespace.WhitespaceListener;
 import com.sleekbyte.tailor.utils.ArgumentParser;
 
@@ -25,6 +26,7 @@ public enum Rules {
     ARROW_WHITESPACE,
     BRACE_STYLE,
     COLON_WHITESPACE,
+    COMMA_WHITESPACE,
     COMMENT_WHITESPACE,
     CONSTANT_K_PREFIX,
     CONSTANT_NAMING,
@@ -81,6 +83,10 @@ public enum Rules {
         COLON_WHITESPACE.name = "colon-whitespace";
         COLON_WHITESPACE.description = "Flag whitespace violations around colons (:).";
         COLON_WHITESPACE.className = ColonWhitespaceListener.class.getName();
+
+        COMMA_WHITESPACE.name = "comma-whitespace";
+        COMMA_WHITESPACE.description = "Flags all commas (,) that are not left associated.";
+        COMMA_WHITESPACE.className = CommaWhitespaceListener.class.getName();
 
         COMMENT_WHITESPACE.name = "comment-whitespace";
         COMMENT_WHITESPACE.description = "Ensure at least one whitespace character after a comment opening symbol"

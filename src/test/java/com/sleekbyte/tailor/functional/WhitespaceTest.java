@@ -80,7 +80,7 @@ public class WhitespaceTest extends RuleTest {
         addExpectedBraceMessage(start + 9, 19);
 
         // getters and setters
-        start = 464 - 184;
+        start = 280;
         addExpectedBraceMessage(start, 8);
         addExpectedBraceMessage(start + 4, 8);
         addExpectedBraceMessage(start + 21, 14);
@@ -89,12 +89,12 @@ public class WhitespaceTest extends RuleTest {
         addExpectedBraceMessage(start + 51, 25);
 
         // Single line comments
-        start = 523 - 184;
+        start = 339;
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start, 3, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 1, 5, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
 
         // Multi line comments
-        start = 530 - 184;
+        start = 346;
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 1, 35, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 2, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
@@ -109,45 +109,17 @@ public class WhitespaceTest extends RuleTest {
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 26, 23, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
 
         // Documentation comments
-        start = 643 - 184 - 68;
+        start = 391;
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start, 3, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 2, 3, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 4, 3, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 6, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 11, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 16, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
-
-        // Type inheritance commas
-        start = 672 - 184 - 68;
-        addExpectedCommaMessage(start, 24, Messages.NO_SPACE_BEFORE);
-        addExpectedCommaMessage(start + 4, 23, Messages.SPACE_AFTER);
-        addExpectedCommaMessage(start + 8, 23, Messages.SPACE_AFTER);
-        addExpectedCommaMessage(start + 16, 33, Messages.NO_SPACE_BEFORE);
-        addExpectedCommaMessage(start + 29, 22, Messages.NO_SPACE_BEFORE);
-        addExpectedCommaMessage(start + 37, 17, Messages.SPACE_AFTER);
-        addExpectedCommaMessage(start + 42, 53, Messages.SPACE_AFTER);
-        addExpectedCommaMessage(start + 46, 22, Messages.NO_SPACE_BEFORE);
-
-        // Generic list commas
-        start = 726 - 184 - 68;
-        addExpectedCommaMessage(start, 31, Messages.SPACE_AFTER);
-        addExpectedCommaMessage(start + 4, 31, Messages.SPACE_AFTER);
-        addExpectedCommaMessage(start + 8, 32, Messages.NO_SPACE_BEFORE);
-
-        // Requirement list commas
-        start = 745 - 184 - 68;
-        addExpectedCommaMessage(start, 37, Messages.SPACE_AFTER);
-        addExpectedCommaMessage(start + 4, 43, Messages.SPACE_AFTER);
-        addExpectedCommaMessage(start + 4, 43, Messages.NO_SPACE_BEFORE);
-        addExpectedCommaMessage(start + 8, 1, Messages.NO_SPACE_BEFORE);
     }
 
     private void addExpectedBraceMessage(int line, int column) {
         addExpectedMsg(Rules.BRACE_STYLE, line, column, Messages.OPEN_BRACE + Messages.SPACE_BEFORE);
-    }
-
-    private void addExpectedCommaMessage(int line, int column, String msg) {
-        addExpectedMsg(Rules.WHITESPACE, line, column, Messages.COMMA + Messages.AT_COLUMN + column + " " + msg);
     }
 
     private void addExpectedMsg(Rules rule, int line, int column, String msg) {
