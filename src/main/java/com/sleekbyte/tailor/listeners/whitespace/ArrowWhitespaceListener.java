@@ -61,4 +61,5 @@ public class ArrowWhitespaceListener extends SwiftBaseListener {
     private void verifyArrowIsSpaceDelimited(Token left, Token right, Token arrow) {
         verifier.verifyPunctuationIsSpaceDelimited(left, right, arrow, Messages.RETURN_ARROW);
     }
+
 }

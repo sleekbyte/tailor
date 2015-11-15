@@ -38,8 +38,6 @@ public class ColonWhitespaceListener extends SwiftBaseListener {
         ParseTree parentLeftSibling = ParseTreeUtil.getLeftSibling(colon.getParent());
         ParseTree rightSibling = ctx.getChild(1);
 
-        assert !(parentLeftSibling == null || rightSibling == null);
-
         Token left = ParseTreeUtil.getStopTokenForNode(parentLeftSibling);
         Token right = ParseTreeUtil.getStartTokenForNode(rightSibling);
         Token colonToken = colon.getSymbol();

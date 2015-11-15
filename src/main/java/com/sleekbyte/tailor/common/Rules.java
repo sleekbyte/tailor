@@ -152,7 +152,7 @@ public enum Rules {
         MULTIPLE_IMPORTS.className = MultipleImportListener.class.getName();
 
         OPERATOR_WHITESPACE.name = "operator-whitespace";
-        OPERATOR_WHITESPACE.description = "Flags operators that are not space delimited in operator declarations";
+        OPERATOR_WHITESPACE.description = "Flags operators that are not space delimited in operator declarations.";
         OPERATOR_WHITESPACE.className = OperatorWhitespaceListener.class.getName();
 
         REDUNDANT_PARENTHESES.name = "redundant-parentheses";
