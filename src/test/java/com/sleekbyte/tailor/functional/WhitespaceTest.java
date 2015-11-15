@@ -23,118 +23,21 @@ public class WhitespaceTest extends RuleTest {
         addExpectedMsg(Rules.WHITESPACE, 21, 1, Messages.OPERATOR + Messages.SPACE_AFTER);
         addExpectedMsg(Rules.WHITESPACE, 26, 5, Messages.OPERATOR + Messages.SPACE_AFTER);
 
-        // Colons in type annotations
-        int start = 35;
-        addExpectedColonMessage(start, 7, Messages.NO_SPACE_BEFORE);
-        addExpectedColonMessage(start + 1, 6, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 4, 11, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 5, 17, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 8, 13, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 9, 14, Messages.NO_SPACE_BEFORE);
-        addExpectedColonMessage(start + 12, 44, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 12, 44, Messages.NO_SPACE_BEFORE);
-        addExpectedColonMessage(start + 13, 17, Messages.NO_SPACE_BEFORE);
-        addExpectedColonMessage(start + 16, 13, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 16, 13, Messages.NO_SPACE_BEFORE);
-        addExpectedColonMessage(start + 16, 37, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 20, 33, Messages.NO_SPACE_BEFORE);
-
-        // Colons in dictionaries
-        start = 58;
-        addExpectedColonMessage(start, 41, Messages.NO_SPACE_BEFORE);
-        addExpectedColonMessage(start + 1, 25, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 3, 26, Messages.NO_SPACE_BEFORE);
-        addExpectedColonMessage(start + 4, 19, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 5, 41, Messages.NO_SPACE_BEFORE);
-        addExpectedColonMessage(start + 6, 1, Messages.NO_SPACE_BEFORE);
-
-        // Switch case colons
-        start = 66;
-        addExpectedColonMessage(start + 1, 17, Messages.NO_SPACE_BEFORE);
-        addExpectedColonMessage(start + 2, 16, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 4, 9, Messages.NO_SPACE_BEFORE);
-        addExpectedColonMessage(start + 9, 34, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 10, 8, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 20, 11, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 22, 10, Messages.SPACE_AFTER);
-
-        // Type Inheritance clause colons
-
-        // classes
-        start = 91;
-        addExpectedColonMessage(start, 18, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 8, 16, Messages.NO_SPACE_BEFORE);
-        addExpectedColonMessage(start + 14, 16, Messages.NO_SPACE_BEFORE);
-
-        // structs
-        start = 109;
-        addExpectedColonMessage(start, 21, Messages.NO_SPACE_BEFORE);
-        addExpectedColonMessage(start + 3, 20, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 7, 18, Messages.NO_SPACE_BEFORE);
-        addExpectedColonMessage(start + 10, 19, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 13, 21, Messages.NO_SPACE_BEFORE);
-
-        // enums
-        start = 130;
-        addExpectedColonMessage(start, 14, Messages.NO_SPACE_BEFORE);
-        addExpectedColonMessage(start + 4, 18, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 11, 14, Messages.NO_SPACE_BEFORE);
-
-        // protocols
-        start = 154;
-        addExpectedColonMessage(start, 31, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 3, 32, Messages.NO_SPACE_BEFORE);
-        addExpectedColonMessage(start + 9, 28, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 12, 29, Messages.NO_SPACE_BEFORE);
-        addExpectedColonMessage(start + 15, 28, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 22, 1, Messages.NO_SPACE_BEFORE);
-        addExpectedColonMessage(start + 26, 1, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 26, 1, Messages.NO_SPACE_BEFORE);
-
-        // extensions
-        start = 183;
-        addExpectedColonMessage(start + 3, 20, Messages.NO_SPACE_BEFORE);
-        addExpectedColonMessage(start + 6, 19, Messages.SPACE_AFTER);
-
-        // ternary operator
-        start = 192;
-        addExpectedColonMessage(start, 48, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start, 48, Messages.SPACE_BEFORE);
-        addExpectedColonMessage(start + 1, 14, Messages.SPACE_BEFORE);
-        addExpectedColonMessage(start + 2, 15, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 4, 30, Messages.SPACE_BEFORE);
-        addExpectedColonMessage(start + 5, 31, Messages.SPACE_AFTER);
-
-        // tuples
-        start = 199;
-        addExpectedColonMessage(start + 1, 33, Messages.NO_SPACE_BEFORE);
-        addExpectedColonMessage(start + 1, 51, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 2, 32, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 3, 45, Messages.NO_SPACE_BEFORE);
-        addExpectedColonMessage(start + 3, 83, Messages.SPACE_AFTER);
-
-        // generics
-        start = 204;
-        addExpectedColonMessage(start + 3, 21, Messages.NO_SPACE_BEFORE);
-        addExpectedColonMessage(start + 3, 35, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 6, 20, Messages.SPACE_AFTER);
-        addExpectedColonMessage(start + 10, 8, Messages.NO_SPACE_BEFORE);
-
         // Whitespace before open braces
 
         // functions
-        start = 223;
+        int start = 39;
         addExpectedBraceMessage(start, 44);
         addExpectedBraceMessage(start + 10, 34);
 
         // if statements
-        start = 240;
+        start = 56;
         addExpectedBraceMessage(start, 23);
         addExpectedBraceMessage(start + 3, 26);
         addExpectedBraceMessage(start + 6, 15);
 
         // loops
-        start = 253;
+        start = 69;
         addExpectedBraceMessage(start, 53);
         addExpectedBraceMessage(start + 4, 38);
         addExpectedBraceMessage(start + 29, 22);
@@ -146,18 +49,18 @@ public class WhitespaceTest extends RuleTest {
         addExpectedBraceMessage(start + 75, 18);
 
         // classes and structs with generic types
-        start = 340;
+        start = 156;
         addExpectedBraceMessage(start, 6);
         addExpectedBraceMessage(start + 3, 4);
 
         // protocols
-        start = 349;
+        start = 165;
         addExpectedBraceMessage(start, 24);
         addExpectedBraceMessage(start + 4, 32);
         addExpectedBraceMessage(start + 13, 24);
 
         // enums
-        start = 376;
+        start = 192;
         addExpectedBraceMessage(start, 16);
         addExpectedBraceMessage(start + 4, 27);
         addExpectedBraceMessage(start + 17, 6);
@@ -165,19 +68,19 @@ public class WhitespaceTest extends RuleTest {
         addExpectedBraceMessage(start + 34, 19);
 
         // closures
-        start = 414;
+        start = 230;
         addExpectedBraceMessage(start, 29);
         addExpectedBraceMessage(start + 14, 72);
         addExpectedBraceMessage(start + 18, 17);
 
         // extensions
-        start = 450;
+        start = 266;
         addExpectedBraceMessage(start, 26);
         addExpectedBraceMessage(start + 4, 29);
         addExpectedBraceMessage(start + 9, 19);
 
         // getters and setters
-        start = 464;
+        start = 464 - 184;
         addExpectedBraceMessage(start, 8);
         addExpectedBraceMessage(start + 4, 8);
         addExpectedBraceMessage(start + 21, 14);
@@ -186,12 +89,12 @@ public class WhitespaceTest extends RuleTest {
         addExpectedBraceMessage(start + 51, 25);
 
         // Single line comments
-        start = 523;
+        start = 523 - 184;
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start, 3, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 1, 5, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
 
         // Multi line comments
-        start = 530;
+        start = 530 - 184;
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 1, 35, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 2, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
@@ -206,33 +109,33 @@ public class WhitespaceTest extends RuleTest {
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 26, 23, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
 
         // Function Result arrow
-        start = 568;
+        start = 568 - 184;
         addExpectedArrowMessage(start, 18, Messages.SPACE_BEFORE);
         addExpectedArrowMessage(start + 4, 21, Messages.SPACE_AFTER);
         addExpectedArrowMessage(start + 8, 20, Messages.SPACE_BEFORE);
         addExpectedArrowMessage(start + 8, 22, Messages.SPACE_AFTER);
 
         // Closure result arrow
-        start = 581;
+        start = 581 - 184;
         addExpectedArrowMessage(start, 9, Messages.SPACE_BEFORE);
         addExpectedArrowMessage(start + 5, 12, Messages.SPACE_AFTER);
         addExpectedArrowMessage(start + 10, 19, Messages.SPACE_BEFORE);
         addExpectedArrowMessage(start + 15, 20, Messages.SPACE_AFTER);
 
         // Function type arrow
-        start = 600;
+        start = 600 - 184;
         addExpectedArrowMessage(start, 19, Messages.SPACE_BEFORE);
         addExpectedArrowMessage(start + 4, 22, Messages.SPACE_AFTER);
         addExpectedArrowMessage(start + 8, 40, Messages.SPACE_BEFORE);
         addExpectedArrowMessage(start + 12, 34, Messages.SPACE_AFTER);
 
         // Subscript result arrow
-        start = 623;
+        start = 623 - 184;
         addExpectedArrowMessage(start, 26, Messages.SPACE_BEFORE);
         addExpectedArrowMessage(start + 4, 29, Messages.SPACE_AFTER);
 
         // Documentation comments
-        start = 643;
+        start = 643 - 184;
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start, 3, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 2, 3, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 4, 3, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
@@ -241,7 +144,7 @@ public class WhitespaceTest extends RuleTest {
         addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 16, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
 
         // Type inheritance commas
-        start = 672;
+        start = 672 - 184;
         addExpectedCommaMessage(start, 24, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 4, 23, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 8, 23, Messages.SPACE_AFTER);
@@ -252,13 +155,13 @@ public class WhitespaceTest extends RuleTest {
         addExpectedCommaMessage(start + 46, 22, Messages.NO_SPACE_BEFORE);
 
         // Generic list commas
-        start = 726;
+        start = 726 - 184;
         addExpectedCommaMessage(start, 31, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 4, 31, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 8, 32, Messages.NO_SPACE_BEFORE);
 
         // Requirement list commas
-        start = 745;
+        start = 745 - 184;
         addExpectedCommaMessage(start, 37, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 4, 43, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 4, 43, Messages.NO_SPACE_BEFORE);
@@ -274,7 +177,7 @@ public class WhitespaceTest extends RuleTest {
     }
 
     private void addExpectedColonMessage(int line, int column, String msg) {
-        addExpectedMsg(Rules.WHITESPACE, line, column, Messages.COLON + Messages.AT_COLUMN + column + " " + msg);
+        addExpectedMsg(Rules.COLON_WHITESPACE, line, column, Messages.COLON + Messages.AT_COLUMN + column + " " + msg);
     }
 
     private void addExpectedCommaMessage(int line, int column, String msg) {

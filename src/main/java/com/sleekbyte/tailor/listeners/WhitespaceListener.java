@@ -27,49 +27,13 @@ public class WhitespaceListener extends SwiftBaseListener {
     }
 
     @Override
-    public void enterDictionaryLiteralItem(SwiftParser.DictionaryLiteralItemContext ctx) {
-        checkWhitespaceAroundColon(ctx);
-    }
-
-    @Override
     public void enterOperatorDeclaration(SwiftParser.OperatorDeclarationContext ctx) {
         checkWhitespaceAroundOperator(ctx);
     }
 
     @Override
-    public void enterTypeAnnotation(SwiftParser.TypeAnnotationContext ctx) {
-        checkWhitespaceAroundColon(ctx);
-    }
-
-    @Override
-    public void enterDictionaryType(SwiftParser.DictionaryTypeContext ctx) {
-        checkWhitespaceAroundColon(ctx);
-    }
-
-    @Override
-    public void enterSwitchCase(SwiftParser.SwitchCaseContext ctx) {
-        checkWhitespaceAroundColon(ctx);
-    }
-
-    @Override
     public void enterTypeInheritanceClause(SwiftParser.TypeInheritanceClauseContext ctx) {
-        checkWhitespaceAroundColon(ctx);
         checkWhitespaceAroundCommas(ctx);
-    }
-
-    @Override
-    public void enterConditionalOperator(SwiftParser.ConditionalOperatorContext ctx) {
-        checkWhitespaceAroundColon(ctx);
-    }
-
-    @Override
-    public void enterExpressionElement(SwiftParser.ExpressionElementContext ctx) {
-        checkWhitespaceAroundColon(ctx);
-    }
-
-    @Override
-    public void enterGenericParameter(SwiftParser.GenericParameterContext ctx) {
-        checkWhitespaceAroundColon(ctx);
     }
 
     @Override
@@ -117,93 +81,6 @@ public class WhitespaceListener extends SwiftBaseListener {
         }
     }
 
-    private void checkWhitespaceAroundColon(SwiftParser.TypeAnnotationContext ctx) {
-        TerminalNodeImpl colon = (TerminalNodeImpl) ctx.getChild(0);
-        ParseTree parentLeftSibling = ParseTreeUtil.getLeftSibling(colon.getParent());
-        ParseTree rightSibling = ctx.getChild(1);
-
-        assert !(parentLeftSibling == null || rightSibling == null);
-
-        Token left = ParseTreeUtil.getStopTokenForNode(parentLeftSibling);
-        Token right = ParseTreeUtil.getStartTokenForNode(rightSibling);
-        Token colonToken = colon.getSymbol();
-
-        verifyColonLeftAssociation(left, right, colonToken);
-    }
-
-    private void checkWhitespaceAroundColon(SwiftParser.DictionaryLiteralItemContext ctx) {
-        Token left = ctx.expression(0).getStop();
-        Token right = ctx.expression(1).getStart();
-        Token colon = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
-
-        verifyColonLeftAssociation(left, right, colon);
-    }
-
-    private void checkWhitespaceAroundColon(SwiftParser.DictionaryTypeContext ctx) {
-        Token left = ctx.sType(0).getStop();
-        Token right = ctx.sType(1).getStart();
-        Token colon = ((TerminalNodeImpl) ctx.getChild(2)).getSymbol();
-
-        verifyColonLeftAssociation(left, right, colon);
-    }
-
-    private void checkWhitespaceAroundColon(SwiftParser.SwitchCaseContext ctx) {
-        Token left = null;
-        Token right = null;
-        Token colon = null;
-
-        if (ctx.caseLabel() != null) {
-            left = ctx.caseLabel().caseItemList().getStop();
-            ParseTree rightChild = ctx.getChild(1);
-            // right child can be statements or a semi colon
-            right = ParseTreeUtil.getStartTokenForNode(rightChild);
-            colon = ((TerminalNodeImpl) ctx.caseLabel().getChild(2)).getSymbol();
-        } else {
-            left = ((TerminalNodeImpl) ctx.defaultLabel().getChild(0)).getSymbol();
-            ParseTree rightChild = ctx.getChild(1);
-            right = ParseTreeUtil.getStartTokenForNode(rightChild);
-            colon = ((TerminalNodeImpl) ctx.defaultLabel().getChild(1)).getSymbol();
-        }
-
-        verifyColonLeftAssociation(left, right, colon);
-    }
-
-    private void checkWhitespaceAroundColon(SwiftParser.TypeInheritanceClauseContext ctx) {
-        Token colon = ((TerminalNodeImpl) ctx.getChild(0)).getSymbol();
-        Token right = ((ParserRuleContext) ctx.getChild(1)).getStart();
-        Token left = ((ParserRuleContext) ParseTreeUtil.getLeftSibling(ctx)).getStop();
-
-        verifyColonLeftAssociation(left, right, colon);
-    }
-
-    private void checkWhitespaceAroundColon(SwiftParser.ConditionalOperatorContext ctx) {
-        Token colon = ((TerminalNodeImpl) ctx.getChild(2)).getSymbol();
-        Token left = ctx.expression().getStop();
-        Token right = ((ParserRuleContext) ParseTreeUtil.getRightSibling(ctx)).getStart();
-
-        verifyColonIsSpaceDelimited(left, right, colon);
-    }
-
-    private void checkWhitespaceAroundColon(SwiftParser.ExpressionElementContext ctx) {
-        if (ctx.identifier() != null) {
-            Token colon = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
-            Token left = ctx.identifier().getStop();
-            Token right = ctx.expression().getStart();
-
-            verifyColonLeftAssociation(left, right, colon);
-        }
-    }
-
-    private void checkWhitespaceAroundColon(SwiftParser.GenericParameterContext ctx) {
-        if (ctx.getChildCount() == 3) {
-            Token colon = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
-            Token left = ctx.typeName().getStop();
-            Token right = ((ParserRuleContext) ctx.getChild(2)).getStart();
-
-            verifyColonLeftAssociation(left, right, colon);
-        }
-    }
-
     private void checkWhitespaceAroundCommas(SwiftParser.TypeInheritanceClauseContext ctx) {
         if (ctx.classRequirement() != null && ctx.typeInheritanceList() != null) {
             Token left = ParseTreeUtil.getStopTokenForNode(ctx.classRequirement());
@@ -248,24 +125,6 @@ public class WhitespaceListener extends SwiftBaseListener {
         Token right = ParseTreeUtil.getStartTokenForNode(ParseTreeUtil.getRightSibling(arrow));
 
         verifyArrowIsSpaceDelimited(left, right, ((TerminalNodeImpl) arrow).getSymbol());
-    }
-
-    private void verifyColonIsSpaceDelimited(Token left, Token right, Token colon) {
-        Location colonLocation = ListenerUtil.getTokenLocation(colon);
-
-        if (checkLeftSpaces(left, colon, 1)) {
-            printer.error(Rules.WHITESPACE, Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " "
-                    + Messages.SPACE_BEFORE, colonLocation);
-        }
-
-        if (checkRightSpaces(right, colon, 1)) {
-            printer.error(Rules.WHITESPACE, Messages.COLON + Messages.AT_COLUMN + colonLocation.column + " "
-                    + Messages.SPACE_AFTER, colonLocation);
-        }
-    }
-
-    private void verifyColonLeftAssociation(Token left, Token right, Token colon) {
-        verifyPunctuationLeftAssociation(left, right, colon, Messages.COLON);
     }
 
     private void verifyCommaLeftAssociation(Token left, Token right, Token comma) {
