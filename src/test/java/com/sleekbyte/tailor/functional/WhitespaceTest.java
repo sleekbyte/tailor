@@ -87,35 +87,6 @@ public class WhitespaceTest extends RuleTest {
         addExpectedBraceMessage(start + 32, 21);
         addExpectedBraceMessage(start + 45, 24);
         addExpectedBraceMessage(start + 51, 25);
-
-        // Single line comments
-        start = 339;
-        addExpectedMsg(Rules.COMMENT_WHITESPACE, start, 3, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
-        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 1, 5, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
-
-        // Multi line comments
-        start = 346;
-        addExpectedMsg(Rules.COMMENT_WHITESPACE, start, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
-        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 1, 35, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
-        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 2, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
-        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 2, 17, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
-        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 3, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
-        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 3, 24, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
-        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 8, 10, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
-        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 9, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
-        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 22, 15, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
-        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 25, 8, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
-        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 26, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
-        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 26, 23, Messages.MULTILINE_COMMENT + Messages.END_SPACE);
-
-        // Documentation comments
-        start = 391;
-        addExpectedMsg(Rules.COMMENT_WHITESPACE, start, 3, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
-        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 2, 3, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
-        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 4, 3, Messages.SINGLE_LINE_COMMENT + Messages.START_SPACE);
-        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 6, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
-        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 11, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
-        addExpectedMsg(Rules.COMMENT_WHITESPACE, start + 16, 3, Messages.MULTILINE_COMMENT + Messages.START_SPACE);
     }
 
     private void addExpectedOperatorMsg(int line, int column, String msg) {
