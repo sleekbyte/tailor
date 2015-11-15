@@ -2,7 +2,6 @@ package com.sleekbyte.tailor.common;
 
 import com.sleekbyte.tailor.listeners.BlankLineListener;
 import com.sleekbyte.tailor.listeners.BraceStyleListener;
-import com.sleekbyte.tailor.listeners.CommentWhitespaceListener;
 import com.sleekbyte.tailor.listeners.ConstantNamingListener;
 import com.sleekbyte.tailor.listeners.FileListener;
 import com.sleekbyte.tailor.listeners.ForceTypeCastListener;
@@ -13,17 +12,43 @@ import com.sleekbyte.tailor.listeners.RedundantParenthesesListener;
 import com.sleekbyte.tailor.listeners.SemicolonTerminatedListener;
 import com.sleekbyte.tailor.listeners.TodoCommentListener;
 import com.sleekbyte.tailor.listeners.UpperCamelCaseListener;
-import com.sleekbyte.tailor.listeners.WhitespaceListener;
+import com.sleekbyte.tailor.listeners.whitespace.ArrowWhitespaceListener;
+import com.sleekbyte.tailor.listeners.whitespace.ColonWhitespaceListener;
+import com.sleekbyte.tailor.listeners.whitespace.CommaWhitespaceListener;
+import com.sleekbyte.tailor.listeners.whitespace.CommentWhitespaceListener;
+import com.sleekbyte.tailor.listeners.whitespace.OperatorWhitespaceListener;
 import com.sleekbyte.tailor.utils.ArgumentParser;
 
 /**
  * Enum for all rules implemented in Tailor.
  */
 public enum Rules {
-    BRACE_STYLE, COMMENT_WHITESPACE, CONSTANT_K_PREFIX, CONSTANT_NAMING, FORCED_TYPE_CAST, FUNCTION_WHITESPACE,
-    LEADING_WHITESPACE, LOWER_CAMEL_CASE, MAX_CLASS_LENGTH, MAX_CLOSURE_LENGTH, MAX_FILE_LENGTH, MAX_FUNCTION_LENGTH,
-    MAX_LINE_LENGTH, MAX_NAME_LENGTH, MAX_STRUCT_LENGTH, MULTIPLE_IMPORTS, REDUNDANT_PARENTHESES, TERMINATING_NEWLINE,
-    TERMINATING_SEMICOLON, TODO_SYNTAX, TRAILING_WHITESPACE, UPPER_CAMEL_CASE, WHITESPACE;
+    ARROW_WHITESPACE,
+    BRACE_STYLE,
+    COLON_WHITESPACE,
+    COMMA_WHITESPACE,
+    COMMENT_WHITESPACE,
+    CONSTANT_K_PREFIX,
+    CONSTANT_NAMING,
+    FORCED_TYPE_CAST,
+    FUNCTION_WHITESPACE,
+    LEADING_WHITESPACE,
+    LOWER_CAMEL_CASE,
+    MAX_CLASS_LENGTH,
+    MAX_CLOSURE_LENGTH,
+    MAX_FILE_LENGTH,
+    MAX_FUNCTION_LENGTH,
+    MAX_LINE_LENGTH,
+    MAX_NAME_LENGTH,
+    MAX_STRUCT_LENGTH,
+    MULTIPLE_IMPORTS,
+    OPERATOR_WHITESPACE,
+    REDUNDANT_PARENTHESES,
+    TERMINATING_NEWLINE,
+    TERMINATING_SEMICOLON,
+    TODO_SYNTAX,
+    TRAILING_WHITESPACE,
+    UPPER_CAMEL_CASE;
 
     private static final String BASE_STYLE_GUIDE_LINK = "https://github.com/sleekbyte/tailor/wiki/Rules#";
     private String name;
@@ -47,9 +72,21 @@ public enum Rules {
     }
 
     static {
+        ARROW_WHITESPACE.name = "arrow-whitespace";
+        ARROW_WHITESPACE.description = "Flags all return arrows (->) that are not space delimited.";
+        ARROW_WHITESPACE.className = ArrowWhitespaceListener.class.getName();
+
         BRACE_STYLE.name = "brace-style";
         BRACE_STYLE.description = "Definitions of constructs should follow the One True Brace Style (1TBS).";
         BRACE_STYLE.className = BraceStyleListener.class.getName();
+
+        COLON_WHITESPACE.name = "colon-whitespace";
+        COLON_WHITESPACE.description = "Flag whitespace violations around colons (:).";
+        COLON_WHITESPACE.className = ColonWhitespaceListener.class.getName();
+
+        COMMA_WHITESPACE.name = "comma-whitespace";
+        COMMA_WHITESPACE.description = "Flags all commas (,) that are not left associated.";
+        COMMA_WHITESPACE.className = CommaWhitespaceListener.class.getName();
 
         COMMENT_WHITESPACE.name = "comment-whitespace";
         COMMENT_WHITESPACE.description = "Ensure at least one whitespace character after a comment opening symbol"
@@ -114,6 +151,10 @@ public enum Rules {
         MULTIPLE_IMPORTS.description = "Multiple import statements should not be defined on a single line.";
         MULTIPLE_IMPORTS.className = MultipleImportListener.class.getName();
 
+        OPERATOR_WHITESPACE.name = "operator-whitespace";
+        OPERATOR_WHITESPACE.description = "Flags operators that are not space delimited in operator declarations.";
+        OPERATOR_WHITESPACE.className = OperatorWhitespaceListener.class.getName();
+
         REDUNDANT_PARENTHESES.name = "redundant-parentheses";
         REDUNDANT_PARENTHESES.description = "Control flow constructs, exception handling constructs, and "
             + "values assigned in variable/constant declarations should not be enclosed in parentheses.";
@@ -141,10 +182,5 @@ public enum Rules {
         UPPER_CAMEL_CASE.description = "Class, enum, enum value, struct, and protocol names should follow"
             + " UpperCamelCase naming convention.";
         UPPER_CAMEL_CASE.className = UpperCamelCaseListener.class.getName();
-
-        WHITESPACE.name = "whitespace";
-        WHITESPACE.description = "Flag whitespace violations around colon (:), arrow (->), and between construct"
-            + " and opening brace ({).";
-        WHITESPACE.className = WhitespaceListener.class.getName();
     }
 }
