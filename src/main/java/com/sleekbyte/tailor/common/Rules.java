@@ -16,7 +16,7 @@ import com.sleekbyte.tailor.listeners.whitespace.ArrowWhitespaceListener;
 import com.sleekbyte.tailor.listeners.whitespace.ColonWhitespaceListener;
 import com.sleekbyte.tailor.listeners.whitespace.CommaWhitespaceListener;
 import com.sleekbyte.tailor.listeners.whitespace.CommentWhitespaceListener;
-import com.sleekbyte.tailor.listeners.whitespace.WhitespaceListener;
+import com.sleekbyte.tailor.listeners.whitespace.OperatorWhitespaceListener;
 import com.sleekbyte.tailor.utils.ArgumentParser;
 
 /**
@@ -42,13 +42,13 @@ public enum Rules {
     MAX_NAME_LENGTH,
     MAX_STRUCT_LENGTH,
     MULTIPLE_IMPORTS,
+    OPERATOR_WHITESPACE,
     REDUNDANT_PARENTHESES,
     TERMINATING_NEWLINE,
     TERMINATING_SEMICOLON,
     TODO_SYNTAX,
     TRAILING_WHITESPACE,
-    UPPER_CAMEL_CASE,
-    WHITESPACE;
+    UPPER_CAMEL_CASE;
 
     private static final String BASE_STYLE_GUIDE_LINK = "https://github.com/sleekbyte/tailor/wiki/Rules#";
     private String name;
@@ -151,6 +151,10 @@ public enum Rules {
         MULTIPLE_IMPORTS.description = "Multiple import statements should not be defined on a single line.";
         MULTIPLE_IMPORTS.className = MultipleImportListener.class.getName();
 
+        OPERATOR_WHITESPACE.name = "operator-whitespace";
+        OPERATOR_WHITESPACE.description = "Flags operators that are not space delimited in operator declarations";
+        OPERATOR_WHITESPACE.className = OperatorWhitespaceListener.class.getName();
+
         REDUNDANT_PARENTHESES.name = "redundant-parentheses";
         REDUNDANT_PARENTHESES.description = "Control flow constructs, exception handling constructs, and "
             + "values assigned in variable/constant declarations should not be enclosed in parentheses.";
@@ -178,10 +182,5 @@ public enum Rules {
         UPPER_CAMEL_CASE.description = "Class, enum, enum value, struct, and protocol names should follow"
             + " UpperCamelCase naming convention.";
         UPPER_CAMEL_CASE.className = UpperCamelCaseListener.class.getName();
-
-        WHITESPACE.name = "whitespace";
-        WHITESPACE.description = "Flag whitespace violations around colon (:), arrow (->), and between construct"
-            + " and opening brace ({).";
-        WHITESPACE.className = WhitespaceListener.class.getName();
     }
 }

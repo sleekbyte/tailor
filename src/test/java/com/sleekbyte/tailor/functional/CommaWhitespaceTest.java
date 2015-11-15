@@ -14,7 +14,6 @@ public class CommaWhitespaceTest extends RuleTest {
     @Override
     protected void addAllExpectedMsgs() {
         // Type inheritance commas
-
         int start = 9;
         addExpectedCommaMessage(start, 24, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 4, 23, Messages.SPACE_AFTER);
