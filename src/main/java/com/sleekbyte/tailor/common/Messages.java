@@ -139,4 +139,6 @@ public class Messages {
     public static final String TAILOR_CONFIG_LOCATION = "Using Tailor configuration file at: ";
     public static final String FILES_TO_BE_ANALYZED = "Files to be analyzed:";
 
+    // Error messages
+    public static final String NO_SWIFT_FILES_FOUND = "No Swift source files were found.";
 }
