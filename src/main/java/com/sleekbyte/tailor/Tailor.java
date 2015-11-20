@@ -6,8 +6,8 @@ import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.ConfigProperties;
 import com.sleekbyte.tailor.common.Configuration;
+import com.sleekbyte.tailor.common.ConstructLengths;
 import com.sleekbyte.tailor.common.ExitCode;
-import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
@@ -19,8 +19,9 @@ import com.sleekbyte.tailor.listeners.DeclarationListener;
 import com.sleekbyte.tailor.listeners.ErrorListener;
 import com.sleekbyte.tailor.listeners.FileListener;
 import com.sleekbyte.tailor.listeners.KPrefixListener;
-import com.sleekbyte.tailor.listeners.MaxLengthListener;
 import com.sleekbyte.tailor.listeners.TodoCommentListener;
+import com.sleekbyte.tailor.listeners.lengths.MaxLengthListener;
+import com.sleekbyte.tailor.listeners.lengths.MinLengthListener;
 import com.sleekbyte.tailor.listeners.whitespace.CommentWhitespaceListener;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ArgumentParser;
@@ -249,7 +250,7 @@ public class Tailor {
         long numErrors = 0;
         long numSkippedFiles = 0;
         long numWarnings = 0;
-        MaxLengths maxLengths = argumentParser.parseMaxLengths();
+        ConstructLengths constructLengths = argumentParser.parseConstructLengths();
         Severity maxSeverity = argumentParser.getMaxSeverity();
         ColorSettings colorSettings =
             new ColorSettings(argumentParser.shouldColorOutput(), argumentParser.shouldInvertColorOutput());
@@ -272,7 +273,8 @@ public class Tailor {
 
             try (Printer printer = new Printer(inputFile, maxSeverity, colorSettings)) {
                 List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, tokenStream);
-                listeners.add(new MaxLengthListener(printer, maxLengths, enabledRules));
+                listeners.add(new MaxLengthListener(printer, constructLengths, enabledRules));
+                listeners.add(new MinLengthListener(printer, constructLengths, enabledRules));
                 DeclarationListener decListener = new DeclarationListener(listeners);
                 listeners.add(decListener);
 
@@ -284,7 +286,7 @@ public class Tailor {
                     }
                     walker.walk(listener, tree);
                 }
-                try (FileListener fileListener = new FileListener(printer, inputFile, maxLengths, enabledRules)) {
+                try (FileListener fileListener = new FileListener(printer, inputFile, constructLengths, enabledRules)) {
                     fileListener.verify();
                 }
 

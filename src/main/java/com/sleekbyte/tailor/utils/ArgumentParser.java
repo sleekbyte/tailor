@@ -1,6 +1,6 @@
 package com.sleekbyte.tailor.utils;
 
-import com.sleekbyte.tailor.common.MaxLengths;
+import com.sleekbyte.tailor.common.ConstructLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
@@ -38,6 +38,8 @@ public class ArgumentParser {
     public static final String MAX_LINE_LENGTH_LONG_OPT = "max-line-length";
     public static final String MAX_NAME_LENGTH_OPT = "max-name-length";
     public static final String MAX_STRUCT_LENGTH_OPT = "max-struct-length";
+
+    public static final String MIN_NAME_LENGTH_OPT = "min-name-length";
 
     private static final String MAX_SEVERITY_OPT = "max-severity";
     private static final String ONLY_OPT = "only";
@@ -106,18 +108,22 @@ public class ArgumentParser {
     }
 
     /**
-     * Parse maximum construct length flags into MaxLengths object.
+     * Parse construct length flags into ConstructLengths object.
      */
-    public MaxLengths parseMaxLengths() throws ArgumentParserException {
-        MaxLengths maxLengths = new MaxLengths();
-        maxLengths.setMaxClassLength(getIntegerArgument(MAX_CLASS_LENGTH_OPT));
-        maxLengths.setMaxClosureLength(getIntegerArgument(MAX_CLOSURE_LENGTH_OPT));
-        maxLengths.setMaxFileLength(getIntegerArgument(MAX_FILE_LENGTH_OPT));
-        maxLengths.setMaxFunctionLength(getIntegerArgument(MAX_FUNCTION_LENGTH_OPT));
-        maxLengths.setMaxLineLength(getIntegerArgument(MAX_LINE_LENGTH_LONG_OPT));
-        maxLengths.setMaxNameLength(getIntegerArgument(MAX_NAME_LENGTH_OPT));
-        maxLengths.setMaxStructLength(getIntegerArgument(MAX_STRUCT_LENGTH_OPT));
-        return maxLengths;
+    public ConstructLengths parseConstructLengths() throws ArgumentParserException {
+        ConstructLengths constructLengths = new ConstructLengths();
+
+        constructLengths.setMaxClassLength(getIntegerArgument(MAX_CLASS_LENGTH_OPT));
+        constructLengths.setMaxClosureLength(getIntegerArgument(MAX_CLOSURE_LENGTH_OPT));
+        constructLengths.setMaxFileLength(getIntegerArgument(MAX_FILE_LENGTH_OPT));
+        constructLengths.setMaxFunctionLength(getIntegerArgument(MAX_FUNCTION_LENGTH_OPT));
+        constructLengths.setMaxLineLength(getIntegerArgument(MAX_LINE_LENGTH_LONG_OPT));
+        constructLengths.setMaxNameLength(getIntegerArgument(MAX_NAME_LENGTH_OPT));
+        constructLengths.setMaxStructLength(getIntegerArgument(MAX_STRUCT_LENGTH_OPT));
+
+        constructLengths.setMinNameLength(getIntegerArgument(MIN_NAME_LENGTH_OPT));
+
+        return constructLengths;
     }
 
     private void addOptions() {
@@ -135,6 +141,10 @@ public class ArgumentParser {
             MAX_LINE_LENGTH_SHORT_OPT, MAX_LINE_LENGTH_LONG_OPT, argName, Messages.MAX_LINE_LENGTH_DESC));
         options.addOption(createSingleArgOpt(MAX_NAME_LENGTH_OPT, argName, Messages.MAX_NAME_LENGTH_DESC));
         options.addOption(createSingleArgOpt(MAX_STRUCT_LENGTH_OPT, argName, Messages.MAX_STRUCT_LENGTH_DESC));
+
+        argName = "1-999";
+        options.addOption(createSingleArgOpt(MIN_NAME_LENGTH_OPT, argName, Messages.MIN_NAME_LENGTH_DESC));
+
 
         argName = "error|warning (default)";
         options.addOption(createSingleArgOpt(MAX_SEVERITY_OPT, argName, Messages.MAX_SEVERITY_DESC));

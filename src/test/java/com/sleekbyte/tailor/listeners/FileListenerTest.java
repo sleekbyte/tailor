@@ -3,7 +3,7 @@ package com.sleekbyte.tailor.listeners;
 import static org.junit.Assert.assertEquals;
 
 import com.sleekbyte.tailor.common.ColorSettings;
-import com.sleekbyte.tailor.common.MaxLengths;
+import com.sleekbyte.tailor.common.ConstructLengths;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.output.Printer;
@@ -64,7 +64,7 @@ public class FileListenerTest {
 
     @Test
     public void testNumLinesInFileZeroLines() throws IOException {
-        try (FileListener fileListener = new FileListener(printer, inputFile, new MaxLengths(), enabledRules)) {
+        try (FileListener fileListener = new FileListener(printer, inputFile, new ConstructLengths(), enabledRules)) {
             fileListener.verify();
             assertEquals(0, fileListener.getNumOfLines());
         }
@@ -73,7 +73,7 @@ public class FileListenerTest {
     @Test
     public void testNumLinesInFileOneLine() throws IOException {
         writeNumOfLines(1, NORMAL_LINE);
-        try (FileListener fileListener = new FileListener(printer, inputFile, new MaxLengths(), enabledRules)) {
+        try (FileListener fileListener = new FileListener(printer, inputFile, new ConstructLengths(), enabledRules)) {
             fileListener.verify();
             assertEquals(1, fileListener.getNumOfLines());
         }
@@ -82,7 +82,7 @@ public class FileListenerTest {
     @Test
     public void testNumLinesInFileMultipleLines() throws IOException {
         writeNumOfLines(4, NORMAL_LINE);
-        try (FileListener fileListener = new FileListener(printer, inputFile, new MaxLengths(), enabledRules)) {
+        try (FileListener fileListener = new FileListener(printer, inputFile, new ConstructLengths(), enabledRules)) {
             fileListener.verify();
             assertEquals(4, fileListener.getNumOfLines());
         }

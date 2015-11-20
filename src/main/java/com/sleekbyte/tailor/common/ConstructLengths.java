@@ -3,7 +3,7 @@ package com.sleekbyte.tailor.common;
 /**
  * Keeps track of maximum length restrictions for files and constructs.
  */
-public class MaxLengths {
+public class ConstructLengths {
 
     public int maxClassLength = 0;
     public int maxClosureLength = 0;
@@ -12,6 +12,8 @@ public class MaxLengths {
     public int maxLineLength = 0;
     public int maxNameLength = 0;
     public int maxStructLength = 0;
+
+    public int minNameLength = 1;
 
     public void setMaxClassLength(int maxClassLength) {
         this.maxClassLength = maxClassLength;
@@ -39,6 +41,10 @@ public class MaxLengths {
 
     public void setMaxStructLength(int maxStructLength) {
         this.maxStructLength = maxStructLength;
+    }
+
+    public void setMinNameLength(int minNameLength) {
+        this.minNameLength = minNameLength;
     }
 
 }

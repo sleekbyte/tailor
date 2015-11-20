@@ -97,6 +97,7 @@ Options:
     --max-name-length=<0-999>                  maximum Identifier name length (in characters)
     --max-severity=<error|warning (default)>   maximum severity
     --max-struct-length=<0-999>                maximum Struct length (in lines)
+    --min-name-length=<1-999>                  minimum Identifier name length (in characters)
     --no-color                                 disable colorized console output
     --only=<rule1,rule2,...>                   run only the specified rules
     --show-rules                               show description for each rule

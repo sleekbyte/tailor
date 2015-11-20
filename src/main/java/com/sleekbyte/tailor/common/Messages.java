@@ -81,6 +81,7 @@ public class Messages {
     public static final String SEMICOLON = "should not terminate with a semicolon";
     public static final String EXCEEDS_LINE_LIMIT = "is over maximum line limit";
     public static final String EXCEEDS_CHARACTER_LIMIT = "is over maximum character limit";
+    public static final String VIOLATES_MINIMUM_CHARACTER_LIMIT = "is less than minimum character limit";
     public static final String GLOBAL_CONSTANT_NAMING = "should be either lowerCamelCase or UpperCamelCase";
     public static final String NEWLINE_TERMINATOR = "should terminate with exactly one newline character ('\\n')";
     public static final String ENCLOSED_PARENTHESES = "should not be enclosed within parentheses";
@@ -113,6 +114,7 @@ public class Messages {
     public static final String HELP_DESC = "display help";
     public static final String VERSION_DESC = "display version";
     public static final String MAXIMUM = "maximum ";
+    public static final String MINIMUM = "minimum ";
     public static final String LENGTH = "length";
     public static final String SEVERITY = "severity ";
     public static final String IN_LINES_DESC = " (in lines)";
@@ -125,6 +127,7 @@ public class Messages {
     public static final String MAX_NAME_LENGTH_DESC = MAXIMUM + IDENTIFIER_NAME + LENGTH + IN_CHARS_DESC;
     public static final String MAX_STRUCT_LENGTH_DESC = MAXIMUM + STRUCT + LENGTH + IN_LINES_DESC;
     public static final String MAX_SEVERITY_DESC = MAXIMUM + SEVERITY;
+    public static final String MIN_NAME_LENGTH_DESC = MINIMUM + IDENTIFIER_NAME + LENGTH + IN_CHARS_DESC;
     public static final String ONLY_SPECIFIC_RULES_DESC = "run only the specified rules";
     public static final String EXCEPT_RULES_DESC = "run all rules except the specified ones";
     public static final String XCODE_INTEGRATION_DESC = "add Tailor Build Phase Run Script to Xcode Project";
