@@ -21,15 +21,13 @@ public class GrammarTest {
 
     private static final String TEST_INPUT_DIR = "src/test/swift/com/sleekbyte/tailor/grammar/";
 
-    private ByteArrayOutputStream errContent;
-    private ByteArrayOutputStream outContent;
     private File[] swiftFiles;
 
     @Before
     public void setUp() throws UnsupportedEncodingException {
         File inputDir = new File(TEST_INPUT_DIR);
         swiftFiles = inputDir.listFiles((File file, String name) -> name.endsWith(".swift"));
-        outContent = new ByteArrayOutputStream();
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent, false, Charset.defaultCharset().name()));
     }
 
@@ -41,7 +39,7 @@ public class GrammarTest {
     @Test
     public void testGrammar() throws UnsupportedEncodingException {
         for (File swiftFile : swiftFiles) {
-            errContent = new ByteArrayOutputStream();
+            ByteArrayOutputStream errContent = new ByteArrayOutputStream();
             System.setErr(new PrintStream(errContent, false, Charset.defaultCharset().name()));
             String[] command = { "--debug", (TEST_INPUT_DIR + swiftFile.getName()) };
             Tailor.main(command);

@@ -85,9 +85,9 @@ public final class CliOptionsTest {
         exit.expectSystemExitWithStatus(ExitCode.success());
         String[] command = { "--show-rules" };
 
-        exit.checkAssertionAfterwards(() -> assertTrue(Rules.values().length > 0));
-
         Tailor.main(command);
+
+        assertTrue(Rules.values().length > 0);
     }
 
     @Test

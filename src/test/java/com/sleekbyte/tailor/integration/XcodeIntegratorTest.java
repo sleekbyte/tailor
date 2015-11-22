@@ -29,6 +29,9 @@ public final class XcodeIntegratorTest {
 
     private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
+
     @Before
     public void setUp() throws UnsupportedEncodingException {
         outContent.reset();
@@ -39,9 +42,6 @@ public final class XcodeIntegratorTest {
     public void tearDown() {
         System.setErr(null);
     }
-
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
 
     @Test(expected = IOException.class)
     public void testGetAbsolutePathEmptyPath() throws  IOException {

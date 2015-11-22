@@ -297,29 +297,29 @@ public class BraceStyleListener extends SwiftBaseListener {
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.SETTER);
     }
 
-    void verifySubscriptBraceStyle(SwiftParser.SubscriptDeclarationContext ctx) {
+    private void verifySubscriptBraceStyle(SwiftParser.SubscriptDeclarationContext ctx) {
         verifyBodyOpenBraceStyle((ParserRuleContext) ParseTreeUtil.getLastChild(ctx), Messages.SUBSCRIPT);
         verifyBodyCloseBraceStyle((ParserRuleContext) ParseTreeUtil.getLastChild(ctx), Messages.SUBSCRIPT);
     }
 
-    void verifyGetterSetterBraceStyle(SwiftParser.GetterSetterBlockContext ctx) {
+    private void verifyGetterSetterBraceStyle(SwiftParser.GetterSetterBlockContext ctx) {
         verifyBodyOpenBraceStyle(ctx, Messages.GETTER_SETTER_BLOCK);
         verifyBodyCloseBraceStyle(ctx, Messages.GETTER_SETTER_BLOCK);
     }
 
-    void verifyWillSetClauseBraceStyle(SwiftParser.WillSetClauseContext ctx) {
+    private void verifyWillSetClauseBraceStyle(SwiftParser.WillSetClauseContext ctx) {
         Token left = ParseTreeUtil.getStopTokenForNode(ParseTreeUtil.getLeftSibling(ctx.codeBlock()));
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), left, Messages.WILL_SET_CLAUSE);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.WILL_SET_CLAUSE);
     }
 
-    void verifyDidSetClauseBraceStyle(SwiftParser.DidSetClauseContext ctx) {
+    private void verifyDidSetClauseBraceStyle(SwiftParser.DidSetClauseContext ctx) {
         Token left = ParseTreeUtil.getStopTokenForNode(ParseTreeUtil.getLeftSibling(ctx.codeBlock()));
         verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), left, Messages.DID_SET_CLAUSE);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.DID_SET_CLAUSE);
     }
 
-    void verifyWillSetDidSetBlockBraceStyle(SwiftParser.WillSetDidSetBlockContext ctx) {
+    private void verifyWillSetDidSetBlockBraceStyle(SwiftParser.WillSetDidSetBlockContext ctx) {
         verifyBodyOpenBraceStyle(ctx, Messages.WILLSET_DIDSET_BLOCK);
         verifyBodyCloseBraceStyle(ctx, Messages.WILLSET_DIDSET_BLOCK);
     }
