@@ -2,6 +2,19 @@ package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.antlr.SwiftParser.ArrayLiteralItemContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.CatchClauseContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ConditionClauseContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryLiteralItemContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ForStatementContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.FunctionCallWithClosureExpressionContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.InitializerContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ParenthesizedExpressionContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.PatternContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ThrowStatementContext;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
@@ -23,84 +36,17 @@ public class RedundantParenthesesListener extends SwiftBaseListener {
     }
 
     @Override
-    public void enterConditionClause(SwiftParser.ConditionClauseContext ctx) {
+    public void enterConditionClause(ConditionClauseContext ctx) {
         verifyRedundantExpressionParentheses(Messages.CONDITIONAL_CLAUSE, ctx.expression());
     }
 
     @Override
-    public void enterSwitchStatement(SwiftParser.SwitchStatementContext ctx) {
+    public void enterSwitchStatement(SwitchStatementContext ctx) {
         verifyRedundantExpressionParentheses(Messages.SWITCH_EXPRESSION, ctx.expression());
     }
 
     @Override
-    public void enterForStatement(SwiftParser.ForStatementContext ctx) {
-        verifyRedundantForLoopParentheses(ctx);
-    }
-
-    @Override
-    public void enterThrowStatement(SwiftParser.ThrowStatementContext ctx) {
-        verifyRedundantExpressionParentheses(Messages.THROW_STATEMENT, ctx.expression());
-    }
-
-    @Override
-    public void enterCatchClause(SwiftParser.CatchClauseContext ctx) {
-        verifyRedundantCatchParentheses(ctx.pattern());
-    }
-
-    @Override
-    public void enterInitializer(SwiftParser.InitializerContext ctx) {
-        verifyRedundantExpressionParentheses(Messages.INITIALIZER_EXPRESSION, ctx.expression());
-    }
-
-    @Override
-    public void enterArrayLiteralItem(SwiftParser.ArrayLiteralItemContext ctx) {
-        verifyRedundantExpressionParentheses(Messages.ARRAY_LITERAL, ctx.expression());
-    }
-
-    @Override
-    public void enterDictionaryLiteralItem(SwiftParser.DictionaryLiteralItemContext ctx) {
-        for (SwiftParser.ExpressionContext expressionContext : ctx.expression()) {
-            verifyRedundantExpressionParentheses(Messages.DICTIONARY_LITERAL, expressionContext);
-        }
-    }
-
-    private void verifyRedundantExpressionParentheses(String constructType, SwiftParser.ExpressionContext ctx) {
-        if (ctx == null
-            || ctx.getChildCount() != 1
-            || ctx.prefixExpression() == null
-            || ctx.prefixExpression().prefixOperator() != null // flag cases with trailing ;
-            || ctx.prefixExpression().postfixExpression() == null
-            || ctx.prefixExpression().postfixExpression().getChildCount() != 1) {
-            return;
-        }
-
-        SwiftParser.PostfixExpressionContext postfixExpression = ctx.prefixExpression().postfixExpression();
-
-        if (!(postfixExpression.getChild(0) instanceof SwiftParser.PrimaryExpressionContext)) {
-            return;
-        }
-
-        SwiftParser.PrimaryExpressionContext primaryExpression =
-            (SwiftParser.PrimaryExpressionContext) postfixExpression.getChild(0);
-
-        if (primaryExpression.getChildCount() != 1
-            || !(primaryExpression.getChild(0) instanceof SwiftParser.ParenthesizedExpressionContext)) {
-            return;
-        }
-
-        SwiftParser.ParenthesizedExpressionContext parenthesizedExpressionContext =
-            (SwiftParser.ParenthesizedExpressionContext) primaryExpression.getChild(0);
-
-        // check to not flag tuple initialization
-        if (parenthesizedExpressionContext.expressionElementList() == null
-            || parenthesizedExpressionContext.expressionElementList().getChildCount() != 1) {
-            return;
-        }
-
-        printRedundantParenthesesWarning(ctx, constructType + Messages.ENCLOSED_PARENTHESES);
-    }
-
-    private void verifyRedundantForLoopParentheses(ParserRuleContext ctx) {
+    public void enterForStatement(ForStatementContext ctx) {
         if (!(ctx.getChild(1) instanceof TerminalNodeImpl)) {
             return;
         } // return if '(' not present
@@ -115,17 +61,85 @@ public class RedundantParenthesesListener extends SwiftBaseListener {
         }
     }
 
-    private void verifyRedundantCatchParentheses(ParserRuleContext ctx) {
-        if (ctx == null) {
+    @Override
+    public void enterThrowStatement(ThrowStatementContext ctx) {
+        verifyRedundantExpressionParentheses(Messages.THROW_STATEMENT, ctx.expression());
+    }
+
+    @Override
+    public void enterCatchClause(CatchClauseContext ctx) {
+        PatternContext patternCtx = ctx.pattern();
+        if (patternCtx == null) {
             return;
         }
-        String pattern = ctx.getText();
+        String pattern = patternCtx.getText();
         char firstCharacter = pattern.charAt(0);
         char lastCharacter = pattern.charAt(pattern.length() - 1);
 
         if (firstCharacter == '(' && lastCharacter == ')') {
-            printRedundantParenthesesWarning(ctx, Messages.CATCH_CLAUSE + Messages.ENCLOSED_PARENTHESES);
+            printRedundantParenthesesWarning(patternCtx, Messages.CATCH_CLAUSE + Messages.ENCLOSED_PARENTHESES);
         }
+    }
+
+    @Override
+    public void enterInitializer(InitializerContext ctx) {
+        verifyRedundantExpressionParentheses(Messages.INITIALIZER_EXPRESSION, ctx.expression());
+    }
+
+    @Override
+    public void enterArrayLiteralItem(ArrayLiteralItemContext ctx) {
+        verifyRedundantExpressionParentheses(Messages.ARRAY_LITERAL, ctx.expression());
+    }
+
+    @Override
+    public void enterDictionaryLiteralItem(DictionaryLiteralItemContext ctx) {
+        for (ExpressionContext expressionContext : ctx.expression()) {
+            verifyRedundantExpressionParentheses(Messages.DICTIONARY_LITERAL, expressionContext);
+        }
+    }
+
+    @Override
+    public void enterFunctionCallWithClosureExpression(FunctionCallWithClosureExpressionContext ctx) {
+        if (ctx.parenthesizedExpression() != null && ctx.parenthesizedExpression().expressionElementList() == null) {
+            printRedundantParenthesesWarning(ctx.parenthesizedExpression(), Messages.EMPTY_PARENTHESES
+                + Messages.REDUNDANT_METHOD_PARENTHESES);
+        }
+    }
+
+    private void verifyRedundantExpressionParentheses(String constructType, ExpressionContext ctx) {
+        if (ctx == null
+            || ctx.getChildCount() != 1
+            || ctx.prefixExpression() == null
+            || ctx.prefixExpression().prefixOperator() != null // flag cases with trailing ;
+            || ctx.prefixExpression().postfixExpression() == null
+            || ctx.prefixExpression().postfixExpression().getChildCount() != 1) {
+            return;
+        }
+
+        SwiftParser.PostfixExpressionContext postfixExpression = ctx.prefixExpression().postfixExpression();
+
+        if (!(postfixExpression.getChild(0) instanceof PrimaryExpressionContext)) {
+            return;
+        }
+
+        PrimaryExpressionContext primaryExpression =
+            (PrimaryExpressionContext) postfixExpression.getChild(0);
+
+        if (primaryExpression.getChildCount() != 1
+            || !(primaryExpression.getChild(0) instanceof ParenthesizedExpressionContext)) {
+            return;
+        }
+
+        ParenthesizedExpressionContext parenthesizedExpressionContext =
+            (ParenthesizedExpressionContext) primaryExpression.getChild(0);
+
+        // check to not flag tuple initialization
+        if (parenthesizedExpressionContext.expressionElementList() == null
+            || parenthesizedExpressionContext.expressionElementList().getChildCount() != 1) {
+            return;
+        }
+
+        printRedundantParenthesesWarning(ctx, constructType + Messages.ENCLOSED_PARENTHESES);
     }
 
     private void printRedundantParenthesesWarning(ParserRuleContext ctx, String firstParenthesisMsg) {
