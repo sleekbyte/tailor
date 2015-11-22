@@ -90,4 +90,9 @@ public class BraceWhitespaceTest extends RuleTest {
             )
         );
     }
+
+    @Override
+    protected String[] getCommandArgs() {
+        return new String[] { "--only=brace-whitespace" };
+    }
 }

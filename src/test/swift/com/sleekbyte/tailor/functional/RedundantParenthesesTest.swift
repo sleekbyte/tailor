@@ -70,3 +70,26 @@ func demo() {
     var airports = [ (1, 2) , (3, 4) ]
     var airports: [String: (String, String)] = [ "YYZ": ("Toronto", "Toronto Pearson") ]
 }
+
+items.map {
+  (item) in item.transform()
+}
+
+items.map() {
+  (item) in item.transform()
+}
+
+items.mapWithParams(params) {
+  (item) in item.transform()
+}
+
+items.map({
+  (item) in item.transform()
+})
+
+matrix.map {
+  (vector) in
+    vector.map() {
+      (el) in el * el
+    }
+}
