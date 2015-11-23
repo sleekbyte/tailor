@@ -1,10 +1,46 @@
 [![Tailor](https://cloud.githubusercontent.com/assets/1350704/9867389/18ae2e06-5b3b-11e5-9b37-72a3e9621b9c.png)](https://tailor.sh)
 
-[![Build Status](https://travis-ci.org/sleekbyte/tailor.svg?branch=master)](https://travis-ci.org/sleekbyte/tailor)
-[![Code Coverage](https://img.shields.io/codecov/c/github/sleekbyte/tailor/master.svg)](https://codecov.io/github/sleekbyte/tailor)
+<p align="center">
+  <a href="https://travis-ci.org/sleekbyte/tailor">
+    <img src="https://travis-ci.org/sleekbyte/tailor.svg?branch=master" alt="Build Status">
+  </a>
+  <a href="https://codecov.io/github/sleekbyte/tailor">
+    <img src="https://img.shields.io/codecov/c/github/sleekbyte/tailor/master.svg" alt="Code Coverage">
+  </a>
+  <a href="https://www.codacy.com/app/sleekbot/tailor">
+    <img src="https://img.shields.io/codacy/d6de692405d14aad98b479cef4c45724.svg" alt="Code Quality">
+  </a>
+</p>
 
-# [Tailor](https://tailor.sh). Static analyzer for [Swift](https://developer.apple.com/swift/).
-Tailor supports Swift 2 out of the box and helps enforce style guidelines outlined in the [The Swift Programming Language](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/), [GitHub](https://github.com/github/swift-style-guide), [Ray Wenderlich](https://github.com/raywenderlich/swift-style-guide), [Jamie Forrest](https://github.com/jamieforrest/swift-style-guide), and [Coursera](https://github.com/coursera/swift-style-guide) style guides. It supports cross-platform usage and can be run on Mac OS X via your shell or integrated with Xcode, as well as on Linux and Windows.
+<p align="center">
+  <a href="#installation">Installation</a>
+  •
+  <a href="#usage">Usage</a>
+  •
+  <a href="#features">Features</a>
+  •
+  <a href="#developers">Developers</a>
+  •
+  <a href="#license">License</a>
+</p>
+
+[Tailor][] is a [static analysis][] and [lint][] tool for source code written in Apple's [Swift][] programming language. It analyzes your code to ensure consistent styling and help avoid bugs.
+
+[static analysis]: https://en.wikipedia.org/wiki/Static_program_analysis
+[lint]: https://en.wikipedia.org/wiki/Lint_(software)
+
+# [Tailor][]. Static analyzer for [Swift][].
+
+[Tailor]: https://tailor.sh
+[Swift]: https://developer.apple.com/swift/
+
+Tailor supports Swift 2 out of the box and helps enforce style guidelines outlined in the [The Swift Programming Language][], [GitHub][], [Ray Wenderlich][], [Jamie Forrest][], and [Coursera][] style guides. It supports cross-platform usage and can be run on Mac OS X via your shell or integrated with Xcode, as well as on Linux and Windows.
+
+[The Swift Programming Language]: https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/
+[GitHub]: https://github.com/github/swift-style-guide
+[Ray Wenderlich]: https://github.com/raywenderlich/swift-style-guide
+[Jamie Forrest]: https://github.com/jamieforrest/swift-style-guide
+[Coursera]: https://github.com/coursera/swift-style-guide
 
 Tailor parses Swift source code using the primary Java target of [ANTLR](http://www.antlr.org):
 
@@ -106,7 +142,7 @@ Options:
 ```
 
 # Features
-* [Rules](#rules)
+* [Enabling and Disabling Rules](#enabling-and-disabling-rules)
 * [Cross-Platform](#cross-platform)
 * [Automatic Xcode Integration](#automatic-xcode-integration)
 * [Colorized Output](#colorized-output)
@@ -114,7 +150,7 @@ Options:
 * [Disable Violations within Source Code](#disable-violations-within-source-code)
 * [Configuration](#configuration)
 
-### Rules
+### Enabling and Disabling Rules
 
 **Rule identifiers and "preferred/not preferred" code samples may be found on the [Rules](https://github.com/sleekbyte/tailor/wiki/Rules) page.**
 
@@ -228,6 +264,9 @@ Please review the [guidelines for contributing](https://github.com/sleekbyte/tai
 | [JaCoCo](http://eclemma.org/jacoco/) | [Eclipse Public License v1.0](http://eclemma.org/license.html) |
 | [Codecov](https://codecov.io) | [Free for Open Source](https://codecov.io/#pricing) |
 | [Bundler](http://bundler.io) | [MIT](https://github.com/bundler/bundler/blob/master/LICENSE.md) |
+| [Codacy](https://www.codacy.com) | [Free for Open Source](https://www.codacy.com/pricing) |
+| [System Rules](http://stefanbirkner.github.io/system-rules/) | [Common Public License 1.0](https://stefanbirkner.github.io/system-rules/license.html) |
+
 
 # License
 Tailor is released under the MIT license. See [LICENSE.md](https://github.com/sleekbyte/tailor/blob/master/LICENSE.md) for details.

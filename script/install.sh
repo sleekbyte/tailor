@@ -12,7 +12,7 @@ PREFIX="/usr/local"
 TAILOR_DIR="$PREFIX/tailor"
 BIN_DIR="$PREFIX/bin"
 START_SCRIPT="$TAILOR_DIR/bin/tailor"
-TAILOR_ZIP_URL="https://github.com/sleekbyte/tailor/releases/download/v0.2.2/tailor.zip"
+TAILOR_ZIP_URL="https://github.com/sleekbyte/tailor/releases/download/v0.3.0/tailor-0.3.0.zip"
 JAVA_VERSION="1.8"
 
 wait_for_user() {
