@@ -124,7 +124,7 @@ public final class TailorConfigurationTest {
         printWriter.println("include:");
         printWriter.println("  - '**/UpperCamelCaseTest.swift'");
         printWriter.println("exclude:");
-        printWriter.println("  - '**/NameLengthTest.swift'");
+        printWriter.println("  - '**/MaxNameLengthTest.swift'");
         streamWriter.close();
         printWriter.close();
         return configFile;

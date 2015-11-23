@@ -36,6 +36,10 @@ public class SourceFileUtil {
         return maxLength > 0 && ctx.getText().length() > maxLength;
     }
 
+    public static boolean nameTooShort(ParserRuleContext ctx, int minLength) {
+        return minLength > 0 && ctx.getText().length() < minLength;
+    }
+
     /**
      * Checks whether a file is terminated with exactly one trailing newline.
      *

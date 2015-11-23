@@ -2,6 +2,7 @@ package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.listeners.lengths.LengthListener;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -130,8 +131,8 @@ public class DeclarationListener extends SwiftBaseListener {
         for (SwiftBaseListener listener : enabledListeners) {
             switch (listenerType) {
                 case CONSTANT_DEC:
-                    if (listener instanceof MaxLengthListener) {
-                        ((MaxLengthListener) listener).setTraversedTreeForConstantDeclaration(true);
+                    if (listener instanceof LengthListener) {
+                        ((LengthListener) listener).setTraversedTreeForConstantDeclaration(true);
                         walker.walk(listener, tree);
                     } else if (listener instanceof ConstantNamingListener || listener instanceof KPrefixListener) {
                         walker.walk(listener, tree);
@@ -141,8 +142,8 @@ public class DeclarationListener extends SwiftBaseListener {
                     if (listener instanceof LowerCamelCaseListener) {
                         ((LowerCamelCaseListener) listener).setTraversedTreeForVarDeclaration(true);
                         walker.walk(listener, tree);
-                    } else if (listener instanceof MaxLengthListener) {
-                        ((MaxLengthListener) listener).setTraversedTreeForVarDeclaration(true);
+                    } else if (listener instanceof LengthListener) {
+                        ((LengthListener) listener).setTraversedTreeForVarDeclaration(true);
                         walker.walk(listener, tree);
                     }
                     break;

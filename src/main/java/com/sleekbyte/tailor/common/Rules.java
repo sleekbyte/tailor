@@ -41,6 +41,7 @@ public enum Rules {
     MAX_LINE_LENGTH,
     MAX_NAME_LENGTH,
     MAX_STRUCT_LENGTH,
+    MIN_NAME_LENGTH,
     MULTIPLE_IMPORTS,
     OPERATOR_WHITESPACE,
     REDUNDANT_PARENTHESES,
@@ -146,6 +147,10 @@ public enum Rules {
         MAX_STRUCT_LENGTH.name = ArgumentParser.MAX_STRUCT_LENGTH_OPT;
         MAX_STRUCT_LENGTH.description = "Enforce a line limit on the lengths of struct bodies.";
         MAX_STRUCT_LENGTH.className = FileListener.class.getName();
+
+        MIN_NAME_LENGTH.name = ArgumentParser.MIN_NAME_LENGTH_OPT;
+        MIN_NAME_LENGTH.description = "Enforce a minimum character limit on the length of each construct name.";
+        MIN_NAME_LENGTH.className = FileListener.class.getName();
 
         MULTIPLE_IMPORTS.name = "multiple-imports";
         MULTIPLE_IMPORTS.description = "Multiple import statements should not be defined on a single line.";

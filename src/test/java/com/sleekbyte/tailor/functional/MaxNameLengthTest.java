@@ -8,10 +8,10 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
- * Functional tests for name length rule.
+ * Functional tests for max name length rule.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class NameLengthTest extends RuleTest {
+public class MaxNameLengthTest extends RuleTest {
 
     @Override
     protected String[] getCommandArgs() {

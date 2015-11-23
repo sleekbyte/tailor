@@ -1,7 +1,7 @@
 package com.sleekbyte.tailor.listeners;
 
+import com.sleekbyte.tailor.common.ConstructLengths;
 import com.sleekbyte.tailor.common.Location;
-import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
@@ -21,7 +21,7 @@ public final class FileListener implements AutoCloseable {
     private static final String DISABLE_PATTERN = "// tailor:disable";
     private Printer printer;
     private File inputFile;
-    private MaxLengths maxLengths;
+    private ConstructLengths constructLengths;
     private LineNumberReader reader;
     private int numOfLines = 0;
     private Set<Rules> enabledRules;
@@ -31,13 +31,13 @@ public final class FileListener implements AutoCloseable {
      *
      * @param printer    the printer to use for displaying violation messages
      * @param inputFile  the source file to verify
-     * @param maxLengths the restrictions for maximum lengths
+     * @param constructLengths the restrictions for maximum lengths
      */
-    public FileListener(Printer printer, File inputFile, MaxLengths maxLengths, Set<Rules> enabledRules)
+    public FileListener(Printer printer, File inputFile, ConstructLengths constructLengths, Set<Rules> enabledRules)
         throws IOException {
         this.printer = printer;
         this.inputFile = inputFile;
-        this.maxLengths = maxLengths;
+        this.constructLengths = constructLengths;
         this.reader = new LineNumberReader(Files.newBufferedReader(inputFile.toPath()));
         this.enabledRules = enabledRules;
     }
@@ -65,8 +65,9 @@ public final class FileListener implements AutoCloseable {
             }
 
             if (enabledRules.contains(Rules.MAX_LINE_LENGTH)
-                && SourceFileUtil.lineTooLong(lineLength, this.maxLengths.maxLineLength)) {
-                lineLengthViolation(lineNumber, lineLength);
+                && SourceFileUtil.lineTooLong(lineLength, this.constructLengths.maxLineLength)) {
+                lineLengthViolation(lineNumber, lineLength, this.constructLengths.maxLineLength, Rules.MAX_LINE_LENGTH,
+                    Messages.EXCEEDS_CHARACTER_LIMIT);
             }
 
             if (enabledRules.contains(Rules.TRAILING_WHITESPACE)
@@ -88,12 +89,11 @@ public final class FileListener implements AutoCloseable {
         }
     }
 
-    private void lineLengthViolation(int lineNumber, int lineLength) {
-        String lengthVersusLimit = " (" + lineLength + "/" + this.maxLengths.maxLineLength + ")";
-        // Mark error on first character beyond limit
-        Location location = new Location(lineNumber, this.maxLengths.maxLineLength + 1);
-        this.printer.error(Rules.MAX_LINE_LENGTH, Messages.LINE + Messages.EXCEEDS_CHARACTER_LIMIT + lengthVersusLimit,
-            location);
+    private void lineLengthViolation(int lineNumber, int lineLength, int lengthLimit,  Rules rule, String msg) {
+        String lengthVersusLimit = " (" + lineLength + "/" + lengthLimit + ")";
+        // Mark error on first line beyond limit
+        Location location = new Location(lineNumber, lengthLimit + 1);
+        this.printer.error(rule, Messages.LINE + msg + lengthVersusLimit, location);
     }
 
     private void trailingWhitespaceViolation(int lineNumber, int lineLength) {
@@ -102,10 +102,10 @@ public final class FileListener implements AutoCloseable {
     }
 
     private void verifyFileLength() {
-        if (SourceFileUtil.fileTooLong(this.numOfLines, this.maxLengths.maxFileLength)) {
-            String lengthVersusLimit = " (" + this.numOfLines + "/" + this.maxLengths.maxFileLength + ")";
+        if (SourceFileUtil.fileTooLong(this.numOfLines, this.constructLengths.maxFileLength)) {
+            String lengthVersusLimit = " (" + this.numOfLines + "/" + this.constructLengths.maxFileLength + ")";
             // Mark error on first line beyond limit
-            Location location = new Location(this.maxLengths.maxFileLength + 1);
+            Location location = new Location(this.constructLengths.maxFileLength + 1);
             this.printer.error(Rules.MAX_FILE_LENGTH, Messages.FILE + Messages.EXCEEDS_LINE_LIMIT + lengthVersusLimit,
                 location);
         }
