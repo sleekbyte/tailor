@@ -34,9 +34,9 @@ public enum Severity {
      * @throws IllegalSeverityException if string is not recognized
      */
     public static Severity parseSeverity(String str) throws IllegalSeverityException {
-        if (str.toLowerCase().equals(Messages.ERROR)) {
+        if (str.equalsIgnoreCase(Messages.ERROR)) {
             return ERROR;
-        } else if (str.toLowerCase().equals(Messages.WARNING)) {
+        } else if (str.equalsIgnoreCase(Messages.WARNING)) {
             return WARNING;
         } else {
             throw new IllegalSeverityException();

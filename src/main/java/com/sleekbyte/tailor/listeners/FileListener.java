@@ -16,7 +16,7 @@ import java.util.Set;
 /**
  * Listener for verifying source files.
  */
-public class FileListener implements AutoCloseable {
+public final class FileListener implements AutoCloseable {
 
     private static final String DISABLE_PATTERN = "// tailor:disable";
     private Printer printer;
@@ -125,7 +125,7 @@ public class FileListener implements AutoCloseable {
         }
     }
 
-    int getNumOfLines() {
+    protected int getNumOfLines() {
         return numOfLines;
     }
 

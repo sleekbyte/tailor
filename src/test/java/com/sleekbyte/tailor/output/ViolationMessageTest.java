@@ -3,7 +3,6 @@ package com.sleekbyte.tailor.output;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -133,7 +132,7 @@ public class ViolationMessageTest {
     @Test
     public void testEqualsNotInstanceOfViolationMessage() {
         ViolationMessage violationMessage = new ViolationMessage(null, "", 0, 0, null, "");
-        assertFalse(violationMessage.equals(null));
+        assertEquals("", violationMessage.toString());
     }
 
     @Test

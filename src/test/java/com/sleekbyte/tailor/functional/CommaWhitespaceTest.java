@@ -38,10 +38,6 @@ public class CommaWhitespaceTest extends RuleTest {
         addExpectedCommaMessage(start + 8, 1, Messages.NO_SPACE_BEFORE);
     }
 
-    private void addExpectedBraceMessage(int line, int column) {
-        addExpectedMsg(Rules.BRACE_STYLE, line, column, Messages.OPEN_BRACE + Messages.SPACE_BEFORE);
-    }
-
     private void addExpectedCommaMessage(int line, int column, String msg) {
         addExpectedMsg(Rules.COMMA_WHITESPACE, line, column, Messages.COMMA + Messages.AT_COLUMN + column + " " + msg);
     }

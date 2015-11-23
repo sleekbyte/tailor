@@ -7,15 +7,12 @@ import com.sleekbyte.tailor.common.MaxLengths;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.output.Printer;
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.File;
@@ -45,11 +42,6 @@ public class FileListenerTest {
     private PrintWriter writer;
     private Printer printer;
     private Set<Rules> enabledRules;
-
-    @Mock
-    private ParserRuleContext context;
-    @Mock private Token startToken;
-    @Mock private Token stopToken;
 
     @Before
     public void setUp() throws NoSuchMethodException, IOException {
