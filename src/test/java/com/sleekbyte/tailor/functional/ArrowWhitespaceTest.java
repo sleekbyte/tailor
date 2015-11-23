@@ -52,4 +52,9 @@ public class ArrowWhitespaceTest extends RuleTest {
             )
         );
     }
+
+    @Override
+    protected String[] getCommandArgs() {
+        return new String[] { "--only=arrow-whitespace" };
+    }
 }
