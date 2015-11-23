@@ -33,6 +33,8 @@ public class RedundantParenthesesTest extends RuleTest {
         addExpectedMsg(66, 18, Severity.WARNING, Messages.INITIALIZER_EXPRESSION + Messages.ENCLOSED_PARENTHESES);
         addExpectedMsg(67, 21, Severity.WARNING, Messages.INITIALIZER_EXPRESSION + Messages.ENCLOSED_PARENTHESES);
         addExpectedMsg(68, 13, Severity.WARNING, Messages.INITIALIZER_EXPRESSION + Messages.ENCLOSED_PARENTHESES);
+        addExpectedMsg(78, 10, Severity.WARNING, Messages.EMPTY_PARENTHESES + Messages.REDUNDANT_METHOD_PARENTHESES);
+        addExpectedMsg(92, 15, Severity.WARNING, Messages.EMPTY_PARENTHESES + Messages.REDUNDANT_METHOD_PARENTHESES);
     }
 
     private void addExpectedMsg(int line, int column, Severity classification, String msg) {

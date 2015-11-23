@@ -9,10 +9,10 @@ import org.antlr.v4.runtime.Token;
 /**
  *  Contains utility functions that are used by various whitespace listeners to verify whitespace.
  */
-public class WhitespaceVerifier {
+public final class WhitespaceVerifier {
 
-    Printer printer;
-    Rules rule;
+    private Printer printer;
+    private Rules rule;
 
     public WhitespaceVerifier(Printer printer, Rules rule) {
         this.printer = printer;

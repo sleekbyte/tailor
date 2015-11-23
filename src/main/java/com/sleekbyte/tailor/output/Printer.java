@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 /**
  * Generates and outputs formatted analysis messages for Xcode.
  */
-public class Printer implements AutoCloseable {
+public final class Printer implements AutoCloseable {
 
     private File inputFile;
     private Severity maxSeverity;
@@ -83,7 +83,7 @@ public class Printer implements AutoCloseable {
         this.msgBuffer.put(violationMessage.toString(), violationMessage);
     }
 
-    static String getHeader(File inputFile, ColorSettings colorSettings) throws IOException {
+    protected static String getHeader(File inputFile, ColorSettings colorSettings) throws IOException {
         if (colorSettings.colorOutput) {
             String textColor = colorSettings.invertColor ? "white" : "black";
             return String.format("%n@|bg_blue," + textColor + " **********|@ @|bg_green," + textColor
