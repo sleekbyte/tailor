@@ -6,7 +6,11 @@ layout: default
     <img class="center-block logo img-responsive" src="/assets/images/logo.png" alt="Tailor">
     <h1 class="title">{{ site.name }}. {{ site.description }}.</h1>
     <p class="description">
-      Tailor is Swift static code analyzer. It aims to enforce many of the guidelines outlined in the
+      A static analysis and lint tool for source code written in Apple's Swift programming language.
+      It analyzes your code to ensure consistent styling and help avoid bugs.
+    </p>
+    <p class="description">
+      Tailor supports Swift 2 out of the box and helps enforce style guidelines outlined in the
       {% for guide in site.data.guides %}
         {% if forloop.last == false %}
           <a href="{{ guide.url }}" target="_blank">{{ guide.name }}</a>,
