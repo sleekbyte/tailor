@@ -12,6 +12,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class CommaWhitespaceTest extends RuleTest {
 
     @Override
+    protected String[] getCommandArgs() {
+        return new String[]{ "--only=comma-whitespace" };
+    }
+
+    @Override
     protected void addAllExpectedMsgs() {
         // Type inheritance commas
         int start = 9;

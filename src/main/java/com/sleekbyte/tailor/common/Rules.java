@@ -17,6 +17,7 @@ import com.sleekbyte.tailor.listeners.whitespace.ColonWhitespaceListener;
 import com.sleekbyte.tailor.listeners.whitespace.CommaWhitespaceListener;
 import com.sleekbyte.tailor.listeners.whitespace.CommentWhitespaceListener;
 import com.sleekbyte.tailor.listeners.whitespace.OperatorWhitespaceListener;
+import com.sleekbyte.tailor.listeners.whitespace.ParenthesisWhitespaceListener;
 import com.sleekbyte.tailor.utils.ArgumentParser;
 
 /**
@@ -44,6 +45,7 @@ public enum Rules {
     MIN_NAME_LENGTH,
     MULTIPLE_IMPORTS,
     OPERATOR_WHITESPACE,
+    PARENTHESIS_WHITESPACE,
     REDUNDANT_PARENTHESES,
     TERMINATING_NEWLINE,
     TERMINATING_SEMICOLON,
@@ -159,6 +161,11 @@ public enum Rules {
         OPERATOR_WHITESPACE.name = "operator-whitespace";
         OPERATOR_WHITESPACE.description = "Flags operators that are not space delimited in operator declarations.";
         OPERATOR_WHITESPACE.className = OperatorWhitespaceListener.class.getName();
+
+        PARENTHESIS_WHITESPACE.name = "parenthesis-whitespace";
+        PARENTHESIS_WHITESPACE.description = "Ensure no whitespace is present immediately after an opening parenthesis "
+            + "and before the closing parenthesis.";
+        PARENTHESIS_WHITESPACE.className = ParenthesisWhitespaceListener.class.getName();
 
         REDUNDANT_PARENTHESES.name = "redundant-parentheses";
         REDUNDANT_PARENTHESES.description = "Control flow constructs, exception handling constructs, and "

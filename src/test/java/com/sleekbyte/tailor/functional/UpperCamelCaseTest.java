@@ -14,6 +14,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class UpperCamelCaseTest extends RuleTest {
 
     @Override
+    protected String[] getCommandArgs() {
+        return new String[]{ "--only=upper-camel-case" };
+    }
+
+    @Override
     protected void addAllExpectedMsgs() {
         addExpectedMsg(3, 7, Severity.WARNING, Messages.CLASS + Messages.NAMES);
         addExpectedMsg(7, 7, Severity.WARNING, Messages.CLASS + Messages.NAMES);
