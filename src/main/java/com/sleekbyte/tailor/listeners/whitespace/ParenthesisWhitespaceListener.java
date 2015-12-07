@@ -7,7 +7,7 @@ import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.WhitespaceVerifier;
 
 /**
- * Parse tree listener for illegal whitespace.
+ * Parse tree listener to flag illegal whitespace in parentheses.
  */
 public final class ParenthesisWhitespaceListener extends SwiftBaseListener {
     private WhitespaceVerifier verifier;
@@ -18,21 +18,32 @@ public final class ParenthesisWhitespaceListener extends SwiftBaseListener {
 
     @Override
     public void enterGenericParameterClause(SwiftParser.GenericParameterClauseContext ctx) {
-        verifier.verifyParenthesisWhitespace(ctx);
+        verifier.verifyParenthesisContentWhitespace(ctx);
     }
 
     @Override
     public void enterParameterClause(SwiftParser.ParameterClauseContext ctx) {
-        verifier.verifyParenthesisWhitespace(ctx);
+        verifier.verifyParenthesisContentWhitespace(ctx);
     }
 
     @Override
     public void enterTupleType(SwiftParser.TupleTypeContext ctx) {
-        verifier.verifyParenthesisWhitespace(ctx);
+        verifier.verifyParenthesisContentWhitespace(ctx);
     }
 
     @Override
     public void enterParenthesizedExpression(SwiftParser.ParenthesizedExpressionContext ctx) {
-        verifier.verifyParenthesisWhitespace(ctx);
+        verifier.verifyParenthesisContentWhitespace(ctx);
     }
+
+    @Override
+    public void enterParameterClauses(SwiftParser.ParameterClausesContext ctx) {
+        verifier.verifyParenthesisSurroundingWhitespace(ctx);
+    }
+
+    @Override
+    public void enterInitializerDeclaration(SwiftParser.InitializerDeclarationContext ctx) {
+        verifier.verifyParenthesisSurroundingWhitespace(ctx.parameterClause());
+    }
+
 }

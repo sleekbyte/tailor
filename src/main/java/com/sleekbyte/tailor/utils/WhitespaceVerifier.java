@@ -83,7 +83,7 @@ public final class WhitespaceVerifier {
      *
      * @param ctx Context comprised of parentheses
      */
-    public void verifyParenthesisWhitespace(ParserRuleContext ctx) {
+    public void verifyParenthesisContentWhitespace(ParserRuleContext ctx) {
         Location openingParenthesisLoc = ListenerUtil.getContextStartLocation(ctx);
         Location closingParenthesisLoc = ListenerUtil.getContextStopLocation(ctx);
 
@@ -110,6 +110,21 @@ public final class WhitespaceVerifier {
         if (checkRightSpaces(closingParenthesis, contentEnd, 0)) {
             Location contentStopLocation = ListenerUtil.getTokenEndLocation(contentEnd);
             printer.error(rule, Messages.PARENTHESES_CONTENT + Messages.NOT_END_SPACE, contentStopLocation);
+        }
+    }
+
+    /**
+     * Verifies that parenthesized constructs do not have a whitespace before the opening parenthesis.
+     *
+     * @param ctx Context comprised of parentheses
+     */
+    public void verifyParenthesisSurroundingWhitespace(ParserRuleContext ctx) {
+        Token left = ParseTreeUtil.getStopTokenForNode(ParseTreeUtil.getLeftNode(ctx));
+        Token openingParenthesis = ParseTreeUtil.getStartTokenForNode(ctx.getChild(0));
+
+        if (checkLeftSpaces(left, openingParenthesis, 0)) {
+            Location illegalWhitespaceLocation =  ListenerUtil.getTokenEndLocation(left);
+            printer.error(rule, Messages.NO_WHITESPACE_BEFORE_PARENTHESES, illegalWhitespaceLocation);
         }
     }
 }

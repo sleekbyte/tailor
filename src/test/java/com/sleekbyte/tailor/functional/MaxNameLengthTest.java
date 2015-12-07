@@ -18,6 +18,7 @@ public class MaxNameLengthTest extends RuleTest {
         return new String[] {
             "--max-line-length", "40",
             "--max-name-length", "5",
+            "--except=parenthesis-whitespace"
         };
     }
 

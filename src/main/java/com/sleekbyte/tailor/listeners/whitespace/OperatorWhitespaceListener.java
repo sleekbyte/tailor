@@ -13,7 +13,7 @@ import org.antlr.v4.runtime.Token;
 /**
  * Parse tree listener for operator whitespace checks.
  */
-public class OperatorWhitespaceListener extends SwiftBaseListener {
+public final class OperatorWhitespaceListener extends SwiftBaseListener {
 
     private Printer printer;
     private WhitespaceVerifier verifier;

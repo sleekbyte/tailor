@@ -69,6 +69,8 @@ public class Messages {
     public static final String COMMA = "Comma ";
     public static final String EMPTY_PARENTHESES = "Empty parentheses ";
     public static final String PARENTHESES_CONTENT = "Parentheses content ";
+    public static final String NO_WHITESPACE_BEFORE_PARENTHESES = "There should be no whitespace before the opening "
+        + "parentheses";
 
     // Plural constructs
     public static final String IMPORTS = "Imports ";

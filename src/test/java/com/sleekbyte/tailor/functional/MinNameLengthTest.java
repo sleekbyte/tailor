@@ -19,6 +19,7 @@ public class MinNameLengthTest extends RuleTest {
     protected String[] getCommandArgs() {
         return new String[] {
             "--min-name-length", String.valueOf(NAME_LENGTH_LIMIT),
+            "--except=parenthesis-whitespace"
         };
     }
 

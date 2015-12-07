@@ -52,3 +52,23 @@ func someMethod(a: String,
     b: Int ) {
 
 }
+
+func someFunc () {
+}
+
+func properFunc() {
+}
+
+func multilineFunc
+    () {
+}
+
+class SomeClass {
+    init() {
+    }
+}
+
+class SomeOtherClass {
+    init () {
+    }
+}

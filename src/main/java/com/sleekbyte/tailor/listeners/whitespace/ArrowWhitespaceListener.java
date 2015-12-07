@@ -17,7 +17,7 @@ import java.util.Optional;
 /**
  * Verifies that the return arrow is always space delimited.
  */
-public class ArrowWhitespaceListener extends SwiftBaseListener {
+public final class ArrowWhitespaceListener extends SwiftBaseListener {
 
     private WhitespaceVerifier verifier;
 
