@@ -163,8 +163,8 @@ public enum Rules {
         OPERATOR_WHITESPACE.className = OperatorWhitespaceListener.class.getName();
 
         PARENTHESIS_WHITESPACE.name = "parenthesis-whitespace";
-        PARENTHESIS_WHITESPACE.description = "Ensure no whitespace is present immediately after an opening parenthesis "
-            + "and before the closing parenthesis.";
+        PARENTHESIS_WHITESPACE.description = "Ensure no whitespace is present immediately before/after an opening"
+            + " parenthesis and before the closing parenthesis.";
         PARENTHESIS_WHITESPACE.className = ParenthesisWhitespaceListener.class.getName();
 
         REDUNDANT_PARENTHESES.name = "redundant-parentheses";
