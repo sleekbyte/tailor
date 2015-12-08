@@ -13,13 +13,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class SortedPrinterOutputTest extends RuleTest {
 
-//    @Override
-//    protected String[] getCommandArgs() {
-//        return new String[]{
-//            "--only=terminating-semicolon, upper-camel-case, terminating-newline",
-//        };
-//    }
-
     @Override
     protected void addAllExpectedMsgs() {
         addExpectedMsg(Rules.TERMINATING_SEMICOLON, 1, 18, Severity.WARNING, Messages.STATEMENTS + Messages.SEMICOLON);

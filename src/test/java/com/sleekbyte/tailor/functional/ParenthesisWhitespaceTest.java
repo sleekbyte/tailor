@@ -37,6 +37,9 @@ public final class ParenthesisWhitespaceTest extends RuleTest {
         addExpectedMessage(52, 11, Messages.PARENTHESES_CONTENT + Messages.NOT_END_SPACE);
         addExpectedMessage(56, 14, Messages.NO_WHITESPACE_BEFORE_PARENTHESES);
         addExpectedMessage(72, 9, Messages.NO_WHITESPACE_BEFORE_PARENTHESES);
+        addExpectedMessage(76, 39, Messages.PARENTHESES_CONTENT + Messages.NOT_END_SPACE);
+        addExpectedMessage(81, 27, Messages.PARENTHESES_CONTENT + Messages.LEADING_WHITESPACE);
+        addExpectedMessage(81, 41, Messages.PARENTHESES_CONTENT + Messages.NOT_END_SPACE);
     }
 
     private void addExpectedMessage(int line, int column, String msg) {
