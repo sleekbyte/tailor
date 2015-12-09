@@ -68,9 +68,10 @@ public class Messages {
     public static final String GENERIC_PARAMETERS = "Generic parameters ";
     public static final String COMMA = "Comma ";
     public static final String EMPTY_PARENTHESES = "Empty parentheses ";
-    public static final String PARENTHESES_CONTENT = "Parentheses content ";
-    public static final String NO_WHITESPACE_BEFORE_PARENTHESES = "There should be no whitespace before the opening "
-        + "parentheses";
+    public static final String EMPTY = "Empty ";
+    public static final String PARENTHESES = "Parentheses ";
+    public static final String CHEVRONS = "Chevrons ";
+    public static final String NO_WHITESPACE_BEFORE = "There should be no whitespace before the ";
 
     // Plural constructs
     public static final String IMPORTS = "Imports ";
@@ -78,7 +79,7 @@ public class Messages {
 
     // Message connector
     public static final String AT_COLUMN = "at column ";
-    public static final String NOT = "not ";
+    public static final String CONTENT = "content ";
 
     // Message descriptions
     public static final String UPPER_CAMEL_CASE = "should be UpperCamelCase";

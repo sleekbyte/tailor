@@ -21,25 +21,25 @@ public final class ParenthesisWhitespaceTest extends RuleTest {
 
     @Override
     protected void addAllExpectedMsgs() {
-        addExpectedMessage(3, 5, Messages.PARENTHESES_CONTENT + Messages.LEADING_WHITESPACE);
-        addExpectedMessage(3, 10, Messages.PARENTHESES_CONTENT + Messages.NOT_END_SPACE);
-        addExpectedMessage(7, 5, Messages.PARENTHESES_CONTENT + Messages.LEADING_WHITESPACE);
+        addExpectedMessage(3, 5, Messages.PARENTHESES + Messages.CONTENT + Messages.LEADING_WHITESPACE);
+        addExpectedMessage(3, 10,Messages.PARENTHESES + Messages.CONTENT + Messages.NOT_END_SPACE);
+        addExpectedMessage(7, 5, Messages.PARENTHESES + Messages.CONTENT + Messages.LEADING_WHITESPACE);
         addExpectedMessage(15, 11, Messages.EMPTY_PARENTHESES + Messages.ILLEGAL_WHITESPACE);
         addExpectedMessage(21, 11, Messages.EMPTY_PARENTHESES + Messages.ILLEGAL_WHITESPACE);
-        addExpectedMessage(23, 11, Messages.PARENTHESES_CONTENT + Messages.LEADING_WHITESPACE);
-        addExpectedMessage(23, 18, Messages.PARENTHESES_CONTENT + Messages.NOT_END_SPACE);
-        addExpectedMessage(25, 12, Messages.PARENTHESES_CONTENT + Messages.LEADING_WHITESPACE);
-        addExpectedMessage(27, 17, Messages.PARENTHESES_CONTENT + Messages.NOT_END_SPACE);
+        addExpectedMessage(23, 11, Messages.PARENTHESES + Messages.CONTENT + Messages.LEADING_WHITESPACE);
+        addExpectedMessage(23, 18, Messages.PARENTHESES + Messages.CONTENT + Messages.NOT_END_SPACE);
+        addExpectedMessage(25, 12, Messages.PARENTHESES + Messages.CONTENT + Messages.LEADING_WHITESPACE);
+        addExpectedMessage(27, 17, Messages.PARENTHESES + Messages.CONTENT + Messages.NOT_END_SPACE);
         addExpectedMessage(29, 16, Messages.EMPTY_PARENTHESES + Messages.ILLEGAL_WHITESPACE);
-        addExpectedMessage(33, 11, Messages.PARENTHESES_CONTENT + Messages.NOT_END_SPACE);
-        addExpectedMessage(35, 14, Messages.PARENTHESES_CONTENT + Messages.LEADING_WHITESPACE);
-        addExpectedMessage(44, 45, Messages.PARENTHESES_CONTENT + Messages.LEADING_WHITESPACE);
-        addExpectedMessage(52, 11, Messages.PARENTHESES_CONTENT + Messages.NOT_END_SPACE);
-        addExpectedMessage(56, 14, Messages.NO_WHITESPACE_BEFORE_PARENTHESES);
-        addExpectedMessage(72, 9, Messages.NO_WHITESPACE_BEFORE_PARENTHESES);
-        addExpectedMessage(76, 39, Messages.PARENTHESES_CONTENT + Messages.NOT_END_SPACE);
-        addExpectedMessage(81, 27, Messages.PARENTHESES_CONTENT + Messages.LEADING_WHITESPACE);
-        addExpectedMessage(81, 41, Messages.PARENTHESES_CONTENT + Messages.NOT_END_SPACE);
+        addExpectedMessage(33, 11, Messages.PARENTHESES + Messages.CONTENT + Messages.NOT_END_SPACE);
+        addExpectedMessage(35, 14, Messages.PARENTHESES + Messages.CONTENT + Messages.LEADING_WHITESPACE);
+        addExpectedMessage(44, 45, Messages.PARENTHESES + Messages.CONTENT + Messages.LEADING_WHITESPACE);
+        addExpectedMessage(52, 11, Messages.PARENTHESES + Messages.CONTENT + Messages.NOT_END_SPACE);
+        addExpectedMessage(56, 14, Messages.NO_WHITESPACE_BEFORE + Messages.PARENTHESES.toLowerCase());
+        addExpectedMessage(72, 9, Messages.NO_WHITESPACE_BEFORE + Messages.PARENTHESES.toLowerCase());
+        addExpectedMessage(76, 39, Messages.PARENTHESES + Messages.CONTENT + Messages.NOT_END_SPACE);
+        addExpectedMessage(81, 27, Messages.PARENTHESES + Messages.CONTENT + Messages.LEADING_WHITESPACE);
+        addExpectedMessage(81, 41, Messages.PARENTHESES + Messages.CONTENT + Messages.NOT_END_SPACE);
     }
 
     private void addExpectedMessage(int line, int column, String msg) {

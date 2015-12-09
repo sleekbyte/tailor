@@ -4,6 +4,7 @@ import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 
 /**
@@ -73,6 +74,56 @@ public final class WhitespaceVerifier {
         if (checkRightSpaces(right, punc, 1)) {
             printer.error(rule, puncStr + Messages.AT_COLUMN + puncLocation.column + " "
                 + Messages.SPACE_AFTER, puncLocation);
+        }
+    }
+
+    /**
+     * Verifies if a bracket construct does not contain whitespace immediately after the opening bracket and
+     * immediately before the closing bracket.
+     *
+     * @param ctx Context comprised of brackets
+     */
+    public void verifyBracketContentWhitespace(ParserRuleContext ctx, String construct) {
+        Token openingParenthesis = ParseTreeUtil.getStopTokenForNode(ctx.getChild(0));
+        Token closingParenthesis = ParseTreeUtil.getStopTokenForNode(ctx.getChild(ctx.getChildCount() - 1));
+        Location openingParenthesisLoc = ListenerUtil.getTokenLocation(openingParenthesis);
+
+        // Handles cases where the parentheses only contain whitespace
+        // Example: if ( ) {}
+        if (ctx.getChildCount() == 2) {
+            if (checkLeftSpaces(openingParenthesis, closingParenthesis, 0)) {
+                printer.error(rule, Messages.EMPTY + construct.toLowerCase() + Messages.ILLEGAL_WHITESPACE,
+                    new Location(openingParenthesisLoc.line, openingParenthesisLoc.column + 1) );
+            }
+            return;
+        }
+
+        Token contentStart = ParseTreeUtil.getStartTokenForNode(ctx.getChild(1));
+        Token contentEnd = ParseTreeUtil.getStopTokenForNode(ctx.getChild(ctx.getChildCount() - 2));
+
+        if (checkLeftSpaces(openingParenthesis, contentStart, 0)) {
+            printer.error(rule, construct + Messages.CONTENT + Messages.LEADING_WHITESPACE,
+                new Location(openingParenthesisLoc.line, openingParenthesisLoc.column + 1));
+        }
+        if (checkRightSpaces(closingParenthesis, contentEnd, 0)) {
+            Location contentStopLocation = ListenerUtil.getTokenEndLocation(contentEnd);
+            printer.error(rule, construct + Messages.CONTENT + Messages.NOT_END_SPACE, contentStopLocation);
+        }
+    }
+
+    /**
+     * Verifies that bracket constructs do not have a whitespace before the opening bracket.
+     *
+     * @param ctx Context comprised of brackets
+     */
+    public void verifyBracketSurroundingWhitespace(ParserRuleContext ctx, String construct) {
+        Token left = ParseTreeUtil.getStopTokenForNode(ParseTreeUtil.getLeftNode(ctx));
+        Token openingParenthesis = ParseTreeUtil.getStartTokenForNode(ctx.getChild(0));
+
+        if (checkLeftSpaces(left, openingParenthesis, 0)) {
+            Location illegalWhitespaceLocation =  ListenerUtil.getTokenEndLocation(left);
+            printer.error(rule, Messages.NO_WHITESPACE_BEFORE + construct.toLowerCase(),
+                illegalWhitespaceLocation);
         }
     }
 
