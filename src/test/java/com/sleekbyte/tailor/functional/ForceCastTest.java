@@ -14,6 +14,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class ForceCastTest extends RuleTest {
 
     @Override
+    protected String[] getCommandArgs() {
+        return new String[]{ "--only=forced-type-cast" };
+    }
+
+    @Override
     protected void addAllExpectedMsgs() {
         addExpectedMsg(7, 18, Severity.WARNING);
         addExpectedMsg(10, 20, Severity.WARNING);

@@ -64,7 +64,8 @@ public final class TailorConfigurationTest {
     public void testConfigInfrastructure() throws IOException {
         String[] command = new String[] {
             "--config", configurationFile.getAbsolutePath(),
-            "--no-color"
+            "--no-color",
+            "--only=upper-camel-case"
         };
         addAllExpectedMsgs();
 

@@ -12,11 +12,13 @@ import com.sleekbyte.tailor.listeners.RedundantParenthesesListener;
 import com.sleekbyte.tailor.listeners.SemicolonTerminatedListener;
 import com.sleekbyte.tailor.listeners.TodoCommentListener;
 import com.sleekbyte.tailor.listeners.UpperCamelCaseListener;
+import com.sleekbyte.tailor.listeners.whitespace.AngleBracketWhitespaceListener;
 import com.sleekbyte.tailor.listeners.whitespace.ArrowWhitespaceListener;
 import com.sleekbyte.tailor.listeners.whitespace.ColonWhitespaceListener;
 import com.sleekbyte.tailor.listeners.whitespace.CommaWhitespaceListener;
 import com.sleekbyte.tailor.listeners.whitespace.CommentWhitespaceListener;
 import com.sleekbyte.tailor.listeners.whitespace.OperatorWhitespaceListener;
+import com.sleekbyte.tailor.listeners.whitespace.ParenthesisWhitespaceListener;
 import com.sleekbyte.tailor.utils.ArgumentParser;
 
 /**
@@ -24,6 +26,7 @@ import com.sleekbyte.tailor.utils.ArgumentParser;
  */
 public enum Rules {
     ARROW_WHITESPACE,
+    ANGLE_BRACKET_WHITESPACE,
     BRACE_STYLE,
     COLON_WHITESPACE,
     COMMA_WHITESPACE,
@@ -44,6 +47,7 @@ public enum Rules {
     MIN_NAME_LENGTH,
     MULTIPLE_IMPORTS,
     OPERATOR_WHITESPACE,
+    PARENTHESIS_WHITESPACE,
     REDUNDANT_PARENTHESES,
     TERMINATING_NEWLINE,
     TERMINATING_SEMICOLON,
@@ -76,6 +80,11 @@ public enum Rules {
         ARROW_WHITESPACE.name = "arrow-whitespace";
         ARROW_WHITESPACE.description = "Flags all return arrows (->) that are not space delimited.";
         ARROW_WHITESPACE.className = ArrowWhitespaceListener.class.getName();
+
+        ANGLE_BRACKET_WHITESPACE.name = "angle-bracket-whitespace";
+        ANGLE_BRACKET_WHITESPACE.description = "Ensure no whitespace is present immediately before/after an opening"
+            + " chevron and before the closing chevron.";
+        ANGLE_BRACKET_WHITESPACE.className = AngleBracketWhitespaceListener.class.getName();
 
         BRACE_STYLE.name = "brace-style";
         BRACE_STYLE.description = "Definitions of constructs should follow the One True Brace Style (1TBS).";
@@ -159,6 +168,11 @@ public enum Rules {
         OPERATOR_WHITESPACE.name = "operator-whitespace";
         OPERATOR_WHITESPACE.description = "Flags operators that are not space delimited in operator declarations.";
         OPERATOR_WHITESPACE.className = OperatorWhitespaceListener.class.getName();
+
+        PARENTHESIS_WHITESPACE.name = "parenthesis-whitespace";
+        PARENTHESIS_WHITESPACE.description = "Ensure no whitespace is present immediately before/after an opening"
+            + " parenthesis and before the closing parenthesis.";
+        PARENTHESIS_WHITESPACE.className = ParenthesisWhitespaceListener.class.getName();
 
         REDUNDANT_PARENTHESES.name = "redundant-parentheses";
         REDUNDANT_PARENTHESES.description = "Control flow constructs, exception handling constructs, and "
