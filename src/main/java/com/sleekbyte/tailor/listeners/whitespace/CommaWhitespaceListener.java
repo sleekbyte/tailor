@@ -14,7 +14,7 @@ import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 /**
  * Flags commas that are not left associated.
  */
-public class CommaWhitespaceListener extends SwiftBaseListener {
+public final class CommaWhitespaceListener extends SwiftBaseListener {
 
     private WhitespaceVerifier verifier;
 

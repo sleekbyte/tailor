@@ -11,6 +11,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class ColonWhitespaceTest extends RuleTest {
 
     @Override
+    protected String[] getCommandArgs() {
+        return new String[]{ "--only=colon-whitespace" };
+    }
+
+    @Override
     protected void addAllExpectedMsgs() {
 
         // Colons in type annotations

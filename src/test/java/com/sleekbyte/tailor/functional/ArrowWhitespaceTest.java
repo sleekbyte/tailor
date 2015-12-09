@@ -11,6 +11,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class ArrowWhitespaceTest extends RuleTest {
 
     @Override
+    protected String[] getCommandArgs() {
+        return new String[] { "--only=arrow-whitespace" };
+    }
+
+    @Override
     protected void addAllExpectedMsgs() {
 
         // Function Result arrow
@@ -53,8 +58,4 @@ public class ArrowWhitespaceTest extends RuleTest {
         );
     }
 
-    @Override
-    protected String[] getCommandArgs() {
-        return new String[] { "--only=arrow-whitespace" };
-    }
 }

@@ -15,7 +15,7 @@ import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 /**
  * Flags invalid whitespace around colons.
  */
-public class ColonWhitespaceListener extends SwiftBaseListener {
+public final class ColonWhitespaceListener extends SwiftBaseListener {
 
     private WhitespaceVerifier verifier;
 

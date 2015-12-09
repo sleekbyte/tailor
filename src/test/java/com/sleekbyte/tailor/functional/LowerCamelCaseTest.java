@@ -14,6 +14,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class LowerCamelCaseTest extends RuleTest {
 
     @Override
+    protected String[] getCommandArgs() {
+        return new String[]{ "--only=lower-camel-case" };
+    }
+
+    @Override
     protected void addAllExpectedMsgs() {
         addExpectedMsg(2, 9, Severity.WARNING, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
         addExpectedMsg(7, 5, Severity.WARNING, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);

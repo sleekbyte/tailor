@@ -68,6 +68,10 @@ public class Messages {
     public static final String GENERIC_PARAMETERS = "Generic parameters ";
     public static final String COMMA = "Comma ";
     public static final String EMPTY_PARENTHESES = "Empty parentheses ";
+    public static final String EMPTY = "Empty ";
+    public static final String PARENTHESES = "Parentheses ";
+    public static final String CHEVRONS = "Chevrons ";
+    public static final String NO_WHITESPACE_BEFORE = "There should be no whitespace before the ";
 
     // Plural constructs
     public static final String IMPORTS = "Imports ";
@@ -75,6 +79,7 @@ public class Messages {
 
     // Message connector
     public static final String AT_COLUMN = "at column ";
+    public static final String CONTENT = "content ";
 
     // Message descriptions
     public static final String UPPER_CAMEL_CASE = "should be UpperCamelCase";
@@ -101,6 +106,8 @@ public class Messages {
     public static final String TRAILING_WHITESPACE = "should not have any trailing whitespace";
     public static final String START_SPACE = "should start with whitespace";
     public static final String END_SPACE = "should end with whitespace";
+    public static final String NOT_END_SPACE = "should not end with whitespace";
+    public static final String ILLEGAL_WHITESPACE = "should not contain whitespace";
     public static final String TODO_SYNTAX = "should be formatted either as <TODO: description>"
         + " or <TODO(dev-name): description>";
     public static final String REDUNDANT_METHOD_PARENTHESES = "following method call with trailing closure argument"
