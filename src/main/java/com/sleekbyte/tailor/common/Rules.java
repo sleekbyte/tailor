@@ -9,6 +9,7 @@ import com.sleekbyte.tailor.listeners.KPrefixListener;
 import com.sleekbyte.tailor.listeners.LowerCamelCaseListener;
 import com.sleekbyte.tailor.listeners.MultipleImportListener;
 import com.sleekbyte.tailor.listeners.RedundantParenthesesListener;
+import com.sleekbyte.tailor.listeners.RedundantSelfListener;
 import com.sleekbyte.tailor.listeners.SemicolonTerminatedListener;
 import com.sleekbyte.tailor.listeners.TodoCommentListener;
 import com.sleekbyte.tailor.listeners.UpperCamelCaseListener;
@@ -45,6 +46,7 @@ public enum Rules {
     MULTIPLE_IMPORTS,
     OPERATOR_WHITESPACE,
     REDUNDANT_PARENTHESES,
+    REDUNDANT_SELF,
     TERMINATING_NEWLINE,
     TERMINATING_SEMICOLON,
     TODO_SYNTAX,
@@ -164,6 +166,10 @@ public enum Rules {
         REDUNDANT_PARENTHESES.description = "Control flow constructs, exception handling constructs, and "
             + "values assigned in variable/constant declarations should not be enclosed in parentheses.";
         REDUNDANT_PARENTHESES.className = RedundantParenthesesListener.class.getName();
+
+        REDUNDANT_SELF.name = "redundant-self";
+        REDUNDANT_SELF.description = "Redundant self.";
+        REDUNDANT_SELF.className = RedundantSelfListener.class.getName();
 
         TERMINATING_NEWLINE.name = "terminating-newline";
         TERMINATING_NEWLINE.description = "Verify that source files terminate with exactly one '\\n' character.";
