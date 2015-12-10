@@ -24,7 +24,7 @@
   <a href="#license">License</a>
 </p>
 
-[Tailor][] is a [static analysis][] and [lint][] tool for source code written in Apple's [Swift][] programming language. It analyzes your code to ensure consistent styling and help avoid bugs.
+[Tailor][] is a cross-platform [static analysis][] and [lint][] tool for source code written in Apple's [Swift][] programming language. It analyzes your code to ensure consistent styling and help avoid bugs.
 
 [static analysis]: https://en.wikipedia.org/wiki/Static_program_analysis
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
@@ -32,7 +32,7 @@
 # [Tailor][]. Static analyzer for [Swift][].
 
 [Tailor]: https://tailor.sh
-[Swift]: https://developer.apple.com/swift/
+[Swift]: https://swift.org
 
 Tailor supports Swift 2 out of the box and helps enforce style guidelines outlined in the [The Swift Programming Language][], [GitHub][], [Ray Wenderlich][], [Jamie Forrest][], and [Coursera][] style guides. It supports cross-platform usage and can be run on Mac OS X via your shell or integrated with Xcode, as well as on Linux and Windows.
 
@@ -55,7 +55,7 @@ Tailor parses Swift source code using the primary Java target of [ANTLR](http://
 ## Installation
 
 Requires Java (JRE or JDK) Version 8 or above: [Java SE Downloads](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
-#### [Homebrew](http://brew.sh)
+#### [Homebrew](http://brew.sh), [Linuxbrew](http://brew.sh/linuxbrew/)
 
 ```bash
 brew install tailor
@@ -167,7 +167,7 @@ tailor --only=redundant-parentheses,terminating-semicolon main.swift
 ```
 
 ### Cross-Platform
-Tailor may be used on Mac OS X via your shell or integrated with Xcode, as well as on Linux and Windows. Great news for when the Swift compiler comes to Linux later this year!
+Tailor may be used on Mac OS X via your shell or integrated with Xcode, as well as on Linux and Windows.
 
 #### Linux
 ![Tailor on Ubuntu](https://cloud.githubusercontent.com/assets/1350704/9894130/2b959794-5bee-11e5-9ed2-84d035895239.png)
