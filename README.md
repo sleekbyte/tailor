@@ -39,7 +39,7 @@ Tailor supports Swift 2 out of the box and helps enforce style guidelines outlin
 [The Swift Programming Language]: https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/
 [GitHub]: https://github.com/github/swift-style-guide
 [Ray Wenderlich]: https://github.com/raywenderlich/swift-style-guide
-[Jamie Forrest]: https://github.com/jamieforrest/swift-style-guide
+[Jamie Forrest]: https://github.com/nartiles/swift-style-guide
 [Coursera]: https://github.com/coursera/swift-style-guide
 
 Tailor parses Swift source code using the primary Java target of [ANTLR](http://www.antlr.org):
