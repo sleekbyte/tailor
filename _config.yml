@@ -1,5 +1,5 @@
 name: Tailor
-description: Static analyzer for Swift
+description: Cross-platform static analyzer and linter for Swift
 url: "https://tailor.sh"
 github_url: "https://github.com/sleekbyte/tailor"
 company_name: Sleekbyte
