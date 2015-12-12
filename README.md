@@ -29,7 +29,7 @@
 [static analysis]: https://en.wikipedia.org/wiki/Static_program_analysis
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
 
-# [Tailor][]. Cross-platform static analyzer and linter for [Swift][].
+## [Tailor][]. Cross-platform static analyzer and linter for [Swift][].
 
 [Tailor]: https://tailor.sh
 [Swift]: https://swift.org
