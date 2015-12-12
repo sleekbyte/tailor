@@ -29,17 +29,16 @@
 [static analysis]: https://en.wikipedia.org/wiki/Static_program_analysis
 [lint]: https://en.wikipedia.org/wiki/Lint_(software)
 
-# [Tailor][]. Static analyzer for [Swift][].
+# [Tailor][]. Cross-platform static analyzer and linter for [Swift][].
 
 [Tailor]: https://tailor.sh
 [Swift]: https://swift.org
 
-Tailor supports Swift 2 out of the box and helps enforce style guidelines outlined in the [The Swift Programming Language][], [GitHub][], [Ray Wenderlich][], [Jamie Forrest][], and [Coursera][] style guides. It supports cross-platform usage and can be run on Mac OS X via your shell or integrated with Xcode, as well as on Linux and Windows.
+Tailor supports Swift 2 out of the box and helps enforce style guidelines outlined in the [The Swift Programming Language][], [GitHub][], [Ray Wenderlich][], and [Coursera][] style guides. It supports cross-platform usage and can be run on Mac OS X via your shell or integrated with Xcode, as well as on Linux and Windows.
 
 [The Swift Programming Language]: https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/
 [GitHub]: https://github.com/github/swift-style-guide
 [Ray Wenderlich]: https://github.com/raywenderlich/swift-style-guide
-[Jamie Forrest]: https://github.com/jamieforrest/swift-style-guide
 [Coursera]: https://github.com/coursera/swift-style-guide
 
 Tailor parses Swift source code using the primary Java target of [ANTLR](http://www.antlr.org):
