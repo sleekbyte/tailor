@@ -31,3 +31,5 @@ func << <T>(inout left: [T], right: [T]) -> [T] {
     left.extend(right)
     return left
 }
+
+func <|< <A>(lhs: A, rhs: A) -> A

@@ -108,3 +108,4 @@ func ** (left: Double, right: Double) -> Double {
     return pow(left, right)
 }
 
+func <| (lhs: Int, rhs: Int) -> Int {}

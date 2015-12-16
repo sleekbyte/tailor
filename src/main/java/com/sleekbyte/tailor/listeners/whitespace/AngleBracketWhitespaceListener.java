@@ -25,16 +25,13 @@ public final class AngleBracketWhitespaceListener extends SwiftBaseListener {
         verifier.verifyBracketContentWhitespace(ctx, Messages.CHEVRONS);
 
         ParseTree leftSibling = ParseTreeUtil.getLeftSibling(ctx);
-        if (leftSibling instanceof FunctionNameContext) {
-            FunctionNameContext functionName = (FunctionNameContext)leftSibling;
-            if (functionName.operator() != null) {
-                // Enforce whitespace around operators defined with func
-                verifier.verifyLeadingWhitespaceBeforeBracket(ctx, Messages.CHEVRONS,
-                    Messages.OPERATOR_OVERLOADING_ONE_WHITESPACE_BEFORE, 1);
-                return;
-            }
+        // Check for operator overloaded methods
+        if (leftSibling instanceof FunctionNameContext && ((FunctionNameContext)leftSibling).operator() != null) {
+            verifier.verifyLeadingWhitespaceBeforeBracket(ctx, Messages.CHEVRONS,
+                Messages.OPERATOR_OVERLOADING_ONE_WHITESPACE_BEFORE, 1);
+        } else {
+            verifier.verifyLeadingWhitespaceBeforeBracket(ctx, Messages.CHEVRONS, Messages.NO_WHITESPACE_BEFORE, 0);
         }
-        verifier.verifyLeadingWhitespaceBeforeBracket(ctx, Messages.CHEVRONS, Messages.NO_WHITESPACE_BEFORE, 0);
     }
 
 }
