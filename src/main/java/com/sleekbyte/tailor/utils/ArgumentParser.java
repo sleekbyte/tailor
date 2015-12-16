@@ -67,6 +67,15 @@ public class ArgumentParser {
     }
 
     /**
+     * Exception thrown when option parsing fails.
+     */
+    public static class ArgumentParserException extends Exception {
+        public ArgumentParserException(String message) {
+            super(message);
+        }
+    }
+
+    /**
      * Check if "-h" or "--help" option was specified.
      */
     public boolean shouldPrintHelp() {

@@ -1,7 +1,8 @@
 package com.sleekbyte.tailor.functional;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 
 import com.sleekbyte.tailor.Tailor;
 import org.junit.After;
@@ -62,8 +63,8 @@ public abstract class RuleTest {
 
         String[] msgs = outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
         String summary = msgs[msgs.length - 1];
-        // Skip first two lines for file header, last two lines for summary
-        msgs = Arrays.copyOfRange(msgs, 2, msgs.length - 2);
+        // Skip first four lines for progress and file header, last two lines for summary
+        msgs = Arrays.copyOfRange(msgs, 4, msgs.length - 2);
 
         for (String msg : msgs) {
             String truncatedMsg = msg.substring(msg.indexOf(inputFile.getName()));
@@ -71,7 +72,7 @@ public abstract class RuleTest {
         }
 
         // Ensure number of warnings in summary equals actual number of warnings in the output
-        assertTrue(summary.contains(expectedMessages.size() + " violation"));
+        assertThat(summary, containsString(expectedMessages.size() + " violation"));
         assertArrayEquals(outContent.toString(Charset.defaultCharset().name()), this.expectedMessages.toArray(),
             actualOutput.toArray());
     }

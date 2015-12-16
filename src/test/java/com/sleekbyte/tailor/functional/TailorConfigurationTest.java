@@ -75,8 +75,8 @@ public final class TailorConfigurationTest {
 
         String[] msgs = outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
 
-        // Skip first three lines for file header, last two lines for summary
-        msgs = Arrays.copyOfRange(msgs, 3, msgs.length - 2);
+        // Skip first five lines for file header, last two lines for summary
+        msgs = Arrays.copyOfRange(msgs, 5, msgs.length - 2);
 
         for (String msg : msgs) {
             String truncatedMsg = msg.substring(msg.indexOf(inputFile.getName()));
