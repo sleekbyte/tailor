@@ -80,3 +80,31 @@ func arithmeticMean(numbers: Double... ) -> Double {
     }
     return total / Double( numbers.count )
 }
+
+prefix operator √ {}
+
+prefix func √ (number: Double) -> Double {
+    return sqrt(number)
+}
+
+prefix func *(number: Double) -> Double {
+    return number
+}
+
+func * (left: String, right: Int) -> String {
+    if right <= 0 {
+        return ""
+    }
+
+    var result = left
+    for _ in 1..<right {
+        result += left
+    }
+
+    return result
+}
+
+func ** (left: Double, right: Double) -> Double {
+    return pow(left, right)
+}
+

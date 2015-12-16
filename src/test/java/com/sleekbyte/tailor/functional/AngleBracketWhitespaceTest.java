@@ -27,6 +27,8 @@ public final class AngleBracketWhitespaceTest extends RuleTest {
         addExpectedMessage(17, 61, Messages.CHEVRONS + Messages.CONTENT + Messages.NOT_END_SPACE);
         addExpectedMessage(20, 19, Messages.NO_WHITESPACE_BEFORE + Messages.CHEVRONS.toLowerCase());
         addExpectedMessage(20, 21, Messages.CHEVRONS + Messages.CONTENT + Messages.LEADING_WHITESPACE);
+        addExpectedMessage(25, 8, Messages.OPERATOR_OVERLOADING_ONE_WHITESPACE_BEFORE
+            + Messages.CHEVRONS.toLowerCase());
     }
 
     private void addExpectedMessage(int line, int column, String msg) {

@@ -72,6 +72,8 @@ public class Messages {
     public static final String PARENTHESES = "Parentheses ";
     public static final String CHEVRONS = "Chevrons ";
     public static final String NO_WHITESPACE_BEFORE = "There should be no whitespace before the ";
+    public static final String OPERATOR_OVERLOADING_ONE_WHITESPACE_BEFORE = "Operator overloading methods should have"
+        + " exactly one space before the ";
 
     // Plural constructs
     public static final String IMPORTS = "Imports ";
