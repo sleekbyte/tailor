@@ -3,7 +3,6 @@ package com.sleekbyte.tailor.listeners;
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClosureExpressionContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.ExternalParameterNameContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.FunctionDeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.InitializerDeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.LocalParameterNameContext;
@@ -44,12 +43,13 @@ public final class RedundantSelfListener extends SwiftBaseListener {
             // Extract function parameter names
             List<String> parameterNames = getFunctionParameters(getParentFunction(ctx));
             ParseTree property = ParseTreeUtil.getRightSibling(dot);
-            if (property != null && parameterNames.contains(property.getText())) {
+            assert (property != null);
+            if (parameterNames.contains(property.getText())) {
                 return;
             }
             // Flag usage of self
             // 1. outside closures and initializer(s)
-            // 2. inside methods that do not have same named parameters
+            // 2. inside methods whose parameters don't have the same name as the property
             printer.warn(Rules.REDUNDANT_SELF, Messages.EXPLICIT_CALL_TO_SELF, location);
 
         }
@@ -105,9 +105,6 @@ public final class RedundantSelfListener extends SwiftBaseListener {
                     LocalParameterNameContext localParameterName = parameter.localParameterName();
                     if (localParameterName != null) {
                         parameterNames.add(parameter.localParameterName().getText());
-                    } else {
-                        ExternalParameterNameContext externalParameterName = parameter.externalParameterName();
-                        parameterNames.add(externalParameterName.getText());
                     }
                 }
             }
