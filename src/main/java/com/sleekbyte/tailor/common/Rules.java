@@ -168,7 +168,8 @@ public enum Rules {
         REDUNDANT_PARENTHESES.className = RedundantParenthesesListener.class.getName();
 
         REDUNDANT_SELF.name = "redundant-self";
-        REDUNDANT_SELF.description = "Redundant self.";
+        REDUNDANT_SELF.description = "Only explicitly use the self keyword when required by the language i.e. in a "
+            + "closure, or when parameter names conflict.";
         REDUNDANT_SELF.className = RedundantSelfListener.class.getName();
 
         TERMINATING_NEWLINE.name = "terminating-newline";
