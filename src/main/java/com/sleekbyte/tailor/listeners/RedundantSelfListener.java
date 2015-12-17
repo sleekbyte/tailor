@@ -40,7 +40,7 @@ public final class RedundantSelfListener extends SwiftBaseListener {
         // 1. standalone self usages
         // 2. self usage in initializer(s) and closures
         ParseTree dot = ParseTreeUtil.getRightNode(ctx);
-        if (dot != null && !insideInitializerOrClosure(ctx)) {
+        if (dot != null && dot.getText().equals(".") && !insideInitializerOrClosure(ctx)) {
             // Extract function parameter names
             List<String> parameterNames = getFunctionParameters(getParentFunction(ctx));
             ParseTree property = ParseTreeUtil.getRightSibling(dot);
