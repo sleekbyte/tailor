@@ -56,3 +56,20 @@ extension String {
         return NSLocalizedString(self, tableName: nil, bundle: NSBundle.mainBundle(), value: "", comment: "")
     }
 }
+
+public override func respondsToSelector(selector: Selector) -> Bool {
+    switch selector {
+    case "URLSession:didBecomeInvalidWithError:":
+        return sessionDidBecomeInvalidWithError != nil
+    case "URLSession:didReceiveChallenge:completionHandler:":
+        return sessionDidReceiveChallenge != nil
+    case "URLSessionDidFinishEventsForBackgroundURLSession:":
+        return sessionDidFinishEventsForBackgroundURLSession != nil
+    case "URLSession:task:willPerformHTTPRedirection:newRequest:completionHandler:":
+        return taskWillPerformHTTPRedirection != nil
+    case "URLSession:dataTask:didReceiveResponse:completionHandler:":
+        return dataTaskDidReceiveResponse != nil
+    default:
+        return self.dynamicType.instancesRespondToSelector(selector)
+    }
+}

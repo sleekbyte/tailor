@@ -3,6 +3,7 @@ package com.sleekbyte.tailor.listeners;
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClosureExpressionContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.DynamicTypeExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.FunctionDeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.InitializerDeclarationContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.LocalParameterNameContext;
@@ -39,12 +40,11 @@ public final class RedundantSelfListener extends SwiftBaseListener {
         // 1. standalone self usages
         // 2. self usage in initializer(s) and closures
         ParseTree dot = ParseTreeUtil.getRightNode(ctx);
-        if (dot != null && dot.getText().equals(".") && !insideInitializerOrClosure(ctx)) {
+        if (dot != null && dot.getText().equals(".") && !insideInitializerOrClosureOrDynamicType(ctx)) {
             // Extract function parameter names
             List<String> parameterNames = getFunctionParameters(getParentFunction(ctx));
             ParseTree property = ParseTreeUtil.getRightSibling(dot);
-            assert (property != null);
-            if (parameterNames.contains(property.getText())) {
+            if (property != null && parameterNames.contains(property.getText())) {
                 return;
             }
             // Flag usage of self
@@ -55,14 +55,15 @@ public final class RedundantSelfListener extends SwiftBaseListener {
         }
     }
 
-    private static boolean insideInitializerOrClosure(ParserRuleContext ctx) {
+    private static boolean insideInitializerOrClosureOrDynamicType(ParserRuleContext ctx) {
         if (ctx == null) {
             return false;
         }
         while (ctx != null) {
             ctx = ctx.getParent();
             if (ctx instanceof ClosureExpressionContext
-                || ctx instanceof InitializerDeclarationContext) {
+                || ctx instanceof InitializerDeclarationContext
+                || ctx instanceof DynamicTypeExpressionContext) {
                 return true;
             }
         }
