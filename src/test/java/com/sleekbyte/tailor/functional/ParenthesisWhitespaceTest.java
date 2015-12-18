@@ -35,13 +35,12 @@ public final class ParenthesisWhitespaceTest extends RuleTest {
         addExpectedMessage(35, 14, Messages.PARENTHESES + Messages.CONTENT + Messages.LEADING_WHITESPACE);
         addExpectedMessage(44, 45, Messages.PARENTHESES + Messages.CONTENT + Messages.LEADING_WHITESPACE);
         addExpectedMessage(52, 11, Messages.PARENTHESES + Messages.CONTENT + Messages.NOT_END_SPACE);
-        addExpectedMessage(56, 14, Messages.NO_WHITESPACE_BEFORE + Messages.PARENTHESES.toLowerCase());
-        addExpectedMessage(72, 9, Messages.NO_WHITESPACE_BEFORE + Messages.PARENTHESES.toLowerCase());
+        addExpectedMessage(56, 14, Messages.PARENTHESES + Messages.NO_WHITESPACE_BEFORE);
+        addExpectedMessage(72, 9, Messages.PARENTHESES + Messages.NO_WHITESPACE_BEFORE);
         addExpectedMessage(76, 39, Messages.PARENTHESES + Messages.CONTENT + Messages.NOT_END_SPACE);
         addExpectedMessage(81, 27, Messages.PARENTHESES + Messages.CONTENT + Messages.LEADING_WHITESPACE);
         addExpectedMessage(81, 41, Messages.PARENTHESES + Messages.CONTENT + Messages.NOT_END_SPACE);
-        addExpectedMessage(90, 14, Messages.OPERATOR_OVERLOADING_ONE_WHITESPACE_BEFORE
-            + Messages.PARENTHESES.toLowerCase());
+        addExpectedMessage(90, 14, Messages.OPERATOR_OVERLOADING_ONE_SPACE);
     }
 
     private void addExpectedMessage(int line, int column, String msg) {

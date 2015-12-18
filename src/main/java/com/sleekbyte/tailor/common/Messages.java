@@ -71,9 +71,6 @@ public class Messages {
     public static final String EMPTY = "Empty ";
     public static final String PARENTHESES = "Parentheses ";
     public static final String CHEVRONS = "Chevrons ";
-    public static final String NO_WHITESPACE_BEFORE = "There should be no whitespace before the ";
-    public static final String OPERATOR_OVERLOADING_ONE_WHITESPACE_BEFORE = "Operator overloading methods should have"
-        + " exactly one space before the ";
 
     // Plural constructs
     public static final String IMPORTS = "Imports ";
@@ -114,6 +111,10 @@ public class Messages {
         + " or <TODO(dev-name): description>";
     public static final String REDUNDANT_METHOD_PARENTHESES = "following method call with trailing closure argument"
         + " should be removed";
+    public static final String NO_WHITESPACE_BEFORE = "should not be preceded by whitespace";
+    public static final String OPERATOR_OVERLOADING_ONE_SPACE = "Operator definitions should be followed by exactly "
+        + "one space";
+
 
     // Usage messages
     public static final String CMD_LINE_SYNTAX = "tailor [options] [--] [[file|directory] ...]";

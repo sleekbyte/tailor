@@ -46,8 +46,7 @@ public final class ParenthesisWhitespaceListener extends SwiftBaseListener {
             FunctionNameContext functionName = (FunctionNameContext) declaration.getChild(1);
             // Check for operator overloaded methods
             if (functionName.operator() != null) {
-                verifier.verifyLeadingWhitespaceBeforeBracket(ctx, Messages.PARENTHESES,
-                    Messages.OPERATOR_OVERLOADING_ONE_WHITESPACE_BEFORE, 1);
+                verifier.verifyLeadingWhitespaceBeforeBracket(ctx, Messages.OPERATOR_OVERLOADING_ONE_SPACE, 1);
                 return;
             }
         }

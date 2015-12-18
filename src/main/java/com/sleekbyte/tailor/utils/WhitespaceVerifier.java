@@ -129,7 +129,26 @@ public final class WhitespaceVerifier {
 
         if (checkLeftSpaces(left, openingParenthesis, numSpace)) {
             Location illegalWhitespaceLocation =  ListenerUtil.getTokenEndLocation(left);
-            printer.error(rule, message + construct.toLowerCase(), illegalWhitespaceLocation);
+            printer.error(rule, construct + message, illegalWhitespaceLocation);
+        }
+    }
+
+    /**
+     * Verifies that bracket constructs do not have a whitespace before the opening bracket.
+     *
+     * @param ctx Context comprised of brackets
+     * @param message Violation message
+     * @param numSpace Number of spaces to check for
+     */
+    public void verifyLeadingWhitespaceBeforeBracket(ParserRuleContext ctx,
+                                                     String message,
+                                                     int numSpace) {
+        Token left = ParseTreeUtil.getStopTokenForNode(ParseTreeUtil.getLeftNode(ctx));
+        Token openingParenthesis = ParseTreeUtil.getStartTokenForNode(ctx.getChild(0));
+
+        if (checkLeftSpaces(left, openingParenthesis, numSpace)) {
+            Location illegalWhitespaceLocation =  ListenerUtil.getTokenEndLocation(left);
+            printer.error(rule, message, illegalWhitespaceLocation);
         }
     }
 
