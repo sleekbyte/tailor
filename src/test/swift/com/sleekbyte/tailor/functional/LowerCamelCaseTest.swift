@@ -98,3 +98,49 @@ class MyClass {
         }
     }
 }
+
+public struct Position {
+    let row: Int
+    let column: Int
+}
+
+extension Position: Equatable {}
+
+public func ==(lhs: Position, rhs: Position) -> Bool {
+    return (lhs.row == rhs.row)
+        && (lhs.column == rhs.column)
+}
+
+infix operator ** { associativity left precedence 160 }
+
+func ** (left: Double, right: Double) -> Double {
+    return pow(left, right)
+}
+
+infix operator **= { associativity right precedence 90 }
+
+func **= (inout left: Double, right: Double) {
+    left = left ** right
+}
+
+protocol RegularExpressionMatchable {
+    func match(pattern: String, options: NSRegularExpressionOptions) throws -> Bool
+}
+
+extension String: RegularExpressionMatchable {
+    func match(pattern: String, options: NSRegularExpressionOptions = []) throws -> Bool {
+        let regex = try NSRegularExpression(pattern: pattern, options: options)
+        return regex.numberOfMatchesInString(self, options: [], range: NSRange(location: 0, length: 0.distanceTo(utf16.count))) != 0
+    }
+}
+
+infix operator =~ { associativity left precedence 130 }
+func =~<T: RegularExpressionMatchable> (left: T, right: String) -> Bool {
+    return try! left.match(right, options: [])
+}
+
+prefix operator √ {}
+
+prefix func √ (number: Double) -> Double {
+    return sqrt(number)
+}
