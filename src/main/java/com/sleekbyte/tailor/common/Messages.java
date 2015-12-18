@@ -112,6 +112,8 @@ public class Messages {
         + " or <TODO(dev-name): description>";
     public static final String REDUNDANT_METHOD_PARENTHESES = "following method call with trailing closure argument"
         + " should be removed";
+    public static final String EXPLICIT_CALL_TO_SELF = "References to self should only be made in closures and to "
+        + "prevent parameter name conflicts.";
 
     // Usage messages
     public static final String CMD_LINE_SYNTAX = "tailor [options] [--] [[file|directory] ...]";

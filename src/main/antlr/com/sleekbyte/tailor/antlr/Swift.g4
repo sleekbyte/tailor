@@ -301,7 +301,7 @@ functionName : identifier |  operator  ;
 functionSignature : parameterClauses ('throws' | 'rethrows')? functionResult? ;
 functionResult : '->' attributes? sType  ;
 functionBody : codeBlock  ;
-parameterClauses : parameterClause parameterClauses? ;
+parameterClauses : parameterClause+ ;
 parameterClause : '(' ')' |  '(' parameterList '...'? ')'  ;
 parameterList : parameter | parameter ',' parameterList  ;
 // Parameters don't have attributes in the Swift Language Reference
