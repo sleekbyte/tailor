@@ -28,7 +28,9 @@ public class LowerCamelCaseListener extends SwiftBaseListener {
 
     @Override
     public void enterFunctionName(SwiftParser.FunctionNameContext ctx) {
-        verifyLowerCamelCase(Messages.FUNCTION + Messages.NAMES, ctx);
+        if (ctx.operator() == null) {
+            verifyLowerCamelCase(Messages.FUNCTION + Messages.NAMES, ctx);
+        }
     }
 
     @Override
