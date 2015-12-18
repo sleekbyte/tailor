@@ -2,10 +2,14 @@ package com.sleekbyte.tailor.listeners.whitespace;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.antlr.SwiftParser.FunctionNameContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.FunctionSignatureContext;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.WhitespaceVerifier;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 /**
  * Parse tree listener to flag illegal whitespace in parentheses.
@@ -34,12 +38,25 @@ public final class ParenthesisWhitespaceListener extends SwiftBaseListener {
 
     @Override
     public void enterParameterClauses(SwiftParser.ParameterClausesContext ctx) {
-        verifier.verifyBracketSurroundingWhitespace(ctx, Messages.PARENTHESES);
+        ParserRuleContext parent = ctx.getParent();
+        if (parent instanceof FunctionSignatureContext) {
+            ParseTree declaration = parent.getParent();
+            // 1st child is functionHead
+            // 2nd child is functionName
+            FunctionNameContext functionName = (FunctionNameContext) declaration.getChild(1);
+            // Check for operator overloaded methods
+            if (functionName.operator() != null) {
+                verifier.verifyLeadingWhitespaceBeforeBracket(ctx, Messages.OPERATOR_OVERLOADING_ONE_SPACE, 1);
+                return;
+            }
+        }
+        verifier.verifyLeadingWhitespaceBeforeBracket(ctx, Messages.PARENTHESES, Messages.NO_WHITESPACE_BEFORE, 0);
     }
 
     @Override
     public void enterInitializerDeclaration(SwiftParser.InitializerDeclarationContext ctx) {
-        verifier.verifyBracketSurroundingWhitespace(ctx.parameterClause(), Messages.PARENTHESES);
+        verifier.verifyLeadingWhitespaceBeforeBracket(ctx.parameterClause(), Messages.PARENTHESES,
+            Messages.NO_WHITESPACE_BEFORE, 0);
     }
 
 }

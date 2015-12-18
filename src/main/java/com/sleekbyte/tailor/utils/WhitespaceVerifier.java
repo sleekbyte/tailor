@@ -82,6 +82,7 @@ public final class WhitespaceVerifier {
      * immediately before the closing bracket.
      *
      * @param ctx Context comprised of brackets
+     * @param construct Name of construct
      */
     public void verifyBracketContentWhitespace(ParserRuleContext ctx, String construct) {
         Token openingParenthesis = ParseTreeUtil.getStopTokenForNode(ctx.getChild(0));
@@ -115,15 +116,39 @@ public final class WhitespaceVerifier {
      * Verifies that bracket constructs do not have a whitespace before the opening bracket.
      *
      * @param ctx Context comprised of brackets
+     * @param construct Name of construct
+     * @param message Violation message
+     * @param numSpace Number of spaces to check for
      */
-    public void verifyBracketSurroundingWhitespace(ParserRuleContext ctx, String construct) {
+    public void verifyLeadingWhitespaceBeforeBracket(ParserRuleContext ctx,
+                                                     String construct,
+                                                     String message,
+                                                     int numSpace) {
         Token left = ParseTreeUtil.getStopTokenForNode(ParseTreeUtil.getLeftNode(ctx));
         Token openingParenthesis = ParseTreeUtil.getStartTokenForNode(ctx.getChild(0));
 
-        if (checkLeftSpaces(left, openingParenthesis, 0)) {
+        if (checkLeftSpaces(left, openingParenthesis, numSpace)) {
             Location illegalWhitespaceLocation =  ListenerUtil.getTokenEndLocation(left);
-            printer.error(rule, Messages.NO_WHITESPACE_BEFORE + construct.toLowerCase(),
-                illegalWhitespaceLocation);
+            printer.error(rule, construct + message, illegalWhitespaceLocation);
+        }
+    }
+
+    /**
+     * Verifies that bracket constructs do not have a whitespace before the opening bracket.
+     *
+     * @param ctx Context comprised of brackets
+     * @param message Violation message
+     * @param numSpace Number of spaces to check for
+     */
+    public void verifyLeadingWhitespaceBeforeBracket(ParserRuleContext ctx,
+                                                     String message,
+                                                     int numSpace) {
+        Token left = ParseTreeUtil.getStopTokenForNode(ParseTreeUtil.getLeftNode(ctx));
+        Token openingParenthesis = ParseTreeUtil.getStartTokenForNode(ctx.getChild(0));
+
+        if (checkLeftSpaces(left, openingParenthesis, numSpace)) {
+            Location illegalWhitespaceLocation =  ListenerUtil.getTokenEndLocation(left);
+            printer.error(rule, message, illegalWhitespaceLocation);
         }
     }
 
