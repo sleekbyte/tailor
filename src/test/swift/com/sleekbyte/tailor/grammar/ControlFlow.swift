@@ -215,3 +215,8 @@ for var i = 0; i < Int(width); i++, sp = sp.advancedBy(4), dp = dp.advancedBy(4)
         memcpy(dp, sp, 4)
     }
 }
+
+for pkg in parms.dependencies where pkg.type == .ModuleMap {
+    let path = Path.join(pkg.path, "module.modulemap")
+    args += ["-Xcc", "-F-module-map=\(path)", "-I", pkg.path]
+}

@@ -75,7 +75,7 @@ forInit : variableDeclaration | expressionList  ;
 
 // GRAMMAR OF A FOR_IN STATEMENT
 
-forInStatement : 'for' 'case'? pattern 'in' expression codeBlock whereClause? ;
+forInStatement : 'for' 'case'? pattern 'in' expression whereClause? codeBlock  ;
 
 // GRAMMAR OF A WHILE STATEMENT
 
@@ -308,6 +308,7 @@ parameterList : parameter | parameter ',' parameterList  ;
 parameter : attributes? 'inout'? 'let'? '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?
  | 'inout'? 'var' '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?
  | attributes? sType
+ | externalParameterName? localParameterName typeAnnotation '...'
  ;
 externalParameterName : identifier | '_'  ;
 localParameterName : identifier | '_'  ;
@@ -848,7 +849,7 @@ NilLiteral: 'nil' ;
 
 identifier : Identifier | contextSensitiveKeyword ;
 
-keyword : 'convenience' | 'class' | 'deinit' | 'enum' | 'extension' | 'func' | 'import' | 'init' | 'let' | 'protocol' | 'static' | 'struct' | 'subscript' | 'typealias' | 'var' | 'break' | 'case' | 'continue' | 'default' | 'do' | 'else' | 'fallthrough' | 'if' | 'in' | 'for' | 'return' | 'switch' | 'where' | 'while' | 'as' | 'dynamicType' | 'is' | 'new' | 'super' | 'self' | 'Self' | 'Type' | 'repeat' ;
+keyword : 'convenience' | 'class' | 'deinit' | 'enum' | 'extension' | 'func' | 'import' | 'init' | 'let' | 'protocol' | 'static' | 'struct' | 'subscript' | 'typealias' | 'var' | 'break' | 'case' | 'continue' | 'default' | 'do' | 'else' | 'fallthrough' | 'if' | 'in' | 'for' | 'return' | 'switch' | 'where' | 'while' | 'as' | 'dynamicType' | 'is' | 'super' | 'self' | 'Self' | 'Type' | 'repeat' ;
 
 contextSensitiveKeyword :
  'associativity' | 'convenience' | 'dynamic' | 'didSet' | 'final' | 'get' | 'infix' | 'indirect' |
