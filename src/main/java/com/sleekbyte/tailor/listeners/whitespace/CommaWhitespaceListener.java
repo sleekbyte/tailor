@@ -4,7 +4,9 @@ import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.antlr.SwiftParser.AvailabilityArgumentsContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ConditionClauseContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.GenericArgumentListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingConditionContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerListContext;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
@@ -84,6 +86,16 @@ public final class CommaWhitespaceListener extends SwiftBaseListener {
 
     @Override
     public void enterAvailabilityArguments(AvailabilityArgumentsContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterGenericArgumentList(GenericArgumentListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterPatternInitializerList(PatternInitializerListContext ctx) {
         checkWhitespaceAroundCommaSeparatedList(ctx);
     }
 

@@ -152,3 +152,17 @@ if #available(iOS 9, OSX 10.10,*) {
 if #available(iOS 9 , OSX 10.10, *) {
     // Use iOS 9 APIs on iOS, and use OS X v10.10 APIs on OS X
 }
+
+struct Array<Value>: CollectionType {}
+
+struct Dictionary<Key: Hashable, Value>: CollectionType {}
+
+struct Dictionary<Key: Hashable , Value>: CollectionType {}
+
+struct Dictionary<Key: Hashable,   Value>: CollectionType {}
+
+let numX = 2, func_y = { x in println(x) }
+
+let numX = 2 , func_y = { x in println(x) }
+
+var numX = 2,func_y = { x in println(x) }
