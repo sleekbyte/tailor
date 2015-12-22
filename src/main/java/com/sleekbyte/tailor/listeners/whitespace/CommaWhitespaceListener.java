@@ -2,6 +2,7 @@ package com.sleekbyte.tailor.listeners.whitespace;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.antlr.SwiftParser.AvailabilityArgumentsContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ConditionClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingConditionContext;
 import com.sleekbyte.tailor.common.Messages;
@@ -79,6 +80,11 @@ public final class CommaWhitespaceListener extends SwiftBaseListener {
             verifyCommaLeftAssociation(left, right, comma);
             checkWhitespaceAroundCommaSeparatedList(ctx.optionalBindingContinuationList());
         }
+    }
+
+    @Override
+    public void enterAvailabilityArguments(AvailabilityArgumentsContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
     }
 
     private void checkWhitespaceAroundCommaSeparatedList(ParserRuleContext ctx) {

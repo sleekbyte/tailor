@@ -140,3 +140,15 @@ if let roomCount = john.residence?.numberOfRooms , var roomCountTwo = john.resid
 if var x = point.x?.val,  var y = point.y?.val,z = point.z?.val {
   println(x, y, z)
 }
+
+if #available(iOS 9, OSX 10.10, *) {
+    // Use iOS 9 APIs on iOS, and use OS X v10.10 APIs on OS X
+}
+
+if #available(iOS 9, OSX 10.10,*) {
+    // Use iOS 9 APIs on iOS, and use OS X v10.10 APIs on OS X
+}
+
+if #available(iOS 9 , OSX 10.10, *) {
+    // Use iOS 9 APIs on iOS, and use OS X v10.10 APIs on OS X
+}

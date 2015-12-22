@@ -175,7 +175,7 @@ whereExpression: expression ;
 // GRAMMAR OF AN AVAILABILITY CONDITION
 
 availabilityCondition: '#available' '(' availabilityArguments ')' ;
-availabilityArguments: availabilityArgument (',' availabilityArguments)? ;
+availabilityArguments: availabilityArgument (',' availabilityArguments)* ;
 availabilityArgument: platformName platformVersion | '*' ;
 platformName: 'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension' | 'watchOS'
  | 'watchOSApplicationExtension' | 'tvOS' | 'tvOSApplicationExtension' ;
