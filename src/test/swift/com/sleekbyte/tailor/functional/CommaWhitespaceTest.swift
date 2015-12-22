@@ -119,3 +119,24 @@ if #available(iOS 10.2, *), var y = val {
 if #available(iOS 10.2, *) , x < 2 {
     println(x + y)
 }
+
+if let roomCount = john.residence?.numberOfRooms {
+    println("John's residence has \(roomCount) room(s).")
+}
+
+if let roomCount = john.residence?.numberOfRooms, roomCountTwo = john.residence?.numberOfRooms {
+    println("John's residence has \(roomCount) room(s).")
+}
+
+if let roomCount = john.residence?.numberOfRooms,roomCountTwo = john.residence?.numberOfRooms {
+    println("John's residence has \(roomCount) room(s).")
+}
+
+if let roomCount = john.residence?.numberOfRooms , var roomCountTwo = john.residence?.numberOfRooms,
+  var name = john.name {
+    println("John's residence has \(roomCount) room(s).")
+}
+
+if var x = point.x?.val,  var y = point.y?.val,z = point.z?.val {
+  println(x, y, z)
+}
