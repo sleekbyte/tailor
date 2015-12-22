@@ -41,6 +41,14 @@ public class CommaWhitespaceTest extends RuleTest {
         addExpectedCommaMessage(start + 4, 43, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 4, 43, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 8, 1, Messages.NO_SPACE_BEFORE);
+
+        // Condition clause/list commas
+        start = 103;
+        addExpectedCommaMessage(start, 10, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 4, 34, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 8, 27, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 16, 28, Messages.NO_SPACE_BEFORE);
+
     }
 
     private void addExpectedCommaMessage(int line, int column, String msg) {

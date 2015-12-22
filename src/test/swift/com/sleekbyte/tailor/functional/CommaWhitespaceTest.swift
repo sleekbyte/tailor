@@ -95,3 +95,27 @@ func someFunction<T: SomeClass, U: SomeProtocol,
 V: AnotherClass>(someT: T, someU: U) {
     // function body goes here
 }
+
+if x < 2, var y = val {
+    println(x + y)
+}
+
+if x < 2 , var y = val {
+    println(x + y)
+}
+
+if x < 2, #available(iOS 10.2, *),var y = val {
+    println(x + y)
+}
+
+if #available(iOS 10.2, *),  var y = val {
+    println(x + y)
+}
+
+if #available(iOS 10.2, *), var y = val {
+    println(x + y)
+}
+
+if #available(iOS 10.2, *) , x < 2 {
+    println(x + y)
+}
