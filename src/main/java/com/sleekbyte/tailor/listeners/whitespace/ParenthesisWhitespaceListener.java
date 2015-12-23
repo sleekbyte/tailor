@@ -4,6 +4,7 @@ import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.antlr.SwiftParser.FunctionNameContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.FunctionSignatureContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.GenericParameterClauseContext;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
@@ -45,7 +46,8 @@ public final class ParenthesisWhitespaceListener extends SwiftBaseListener {
             // 2nd child is functionName
             FunctionNameContext functionName = (FunctionNameContext) declaration.getChild(1);
             // Check for operator overloaded methods
-            if (functionName.operator() != null) {
+            if (functionName.operator() != null
+                && !(declaration.getChild(2) instanceof GenericParameterClauseContext)) {
                 verifier.verifyLeadingWhitespaceBeforeBracket(ctx, Messages.OPERATOR_OVERLOADING_ONE_SPACE, 1);
                 return;
             }
