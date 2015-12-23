@@ -303,7 +303,7 @@ functionResult : '->' attributes? sType  ;
 functionBody : codeBlock  ;
 parameterClauses : parameterClause parameterClauses? ;
 parameterClause : '(' ')' |  '(' parameterList '...'? ')'  ;
-parameterList : parameter | parameter ',' parameterList  ;
+parameterList : parameter (',' parameter)*  ;
 // Parameters don't have attributes in the Swift Language Reference
 parameter : attributes? 'inout'? 'let'? '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?
  | 'inout'? 'var' '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?

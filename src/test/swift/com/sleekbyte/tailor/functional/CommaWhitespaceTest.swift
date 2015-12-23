@@ -166,3 +166,13 @@ let numX = 2, func_y = { x in println(x) }
 let numX = 2 , func_y = { x in println(x) }
 
 var numX = 2,func_y = { x in println(x) }
+
+func initialize(x: Int) {}
+
+func initialize(x: Int, y: Int, z: Int) {}
+
+func initialize(x: Int,  y: Int, z: Int) {}
+
+func initialize(x: Int,y: Int,z: Int) {}
+
+func initialize(x: Int , y: Int, z: Int) {}
