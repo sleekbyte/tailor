@@ -176,3 +176,34 @@ func initialize(x: Int,  y: Int, z: Int) {}
 func initialize(x: Int,y: Int,z: Int) {}
 
 func initialize(x: Int , y: Int, z: Int) {}
+
+enum Planet {
+    case Earth
+}
+
+enum Planet {
+    case Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune
+}
+
+enum Planet {
+    case Mercury,Venus, Earth, Mars,  Jupiter, Saturn, Uranus, Neptune
+}
+
+enum Planet {
+    case Mercury, Venus, Earth, Mars, Jupiter , Saturn, Uranus, Neptune
+}
+
+enum ASCIIControlCharacter: Character {
+    case Tab = "\t", LineFeed = "\n"
+    case CarriageReturn = "\r"
+}
+
+enum ASCIIControlCharacter: Character {
+    case Tab = "\t" , LineFeed = "\n"
+    case CarriageReturn = "\r"
+}
+
+enum ASCIIControlCharacter: Character {
+    case Tab = "\t",LineFeed = "\n"
+    case CarriageReturn = "\r"
+}

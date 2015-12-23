@@ -71,6 +71,14 @@ public class CommaWhitespaceTest extends RuleTest {
         addExpectedCommaMessage(start + 10, 23, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 10, 30, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 12, 24, Messages.NO_SPACE_BEFORE);
+
+        // Enum case lists
+        start = 189;
+        addExpectedCommaMessage(start, 17, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start, 36, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 4, 47, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 13, 21, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 18, 20, Messages.SPACE_AFTER);
     }
 
     private void addExpectedCommaMessage(int line, int column, String msg) {
