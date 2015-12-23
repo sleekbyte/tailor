@@ -135,3 +135,30 @@ internal indirect enum Either<L, R> {
 	case Left(L)
 	case Right(R)
 }
+
+public enum SystemError: ErrorType {
+    case chdir(Int32)
+    case close(Int32)
+    case dirfd(Int32, String)
+    case fopen(Int32, String)
+    case fputs
+    case fgetc(Int32)
+    case fread(Int32)
+    case getcwd(Int32)
+    case mkdir(Int32, String)
+    case mkdtemp(Int32)
+    case opendir(Int32, String)
+    case pipe(Int32)
+    case popen(Int32, String)
+    case posix_spawn(Int32, [String])
+    case read(Int32)
+    case readdir(Int32, String)
+    case readlink(Int32, String)
+    case realpath(Int32, String)
+    case rename(Int32, old: String, new: String)
+    case rmdir(Int32, String)
+    case stat(Int32, String)
+    case symlinkat(Int32, String)
+    case unlink(Int32, String)
+    case waitpid(Int32)
+}
