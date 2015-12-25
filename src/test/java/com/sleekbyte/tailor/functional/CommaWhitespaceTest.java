@@ -70,7 +70,7 @@ public class CommaWhitespaceTest extends RuleTest {
         addExpectedCommaMessage(start + 8, 23, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 10, 23, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 10, 30, Messages.SPACE_AFTER);
-        addExpectedCommaMessage(start + 12, 24, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 12, 30, Messages.NO_SPACE_BEFORE);
 
         // Enum case lists
         start = 189;

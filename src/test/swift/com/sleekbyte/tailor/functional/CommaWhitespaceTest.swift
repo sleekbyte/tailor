@@ -175,7 +175,7 @@ func initialize(x: Int,  y: Int, z: Int) {}
 
 func initialize(x: Int,y: Int,z: Int) {}
 
-func initialize(x: Int , y: Int, z: Int) {}
+func initialize(x_ext x: Int , y_ext y: Int, z_ext z: Int) {}
 
 enum Planet {
     case Earth
