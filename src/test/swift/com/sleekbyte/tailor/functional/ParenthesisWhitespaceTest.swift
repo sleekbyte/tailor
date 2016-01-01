@@ -109,3 +109,7 @@ func ** (left: Double, right: Double) -> Double {
 }
 
 func <| (lhs: Int, rhs: Int) -> Int {}
+
+func <|< <A> (lhs: A, rhs: A) -> A
+
+func <|< <A>(lhs: A, rhs: A) -> A
