@@ -303,7 +303,7 @@ functionResult : '->' attributes? sType  ;
 functionBody : codeBlock  ;
 parameterClauses : parameterClause parameterClauses? ;
 parameterClause : '(' ')' |  '(' parameterList '...'? ')'  ;
-parameterList : parameter | parameter ',' parameterList  ;
+parameterList : parameter (',' parameter)*  ;
 // Parameters don't have attributes in the Swift Language Reference
 parameter : attributes? 'inout'? 'let'? '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?
  | 'inout'? 'var' '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?
@@ -322,7 +322,7 @@ unionStyleEnum : 'indirect'? 'enum' enumName genericParameterClause? typeInherit
 unionStyleEnumMembers : unionStyleEnumMember unionStyleEnumMembers? ;
 unionStyleEnumMember : declaration | unionStyleEnumCaseClause ';'? ;
 unionStyleEnumCaseClause : attributes? 'indirect'? 'case' unionStyleEnumCaseList  ;
-unionStyleEnumCaseList : unionStyleEnumCase | unionStyleEnumCase ',' unionStyleEnumCaseList  ;
+unionStyleEnumCaseList : unionStyleEnumCase (',' unionStyleEnumCase)*  ;
 unionStyleEnumCase : enumCaseName tupleType? ;
 enumName : identifier  ;
 enumCaseName : identifier  ;
@@ -331,7 +331,7 @@ rawValueStyleEnum : 'enum' enumName genericParameterClause? typeInheritanceClaus
 rawValueStyleEnumMembers : rawValueStyleEnumMember rawValueStyleEnumMembers? ;
 rawValueStyleEnumMember : declaration | rawValueStyleEnumCaseClause  ;
 rawValueStyleEnumCaseClause : attributes? 'case' rawValueStyleEnumCaseList  ;
-rawValueStyleEnumCaseList : rawValueStyleEnumCase | rawValueStyleEnumCase ',' rawValueStyleEnumCaseList  ;
+rawValueStyleEnumCaseList : rawValueStyleEnumCase (',' rawValueStyleEnumCase)*   ;
 rawValueStyleEnumCase : enumCaseName rawValueAssignment? ;
 rawValueAssignment : '=' literal  ;
 
