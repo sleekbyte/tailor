@@ -152,3 +152,58 @@ if #available(iOS 9, OSX 10.10,*) {
 if #available(iOS 9 , OSX 10.10, *) {
     // Use iOS 9 APIs on iOS, and use OS X v10.10 APIs on OS X
 }
+
+struct Array<Value>: CollectionType {}
+
+struct Dictionary<Key: Hashable, Value>: CollectionType {}
+
+struct Dictionary<Key: Hashable , Value>: CollectionType {}
+
+struct Dictionary<Key: Hashable,   Value>: CollectionType {}
+
+let numX = 2, func_y = { x in println(x) }
+
+let numX = 2 , func_y = { x in println(x) }
+
+var numX = 2,func_y = { x in println(x) }
+
+func initialize(x: Int) {}
+
+func initialize(x: Int, y: Int, z: Int) {}
+
+func initialize(x: Int,  y: Int, z: Int) {}
+
+func initialize(x: Int,y: Int,z: Int) {}
+
+func initialize(x_ext x: Int , y_ext y: Int, z_ext z: Int) {}
+
+enum Planet {
+    case Earth
+}
+
+enum Planet {
+    case Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune
+}
+
+enum Planet {
+    case Mercury,Venus, Earth, Mars,  Jupiter, Saturn, Uranus, Neptune
+}
+
+enum Planet {
+    case Mercury, Venus, Earth, Mars, Jupiter , Saturn, Uranus, Neptune
+}
+
+enum ASCIIControlCharacter: Character {
+    case Tab = "\t", LineFeed = "\n"
+    case CarriageReturn = "\r"
+}
+
+enum ASCIIControlCharacter: Character {
+    case Tab = "\t" , LineFeed = "\n"
+    case CarriageReturn = "\r"
+}
+
+enum ASCIIControlCharacter: Character {
+    case Tab = "\t",LineFeed = "\n"
+    case CarriageReturn = "\r"
+}

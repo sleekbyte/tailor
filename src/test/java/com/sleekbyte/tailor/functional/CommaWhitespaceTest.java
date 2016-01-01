@@ -56,10 +56,29 @@ public class CommaWhitespaceTest extends RuleTest {
         addExpectedCommaMessage(start + 9, 24, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 9, 47, Messages.SPACE_AFTER);
 
-        // Availability conditions
+        // Availability conditions and Generic Arguments
         start = 148;
         addExpectedCommaMessage(start, 31, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 4, 21, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 12, 33, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 14, 32, Messages.SPACE_AFTER);
+
+        // Pattern initializer list and parameter list
+        start = 166;
+        addExpectedCommaMessage(start, 14, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 2, 13, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 8, 23, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 10, 23, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 10, 30, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 12, 30, Messages.NO_SPACE_BEFORE);
+
+        // Enum case lists
+        start = 189;
+        addExpectedCommaMessage(start, 17, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start, 36, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 4, 47, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 13, 21, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 18, 20, Messages.SPACE_AFTER);
     }
 
     private void addExpectedCommaMessage(int line, int column, String msg) {
