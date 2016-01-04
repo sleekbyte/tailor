@@ -166,9 +166,9 @@ tasks.withType(Pmd) {
 task gems(type: Exec) {
     inputs.file file('src/dist/gems/Gemfile')
     outputs.dir file('src/dist/gems/vendor/')
-    workingDir 'src/dist/gems/'
+    workingDir 'src/dist/gems'
     executable 'sh'
-    args '-c', 'if gem list -i bundler >/dev/null; then bundle package --no-install; else echo "Run \'gem install bundler\'" && exit 1; fi'
+    args '-c', 'bundle package --no-install'
 }
 // Ensure gems are packaged into distribution
 distZip.dependsOn 'gems'
@@ -195,10 +195,23 @@ task setVersion {
 
 task updateInstallScripts(type: Exec) {
     doFirst {
-        executable 'sh'
-        args '-c', "sed -i '' 's/[0-9]\\{1,\\}\\.[0-9]\\{1,\\}\\.[0-9]\\{1,\\}/${version}/g' script/install.sh script/install.ps1 script/uninstall.ps1"
+        commandLine "sed", "-i", "", "s/[0-9]\\{1,\\}\\.[0-9]\\{1,\\}\\.[0-9]\\{1,\\}/${version}/g", "script/install.sh", "script/install.ps1", "script/uninstall.ps1"
     }
 }
+// }}}
+
+// Generate man page {{{
+task manpage(type: Exec) {
+    workingDir 'man'
+    executable 'sh'
+    args '-c', "if bundle check >/dev/null; then" +
+        " bundle exec ronn --manual='Tailor Manual' --organization='Sleekbyte' --roff tailor.1.ronn && mv tailor.1 ../src/dist/;" +
+        " else echo 'WARNING: Man page will not be included in distribution since Ronn is missing, please run `script/bootstrap`.'; fi"
+}
+// Ensure man page is packaged into distribution
+distZip.dependsOn 'manpage'
+distTar.dependsOn 'manpage'
+installDist.dependsOn 'manpage'
 // }}}
 
 // Install Globally {{{
@@ -208,17 +221,18 @@ task extractGlobally(type: Sync) {
 }
 
 task install(type: Exec) {
-    executable 'sh'
-    args '-c', "ln -fs /usr/local/tailor/tailor-${version}/bin/tailor /usr/local/bin/tailor"
+    commandLine "ln", "-fs", "/usr/local/tailor/tailor-${version}/bin/tailor", "/usr/local/bin/tailor"
+    commandLine "ln", "-fs", "/usr/local/tailor/tailor-${version}/tailor.1", "/usr/local/share/man/man1/tailor.1"
 }
 
 extractGlobally.dependsOn distZip
 install.dependsOn extractGlobally
 // }}}
 
-// Ensure ANTLR output and Ruby gems are deleted via clean
+// Ensure ANTLR output, generated man page, and Ruby gems are deleted via clean
 clean {
     delete file('src/gen/')
+    delete files('src/dist/tailor.1')
     delete files('src/dist/gems/.bundle/', 'src/dist/gems/Gemfile.lock', 'src/dist/gems/vendor/')
 }
 

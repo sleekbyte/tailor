@@ -1,0 +1,90 @@
+tailor(1) -- cross-platform static analyzer and linter for Swift
+=============================================
+
+## SYNOPSIS
+
+`tailor` [<options>] [--] [[<file>|<directory>] ...]
+
+The full list of supported options is available via `tailor --help`.
+
+## DESCRIPTION
+
+Tailor is a cross-platform static analysis and lint tool for source code written in Apple's Swift programming language. It analyzes your code to ensure consistent styling and help avoid bugs.
+
+## OPTIONS
+
+* `-c`,`--config`=<path/to/.tailor.yml>:
+  specify configuration file
+
+* `--debug`:
+  print ANTLR error messages when parsing error occurs
+
+* `--except`=<rule1,rule2,...>:
+  run all rules except the specified ones
+
+* `-h`,`--help`:
+  display help
+
+* `--invert-color`:
+  invert colorized console output
+
+* `-l`,`--max-line-length`=<0-999>:
+  maximum Line length (in characters)
+
+* `--list-files`:
+  display Swift source files to be analyzed
+
+* `--max-class-length`=<0-999>:
+  maximum Class length (in lines)
+
+* `--max-closure-length`=<0-999>:
+  maximum Closure length (in lines)
+
+* `--max-file-length`=<0-999>:
+  maximum File length (in lines)
+
+* `--max-function-length`=<0-999>:
+  maximum Function length (in lines)
+
+* `--max-name-length`=<0-999>:
+  maximum Identifier name length (in characters)
+
+* `--max-severity`=<error|warning (default)>:
+  maximum severity
+
+* `--max-struct-length`=<0-999>:
+  maximum Struct length (in lines)
+
+* `--min-name-length`=<1-999>:
+  minimum Identifier name length (in characters)
+
+* `--no-color`:
+  disable colorized console output
+
+* `--only`=<rule1,rule2,...>:
+  run only the specified rules
+
+* `--show-rules`:
+  show description for each rule
+
+* ` -v`,`--version`:
+  display version
+
+* `--xcode`=<path/to/project.xcodeproj>:
+  add Tailor Build Phase Run Script to Xcode Project
+
+## BUGS
+
+<https://github.com/sleekbyte/tailor/issues>
+
+## AUTHORS
+
+<https://github.com/sleekbyte/tailor/wiki/Team>
+
+## COPYRIGHT
+
+Tailor is released under the MIT license. See LICENSE.md for details.
+
+## SEE ALSO
+
+swift(1), <https://tailor.sh>,  <https://github.com/sleekbyte/tailor>
