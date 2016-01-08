@@ -3,9 +3,11 @@
 $erroractionpreference = 'stop' # Quit if anything goes wrong
 
 ### Variables
+$tailorversion = '0.3.0'
+$tailor = 'tailor'
 $appdatadir = $env:localappdata.tolower()
-$tailordir = "$appdatadir\tailor"
-$tailorbindir = ";$tailordir\bin"
+$tailordir = "$appdatadir\$tailor"
+$tailorbindir = ";$tailordir\$tailor-$tailorversion\bin"
 
 ### Messages
 function abort($msg) { write-host $msg -f darkred; exit 1 }
