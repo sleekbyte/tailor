@@ -196,7 +196,7 @@ task setVersion {
 task updateInstallScripts(type: Exec) {
     doFirst {
         executable 'sh'
-        args '-c', "sed -i '' 's/[0-9]\\{1,\\}\\.[0-9]\\{1,\\}\\.[0-9]\\{1,\\}/${version}/g' script/install.sh script/install.ps1"
+        args '-c', "sed -i '' 's/[0-9]\\{1,\\}\\.[0-9]\\{1,\\}\\.[0-9]\\{1,\\}/${version}/g' script/install.sh script/install.ps1 script/uninstall.ps1"
     }
 }
 // }}}

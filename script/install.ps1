@@ -4,9 +4,13 @@ $erroractionpreference = 'stop' # Quit if anything goes wrong
 
 ### Variables
 $appdatadir = $env:localappdata.tolower()
-$tailorbindir = "$appdatadir\tailor\bin"
-$zipurl = 'https://github.com/sleekbyte/tailor/releases/download/v0.4.0/tailor-0.4.0.zip'
-$zipfile = "$env:temp\tailor.zip"
+$tailorversion = '0.4.0'
+$tailor = 'tailor'
+$tailorzip = "$tailor-$tailorversion.zip"
+$tailorinstalldir = "$appdatadir\$tailor"
+$tailorbindir = "$tailorinstalldir\$tailor-$tailorversion\bin"
+$zipurl = "https://github.com/sleekbyte/tailor/releases/download/v$tailorversion/$tailorzip"
+$zipfile = "$env:temp\$tailorzip"
 $javaversion='1.8'
 
 ### Messages
@@ -56,10 +60,11 @@ echo ''
 verify-java
 
 ### Install tailor
-echo "Downloading tailor.zip to $appdatadir"
+echo "Downloading $tailor.zip to $appdatadir"
 dl $zipurl $zipfile
 
-unzip $zipfile $appdatadir
+new-item -ItemType Directory -Path $tailorinstalldir
+unzip $zipfile $tailorinstalldir
 remove-item $zipfile
 
 configure-path
