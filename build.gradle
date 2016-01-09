@@ -238,5 +238,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'org.hamcrest:hamcrest-all:1.3'
     testCompile 'org.mockito:mockito-core:1.+'
-    testCompile 'com.github.stefanbirkner:system-rules:1.13.0'
+    testCompile 'com.github.stefanbirkner:system-rules:1.15.1'
 }
