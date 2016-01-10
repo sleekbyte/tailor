@@ -11,9 +11,11 @@ reset='\033[0m'
 PREFIX="/usr/local"
 TAILOR_DIR="$PREFIX/tailor"
 BIN_DIR="$PREFIX/bin"
+MAN_DIR="$PREFIX/share/man/man1"
 TAILOR_VERSION="0.4.0"
 TAILOR_ZIP="tailor-$TAILOR_VERSION.zip"
 START_SCRIPT="$TAILOR_DIR/tailor-$TAILOR_VERSION/bin/tailor"
+MAN_PAGE="$TAILOR_DIR/tailor-$TAILOR_VERSION/tailor.1"
 TAILOR_ZIP_URL="https://github.com/sleekbyte/tailor/releases/download/v$TAILOR_VERSION/$TAILOR_ZIP"
 JAVA_VERSION="1.8"
 
@@ -77,6 +79,7 @@ if wait_for_user; then
   maybe_sudo /usr/bin/unzip -oqq "$TAILOR_DIR/$TAILOR_ZIP" -d "$TAILOR_DIR"
   maybe_sudo /bin/rm -rf "$TAILOR_DIR/$TAILOR_ZIP"
   maybe_sudo /bin/ln -fs "$START_SCRIPT" "$BIN_DIR"/tailor
+  maybe_sudo /bin/ln -fs "$MAN_PAGE" "$MAN_DIR"/tailor.1
   if [ $(uname) = "Darwin" ]; then
     maybe_sudo /usr/sbin/chown -R $(/usr/bin/whoami) "$TAILOR_DIR"
   elif [ $(uname) = "Linux" ]; then

@@ -11,7 +11,7 @@ reset='\033[0m'
 PREFIX="/usr/local"
 TAILOR_DIR="$PREFIX/tailor"
 BIN_DIR="$PREFIX/bin"
-START_SCRIPT="$TAILOR_DIR/bin/tailor"
+MAN_DIR="$PREFIX/share/man/man1"
 
 wait_for_user() {
   if [ $(uname) = "Darwin" ]; then
@@ -48,6 +48,7 @@ echo "Tailor will be uninstalled from: $blue$TAILOR_DIR/$reset"
 if wait_for_user; then
   maybe_sudo /bin/rm -rf "$TAILOR_DIR"
   maybe_sudo /bin/rm -f "$BIN_DIR"/tailor
+  maybe_sudo /bin/rm -f "$MAN_DIR"/tailor.1
   kill_sudo
 
   cecho "Tailor uninstalled." $green
