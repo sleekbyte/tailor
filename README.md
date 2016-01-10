@@ -237,6 +237,7 @@ Please review the [guidelines for contributing](https://github.com/sleekbyte/tai
 ## Development Environment
 * [Java Version 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
 * [Gradle](https://gradle.org) (optional, `./gradlew` may be used instead)
+* [Bundler](http://bundler.io)
 
 # External Tools and Libraries
 
@@ -265,6 +266,7 @@ Please review the [guidelines for contributing](https://github.com/sleekbyte/tai
 | [Bundler](http://bundler.io) | [MIT](https://github.com/bundler/bundler/blob/master/LICENSE.md) |
 | [Codacy](https://www.codacy.com) | [Free for Open Source](https://www.codacy.com/pricing) |
 | [System Rules](http://stefanbirkner.github.io/system-rules/) | [Common Public License 1.0](https://stefanbirkner.github.io/system-rules/license.html) |
+| [Ronn](https://github.com/rtomayko/ronn) | [MIT](https://github.com/rtomayko/ronn/blob/master/COPYING) |
 
 
 # License

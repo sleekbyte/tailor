@@ -29,4 +29,7 @@ gradle-app.setting
 ## Bundler
 .bundle/
 Gemfile.lock
-cache/
+vendor/
+
+# Ronn
+tailor.1
