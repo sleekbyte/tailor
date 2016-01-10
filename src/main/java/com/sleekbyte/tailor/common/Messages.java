@@ -110,8 +110,8 @@ public class Messages {
     public static final String NO_WHITESPACE_BEFORE = "should not be preceded by whitespace";
     public static final String OPERATOR_OVERLOADING_ONE_SPACE = "Operator definitions should be followed by exactly "
         + "one space";
-    public static final String CONSECUTIVE = "Consecutive ";
-    public static final String REDUNDANT_OPTIONAL_BINDING = " should be avoided in optional binding";
+    public static final String REDUNDANT = "Redundant ";
+    public static final String REDUNDANT_OPTIONAL_BINDING = " in optional binding should be removed";
 
 
     // Usage messages

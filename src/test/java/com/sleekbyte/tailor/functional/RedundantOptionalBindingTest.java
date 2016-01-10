@@ -32,7 +32,7 @@ public final class RedundantOptionalBindingTest extends RuleTest {
                 line,
                 column,
                 Severity.WARNING,
-                Messages.CONSECUTIVE + "'" + construct + "' " + Messages.AT_COLUMN + column
+                Messages.REDUNDANT + "'" + construct + "' " + Messages.AT_COLUMN + column
                     + Messages.REDUNDANT_OPTIONAL_BINDING
             )
         );

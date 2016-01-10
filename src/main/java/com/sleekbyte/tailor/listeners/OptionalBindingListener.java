@@ -37,7 +37,7 @@ public final class OptionalBindingListener extends SwiftBaseListener {
                 if (head.getChild(0).getText().equals(lastBindingHead)) {
                     Location location = ListenerUtil.getContextStartLocation(head);
                     printer.error(Rules.REDUNDANT_OPTIONAL_BINDING,
-                        Messages.CONSECUTIVE + "'" + lastBindingHead + "' " + Messages.AT_COLUMN + location.column
+                        Messages.REDUNDANT + "'" + lastBindingHead + "' " + Messages.AT_COLUMN + location.column
                             + Messages.REDUNDANT_OPTIONAL_BINDING, location);
                 } else {
                     lastBindingHead = head.getChild(0).getText();
