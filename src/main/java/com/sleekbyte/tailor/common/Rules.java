@@ -177,7 +177,7 @@ public enum Rules {
         PARENTHESIS_WHITESPACE.className = ParenthesisWhitespaceListener.class.getName();
 
         REDUNDANT_OPTIONAL_BINDING.name = "redundant-optional-binding";
-        REDUNDANT_OPTIONAL_BINDING.description = "Flag consecutive `let/var` bindings in optional binding.";
+        REDUNDANT_OPTIONAL_BINDING.description = "Flag redundant 'let'/'var' bindings in optional binding lists.";
         REDUNDANT_OPTIONAL_BINDING.className = OptionalBindingListener.class.getName();
 
         REDUNDANT_PARENTHESES.name = "redundant-parentheses";
