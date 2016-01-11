@@ -147,3 +147,10 @@ public func success(@noescape closure: T -> Void) {
 public prefix func <-<R: FallibleSendable>(channel: R) throws -> R.T? {
     return try channel.send()
 }
+
+public func fopen(path: String..., mode: String = "r") throws -> UnsafeMutablePointer<FILE> {
+    let path = joinPathComponents(path)
+    let f = libc.fopen(path, mode)
+    guard f != nil else { throw SystemError.fopen(errno, path) }
+    return f
+}

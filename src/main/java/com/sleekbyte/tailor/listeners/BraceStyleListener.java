@@ -160,7 +160,8 @@ public class BraceStyleListener extends SwiftBaseListener {
     }
 
     private void verifyForInStatementBraceStyle(SwiftParser.ForInStatementContext ctx) {
-        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), ctx.expression().getStop(), Messages.FOR_IN_LOOP);
+        Token leftOfCodeBlock = ctx.whereClause() == null ? ctx.expression().getStop() : ctx.whereClause().getStop();
+        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), leftOfCodeBlock, Messages.FOR_IN_LOOP);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.FOR_IN_LOOP);
     }
 

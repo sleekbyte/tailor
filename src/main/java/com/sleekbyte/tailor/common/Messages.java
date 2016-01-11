@@ -21,12 +21,10 @@ public class Messages {
     public static final String ELEMENT = "Element ";
     public static final String ENUM = "Enum ";
     public static final String ENUM_CASE = "Enum case ";
-    public static final String EXTERNAL_PARAMETER = "External parameter ";
     public static final String FILE = "File ";
     public static final String FUNCTION = "Function ";
     public static final String LABEL = "Label ";
     public static final String LINE = "Line ";
-    public static final String LOCAL_PARAMETER = "Local parameter ";
     public static final String PROTOCOL = "Protocol ";
     public static final String IDENTIFIER_NAME = "Identifier name ";
     public static final String SETTER = "Setter ";
@@ -35,9 +33,7 @@ public class Messages {
     public static final String TYPEALIAS = "Typealias ";
     public static final String VARIABLE = "Variable ";
     public static final String CONDITIONAL_CLAUSE = "Conditional clause ";
-    public static final String SWITCH = "Switch ";
     public static final String SWITCH_EXPRESSION = "Switch expression ";
-    public static final String FOR = "For ";
     public static final String FOR_LOOP = "For loop ";
     public static final String THROW_STATEMENT = "Throw statement ";
     public static final String CATCH_CLAUSE = "Catch clause ";
@@ -71,7 +67,6 @@ public class Messages {
     public static final String EMPTY = "Empty ";
     public static final String PARENTHESES = "Parentheses ";
     public static final String CHEVRONS = "Chevrons ";
-    public static final String NO_WHITESPACE_BEFORE = "There should be no whitespace before the ";
 
     // Plural constructs
     public static final String IMPORTS = "Imports ";
@@ -112,6 +107,12 @@ public class Messages {
         + " or <TODO(dev-name): description>";
     public static final String REDUNDANT_METHOD_PARENTHESES = "following method call with trailing closure argument"
         + " should be removed";
+    public static final String NO_WHITESPACE_BEFORE = "should not be preceded by whitespace";
+    public static final String OPERATOR_OVERLOADING_ONE_SPACE = "Operator definitions should be followed by exactly "
+        + "one space";
+    public static final String REDUNDANT = "Redundant ";
+    public static final String REDUNDANT_OPTIONAL_BINDING = " in optional binding should be removed";
+
 
     // Usage messages
     public static final String CMD_LINE_SYNTAX = "tailor [options] [--] [[file|directory] ...]";

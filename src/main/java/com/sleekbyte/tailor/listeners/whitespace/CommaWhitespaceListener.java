@@ -2,6 +2,14 @@ package com.sleekbyte.tailor.listeners.whitespace;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.antlr.SwiftParser.AvailabilityArgumentsContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ConditionClauseContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.GenericArgumentListContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingConditionContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ParameterListContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerListContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.RawValueStyleEnumCaseListContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.UnionStyleEnumCaseListContext;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
@@ -44,6 +52,68 @@ public final class CommaWhitespaceListener extends SwiftBaseListener {
 
     @Override
     public void enterRequirementList(SwiftParser.RequirementListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+
+    @Override
+    public void enterConditionClause(ConditionClauseContext ctx) {
+        if (
+            // conditionClause -> expression ',' conditionList
+            (ctx.expression() != null && ctx.conditionList() != null)
+            // conditionClause -> availabilityCondition ',' expression
+                || (ctx.availabilityCondition() != null && ctx.expression() != null)) {
+
+            Token left = ParseTreeUtil.getStopTokenForNode(ctx.getChild(0));
+            Token right = ParseTreeUtil.getStartTokenForNode(ctx.getChild(2));
+            Token comma = ParseTreeUtil.getStartTokenForNode(ctx.getChild(1));
+
+            verifyCommaLeftAssociation(left, right, comma);
+        }
+        if (ctx.conditionList() != null) {
+            checkWhitespaceAroundCommaSeparatedList(ctx.conditionList());
+        }
+    }
+
+    @Override
+    public void enterOptionalBindingCondition(OptionalBindingConditionContext ctx) {
+        if (ctx.optionalBindingContinuationList() != null) {
+            Token left = ParseTreeUtil.getStopTokenForNode(ctx.optionalBindingHead());
+            Token right = ParseTreeUtil.getStartTokenForNode(ctx.optionalBindingContinuationList());
+            Token comma = ParseTreeUtil.getStartTokenForNode(ctx.getChild(1));
+
+            verifyCommaLeftAssociation(left, right, comma);
+            checkWhitespaceAroundCommaSeparatedList(ctx.optionalBindingContinuationList());
+        }
+    }
+
+    @Override
+    public void enterAvailabilityArguments(AvailabilityArgumentsContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterGenericArgumentList(GenericArgumentListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterPatternInitializerList(PatternInitializerListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterParameterList(ParameterListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterUnionStyleEnumCaseList(UnionStyleEnumCaseListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterRawValueStyleEnumCaseList(RawValueStyleEnumCaseListContext ctx) {
         checkWhitespaceAroundCommaSeparatedList(ctx);
     }
 

@@ -11,8 +11,12 @@ reset='\033[0m'
 PREFIX="/usr/local"
 TAILOR_DIR="$PREFIX/tailor"
 BIN_DIR="$PREFIX/bin"
-START_SCRIPT="$TAILOR_DIR/bin/tailor"
-TAILOR_ZIP_URL="https://github.com/sleekbyte/tailor/releases/download/v0.3.0/tailor-0.3.0.zip"
+MAN_DIR="$PREFIX/share/man/man1"
+TAILOR_VERSION="0.4.0"
+TAILOR_ZIP="tailor-$TAILOR_VERSION.zip"
+START_SCRIPT="$TAILOR_DIR/tailor-$TAILOR_VERSION/bin/tailor"
+MAN_PAGE="$TAILOR_DIR/tailor-$TAILOR_VERSION/tailor.1"
+TAILOR_ZIP_URL="https://github.com/sleekbyte/tailor/releases/download/v$TAILOR_VERSION/$TAILOR_ZIP"
 JAVA_VERSION="1.8"
 
 wait_for_user() {
@@ -66,15 +70,16 @@ cecho() {
   echo "$color$message$reset"
 }
 
-echo "Tailor will be installed to: $blue$TAILOR_DIR/$reset"
+echo "Tailor $TAILOR_VERSION will be installed to: $blue$TAILOR_DIR/$reset"
 if wait_for_user; then
   verify_java
-  maybe_sudo /bin/mkdir -p $BIN_DIR
-  cecho "Downloading tailor.zip to $PREFIX/..." $blue
-  maybe_sudo /usr/bin/curl -#fLo "$PREFIX"/tailor.zip "$TAILOR_ZIP_URL"
-  maybe_sudo /usr/bin/unzip -oqq "$PREFIX"/tailor.zip -d "$PREFIX"
-  maybe_sudo /bin/rm -rf "$PREFIX"/tailor.zip
+  maybe_sudo /bin/mkdir -p $BIN_DIR $TAILOR_DIR
+  cecho "Downloading $TAILOR_ZIP to $TAILOR_DIR/..." $blue
+  maybe_sudo /usr/bin/curl -#fLo "$TAILOR_DIR/$TAILOR_ZIP" "$TAILOR_ZIP_URL"
+  maybe_sudo /usr/bin/unzip -oqq "$TAILOR_DIR/$TAILOR_ZIP" -d "$TAILOR_DIR"
+  maybe_sudo /bin/rm -rf "$TAILOR_DIR/$TAILOR_ZIP"
   maybe_sudo /bin/ln -fs "$START_SCRIPT" "$BIN_DIR"/tailor
+  maybe_sudo /bin/ln -fs "$MAN_PAGE" "$MAN_DIR"/tailor.1
   if [ $(uname) = "Darwin" ]; then
     maybe_sudo /usr/sbin/chown -R $(/usr/bin/whoami) "$TAILOR_DIR"
   elif [ $(uname) = "Linux" ]; then

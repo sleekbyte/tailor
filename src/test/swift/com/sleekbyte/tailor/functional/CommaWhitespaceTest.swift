@@ -95,3 +95,115 @@ func someFunction<T: SomeClass, U: SomeProtocol,
 V: AnotherClass>(someT: T, someU: U) {
     // function body goes here
 }
+
+if x < 2, var y = val {
+    println(x + y)
+}
+
+if x < 2 , var y = val {
+    println(x + y)
+}
+
+if x < 2, #available(iOS 10.2, *),var y = val {
+    println(x + y)
+}
+
+if #available(iOS 10.2, *),  var y = val {
+    println(x + y)
+}
+
+if #available(iOS 10.2, *), var y = val {
+    println(x + y)
+}
+
+if #available(iOS 10.2, *) , x < 2 {
+    println(x + y)
+}
+
+if let roomCount = john.residence?.numberOfRooms {
+    println("John's residence has \(roomCount) room(s).")
+}
+
+if let roomCount = john.residence?.numberOfRooms, roomCountTwo = john.residence?.numberOfRooms {
+    println("John's residence has \(roomCount) room(s).")
+}
+
+if let roomCount = john.residence?.numberOfRooms,roomCountTwo = john.residence?.numberOfRooms {
+    println("John's residence has \(roomCount) room(s).")
+}
+
+if let roomCount = john.residence?.numberOfRooms , var roomCountTwo = john.residence?.numberOfRooms,
+  var name = john.name {
+    println("John's residence has \(roomCount) room(s).")
+}
+
+if var x = point.x?.val,  var y = point.y?.val,z = point.z?.val {
+  println(x, y, z)
+}
+
+if #available(iOS 9, OSX 10.10, *) {
+    // Use iOS 9 APIs on iOS, and use OS X v10.10 APIs on OS X
+}
+
+if #available(iOS 9, OSX 10.10,*) {
+    // Use iOS 9 APIs on iOS, and use OS X v10.10 APIs on OS X
+}
+
+if #available(iOS 9 , OSX 10.10, *) {
+    // Use iOS 9 APIs on iOS, and use OS X v10.10 APIs on OS X
+}
+
+struct Array<Value>: CollectionType {}
+
+struct Dictionary<Key: Hashable, Value>: CollectionType {}
+
+struct Dictionary<Key: Hashable , Value>: CollectionType {}
+
+struct Dictionary<Key: Hashable,   Value>: CollectionType {}
+
+let numX = 2, func_y = { x in println(x) }
+
+let numX = 2 , func_y = { x in println(x) }
+
+var numX = 2,func_y = { x in println(x) }
+
+func initialize(x: Int) {}
+
+func initialize(x: Int, y: Int, z: Int) {}
+
+func initialize(x: Int,  y: Int, z: Int) {}
+
+func initialize(x: Int,y: Int,z: Int) {}
+
+func initialize(x_ext x: Int , y_ext y: Int, z_ext z: Int) {}
+
+enum Planet {
+    case Earth
+}
+
+enum Planet {
+    case Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune
+}
+
+enum Planet {
+    case Mercury,Venus, Earth, Mars,  Jupiter, Saturn, Uranus, Neptune
+}
+
+enum Planet {
+    case Mercury, Venus, Earth, Mars, Jupiter , Saturn, Uranus, Neptune
+}
+
+enum ASCIIControlCharacter: Character {
+    case Tab = "\t", LineFeed = "\n"
+    case CarriageReturn = "\r"
+}
+
+enum ASCIIControlCharacter: Character {
+    case Tab = "\t" , LineFeed = "\n"
+    case CarriageReturn = "\r"
+}
+
+enum ASCIIControlCharacter: Character {
+    case Tab = "\t",LineFeed = "\n"
+    case CarriageReturn = "\r"
+}

@@ -8,6 +8,7 @@ import com.sleekbyte.tailor.listeners.ForceTypeCastListener;
 import com.sleekbyte.tailor.listeners.KPrefixListener;
 import com.sleekbyte.tailor.listeners.LowerCamelCaseListener;
 import com.sleekbyte.tailor.listeners.MultipleImportListener;
+import com.sleekbyte.tailor.listeners.OptionalBindingListener;
 import com.sleekbyte.tailor.listeners.RedundantParenthesesListener;
 import com.sleekbyte.tailor.listeners.SemicolonTerminatedListener;
 import com.sleekbyte.tailor.listeners.TodoCommentListener;
@@ -48,6 +49,7 @@ public enum Rules {
     MULTIPLE_IMPORTS,
     OPERATOR_WHITESPACE,
     PARENTHESIS_WHITESPACE,
+    REDUNDANT_OPTIONAL_BINDING,
     REDUNDANT_PARENTHESES,
     TERMINATING_NEWLINE,
     TERMINATING_SEMICOLON,
@@ -173,6 +175,10 @@ public enum Rules {
         PARENTHESIS_WHITESPACE.description = "Ensure no whitespace is present immediately before/after an opening"
             + " parenthesis and before the closing parenthesis.";
         PARENTHESIS_WHITESPACE.className = ParenthesisWhitespaceListener.class.getName();
+
+        REDUNDANT_OPTIONAL_BINDING.name = "redundant-optional-binding";
+        REDUNDANT_OPTIONAL_BINDING.description = "Flag redundant 'let'/'var' bindings in optional binding lists.";
+        REDUNDANT_OPTIONAL_BINDING.className = OptionalBindingListener.class.getName();
 
         REDUNDANT_PARENTHESES.name = "redundant-parentheses";
         REDUNDANT_PARENTHESES.description = "Control flow constructs, exception handling constructs, and "

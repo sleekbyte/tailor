@@ -75,7 +75,7 @@ forInit : variableDeclaration | expressionList  ;
 
 // GRAMMAR OF A FOR_IN STATEMENT
 
-forInStatement : 'for' 'case'? pattern 'in' expression codeBlock whereClause? ;
+forInStatement : 'for' 'case'? pattern 'in' expression whereClause? codeBlock  ;
 
 // GRAMMAR OF A WHILE STATEMENT
 
@@ -175,7 +175,7 @@ whereExpression: expression ;
 // GRAMMAR OF AN AVAILABILITY CONDITION
 
 availabilityCondition: '#available' '(' availabilityArguments ')' ;
-availabilityArguments: availabilityArgument (',' availabilityArguments)? ;
+availabilityArguments: availabilityArgument (',' availabilityArguments)* ;
 availabilityArgument: platformName platformVersion | '*' ;
 platformName: 'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension' | 'watchOS'
  | 'watchOSApplicationExtension' | 'tvOS' | 'tvOSApplicationExtension' ;
@@ -303,11 +303,12 @@ functionResult : '->' attributes? sType  ;
 functionBody : codeBlock  ;
 parameterClauses : parameterClause parameterClauses? ;
 parameterClause : '(' ')' |  '(' parameterList '...'? ')'  ;
-parameterList : parameter | parameter ',' parameterList  ;
+parameterList : parameter (',' parameter)*  ;
 // Parameters don't have attributes in the Swift Language Reference
 parameter : attributes? 'inout'? 'let'? '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?
  | 'inout'? 'var' '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?
  | attributes? sType
+ | externalParameterName? localParameterName typeAnnotation '...'
  ;
 externalParameterName : identifier | '_'  ;
 localParameterName : identifier | '_'  ;
@@ -321,7 +322,7 @@ unionStyleEnum : 'indirect'? 'enum' enumName genericParameterClause? typeInherit
 unionStyleEnumMembers : unionStyleEnumMember unionStyleEnumMembers? ;
 unionStyleEnumMember : declaration | unionStyleEnumCaseClause ';'? ;
 unionStyleEnumCaseClause : attributes? 'indirect'? 'case' unionStyleEnumCaseList  ;
-unionStyleEnumCaseList : unionStyleEnumCase | unionStyleEnumCase ',' unionStyleEnumCaseList  ;
+unionStyleEnumCaseList : unionStyleEnumCase (',' unionStyleEnumCase)*  ;
 unionStyleEnumCase : enumCaseName tupleType? ;
 enumName : identifier  ;
 enumCaseName : identifier  ;
@@ -330,7 +331,7 @@ rawValueStyleEnum : 'enum' enumName genericParameterClause? typeInheritanceClaus
 rawValueStyleEnumMembers : rawValueStyleEnumMember rawValueStyleEnumMembers? ;
 rawValueStyleEnumMember : declaration | rawValueStyleEnumCaseClause  ;
 rawValueStyleEnumCaseClause : attributes? 'case' rawValueStyleEnumCaseList  ;
-rawValueStyleEnumCaseList : rawValueStyleEnumCase | rawValueStyleEnumCase ',' rawValueStyleEnumCaseList  ;
+rawValueStyleEnumCaseList : rawValueStyleEnumCase (',' rawValueStyleEnumCase)*   ;
 rawValueStyleEnumCase : enumCaseName rawValueAssignment? ;
 rawValueAssignment : '=' literal  ;
 
@@ -848,7 +849,7 @@ NilLiteral: 'nil' ;
 
 identifier : Identifier | contextSensitiveKeyword ;
 
-keyword : 'convenience' | 'class' | 'deinit' | 'enum' | 'extension' | 'func' | 'import' | 'init' | 'let' | 'protocol' | 'static' | 'struct' | 'subscript' | 'typealias' | 'var' | 'break' | 'case' | 'continue' | 'default' | 'do' | 'else' | 'fallthrough' | 'if' | 'in' | 'for' | 'return' | 'switch' | 'where' | 'while' | 'as' | 'dynamicType' | 'is' | 'new' | 'super' | 'self' | 'Self' | 'Type' | 'repeat' ;
+keyword : 'convenience' | 'class' | 'deinit' | 'enum' | 'extension' | 'func' | 'import' | 'init' | 'let' | 'protocol' | 'static' | 'struct' | 'subscript' | 'typealias' | 'var' | 'break' | 'case' | 'continue' | 'default' | 'do' | 'else' | 'fallthrough' | 'if' | 'in' | 'for' | 'return' | 'switch' | 'where' | 'while' | 'as' | 'dynamicType' | 'is' | 'super' | 'self' | 'Self' | 'Type' | 'repeat' ;
 
 contextSensitiveKeyword :
  'associativity' | 'convenience' | 'dynamic' | 'didSet' | 'final' | 'get' | 'infix' | 'indirect' |

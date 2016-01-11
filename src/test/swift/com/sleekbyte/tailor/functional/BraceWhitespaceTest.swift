@@ -110,6 +110,10 @@ class Rectangle: Shape {
                 x{
 
             }
+
+            for pkg in parms.dependencies where pkg.type == .ModuleMap{
+                println(pkg.name)
+            }
         }
 
    }
