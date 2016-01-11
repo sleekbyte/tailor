@@ -241,3 +241,15 @@ shoppingList += ["Chocolate Spread","Cheese", "Butter"]
 shoppingList += ["Chocolate Spread", "Cheese", "Butter",]
 
 shoppingList += ["Chocolate Spread", "Cheese", "Butter" ,]
+
+var airports: [String: String] = ["YYZ": "Toronto Pearson", "DUB": "Dublin"]
+
+var airports: [String: String] = ["YYZ": "Toronto Pearson" , "DUB": "Dublin"]
+
+var airports: [String: String] = ["YYZ": "Toronto Pearson",  "DUB": "Dublin"]
+
+var airports: [String: String] = ["YYZ": "Toronto Pearson","DUB": "Dublin"]
+
+var airports: [String: String] = ["YYZ": "Toronto Pearson", "DUB": "Dublin",]
+
+var airports: [String: String] = ["YYZ": "Toronto Pearson", "DUB": "Dublin" ,]

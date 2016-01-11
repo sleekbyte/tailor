@@ -95,12 +95,19 @@ public class CommaWhitespaceTest extends RuleTest {
         addExpectedCommaMessage(start + 4, 46, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 8, 46, Messages.NO_SPACE_BEFORE);
 
-        // Array Literals
+        // Array literals
         start = 237;
         addExpectedCommaMessage(start, 37, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start, 47, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 2, 36, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 6, 57, Messages.NO_SPACE_BEFORE);
+
+        // Dictionary literals
+        start = 247;
+        addExpectedCommaMessage(start, 60, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 2, 59, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 4, 59, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 8, 77, Messages.NO_SPACE_BEFORE);
     }
 
     private void addExpectedCommaMessage(int line, int column, String msg) {
