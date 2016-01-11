@@ -94,16 +94,17 @@ public class CommaWhitespaceTest extends RuleTest {
         addExpectedCommaMessage(start + 4, 11, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 4, 46, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 8, 46, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 16, 5, Messages.NO_SPACE_BEFORE);
 
         // Array literals
-        start = 237;
+        start = 246;
         addExpectedCommaMessage(start, 37, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start, 47, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 2, 36, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 6, 57, Messages.NO_SPACE_BEFORE);
 
         // Dictionary literals
-        start = 247;
+        start = 259;
         addExpectedCommaMessage(start, 60, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 2, 59, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 4, 59, Messages.SPACE_AFTER);

@@ -232,6 +232,15 @@ for (i = 0, j = n - 1; i < n && j >= 0; i++  , j--) {
   println(mat[i][j])
 }
 
+for (var i = 0,
+    j = 300 - 1;
+    i < 29 && j >= 0;
+    i++
+    ,
+    j--) {
+  println(mat[i][j])
+}
+
 shoppingList += ["Chocolate Spread", "Cheese", "Butter"]
 
 shoppingList += ["Chocolate Spread" , "Cheese",  "Butter"]
@@ -241,6 +250,9 @@ shoppingList += ["Chocolate Spread","Cheese", "Butter"]
 shoppingList += ["Chocolate Spread", "Cheese", "Butter",]
 
 shoppingList += ["Chocolate Spread", "Cheese", "Butter" ,]
+
+shoppingList += ["Chocolate Spread", "Cheese",
+ "Butter"]
 
 var airports: [String: String] = ["YYZ": "Toronto Pearson", "DUB": "Dublin"]
 
