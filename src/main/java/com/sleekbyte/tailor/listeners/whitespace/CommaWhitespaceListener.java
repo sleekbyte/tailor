@@ -9,6 +9,8 @@ import com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingConditionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ParameterListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.RawValueStyleEnumCaseListContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementListContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.TupleTypeElementListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.UnionStyleEnumCaseListContext;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
@@ -114,6 +116,16 @@ public final class CommaWhitespaceListener extends SwiftBaseListener {
 
     @Override
     public void enterRawValueStyleEnumCaseList(RawValueStyleEnumCaseListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterTuplePatternElementList(TuplePatternElementListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterTupleTypeElementList(TupleTypeElementListContext ctx) {
         checkWhitespaceAroundCommaSeparatedList(ctx);
     }
 

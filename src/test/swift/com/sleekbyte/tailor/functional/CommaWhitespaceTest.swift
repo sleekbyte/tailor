@@ -207,3 +207,11 @@ enum ASCIIControlCharacter: Character {
     case Tab = "\t",LineFeed = "\n"
     case CarriageReturn = "\r"
 }
+
+var (x, y): (Int, Int)
+
+var (x,y): (Int , Int)
+
+var (x, y ,z): (Int,Int, Int)
+
+var (x): Int = 2

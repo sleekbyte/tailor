@@ -79,6 +79,15 @@ public class CommaWhitespaceTest extends RuleTest {
         addExpectedCommaMessage(start + 4, 47, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 13, 21, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 18, 20, Messages.SPACE_AFTER);
+
+        // Tuple patterns
+        start = 213;
+        addExpectedCommaMessage(start, 7, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start, 17, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 2, 11, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 2, 11, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 2, 20, Messages.SPACE_AFTER);
+
     }
 
     private void addExpectedCommaMessage(int line, int column, String msg) {
