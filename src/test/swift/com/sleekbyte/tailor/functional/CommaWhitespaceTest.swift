@@ -215,3 +215,19 @@ var (x,y): (Int , Int)
 var (x, y ,z): (Int,Int, Int)
 
 var (x): Int = 2
+
+for (i = 0, j = n - 1; i < n && j >= 0; i++, j--) {
+  println(mat[i][j])
+}
+
+for (i = 0,j = n - 1; i < n && j >= 0; i++, j--) {
+  println(mat[i][j])
+}
+
+for (i = 0,  j = n - 1; i < n && j >= 0; i++ , j--) {
+  println(mat[i][j])
+}
+
+for (i = 0, j = n - 1; i < n && j >= 0; i++  , j--) {
+  println(mat[i][j])
+}
