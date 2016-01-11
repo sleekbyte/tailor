@@ -60,6 +60,7 @@ import java.util.stream.Collectors;
 public class Tailor {
 
     private static ArgumentParser argumentParser = new ArgumentParser();
+    private static Optional<Configuration> configuration;
     private static List<String> pathNames;
 
     /**
@@ -95,13 +96,11 @@ public class Tailor {
         }
         Set<String> fileNames = new TreeSet<>();
 
-        Optional<Configuration> optionalConfig =
-            ConfigurationFileManager.getConfiguration(argumentParser.getConfigFilePath());
         Optional<String> srcRoot = getSrcRoot();
         if (pathNames.size() >= 1) {
             fileNames.addAll(findFilesInPaths());
-        } else if (optionalConfig.isPresent()) {
-            Configuration config = optionalConfig.get();
+        } else if (configuration.isPresent()) {
+            Configuration config = configuration.get();
             Optional<String> configFileLocation = config.getFileLocation();
             if (configFileLocation.isPresent()) {
                 System.out.println(Messages.TAILOR_CONFIG_LOCATION + configFileLocation.get());
@@ -332,6 +331,10 @@ public class Tailor {
             if (xcodeprojPath != null) {
                 System.exit(XcodeIntegrator.setupXcode(xcodeprojPath));
             }
+
+            // Parse config file
+            configuration = ConfigurationFileManager.getConfiguration(argumentParser.getConfigFilePath());
+
             Set<String> fileNames = getSwiftSourceFiles(cmd.getArgs());
             if (fileNames.size() == 0) {
                 exitWithNoSourceFilesError();
