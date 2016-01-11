@@ -2,6 +2,7 @@ package com.sleekbyte.tailor.listeners.whitespace;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.antlr.SwiftParser.ArrayLiteralItemsContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.AvailabilityArgumentsContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ConditionClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionListContext;
@@ -135,17 +136,35 @@ public final class CommaWhitespaceListener extends SwiftBaseListener {
         checkWhitespaceAroundCommaSeparatedList(ctx);
     }
 
+    @Override
+    public void enterArrayLiteralItems(ArrayLiteralItemsContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
     private void checkWhitespaceAroundCommaSeparatedList(ParserRuleContext ctx) {
-        for (int i = 0; i < ctx.children.size() - 2; i += 2) {
+        int numChildren = ctx.children.size();
+
+        for (int i = 0; i < numChildren - 2; i += 2) {
             Token left = ParseTreeUtil.getStopTokenForNode(ctx.getChild(i));
             Token right = ParseTreeUtil.getStartTokenForNode(ctx.getChild(i + 2));
             Token comma = ((TerminalNodeImpl) ctx.getChild(i + 1)).getSymbol();
 
             verifyCommaLeftAssociation(left, right, comma);
         }
+
+        // For constructs that allow trailing commas (example: array-literal)
+        Token last = ParseTreeUtil.getStartTokenForNode(ctx.getChild(numChildren - 1));
+        if (last.getText().equals(",")) {
+            Token left = ParseTreeUtil.getStopTokenForNode(ctx.getChild(numChildren - 2));
+            verifyCommaLeftAssociation(left, last);
+        }
     }
 
     private void verifyCommaLeftAssociation(Token left, Token right, Token comma) {
         verifier.verifyPunctuationLeftAssociation(left, right, comma, Messages.COMMA);
+    }
+
+    private void verifyCommaLeftAssociation(Token left, Token comma) {
+        verifier.verifyPunctuationLeftAssociation(left, comma, Messages.COMMA);
     }
 }

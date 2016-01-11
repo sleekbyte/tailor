@@ -231,3 +231,13 @@ for (i = 0,  j = n - 1; i < n && j >= 0; i++ , j--) {
 for (i = 0, j = n - 1; i < n && j >= 0; i++  , j--) {
   println(mat[i][j])
 }
+
+shoppingList += ["Chocolate Spread", "Cheese", "Butter"]
+
+shoppingList += ["Chocolate Spread" , "Cheese",  "Butter"]
+
+shoppingList += ["Chocolate Spread","Cheese", "Butter"]
+
+shoppingList += ["Chocolate Spread", "Cheese", "Butter",]
+
+shoppingList += ["Chocolate Spread", "Cheese", "Butter" ,]
