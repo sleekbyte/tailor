@@ -220,13 +220,17 @@ task extractGlobally(type: Sync) {
     into '/usr/local/tailor'
 }
 
-task install(type: Exec) {
-    commandLine "ln", "-fs", "/usr/local/tailor/tailor-${version}/bin/tailor", "/usr/local/bin/tailor"
+task installMan(type: Exec) {
     commandLine "ln", "-fs", "/usr/local/tailor/tailor-${version}/tailor.1", "/usr/local/share/man/man1/tailor.1"
 }
 
+task install(type: Exec) {
+    commandLine "ln", "-fs", "/usr/local/tailor/tailor-${version}/bin/tailor", "/usr/local/bin/tailor"
+}
+
 extractGlobally.dependsOn distZip
-install.dependsOn extractGlobally
+installMan.dependsOn extractGlobally
+install.dependsOn installMan
 // }}}
 
 // Ensure ANTLR output, generated man page, and Ruby gems are deleted via clean
