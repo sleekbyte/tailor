@@ -361,7 +361,7 @@ public class Tailor {
                     return tree;
                 }));
         System.out.format("%n");
-        files.parallelStream().forEach(
+        files.stream().forEach(
             file -> {
                 try {
                     Tailor.analyzeFile(file, filesToTokenStreams.get(file), filesToTrees.get(file));
