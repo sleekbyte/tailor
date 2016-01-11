@@ -58,21 +58,21 @@ public class ArgumentParser {
     private CommandLine cmd;
 
     /**
-     * Parse command line options/flags and arguments.
-     */
-    public CommandLine parseCommandLine(String[] args) throws ParseException {
-        addOptions();
-        cmd = new DefaultParser().parse(this.options, args);
-        return cmd;
-    }
-
-    /**
      * Exception thrown when option parsing fails.
      */
     public static class ArgumentParserException extends Exception {
         public ArgumentParserException(String message) {
             super(message);
         }
+    }
+
+    /**
+     * Parse command line options/flags and arguments.
+     */
+    public CommandLine parseCommandLine(String[] args) throws ParseException {
+        addOptions();
+        cmd = new DefaultParser().parse(this.options, args);
+        return cmd;
     }
 
     /**
