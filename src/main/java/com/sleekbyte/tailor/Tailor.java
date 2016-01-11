@@ -50,10 +50,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentMap;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -175,10 +176,12 @@ public class Tailor {
      * @throws ArgumentParserException if listener for an enabled rule is not found
      */
     public static List<SwiftBaseListener> createListeners(Set<Rules> enabledRules, Printer printer,
-                                                          CommonTokenStream tokenStream)
+                                                          CommonTokenStream tokenStream,
+                                                          ConstructLengths constructLengths)
         throws ArgumentParserException {
         List<SwiftBaseListener> listeners = new LinkedList<>();
         Set<String> classNames = enabledRules.stream().map(Rules::getClassName).collect(Collectors.toSet());
+
         for (String className : classNames) {
             try {
 
@@ -207,6 +210,12 @@ public class Tailor {
                 throw new ArgumentParserException("Listeners were not successfully created: " + e);
             }
         }
+
+        listeners.add(new MinLengthListener(printer, constructLengths, enabledRules));
+        listeners.add(new MaxLengthListener(printer, constructLengths, enabledRules));
+        DeclarationListener decListener = new DeclarationListener(listeners);
+        listeners.add(decListener);
+
         return listeners;
     }
 
@@ -257,6 +266,72 @@ public class Tailor {
     }
 
     /**
+     * Walks the provided parse tree using the list of listeners.
+     *
+     * @param listeners List of parse tree listeners.
+     * @param tree Parse tree.
+     */
+    public static void walkParseTree(List<SwiftBaseListener> listeners, TopLevelContext tree) {
+        ParseTreeWalker walker = new ParseTreeWalker();
+        for (SwiftBaseListener listener : listeners) {
+            // The following listeners are used by DeclarationListener to walk the tree
+            if (listener instanceof ConstantNamingListener || listener instanceof KPrefixListener) {
+                continue;
+            }
+            walker.walk(listener, tree);
+        }
+    }
+
+    /**
+     * Analyzes an individual file by creating the corresponding listeners and walking the file's parse tree.
+     *
+     * @param inputFile File to analyze.
+     * @param optTokenStream Common token stream for input file.
+     * @param optTree Parse tree for input file.
+     * @throws ArgumentParserException if an error occurs when parsing cmd line arguments
+     */
+    public static void analyzeFile(File inputFile, Optional<CommonTokenStream> optTokenStream,
+                                   Optional<TopLevelContext> optTree)
+            throws ArgumentParserException {
+        ConstructLengths constructLengths = argumentParser.parseConstructLengths();
+        Severity maxSeverity = argumentParser.getMaxSeverity();
+        ColorSettings colorSettings =
+                new ColorSettings(argumentParser.shouldColorOutput(), argumentParser.shouldInvertColorOutput());
+        Set<Rules> enabledRules = argumentParser.getEnabledRules();
+
+        try {
+            try (Printer printer = new Printer(inputFile, maxSeverity, colorSettings)) {
+                if (optTokenStream.isPresent() && optTree.isPresent()) {
+                    CommonTokenStream tokenStream = optTokenStream.get();
+                    TopLevelContext tree = optTree.get();
+                    List<SwiftBaseListener> listeners = createListeners(
+                        enabledRules,
+                        printer,
+                        tokenStream,
+                        constructLengths
+                    );
+
+                    walkParseTree(listeners, tree);
+
+                    try (FileListener fileListener =
+                             new FileListener(printer, inputFile, constructLengths, enabledRules)) {
+                        fileListener.verify();
+                    }
+
+                    numErrors += printer.getNumErrorMessages();
+                    numWarnings += printer.getNumWarningMessages();
+                } else {
+                    printer.printParseErrorMessage();
+                }
+            }
+        } catch (IOException e) {
+            handleIoException(e);
+        } catch (ArgumentParserException e) {
+            handleCliException(e);
+        }
+    }
+
+    /**
      * Analyze files with SwiftLexer, SwiftParser and Listeners.
      *
      * @param fileNames List of files to analyze
@@ -266,68 +341,30 @@ public class Tailor {
     public static void analyzeFiles(Set<String> fileNames) throws ArgumentParserException, IOException {
         numErrors = 0;
         numWarnings = 0;
-        ConstructLengths constructLengths = argumentParser.parseConstructLengths();
-        Severity maxSeverity = argumentParser.getMaxSeverity();
-        ColorSettings colorSettings =
-            new ColorSettings(argumentParser.shouldColorOutput(), argumentParser.shouldInvertColorOutput());
-        Set<Rules> enabledRules = argumentParser.getEnabledRules();
 
         List<File> files = fileNames.parallelStream().map(File::new).collect(Collectors.toList());
-        List<Optional<CommonTokenStream>> tokenStreams =
-            files.parallelStream().map(Tailor::getTokenStream).collect(Collectors.toList());
+        ConcurrentMap<File, Optional<CommonTokenStream>> filesToTokenStreams =
+            files.parallelStream().collect(Collectors.toConcurrentMap(Function.identity(), Tailor::getTokenStream));
         System.out.format("Analyzing %s:%n", pluralize(fileNames.size(), "file", "files"));
-        List<Optional<TopLevelContext>> trees = tokenStreams
+        ConcurrentMap<File, Optional<TopLevelContext>> filesToTrees = files
             .parallelStream()
-            .map(stream -> {
+            .collect(Collectors.toConcurrentMap(Function.identity(),
+                file -> {
                     Optional<TopLevelContext> tree = Optional.empty();
                     try {
-                        tree = Tailor.getParseTree(stream);
+                        tree = Tailor.getParseTree(filesToTokenStreams.get(file));
                         System.out.print(".");
                     } catch (ErrorListener.ParseException e) {
                         System.out.print("S");
                         numSkippedFiles++;
                     }
                     return tree;
-                })
-            .collect(Collectors.toList());
+                }));
         System.out.format("%n");
-        ListIterator<Optional<CommonTokenStream>> tokenStreamIterator = tokenStreams.listIterator();
-        ListIterator<Optional<TopLevelContext>> treeIterator = trees.listIterator();
-        files.parallelStream().forEachOrdered(inputFile -> {
-                Optional<CommonTokenStream> optTokenStream = tokenStreamIterator.next();
-                Optional<TopLevelContext> optTree = treeIterator.next();
+        files.parallelStream().forEach(
+            file -> {
                 try {
-                    try (Printer printer = new Printer(inputFile, maxSeverity, colorSettings)) {
-                        if (optTokenStream.isPresent() && optTree.isPresent()) {
-                            CommonTokenStream tokenStream = optTokenStream.get();
-                            TopLevelContext tree = optTree.get();
-                            List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, tokenStream);
-                            listeners.add(new MaxLengthListener(printer, constructLengths, enabledRules));
-                            listeners.add(new MinLengthListener(printer, constructLengths, enabledRules));
-                            DeclarationListener decListener = new DeclarationListener(listeners);
-                            listeners.add(decListener);
-
-                            ParseTreeWalker walker = new ParseTreeWalker();
-                            for (SwiftBaseListener listener : listeners) {
-                                // The following listeners are used by DeclarationListener to walk the tree
-                                if (listener instanceof ConstantNamingListener || listener instanceof KPrefixListener) {
-                                    continue;
-                                }
-                                walker.walk(listener, tree);
-                            }
-                            try (FileListener fileListener =
-                                     new FileListener(printer, inputFile, constructLengths, enabledRules)) {
-                                fileListener.verify();
-                            }
-
-                            numErrors += printer.getNumErrorMessages();
-                            numWarnings += printer.getNumWarningMessages();
-                        } else {
-                            printer.printParseErrorMessage();
-                        }
-                    }
-                } catch (IOException e) {
-                    handleIoException(e);
+                    Tailor.analyzeFile(file, filesToTokenStreams.get(file), filesToTrees.get(file));
                 } catch (ArgumentParserException e) {
                     handleCliException(e);
                 }
