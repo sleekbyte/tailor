@@ -265,3 +265,29 @@ var airports: [String: String] = ["YYZ": "Toronto Pearson","DUB": "Dublin"]
 var airports: [String: String] = ["YYZ": "Toronto Pearson", "DUB": "Dublin",]
 
 var airports: [String: String] = ["YYZ": "Toronto Pearson", "DUB": "Dublin" ,]
+
+lazy var someClosure: Void -> String = {
+    [unowned self, weak delegate = self.delegate!] in
+    // closure body goes here
+}
+
+lazy var someClosure: Void -> String = {
+    [unowned self,weak delegate = self.delegate!] in
+    // closure body goes here
+}
+
+lazy var someClosure: Void -> String = {
+    [unowned self , weak delegate = self.delegate!] in
+    // closure body goes here
+}
+
+lazy var someClosure: Void -> String = {
+    [unowned self,  weak delegate = self.delegate!] in
+    // closure body goes here
+}
+
+lazy var someClosure: Void -> String = {
+    [unowned self,
+     weak delegate = self.delegate!] in
+    // closure body goes here
+}
