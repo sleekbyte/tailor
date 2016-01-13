@@ -123,6 +123,13 @@ public class CommaWhitespaceTest extends RuleTest {
         addExpectedCommaMessage(start + 1, 18, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 8, 23, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 15, 22, Messages.SPACE_AFTER);
+
+        // Identifier List
+        start = 315;
+        addExpectedCommaMessage(start, 28, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 1, 29, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 3, 28, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 3, 32, Messages.SPACE_AFTER);
     }
 
     private void addExpectedCommaMessage(int line, int column, String msg) {

@@ -310,3 +310,9 @@ func getFullName() -> (first: String, last: String) {
 
     return (firstName,lastName)
 }
+
+reversed = names.sort( { s1, s2 in s1 > s2 } )
+reversed = names.sort( { s1,s2 in s1 > s2 } )
+reversed = names.sort( { s1 , s2 in s1 > s2 } )
+reversed = names.sort( { _, s1, s2 in s1 > s2 } )
+reversed = names.sort( { _ , s1,  s2 in s1 > s2 } )

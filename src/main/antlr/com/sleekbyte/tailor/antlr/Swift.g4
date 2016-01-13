@@ -895,7 +895,7 @@ Identifier : IdentifierHead IdentifierCharacters?
  | ImplicitParameterName
  ;
 
-identifierList : (identifier | '_') | (identifier | '_') ',' identifierList  ;
+identifierList : (identifier | '_') (',' (identifier | '_'))*  ;
 
 fragment IdentifierHead : [a-zA-Z] | '_'
  | '\u00A8' | '\u00AA' | '\u00AD' | '\u00AF' | [\u00B2-\u00B5] | [\u00B7-\u00BA]
