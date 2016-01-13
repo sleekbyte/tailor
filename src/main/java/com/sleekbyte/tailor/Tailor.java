@@ -5,12 +5,12 @@ import com.sleekbyte.tailor.antlr.SwiftLexer;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.ConfigProperties;
-import com.sleekbyte.tailor.common.Configuration;
 import com.sleekbyte.tailor.common.ConstructLengths;
 import com.sleekbyte.tailor.common.ExitCode;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
+import com.sleekbyte.tailor.common.YamlConfiguration;
 import com.sleekbyte.tailor.integration.XcodeIntegrator;
 import com.sleekbyte.tailor.listeners.BlankLineListener;
 import com.sleekbyte.tailor.listeners.BraceStyleListener;
@@ -27,8 +27,8 @@ import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.CliArgumentParser;
 import com.sleekbyte.tailor.utils.CliArgumentParserException;
 import com.sleekbyte.tailor.utils.CommentExtractor;
-import com.sleekbyte.tailor.utils.ConfigurationFileManager;
 import com.sleekbyte.tailor.utils.Finder;
+import com.sleekbyte.tailor.utils.YamlConfigurationFileManager;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -60,7 +60,7 @@ import java.util.stream.Collectors;
 public class Tailor {
 
     private static CliArgumentParser cliArgumentParser = new CliArgumentParser();
-    private static Optional<Configuration> configuration;
+    private static Optional<YamlConfiguration> configuration;
     private static List<String> pathNames;
 
     /**
@@ -100,7 +100,7 @@ public class Tailor {
         if (pathNames.size() >= 1) {
             fileNames.addAll(findFilesInPaths());
         } else if (configuration.isPresent()) {
-            Configuration config = configuration.get();
+            YamlConfiguration config = configuration.get();
             Optional<String> configFileLocation = config.getFileLocation();
             if (configFileLocation.isPresent()) {
                 System.out.println(Messages.TAILOR_CONFIG_LOCATION + configFileLocation.get());
@@ -333,7 +333,7 @@ public class Tailor {
             }
 
             // Parse config file
-            configuration = ConfigurationFileManager.getConfiguration(cliArgumentParser.getConfigFilePath());
+            configuration = YamlConfigurationFileManager.getConfiguration(cliArgumentParser.getConfigFilePath());
 
             Set<String> fileNames = getSwiftSourceFiles(cmd.getArgs());
             if (fileNames.size() == 0) {

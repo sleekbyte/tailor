@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * Represent a config object.
  */
-public final class Configuration {
+public final class YamlConfiguration {
 
     private static final String[] DEFAULT_INCLUDE = new String[] {"**.swift"};
     private static final String[] DEFAULT_EXCLUDE = new String[] {"**.{svn,git,lproj,xcassets,framework,xcodeproj}"};
