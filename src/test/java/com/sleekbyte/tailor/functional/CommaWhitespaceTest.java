@@ -109,6 +109,34 @@ public class CommaWhitespaceTest extends RuleTest {
         addExpectedCommaMessage(start + 2, 59, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 4, 59, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 8, 77, Messages.NO_SPACE_BEFORE);
+
+        // Capture lists
+        start = 275;
+        addExpectedCommaMessage(start, 18, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 5, 19, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 10, 18, Messages.SPACE_AFTER);
+
+        // Parenthesized Expressions
+        start = 296;
+        addExpectedCommaMessage(start, 15, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start, 26, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 1, 18, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 8, 23, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 15, 22, Messages.SPACE_AFTER);
+
+        // Identifier List
+        start = 315;
+        addExpectedCommaMessage(start, 28, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 1, 29, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 3, 28, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 3, 32, Messages.SPACE_AFTER);
+
+        // Case Item List
+        start = 326;
+        addExpectedCommaMessage(start, 10, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start, 15, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start, 21, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 6, 6, Messages.SPACE_AFTER);
     }
 
     private void addExpectedCommaMessage(int line, int column, String msg) {

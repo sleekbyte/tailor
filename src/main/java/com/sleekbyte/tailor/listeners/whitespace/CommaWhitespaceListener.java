@@ -4,10 +4,14 @@ import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.antlr.SwiftParser.ArrayLiteralItemsContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.AvailabilityArgumentsContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.CaptureListItemsContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.CaseItemListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ConditionClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryLiteralItemsContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.GenericArgumentListContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.IdentifierListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingConditionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ParameterListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerListContext;
@@ -144,6 +148,26 @@ public final class CommaWhitespaceListener extends SwiftBaseListener {
 
     @Override
     public void enterDictionaryLiteralItems(DictionaryLiteralItemsContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterCaptureListItems(CaptureListItemsContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterExpressionElementList(ExpressionElementListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterIdentifierList(IdentifierListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterCaseItemList(CaseItemListContext ctx) {
         checkWhitespaceAroundCommaSeparatedList(ctx);
     }
 
