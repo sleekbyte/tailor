@@ -115,6 +115,14 @@ public class CommaWhitespaceTest extends RuleTest {
         addExpectedCommaMessage(start, 18, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 5, 19, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 10, 18, Messages.SPACE_AFTER);
+
+        // Parenthesized Expressions
+        start = 296;
+        addExpectedCommaMessage(start, 15, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start, 26, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 1, 18, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 8, 23, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 15, 22, Messages.SPACE_AFTER);
     }
 
     private void addExpectedCommaMessage(int line, int column, String msg) {

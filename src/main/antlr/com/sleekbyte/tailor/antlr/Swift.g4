@@ -635,7 +635,7 @@ implicitMemberExpression : '.' identifier  ;
 // GRAMMAR OF A PARENTHESIZED EXPRESSION
 
 parenthesizedExpression : '(' expressionElementList? ')'  ;
-expressionElementList : expressionElement (',' expressionElementList)*  ;
+expressionElementList : expressionElement (',' expressionElement)*  ;
 expressionElement : expression | identifier ':' expression  ;
 
 // GRAMMAR OF A WILDCARD EXPRESSION

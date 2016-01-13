@@ -291,3 +291,22 @@ lazy var someClosure: Void -> String = {
      weak delegate = self.delegate!] in
     // closure body goes here
 }
+
+var arr = [ (1, 2, 3), (3, 4, 5) ]
+var arr = [ (1,2, 3), (3 , 4, 5) ]
+var arr = [ (1, 2,  3), (3, 4,
+  5) ]
+
+func getFullName() -> (first: String, last: String) {
+    let firstName = "John"
+    let lastName = "Doe"
+
+    return (firstName , lastName)
+}
+
+func getFullName() -> (first: String, last: String) {
+    let firstName = "John"
+    let lastName = "Doe"
+
+    return (firstName,lastName)
+}
