@@ -104,7 +104,8 @@ switchStatement : 'switch' expression '{' switchCases? '}'  ;
 switchCases : switchCase switchCases? ;
 switchCase : caseLabel statements | defaultLabel statements  | caseLabel ';' | defaultLabel ';'  ;
 caseLabel : 'case' caseItemList ':' ;
-caseItemList : pattern whereClause? | pattern whereClause? ',' caseItemList ;
+caseItemList : caseItem (',' caseItem)* ;
+caseItem: pattern whereClause? ;
 defaultLabel : 'default' ':' ;
 
 // GRAMMAR OF A LABELED STATEMENT

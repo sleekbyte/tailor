@@ -5,6 +5,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.antlr.SwiftParser.ArrayLiteralItemsContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.AvailabilityArgumentsContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.CaptureListItemsContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.CaseItemListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ConditionClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryLiteralItemsContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementListContext;
@@ -162,6 +163,11 @@ public final class CommaWhitespaceListener extends SwiftBaseListener {
 
     @Override
     public void enterIdentifierList(IdentifierListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterCaseItemList(CaseItemListContext ctx) {
         checkWhitespaceAroundCommaSeparatedList(ctx);
     }
 

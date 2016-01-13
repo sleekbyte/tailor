@@ -316,3 +316,19 @@ reversed = names.sort( { s1,s2 in s1 > s2 } )
 reversed = names.sort( { s1 , s2 in s1 > s2 } )
 reversed = names.sort( { _, s1, s2 in s1 > s2 } )
 reversed = names.sort( { _ , s1,  s2 in s1 > s2 } )
+
+switch character {
+case "a", "e", "i", "o", "u", " ": continue
+default: puzzleOutput.append(character)
+}
+
+switch character {
+case "a" , "e",  "i","o", "u", " ": continue
+default: puzzleOutput.append(character)
+}
+
+switch character {
+case "a", "e", "i", "o",
+  "u"," ": continue
+default: puzzleOutput.append(character)
+}

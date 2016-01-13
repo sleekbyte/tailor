@@ -130,6 +130,13 @@ public class CommaWhitespaceTest extends RuleTest {
         addExpectedCommaMessage(start + 1, 29, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 3, 28, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 3, 32, Messages.SPACE_AFTER);
+
+        // Case Item List
+        start = 326;
+        addExpectedCommaMessage(start, 10, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start, 15, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start, 21, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 6, 6, Messages.SPACE_AFTER);
     }
 
     private void addExpectedCommaMessage(int line, int column, String msg) {
