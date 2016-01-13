@@ -35,6 +35,22 @@ public final class WhitespaceVerifier {
     }
 
     /**
+     * Verifies if a certain punctuation token is left associated (no space on the left).
+     *
+     * @param left Token on the left of the punctuation token
+     * @param punc Punctuation token
+     * @param puncStr String version of the punctuation to be used in violation messages
+     */
+    public void verifyPunctuationLeftAssociation(Token left, Token punc, String puncStr) {
+        Location puncLocation = ListenerUtil.getTokenLocation(punc);
+
+        if (checkIfInline(left, punc) || checkLeftSpaces(left, punc, 0)) {
+            printer.error(rule, puncStr + Messages.AT_COLUMN + puncLocation.column + " "
+                + Messages.NO_SPACE_BEFORE, puncLocation);
+        }
+    }
+
+    /**
      * Verifies if a certain punctuation token is left associated (no space on the left, one space on the right).
      *
      * @param left Token on the left of the punctuation token
@@ -45,10 +61,7 @@ public final class WhitespaceVerifier {
     public void verifyPunctuationLeftAssociation(Token left, Token right, Token punc, String puncStr) {
         Location puncLocation = ListenerUtil.getTokenLocation(punc);
 
-        if (checkIfInline(left, punc) || checkLeftSpaces(left, punc, 0)) {
-            printer.error(rule, puncStr + Messages.AT_COLUMN + puncLocation.column + " "
-                + Messages.NO_SPACE_BEFORE, puncLocation);
-        }
+        verifyPunctuationLeftAssociation(left, punc, puncStr);
 
         if (checkRightSpaces(right, punc, 1)) {
             printer.error(rule, puncStr + Messages.AT_COLUMN + puncLocation.column + " "

@@ -79,6 +79,36 @@ public class CommaWhitespaceTest extends RuleTest {
         addExpectedCommaMessage(start + 4, 47, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 13, 21, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 18, 20, Messages.SPACE_AFTER);
+
+        // Tuple patterns
+        start = 213;
+        addExpectedCommaMessage(start, 7, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start, 17, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 2, 11, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 2, 11, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 2, 20, Messages.SPACE_AFTER);
+
+        // Expression lists
+        start = 223;
+        addExpectedCommaMessage(start, 11, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 4, 11, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 4, 46, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 8, 46, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 16, 5, Messages.NO_SPACE_BEFORE);
+
+        // Array literals
+        start = 246;
+        addExpectedCommaMessage(start, 37, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start, 47, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 2, 36, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 6, 57, Messages.NO_SPACE_BEFORE);
+
+        // Dictionary literals
+        start = 259;
+        addExpectedCommaMessage(start, 60, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 2, 59, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 4, 59, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 8, 77, Messages.NO_SPACE_BEFORE);
     }
 
     private void addExpectedCommaMessage(int line, int column, String msg) {
