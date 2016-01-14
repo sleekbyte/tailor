@@ -296,7 +296,7 @@ public class Tailor {
         ConstructLengths constructLengths = argumentParser.parseConstructLengths();
         Severity maxSeverity = argumentParser.getMaxSeverity();
         ColorSettings colorSettings =
-                new ColorSettings(argumentParser.shouldColorOutput(), argumentParser.shouldInvertColorOutput());
+            new ColorSettings(argumentParser.shouldColorOutput(), argumentParser.shouldInvertColorOutput());
         Set<Rules> enabledRules = argumentParser.getEnabledRules();
 
         try {

@@ -15,6 +15,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
- * Tests for ParallelTest rule.
+ * Tests for parallel analysis.
  */
 @RunWith(MockitoJUnitRunner.class)
 public final class ParallelTest  {
@@ -35,7 +36,8 @@ public final class ParallelTest  {
     private List<String> expectedMessages;
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
+        InvocationTargetException, InstantiationException, IOException  {
         inputFiles = new ArrayList<>();
         inputFiles.add(new File(TEST_INPUT_DIR + "AngleBracketWhitespaceTest.swift"));
         inputFiles.add(new File(TEST_INPUT_DIR + "BraceWhitespaceTest.swift"));
@@ -82,10 +84,11 @@ public final class ParallelTest  {
             actualOutput.toArray());
     }
 
-    private void addAllExpectedMsgs() throws Exception {
+    private void addAllExpectedMsgs() throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
+        InvocationTargetException, InstantiationException {
         for (File file : inputFiles) {
-            String fileClassName = this.getClass().getPackage().getName() + "." +
-                file.getName().substring(0, file.getName().indexOf(".swift"));
+            String fileClassName = this.getClass().getPackage().getName() + "."
+                + file.getName().substring(0, file.getName().indexOf(".swift"));
             RuleTest ruleTest = (RuleTest) Class.forName(fileClassName).getConstructor().newInstance();
             ruleTest.inputFile = new File(TEST_INPUT_DIR + ruleTest.getInputFilePath());
             ruleTest.expectedMessages = new ArrayList<>();
