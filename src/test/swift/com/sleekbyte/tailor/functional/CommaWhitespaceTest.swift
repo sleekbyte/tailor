@@ -207,3 +207,128 @@ enum ASCIIControlCharacter: Character {
     case Tab = "\t",LineFeed = "\n"
     case CarriageReturn = "\r"
 }
+
+var (x, y): (Int, Int)
+
+var (x,y): (Int , Int)
+
+var (x, y ,z): (Int,Int, Int)
+
+var (x): Int = 2
+
+for (i = 0, j = n - 1; i < n && j >= 0; i++, j--) {
+  println(mat[i][j])
+}
+
+for (i = 0,j = n - 1; i < n && j >= 0; i++, j--) {
+  println(mat[i][j])
+}
+
+for (i = 0,  j = n - 1; i < n && j >= 0; i++ , j--) {
+  println(mat[i][j])
+}
+
+for (i = 0, j = n - 1; i < n && j >= 0; i++  , j--) {
+  println(mat[i][j])
+}
+
+for (var i = 0,
+    j = 300 - 1;
+    i < 29 && j >= 0;
+    i++
+    ,
+    j--) {
+  println(mat[i][j])
+}
+
+shoppingList += ["Chocolate Spread", "Cheese", "Butter"]
+
+shoppingList += ["Chocolate Spread" , "Cheese",  "Butter"]
+
+shoppingList += ["Chocolate Spread","Cheese", "Butter"]
+
+shoppingList += ["Chocolate Spread", "Cheese", "Butter",]
+
+shoppingList += ["Chocolate Spread", "Cheese", "Butter" ,]
+
+shoppingList += ["Chocolate Spread", "Cheese",
+ "Butter"]
+
+var airports: [String: String] = ["YYZ": "Toronto Pearson", "DUB": "Dublin"]
+
+var airports: [String: String] = ["YYZ": "Toronto Pearson" , "DUB": "Dublin"]
+
+var airports: [String: String] = ["YYZ": "Toronto Pearson",  "DUB": "Dublin"]
+
+var airports: [String: String] = ["YYZ": "Toronto Pearson","DUB": "Dublin"]
+
+var airports: [String: String] = ["YYZ": "Toronto Pearson", "DUB": "Dublin",]
+
+var airports: [String: String] = ["YYZ": "Toronto Pearson", "DUB": "Dublin" ,]
+
+lazy var someClosure: Void -> String = {
+    [unowned self, weak delegate = self.delegate!] in
+    // closure body goes here
+}
+
+lazy var someClosure: Void -> String = {
+    [unowned self,weak delegate = self.delegate!] in
+    // closure body goes here
+}
+
+lazy var someClosure: Void -> String = {
+    [unowned self , weak delegate = self.delegate!] in
+    // closure body goes here
+}
+
+lazy var someClosure: Void -> String = {
+    [unowned self,  weak delegate = self.delegate!] in
+    // closure body goes here
+}
+
+lazy var someClosure: Void -> String = {
+    [unowned self,
+     weak delegate = self.delegate!] in
+    // closure body goes here
+}
+
+var arr = [ (1, 2, 3), (3, 4, 5) ]
+var arr = [ (1,2, 3), (3 , 4, 5) ]
+var arr = [ (1, 2,  3), (3, 4,
+  5) ]
+
+func getFullName() -> (first: String, last: String) {
+    let firstName = "John"
+    let lastName = "Doe"
+
+    return (firstName , lastName)
+}
+
+func getFullName() -> (first: String, last: String) {
+    let firstName = "John"
+    let lastName = "Doe"
+
+    return (firstName,lastName)
+}
+
+reversed = names.sort( { s1, s2 in s1 > s2 } )
+reversed = names.sort( { s1,s2 in s1 > s2 } )
+reversed = names.sort( { s1 , s2 in s1 > s2 } )
+reversed = names.sort( { _, s1, s2 in s1 > s2 } )
+reversed = names.sort( { _ , s1,  s2 in s1 > s2 } )
+
+switch character {
+case "a", "e", "i", "o", "u", " ": continue
+default: puzzleOutput.append(character)
+}
+
+switch character {
+case "a" , "e",  "i","o", "u", " ": continue
+default: puzzleOutput.append(character)
+}
+
+switch character {
+case "a", "e", "i", "o",
+  "u"," ": continue
+default: puzzleOutput.append(character)
+}

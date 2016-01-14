@@ -14,6 +14,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class RedundantParenthesesTest extends RuleTest {
 
     @Override
+    protected String[] getCommandArgs() {
+        return new String[]{ "--only=redundant-parentheses" };
+    }
+    
+    @Override
     protected void addAllExpectedMsgs() {
         addExpectedMsg(3, 8, Severity.WARNING, Messages.CONDITIONAL_CLAUSE + Messages.ENCLOSED_PARENTHESES);
         addExpectedMsg(6, 13, Severity.WARNING, Messages.CONDITIONAL_CLAUSE + Messages.ENCLOSED_PARENTHESES);

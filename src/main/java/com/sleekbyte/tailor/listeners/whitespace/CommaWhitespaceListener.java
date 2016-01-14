@@ -2,13 +2,22 @@ package com.sleekbyte.tailor.listeners.whitespace;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.antlr.SwiftParser.ArrayLiteralItemsContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.AvailabilityArgumentsContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.CaptureListItemsContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.CaseItemListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ConditionClauseContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryLiteralItemsContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementListContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.GenericArgumentListContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.IdentifierListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingConditionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ParameterListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.RawValueStyleEnumCaseListContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementListContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.TupleTypeElementListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.UnionStyleEnumCaseListContext;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
@@ -117,17 +126,75 @@ public final class CommaWhitespaceListener extends SwiftBaseListener {
         checkWhitespaceAroundCommaSeparatedList(ctx);
     }
 
+    @Override
+    public void enterTuplePatternElementList(TuplePatternElementListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterTupleTypeElementList(TupleTypeElementListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterExpressionList(ExpressionListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterArrayLiteralItems(ArrayLiteralItemsContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterDictionaryLiteralItems(DictionaryLiteralItemsContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterCaptureListItems(CaptureListItemsContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterExpressionElementList(ExpressionElementListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterIdentifierList(IdentifierListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterCaseItemList(CaseItemListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
     private void checkWhitespaceAroundCommaSeparatedList(ParserRuleContext ctx) {
-        for (int i = 0; i < ctx.children.size() - 2; i += 2) {
+        int numChildren = ctx.children.size();
+
+        for (int i = 0; i < numChildren - 2; i += 2) {
             Token left = ParseTreeUtil.getStopTokenForNode(ctx.getChild(i));
             Token right = ParseTreeUtil.getStartTokenForNode(ctx.getChild(i + 2));
             Token comma = ((TerminalNodeImpl) ctx.getChild(i + 1)).getSymbol();
 
             verifyCommaLeftAssociation(left, right, comma);
         }
+
+        // For constructs that allow trailing commas (example: array-literal)
+        Token last = ParseTreeUtil.getStartTokenForNode(ctx.getChild(numChildren - 1));
+        if (last.getText().equals(",")) {
+            Token left = ParseTreeUtil.getStopTokenForNode(ctx.getChild(numChildren - 2));
+            verifyCommaLeftAssociation(left, last);
+        }
     }
 
     private void verifyCommaLeftAssociation(Token left, Token right, Token comma) {
         verifier.verifyPunctuationLeftAssociation(left, right, comma, Messages.COMMA);
+    }
+
+    private void verifyCommaLeftAssociation(Token left, Token comma) {
+        verifier.verifyPunctuationLeftAssociation(left, comma, Messages.COMMA);
     }
 }

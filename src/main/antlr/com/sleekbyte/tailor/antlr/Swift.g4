@@ -104,7 +104,8 @@ switchStatement : 'switch' expression '{' switchCases? '}'  ;
 switchCases : switchCase switchCases? ;
 switchCase : caseLabel statements | defaultLabel statements  | caseLabel ';' | defaultLabel ';'  ;
 caseLabel : 'case' caseItemList ':' ;
-caseItemList : pattern whereClause? | pattern whereClause? ',' caseItemList ;
+caseItemList : caseItem (',' caseItem)* ;
+caseItem: pattern whereClause? ;
 defaultLabel : 'default' ':' ;
 
 // GRAMMAR OF A LABELED STATEMENT
@@ -635,7 +636,7 @@ implicitMemberExpression : '.' identifier  ;
 // GRAMMAR OF A PARENTHESIZED EXPRESSION
 
 parenthesizedExpression : '(' expressionElementList? ')'  ;
-expressionElementList : expressionElement (',' expressionElementList)*  ;
+expressionElementList : expressionElement (',' expressionElement)*  ;
 expressionElement : expression | identifier ':' expression  ;
 
 // GRAMMAR OF A WILDCARD EXPRESSION
@@ -895,7 +896,7 @@ Identifier : IdentifierHead IdentifierCharacters?
  | ImplicitParameterName
  ;
 
-identifierList : (identifier | '_') | (identifier | '_') ',' identifierList  ;
+identifierList : (identifier | '_') (',' (identifier | '_'))*  ;
 
 fragment IdentifierHead : [a-zA-Z] | '_'
  | '\u00A8' | '\u00AA' | '\u00AD' | '\u00AF' | [\u00B2-\u00B5] | [\u00B7-\u00BA]
