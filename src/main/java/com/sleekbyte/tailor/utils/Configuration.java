@@ -5,7 +5,6 @@ import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.common.YamlConfiguration;
-import com.sleekbyte.tailor.interfaces.ConfigurationInterface;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
 
@@ -26,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * Adaptor class for YamlConfiguration and CliArgumentParser.
  */
-public final class Configuration implements ConfigurationInterface {
+public final class Configuration {
 
     private static CliArgumentParser cliArgumentParser = new CliArgumentParser();
     private Optional<YamlConfiguration> yamlConfiguration;
@@ -37,42 +36,34 @@ public final class Configuration implements ConfigurationInterface {
         yamlConfiguration = YamlConfigurationFileManager.getConfiguration(cliArgumentParser.getConfigFilePath());
     }
 
-    @Override
     public boolean shouldPrintHelp() {
         return cliArgumentParser.shouldPrintHelp();
     }
 
-    @Override
     public boolean shouldPrintVersion() {
         return cliArgumentParser.shouldPrintVersion();
     }
 
-    @Override
     public boolean shouldPrintRules() {
         return cliArgumentParser.shouldPrintRules();
     }
 
-    @Override
     public boolean shouldListFiles() {
         return cliArgumentParser.shouldListFiles();
     }
 
-    @Override
     public boolean shouldColorOutput() {
         return cliArgumentParser.shouldColorOutput();
     }
 
-    @Override
     public boolean shouldInvertColorOutput() {
         return cliArgumentParser.shouldInvertColorOutput();
     }
 
-    @Override
     public boolean debugFlagSet() throws CliArgumentParserException {
         return cliArgumentParser.debugFlagSet();
     }
 
-    @Override
     public Set<Rules> getEnabledRules() throws CliArgumentParserException {
         return cliArgumentParser.getEnabledRules();
     }
@@ -83,7 +74,6 @@ public final class Configuration implements ConfigurationInterface {
      * @return Swift file names
      * @throws IOException if path specified does not exist
      */
-    @Override
     public Set<String> getFilesToAnalyze() throws IOException {
         Optional<String> srcRoot = getSrcRoot();
         List<String> pathNames = new ArrayList<>();
@@ -114,22 +104,18 @@ public final class Configuration implements ConfigurationInterface {
         return fileNames;
     }
 
-    @Override
     public ConstructLengths parseConstructLengths() throws CliArgumentParserException {
         return cliArgumentParser.parseConstructLengths();
     }
 
-    @Override
     public Severity getMaxSeverity() throws CliArgumentParserException {
         return cliArgumentParser.getMaxSeverity();
     }
 
-    @Override
     public String getXcodeprojPath() {
         return cliArgumentParser.getXcodeprojPath();
     }
 
-    @Override
     public void printHelp() {
         cliArgumentParser.printHelp();
     }
