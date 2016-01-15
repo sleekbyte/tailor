@@ -61,6 +61,8 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
         return lineNumber;
     }
 
+    public int getColumnNumber() { return columnNumber; }
+
     public Severity getSeverity() {
         return severity;
     }

@@ -1,9 +1,9 @@
 package com.sleekbyte.tailor.output;
 
-import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
+import com.sleekbyte.tailor.format.Formatter;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 
@@ -25,23 +25,21 @@ public final class Printer implements AutoCloseable {
 
     private File inputFile;
     private Severity maxSeverity;
+    private Formatter formatter;
     private Map<String, ViolationMessage> msgBuffer = new HashMap<>();
     private Set<Integer> ignoredLineNumbers = new HashSet<>();
-    private ColorSettings colorSettings;
-    private int highestLineNumber = 0;
-    private int highestColumnNumber = 0;
 
     /**
      * Constructs a printer for the specified input file, maximum severity, and color setting.
      *
      * @param inputFile the source file to verify
      * @param maxSeverity the maximum severity of any emitted violation messages
-     * @param colorSettings settings corresponding to colorized console output
+     * @param formatter format to print in
      */
-    public Printer(File inputFile, Severity maxSeverity, ColorSettings colorSettings) {
+    public Printer(File inputFile, Severity maxSeverity, Formatter formatter) {
         this.inputFile = inputFile;
         this.maxSeverity = maxSeverity;
-        this.colorSettings = colorSettings;
+        this.formatter = formatter;
     }
 
     /**
@@ -67,13 +65,6 @@ public final class Printer implements AutoCloseable {
     }
 
     private void print(Rules rule, Severity severity, String msg, Location location) {
-        if (location.line > this.highestLineNumber) {
-            this.highestLineNumber = location.line;
-        }
-        if (location.column > this.highestColumnNumber) {
-            this.highestColumnNumber = location.column;
-        }
-
         ViolationMessage violationMessage = new ViolationMessage(rule, location.line, location.column, severity, msg);
         try {
             violationMessage.setFilePath(this.inputFile.getCanonicalPath());
@@ -81,16 +72,6 @@ public final class Printer implements AutoCloseable {
             System.err.println("Error in getting canonical path of input file: " + e.getMessage());
         }
         this.msgBuffer.put(violationMessage.toString(), violationMessage);
-    }
-
-    protected static String getHeader(File inputFile, ColorSettings colorSettings) throws IOException {
-        if (colorSettings.colorOutput) {
-            String textColor = colorSettings.invertColor ? "white" : "black";
-            return String.format("%n@|bg_blue," + textColor + " **********|@ @|bg_green," + textColor
-                    + " %s|@ @|bg_blue," + textColor + " **********|@", inputFile.getCanonicalPath());
-        } else {
-            return String.format("%n********** %s **********", inputFile.toString());
-        }
     }
 
     // Visible for testing only
@@ -109,28 +90,7 @@ public final class Printer implements AutoCloseable {
         List<ViolationMessage> outputList = new ArrayList<>(this.msgBuffer.values().stream()
             .filter(msg -> !ignoredLineNumbers.contains(msg.getLineNumber())).collect(Collectors.toList()));
         Collections.sort(outputList);
-        if (outputList.size() > 0) {
-            printColoredMessage(getHeader(inputFile, colorSettings));
-        }
-        if (colorSettings.colorOutput) {
-            for (ViolationMessage output : outputList) {
-                output.setColorSettings(colorSettings);
-                output.setLineNumberWidth(String.valueOf(highestLineNumber).length());
-                output.setColumnNumberWidth(String.valueOf(highestColumnNumber).length());
-                AnsiConsole.out.println(Ansi.ansi().render(output.toString()));
-            }
-        } else {
-            outputList.forEach(System.out::println);
-        }
-        this.msgBuffer.clear();
-    }
-
-    /**
-     * Print error message to indicate parse failure.
-     */
-    public void printParseErrorMessage() throws IOException {
-        printColoredMessage(getHeader(inputFile, colorSettings));
-        System.out.println(inputFile + " could not be parsed successfully, skipping...");
+        formatter.displayViolationMessages(outputList);
     }
 
     private long getNumMessagesWithSeverity(Severity severity) {
@@ -151,14 +111,6 @@ public final class Printer implements AutoCloseable {
         this.ignoredLineNumbers.add(ignoredLineNumber);
     }
 
-    private void printColoredMessage(String msg) {
-        if (colorSettings.colorOutput) {
-            AnsiConsole.out.println(Ansi.ansi().render(msg));
-        } else {
-            System.out.println(msg);
-        }
-    }
-
     /**
      * Print all rules along with their descriptions to STDOUT.
      */
@@ -173,4 +125,7 @@ public final class Printer implements AutoCloseable {
         }
     }
 
+    public void printParseErrorMessage() throws IOException {
+        formatter.displayParseErrorMessage();
+    }
 }

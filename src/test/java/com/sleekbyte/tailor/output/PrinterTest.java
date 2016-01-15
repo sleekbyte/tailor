@@ -6,6 +6,8 @@ import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
+import com.sleekbyte.tailor.format.Formatter;
+import com.sleekbyte.tailor.format.XcodeFormatter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,8 +34,9 @@ public class PrinterTest {
     private static final ColorSettings colorSettings = new ColorSettings(false, false);
 
     private File inputFile = new File("abc.swift");
-    private Printer printer = new Printer(inputFile, Severity.ERROR, colorSettings);
-    private Printer warnPrinter = new Printer(inputFile, Severity.WARNING, colorSettings);
+    private Formatter formatter = new XcodeFormatter(inputFile, colorSettings);
+    private Printer printer = new Printer(inputFile, Severity.ERROR, formatter);
+    private Printer warnPrinter = new Printer(inputFile, Severity.WARNING, formatter);
     private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     @Before
@@ -83,13 +86,13 @@ public class PrinterTest {
     public void testPrintParseErrorMessageNoColor() throws IOException {
         printer.printParseErrorMessage();
         printer.close();
-        String expectedOutput = Printer.getHeader(inputFile, colorSettings) + "\n" + inputFile
+        String expectedOutput = XcodeFormatter.getHeader(inputFile, colorSettings) + "\n" + inputFile
             + " could not be parsed successfully, skipping...\n";
         assertEquals(expectedOutput, outContent.toString(Charset.defaultCharset().name()));
     }
 
     private String expectedOutput(Rules rule, Severity severity, String msg, int line, int column) throws IOException {
-        return Printer.getHeader(inputFile, colorSettings) + "\n" + Printer.genOutputStringForTest(rule,
+        return XcodeFormatter.getHeader(inputFile, colorSettings) + "\n" + Printer.genOutputStringForTest(rule,
             inputFile.getCanonicalPath(), line, column, severity, msg) + "\n";
     }
 
