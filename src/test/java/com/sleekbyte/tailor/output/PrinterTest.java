@@ -8,7 +8,6 @@ import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.format.Formatter;
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -26,11 +25,6 @@ public class PrinterTest {
     static class MockFormatter implements Formatter {
         boolean displayViolationMessagesCalled = false;
         boolean displayParseErrorMessageCalled = false;
-
-        public void reset() {
-            displayParseErrorMessageCalled = false;
-            displayParseErrorMessageCalled = false;
-        }
 
         @Override
         public void displayViolationMessages(List<ViolationMessage> violationMessages) throws IOException {
@@ -52,11 +46,6 @@ public class PrinterTest {
     private MockFormatter formatter = new MockFormatter();
     private Printer printer = new Printer(inputFile, Severity.ERROR, formatter);
     private Printer warnPrinter = new Printer(inputFile, Severity.WARNING, formatter);
-
-    @After
-    public void tearDown() throws IOException {
-        formatter.reset();
-    }
 
     @Test
     public void testFormatterDisplayMessage() throws IOException {
