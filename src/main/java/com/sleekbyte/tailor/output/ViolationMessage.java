@@ -57,14 +57,24 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
         this.violationMessage = violationMessage;
     }
 
+    public Rules getRule() {
+        return rule;
+    }
+
     public int getLineNumber() {
         return lineNumber;
     }
 
-    public int getColumnNumber() { return columnNumber; }
+    public int getColumnNumber() {
+        return columnNumber;
+    }
 
     public Severity getSeverity() {
         return severity;
+    }
+
+    public String getMessage() {
+        return violationMessage;
     }
 
     public void setFilePath(String filePath) {

@@ -85,9 +85,13 @@ public final class Printer implements AutoCloseable {
         return new ViolationMessage(rule, filePath, line, column, severity, msg).toString();
     }
 
+    List<ViolationMessage> getViolationMessages() {
+        return new ArrayList<ViolationMessage>(this.msgBuffer.values());
+    }
+
     @Override
     public void close() throws IOException {
-        List<ViolationMessage> outputList = new ArrayList<>(this.msgBuffer.values().stream()
+        List<ViolationMessage> outputList = new ArrayList<>(this.getViolationMessages().stream()
             .filter(msg -> !ignoredLineNumbers.contains(msg.getLineNumber())).collect(Collectors.toList()));
         Collections.sort(outputList);
         formatter.displayViolationMessages(outputList);

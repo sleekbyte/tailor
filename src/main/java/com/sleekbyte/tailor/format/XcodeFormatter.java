@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Formatter used to display violation messages in a format that is compatible with Xcode.
+ */
 public class XcodeFormatter implements Formatter {
 
     File inputFile;
@@ -29,6 +32,14 @@ public class XcodeFormatter implements Formatter {
         return violationMessages.stream().max(Comparator.comparing(v -> v.getColumnNumber())).get().getColumnNumber();
     }
 
+    /**
+     * Returns a file header used to demarcate violation messages from different files.
+     *
+     * @param inputFile The input file
+     * @param colorSettings Color settings
+     * @return String containing the file header
+     * @throws IOException if file cannot be opened
+     */
     public static String getHeader(File inputFile, ColorSettings colorSettings) throws IOException {
         if (colorSettings.colorOutput) {
             String textColor = colorSettings.invertColor ? "white" : "black";

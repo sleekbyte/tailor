@@ -1,25 +1,21 @@
 package com.sleekbyte.tailor.output;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.format.Formatter;
-import com.sleekbyte.tailor.format.XcodeFormatter;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
+import java.util.List;
 
 /**
  * Tests for {@link Printer}.
@@ -27,73 +23,114 @@ import java.nio.charset.Charset;
 @RunWith(MockitoJUnitRunner.class)
 public class PrinterTest {
 
+    static class MockFormatter implements Formatter {
+        boolean displayViolationMessagesCalled = false;
+        boolean displayParseErrorMessageCalled = false;
+
+        public void reset() {
+            displayParseErrorMessageCalled = false;
+            displayParseErrorMessageCalled = false;
+        }
+
+        @Override
+        public void displayViolationMessages(List<ViolationMessage> violationMessages) throws IOException {
+            displayViolationMessagesCalled = true;
+        }
+
+        @Override
+        public void displayParseErrorMessage() throws IOException {
+            displayParseErrorMessageCalled = true;
+        }
+    }
+
     private static final String WARNING_MSG = "this is a warning";
     private static final String ERROR_MSG = "this is an error";
     private static final int LINE_NUMBER = 23;
     private static final int COLUMN_NUMBER = 13;
-    private static final ColorSettings colorSettings = new ColorSettings(false, false);
 
     private File inputFile = new File("abc.swift");
-    private Formatter formatter = new XcodeFormatter(inputFile, colorSettings);
+    private MockFormatter formatter = new MockFormatter();
     private Printer printer = new Printer(inputFile, Severity.ERROR, formatter);
     private Printer warnPrinter = new Printer(inputFile, Severity.WARNING, formatter);
-    private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-
-    @Before
-    public void setUp() throws UnsupportedEncodingException {
-        outContent.reset();
-        System.setOut(new PrintStream(outContent, false, Charset.defaultCharset().name()));
-    }
 
     @After
-    public void tearDown() {
-        System.setOut(null);
+    public void tearDown() throws IOException {
+        formatter.reset();
+    }
+
+    @Test
+    public void testFormatterDisplayMessage() throws IOException {
+        printer.error(Rules.LOWER_CAMEL_CASE, ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
+        printer.close();
+        assertTrue(formatter.displayViolationMessagesCalled);
+        assertFalse(formatter.displayParseErrorMessageCalled);
+    }
+
+    @Test
+    public void testFormatterParseErrorMessage() throws IOException {
+        printer.printParseErrorMessage();
+        assertFalse(formatter.displayViolationMessagesCalled);
+        assertTrue(formatter.displayParseErrorMessageCalled);
+    }
+
+    @Test
+    public void testError() throws IOException {
+        printer.error(Rules.LOWER_CAMEL_CASE, ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
+        ViolationMessage message = printer.getViolationMessages().get(0);
+        assertEquals(message.getSeverity(), Severity.ERROR);
+        validateViolationMessage(message, Rules.LOWER_CAMEL_CASE, ERROR_MSG, LINE_NUMBER,
+            COLUMN_NUMBER);
+        printer.close();
+    }
+
+    @Test
+    public void testWarn() throws IOException {
+        printer.warn(Rules.LOWER_CAMEL_CASE, WARNING_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
+        ViolationMessage message = printer.getViolationMessages().get(0);
+        assertEquals(message.getSeverity(), Severity.WARNING);
+        validateViolationMessage(message, Rules.LOWER_CAMEL_CASE, WARNING_MSG, LINE_NUMBER,
+            COLUMN_NUMBER);
+        printer.close();
     }
 
     @Test
     public void testWarnWithLocationSuccess() throws IOException {
         printer.warn(Rules.LOWER_CAMEL_CASE, WARNING_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
+        ViolationMessage message = printer.getViolationMessages().get(0);
+        assertEquals(Severity.WARNING, message.getSeverity());
         printer.close();
-        assertEquals(expectedOutput(Rules.LOWER_CAMEL_CASE, Severity.WARNING, WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER),
-            outContent.toString(Charset.defaultCharset().name()));
     }
 
     @Test
     public void testErrorWithLocationSuccess() throws IOException {
         printer.error(Rules.LOWER_CAMEL_CASE, ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
+        ViolationMessage message = printer.getViolationMessages().get(0);
+        assertEquals(Severity.ERROR, message.getSeverity());
         printer.close();
-        assertEquals(expectedOutput(Rules.LOWER_CAMEL_CASE, Severity.ERROR, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER),
-            outContent.toString(Charset.defaultCharset().name()));
     }
 
     @Test
     public void testErrorWithMaxSeverityWarn() throws IOException {
         warnPrinter.error(Rules.LOWER_CAMEL_CASE, ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
+        ViolationMessage message = warnPrinter.getViolationMessages().get(0);
+        assertEquals(Severity.WARNING, message.getSeverity());
         warnPrinter.close();
-        assertEquals(expectedOutput(Rules.LOWER_CAMEL_CASE, Severity.WARNING, ERROR_MSG, LINE_NUMBER, COLUMN_NUMBER),
-            outContent.toString(Charset.defaultCharset().name()));
     }
 
     @Test
     public void testWarnWithMaxSeverityWarn() throws IOException {
         warnPrinter.warn(Rules.LOWER_CAMEL_CASE, WARNING_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
+        ViolationMessage message = warnPrinter.getViolationMessages().get(0);
+        assertEquals(Severity.WARNING, message.getSeverity());
         warnPrinter.close();
-        assertEquals(expectedOutput(Rules.LOWER_CAMEL_CASE, Severity.WARNING, WARNING_MSG, LINE_NUMBER, COLUMN_NUMBER),
-            outContent.toString(Charset.defaultCharset().name()));
     }
 
-    @Test
-    public void testPrintParseErrorMessageNoColor() throws IOException {
-        printer.printParseErrorMessage();
-        printer.close();
-        String expectedOutput = XcodeFormatter.getHeader(inputFile, colorSettings) + "\n" + inputFile
-            + " could not be parsed successfully, skipping...\n";
-        assertEquals(expectedOutput, outContent.toString(Charset.defaultCharset().name()));
-    }
-
-    private String expectedOutput(Rules rule, Severity severity, String msg, int line, int column) throws IOException {
-        return XcodeFormatter.getHeader(inputFile, colorSettings) + "\n" + Printer.genOutputStringForTest(rule,
-            inputFile.getCanonicalPath(), line, column, severity, msg) + "\n";
+    private void validateViolationMessage(ViolationMessage message, Rules rule, String msg,
+                                             int line, int column) {
+        assertEquals(rule, message.getRule());
+        assertEquals(msg, message.getMessage());
+        assertEquals(line, message.getLineNumber());
+        assertEquals(column, message.getColumnNumber());
     }
 
 }
