@@ -16,8 +16,8 @@ import java.util.List;
  */
 public class XcodeFormatter implements Formatter {
 
-    File inputFile;
-    ColorSettings colorSettings;
+    private File inputFile;
+    private ColorSettings colorSettings;
 
     public XcodeFormatter(File inputFile, ColorSettings colorSettings) {
         this.inputFile = inputFile;

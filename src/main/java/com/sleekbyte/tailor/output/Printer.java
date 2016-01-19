@@ -85,8 +85,8 @@ public final class Printer implements AutoCloseable {
         return new ViolationMessage(rule, filePath, line, column, severity, msg).toString();
     }
 
-    List<ViolationMessage> getViolationMessages() {
-        return new ArrayList<ViolationMessage>(this.msgBuffer.values());
+    public List<ViolationMessage> getViolationMessages() {
+        return new ArrayList<>(this.msgBuffer.values());
     }
 
     @Override
