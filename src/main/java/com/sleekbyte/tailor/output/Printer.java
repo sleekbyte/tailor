@@ -32,9 +32,9 @@ public final class Printer implements AutoCloseable {
     /**
      * Constructs a printer for the specified input file, maximum severity, and color setting.
      *
-     * @param inputFile the source file to verify
-     * @param maxSeverity the maximum severity of any emitted violation messages
-     * @param formatter format to print in
+     * @param inputFile The source file to verify
+     * @param maxSeverity The maximum severity of any emitted violation messages
+     * @param formatter Format to print in
      */
     public Printer(File inputFile, Severity maxSeverity, Formatter formatter) {
         this.inputFile = inputFile;
@@ -45,9 +45,9 @@ public final class Printer implements AutoCloseable {
     /**
      * Prints warning message.
      *
-     * @param rule rule associated with warning
-     * @param warningMsg warning message to print
-     * @param location   location object containing line and column number for printing
+     * @param rule Rule associated with warning
+     * @param warningMsg Warning message to print
+     * @param location Location object containing line and column number for printing
      */
     public void warn(Rules rule, String warningMsg, Location location) {
         print(rule, Severity.WARNING, warningMsg, location);
@@ -56,9 +56,9 @@ public final class Printer implements AutoCloseable {
     /**
      * Prints error message.
      *
-     * @param rule rule associated with error
-     * @param errorMsg error message to print
-     * @param location location object containing line and column number for printing
+     * @param rule Rule associated with error
+     * @param errorMsg Error message to print
+     * @param location Location object containing line and column number for printing
      */
     public void error(Rules rule, String errorMsg, Location location) {
         print(rule, Severity.min(Severity.ERROR, maxSeverity), errorMsg, location);

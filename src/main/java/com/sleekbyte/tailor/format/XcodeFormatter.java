@@ -12,9 +12,9 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Formatter used to display violation messages in a format that is compatible with Xcode.
+ * Formatter that displays violation messages in an Xcode compatible format.
  */
-public class XcodeFormatter implements Formatter {
+public final class XcodeFormatter implements Formatter {
 
     private File inputFile;
     private ColorSettings colorSettings;

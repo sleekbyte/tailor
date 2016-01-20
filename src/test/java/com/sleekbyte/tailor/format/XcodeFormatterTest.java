@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)
-public class XcodeFormatterTest {
+public final class XcodeFormatterTest {
 
     private static final String WARNING_MSG = "this is a warning";
     private static final String ERROR_MSG = "this is an error";
