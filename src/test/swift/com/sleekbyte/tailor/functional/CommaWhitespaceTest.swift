@@ -265,3 +265,70 @@ var airports: [String: String] = ["YYZ": "Toronto Pearson","DUB": "Dublin"]
 var airports: [String: String] = ["YYZ": "Toronto Pearson", "DUB": "Dublin",]
 
 var airports: [String: String] = ["YYZ": "Toronto Pearson", "DUB": "Dublin" ,]
+
+lazy var someClosure: Void -> String = {
+    [unowned self, weak delegate = self.delegate!] in
+    // closure body goes here
+}
+
+lazy var someClosure: Void -> String = {
+    [unowned self,weak delegate = self.delegate!] in
+    // closure body goes here
+}
+
+lazy var someClosure: Void -> String = {
+    [unowned self , weak delegate = self.delegate!] in
+    // closure body goes here
+}
+
+lazy var someClosure: Void -> String = {
+    [unowned self,  weak delegate = self.delegate!] in
+    // closure body goes here
+}
+
+lazy var someClosure: Void -> String = {
+    [unowned self,
+     weak delegate = self.delegate!] in
+    // closure body goes here
+}
+
+var arr = [ (1, 2, 3), (3, 4, 5) ]
+var arr = [ (1,2, 3), (3 , 4, 5) ]
+var arr = [ (1, 2,  3), (3, 4,
+  5) ]
+
+func getFullName() -> (first: String, last: String) {
+    let firstName = "John"
+    let lastName = "Doe"
+
+    return (firstName , lastName)
+}
+
+func getFullName() -> (first: String, last: String) {
+    let firstName = "John"
+    let lastName = "Doe"
+
+    return (firstName,lastName)
+}
+
+reversed = names.sort( { s1, s2 in s1 > s2 } )
+reversed = names.sort( { s1,s2 in s1 > s2 } )
+reversed = names.sort( { s1 , s2 in s1 > s2 } )
+reversed = names.sort( { _, s1, s2 in s1 > s2 } )
+reversed = names.sort( { _ , s1,  s2 in s1 > s2 } )
+
+switch character {
+case "a", "e", "i", "o", "u", " ": continue
+default: puzzleOutput.append(character)
+}
+
+switch character {
+case "a" , "e",  "i","o", "u", " ": continue
+default: puzzleOutput.append(character)
+}
+
+switch character {
+case "a", "e", "i", "o",
+  "u"," ": continue
+default: puzzleOutput.append(character)
+}
