@@ -2,6 +2,7 @@ package com.sleekbyte.tailor.format;
 
 
 import com.sleekbyte.tailor.common.ColorSettings;
+import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.ViolationMessage;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
@@ -70,7 +71,7 @@ public final class XcodeFormatter implements Formatter {
     @Override
     public void displayParseErrorMessage() throws IOException {
         printColoredMessage(getHeader(inputFile, colorSettings));
-        System.out.println(inputFile + " could not be parsed successfully, skipping...");
+        System.out.println(inputFile + Messages.COULD_NOT_BE_PARSED);
     }
 
     private void printColoredMessage(String msg) {

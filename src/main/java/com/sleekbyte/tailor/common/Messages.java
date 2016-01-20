@@ -155,4 +155,5 @@ public class Messages {
 
     // Error messages
     public static final String NO_SWIFT_FILES_FOUND = "No Swift source files were found.";
+    public static final String COULD_NOT_BE_PARSED = " could not be parsed successfully, skipping...";
 }

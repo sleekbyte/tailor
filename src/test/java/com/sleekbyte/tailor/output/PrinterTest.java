@@ -1,8 +1,8 @@
 package com.sleekbyte.tailor.output;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Rules;
@@ -22,44 +22,28 @@ import java.util.List;
 @RunWith(MockitoJUnitRunner.class)
 public class PrinterTest {
 
-    static class MockFormatter implements Formatter {
-        boolean displayViolationMessagesCalled = false;
-        boolean displayParseErrorMessageCalled = false;
-
-        @Override
-        public void displayViolationMessages(List<ViolationMessage> violationMessages) throws IOException {
-            displayViolationMessagesCalled = true;
-        }
-
-        @Override
-        public void displayParseErrorMessage() throws IOException {
-            displayParseErrorMessageCalled = true;
-        }
-    }
-
     private static final String WARNING_MSG = "this is a warning";
     private static final String ERROR_MSG = "this is an error";
     private static final int LINE_NUMBER = 23;
     private static final int COLUMN_NUMBER = 13;
 
     private File inputFile = new File("abc.swift");
-    private MockFormatter formatter = new MockFormatter();
+    private Formatter formatter = mock(Formatter.class);
     private Printer printer = new Printer(inputFile, Severity.ERROR, formatter);
     private Printer warnPrinter = new Printer(inputFile, Severity.WARNING, formatter);
 
     @Test
     public void testFormatterDisplayMessage() throws IOException {
         printer.error(Rules.LOWER_CAMEL_CASE, ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
+        List<ViolationMessage> violationsMessage = printer.getViolationMessages();
         printer.close();
-        assertTrue(formatter.displayViolationMessagesCalled);
-        assertFalse(formatter.displayParseErrorMessageCalled);
+        verify(formatter).displayViolationMessages(violationsMessage);
     }
 
     @Test
     public void testFormatterParseErrorMessage() throws IOException {
         printer.printParseErrorMessage();
-        assertFalse(formatter.displayViolationMessagesCalled);
-        assertTrue(formatter.displayParseErrorMessageCalled);
+        verify(formatter).displayParseErrorMessage();
     }
 
     @Test

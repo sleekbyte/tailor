@@ -1,9 +1,9 @@
 package com.sleekbyte.tailor.format;
 
-
 import static org.junit.Assert.assertEquals;
 
 import com.sleekbyte.tailor.common.ColorSettings;
+import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.output.Printer;
@@ -62,7 +62,7 @@ public final class XcodeFormatterTest {
     public void testDisplayParseErrorMessage() throws IOException {
         formatter.displayParseErrorMessage();
         String expectedOutput = XcodeFormatter.getHeader(inputFile, colorSettings) + "\n" + inputFile
-            + " could not be parsed successfully, skipping...\n";
+            + Messages.COULD_NOT_BE_PARSED + "\n";
         assertEquals(expectedOutput, outContent.toString(Charset.defaultCharset().name()));
     }
 
