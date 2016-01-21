@@ -21,6 +21,7 @@
     <exclude name="JUnitAssertionsShouldIncludeMessage"/>
     <exclude name="JUnitTestContainsTooManyAsserts"/>
     <exclude name="TestClassWithoutTestCases"/>
+    <exclude name="JUnitTestsShouldIncludeAssert"/>
   </rule>
 
   <rule ref="rulesets/java/strictexception.xml"/>

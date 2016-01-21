@@ -6,6 +6,8 @@ import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.ConstructLengths;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
+import com.sleekbyte.tailor.format.Formatter;
+import com.sleekbyte.tailor.format.XcodeFormatter;
 import com.sleekbyte.tailor.output.Printer;
 import org.junit.Before;
 import org.junit.Rule;
@@ -42,12 +44,15 @@ public class FileListenerTest {
     private PrintWriter writer;
     private Printer printer;
     private Set<Rules> enabledRules;
+    private Formatter formatter;
 
     @Before
     public void setUp() throws NoSuchMethodException, IOException {
         Method method = this.getClass().getMethod(testName.getMethodName());
         inputFile = folder.newFile(method.getName() + "-" + INPUT_FILE);
-        printer = new Printer(inputFile, Severity.WARNING, new ColorSettings(false, false));
+        formatter = new XcodeFormatter(inputFile, new ColorSettings(false, false));
+
+        printer = new Printer(inputFile, Severity.WARNING, formatter);
         writer = new PrintWriter(inputFile, Charset.defaultCharset().name());
         enabledRules = new HashSet<>(
             Arrays.asList(Rules.TERMINATING_NEWLINE, Rules.LEADING_WHITESPACE, Rules.TRAILING_WHITESPACE,
