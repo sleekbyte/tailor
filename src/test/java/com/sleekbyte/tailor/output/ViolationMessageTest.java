@@ -141,4 +141,15 @@ public class ViolationMessageTest {
             Severity.ERROR, "errMsg");
         assertEquals(violationMessage, violationMessage);
     }
+
+    @Test
+    public void testHashCode() {
+        ViolationMessage msg1 = new ViolationMessage(Rules.LOWER_CAMEL_CASE, "/usr/bin/local", 20, 23, Severity.WARNING,
+            "errMsg");
+        ViolationMessage msg2 = new ViolationMessage(Rules.LOWER_CAMEL_CASE, "/usr/bin/local", 20, 23, Severity.WARNING,
+            "errMsg");
+        assertEquals(msg1, msg2);
+        assertEquals(msg1.hashCode(), msg2.hashCode());
+    }
+
 }

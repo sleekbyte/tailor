@@ -10,6 +10,8 @@ import com.sleekbyte.tailor.common.ExitCode;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
+import com.sleekbyte.tailor.format.Formatter;
+import com.sleekbyte.tailor.format.XcodeFormatter;
 import com.sleekbyte.tailor.integration.XcodeIntegrator;
 import com.sleekbyte.tailor.listeners.BlankLineListener;
 import com.sleekbyte.tailor.listeners.BraceStyleListener;
@@ -181,18 +183,19 @@ public class Tailor {
             File inputFile = new File(fileName);
             CommonTokenStream tokenStream;
             SwiftParser.TopLevelContext tree;
+            Formatter formatter = new XcodeFormatter(inputFile, colorSettings);
 
             try {
                 tokenStream = getTokenStream(inputFile);
                 tree = getParseTree(tokenStream);
             } catch (ErrorListener.ParseException e) {
-                Printer printer = new Printer(inputFile, maxSeverity, colorSettings);
+                Printer printer = new Printer(inputFile, maxSeverity, formatter);
                 printer.printParseErrorMessage();
                 numSkippedFiles++;
                 continue;
             }
 
-            try (Printer printer = new Printer(inputFile, maxSeverity, colorSettings)) {
+            try (Printer printer = new Printer(inputFile, maxSeverity, formatter)) {
                 List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, tokenStream);
                 listeners.add(new MaxLengthListener(printer, constructLengths, enabledRules));
                 listeners.add(new MinLengthListener(printer, constructLengths, enabledRules));
