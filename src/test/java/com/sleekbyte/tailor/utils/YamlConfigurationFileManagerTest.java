@@ -2,7 +2,7 @@ package com.sleekbyte.tailor.utils;
 
 import static org.junit.Assert.assertEquals;
 
-import com.sleekbyte.tailor.common.Configuration;
+import com.sleekbyte.tailor.common.YamlConfiguration;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -22,24 +22,24 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * Tests for {@link ConfigurationFileManager}.
+ * Tests for {@link YamlConfigurationFileManager}.
  */
 @RunWith(MockitoJUnitRunner.class)
-public final class ConfigurationFileManagerTest {
+public final class YamlConfigurationFileManagerTest {
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
 
     @Test(expected = IOException.class)
     public void testParseConfigurationFileEmptyFolder() throws IOException {
-        ConfigurationFileManager.getConfiguration(Optional.of(folder.getRoot().getPath()));
+        YamlConfigurationFileManager.getConfiguration(Optional.of(folder.getRoot().getPath()));
     }
 
     @Test
     public void testParseConfigurationFileValidConfigFile() throws IOException {
-        Configuration config = ConfigurationFileManager
+        YamlConfiguration config = YamlConfigurationFileManager
                 .getConfiguration(Optional.of(createConfigFile(".tailor.yml").toString()))
-                .orElse(new Configuration());
+                .orElse(new YamlConfiguration());
 
         Set<String> actualIncludeList = config.getInclude();
         Set<String> actualExcludeList = config.getExclude();

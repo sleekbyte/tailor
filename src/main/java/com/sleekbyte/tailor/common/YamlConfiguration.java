@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * Represent a config object.
  */
-public final class Configuration {
+public final class YamlConfiguration {
 
     private static final String[] DEFAULT_INCLUDE = new String[] {"**.swift"};
     private static final String[] DEFAULT_EXCLUDE = new String[] {"**.{svn,git,lproj,xcassets,framework,xcodeproj}"};
@@ -16,6 +16,8 @@ public final class Configuration {
     private Optional<String> fileLocation = Optional.empty();
     private Set<String> include = new HashSet<>(Arrays.asList(DEFAULT_INCLUDE));
     private Set<String> exclude = new HashSet<>(Arrays.asList(DEFAULT_EXCLUDE));
+    private Set<String> only = new HashSet<>();
+    private Set<String> except = new HashSet<>();
 
     public Optional<String> getFileLocation() {
         return fileLocation;
@@ -29,6 +31,14 @@ public final class Configuration {
         return exclude;
     }
 
+    public Set<String> getOnly() {
+        return only;
+    }
+
+    public Set<String> getExcept() {
+        return except;
+    }
+
     public void setFileLocation(String fileLocation) {
         this.fileLocation = Optional.ofNullable(fileLocation);
     }
@@ -39,5 +49,13 @@ public final class Configuration {
 
     public void setExclude(Set<String> exclude) {
         this.exclude = exclude;
+    }
+
+    public void setOnly(Set<String> only) {
+        this.only = only;
+    }
+
+    public void setExcept(Set<String> except) {
+        this.except = except;
     }
 }
