@@ -33,7 +33,7 @@ import java.util.List;
  * Create config file that will only lint UpperCamelCaseTest.swift functional test file.
  */
 @RunWith(MockitoJUnitRunner.class)
-public final class TailorYamlConfigurationTest {
+public final class YamlConfigurationTest {
     private File configurationFile;
 
     @Rule

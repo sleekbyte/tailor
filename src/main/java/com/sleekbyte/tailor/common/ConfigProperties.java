@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * YamlConfiguration Properties container.
+ * Configuration Properties container.
  */
 public class ConfigProperties {
 
