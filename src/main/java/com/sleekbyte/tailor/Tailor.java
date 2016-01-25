@@ -11,7 +11,6 @@ import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.format.Formatter;
-import com.sleekbyte.tailor.format.XcodeFormatter;
 import com.sleekbyte.tailor.integration.XcodeIntegrator;
 import com.sleekbyte.tailor.listeners.BlankLineListener;
 import com.sleekbyte.tailor.listeners.BraceStyleListener;
@@ -38,7 +37,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -58,30 +56,6 @@ public class Tailor {
         System.err.println(Messages.NO_SWIFT_FILES_FOUND);
         configuration.printHelp();
         System.exit(ExitCode.failure());
-    }
-
-    private static String pluralize(long number, String singular, String plural) {
-        return String.format("%d %s", number, number == 1 ? singular : plural);
-    }
-
-    /**
-     * Print results of analysis.
-     *
-     * @param numFiles Number of swift files detected
-     * @param numSkipped Number of swift files skipped due to parsing errors
-     * @param numErrors Number of error violations
-     * @param numWarnings Number of warning violations
-     */
-    public static void printSummary(long numFiles, long numSkipped, long numErrors, long numWarnings) {
-        long numFilesAnalyzed = numFiles - numSkipped;
-        long numViolations = numErrors + numWarnings;
-        System.out.println(String.format("%nAnalyzed %s, skipped %s, and detected %s (%s, %s).%n",
-            pluralize(numFilesAnalyzed, "file", "files"),
-            pluralize(numSkipped, "file", "files"),
-            pluralize(numViolations, "violation", "violations"),
-            pluralize(numErrors, "error", "errors"),
-            pluralize(numWarnings, "warning", "warnings")
-        ));
     }
 
     /**
@@ -120,8 +94,7 @@ public class Tailor {
                     listeners.add((SwiftBaseListener) listenerConstructor.newInstance(printer));
                 }
 
-            } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException
-                | InstantiationException | IllegalAccessException e) {
+            } catch (ReflectiveOperationException e) {
                 throw new CliArgumentParserException("Listeners were not successfully created: " + e);
             }
         }
@@ -178,12 +151,13 @@ public class Tailor {
         ColorSettings colorSettings =
             new ColorSettings(configuration.shouldColorOutput(), configuration.shouldInvertColorOutput());
         Set<Rules> enabledRules = configuration.getEnabledRules();
+        Formatter formatter = null;
 
         for (String fileName : fileNames) {
             File inputFile = new File(fileName);
             CommonTokenStream tokenStream;
             SwiftParser.TopLevelContext tree;
-            Formatter formatter = new XcodeFormatter(inputFile, colorSettings);
+            formatter = configuration.getFormatter(inputFile, colorSettings);
 
             try {
                 tokenStream = getTokenStream(inputFile);
@@ -219,11 +193,13 @@ public class Tailor {
             }
         }
 
-        printSummary(fileNames.size(), numSkippedFiles, numErrors, numWarnings);
-
-        if (numErrors >= 1L) {
+        if (formatter != null) {
+            formatter.displaySummary(fileNames.size(), numSkippedFiles, numErrors, numWarnings);
             // Non-zero exit status when any violation messages have Severity.ERROR, controlled by --max-severity
-            System.exit(ExitCode.failure());
+            ExitCode exitCode = formatter.getExitStatus(numErrors, numWarnings);
+            if (exitCode.ordinal() != 0) {
+                System.exit(exitCode.ordinal());
+            }
         }
     }
 

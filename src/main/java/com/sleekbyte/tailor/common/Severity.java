@@ -23,8 +23,7 @@ public enum Severity {
     /**
      * Exception thrown when invalid severity is provided.
      */
-    public static class IllegalSeverityException extends Exception {
-    }
+    public static class IllegalSeverityException extends Exception {}
 
     /**
      * Parse str and convert to appropriate Severity.

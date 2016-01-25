@@ -148,10 +148,17 @@ public class Messages {
     public static final String SHOW_RULES_DESC = "show description for each rule";
     public static final String CONFIG_FILE_DESC = "specify configuration file";
     public static final String LIST_FILES_DESC = "display Swift source files to be analyzed";
+    public static final String FORMAT_DESC = "select an output format";
 
     // Runtime messages
     public static final String TAILOR_CONFIG_LOCATION = "Using Tailor configuration file at: ";
     public static final String FILES_TO_BE_ANALYZED = "Files to be analyzed:";
+
+    // JSON Format messages
+    public static final String PATH = "path";
+    public static final String VIOLATIONS = "violations";
+    public static final String PARSED = "parsed";
+    public static final String SUMMARY = "summary";
 
     // Error messages
     public static final String NO_SWIFT_FILES_FOUND = "No Swift source files were found.";

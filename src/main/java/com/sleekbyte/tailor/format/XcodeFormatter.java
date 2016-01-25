@@ -2,6 +2,7 @@ package com.sleekbyte.tailor.format;
 
 
 import com.sleekbyte.tailor.common.ColorSettings;
+import com.sleekbyte.tailor.common.ExitCode;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.ViolationMessage;
 import org.fusesource.jansi.Ansi;
@@ -72,6 +73,27 @@ public final class XcodeFormatter implements Formatter {
     public void displayParseErrorMessage() throws IOException {
         printColoredMessage(getHeader(inputFile, colorSettings));
         System.out.println(inputFile + Messages.COULD_NOT_BE_PARSED);
+    }
+
+    @Override
+    public void displaySummary(long numFiles, long numSkipped, long numErrors, long numWarnings) {
+        long numFilesAnalyzed = numFiles - numSkipped;
+        long numViolations = numErrors + numWarnings;
+        System.out.println(String.format("%nAnalyzed %s, skipped %s, and detected %s (%s, %s).%n",
+            Formatter.pluralize(numFilesAnalyzed, "file", "files"),
+            Formatter.pluralize(numSkipped, "file", "files"),
+            Formatter.pluralize(numViolations, "violation", "violations"),
+            Formatter.pluralize(numErrors, "error", "errors"),
+            Formatter.pluralize(numWarnings, "warning", "warnings")
+        ));
+    }
+
+    @Override
+    public ExitCode getExitStatus(long numErrors, long numWarnings) {
+        if (numErrors >= 1L) {
+            return ExitCode.FAILURE;
+        }
+        return ExitCode.SUCCESS;
     }
 
     private void printColoredMessage(String msg) {

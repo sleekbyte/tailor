@@ -156,6 +156,10 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
             formattedSeverity(), formattedRule(), formattedViolationMessage());
     }
 
+    public ViolationJSON toJSON() {
+        return new ViolationJSON(lineNumber, columnNumber, severity, rule, violationMessage);
+    }
+
     private String formattedRule() {
         return String.format("[%s]", rule.getName());
     }

@@ -4,6 +4,7 @@ import com.sleekbyte.tailor.common.ConstructLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
+import com.sleekbyte.tailor.format.Format;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -53,6 +54,9 @@ public class CliArgumentParser {
     private static final String CONFIG_SHORT_OPT = "c";
     private static final String CONFIG_LONG_OPT = "config";
     private static final String LIST_FILES_OPT = "list-files";
+    private static final String FORMAT_SHORT_OPT = "f";
+    private static final String FORMAT_LONG_OPT = "format";
+    public static final String INVALID_OPTION_VALUE = "Invalid value provided for option ";
 
     private Options options;
     private CommandLine cmd;
@@ -167,6 +171,9 @@ public class CliArgumentParser {
         options.addOption(createSingleArgOpt(CONFIG_SHORT_OPT, CONFIG_LONG_OPT, argName, Messages.CONFIG_FILE_DESC));
 
         options.addOption(createNoArgOpt(LIST_FILES_OPT, Messages.LIST_FILES_DESC));
+
+        argName = Format.getFormats();
+        options.addOption(createSingleArgOpt(FORMAT_SHORT_OPT, FORMAT_LONG_OPT, argName, Messages.FORMAT_DESC));
     }
 
     /**
@@ -304,7 +311,7 @@ public class CliArgumentParser {
         try {
             return Severity.parseSeverity(this.cmd.getOptionValue(MAX_SEVERITY_OPT, Messages.WARNING));
         } catch (Severity.IllegalSeverityException ex) {
-            throw new CliArgumentParserException("Invalid value provided for argument " + MAX_SEVERITY_OPT + ".");
+            throw new CliArgumentParserException(INVALID_OPTION_VALUE + MAX_SEVERITY_OPT + ".");
         }
     }
 
@@ -318,5 +325,21 @@ public class CliArgumentParser {
 
     public boolean shouldInvertColorOutput() {
         return cmd != null && cmd.hasOption(INVERT_COLOR_OPT);
+    }
+
+    /**
+     * Returns format specified by user, defaults to Xcode format.
+     * @return Format type
+     */
+    public Format getFormat() throws CliArgumentParserException {
+        if (cmd != null) {
+            try {
+                return Format.parseFormat(cmd.getOptionValue(FORMAT_LONG_OPT, Format.XCODE.getName()));
+            } catch (Format.IllegalFormatException e) {
+                throw new CliArgumentParserException(INVALID_OPTION_VALUE + FORMAT_LONG_OPT + "."
+                    + " Options are <" + Format.getFormats() + ">.");
+            }
+        }
+        return Format.XCODE;
     }
 }
