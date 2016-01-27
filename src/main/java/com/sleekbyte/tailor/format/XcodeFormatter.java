@@ -16,14 +16,10 @@ import java.util.List;
 /**
  * Formatter that displays violation messages in an Xcode compatible format.
  */
-public final class XcodeFormatter implements Formatter {
-
-    private File inputFile;
-    private ColorSettings colorSettings;
+public final class XcodeFormatter extends Formatter {
 
     public XcodeFormatter(File inputFile, ColorSettings colorSettings) {
-        this.inputFile = inputFile;
-        this.colorSettings = colorSettings;
+        super(inputFile, colorSettings);
     }
 
     public int getHighestLineNumber(List<ViolationMessage> violationMessages) {

@@ -197,7 +197,7 @@ public class Tailor {
             formatter.displaySummary(fileNames.size(), numSkippedFiles, numErrors, numWarnings);
             // Non-zero exit status when any violation messages have Severity.ERROR, controlled by --max-severity
             ExitCode exitCode = formatter.getExitStatus(numErrors, numWarnings);
-            if (exitCode.ordinal() != 0) {
+            if (exitCode != ExitCode.SUCCESS) {
                 System.exit(exitCode.ordinal());
             }
         }

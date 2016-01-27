@@ -16,17 +16,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Formatter that displays violation messages in an Xcode compatible format.
+ * Formatter that displays violation messages in valid JSON output.
  */
-public final class JSONFormatter implements Formatter {
+public final class JSONFormatter extends Formatter {
 
-    private File inputFile;
-    private ColorSettings colorSettings;
     private Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
 
     public JSONFormatter(File inputFile, ColorSettings colorSettings) {
-        this.inputFile = inputFile;
-        this.colorSettings = colorSettings;
+        super(inputFile, colorSettings);
     }
 
     @Override
@@ -67,6 +64,9 @@ public final class JSONFormatter implements Formatter {
 
     @Override
     public ExitCode getExitStatus(long numErrors, long numWarnings) {
+        if (numErrors >= 1L) {
+            return ExitCode.FAILURE;
+        }
         return ExitCode.SUCCESS;
     }
 
