@@ -87,7 +87,7 @@ public final class ColonWhitespaceListener extends SwiftBaseListener {
 
     @Override
     public void enterConditionalOperator(SwiftParser.ConditionalOperatorContext ctx) {
-        Token colon = ((TerminalNodeImpl) ctx.getChild(2)).getSymbol();
+        Token colon = ((TerminalNodeImpl) ctx.getChild(ctx.getChildCount() - 1)).getSymbol();
         Token left = ctx.expression().getStop();
         Token right = ((ParserRuleContext) ParseTreeUtil.getRightSibling(ctx)).getStart();
 
