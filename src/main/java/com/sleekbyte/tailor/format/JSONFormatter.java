@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.ExitCode;
-import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.ViolationMessage;
 
@@ -31,10 +30,17 @@ public final class JSONFormatter extends Formatter {
         List<Map<String, Object>> violations = new ArrayList<>();
         for (ViolationMessage msg : violationMessages) {
             Map<String, Object> violation = new HashMap<>();
-            violation.put(Messages.LOCATION_KEY, new Location(msg.getLineNumber(), msg.getColumnNumber()));
+            Map<String, Integer> location = new HashMap<>();
+
+            location.put("line", msg.getLineNumber());
+            if (msg.getColumnNumber() != 0) {
+                location.put("column", msg.getColumnNumber());
+            }
+            violation.put(Messages.LOCATION_KEY, location);
             violation.put(Messages.SEVERITY_KEY, msg.getSeverity().toString());
             violation.put(Messages.RULE_KEY, msg.getRule().getName());
             violation.put(Messages.MESSAGE_KEY, msg.getMessage());
+
             violations.add(violation);
         }
         displayMessages(violations, true);
