@@ -155,10 +155,18 @@ public class Messages {
     public static final String FILES_TO_BE_ANALYZED = "Files to be analyzed:";
 
     // JSON Format messages
-    public static final String PATH = "path";
-    public static final String VIOLATIONS = "violations";
-    public static final String PARSED = "parsed";
-    public static final String SUMMARY = "summary";
+    public static final String LOCATION_KEY = "location";
+    public static final String SEVERITY_KEY = "severity";
+    public static final String RULE_KEY = "rule";
+    public static final String MESSAGE_KEY = "message";
+    public static final String PATH_KEY = "path";
+    public static final String VIOLATIONS_KEY = "violations";
+    public static final String PARSED_KEY = "parsed";
+    public static final String SUMMARY_KEY = "summary";
+    public static final String ANALYZED_KEY = "analyzed";
+    public static final String SKIPPED_KEY = "skipped";
+    public static final String ERRORS_KEY = "errors";
+    public static final String WARNINGS_KEY = "warnings";
 
     // Error messages
     public static final String NO_SWIFT_FILES_FOUND = "No Swift source files were found.";

@@ -1,7 +1,6 @@
 package com.sleekbyte.tailor.output;
 
 import com.sleekbyte.tailor.common.ColorSettings;
-import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 
@@ -155,35 +154,6 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
 
         return String.format("%s%s%s %s %s %s", formattedFilePath(), formattedLineNumber(), formattedColumnNumber(),
             formattedSeverity(), formattedRule(), formattedViolationMessage());
-    }
-
-    public ViolationJSON toJSON() {
-        return new ViolationJSON(lineNumber, columnNumber, severity, rule, violationMessage);
-    }
-
-    /**
-     * Primitive representation of violation for JSON serialization.
-     */
-    public static class ViolationJSON {
-        private Location location;
-        private String severity;
-        private String rule;
-        private String message;
-
-        /**
-         * Construct a primitive representation of a violation.
-         * @param lineNumber line of the violation
-         * @param columnNumber column of the violation
-         * @param severity severity of the violation
-         * @param rule name of the rule being violated
-         * @param violationMessage reason for violation
-         */
-        public ViolationJSON(int lineNumber, int columnNumber, Severity severity, Rules rule, String violationMessage) {
-            this.location = new Location(lineNumber, columnNumber);
-            this.severity = severity.toString();
-            this.rule = rule.getName();
-            this.message = violationMessage;
-        }
     }
 
     private String formattedRule() {
