@@ -5,9 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.ExitCode;
 import com.sleekbyte.tailor.common.Messages;
-import com.sleekbyte.tailor.output.SummaryJSON;
-import com.sleekbyte.tailor.output.ViolationJSON;
 import com.sleekbyte.tailor.output.ViolationMessage;
+import com.sleekbyte.tailor.output.ViolationMessage.ViolationJSON;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +23,7 @@ public final class JSONFormatter implements Formatter {
 
     private File inputFile;
     private ColorSettings colorSettings;
+    private Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
 
     public JSONFormatter(File inputFile, ColorSettings colorSettings) {
         this.inputFile = inputFile;
@@ -40,7 +40,7 @@ public final class JSONFormatter implements Formatter {
         output.put(Messages.VIOLATIONS, violations);
         output.put(Messages.PARSED, true);
 
-        prettyPrintJSON(output);
+        System.out.println(gson.toJson(output));
     }
 
     @Override
@@ -51,7 +51,34 @@ public final class JSONFormatter implements Formatter {
         output.put(Messages.VIOLATIONS, new ArrayList<>());
         output.put(Messages.PARSED, false);
 
-        prettyPrintJSON(output);
+        System.out.println(gson.toJson(output));
+    }
+
+    /**
+     * Primitive representation of summary for JSON serialization.
+     */
+    public static class SummaryJSON {
+        private long analyzed;
+        private long skipped;
+        private long violations;
+        private long errors;
+        private long warnings;
+
+        /**
+         * Construct a primitive representation of a summary.
+         * @param numAnalyzed files successfully analyzed
+         * @param numSkipped files skipped due to parse failures
+         * @param numViolations total violations found
+         * @param numErrors errors found
+         * @param numWarnings warnings found
+         */
+        public SummaryJSON(long numAnalyzed, long numSkipped, long numViolations, long numErrors, long numWarnings) {
+            this.analyzed = numAnalyzed;
+            this.skipped = numSkipped;
+            this.violations = numViolations;
+            this.errors = numErrors;
+            this.warnings = numWarnings;
+        }
     }
 
     @Override
@@ -63,7 +90,7 @@ public final class JSONFormatter implements Formatter {
         Map<String, Object> output = new HashMap<>();
         output.put(Messages.SUMMARY, summary);
 
-        prettyPrintJSON(output);
+        System.out.println(gson.toJson(output));
     }
 
     @Override
@@ -71,8 +98,4 @@ public final class JSONFormatter implements Formatter {
         return ExitCode.SUCCESS;
     }
 
-    private void prettyPrintJSON(Map<String, Object> output) {
-        Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-        System.out.println(gson.toJson(output));
-    }
 }
