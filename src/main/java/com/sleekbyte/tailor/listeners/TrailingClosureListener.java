@@ -14,6 +14,9 @@ import com.sleekbyte.tailor.utils.ListenerUtil;
 
 import java.util.List;
 
+/**
+ * Listener that checks for closures that should be passed to functions as trailing closures.
+ */
 public final class TrailingClosureListener extends SwiftBaseListener{
 
     Printer printer;
