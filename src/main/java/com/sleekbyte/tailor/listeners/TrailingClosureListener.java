@@ -42,7 +42,7 @@ public final class TrailingClosureListener extends SwiftBaseListener{
 
         // Check if the parameter isn't named
         ExpressionElementContext element = elements.get(elements.size() - 1);
-        if (element.expression() == null || element.identifier() != null) {
+        if (element.identifier() != null) {
             return;
         }
 
