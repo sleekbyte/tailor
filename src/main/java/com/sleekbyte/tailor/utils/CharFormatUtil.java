@@ -15,6 +15,11 @@ public class CharFormatUtil {
         return !word.isEmpty() && Character.isLowerCase(word.charAt(0)) && word.matches(ALPHANUMERIC_REGEX);
     }
 
+    public static boolean startsWithAcronym(String word) {
+        return word.length() > 2 && Character.isUpperCase(word.charAt(0)) && Character.isUpperCase(word.charAt(1))
+            && word.matches(ALPHANUMERIC_REGEX);
+    }
+
     /**
      * Checks if a name is prefixed with a 'k' or 'K'.
      *
