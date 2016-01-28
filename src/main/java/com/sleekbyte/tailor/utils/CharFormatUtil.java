@@ -16,7 +16,7 @@ public class CharFormatUtil {
     }
 
     public static boolean startsWithAcronym(String word) {
-        return word.length() > 2 && Character.isUpperCase(word.charAt(0)) && Character.isUpperCase(word.charAt(1))
+        return word.length() >= 2 && Character.isUpperCase(word.charAt(0)) && Character.isUpperCase(word.charAt(1))
             && word.matches(ALPHANUMERIC_REGEX);
     }
 

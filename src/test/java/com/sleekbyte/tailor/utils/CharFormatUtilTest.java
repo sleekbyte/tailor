@@ -66,4 +66,26 @@ public class CharFormatUtilTest {
         assertFalse(CharFormatUtil.isKPrefixed("AlsoValidConstantName"));
     }
 
+    @Test
+    public void testStartsWithAcronym() {
+        // Names that start with acronyms
+        assertTrue(CharFormatUtil.startsWithAcronym("AT"));
+        assertTrue(CharFormatUtil.startsWithAcronym("URL"));
+        assertTrue(CharFormatUtil.startsWithAcronym("XLnotification"));
+        assertTrue(CharFormatUtil.startsWithAcronym("SHIELDprogrammeMARVEL"));
+
+        // Single character names
+        assertFalse(CharFormatUtil.startsWithAcronym("A"));
+        assertFalse(CharFormatUtil.startsWithAcronym("2"));
+        assertFalse(CharFormatUtil.startsWithAcronym("$"));
+
+        // Names that contain special characters
+        assertFalse(CharFormatUtil.startsWithAcronym("$HIELDprogrammeMARVEL"));
+        assertFalse(CharFormatUtil.startsWithAcronym("SH!ELDprogrammeMARVEL"));
+
+        // Names that do not start with acronyms
+        assertFalse(CharFormatUtil.startsWithAcronym("uRL"));
+        assertFalse(CharFormatUtil.startsWithAcronym("xURLS"));
+        assertFalse(CharFormatUtil.startsWithAcronym("shieldPROGRAMMEmarvel"));
+    }
 }
