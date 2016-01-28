@@ -19,7 +19,7 @@ import java.util.List;
  */
 public final class TrailingClosureListener extends SwiftBaseListener {
 
-    Printer printer;
+    private Printer printer;
 
     public TrailingClosureListener(Printer printer) {
         this.printer = printer;
@@ -34,13 +34,9 @@ public final class TrailingClosureListener extends SwiftBaseListener {
             return;
         }
 
-        // Check if the function call has at least one parameter
         List<ExpressionElementContext> elements = elemList.expressionElement();
-        if (elements.size() == 0) {
-            return;
-        }
 
-        // Check if the parameter isn't named
+        // Check if the last parameter isn't named
         ExpressionElementContext element = elements.get(elements.size() - 1);
         if (element.identifier() != null) {
             return;
@@ -48,7 +44,7 @@ public final class TrailingClosureListener extends SwiftBaseListener {
 
         // Check if the parameter is a simple prefix expression
         ExpressionContext expression = element.expression();
-        if (expression.prefixExpression() == null || expression.prefixExpression().postfixExpression() == null) {
+        if (expression.binaryExpression().size() != 0) {
             return;
         }
 
