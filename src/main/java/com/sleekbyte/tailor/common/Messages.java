@@ -156,6 +156,8 @@ public class Messages {
 
     // JSON Format messages
     public static final String LOCATION_KEY = "location";
+    public static final String LINE_KEY = "line";
+    public static final String COLUMN_KEY = "column";
     public static final String SEVERITY_KEY = "severity";
     public static final String RULE_KEY = "rule";
     public static final String MESSAGE_KEY = "message";

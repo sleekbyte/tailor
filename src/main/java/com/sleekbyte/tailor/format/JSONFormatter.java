@@ -32,9 +32,9 @@ public final class JSONFormatter extends Formatter {
             Map<String, Object> violation = new HashMap<>();
             Map<String, Integer> location = new HashMap<>();
 
-            location.put("line", msg.getLineNumber());
+            location.put(Messages.LINE_KEY, msg.getLineNumber());
             if (msg.getColumnNumber() != 0) {
-                location.put("column", msg.getColumnNumber());
+                location.put(Messages.COLUMN_KEY, msg.getColumnNumber());
             }
             violation.put(Messages.LOCATION_KEY, location);
             violation.put(Messages.SEVERITY_KEY, msg.getSeverity().toString());
