@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Listener that checks for closures that should be passed to functions as trailing closures.
  */
-public final class TrailingClosureListener extends SwiftBaseListener{
+public final class TrailingClosureListener extends SwiftBaseListener {
 
     Printer printer;
 
@@ -61,6 +61,6 @@ public final class TrailingClosureListener extends SwiftBaseListener{
                     ListenerUtil.getContextStartLocation(primaryExpr.closureExpression()));
             }
         }
-
     }
+
 }

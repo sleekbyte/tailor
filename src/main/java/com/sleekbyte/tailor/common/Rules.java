@@ -201,8 +201,8 @@ public enum Rules {
         TODO_SYNTAX.className = TodoCommentListener.class.getName();
 
         TRAILING_CLOSURE.name = "trailing-closure";
-        TRAILING_CLOSURE.description = "Functions that have a single closure argument should be called using the "
-            + "trailing closure syntax.";
+        TRAILING_CLOSURE.description = "Functions that have a closure as their last argument should be called"
+            + "using trailing closure syntax.";
         TRAILING_CLOSURE.className = TrailingClosureListener.class.getName();
 
         TRAILING_WHITESPACE.name = "trailing-whitespace";
