@@ -112,6 +112,8 @@ public class Messages {
         + "one space";
     public static final String REDUNDANT = "Redundant ";
     public static final String REDUNDANT_OPTIONAL_BINDING = " in optional binding should be removed";
+    public static final String TRAILING_CLOSURE = "is the function's final argument and may be passed as a trailing "
+        + "closure instead";
 
 
     // Usage messages
