@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public final class JSONFormatter extends Formatter {
 
-    private Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+    private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
 
     public JSONFormatter(File inputFile, ColorSettings colorSettings) {
         super(inputFile, colorSettings);
@@ -65,7 +65,7 @@ public final class JSONFormatter extends Formatter {
         Map<String, Map<String, Long>> output = new HashMap<>();
         output.put(Messages.SUMMARY_KEY, summary);
 
-        System.out.println(gson.toJson(output));
+        System.out.println(GSON.toJson(output));
     }
 
     @Override
@@ -81,7 +81,7 @@ public final class JSONFormatter extends Formatter {
         output.put(Messages.PATH_KEY, inputFile.getCanonicalPath());
         output.put(Messages.VIOLATIONS_KEY, violations);
         output.put(Messages.PARSED_KEY, parsed);
-        System.out.println(gson.toJson(output));
+        System.out.println(GSON.toJson(output));
     }
 
 }
