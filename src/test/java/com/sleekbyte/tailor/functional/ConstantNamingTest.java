@@ -23,7 +23,6 @@ public class ConstantNamingTest extends RuleTest {
             + Messages.K_PREFIXED);
         addExpectedMsg(Rules.CONSTANT_K_PREFIX, 5, 16, Severity.WARNING, Messages.CONSTANT + Messages.NAME
             + Messages.K_PREFIXED);
-        addExpectedMsg(Rules.CONSTANT_NAMING, 5, 16, Severity.WARNING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE);
         addExpectedMsg(Rules.CONSTANT_NAMING, 5, 45, Severity.WARNING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE);
         addExpectedMsg(Rules.CONSTANT_NAMING, 11, 13, Severity.WARNING, Messages.GLOBAL + Messages.CONSTANT
             + Messages.GLOBAL_CONSTANT_NAMING);
@@ -63,7 +62,6 @@ public class ConstantNamingTest extends RuleTest {
             + Messages.K_PREFIXED);
         addExpectedMsg(Rules.CONSTANT_K_PREFIX, 134, 20, Severity.WARNING, Messages.CONSTANT + Messages.NAME
             + Messages.K_PREFIXED);
-        addExpectedMsg(Rules.CONSTANT_NAMING, 134, 20, Severity.WARNING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE);
     }
 
     @Override
