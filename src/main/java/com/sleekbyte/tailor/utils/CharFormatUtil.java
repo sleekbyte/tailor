@@ -20,6 +20,10 @@ public class CharFormatUtil {
             && word.matches(ALPHANUMERIC_REGEX);
     }
 
+    public static boolean isLowerCamelCaseOrAcronym(String word) {
+        return startsWithAcronym(word) || isLowerCamelCase(word);
+    }
+
     /**
      * Checks if a name is prefixed with a 'k' or 'K'.
      *

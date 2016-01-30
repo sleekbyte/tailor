@@ -31,13 +31,12 @@ public class ConstantNamingListener extends SwiftBaseListener {
                 || ConstantDecHelper.insideClass(constantDecContext)
                 || ConstantDecHelper.insideStruct(constantDecContext)) {
             if (!CharFormatUtil.isUpperCamelCase(constantName)
-                && !CharFormatUtil.startsWithAcronym(constantName)
-                && !CharFormatUtil.isLowerCamelCase(constantName)) {
+                && !CharFormatUtil.isLowerCamelCaseOrAcronym(constantName)) {
                 printer.error(Rules.CONSTANT_NAMING, Messages.GLOBAL + Messages.CONSTANT
                     + Messages.GLOBAL_CONSTANT_NAMING, location);
             }
         } else {
-            if (!CharFormatUtil.startsWithAcronym(constantName) && !CharFormatUtil.isLowerCamelCase(constantName)) {
+            if (!CharFormatUtil.isLowerCamelCaseOrAcronym(constantName)) {
                 printer.error(Rules.CONSTANT_NAMING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE, location);
             }
         }
