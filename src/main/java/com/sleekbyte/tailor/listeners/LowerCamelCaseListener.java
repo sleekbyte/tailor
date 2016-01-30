@@ -48,7 +48,7 @@ public class LowerCamelCaseListener extends SwiftBaseListener {
 
     private void verifyLowerCamelCase(String constructType, ParserRuleContext ctx) {
         String constructName = ctx.getText();
-        if (!CharFormatUtil.startsWithAcronym(constructName) && !CharFormatUtil.isLowerCamelCase(constructName)) {
+        if (!CharFormatUtil.isLowerCamelCaseOrAcronym(constructName)) {
             Location location = ListenerUtil.getContextStartLocation(ctx);
             this.printer.error(Rules.LOWER_CAMEL_CASE, constructType + Messages.LOWER_CAMEL_CASE, location);
         }

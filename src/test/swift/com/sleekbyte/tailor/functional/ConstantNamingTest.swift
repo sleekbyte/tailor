@@ -131,7 +131,18 @@ private struct Scaling {
     func sup() {
         static let faceRadiusToMouthWidthRatio: CGFloat = 1
         static let kFaceRadiusToMouthHeightRatio: CGFloat = 3
-        static let KFaceRadiusToMouthOffsetRatio: CGFloat = 3
+        static let kFaceRadiusToMouthOffsetRatio: CGFloat = 3
+    }
+
+    let URL = "https://tailor.sh"
+
+    init?(URL url: NSURL, resolvingAgainstBaseURL resolve: Bool) {
+    }
+    convenience init(URL URL: NSURL) {
+    }
+    init(URL URL: NSURL, entersReaderIfAvailable entersReaderIfAvailable: Bool) {
+    }
+    init?(URL url: NSURL, statusCode statusCode: Int, HTTPVersion HTTPVersion: String?, headerFields headerFields: [String: String]?) {
     }
 
 }
