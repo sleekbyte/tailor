@@ -86,12 +86,12 @@ public final class XcodeFormatterTest {
 
     @Test
     public void testSuccessExitStatus() {
-        assertEquals(ExitCode.SUCCESS, formatter.getExitStatus(0, 10));
+        assertEquals(ExitCode.SUCCESS, formatter.getExitStatus(0));
     }
 
     @Test
     public void testFailureExitStatus() {
-        assertEquals(ExitCode.FAILURE, formatter.getExitStatus(10, 10));
+        assertEquals(ExitCode.FAILURE, formatter.getExitStatus(10));
     }
 
     private String expectedOutput(List<ViolationMessage> list) throws IOException {

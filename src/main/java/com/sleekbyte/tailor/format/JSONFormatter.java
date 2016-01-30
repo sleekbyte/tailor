@@ -3,7 +3,6 @@ package com.sleekbyte.tailor.format;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sleekbyte.tailor.common.ColorSettings;
-import com.sleekbyte.tailor.common.ExitCode;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.ViolationMessage;
 
@@ -66,14 +65,6 @@ public final class JSONFormatter extends Formatter {
         output.put(Messages.SUMMARY_KEY, summary);
 
         System.out.println(GSON.toJson(output));
-    }
-
-    @Override
-    public ExitCode getExitStatus(long numErrors, long numWarnings) {
-        if (numErrors >= 1L) {
-            return ExitCode.FAILURE;
-        }
-        return ExitCode.SUCCESS;
     }
 
     private void displayMessages(List<Map<String, Object>> violations, boolean parsed) throws IOException {

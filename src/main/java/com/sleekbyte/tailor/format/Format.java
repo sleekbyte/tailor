@@ -45,9 +45,9 @@ public enum Format {
      * @throws IllegalFormatException if string is not recognized
      */
     public static Format parseFormat(String str) throws IllegalFormatException {
-        Set<String> formats = Arrays.asList(values()).stream().map(Format::toString).collect(Collectors.toSet());
+        Set<String> formats = Arrays.asList(Format.values()).stream().map(Format::toString).collect(Collectors.toSet());
         if (formats.contains(str)) {
-            return valueOf(str.toUpperCase());
+            return Format.valueOf(str.toUpperCase());
         } else {
             throw new IllegalFormatException();
         }

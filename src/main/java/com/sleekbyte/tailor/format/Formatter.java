@@ -50,10 +50,14 @@ public abstract class Formatter {
      * Determine an appropriate exit code for the application, depending on the number of errors and warnings found.
      *
      * @param numErrors number of errors detected during analysis
-     * @param numWarnings number of warnings detected during analysis
      * @return the ExitCode reflecting the application's status determined by the results of the analysis run
      */
-    public abstract ExitCode getExitStatus(long numErrors, long numWarnings);
+    public ExitCode getExitStatus(long numErrors) {
+        if (numErrors >= 1L) {
+            return ExitCode.FAILURE;
+        }
+        return ExitCode.SUCCESS;
+    }
 
     protected static String pluralize(long number, String singular, String plural) {
         return String.format("%d %s", number, number == 1 ? singular : plural);

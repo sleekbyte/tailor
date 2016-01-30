@@ -2,7 +2,6 @@ package com.sleekbyte.tailor.format;
 
 
 import com.sleekbyte.tailor.common.ColorSettings;
-import com.sleekbyte.tailor.common.ExitCode;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.ViolationMessage;
 import org.fusesource.jansi.Ansi;
@@ -82,14 +81,6 @@ public final class XcodeFormatter extends Formatter {
             Formatter.pluralize(numErrors, "error", "errors"),
             Formatter.pluralize(numWarnings, "warning", "warnings")
         ));
-    }
-
-    @Override
-    public ExitCode getExitStatus(long numErrors, long numWarnings) {
-        if (numErrors >= 1L) {
-            return ExitCode.FAILURE;
-        }
-        return ExitCode.SUCCESS;
     }
 
     private void printColoredMessage(String msg) {
