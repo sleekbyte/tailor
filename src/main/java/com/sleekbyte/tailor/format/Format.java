@@ -1,7 +1,6 @@
 package com.sleekbyte.tailor.format;
 
 import java.util.Arrays;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -27,11 +26,6 @@ public enum Format {
         return description;
     }
 
-    @Override
-    public String toString() {
-        return name;
-    }
-
     /**
      * Exception thrown when invalid format is provided.
      */
@@ -45,12 +39,12 @@ public enum Format {
      * @throws IllegalFormatException if string is not recognized
      */
     public static Format parseFormat(String str) throws IllegalFormatException {
-        Set<String> formats = Arrays.asList(Format.values()).stream().map(Format::toString).collect(Collectors.toSet());
-        if (formats.contains(str)) {
-            return Format.valueOf(str.toUpperCase());
-        } else {
-            throw new IllegalFormatException();
+        for (Format format : Format.values()) {
+            if (format.getName().equals(str)) {
+                return format;
+            }
         }
+        throw new IllegalFormatException();
     }
 
     public static String getFormats() {
