@@ -1,3 +1,9 @@
+// Plugins {{{
+plugins {
+    id "com.github.kt3k.coveralls" version "2.6.3"
+}
+// }}}
+
 // Java Plugin {{{
 apply plugin: 'java'
 
