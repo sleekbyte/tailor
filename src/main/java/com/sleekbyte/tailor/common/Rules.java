@@ -12,6 +12,7 @@ import com.sleekbyte.tailor.listeners.OptionalBindingListener;
 import com.sleekbyte.tailor.listeners.RedundantParenthesesListener;
 import com.sleekbyte.tailor.listeners.SemicolonTerminatedListener;
 import com.sleekbyte.tailor.listeners.TodoCommentListener;
+import com.sleekbyte.tailor.listeners.TrailingClosureListener;
 import com.sleekbyte.tailor.listeners.UpperCamelCaseListener;
 import com.sleekbyte.tailor.listeners.whitespace.AngleBracketWhitespaceListener;
 import com.sleekbyte.tailor.listeners.whitespace.ArrowWhitespaceListener;
@@ -54,6 +55,7 @@ public enum Rules {
     TERMINATING_NEWLINE,
     TERMINATING_SEMICOLON,
     TODO_SYNTAX,
+    TRAILING_CLOSURE,
     TRAILING_WHITESPACE,
     UPPER_CAMEL_CASE;
 
@@ -197,6 +199,11 @@ public enum Rules {
         TODO_SYNTAX.description = "TODO comments should follow either <TODO: description> or"
             + " <TODO(dev-name): description> format.";
         TODO_SYNTAX.className = TodoCommentListener.class.getName();
+
+        TRAILING_CLOSURE.name = "trailing-closure";
+        TRAILING_CLOSURE.description = "Functions that have a closure as their last argument should be called"
+            + "using trailing closure syntax.";
+        TRAILING_CLOSURE.className = TrailingClosureListener.class.getName();
 
         TRAILING_WHITESPACE.name = "trailing-whitespace";
         TRAILING_WHITESPACE.description = "Flag whitespace after the last non-whitespace character on each line "

@@ -1,5 +1,5 @@
 func helloWorld(var nameOfVar: String) {
-    var HELLO = 2
+    var URL = "https://tailor.sh"
     var helloWorld = 3
     var thisWorld = 10
 }
@@ -53,7 +53,7 @@ private struct Scaling {
 }
 
 var many_times = numbers.map {
-    (var HELLO) -> String in
+    (var URL) -> String in
     var Output = ""
     while number < 0 {
         number = 10
@@ -62,7 +62,7 @@ var many_times = numbers.map {
 }
 
 var X, Y: Int
-var XPlusY: Int {
+var xPlusY: Int {
   return x + y
 }
 
@@ -143,4 +143,16 @@ prefix operator √ {}
 
 prefix func √ (number: Double) -> Double {
     return sqrt(number)
+}
+
+init?(URL url: NSURL, resolvingAgainstBaseURL resolve: Bool) {
+}
+
+convenience init(URL URL: NSURL) {
+}
+
+init(URL URL: NSURL, entersReaderIfAvailable entersReaderIfAvailable: Bool) {
+}
+
+init?(URL url: NSURL, statusCode statusCode: Int, HTTPVersion HTTPVersion: String?, headerFields headerFields: [String: String]?) {
 }
