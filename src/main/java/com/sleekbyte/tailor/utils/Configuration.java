@@ -6,6 +6,7 @@ import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.common.YamlConfiguration;
+import com.sleekbyte.tailor.format.Format;
 import com.sleekbyte.tailor.format.Formatter;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
@@ -77,7 +78,7 @@ public final class Configuration {
      * @return Swift file names
      * @throws IOException if path specified does not exist
      */
-    public Set<String> getFilesToAnalyze() throws IOException {
+    public Set<String> getFilesToAnalyze() throws IOException, CliArgumentParserException {
         Optional<String> srcRoot = getSrcRoot();
         List<String> pathNames = new ArrayList<>();
         String[] cliPaths = cmd.getArgs();
@@ -92,7 +93,7 @@ public final class Configuration {
         } else if (yamlConfiguration.isPresent()) {
             YamlConfiguration config = yamlConfiguration.get();
             Optional<String> configFileLocation = config.getFileLocation();
-            if (configFileLocation.isPresent()) {
+            if (configFileLocation.isPresent() && cliArgumentParser.getFormat() == Format.XCODE) {
                 System.out.println(Messages.TAILOR_CONFIG_LOCATION + configFileLocation.get());
             }
             URI rootUri = new File(srcRoot.orElse(".")).toURI();
