@@ -6,3 +6,4 @@ before_install:
   - pip install --user codecov
 after_success:
   - codecov
+  - ./gradlew coveralls

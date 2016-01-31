@@ -4,8 +4,8 @@
   <a href="https://travis-ci.org/sleekbyte/tailor">
     <img src="https://travis-ci.org/sleekbyte/tailor.svg?branch=master" alt="Build Status">
   </a>
-  <a href="https://codecov.io/github/sleekbyte/tailor">
-    <img src="https://img.shields.io/codecov/c/github/sleekbyte/tailor/master.svg" alt="Code Coverage">
+  <a href="https://coveralls.io/github/sleekbyte/tailor">
+    <img src="https://coveralls.io/repos/github/sleekbyte/tailor/badge.svg" alt="Code Coverage">
   </a>
   <a href="https://www.codacy.com/app/sleekbot/tailor">
     <img src="https://img.shields.io/codacy/d6de692405d14aad98b479cef4c45724.svg" alt="Code Quality">
@@ -319,6 +319,7 @@ Please review the [guidelines for contributing](https://github.com/sleekbyte/tai
 | [PMD](http://pmd.sourceforge.net) | [BSD-style](http://pmd.sourceforge.net/pmd-5.3.2/license.html) |
 | [JaCoCo](http://eclemma.org/jacoco/) | [Eclipse Public License v1.0](http://eclemma.org/license.html) |
 | [Codecov](https://codecov.io) | [Free for Open Source](https://codecov.io/#pricing) |
+| [Coveralls](https://coveralls.io) | [Free for Open Source](https://coveralls.io/pricing) |
 | [Bundler](http://bundler.io) | [MIT](https://github.com/bundler/bundler/blob/master/LICENSE.md) |
 | [Codacy](https://www.codacy.com) | [Free for Open Source](https://www.codacy.com/pricing) |
 | [System Rules](http://stefanbirkner.github.io/system-rules/) | [Common Public License 1.0](https://stefanbirkner.github.io/system-rules/license.html) |
