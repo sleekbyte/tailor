@@ -150,10 +150,27 @@ public class Messages {
     public static final String SHOW_RULES_DESC = "show description for each rule";
     public static final String CONFIG_FILE_DESC = "specify configuration file";
     public static final String LIST_FILES_DESC = "display Swift source files to be analyzed";
+    public static final String FORMAT_DESC = "select an output format";
 
     // Runtime messages
     public static final String TAILOR_CONFIG_LOCATION = "Using Tailor configuration file at: ";
     public static final String FILES_TO_BE_ANALYZED = "Files to be analyzed:";
+
+    // JSON Format messages
+    public static final String LOCATION_KEY = "location";
+    public static final String LINE_KEY = "line";
+    public static final String COLUMN_KEY = "column";
+    public static final String SEVERITY_KEY = "severity";
+    public static final String RULE_KEY = "rule";
+    public static final String MESSAGE_KEY = "message";
+    public static final String PATH_KEY = "path";
+    public static final String VIOLATIONS_KEY = "violations";
+    public static final String PARSED_KEY = "parsed";
+    public static final String SUMMARY_KEY = "summary";
+    public static final String ANALYZED_KEY = "analyzed";
+    public static final String SKIPPED_KEY = "skipped";
+    public static final String ERRORS_KEY = "errors";
+    public static final String WARNINGS_KEY = "warnings";
 
     // Error messages
     public static final String NO_SWIFT_FILES_FOUND = "No Swift source files were found.";

@@ -1,15 +1,19 @@
 package com.sleekbyte.tailor.utils;
 
+import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.ConstructLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.common.YamlConfiguration;
+import com.sleekbyte.tailor.format.Format;
+import com.sleekbyte.tailor.format.Formatter;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -74,7 +78,7 @@ public final class Configuration {
      * @return Swift file names
      * @throws IOException if path specified does not exist
      */
-    public Set<String> getFilesToAnalyze() throws IOException {
+    public Set<String> getFilesToAnalyze() throws IOException, CliArgumentParserException {
         Optional<String> srcRoot = getSrcRoot();
         List<String> pathNames = new ArrayList<>();
         String[] cliPaths = cmd.getArgs();
@@ -89,7 +93,7 @@ public final class Configuration {
         } else if (yamlConfiguration.isPresent()) {
             YamlConfiguration config = yamlConfiguration.get();
             Optional<String> configFileLocation = config.getFileLocation();
-            if (configFileLocation.isPresent()) {
+            if (configFileLocation.isPresent() && cliArgumentParser.getFormat() == Format.XCODE) {
                 System.out.println(Messages.TAILOR_CONFIG_LOCATION + configFileLocation.get());
             }
             URI rootUri = new File(srcRoot.orElse(".")).toURI();
@@ -118,6 +122,25 @@ public final class Configuration {
 
     public void printHelp() {
         cliArgumentParser.printHelp();
+    }
+
+    /**
+     * Get an instance of the formatter specified by the user.
+     * @param inputFile the file for which violation messages will be displayed
+     * @param colorSettings the command-line color settings
+     * @return formatter instance that implements Formatter interface
+     * @throws CliArgumentParserException if the user-specified format does not correspond to a supported type
+     */
+    public Formatter getFormatter(File inputFile, ColorSettings colorSettings) throws CliArgumentParserException {
+        String formatClass = cliArgumentParser.getFormat().getClassName();
+        Formatter formatter;
+        try {
+            Constructor formatConstructor = Class.forName(formatClass).getConstructor(File.class, ColorSettings.class);
+            formatter = (Formatter) formatConstructor.newInstance(inputFile, colorSettings);
+        } catch (ReflectiveOperationException e) {
+            throw new CliArgumentParserException("Formatter was not successfully created: " + e);
+        }
+        return formatter;
     }
 
     private static Set<String> findFilesInPaths(List<String> pathNames) throws IOException {

@@ -121,6 +121,7 @@ Options:
  -c,--config=<path/to/.tailor.yml>             specify configuration file
     --debug                                    print ANTLR error messages when parsing error occurs
     --except=<rule1,rule2,...>                 run all rules except the specified ones
+ -f,--format=<xcode|json>                      select an output format
  -h,--help                                     display help
     --invert-color                             invert colorized console output
  -l,--max-line-length=<0-999>                  maximum Line length (in characters)
@@ -148,6 +149,7 @@ Options:
 * [Warnings, Errors, and Failing the Build](#warnings-errors-and-failing-the-build)
 * [Disable Violations within Source Code](#disable-violations-within-source-code)
 * [Configuration](#configuration)
+* [Formatters](#formatters)
 
 ### Enabling and Disabling Rules
 
@@ -231,6 +233,59 @@ exclude:
 * *Exclude* is given higher precedence than *Include*
 * Tailor recognizes the [Java Glob](https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob) syntax
 
+### Formatters
+
+Tailor's output format may be customized via the `-f`/`--format` option. The Xcode formatter is selected by default.
+
+#### Xcode Formatter (default)
+
+The default `xcode` formatter outputs violation messages according to the format expected by Xcode to be displayed inline within the Xcode Editor Area and as a list in the Log Navigator. This format is also as human-friendly as possible on the console.
+
+```
+$ tailor main.swift
+
+********** /main.swift **********
+/main.swift:1:    warning: [multiple-imports] Imports should be on separate lines
+/main.swift:1:18: warning: [terminating-semicolon] Statements should not terminate with a semicolon
+/main.swift:3:05: warning: [constant-naming] Global Constant should be either lowerCamelCase or UpperCamelCase
+/main.swift:5:07: warning: [redundant-parentheses] Conditional clause should not be enclosed within parentheses
+/main.swift:7:    warning: [terminating-newline] File should terminate with exactly one newline character ('\n')
+
+Analyzed 1 file, skipped 0 files, and detected 5 violations (0 errors, 5 warnings).
+```
+
+#### JSON Formatter
+
+The `json` formatter outputs statistics for each file in a separate [JSON](http://www.json.org) object, and a final `summary` object indicating the parsing results and the violation counts.
+
+```
+$ tailor -f json main.swift
+{
+  "path": "/main.swift",
+  "violations": [
+    {
+      "severity": "warning",
+      "rule": "constant-naming",
+      "location": {
+        "line": 1,
+        "column": 5
+      },
+      "message": "Global Constant should be either lowerCamelCase or UpperCamelCase"
+    }
+  ],
+  "parsed": true
+}
+{
+  "summary": {
+    "violations": 1,
+    "warnings": 1,
+    "analyzed": 1,
+    "errors": 0,
+    "skipped": 0
+  }
+}
+```
+
 # Developers
 Please review the [guidelines for contributing](https://github.com/sleekbyte/tailor/blob/master/CONTRIBUTING.md) to this repository.
 
@@ -249,6 +304,7 @@ Please review the [guidelines for contributing](https://github.com/sleekbyte/tai
 | [Jansi](https://github.com/fusesource/jansi) | [Apache License, Version 2.0](https://github.com/fusesource/jansi/blob/master/license.txt) |
 | [Xcodeproj](https://github.com/CocoaPods/Xcodeproj) | [MIT](https://github.com/CocoaPods/Xcodeproj/blob/master/LICENSE) |
 | [SnakeYAML](https://bitbucket.org/asomov/snakeyaml) | [Apache License, Version 2.0](https://bitbucket.org/asomov/snakeyaml/raw/8939e0aa430d25b3b49b353508b23e072dd02171/LICENSE.txt) |
+| [Gson](https://github.com/google/gson) | [Apache License, Version 2.0](https://github.com/google/gson/blob/master/LICENSE) |
 
 ### Development Only
 | Tool  | License |

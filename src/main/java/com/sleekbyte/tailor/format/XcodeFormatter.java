@@ -15,14 +15,10 @@ import java.util.List;
 /**
  * Formatter that displays violation messages in an Xcode compatible format.
  */
-public final class XcodeFormatter implements Formatter {
-
-    private File inputFile;
-    private ColorSettings colorSettings;
+public final class XcodeFormatter extends Formatter {
 
     public XcodeFormatter(File inputFile, ColorSettings colorSettings) {
-        this.inputFile = inputFile;
-        this.colorSettings = colorSettings;
+        super(inputFile, colorSettings);
     }
 
     public int getHighestLineNumber(List<ViolationMessage> violationMessages) {
@@ -72,6 +68,19 @@ public final class XcodeFormatter implements Formatter {
     public void displayParseErrorMessage() throws IOException {
         printColoredMessage(getHeader(inputFile, colorSettings));
         System.out.println(inputFile + Messages.COULD_NOT_BE_PARSED);
+    }
+
+    @Override
+    public void displaySummary(long numFiles, long numSkipped, long numErrors, long numWarnings) {
+        long numFilesAnalyzed = numFiles - numSkipped;
+        long numViolations = numErrors + numWarnings;
+        System.out.println(String.format("%nAnalyzed %s, skipped %s, and detected %s (%s, %s).%n",
+            Formatter.pluralize(numFilesAnalyzed, "file", "files"),
+            Formatter.pluralize(numSkipped, "file", "files"),
+            Formatter.pluralize(numViolations, "violation", "violations"),
+            Formatter.pluralize(numErrors, "error", "errors"),
+            Formatter.pluralize(numWarnings, "warning", "warnings")
+        ));
     }
 
     private void printColoredMessage(String msg) {

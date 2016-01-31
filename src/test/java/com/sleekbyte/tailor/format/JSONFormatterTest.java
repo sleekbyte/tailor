@@ -2,12 +2,13 @@ package com.sleekbyte.tailor.format;
 
 import static org.junit.Assert.assertEquals;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.ExitCode;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
-import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.output.ViolationMessage;
 import org.junit.After;
 import org.junit.Before;
@@ -23,17 +24,20 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RunWith(MockitoJUnitRunner.class)
-public final class XcodeFormatterTest {
+public final class JSONFormatterTest {
 
     private static final String WARNING_MSG = "this is a warning";
     private static final String ERROR_MSG = "this is an error";
     private static final ColorSettings colorSettings = new ColorSettings(false, false);
+    private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
 
     private File inputFile = new File("abc.swift");
-    private Formatter formatter = new XcodeFormatter(inputFile, colorSettings);
+    private Formatter formatter = new JSONFormatter(inputFile, colorSettings);
     private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     @Before
@@ -62,9 +66,12 @@ public final class XcodeFormatterTest {
     @Test
     public void testDisplayParseErrorMessage() throws IOException {
         formatter.displayParseErrorMessage();
-        String expectedOutput = XcodeFormatter.getHeader(inputFile, colorSettings) + "\n" + inputFile
-            + Messages.COULD_NOT_BE_PARSED + "\n";
-        assertEquals(expectedOutput, outContent.toString(Charset.defaultCharset().name()));
+        Map<String, Object> output = new HashMap<>();
+        output.put(Messages.PATH_KEY, inputFile.getCanonicalPath());
+        output.put(Messages.PARSED_KEY, false);
+        output.put(Messages.VIOLATIONS_KEY, new ArrayList<>());
+        assertEquals(GSON.toJson(output) + System.lineSeparator(),
+            outContent.toString(Charset.defaultCharset().name()));
     }
 
     @Test
@@ -77,11 +84,17 @@ public final class XcodeFormatterTest {
         final long violations = errors + warnings;
         formatter.displaySummary(files, skipped, errors, warnings);
 
-        String expectedOutput = String.format(
-            "%nAnalyzed %d files, skipped %d file, and detected %d violations (%d errors, %d warnings).%n%n",
-            analyzed, skipped, violations, errors, warnings);
+        Map<String, Object> summary = new HashMap<>();
+        summary.put(Messages.ANALYZED_KEY, analyzed);
+        summary.put(Messages.SKIPPED_KEY, skipped);
+        summary.put(Messages.VIOLATIONS_KEY, violations);
+        summary.put(Messages.ERRORS_KEY, errors);
+        summary.put(Messages.WARNINGS_KEY, warnings);
+        Map<String, Object> output = new HashMap<>();
+        output.put(Messages.SUMMARY_KEY, summary);
 
-        assertEquals(expectedOutput, outContent.toString(Charset.defaultCharset().name()));
+        assertEquals(GSON.toJson(output) + System.lineSeparator(),
+            outContent.toString(Charset.defaultCharset().name()));
     }
 
     @Test
@@ -95,12 +108,24 @@ public final class XcodeFormatterTest {
     }
 
     private String expectedOutput(List<ViolationMessage> list) throws IOException {
-        StringBuffer expected = new StringBuffer(XcodeFormatter.getHeader(inputFile, colorSettings) + "\n");
-        for (ViolationMessage message : list) {
-            expected.append(Printer.genOutputStringForTest(message.getRule(), inputFile.getCanonicalPath(),
-                message.getLineNumber(), message.getColumnNumber(), message.getSeverity(), message.getMessage())
-                + "\n");
+        Map<String, Object> output = new HashMap<>();
+        output.put(Messages.PATH_KEY, inputFile.getCanonicalPath());
+        output.put(Messages.PARSED_KEY, true);
+
+        List<Map<String, Object>> violations = new ArrayList<>();
+        for (ViolationMessage msg : list) {
+            Map<String, Object> violation = new HashMap<>();
+            Map<String, Object> location = new HashMap<>();
+            location.put(Messages.LINE_KEY, msg.getLineNumber());
+            location.put(Messages.COLUMN_KEY, msg.getColumnNumber());
+            violation.put(Messages.LOCATION_KEY, location);
+            violation.put(Messages.SEVERITY_KEY, msg.getSeverity().toString());
+            violation.put(Messages.RULE_KEY, msg.getRule().getName());
+            violation.put(Messages.MESSAGE_KEY, msg.getMessage());
+            violations.add(violation);
         }
-        return expected.toString();
+        output.put(Messages.VIOLATIONS_KEY, violations);
+
+        return GSON.toJson(output) + System.lineSeparator();
     }
 }
