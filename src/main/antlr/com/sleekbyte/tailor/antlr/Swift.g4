@@ -998,4 +998,4 @@ WS : [ \n\r\t\u000B\u000C\u0000] -> channel(HIDDEN) ;
  */
 BlockComment : '/*' (BlockComment|.)*? '*/' '\n'? -> channel(HIDDEN) ; // nesting allow
 
-LineComment : '//' .*? '\n' -> channel(HIDDEN) ;
+LineComment : '//' .*? ('\n'|EOF) -> channel(HIDDEN) ;
