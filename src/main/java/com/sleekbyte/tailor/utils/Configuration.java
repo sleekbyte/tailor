@@ -68,8 +68,35 @@ public final class Configuration {
         return cliArgumentParser.debugFlagSet();
     }
 
+    /**
+     * Collects all rules enabled by default and then filters out rules according to CLI options
+     * and YamlConfiguration file.
+     *
+     * @return list of enabled rules after filtering
+     * @throws CliArgumentParserException if rule names specified in command line options are not valid
+     */
     public Set<Rules> getEnabledRules() throws CliArgumentParserException {
-        return cliArgumentParser.getEnabledRules();
+        if (cliArgumentParser.hasSpecifiedExceptOnlyOption()) {
+            return cliArgumentParser.getEnabledRules();
+        }
+        Set<Rules> enabledRules = new HashSet<>(Arrays.asList(Rules.values()));
+        Set<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toSet());
+        if (yamlConfiguration.isPresent()) {
+            YamlConfiguration configuration = yamlConfiguration.get();
+            Set<String> onlySpecificRules = configuration.getOnly();
+            Configuration.checkValidRules(enabledRuleNames, onlySpecificRules);
+            if (onlySpecificRules.size() > 0) {
+                return enabledRules.stream()
+                    .filter(rule -> onlySpecificRules.contains(rule.getName())).collect(Collectors.toSet());
+            }
+            Set<String> excludedRules = configuration.getExcept();
+            Configuration.checkValidRules(enabledRuleNames, excludedRules);
+            if (excludedRules.size() > 0) {
+                return enabledRules.stream()
+                    .filter(rule -> !excludedRules.contains(rule.getName())).collect(Collectors.toSet());
+            }
+        }
+        return enabledRules;
     }
 
     /**
@@ -172,5 +199,20 @@ public final class Configuration {
             return Optional.empty();
         }
         return Optional.of(srcRoot);
+    }
+
+    /**
+     * Checks if rules specified in command line option is valid.
+     *
+     * @param enabledRules   all valid rule names
+     * @param specifiedRules rule names specified from command line
+     * @throws CliArgumentParserException if rule name specified in command line is not valid
+     */
+    public static void checkValidRules(Set<String> enabledRules, Set<String> specifiedRules)
+        throws CliArgumentParserException {
+        if (!enabledRules.containsAll(specifiedRules)) {
+            specifiedRules.removeAll(enabledRules);
+            throw new CliArgumentParserException("The following rules were not recognized: " + specifiedRules);
+        }
     }
 }

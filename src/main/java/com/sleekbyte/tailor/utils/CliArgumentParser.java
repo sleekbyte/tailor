@@ -240,6 +240,13 @@ public class CliArgumentParser {
         }
     }
 
+    /*
+     * Check if "--only" or "--except" option was specified.
+     */
+    public boolean hasSpecifiedExceptOnlyOption() {
+        return cmd.hasOption(ONLY_OPT) || cmd.hasOption(EXCEPT_OPT);
+    }
+
     /**
      * Collects all rules enabled by default and then filters out rules according to command line options.
      *
@@ -251,36 +258,21 @@ public class CliArgumentParser {
         Set<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toSet());
 
         // ONLY_OPT before EXCEPT_OPT gives precedence to ONLY_OPT if both are specified on the command line
-        if (this.cmd.hasOption(ONLY_OPT)) {
-            Set<String> onlySpecificRules = new HashSet<>(Arrays.asList(this.cmd.getOptionValues(ONLY_OPT)));
-            checkValidRules(enabledRuleNames, onlySpecificRules);
+        if (cmd.hasOption(ONLY_OPT)) {
+            Set<String> onlySpecificRules = new HashSet<>(Arrays.asList(cmd.getOptionValues(ONLY_OPT)));
+            Configuration.checkValidRules(enabledRuleNames, onlySpecificRules);
 
             return enabledRules.stream()
                 .filter(rule -> onlySpecificRules.contains(rule.getName())).collect(Collectors.toSet());
-        } else if (this.cmd.hasOption(EXCEPT_OPT)) {
-            Set<String> excludedRules = new HashSet<>(Arrays.asList(this.cmd.getOptionValues(EXCEPT_OPT)));
-            checkValidRules(enabledRuleNames, excludedRules);
+        } else if (cmd.hasOption(EXCEPT_OPT)) {
+            Set<String> excludedRules = new HashSet<>(Arrays.asList(cmd.getOptionValues(EXCEPT_OPT)));
+            Configuration.checkValidRules(enabledRuleNames, excludedRules);
 
             return enabledRules.stream()
                 .filter(rule -> !excludedRules.contains(rule.getName())).collect(Collectors.toSet());
         }
 
         return enabledRules;
-    }
-
-    /**
-     * Checks if rules specified in command line option is valid.
-     *
-     * @param enabledRules   all valid rule names
-     * @param specifiedRules rule names specified from command line
-     * @throws CliArgumentParserException if rule name specified in command line is not valid
-     */
-    private void checkValidRules(Set<String> enabledRules, Set<String> specifiedRules)
-        throws CliArgumentParserException {
-        if (!enabledRules.containsAll(specifiedRules)) {
-            specifiedRules.removeAll(enabledRules);
-            throw new CliArgumentParserException("The following rules were not recognized: " + specifiedRules);
-        }
     }
 
     /*
@@ -329,6 +321,7 @@ public class CliArgumentParser {
 
     /**
      * Returns format specified by user, defaults to Xcode format.
+     *
      * @return Format type
      */
     public Format getFormat() throws CliArgumentParserException {
