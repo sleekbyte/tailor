@@ -25,7 +25,7 @@ public final class JSONFormatter extends Formatter {
     }
 
     @Override
-    public void displayViolationMessages(List<ViolationMessage> violationMessages) throws IOException {
+    public Map<String, Object> displayViolationMessages(List<ViolationMessage> violationMessages) throws IOException {
         List<Map<String, Object>> violations = new ArrayList<>();
         for (ViolationMessage msg : violationMessages) {
             Map<String, Object> violation = new HashMap<>();
@@ -42,12 +42,12 @@ public final class JSONFormatter extends Formatter {
 
             violations.add(violation);
         }
-        displayMessages(violations, true);
+        return structureMessages(violations, true);
     }
 
     @Override
-    public void displayParseErrorMessage() throws IOException {
-        displayMessages(new ArrayList<>(), false);
+    public Map<String, Object> displayParseErrorMessage() throws IOException {
+        return structureMessages(new ArrayList<>(), false);
     }
 
     @Override
@@ -67,12 +67,13 @@ public final class JSONFormatter extends Formatter {
         System.out.println(GSON.toJson(output));
     }
 
-    private void displayMessages(List<Map<String, Object>> violations, boolean parsed) throws IOException {
+    private Map<String, Object> structureMessages(List<Map<String, Object>> violations, boolean parsed)
+                                throws IOException {
         Map<String, Object> output = new HashMap<>();
         output.put(Messages.PATH_KEY, inputFile.getCanonicalPath());
         output.put(Messages.VIOLATIONS_KEY, violations);
         output.put(Messages.PARSED_KEY, parsed);
-        System.out.println(GSON.toJson(output));
+        return output;
     }
 
 }

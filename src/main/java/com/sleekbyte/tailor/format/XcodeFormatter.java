@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Formatter that displays violation messages in an Xcode compatible format.
@@ -48,7 +49,7 @@ public final class XcodeFormatter extends Formatter {
     }
 
     @Override
-    public void displayViolationMessages(List<ViolationMessage> violationMessages) throws IOException {
+    public Map<String, Object> displayViolationMessages(List<ViolationMessage> violationMessages) throws IOException {
         if (violationMessages.size() > 0) {
             printColoredMessage(getHeader(inputFile, colorSettings));
         }
@@ -62,12 +63,14 @@ public final class XcodeFormatter extends Formatter {
         } else {
             violationMessages.forEach(System.out::println);
         }
+        return null;
     }
 
     @Override
-    public void displayParseErrorMessage() throws IOException {
+    public Map<String, Object> displayParseErrorMessage() throws IOException {
         printColoredMessage(getHeader(inputFile, colorSettings));
         System.out.println(inputFile + Messages.COULD_NOT_BE_PARSED);
+        return null;
     }
 
     @Override

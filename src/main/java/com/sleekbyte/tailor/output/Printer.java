@@ -4,6 +4,7 @@ import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.format.Formatter;
+import com.sleekbyte.tailor.format.JSONFormatter;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 
@@ -91,10 +92,25 @@ public final class Printer implements AutoCloseable {
 
     @Override
     public void close() throws IOException {
-        List<ViolationMessage> outputList = new ArrayList<>(this.getViolationMessages().stream()
-            .filter(msg -> !ignoredLineNumbers.contains(msg.getLineNumber())).collect(Collectors.toList()));
-        Collections.sort(outputList);
-        formatter.displayViolationMessages(outputList);
+        if (formatter.getClass() != JSONFormatter.class) {
+            List<ViolationMessage> outputList = new ArrayList<>(this.getViolationMessages().stream()
+                .filter(msg -> !ignoredLineNumbers.contains(msg.getLineNumber())).collect(Collectors.toList()));
+            Collections.sort(outputList);
+            formatter.displayViolationMessages(outputList);
+        }
+    }
+
+    /**
+     * Return all violations from formatter.
+     */
+    public Map<String, Object> getViolations() throws IOException {
+        if (formatter.getClass() == JSONFormatter.class) {
+            List<ViolationMessage> outputList = new ArrayList<>(this.getViolationMessages().stream()
+                .filter(msg -> !ignoredLineNumbers.contains(msg.getLineNumber())).collect(Collectors.toList()));
+            Collections.sort(outputList);
+            return formatter.displayViolationMessages(outputList);
+        }
+        return null;
     }
 
     private long getNumMessagesWithSeverity(Severity severity) {

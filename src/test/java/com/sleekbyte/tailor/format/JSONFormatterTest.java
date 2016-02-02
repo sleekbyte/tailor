@@ -59,8 +59,9 @@ public final class JSONFormatterTest {
         messages.add(new ViolationMessage(Rules.UPPER_CAMEL_CASE, inputFile.getCanonicalPath(),  11, 14,
             Severity.ERROR, ERROR_MSG));
         Collections.sort(messages);
-        formatter.displayViolationMessages(messages);
-        assertEquals(expectedOutput(messages), outContent.toString(Charset.defaultCharset().name()));
+        Map<String, Object> violations = formatter.displayViolationMessages(messages);
+        boolean parsed = true;
+        assertEquals(expectedOutput(messages, parsed), GSON.toJson(violations));
     }
 
     @Test
@@ -70,8 +71,9 @@ public final class JSONFormatterTest {
         output.put(Messages.PATH_KEY, inputFile.getCanonicalPath());
         output.put(Messages.PARSED_KEY, false);
         output.put(Messages.VIOLATIONS_KEY, new ArrayList<>());
-        assertEquals(GSON.toJson(output) + System.lineSeparator(),
-            outContent.toString(Charset.defaultCharset().name()));
+        boolean parsed = false;
+        assertEquals(GSON.toJson(output),
+            expectedOutput(new ArrayList<>(), parsed));
     }
 
     @Test
@@ -107,12 +109,11 @@ public final class JSONFormatterTest {
         assertEquals(ExitCode.FAILURE, formatter.getExitStatus(10));
     }
 
-    private String expectedOutput(List<ViolationMessage> list) throws IOException {
+    private String expectedOutput(List<ViolationMessage> list, boolean parsed) throws IOException {
         Map<String, Object> output = new HashMap<>();
         output.put(Messages.PATH_KEY, inputFile.getCanonicalPath());
-        output.put(Messages.PARSED_KEY, true);
+        ArrayList violations = new ArrayList();
 
-        List<Map<String, Object>> violations = new ArrayList<>();
         for (ViolationMessage msg : list) {
             Map<String, Object> violation = new HashMap<>();
             Map<String, Object> location = new HashMap<>();
@@ -125,7 +126,7 @@ public final class JSONFormatterTest {
             violations.add(violation);
         }
         output.put(Messages.VIOLATIONS_KEY, violations);
-
-        return GSON.toJson(output) + System.lineSeparator();
+        output.put(Messages.PARSED_KEY, parsed);
+        return GSON.toJson(output);
     }
 }
