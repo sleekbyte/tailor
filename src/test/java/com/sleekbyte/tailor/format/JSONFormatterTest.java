@@ -59,9 +59,10 @@ public final class JSONFormatterTest {
         messages.add(new ViolationMessage(Rules.UPPER_CAMEL_CASE, inputFile.getCanonicalPath(),  11, 14,
             Severity.ERROR, ERROR_MSG));
         Collections.sort(messages);
-        Map<String, Object> violations = formatter.displayViolationMessages(messages);
+        formatter.displayViolationMessages(messages, true);
         boolean parsed = true;
-        assertEquals(expectedOutput(messages, parsed), GSON.toJson(violations));
+        assertEquals(expectedOutput(messages, parsed).replaceAll("(\\s|\\t|\\r?\\n)+", ""),
+            outContent.toString(Charset.defaultCharset().name()).replaceAll("(\\s|\\t|\\r?\\n)+", ""));
     }
 
     @Test

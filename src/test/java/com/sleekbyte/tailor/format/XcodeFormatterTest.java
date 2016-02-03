@@ -55,7 +55,7 @@ public final class XcodeFormatterTest {
         messages.add(new ViolationMessage(Rules.UPPER_CAMEL_CASE, inputFile.getCanonicalPath(),  11, 14,
             Severity.ERROR, ERROR_MSG));
         Collections.sort(messages);
-        formatter.displayViolationMessages(messages);
+        formatter.displayViolationMessages(messages, true);
         assertEquals(expectedOutput(messages), outContent.toString(Charset.defaultCharset().name()));
     }
 

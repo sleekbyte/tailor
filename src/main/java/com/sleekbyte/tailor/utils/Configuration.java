@@ -23,7 +23,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 /**
@@ -78,7 +77,7 @@ public final class Configuration {
      * @return Swift file names
      * @throws IOException if path specified does not exist
      */
-    public Set<String> getFilesToAnalyze() throws IOException, CliArgumentParserException {
+    public List<String> getFilesToAnalyze() throws IOException, CliArgumentParserException {
         Optional<String> srcRoot = getSrcRoot();
         List<String> pathNames = new ArrayList<>();
         String[] cliPaths = cmd.getArgs();
@@ -86,7 +85,7 @@ public final class Configuration {
         if (cliPaths.length >= 1) {
             pathNames.addAll(Arrays.asList(cliPaths));
         }
-        Set<String> fileNames = new TreeSet<>();
+        List<String> fileNames = new ArrayList<>();
 
         if (pathNames.size() >= 1) {
             fileNames.addAll(findFilesInPaths(pathNames));
@@ -141,6 +140,17 @@ public final class Configuration {
             throw new CliArgumentParserException("Formatter was not successfully created: " + e);
         }
         return formatter;
+    }
+
+    /**
+     * Checks wether configuration is json.
+     */
+    public boolean expectsJson() {
+        try {
+            return cliArgumentParser.getFormat().getName().equals("json");
+        } catch (CliArgumentParserException e) {
+            return false;
+        }
     }
 
     private static Set<String> findFilesInPaths(List<String> pathNames) throws IOException {

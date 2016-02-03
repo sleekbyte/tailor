@@ -1,7 +1,5 @@
 package com.sleekbyte.tailor;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftLexer;
 import com.sleekbyte.tailor.antlr.SwiftParser;
@@ -13,7 +11,6 @@ import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.format.Formatter;
-import com.sleekbyte.tailor.format.JSONFormatter;
 import com.sleekbyte.tailor.integration.XcodeIntegrator;
 import com.sleekbyte.tailor.listeners.BlankLineListener;
 import com.sleekbyte.tailor.listeners.BraceStyleListener;
@@ -40,10 +37,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -147,7 +142,7 @@ public class Tailor {
      * @throws CliArgumentParserException if an error occurs when parsing cmd line arguments
      * @throws IOException if a file cannot be opened
      */
-    public static void analyzeFiles(Set<String> fileNames) throws CliArgumentParserException, IOException {
+    public static void analyzeFiles(List<String> fileNames) throws CliArgumentParserException, IOException {
         long numErrors = 0;
         long numSkippedFiles = 0;
         long numWarnings = 0;
@@ -156,8 +151,12 @@ public class Tailor {
         ColorSettings colorSettings =
             new ColorSettings(configuration.shouldColorOutput(), configuration.shouldInvertColorOutput());
         Set<Rules> enabledRules = configuration.getEnabledRules();
-        ArrayList<Map<String, Object>> jsonViolations = new ArrayList<Map<String, Object>>();
         Formatter formatter = null;
+        boolean expectsJson = configuration.expectsJson();
+        if (expectsJson) {
+            System.out.println("[");
+        }
+        int lastIndex = fileNames.size() - 1;
         for (String fileName : fileNames) {
             File inputFile = new File(fileName);
             CommonTokenStream tokenStream;
@@ -167,13 +166,13 @@ public class Tailor {
                 tokenStream = getTokenStream(inputFile);
                 tree = getParseTree(tokenStream);
             } catch (ErrorListener.ParseException e) {
-                Printer printer = new Printer(inputFile, maxSeverity, formatter);
+                Printer printer = new Printer(inputFile, maxSeverity, formatter, false);
                 printer.printParseErrorMessage();
                 numSkippedFiles++;
                 continue;
             }
-
-            try (Printer printer = new Printer(inputFile, maxSeverity, formatter)) {
+            boolean lastFile = fileNames.indexOf(fileName) == lastIndex;
+            try (Printer printer = new Printer(inputFile, maxSeverity, formatter, lastFile)) {
                 List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, tokenStream);
                 listeners.add(new MaxLengthListener(printer, constructLengths, enabledRules));
                 listeners.add(new MinLengthListener(printer, constructLengths, enabledRules));
@@ -192,26 +191,18 @@ public class Tailor {
                     fileListener.verify();
                 }
 
-                if (formatter.getClass() == JSONFormatter.class) {
-                    jsonViolations.add(printer.getViolations());
-                }
-
                 numErrors += printer.getNumErrorMessages();
                 numWarnings += printer.getNumWarningMessages();
             }
         }
-
-        if (formatter != null) {
-            if (formatter.getClass() == JSONFormatter.class) {
-                Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-                System.out.println(gson.toJson(jsonViolations));
-            } else {
-                formatter.displaySummary(fileNames.size(), numSkippedFiles, numErrors, numWarnings);
-                // Non-zero exit status when any violation messages have Severity.ERROR, controlled by --max-severity
-                ExitCode exitCode = formatter.getExitStatus(numErrors);
-                if (exitCode != ExitCode.SUCCESS) {
-                    System.exit(exitCode.ordinal());
-                }
+        if (expectsJson) {
+            System.out.println("]");
+        } else if (formatter != null) {
+            formatter.displaySummary(fileNames.size(), numSkippedFiles, numErrors, numWarnings);
+            // Non-zero exit status when any violation messages have Severity.ERROR, controlled by --max-severity
+            ExitCode exitCode = formatter.getExitStatus(numErrors);
+            if (exitCode != ExitCode.SUCCESS) {
+                System.exit(exitCode.ordinal());
             }
         }
     }
@@ -245,7 +236,7 @@ public class Tailor {
                 System.exit(XcodeIntegrator.setupXcode(xcodeprojPath));
             }
 
-            Set<String> fileNames = configuration.getFilesToAnalyze();
+            List<String> fileNames = configuration.getFilesToAnalyze();
             if (fileNames.size() == 0) {
                 exitWithNoSourceFilesError();
             }

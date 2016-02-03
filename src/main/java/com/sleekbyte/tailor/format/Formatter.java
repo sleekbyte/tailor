@@ -7,7 +7,6 @@ import com.sleekbyte.tailor.output.ViolationMessage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Formatter used to display violation messages.
@@ -29,14 +28,14 @@ public abstract class Formatter {
      * @param violationMessages list of violation messages to print
      * @throws IOException if canonical path could not be retrieved from the inputFile
      */
-    public abstract Map<String, Object> displayViolationMessages(List<ViolationMessage> violationMessages)
+    public abstract void displayViolationMessages(List<ViolationMessage> violationMessages, boolean lastFile)
                                         throws IOException;
 
     /**
      * Print a message to the console indicating that the file failed to be parsed.
      * @throws IOException if canonical path could not be retrieved from the inputFile
      */
-    public abstract Map<String, Object> displayParseErrorMessage() throws IOException;
+    public abstract void displayParseErrorMessage() throws IOException;
 
     /**
      * Print a message to the console stating the analysis and violation statistics for a given number of files.

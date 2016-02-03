@@ -111,8 +111,8 @@ public final class FormatTest {
         ArrayList expectedJSONOutputList = new ArrayList();
         expectedJSONOutputList.add(expectedJSONOutput);
 
-        assertEquals(msgs.replaceAll("(\\t|\\r?\\n)+", ""),
-            GSON.toJson(expectedJSONOutputList).replaceAll("(\\t|\\r?\\n)+", ""));
+        assertEquals(msgs.replaceAll("(\\s|\\t|\\r?\\n)+", ""),
+            GSON.toJson(expectedJSONOutputList).replaceAll("(\\s|\\t|\\r?\\n)+", ""));
     }
 
     protected void addAllExpectedMsgs(Format format) {
