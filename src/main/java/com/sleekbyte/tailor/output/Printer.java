@@ -26,6 +26,7 @@ public final class Printer implements AutoCloseable {
     private File inputFile;
     private Severity maxSeverity;
     private Formatter formatter;
+    private boolean lastFile;
     private Map<String, ViolationMessage> msgBuffer = new HashMap<>();
     private Set<Integer> ignoredLineNumbers = new HashSet<>();
 
@@ -36,10 +37,11 @@ public final class Printer implements AutoCloseable {
      * @param maxSeverity The maximum severity of any emitted violation messages
      * @param formatter Format to print in
      */
-    public Printer(File inputFile, Severity maxSeverity, Formatter formatter) {
+    public Printer(File inputFile, Severity maxSeverity, Formatter formatter, boolean lastFile) {
         this.inputFile = inputFile;
         this.maxSeverity = maxSeverity;
         this.formatter = formatter;
+        this.lastFile = lastFile;
     }
 
     /**
@@ -94,7 +96,7 @@ public final class Printer implements AutoCloseable {
         List<ViolationMessage> outputList = new ArrayList<>(this.getViolationMessages().stream()
             .filter(msg -> !ignoredLineNumbers.contains(msg.getLineNumber())).collect(Collectors.toList()));
         Collections.sort(outputList);
-        formatter.displayViolationMessages(outputList);
+        formatter.displayViolationMessages(outputList, lastFile);
     }
 
     private long getNumMessagesWithSeverity(Severity severity) {

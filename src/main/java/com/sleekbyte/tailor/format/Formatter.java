@@ -28,7 +28,8 @@ public abstract class Formatter {
      * @param violationMessages list of violation messages to print
      * @throws IOException if canonical path could not be retrieved from the inputFile
      */
-    public abstract void displayViolationMessages(List<ViolationMessage> violationMessages) throws IOException;
+    public abstract void displayViolationMessages(List<ViolationMessage> violationMessages, boolean lastFile)
+                                        throws IOException;
 
     /**
      * Print a message to the console indicating that the file failed to be parsed.

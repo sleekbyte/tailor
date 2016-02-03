@@ -1,6 +1,7 @@
 package com.sleekbyte.tailor.functional;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,7 +27,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 /**
  * Tests for {@link Tailor} output formats.
@@ -41,11 +41,15 @@ public final class FormatTest {
     protected ByteArrayOutputStream outContent;
     protected File inputFile;
     protected List<String> expectedMessages;
+    protected Map<String, Object> expectedJSONOutput;
 
     @Before
     public void setUp() throws IOException {
         inputFile = new File(TEST_INPUT_DIR + "/UpperCamelCaseTest.swift");
         expectedMessages = new ArrayList<>();
+        expectedJSONOutput = new HashMap<>();
+        expectedJSONOutput.put(Messages.PATH_KEY, inputFile.getCanonicalPath());
+        expectedJSONOutput.put(Messages.VIOLATIONS_KEY, new ArrayList<>());
         outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent, false, Charset.defaultCharset().name()));
     }
@@ -97,31 +101,18 @@ public final class FormatTest {
         };
 
         addAllExpectedMsgs(format);
-        expectedMessages.addAll(Arrays.asList(getJSONSummary(1, 0, 0, 22).split(NEWLINE_REGEX)));
 
         Tailor.main(command);
 
-        List<String> actualOutput = new ArrayList<>();
+        String msgs = outContent.toString(Charset.defaultCharset().name());
 
-        String[] msgs = outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
+        expectedJSONOutput.put("parsed", true);
 
-        // Skip first three lines for path and JSON array start, three lines before summary
-        String[] violations = Arrays.copyOfRange(msgs, 3, msgs.length - 12);
-        String[] summary = Arrays.copyOfRange(msgs, msgs.length - 9, msgs.length);
-        msgs = Stream.concat(Arrays.stream(violations), Arrays.stream(summary)).toArray(String[]::new);
+        ArrayList expectedJSONOutputList = new ArrayList();
+        expectedJSONOutputList.add(expectedJSONOutput);
 
-        List<String> expectedOutput = new ArrayList<>();
-        for (String msg : expectedMessages) {
-            String trimmedMsg = msg.trim().replaceAll(",", "");
-            expectedOutput.add(trimmedMsg);
-        }
-        for (String msg : msgs) {
-            String trimmedMsg = msg.trim().replaceAll(",", "");
-            actualOutput.add(trimmedMsg);
-        }
-
-        assertArrayEquals(outContent.toString(Charset.defaultCharset().name()), expectedOutput.toArray(),
-            actualOutput.toArray());
+        assertEquals(msgs.replaceAll("(\\s|\\t|\\r?\\n)+", ""),
+            GSON.toJson(expectedJSONOutputList).replaceAll("(\\s|\\t|\\r?\\n)+", ""));
     }
 
     protected void addAllExpectedMsgs(Format format) {
@@ -157,6 +148,7 @@ public final class FormatTest {
                         line, column, severity, msg + Messages.UPPER_CAMEL_CASE));
                 break;
             case JSON:
+
                 Map<String, Object> violation = new HashMap<>();
                 Map<String, Object> location = new HashMap<>();
                 location.put(Messages.LINE_KEY, line);
@@ -165,8 +157,7 @@ public final class FormatTest {
                 violation.put(Messages.SEVERITY_KEY, severity.toString());
                 violation.put(Messages.RULE_KEY, Rules.UPPER_CAMEL_CASE.getName());
                 violation.put(Messages.MESSAGE_KEY, msg + Messages.UPPER_CAMEL_CASE);
-                String violationString = GSON.toJson(violation) + System.lineSeparator();
-                expectedMessages.addAll(Arrays.asList(violationString.split(NEWLINE_REGEX)));
+                ((ArrayList)expectedJSONOutput.get(Messages.VIOLATIONS_KEY)).add(violation);
                 break;
             default:
                 break;
@@ -183,6 +174,10 @@ public final class FormatTest {
         Map<String, Object> output = new HashMap<>();
         output.put(Messages.SUMMARY_KEY, summary);
         return GSON.toJson(output) + System.lineSeparator();
+    }
+
+    private static int countSubstring(String subStr, String str) {
+        return (str.length() - str.replace(subStr, "").length()) / subStr.length();
     }
 
 }

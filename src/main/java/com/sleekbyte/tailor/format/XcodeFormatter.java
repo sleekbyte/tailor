@@ -48,7 +48,8 @@ public final class XcodeFormatter extends Formatter {
     }
 
     @Override
-    public void displayViolationMessages(List<ViolationMessage> violationMessages) throws IOException {
+    public void displayViolationMessages(List<ViolationMessage> violationMessages, boolean lastFile)
+                throws IOException {
         if (violationMessages.size() > 0) {
             printColoredMessage(getHeader(inputFile, colorSettings));
         }

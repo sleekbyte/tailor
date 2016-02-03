@@ -52,7 +52,7 @@ public class FileListenerTest {
         inputFile = folder.newFile(method.getName() + "-" + INPUT_FILE);
         formatter = new XcodeFormatter(inputFile, new ColorSettings(false, false));
 
-        printer = new Printer(inputFile, Severity.WARNING, formatter);
+        printer = new Printer(inputFile, Severity.WARNING, formatter, true);
         writer = new PrintWriter(inputFile, Charset.defaultCharset().name());
         enabledRules = new HashSet<>(
             Arrays.asList(Rules.TERMINATING_NEWLINE, Rules.LEADING_WHITESPACE, Rules.TRAILING_WHITESPACE,

@@ -29,15 +29,15 @@ public class PrinterTest {
 
     private File inputFile = new File("abc.swift");
     private Formatter formatter = mock(Formatter.class);
-    private Printer printer = new Printer(inputFile, Severity.ERROR, formatter);
-    private Printer warnPrinter = new Printer(inputFile, Severity.WARNING, formatter);
+    private Printer printer = new Printer(inputFile, Severity.ERROR, formatter, true);
+    private Printer warnPrinter = new Printer(inputFile, Severity.WARNING, formatter, true);
 
     @Test
     public void testFormatterDisplayMessage() throws IOException {
         printer.error(Rules.LOWER_CAMEL_CASE, ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         List<ViolationMessage> violationsMessage = printer.getViolationMessages();
         printer.close();
-        verify(formatter).displayViolationMessages(violationsMessage);
+        verify(formatter).displayViolationMessages(violationsMessage, true);
     }
 
     @Test

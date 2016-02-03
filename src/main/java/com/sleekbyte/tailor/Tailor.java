@@ -142,7 +142,7 @@ public class Tailor {
      * @throws CliArgumentParserException if an error occurs when parsing cmd line arguments
      * @throws IOException if a file cannot be opened
      */
-    public static void analyzeFiles(Set<String> fileNames) throws CliArgumentParserException, IOException {
+    public static void analyzeFiles(List<String> fileNames) throws CliArgumentParserException, IOException {
         long numErrors = 0;
         long numSkippedFiles = 0;
         long numWarnings = 0;
@@ -152,24 +152,27 @@ public class Tailor {
             new ColorSettings(configuration.shouldColorOutput(), configuration.shouldInvertColorOutput());
         Set<Rules> enabledRules = configuration.getEnabledRules();
         Formatter formatter = null;
-
+        boolean expectsJson = configuration.expectsJson();
+        if (expectsJson) {
+            System.out.println("[");
+        }
+        int lastIndex = fileNames.size() - 1;
         for (String fileName : fileNames) {
             File inputFile = new File(fileName);
             CommonTokenStream tokenStream;
             SwiftParser.TopLevelContext tree;
             formatter = configuration.getFormatter(inputFile, colorSettings);
-
             try {
                 tokenStream = getTokenStream(inputFile);
                 tree = getParseTree(tokenStream);
             } catch (ErrorListener.ParseException e) {
-                Printer printer = new Printer(inputFile, maxSeverity, formatter);
+                Printer printer = new Printer(inputFile, maxSeverity, formatter, false);
                 printer.printParseErrorMessage();
                 numSkippedFiles++;
                 continue;
             }
-
-            try (Printer printer = new Printer(inputFile, maxSeverity, formatter)) {
+            boolean lastFile = fileNames.indexOf(fileName) == lastIndex;
+            try (Printer printer = new Printer(inputFile, maxSeverity, formatter, lastFile)) {
                 List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, tokenStream);
                 listeners.add(new MaxLengthListener(printer, constructLengths, enabledRules));
                 listeners.add(new MinLengthListener(printer, constructLengths, enabledRules));
@@ -192,8 +195,9 @@ public class Tailor {
                 numWarnings += printer.getNumWarningMessages();
             }
         }
-
-        if (formatter != null) {
+        if (expectsJson) {
+            System.out.println("]");
+        } else if (formatter != null) {
             formatter.displaySummary(fileNames.size(), numSkippedFiles, numErrors, numWarnings);
             // Non-zero exit status when any violation messages have Severity.ERROR, controlled by --max-severity
             ExitCode exitCode = formatter.getExitStatus(numErrors);
@@ -232,7 +236,7 @@ public class Tailor {
                 System.exit(XcodeIntegrator.setupXcode(xcodeprojPath));
             }
 
-            Set<String> fileNames = configuration.getFilesToAnalyze();
+            List<String> fileNames = configuration.getFilesToAnalyze();
             if (fileNames.size() == 0) {
                 exitWithNoSourceFilesError();
             }
