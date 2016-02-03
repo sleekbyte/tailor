@@ -2,7 +2,6 @@ package com.sleekbyte.tailor.utils;
 
 import com.sleekbyte.tailor.common.ConstructLengths;
 import com.sleekbyte.tailor.common.Messages;
-import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.format.Format;
 import org.apache.commons.cli.CommandLine;
@@ -16,7 +15,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Parse command line options and arguments.
@@ -240,39 +238,14 @@ public class CliArgumentParser {
         }
     }
 
-    /*
-     * Check if "--only" or "--except" option was specified.
-     */
-    public boolean hasSpecifiedExceptOnlyOption() {
-        return cmd.hasOption(ONLY_OPT) || cmd.hasOption(EXCEPT_OPT);
+    public Set<String> getOnlySpecificRules() {
+        return cmd.hasOption(ONLY_OPT) ? new HashSet<>(Arrays.asList(cmd.getOptionValues(ONLY_OPT)))
+                                       : new HashSet<>();
     }
 
-    /**
-     * Collects all rules enabled by default and then filters out rules according to command line options.
-     *
-     * @return list of enabled rules after filtering
-     * @throws CliArgumentParserException if rule names specified in command line options are not valid
-     */
-    public Set<Rules> getEnabledRules() throws CliArgumentParserException {
-        Set<Rules> enabledRules = new HashSet<>(Arrays.asList(Rules.values()));
-        Set<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toSet());
-
-        // ONLY_OPT before EXCEPT_OPT gives precedence to ONLY_OPT if both are specified on the command line
-        if (cmd.hasOption(ONLY_OPT)) {
-            Set<String> onlySpecificRules = new HashSet<>(Arrays.asList(cmd.getOptionValues(ONLY_OPT)));
-            Configuration.checkValidRules(enabledRuleNames, onlySpecificRules);
-
-            return enabledRules.stream()
-                .filter(rule -> onlySpecificRules.contains(rule.getName())).collect(Collectors.toSet());
-        } else if (cmd.hasOption(EXCEPT_OPT)) {
-            Set<String> excludedRules = new HashSet<>(Arrays.asList(cmd.getOptionValues(EXCEPT_OPT)));
-            Configuration.checkValidRules(enabledRuleNames, excludedRules);
-
-            return enabledRules.stream()
-                .filter(rule -> !excludedRules.contains(rule.getName())).collect(Collectors.toSet());
-        }
-
-        return enabledRules;
+    public Set<String> getExcludedRules() {
+        return cmd.hasOption(EXCEPT_OPT) ? new HashSet<>(Arrays.asList(cmd.getOptionValues(EXCEPT_OPT)))
+                                         : new HashSet<>();
     }
 
     /*

@@ -76,27 +76,50 @@ public final class Configuration {
      * @throws CliArgumentParserException if rule names specified in command line options are not valid
      */
     public Set<Rules> getEnabledRules() throws CliArgumentParserException {
-        if (cliArgumentParser.hasSpecifiedExceptOnlyOption()) {
-            return cliArgumentParser.getEnabledRules();
+        // --only is given precedence over --except
+        // CLI input is given precedence over YAML configuration file
+
+        // Retrieve included or excluded rules from CLI
+        Set<String> onlySpecificRules = cliArgumentParser.getOnlySpecificRules();
+        if (onlySpecificRules.size() > 0) {
+            return getRulesFilteredByOnly(onlySpecificRules);
         }
-        Set<Rules> enabledRules = new HashSet<>(Arrays.asList(Rules.values()));
-        Set<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toSet());
+
+        Set<String> excludedRules = cliArgumentParser.getExcludedRules();
+        if (excludedRules.size() > 0) {
+            return getRulesFilteredByExcept(excludedRules);
+        }
+
+        // Retrieve included or excluded rules from YAML configuration
         if (yamlConfiguration.isPresent()) {
             YamlConfiguration configuration = yamlConfiguration.get();
-            Set<String> onlySpecificRules = configuration.getOnly();
-            Configuration.checkValidRules(enabledRuleNames, onlySpecificRules);
+            onlySpecificRules = configuration.getOnly();
             if (onlySpecificRules.size() > 0) {
-                return enabledRules.stream()
-                    .filter(rule -> onlySpecificRules.contains(rule.getName())).collect(Collectors.toSet());
+                return getRulesFilteredByOnly(onlySpecificRules);
             }
-            Set<String> excludedRules = configuration.getExcept();
-            Configuration.checkValidRules(enabledRuleNames, excludedRules);
+
+            excludedRules = configuration.getExcept();
             if (excludedRules.size() > 0) {
-                return enabledRules.stream()
-                    .filter(rule -> !excludedRules.contains(rule.getName())).collect(Collectors.toSet());
+                return getRulesFilteredByExcept(excludedRules);
             }
         }
-        return enabledRules;
+
+        // If `only`/`except` options aren't used then enable all rules
+        return new HashSet<>(Arrays.asList(Rules.values()));
+    }
+
+    private Set<Rules> getRulesFilteredByOnly(Set<String> parsedRules) throws CliArgumentParserException {
+        Set<Rules> enabledRules = new HashSet<>(Arrays.asList(Rules.values()));
+        Set<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toSet());
+        Configuration.checkValidRules(enabledRuleNames, parsedRules);
+        return enabledRules.stream().filter(rule -> parsedRules.contains(rule.getName())).collect(Collectors.toSet());
+    }
+
+    private Set<Rules> getRulesFilteredByExcept(Set<String> parsedRules) throws CliArgumentParserException {
+        Set<Rules> enabledRules = new HashSet<>(Arrays.asList(Rules.values()));
+        Set<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toSet());
+        Configuration.checkValidRules(enabledRuleNames, parsedRules);
+        return enabledRules.stream().filter(rule -> !parsedRules.contains(rule.getName())).collect(Collectors.toSet());
     }
 
     /**
@@ -208,7 +231,7 @@ public final class Configuration {
      * @param specifiedRules rule names specified from command line
      * @throws CliArgumentParserException if rule name specified in command line is not valid
      */
-    public static void checkValidRules(Set<String> enabledRules, Set<String> specifiedRules)
+    private static void checkValidRules(Set<String> enabledRules, Set<String> specifiedRules)
         throws CliArgumentParserException {
         if (!enabledRules.containsAll(specifiedRules)) {
             specifiedRules.removeAll(enabledRules);
