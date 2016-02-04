@@ -210,7 +210,11 @@ import Foundation; // tailor:disable
 ```
 
 ### Configuration
-The behavior of Tailor can be customized via the `.tailor.yml` configuration file. It enables you to include/exclude certain files and directories from analysis. You can tell Tailor which configuration file to use by specifying its file path via the `--config` CLI option. By default, Tailor will look for the configuration file in the directory where you will run Tailor from.
+The behavior of Tailor can be customized via the `.tailor.yml` configuration file. It enables you to 
+* include/exclude certain files and directories from analysis 
+* enable and disable specific analysis rules
+
+You can tell Tailor which configuration file to use by specifying its file path via the `--config` CLI option. By default, Tailor will look for the configuration file in the directory where you will run Tailor from.
 
 The file follows the [YAML 1.1](http://www.yaml.org/spec/1.1/) format.
 
@@ -232,6 +236,31 @@ exclude:
 * Paths to directories or Swift files provided explicitly via CLI will cause the `include`/`exclude` rules specified in `.tailor.yml` to be ignored
 * *Exclude* is given higher precedence than *Include*
 * Tailor recognizes the [Java Glob](https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob) syntax
+
+#### Enabling/Disabling rules
+Tailor allows you to individually disable (blacklist) or enable (whitelist) rules via the `except` and `only` labels.
+
+Here is an example showcasing how to enable certain rules:
+```YAML
+# Tailor will solely check for violations to the following rules
+only:
+    - upper-camel-case
+    - trailing-closure
+    - forced-type-cast
+    - redundant-parentheses
+```
+
+Here is an example showcasing how to disable certain rules:
+```YAML
+# Tailor will check for violations to all rules except for the following ones
+except:
+    - parenthesis-whitespace
+    - lower-camel-case
+```
+
+##### Notes
+* *only* is given precedence over *except*
+* Rules that are explicitly included/excluded via CLI will cause the `only`/`except` rules specified in `.tailor.yml` to be ignored
 
 ### Formatters
 
