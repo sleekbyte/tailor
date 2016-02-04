@@ -27,6 +27,7 @@ import com.sleekbyte.tailor.listeners.whitespace.CommentWhitespaceListener;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ArgumentParser;
 import com.sleekbyte.tailor.utils.ArgumentParser.ArgumentParserException;
+import com.sleekbyte.tailor.utils.CliArgumentParser;
 import com.sleekbyte.tailor.utils.CliArgumentParserException;
 import com.sleekbyte.tailor.utils.CommentExtractor;
 import com.sleekbyte.tailor.utils.Configuration;
@@ -53,8 +54,7 @@ import java.util.stream.Collectors;
  */
 public class Tailor {
 
-    private static ArgumentParser argumentParser = new ArgumentParser();
-    private static List<String> pathNames;
+    private static CliArgumentParser argumentParser = new CliArgumentParser();
     private static long numSkippedFiles = 0;
     private static long numErrors = 0;
     private static long numWarnings = 0;
@@ -140,7 +140,7 @@ public class Tailor {
             return Optional.of(new CommonTokenStream(lexer));
         } catch (IOException e) {
             handleIoException(e);
-        } catch (ArgumentParserException e) {
+        } catch (CliArgumentParserException e) {
             handleCliException(e);
         }
         return Optional.empty();
@@ -165,7 +165,7 @@ public class Tailor {
                 swiftParser.addErrorListener(new ErrorListener());
             }
             tree = Optional.of(swiftParser.topLevel());
-        } catch (ArgumentParserException e) {
+        } catch (CliArgumentParserException e) {
             handleCliException(e);
         }
         return tree;
@@ -191,49 +191,35 @@ public class Tailor {
     /**
      * Analyzes an individual file by creating the corresponding listeners and walking the file's parse tree.
      *
-     * @param fileNames List of files to analyze
+     * @param inputFile File to analyze.
+     * @param optTokenStream Common token stream for input file.
+     * @param optTree Parse tree for input file.
      * @throws CliArgumentParserException if an error occurs when parsing cmd line arguments
-     * @throws IOException if a file cannot be opened
      */
-    public static void analyzeFiles(Set<String> fileNames) throws CliArgumentParserException, IOException {
-        long numErrors = 0;
-        long numSkippedFiles = 0;
-        long numWarnings = 0;
+    public static void analyzeFile(File inputFile, Optional<CommonTokenStream> optTokenStream,
+                                   Optional<TopLevelContext> optTree)
+        throws CliArgumentParserException {
+
         ConstructLengths constructLengths = configuration.parseConstructLengths();
         Severity maxSeverity = configuration.getMaxSeverity();
-        ColorSettings colorSettings =
-            new ColorSettings(configuration.shouldColorOutput(), configuration.shouldInvertColorOutput());
         Set<Rules> enabledRules = configuration.getEnabledRules();
         Formatter formatter = null;
 
-        for (String fileName : fileNames) {
-            File inputFile = new File(fileName);
-            CommonTokenStream tokenStream;
-            SwiftParser.TopLevelContext tree;
-            formatter = configuration.getFormatter(inputFile, colorSettings);
-
-            try {
-                tokenStream = getTokenStream(inputFile);
-                tree = getParseTree(tokenStream);
-            } catch (ErrorListener.ParseException e) {
-                Printer printer = new Printer(inputFile, maxSeverity, formatter);
-                printer.printParseErrorMessage();
-                numSkippedFiles++;
-                continue;
-            }
-
+        try {
             try (Printer printer = new Printer(inputFile, maxSeverity, formatter)) {
-                List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, tokenStream);
-                listeners.add(new MaxLengthListener(printer, constructLengths, enabledRules));
-                listeners.add(new MinLengthListener(printer, constructLengths, enabledRules));
-                DeclarationListener decListener = new DeclarationListener(listeners);
-                listeners.add(decListener);
-
-                ParseTreeWalker walker = new ParseTreeWalker();
-                for (SwiftBaseListener listener : listeners) {
-                    // The following listeners are used by DeclarationListener to walk the tree
-                    if (listener instanceof ConstantNamingListener || listener instanceof KPrefixListener) {
-                        continue;
+                if (optTokenStream.isPresent() && optTree.isPresent()) {
+                    CommonTokenStream tokenStream = optTokenStream.get();
+                    TopLevelContext tree = optTree.get();
+                    List<SwiftBaseListener> listeners = createListeners(
+                        enabledRules,
+                        printer,
+                        tokenStream,
+                        constructLengths
+                    );
+                    walkParseTree(listeners, tree);
+                    try (FileListener fileListener =
+                             new FileListener(printer, inputFile, constructLengths, enabledRules)) {
+                        fileListener.verify();
                     }
 
                     numErrors += printer.getNumErrorMessages();
@@ -244,7 +230,7 @@ public class Tailor {
             }
         } catch (IOException e) {
             handleIoException(e);
-        } catch (ArgumentParserException e) {
+        } catch (CliArgumentParserException e) {
             handleCliException(e);
         }
     }
@@ -253,17 +239,17 @@ public class Tailor {
      * Analyze files with SwiftLexer, SwiftParser and Listeners.
      *
      * @param fileNames List of files to analyze
-     * @throws ArgumentParserException if an error occurs when parsing cmd line arguments
+     * @throws CliArgumentParserException if an error occurs when parsing cmd line arguments
      * @throws IOException if a file cannot be opened
      */
-    public static void analyzeFiles(Set<String> fileNames) throws ArgumentParserException, IOException {
+    public static void analyzeFiles(Set<String> fileNames) throws CliArgumentParserException, IOException {
         numErrors = 0;
         numWarnings = 0;
 
         List<File> files = fileNames.parallelStream().map(File::new).collect(Collectors.toList());
         ConcurrentMap<File, Optional<CommonTokenStream>> filesToTokenStreams =
             files.parallelStream().collect(Collectors.toConcurrentMap(Function.identity(), Tailor::getTokenStream));
-        System.out.format("Analyzing %s:%n", pluralize(fileNames.size(), "file", "files"));
+        System.out.format("Analyzing %s:%n", formatter.pluralize(fileNames.size(), "file", "files"));
         ConcurrentMap<File, Optional<TopLevelContext>> filesToTrees = files
             .parallelStream()
             .collect(Collectors.toConcurrentMap(Function.identity(),
@@ -283,7 +269,7 @@ public class Tailor {
             file -> {
                 try {
                     Tailor.analyzeFile(file, filesToTokenStreams.get(file), filesToTrees.get(file));
-                } catch (ArgumentParserException e) {
+                } catch (CliArgumentParserException e) {
                     handleCliException(e);
                 }
             });
