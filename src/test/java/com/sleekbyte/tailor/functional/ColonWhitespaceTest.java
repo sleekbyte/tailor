@@ -99,9 +99,10 @@ public class ColonWhitespaceTest extends RuleTest {
         addExpectedMessage(start + 2, 15, Messages.SPACE_AFTER);
         addExpectedMessage(start + 4, 30, Messages.SPACE_BEFORE);
         addExpectedMessage(start + 5, 31, Messages.SPACE_AFTER);
+        addExpectedMessage(start + 7, 52, Messages.SPACE_BEFORE);
 
         // tuples
-        start = 165;
+        start = 167;
         addExpectedMessage(start + 1, 33, Messages.NO_SPACE_BEFORE);
         addExpectedMessage(start + 1, 51, Messages.SPACE_AFTER);
         addExpectedMessage(start + 2, 32, Messages.SPACE_AFTER);
@@ -109,7 +110,7 @@ public class ColonWhitespaceTest extends RuleTest {
         addExpectedMessage(start + 3, 83, Messages.SPACE_AFTER);
 
         // generics
-        start = 170;
+        start = 172;
         addExpectedMessage(start + 3, 21, Messages.NO_SPACE_BEFORE);
         addExpectedMessage(start + 3, 35, Messages.SPACE_AFTER);
         addExpectedMessage(start + 6, 20, Messages.SPACE_AFTER);

@@ -161,6 +161,8 @@ a != nil ? a! :  b
 let light = status ? getRed() : getGreen()
 let light = status ? getRed(): getGreen()
 let light = status ? getRed() :  getGreen()
+let boolValue = lhs.boolValue ? try rhs().boolValue : false
+let boolValue = lhs.boolValue ? try rhs().boolValue: false
 
 let http200Status = (statusCode: 200, description: "OK")
 let http200Status = (statusCode : 200, description:"OK")

@@ -4,6 +4,7 @@ import com.sleekbyte.tailor.common.ConstructLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
+import com.sleekbyte.tailor.format.Format;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 /**
  * Parse command line options and arguments.
  */
-public class ArgumentParser {
+public class CliArgumentParser {
 
     private static final String SYNTAX_PREFIX = "Usage: ";
     private static final String OPTIONS_PREFIX = "Options:";
@@ -53,6 +54,9 @@ public class ArgumentParser {
     private static final String CONFIG_SHORT_OPT = "c";
     private static final String CONFIG_LONG_OPT = "config";
     private static final String LIST_FILES_OPT = "list-files";
+    private static final String FORMAT_SHORT_OPT = "f";
+    private static final String FORMAT_LONG_OPT = "format";
+    public static final String INVALID_OPTION_VALUE = "Invalid value provided for option ";
 
     private Options options;
     private CommandLine cmd;
@@ -119,7 +123,7 @@ public class ArgumentParser {
     /**
      * Parse construct length flags into ConstructLengths object.
      */
-    public ConstructLengths parseConstructLengths() throws ArgumentParserException {
+    public ConstructLengths parseConstructLengths() throws CliArgumentParserException {
         ConstructLengths constructLengths = new ConstructLengths();
 
         constructLengths.setMaxClassLength(getIntegerArgument(MAX_CLASS_LENGTH_OPT));
@@ -176,6 +180,9 @@ public class ArgumentParser {
         options.addOption(createSingleArgOpt(CONFIG_SHORT_OPT, CONFIG_LONG_OPT, argName, Messages.CONFIG_FILE_DESC));
 
         options.addOption(createNoArgOpt(LIST_FILES_OPT, Messages.LIST_FILES_DESC));
+
+        argName = Format.getFormats();
+        options.addOption(createSingleArgOpt(FORMAT_SHORT_OPT, FORMAT_LONG_OPT, argName, Messages.FORMAT_DESC));
     }
 
     /**
@@ -234,11 +241,11 @@ public class ArgumentParser {
         return Option.builder().longOpt(longOpt).hasArgs().argName(argName).valueSeparator(',').desc(desc).build();
     }
 
-    private int getIntegerArgument(String opt) throws ArgumentParserException {
+    private int getIntegerArgument(String opt) throws CliArgumentParserException {
         try {
             return Integer.parseInt(this.cmd.getOptionValue(opt, DEFAULT_INT_ARG));
         } catch (NumberFormatException e) {
-            throw new ArgumentParserException("Invalid value provided for integer argument " + opt + ".");
+            throw new CliArgumentParserException("Invalid value provided for integer argument " + opt + ".");
         }
     }
 
@@ -246,9 +253,9 @@ public class ArgumentParser {
      * Collects all rules enabled by default and then filters out rules according to command line options.
      *
      * @return list of enabled rules after filtering
-     * @throws ArgumentParserException if rule names specified in command line options are not valid
+     * @throws CliArgumentParserException if rule names specified in command line options are not valid
      */
-    public Set<Rules> getEnabledRules() throws ArgumentParserException {
+    public Set<Rules> getEnabledRules() throws CliArgumentParserException {
         Set<Rules> enabledRules = new HashSet<>(Arrays.asList(Rules.values()));
         Set<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toSet());
 
@@ -275,13 +282,13 @@ public class ArgumentParser {
      *
      * @param enabledRules   all valid rule names
      * @param specifiedRules rule names specified from command line
-     * @throws ArgumentParserException if rule name specified in command line is not valid
+     * @throws CliArgumentParserException if rule name specified in command line is not valid
      */
     private void checkValidRules(Set<String> enabledRules, Set<String> specifiedRules)
-        throws ArgumentParserException {
+        throws CliArgumentParserException {
         if (!enabledRules.containsAll(specifiedRules)) {
             specifiedRules.removeAll(enabledRules);
-            throw new ArgumentParserException("The following rules were not recognized: " + specifiedRules);
+            throw new CliArgumentParserException("The following rules were not recognized: " + specifiedRules);
         }
     }
 
@@ -307,17 +314,17 @@ public class ArgumentParser {
      * Returns maximum severity configured by user or 'warning' if not specified.
      *
      * @return Maximum severity
-     * @throws ArgumentParserException if invalid value specified for --max-severity
+     * @throws CliArgumentParserException if invalid value specified for --max-severity
      */
-    public Severity getMaxSeverity() throws ArgumentParserException {
+    public Severity getMaxSeverity() throws CliArgumentParserException {
         try {
             return Severity.parseSeverity(this.cmd.getOptionValue(MAX_SEVERITY_OPT, Messages.WARNING));
         } catch (Severity.IllegalSeverityException ex) {
-            throw new ArgumentParserException("Invalid value provided for argument " + MAX_SEVERITY_OPT + ".");
+            throw new CliArgumentParserException(INVALID_OPTION_VALUE + MAX_SEVERITY_OPT + ".");
         }
     }
 
-    public boolean debugFlagSet() throws ArgumentParserException {
+    public boolean debugFlagSet() throws CliArgumentParserException {
         return cmd != null && cmd.hasOption(DEBUG_OPT);
     }
 
@@ -327,5 +334,21 @@ public class ArgumentParser {
 
     public boolean shouldInvertColorOutput() {
         return cmd != null && cmd.hasOption(INVERT_COLOR_OPT);
+    }
+
+    /**
+     * Returns format specified by user, defaults to Xcode format.
+     * @return Format type
+     */
+    public Format getFormat() throws CliArgumentParserException {
+        if (cmd != null) {
+            try {
+                return Format.parseFormat(cmd.getOptionValue(FORMAT_LONG_OPT, Format.XCODE.getName()));
+            } catch (Format.IllegalFormatException e) {
+                throw new CliArgumentParserException(INVALID_OPTION_VALUE + FORMAT_LONG_OPT + "."
+                    + " Options are <" + Format.getFormats() + ">.");
+            }
+        }
+        return Format.XCODE;
     }
 }

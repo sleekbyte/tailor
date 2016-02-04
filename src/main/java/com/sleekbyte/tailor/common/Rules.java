@@ -12,6 +12,7 @@ import com.sleekbyte.tailor.listeners.OptionalBindingListener;
 import com.sleekbyte.tailor.listeners.RedundantParenthesesListener;
 import com.sleekbyte.tailor.listeners.SemicolonTerminatedListener;
 import com.sleekbyte.tailor.listeners.TodoCommentListener;
+import com.sleekbyte.tailor.listeners.TrailingClosureListener;
 import com.sleekbyte.tailor.listeners.UpperCamelCaseListener;
 import com.sleekbyte.tailor.listeners.whitespace.AngleBracketWhitespaceListener;
 import com.sleekbyte.tailor.listeners.whitespace.ArrowWhitespaceListener;
@@ -20,7 +21,7 @@ import com.sleekbyte.tailor.listeners.whitespace.CommaWhitespaceListener;
 import com.sleekbyte.tailor.listeners.whitespace.CommentWhitespaceListener;
 import com.sleekbyte.tailor.listeners.whitespace.OperatorWhitespaceListener;
 import com.sleekbyte.tailor.listeners.whitespace.ParenthesisWhitespaceListener;
-import com.sleekbyte.tailor.utils.ArgumentParser;
+import com.sleekbyte.tailor.utils.CliArgumentParser;
 
 /**
  * Enum for all rules implemented in Tailor.
@@ -54,6 +55,7 @@ public enum Rules {
     TERMINATING_NEWLINE,
     TERMINATING_SEMICOLON,
     TODO_SYNTAX,
+    TRAILING_CLOSURE,
     TRAILING_WHITESPACE,
     UPPER_CAMEL_CASE;
 
@@ -131,35 +133,35 @@ public enum Rules {
         LOWER_CAMEL_CASE.description = "Method and variable names should follow lowerCamelCase naming convention.";
         LOWER_CAMEL_CASE.className = LowerCamelCaseListener.class.getName();
 
-        MAX_CLASS_LENGTH.name = ArgumentParser.MAX_CLASS_LENGTH_OPT;
+        MAX_CLASS_LENGTH.name = CliArgumentParser.MAX_CLASS_LENGTH_OPT;
         MAX_CLASS_LENGTH.description = "Enforce a line limit on the lengths of class bodies.";
         MAX_CLASS_LENGTH.className = FileListener.class.getName();
 
-        MAX_CLOSURE_LENGTH.name = ArgumentParser.MAX_CLOSURE_LENGTH_OPT;
+        MAX_CLOSURE_LENGTH.name = CliArgumentParser.MAX_CLOSURE_LENGTH_OPT;
         MAX_CLOSURE_LENGTH.description = "Enforce a line limit on the lengths of closure bodies.";
         MAX_CLOSURE_LENGTH.className = FileListener.class.getName();
 
-        MAX_FILE_LENGTH.name = ArgumentParser.MAX_FILE_LENGTH_OPT;
+        MAX_FILE_LENGTH.name = CliArgumentParser.MAX_FILE_LENGTH_OPT;
         MAX_FILE_LENGTH.description = "Enforce a line limit on each file.";
         MAX_FILE_LENGTH.className = FileListener.class.getName();
 
-        MAX_FUNCTION_LENGTH.name = ArgumentParser.MAX_FUNCTION_LENGTH_OPT;
+        MAX_FUNCTION_LENGTH.name = CliArgumentParser.MAX_FUNCTION_LENGTH_OPT;
         MAX_FUNCTION_LENGTH.description = "Enforce a line limit on the lengths of function bodies.";
         MAX_FUNCTION_LENGTH.className = FileListener.class.getName();
 
-        MAX_LINE_LENGTH.name = ArgumentParser.MAX_LINE_LENGTH_LONG_OPT;
+        MAX_LINE_LENGTH.name = CliArgumentParser.MAX_LINE_LENGTH_LONG_OPT;
         MAX_LINE_LENGTH.description = "Enforce a character limit on the length of each line.";
         MAX_LINE_LENGTH.className = FileListener.class.getName();
 
-        MAX_NAME_LENGTH.name = ArgumentParser.MAX_NAME_LENGTH_OPT;
+        MAX_NAME_LENGTH.name = CliArgumentParser.MAX_NAME_LENGTH_OPT;
         MAX_NAME_LENGTH.description = "Enforce a character limit on the length of each construct name.";
         MAX_NAME_LENGTH.className = FileListener.class.getName();
 
-        MAX_STRUCT_LENGTH.name = ArgumentParser.MAX_STRUCT_LENGTH_OPT;
+        MAX_STRUCT_LENGTH.name = CliArgumentParser.MAX_STRUCT_LENGTH_OPT;
         MAX_STRUCT_LENGTH.description = "Enforce a line limit on the lengths of struct bodies.";
         MAX_STRUCT_LENGTH.className = FileListener.class.getName();
 
-        MIN_NAME_LENGTH.name = ArgumentParser.MIN_NAME_LENGTH_OPT;
+        MIN_NAME_LENGTH.name = CliArgumentParser.MIN_NAME_LENGTH_OPT;
         MIN_NAME_LENGTH.description = "Enforce a minimum character limit on the length of each construct name.";
         MIN_NAME_LENGTH.className = FileListener.class.getName();
 
@@ -197,6 +199,11 @@ public enum Rules {
         TODO_SYNTAX.description = "TODO comments should follow either <TODO: description> or"
             + " <TODO(dev-name): description> format.";
         TODO_SYNTAX.className = TodoCommentListener.class.getName();
+
+        TRAILING_CLOSURE.name = "trailing-closure";
+        TRAILING_CLOSURE.description = "Functions that have a closure as their last argument should be called"
+            + "using trailing closure syntax.";
+        TRAILING_CLOSURE.className = TrailingClosureListener.class.getName();
 
         TRAILING_WHITESPACE.name = "trailing-whitespace";
         TRAILING_WHITESPACE.description = "Flag whitespace after the last non-whitespace character on each line "
