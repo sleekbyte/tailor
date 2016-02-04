@@ -104,27 +104,7 @@ public final class FormatTest {
             inputFile.getPath()
         };
 
-        List<Map<String, Object>> violations = new ArrayList<>();
-        for (ViolationMessage msg : getExpectedMsgs()) {
-            Map<String, Object> violation = new HashMap<>();
-            Map<String, Object> location = new HashMap<>();
-            location.put(Messages.LINE_KEY, msg.getLineNumber());
-            location.put(Messages.COLUMN_KEY, msg.getColumnNumber());
-            violation.put(Messages.LOCATION_KEY, location);
-            violation.put(Messages.SEVERITY_KEY, msg.getSeverity().toString());
-            violation.put(Messages.RULE_KEY, Rules.UPPER_CAMEL_CASE.getName());
-            violation.put(Messages.MESSAGE_KEY, msg.getMessage());
-            violations.add(violation);
-        }
-        Map<String, Object> file = new HashMap<>();
-        file.put(Messages.PATH_KEY, "");
-        file.put(Messages.PARSED_KEY, true);
-        file.put(Messages.VIOLATIONS_KEY, violations);
-        List<Object> files = new ArrayList<>();
-        files.add(file);
-        Map<String, Object> expectedOutput = new LinkedHashMap<>();
-        expectedOutput.put(Messages.FILES_KEY, files);
-        expectedOutput.put(Messages.SUMMARY_KEY, getJSONSummary(1, 0, 0, 22));
+        Map<String, Object> expectedOutput = getJSONMessages();
 
         Tailor.main(command);
 
@@ -184,6 +164,34 @@ public final class FormatTest {
         summary.put(Messages.ERRORS_KEY, errors);
         summary.put(Messages.WARNINGS_KEY, warnings);
         return summary;
+    }
+
+    private Map<String, Object> getJSONMessages() {
+        List<Map<String, Object>> violations = new ArrayList<>();
+        for (ViolationMessage msg : getExpectedMsgs()) {
+            Map<String, Object> violation = new HashMap<>();
+            Map<String, Object> location = new HashMap<>();
+            location.put(Messages.LINE_KEY, msg.getLineNumber());
+            location.put(Messages.COLUMN_KEY, msg.getColumnNumber());
+            violation.put(Messages.LOCATION_KEY, location);
+            violation.put(Messages.SEVERITY_KEY, msg.getSeverity().toString());
+            violation.put(Messages.RULE_KEY, Rules.UPPER_CAMEL_CASE.getName());
+            violation.put(Messages.MESSAGE_KEY, msg.getMessage());
+            violations.add(violation);
+        }
+
+        Map<String, Object> file = new HashMap<>();
+        file.put(Messages.PATH_KEY, "");
+        file.put(Messages.PARSED_KEY, true);
+        file.put(Messages.VIOLATIONS_KEY, violations);
+
+        List<Object> files = new ArrayList<>();
+        files.add(file);
+
+        Map<String, Object> expectedOutput = new LinkedHashMap<>();
+        expectedOutput.put(Messages.FILES_KEY, files);
+        expectedOutput.put(Messages.SUMMARY_KEY, getJSONSummary(1, 0, 0, 22));
+        return expectedOutput;
     }
 
 }

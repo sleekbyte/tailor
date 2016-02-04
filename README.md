@@ -254,28 +254,30 @@ $ tailor main.swift
 Analyzed 1 file, skipped 0 files, and detected 5 violations (0 errors, 5 warnings).
 ```
 
-#### JSON Formatter
+#### [JSON](http://www.json.org) Formatter
 
-The `json` formatter outputs statistics for each file in a separate [JSON](http://www.json.org) object, and a final `summary` object indicating the parsing results and the violation counts.
+The `json` formatter outputs an array of violation messages for each file, and a `summary` object indicating the parsing results and the violation counts.
 
 ```
 $ tailor -f json main.swift
 {
-  "path": "/main.swift",
-  "violations": [
+  "files": [
     {
-      "severity": "warning",
-      "rule": "constant-naming",
-      "location": {
-        "line": 1,
-        "column": 5
-      },
-      "message": "Global Constant should be either lowerCamelCase or UpperCamelCase"
+      "path": "/main.swift",
+      "violations": [
+        {
+          "severity": "warning",
+          "rule": "constant-naming",
+          "location": {
+            "line": 1,
+            "column": 5
+          },
+          "message": "Global Constant should be either lowerCamelCase or UpperCamelCase"
+        }
+      ],
+      "parsed": true
     }
   ],
-  "parsed": true
-}
-{
   "summary": {
     "violations": 1,
     "warnings": 1,
