@@ -41,8 +41,8 @@ public final class YamlConfigurationTest {
 
     protected static final String TEST_INPUT_DIR = "src/test/swift/com/sleekbyte/tailor/functional/yaml";
     protected static final String NEWLINE_REGEX = "\\r?\\n";
-    private static final String YamlTest1 = "YamlTest1.swift";
-    private static final String YamlTest2 = "YamlTest2.swift";
+    private static final String YAML_TEST_1 = "YamlTest1.swift";
+    private static final String YAML_TEST_2 = "YamlTest2.swift";
 
     protected ByteArrayOutputStream outContent;
     protected File inputFile;
@@ -67,76 +67,80 @@ public final class YamlConfigurationTest {
         addExpectedMsg(3, 7,
             Rules.UPPER_CAMEL_CASE,
             Messages.CLASS + Messages.NAMES + Messages.UPPER_CAMEL_CASE,
-            YamlTest1);
+            YAML_TEST_1);
 
         addExpectedMsg(7, 7,
             Rules.UPPER_CAMEL_CASE,
             Messages.CLASS + Messages.NAMES + Messages.UPPER_CAMEL_CASE,
-            YamlTest1);
+            YAML_TEST_1);
 
         addExpectedMsg(12, 15,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
-            YamlTest1);
+            YAML_TEST_1);
 
         addExpectedMsg(13, 18,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
-            YamlTest1);
+            YAML_TEST_1);
 
         addExpectedMsg(17, 15,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
-            YamlTest1);
+            YAML_TEST_1);
 
         addExpectedMsg(18, 18,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
-            YamlTest1);
+            YAML_TEST_1);
 
         addExpectedMsg(20, 26,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
-            YamlTest1);
+            YAML_TEST_1);
 
         addExpectedMsg(21, 16,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
-            YamlTest1);
+            YAML_TEST_1);
 
         addExpectedMsg(25, 19,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
-            YamlTest1);
+            YAML_TEST_1);
 
         addExpectedMsg(26, 8,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
-            YamlTest1);
+            YAML_TEST_1);
 
         addExpectedMsg(29, 63,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
-            YamlTest1);
+            YAML_TEST_1);
 
         addExpectedMsg(31, 71,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
-            YamlTest1);
+            YAML_TEST_1);
 
         addExpectedMsg(33, 57,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
-            YamlTest1);
+            YAML_TEST_1);
 
         addExpectedMsg(35, 4,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
-            YamlTest1);
+            YAML_TEST_1);
 
-        // Create config file that wants to only analyze YamlTest1.swift
+        // Create config file that wants to only analyze YAML_TEST_1.swift
         File configurationFile = includeOptionConfig(".tailor.yml");
-        runTest(configurationFile.getAbsolutePath());
+        String[] command = new String[] {
+            "--config", configurationFile.getAbsolutePath(),
+            "--no-color"
+        };
+        runTest(command);
     }
 
     @Test
@@ -145,41 +149,45 @@ public final class YamlConfigurationTest {
         addExpectedMsg(8, 33,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
-            YamlTest2);
+            YAML_TEST_2);
 
         addExpectedMsg(9, 16,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
-            YamlTest2);
+            YAML_TEST_2);
 
         addExpectedMsg(10, 23,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
-            YamlTest2);
+            YAML_TEST_2);
 
         addExpectedMsg(11, 39,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
-            YamlTest2);
+            YAML_TEST_2);
 
         addExpectedMsg(12, 2,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
-            YamlTest2);
+            YAML_TEST_2);
 
         addExpectedMsg(14, 23,
             Rules.TRAILING_CLOSURE,
             Messages.CLOSURE + Messages.TRAILING_CLOSURE,
-            YamlTest2);
+            YAML_TEST_2);
 
         addExpectedMsg(18, 2,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
-            YamlTest2);
+            YAML_TEST_2);
 
-        // Create config file that will only analyze YamlTest2.swift for violations other than upper-camel-case
+        // Create config file that will only analyze YAML_TEST_2.swift for violations other than upper-camel-case
         File configurationFile = exceptOptionConfig(".tailor.yml");
-        runTest(configurationFile.getAbsolutePath());
+        String[] command = new String[] {
+            "--config", configurationFile.getAbsolutePath(),
+            "--no-color"
+        };
+        runTest(command);
     }
 
     @Test
@@ -188,24 +196,96 @@ public final class YamlConfigurationTest {
         addExpectedMsg(3, 7,
             Rules.UPPER_CAMEL_CASE,
             Messages.CLASS + Messages.NAMES + Messages.UPPER_CAMEL_CASE,
-            YamlTest1);
+            YAML_TEST_1);
 
         addExpectedMsg(7, 7,
             Rules.UPPER_CAMEL_CASE,
             Messages.CLASS + Messages.NAMES + Messages.UPPER_CAMEL_CASE,
-            YamlTest1);
+            YAML_TEST_1);
 
-        // Create config file that wants to only analyze YamlTest1.swift for upper-camel-case violations
+        // Create config file that wants to only analyze YAML_TEST_1.swift for upper-camel-case violations
         // Test for precedence of `only` over `except`
         File configurationFile = onlyAndExceptPrecedenceConfig(".tailor.yml");
-        runTest(configurationFile.getAbsolutePath());
-    }
-
-    private void runTest(String configFilePath) throws UnsupportedEncodingException {
         String[] command = new String[] {
-            "--config", configFilePath,
+            "--config", configurationFile.getAbsolutePath(),
             "--no-color"
         };
+        runTest(command);
+    }
+
+    @Test
+    public void testCliAndConfigFilePrecedence() throws IOException {
+
+        addExpectedMsg(12, 15,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        addExpectedMsg(13, 18,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        addExpectedMsg(17, 15,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        addExpectedMsg(18, 18,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        addExpectedMsg(20, 26,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        addExpectedMsg(21, 16,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        addExpectedMsg(25, 19,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        addExpectedMsg(26, 8,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        addExpectedMsg(29, 63,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        addExpectedMsg(31, 71,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        addExpectedMsg(33, 57,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        addExpectedMsg(35, 4,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        File configurationFile = onlyAndExceptPrecedenceConfig(".tailor.yml");
+        String[] command = new String[] {
+            "--only", "terminating-semicolon",
+            "--config", configurationFile.getAbsolutePath(),
+            "--no-color"
+        };
+        runTest(command);
+    }
+
+    private void runTest(String[] command) throws UnsupportedEncodingException {
 
         Tailor.main(command);
 
@@ -236,7 +316,7 @@ public final class YamlConfigurationTest {
         Writer streamWriter = new OutputStreamWriter(new FileOutputStream(configFile), Charset.forName("UTF-8"));
         PrintWriter printWriter = new PrintWriter(streamWriter);
         printWriter.println("include:");
-        printWriter.println("  - '**/" + YamlTest1 + "'");
+        printWriter.println("  - '**/" + YAML_TEST_1 + "'");
         streamWriter.close();
         printWriter.close();
         return configFile;
@@ -247,7 +327,7 @@ public final class YamlConfigurationTest {
         Writer streamWriter = new OutputStreamWriter(new FileOutputStream(configFile), Charset.forName("UTF-8"));
         PrintWriter printWriter = new PrintWriter(streamWriter);
         printWriter.println("include:");
-        printWriter.println("  - '**/" + YamlTest1 + "'");
+        printWriter.println("  - '**/" + YAML_TEST_1 + "'");
         printWriter.println("only:");
         printWriter.println("  - upper-camel-case");
         printWriter.println("except:");
@@ -262,7 +342,7 @@ public final class YamlConfigurationTest {
         Writer streamWriter = new OutputStreamWriter(new FileOutputStream(configFile), Charset.forName("UTF-8"));
         PrintWriter printWriter = new PrintWriter(streamWriter);
         printWriter.println("include:");
-        printWriter.println("  - '**/" + YamlTest2 + "'");
+        printWriter.println("  - '**/" + YAML_TEST_2 + "'");
         printWriter.println("except:");
         printWriter.println("  - upper-camel-case");
         streamWriter.close();

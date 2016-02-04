@@ -108,20 +108,6 @@ public final class Configuration {
         return new HashSet<>(Arrays.asList(Rules.values()));
     }
 
-    private Set<Rules> getRulesFilteredByOnly(Set<String> parsedRules) throws CliArgumentParserException {
-        Set<Rules> enabledRules = new HashSet<>(Arrays.asList(Rules.values()));
-        Set<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toSet());
-        Configuration.checkValidRules(enabledRuleNames, parsedRules);
-        return enabledRules.stream().filter(rule -> parsedRules.contains(rule.getName())).collect(Collectors.toSet());
-    }
-
-    private Set<Rules> getRulesFilteredByExcept(Set<String> parsedRules) throws CliArgumentParserException {
-        Set<Rules> enabledRules = new HashSet<>(Arrays.asList(Rules.values()));
-        Set<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toSet());
-        Configuration.checkValidRules(enabledRuleNames, parsedRules);
-        return enabledRules.stream().filter(rule -> !parsedRules.contains(rule.getName())).collect(Collectors.toSet());
-    }
-
     /**
      * Iterate through pathNames and derive swift source files from each path.
      *
@@ -238,4 +224,19 @@ public final class Configuration {
             throw new CliArgumentParserException("The following rules were not recognized: " + specifiedRules);
         }
     }
+
+    private Set<Rules> getRulesFilteredByOnly(Set<String> parsedRules) throws CliArgumentParserException {
+        Set<Rules> enabledRules = new HashSet<>(Arrays.asList(Rules.values()));
+        Set<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toSet());
+        Configuration.checkValidRules(enabledRuleNames, parsedRules);
+        return enabledRules.stream().filter(rule -> parsedRules.contains(rule.getName())).collect(Collectors.toSet());
+    }
+
+    private Set<Rules> getRulesFilteredByExcept(Set<String> parsedRules) throws CliArgumentParserException {
+        Set<Rules> enabledRules = new HashSet<>(Arrays.asList(Rules.values()));
+        Set<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toSet());
+        Configuration.checkValidRules(enabledRuleNames, parsedRules);
+        return enabledRules.stream().filter(rule -> !parsedRules.contains(rule.getName())).collect(Collectors.toSet());
+    }
+
 }
