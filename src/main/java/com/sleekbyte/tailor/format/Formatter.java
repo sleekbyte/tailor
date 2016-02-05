@@ -14,11 +14,9 @@ import java.util.List;
  */
 public abstract class Formatter {
 
-    protected File inputFile;
     protected ColorSettings colorSettings;
 
-    public Formatter(File inputFile, ColorSettings colorSettings) {
-        this.inputFile = inputFile;
+    public Formatter(ColorSettings colorSettings) {
         this.colorSettings = colorSettings;
     }
 
@@ -28,13 +26,14 @@ public abstract class Formatter {
      * @param violationMessages list of violation messages to print
      * @throws IOException if canonical path could not be retrieved from the inputFile
      */
-    public abstract void displayViolationMessages(List<ViolationMessage> violationMessages) throws IOException;
+    public abstract void displayViolationMessages(List<ViolationMessage> violationMessages, File inputFile)
+        throws IOException;
 
     /**
      * Print a message to the console indicating that the file failed to be parsed.
      * @throws IOException if canonical path could not be retrieved from the inputFile
      */
-    public abstract void displayParseErrorMessage() throws IOException;
+    public abstract void displayParseErrorMessage(File inputFile) throws IOException;
 
     /**
      * Print a message to the console stating the analysis and violation statistics for a given number of files.
@@ -59,7 +58,7 @@ public abstract class Formatter {
         return ExitCode.SUCCESS;
     }
 
-    protected static String pluralize(long number, String singular, String plural) {
+    public static String pluralize(long number, String singular, String plural) {
         return String.format("%d %s", number, number == 1 ? singular : plural);
     }
 

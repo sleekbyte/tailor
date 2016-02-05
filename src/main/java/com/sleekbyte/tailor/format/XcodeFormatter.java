@@ -17,8 +17,8 @@ import java.util.List;
  */
 public final class XcodeFormatter extends Formatter {
 
-    public XcodeFormatter(File inputFile, ColorSettings colorSettings) {
-        super(inputFile, colorSettings);
+    public XcodeFormatter(ColorSettings colorSettings) {
+        super(colorSettings);
     }
 
     public int getHighestLineNumber(List<ViolationMessage> violationMessages) {
@@ -48,7 +48,7 @@ public final class XcodeFormatter extends Formatter {
     }
 
     @Override
-    public void displayViolationMessages(List<ViolationMessage> violationMessages) throws IOException {
+    public void displayViolationMessages(List<ViolationMessage> violationMessages, File inputFile) throws IOException {
         if (violationMessages.size() > 0) {
             printColoredMessage(getHeader(inputFile, colorSettings));
         }
@@ -65,7 +65,7 @@ public final class XcodeFormatter extends Formatter {
     }
 
     @Override
-    public void displayParseErrorMessage() throws IOException {
+    public void displayParseErrorMessage(File inputFile) throws IOException {
         printColoredMessage(getHeader(inputFile, colorSettings));
         System.out.println(inputFile + Messages.COULD_NOT_BE_PARSED);
     }

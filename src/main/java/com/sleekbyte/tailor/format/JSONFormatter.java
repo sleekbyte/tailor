@@ -20,12 +20,12 @@ public final class JSONFormatter extends Formatter {
 
     private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
 
-    public JSONFormatter(File inputFile, ColorSettings colorSettings) {
-        super(inputFile, colorSettings);
+    public JSONFormatter(ColorSettings colorSettings) {
+        super(colorSettings);
     }
 
     @Override
-    public void displayViolationMessages(List<ViolationMessage> violationMessages) throws IOException {
+    public void displayViolationMessages(List<ViolationMessage> violationMessages, File inputFile) throws IOException {
         List<Map<String, Object>> violations = new ArrayList<>();
         for (ViolationMessage msg : violationMessages) {
             Map<String, Object> violation = new HashMap<>();
@@ -42,12 +42,12 @@ public final class JSONFormatter extends Formatter {
 
             violations.add(violation);
         }
-        displayMessages(violations, true);
+        displayMessages(violations, true, inputFile.getCanonicalPath());
     }
 
     @Override
-    public void displayParseErrorMessage() throws IOException {
-        displayMessages(new ArrayList<>(), false);
+    public void displayParseErrorMessage(File inputFile) throws IOException {
+        displayMessages(new ArrayList<>(), false, inputFile.getCanonicalPath());
     }
 
     @Override
@@ -67,9 +67,10 @@ public final class JSONFormatter extends Formatter {
         System.out.println(GSON.toJson(output));
     }
 
-    private void displayMessages(List<Map<String, Object>> violations, boolean parsed) throws IOException {
+    private void displayMessages(List<Map<String, Object>> violations, boolean parsed, String filePath)
+        throws IOException {
         Map<String, Object> output = new HashMap<>();
-        output.put(Messages.PATH_KEY, inputFile.getCanonicalPath());
+        output.put(Messages.PATH_KEY, filePath);
         output.put(Messages.VIOLATIONS_KEY, violations);
         output.put(Messages.PARSED_KEY, parsed);
         System.out.println(GSON.toJson(output));

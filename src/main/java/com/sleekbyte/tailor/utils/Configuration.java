@@ -126,17 +126,16 @@ public final class Configuration {
 
     /**
      * Get an instance of the formatter specified by the user.
-     * @param inputFile the file for which violation messages will be displayed
      * @param colorSettings the command-line color settings
      * @return formatter instance that implements Formatter interface
      * @throws CliArgumentParserException if the user-specified format does not correspond to a supported type
      */
-    public Formatter getFormatter(File inputFile, ColorSettings colorSettings) throws CliArgumentParserException {
+    public Formatter getFormatter(ColorSettings colorSettings) throws CliArgumentParserException {
         String formatClass = cliArgumentParser.getFormat().getClassName();
         Formatter formatter;
         try {
-            Constructor formatConstructor = Class.forName(formatClass).getConstructor(File.class, ColorSettings.class);
-            formatter = (Formatter) formatConstructor.newInstance(inputFile, colorSettings);
+            Constructor formatConstructor = Class.forName(formatClass).getConstructor(ColorSettings.class);
+            formatter = (Formatter) formatConstructor.newInstance(colorSettings);
         } catch (ReflectiveOperationException e) {
             throw new CliArgumentParserException("Formatter was not successfully created: " + e);
         }

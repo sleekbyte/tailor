@@ -37,7 +37,7 @@ public final class JSONFormatterTest {
     private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
 
     private File inputFile = new File("abc.swift");
-    private Formatter formatter = new JSONFormatter(inputFile, colorSettings);
+    private Formatter formatter = new JSONFormatter(colorSettings);
     private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     @Before
@@ -59,13 +59,13 @@ public final class JSONFormatterTest {
         messages.add(new ViolationMessage(Rules.UPPER_CAMEL_CASE, inputFile.getCanonicalPath(),  11, 14,
             Severity.ERROR, ERROR_MSG));
         Collections.sort(messages);
-        formatter.displayViolationMessages(messages);
+        formatter.displayViolationMessages(messages, inputFile);
         assertEquals(expectedOutput(messages), outContent.toString(Charset.defaultCharset().name()));
     }
 
     @Test
     public void testDisplayParseErrorMessage() throws IOException {
-        formatter.displayParseErrorMessage();
+        formatter.displayParseErrorMessage(inputFile);
         Map<String, Object> output = new HashMap<>();
         output.put(Messages.PATH_KEY, inputFile.getCanonicalPath());
         output.put(Messages.PARSED_KEY, false);

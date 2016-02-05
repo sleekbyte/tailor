@@ -37,13 +37,14 @@ public class PrinterTest {
         printer.error(Rules.LOWER_CAMEL_CASE, ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         List<ViolationMessage> violationsMessage = printer.getViolationMessages();
         printer.close();
-        verify(formatter).displayViolationMessages(violationsMessage);
+        verify(formatter).displayViolationMessages(violationsMessage, inputFile);
     }
 
     @Test
     public void testFormatterParseErrorMessage() throws IOException {
-        printer.printParseErrorMessage();
-        verify(formatter).displayParseErrorMessage();
+        printer.setShouldPrintParseErrorMessage(true);
+        printer.close();
+        verify(formatter).displayParseErrorMessage(inputFile);
     }
 
     @Test

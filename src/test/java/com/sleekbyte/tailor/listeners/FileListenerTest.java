@@ -50,7 +50,7 @@ public class FileListenerTest {
     public void setUp() throws NoSuchMethodException, IOException {
         Method method = this.getClass().getMethod(testName.getMethodName());
         inputFile = folder.newFile(method.getName() + "-" + INPUT_FILE);
-        formatter = new XcodeFormatter(inputFile, new ColorSettings(false, false));
+        formatter = new XcodeFormatter(new ColorSettings(false, false));
 
         printer = new Printer(inputFile, Severity.WARNING, formatter);
         writer = new PrintWriter(inputFile, Charset.defaultCharset().name());
