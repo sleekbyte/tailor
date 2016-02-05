@@ -7,3 +7,12 @@ before_install:
 after_success:
   - codecov
   - ./gradlew coveralls
+deploy:
+  provider: releases
+  api_key: ${GITHUB_KEY}
+  file:
+    - build/distributions/tailor-*.tar
+    - build/distributions/tailor-*.zip
+  skip_cleanup: true
+  on:
+    tags: true

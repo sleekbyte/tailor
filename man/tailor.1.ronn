@@ -22,6 +22,9 @@ Tailor is a cross-platform static analysis and lint tool for source code written
 * `--except`=<rule1,rule2,...>:
   run all rules except the specified ones
 
+* `-f`,`--format`=<xcode|json>:
+  select an output format
+
 * `-h`,`--help`:
   display help
 
