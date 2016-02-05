@@ -163,6 +163,7 @@ public class Messages {
     public static final String SEVERITY_KEY = "severity";
     public static final String RULE_KEY = "rule";
     public static final String MESSAGE_KEY = "message";
+    public static final String FILES_KEY = "files";
     public static final String PATH_KEY = "path";
     public static final String VIOLATIONS_KEY = "violations";
     public static final String PARSED_KEY = "parsed";
