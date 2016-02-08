@@ -29,7 +29,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Tests for {@link Tailor} output formats.
@@ -110,10 +109,7 @@ public final class FormatTest {
         Tailor.main(command);
 
         String[] msgs = outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
-        // Skip first three lines for path and JSON array start, three lines before summary
-        String[] violations = Arrays.copyOfRange(msgs, 5, msgs.length - 12);
-        String[] summary = Arrays.copyOfRange(msgs, msgs.length - 9, msgs.length);
-        msgs = Stream.concat(Arrays.stream(violations), Arrays.stream(summary)).toArray(String[]::new);
+        msgs = Arrays.copyOfRange(msgs, 2, msgs.length);
 
         List<String> expected = new ArrayList<>();
         List<String> actual = new ArrayList<>();
