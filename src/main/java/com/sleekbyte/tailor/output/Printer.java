@@ -82,10 +82,11 @@ public final class Printer implements Comparable<Printer> {
     }
 
     /**
-     * Blah.
-     * @throws IOException sdf
+     * Calls formatter to display all violation or error messages.
+     *
+     * @throws IOException if formatter cannot retrieve canonical path from inputFile
      */
-    public void close() throws IOException {
+    public void printAllMessages() throws IOException {
         if (shouldPrintParseErrorMessage) {
             printParseErrorMessage();
         } else {

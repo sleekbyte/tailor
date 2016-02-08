@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -50,7 +51,7 @@ import java.util.stream.Collectors;
  */
 public class Tailor {
 
-    private static long numSkippedFiles = 0;
+    private static AtomicInteger numSkippedFiles = new AtomicInteger(0);
     private static long numErrors = 0;
     private static long numWarnings = 0;
     private static Configuration configuration;
@@ -258,7 +259,7 @@ public class Tailor {
                     Printer printer = new Printer(file, maxSeverity, formatter);
                     printer.setShouldPrintParseErrorMessage(true);
                     printersForAllFiles.add(printer);
-                    numSkippedFiles++;
+                    numSkippedFiles.incrementAndGet();
                 } catch (CliArgumentParserException e) {
                     handleCliException(e);
                 }
@@ -267,14 +268,14 @@ public class Tailor {
 
         printersForAllFiles.forEach(printer -> {
                 try {
-                    printer.close();
+                    printer.printAllMessages();
                 } catch (IOException e) {
                     handleIoException(e);
                 }
             });
 
         printersForAllFiles.clear();
-        formatter.displaySummary(fileNames.size(), numSkippedFiles, numErrors, numWarnings);
+        formatter.displaySummary(fileNames.size(), numSkippedFiles.get(), numErrors, numWarnings);
         // Non-zero exit status when any violation messages have Severity.ERROR, controlled by --max-severity
         ExitCode exitCode = formatter.getExitStatus(numErrors);
         if (exitCode != ExitCode.SUCCESS) {

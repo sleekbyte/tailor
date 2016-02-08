@@ -36,14 +36,14 @@ public class PrinterTest {
     public void testFormatterDisplayMessage() throws IOException {
         printer.error(Rules.LOWER_CAMEL_CASE, ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         List<ViolationMessage> violationsMessage = printer.getViolationMessages();
-        printer.close();
+        printer.printAllMessages();
         verify(formatter).displayViolationMessages(violationsMessage, inputFile);
     }
 
     @Test
     public void testFormatterParseErrorMessage() throws IOException {
         printer.setShouldPrintParseErrorMessage(true);
-        printer.close();
+        printer.printAllMessages();
         verify(formatter).displayParseErrorMessage(inputFile);
     }
 
@@ -54,7 +54,7 @@ public class PrinterTest {
         assertEquals(message.getSeverity(), Severity.ERROR);
         validateViolationMessage(message, Rules.LOWER_CAMEL_CASE, ERROR_MSG, LINE_NUMBER,
             COLUMN_NUMBER);
-        printer.close();
+        printer.printAllMessages();
     }
 
     @Test
@@ -64,7 +64,7 @@ public class PrinterTest {
         assertEquals(message.getSeverity(), Severity.WARNING);
         validateViolationMessage(message, Rules.LOWER_CAMEL_CASE, WARNING_MSG, LINE_NUMBER,
             COLUMN_NUMBER);
-        printer.close();
+        printer.printAllMessages();
     }
 
     @Test
@@ -72,7 +72,7 @@ public class PrinterTest {
         printer.warn(Rules.LOWER_CAMEL_CASE, WARNING_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         ViolationMessage message = printer.getViolationMessages().get(0);
         assertEquals(Severity.WARNING, message.getSeverity());
-        printer.close();
+        printer.printAllMessages();
     }
 
     @Test
@@ -80,7 +80,7 @@ public class PrinterTest {
         printer.error(Rules.LOWER_CAMEL_CASE, ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         ViolationMessage message = printer.getViolationMessages().get(0);
         assertEquals(Severity.ERROR, message.getSeverity());
-        printer.close();
+        printer.printAllMessages();
     }
 
     @Test
@@ -88,7 +88,7 @@ public class PrinterTest {
         warnPrinter.error(Rules.LOWER_CAMEL_CASE, ERROR_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         ViolationMessage message = warnPrinter.getViolationMessages().get(0);
         assertEquals(Severity.WARNING, message.getSeverity());
-        warnPrinter.close();
+        warnPrinter.printAllMessages();
     }
 
     @Test
@@ -96,7 +96,7 @@ public class PrinterTest {
         warnPrinter.warn(Rules.LOWER_CAMEL_CASE, WARNING_MSG, new Location(LINE_NUMBER, COLUMN_NUMBER));
         ViolationMessage message = warnPrinter.getViolationMessages().get(0);
         assertEquals(Severity.WARNING, message.getSeverity());
-        warnPrinter.close();
+        warnPrinter.printAllMessages();
     }
 
     private void validateViolationMessage(ViolationMessage message, Rules rule, String msg,
