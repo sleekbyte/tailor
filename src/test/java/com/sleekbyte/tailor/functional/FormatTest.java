@@ -10,6 +10,7 @@ import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.format.Format;
 import com.sleekbyte.tailor.output.Printer;
+import com.sleekbyte.tailor.output.ViolationMessage;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,8 +25,10 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -59,13 +62,19 @@ public final class FormatTest {
     public void testXcodeFormat() throws IOException {
         Format format = Format.XCODE;
 
-        String[] command = new String[] {
+        final String[] command = new String[] {
             "--format", format.getName(),
             "--no-color",
             "--only=upper-camel-case",
             inputFile.getPath()
         };
-        addAllExpectedMsgs(format);
+        expectedMessages.addAll(getExpectedMsgs().stream().map(msg -> Printer.genOutputStringForTest(
+            msg.getRule(),
+            inputFile.getName(),
+            msg.getLineNumber(),
+            msg.getColumnNumber(),
+            msg.getSeverity(),
+            msg.getMessage())).collect(Collectors.toList()));
 
         Tailor.main(command);
 
@@ -89,99 +98,106 @@ public final class FormatTest {
     public void testJSONFormat() throws IOException {
         Format format = Format.JSON;
 
-        String[] command = new String[] {
+        final String[] command = new String[] {
             "--format", format.getName(),
             "--no-color",
             "--only=upper-camel-case",
             inputFile.getPath()
         };
 
-        addAllExpectedMsgs(format);
-        expectedMessages.addAll(Arrays.asList(getJSONSummary(1, 0, 0, 22).split(NEWLINE_REGEX)));
+        Map<String, Object> expectedOutput = getJSONMessages();
 
         Tailor.main(command);
 
-        List<String> actualOutput = new ArrayList<>();
-
         String[] msgs = outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
-
         // Skip first three lines for path and JSON array start, three lines before summary
         String[] violations = Arrays.copyOfRange(msgs, 5, msgs.length - 12);
         String[] summary = Arrays.copyOfRange(msgs, msgs.length - 9, msgs.length);
         msgs = Stream.concat(Arrays.stream(violations), Arrays.stream(summary)).toArray(String[]::new);
 
-        List<String> expectedOutput = new ArrayList<>();
+        List<String> expected = new ArrayList<>();
+        List<String> actual = new ArrayList<>();
+        expectedMessages.addAll(
+            Arrays.asList((GSON.toJson(expectedOutput) + System.lineSeparator()).split(NEWLINE_REGEX)));
         for (String msg : expectedMessages) {
-            String trimmedMsg = msg.trim().replaceAll(",", "");
-            expectedOutput.add(trimmedMsg);
+            String strippedMsg = msg.replaceAll(inputFile.getCanonicalPath(), "");
+            expected.add(strippedMsg);
         }
         for (String msg : msgs) {
-            String trimmedMsg = msg.trim().replaceAll(",", "");
-            actualOutput.add(trimmedMsg);
+            String strippedMsg = msg.replaceAll(inputFile.getCanonicalPath(), "");
+            actual.add(strippedMsg);
         }
-        assertArrayEquals(outContent.toString(Charset.defaultCharset().name()), expectedOutput.toArray(),
-            actualOutput.toArray());
+
+        assertArrayEquals(outContent.toString(Charset.defaultCharset().name()), expected.toArray(), actual.toArray());
     }
 
-    protected void addAllExpectedMsgs(Format format) {
-        addExpectedMsg(format, 3, 7, Severity.WARNING, Messages.CLASS + Messages.NAMES);
-        addExpectedMsg(format, 7, 7, Severity.WARNING, Messages.CLASS + Messages.NAMES);
-        addExpectedMsg(format, 24, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
-        addExpectedMsg(format, 25, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
-        addExpectedMsg(format, 26, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
-        addExpectedMsg(format, 42, 6, Severity.WARNING, Messages.ENUM + Messages.NAMES);
-        addExpectedMsg(format, 43, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
-        addExpectedMsg(format, 46, 6, Severity.WARNING, Messages.ENUM + Messages.NAMES);
-        addExpectedMsg(format, 47, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
-        addExpectedMsg(format, 50, 6, Severity.WARNING, Messages.ENUM + Messages.NAMES);
-        addExpectedMsg(format, 55, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
-        addExpectedMsg(format, 63, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
-        addExpectedMsg(format, 72, 8, Severity.WARNING, Messages.STRUCT + Messages.NAMES);
-        addExpectedMsg(format, 76, 8, Severity.WARNING, Messages.STRUCT + Messages.NAMES);
-        addExpectedMsg(format, 90, 10, Severity.WARNING, Messages.PROTOCOL + Messages.NAMES);
-        addExpectedMsg(format, 94, 10, Severity.WARNING, Messages.PROTOCOL + Messages.NAMES);
-        addExpectedMsg(format, 98, 10, Severity.WARNING, Messages.PROTOCOL + Messages.NAMES);
-        addExpectedMsg(format, 107, 10, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
-        addExpectedMsg(format, 119, 18, Severity.WARNING, Messages.GENERIC_PARAMETERS + Messages.NAMES);
-        addExpectedMsg(format, 119, 23, Severity.WARNING, Messages.GENERIC_PARAMETERS + Messages.NAMES);
-        addExpectedMsg(format, 128, 20, Severity.WARNING, Messages.GENERIC_PARAMETERS + Messages.NAMES);
-        addExpectedMsg(format, 137, 14, Severity.WARNING, Messages.GENERIC_PARAMETERS + Messages.NAMES);
+    protected List<ViolationMessage> getExpectedMsgs() {
+        List<ViolationMessage> messages = new ArrayList<>();
+        messages.add(createViolationMessage(3, 7, Severity.WARNING, Messages.CLASS + Messages.NAMES));
+        messages.add(createViolationMessage(7, 7, Severity.WARNING, Messages.CLASS + Messages.NAMES));
+        messages.add(createViolationMessage(24, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES));
+        messages.add(createViolationMessage(25, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES));
+        messages.add(createViolationMessage(26, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES));
+        messages.add(createViolationMessage(42, 6, Severity.WARNING, Messages.ENUM + Messages.NAMES));
+        messages.add(createViolationMessage(43, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES));
+        messages.add(createViolationMessage(46, 6, Severity.WARNING, Messages.ENUM + Messages.NAMES));
+        messages.add(createViolationMessage(47, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES));
+        messages.add(createViolationMessage(50, 6, Severity.WARNING, Messages.ENUM + Messages.NAMES));
+        messages.add(createViolationMessage(55, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES));
+        messages.add(createViolationMessage(63, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES));
+        messages.add(createViolationMessage(72, 8, Severity.WARNING, Messages.STRUCT + Messages.NAMES));
+        messages.add(createViolationMessage(76, 8, Severity.WARNING, Messages.STRUCT + Messages.NAMES));
+        messages.add(createViolationMessage(90, 10, Severity.WARNING, Messages.PROTOCOL + Messages.NAMES));
+        messages.add(createViolationMessage(94, 10, Severity.WARNING, Messages.PROTOCOL + Messages.NAMES));
+        messages.add(createViolationMessage(98, 10, Severity.WARNING, Messages.PROTOCOL + Messages.NAMES));
+        messages.add(createViolationMessage(107, 10, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES));
+        messages.add(createViolationMessage(119, 18, Severity.WARNING, Messages.GENERIC_PARAMETERS + Messages.NAMES));
+        messages.add(createViolationMessage(119, 23, Severity.WARNING, Messages.GENERIC_PARAMETERS + Messages.NAMES));
+        messages.add(createViolationMessage(128, 20, Severity.WARNING, Messages.GENERIC_PARAMETERS + Messages.NAMES));
+        messages.add(createViolationMessage(137, 14, Severity.WARNING, Messages.GENERIC_PARAMETERS + Messages.NAMES));
+        return messages;
     }
 
-    private void addExpectedMsg(Format format, int line, int column, Severity severity, String msg) {
-        switch (format) {
-            case XCODE:
-                expectedMessages.add(
-                    Printer.genOutputStringForTest(Rules.UPPER_CAMEL_CASE, inputFile.getName(),
-                        line, column, severity, msg + Messages.UPPER_CAMEL_CASE));
-                break;
-            case JSON:
-                Map<String, Object> violation = new HashMap<>();
-                Map<String, Object> location = new HashMap<>();
-                location.put(Messages.LINE_KEY, line);
-                location.put(Messages.COLUMN_KEY, column);
-                violation.put(Messages.LOCATION_KEY, location);
-                violation.put(Messages.SEVERITY_KEY, severity.toString());
-                violation.put(Messages.RULE_KEY, Rules.UPPER_CAMEL_CASE.getName());
-                violation.put(Messages.MESSAGE_KEY, msg + Messages.UPPER_CAMEL_CASE);
-                String violationString = GSON.toJson(violation) + System.lineSeparator();
-                expectedMessages.addAll(Arrays.asList(violationString.split(NEWLINE_REGEX)));
-                break;
-            default:
-                break;
-        }
+    private ViolationMessage createViolationMessage(int line, int column, Severity severity, String msg) {
+        return new ViolationMessage(Rules.UPPER_CAMEL_CASE, line, column, severity, msg + Messages.UPPER_CAMEL_CASE);
     }
 
-    private String getJSONSummary(long analyzed, long skipped, long errors, long warnings) {
+    private Map<String, Object> getJSONSummary(long analyzed, long skipped, long errors, long warnings) {
         Map<String, Object> summary = new HashMap<>();
         summary.put(Messages.ANALYZED_KEY, analyzed);
         summary.put(Messages.SKIPPED_KEY, skipped);
         summary.put(Messages.VIOLATIONS_KEY, errors + warnings);
         summary.put(Messages.ERRORS_KEY, errors);
         summary.put(Messages.WARNINGS_KEY, warnings);
-        Map<String, Object> output = new HashMap<>();
-        output.put(Messages.SUMMARY_KEY, summary);
-        return GSON.toJson(output) + System.lineSeparator();
+        return summary;
+    }
+
+    private Map<String, Object> getJSONMessages() {
+        List<Map<String, Object>> violations = new ArrayList<>();
+        for (ViolationMessage msg : getExpectedMsgs()) {
+            Map<String, Object> violation = new HashMap<>();
+            Map<String, Object> location = new HashMap<>();
+            location.put(Messages.LINE_KEY, msg.getLineNumber());
+            location.put(Messages.COLUMN_KEY, msg.getColumnNumber());
+            violation.put(Messages.LOCATION_KEY, location);
+            violation.put(Messages.SEVERITY_KEY, msg.getSeverity().toString());
+            violation.put(Messages.RULE_KEY, Rules.UPPER_CAMEL_CASE.getName());
+            violation.put(Messages.MESSAGE_KEY, msg.getMessage());
+            violations.add(violation);
+        }
+
+        Map<String, Object> file = new HashMap<>();
+        file.put(Messages.PATH_KEY, "");
+        file.put(Messages.PARSED_KEY, true);
+        file.put(Messages.VIOLATIONS_KEY, violations);
+
+        List<Object> files = new ArrayList<>();
+        files.add(file);
+
+        Map<String, Object> expectedOutput = new LinkedHashMap<>();
+        expectedOutput.put(Messages.FILES_KEY, files);
+        expectedOutput.put(Messages.SUMMARY_KEY, getJSONSummary(1, 0, 0, 22));
+        return expectedOutput;
     }
 
 }

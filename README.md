@@ -210,7 +210,11 @@ import Foundation; // tailor:disable
 ```
 
 ### Configuration
-The behavior of Tailor can be customized via the `.tailor.yml` configuration file. It enables you to include/exclude certain files and directories from analysis. You can tell Tailor which configuration file to use by specifying its file path via the `--config` CLI option. By default, Tailor will look for the configuration file in the directory where you will run Tailor from.
+The behavior of Tailor can be customized via the `.tailor.yml` configuration file. It enables you to 
+* include/exclude certain files and directories from analysis 
+* enable and disable specific analysis rules
+
+You can tell Tailor which configuration file to use by specifying its file path via the `--config` CLI option. By default, Tailor will look for the configuration file in the directory where you will run Tailor from.
 
 The file follows the [YAML 1.1](http://www.yaml.org/spec/1.1/) format.
 
@@ -233,6 +237,31 @@ exclude:
 * *Exclude* is given higher precedence than *Include*
 * Tailor recognizes the [Java Glob](https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob) syntax
 
+#### Enabling/Disabling rules
+Tailor allows you to individually disable (blacklist) or enable (whitelist) rules via the `except` and `only` labels.
+
+Here is an example showcasing how to enable certain rules:
+```YAML
+# Tailor will solely check for violations to the following rules
+only:
+    - upper-camel-case
+    - trailing-closure
+    - forced-type-cast
+    - redundant-parentheses
+```
+
+Here is an example showcasing how to disable certain rules:
+```YAML
+# Tailor will check for violations to all rules except for the following ones
+except:
+    - parenthesis-whitespace
+    - lower-camel-case
+```
+
+##### Notes
+* *only* is given precedence over *except*
+* Rules that are explicitly included/excluded via CLI will cause the `only`/`except` rules specified in `.tailor.yml` to be ignored
+
 ### Formatters
 
 Tailor's output format may be customized via the `-f`/`--format` option. The Xcode formatter is selected by default.
@@ -254,28 +283,30 @@ $ tailor main.swift
 Analyzed 1 file, skipped 0 files, and detected 5 violations (0 errors, 5 warnings).
 ```
 
-#### JSON Formatter
+#### [JSON](http://www.json.org) Formatter
 
-The `json` formatter outputs statistics for each file in a separate [JSON](http://www.json.org) object, and a final `summary` object indicating the parsing results and the violation counts.
+The `json` formatter outputs an array of violation messages for each file, and a `summary` object indicating the parsing results and the violation counts.
 
 ```
 $ tailor -f json main.swift
 {
-  "path": "/main.swift",
-  "violations": [
+  "files": [
     {
-      "severity": "warning",
-      "rule": "constant-naming",
-      "location": {
-        "line": 1,
-        "column": 5
-      },
-      "message": "Global Constant should be either lowerCamelCase or UpperCamelCase"
+      "path": "/main.swift",
+      "violations": [
+        {
+          "severity": "warning",
+          "rule": "constant-naming",
+          "location": {
+            "line": 1,
+            "column": 5
+          },
+          "message": "Global Constant should be either lowerCamelCase or UpperCamelCase"
+        }
+      ],
+      "parsed": true
     }
   ],
-  "parsed": true
-}
-{
   "summary": {
     "violations": 1,
     "warnings": 1,

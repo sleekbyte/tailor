@@ -68,8 +68,44 @@ public final class Configuration {
         return cliArgumentParser.debugFlagSet();
     }
 
+    /**
+     * Collects all rules enabled by default and then filters out rules according to CLI options
+     * and YamlConfiguration file.
+     *
+     * @return list of enabled rules after filtering
+     * @throws CliArgumentParserException if rule names specified in command line options are not valid
+     */
     public Set<Rules> getEnabledRules() throws CliArgumentParserException {
-        return cliArgumentParser.getEnabledRules();
+        // --only is given precedence over --except
+        // CLI input is given precedence over YAML configuration file
+
+        // Retrieve included or excluded rules from CLI
+        Set<String> onlySpecificRules = cliArgumentParser.getOnlySpecificRules();
+        if (onlySpecificRules.size() > 0) {
+            return getRulesFilteredByOnly(onlySpecificRules);
+        }
+
+        Set<String> excludedRules = cliArgumentParser.getExcludedRules();
+        if (excludedRules.size() > 0) {
+            return getRulesFilteredByExcept(excludedRules);
+        }
+
+        // Retrieve included or excluded rules from YAML configuration
+        if (yamlConfiguration.isPresent()) {
+            YamlConfiguration configuration = yamlConfiguration.get();
+            onlySpecificRules = configuration.getOnly();
+            if (onlySpecificRules.size() > 0) {
+                return getRulesFilteredByOnly(onlySpecificRules);
+            }
+
+            excludedRules = configuration.getExcept();
+            if (excludedRules.size() > 0) {
+                return getRulesFilteredByExcept(excludedRules);
+            }
+        }
+
+        // If `only`/`except` options aren't used then enable all rules
+        return new HashSet<>(Arrays.asList(Rules.values()));
     }
 
     /**
@@ -172,4 +208,34 @@ public final class Configuration {
         }
         return Optional.of(srcRoot);
     }
+
+    /**
+     * Checks if rules specified in command line option is valid.
+     *
+     * @param enabledRules   all valid rule names
+     * @param specifiedRules rule names specified from command line
+     * @throws CliArgumentParserException if rule name specified in command line is not valid
+     */
+    private static void checkValidRules(Set<String> enabledRules, Set<String> specifiedRules)
+        throws CliArgumentParserException {
+        if (!enabledRules.containsAll(specifiedRules)) {
+            specifiedRules.removeAll(enabledRules);
+            throw new CliArgumentParserException("The following rules were not recognized: " + specifiedRules);
+        }
+    }
+
+    private Set<Rules> getRulesFilteredByOnly(Set<String> parsedRules) throws CliArgumentParserException {
+        Set<Rules> enabledRules = new HashSet<>(Arrays.asList(Rules.values()));
+        Set<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toSet());
+        Configuration.checkValidRules(enabledRuleNames, parsedRules);
+        return enabledRules.stream().filter(rule -> parsedRules.contains(rule.getName())).collect(Collectors.toSet());
+    }
+
+    private Set<Rules> getRulesFilteredByExcept(Set<String> parsedRules) throws CliArgumentParserException {
+        Set<Rules> enabledRules = new HashSet<>(Arrays.asList(Rules.values()));
+        Set<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toSet());
+        Configuration.checkValidRules(enabledRuleNames, parsedRules);
+        return enabledRules.stream().filter(rule -> !parsedRules.contains(rule.getName())).collect(Collectors.toSet());
+    }
+
 }

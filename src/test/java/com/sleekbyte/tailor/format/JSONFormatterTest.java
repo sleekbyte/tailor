@@ -25,6 +25,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,18 +37,22 @@ public final class JSONFormatterTest {
     private static final ColorSettings colorSettings = new ColorSettings(false, false);
     private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
 
+    protected ByteArrayOutputStream outContent;
     private File inputFile = new File("abc.swift");
-    private Formatter formatter = new JSONFormatter(colorSettings);
-    private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private JSONFormatter formatter;
 
     @Before
     public void setUp() throws UnsupportedEncodingException {
-        outContent.reset();
+        formatter = new JSONFormatter(colorSettings);
+        formatter.clearFiles();
+        outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent, false, Charset.defaultCharset().name()));
     }
 
     @After
-    public void tearDown() throws IOException {
+    public void tearDown() {
+        formatter.clearFiles();
+        formatter = null;
         System.setOut(null);
     }
 
@@ -59,8 +64,10 @@ public final class JSONFormatterTest {
         messages.add(new ViolationMessage(Rules.UPPER_CAMEL_CASE, inputFile.getCanonicalPath(),  11, 14,
             Severity.ERROR, ERROR_MSG));
         Collections.sort(messages);
+
         formatter.displayViolationMessages(messages, inputFile);
-        assertEquals(expectedOutput(messages), outContent.toString(Charset.defaultCharset().name()));
+        List<Map<String, Object>> actualOutput = formatter.getFiles();
+        assertEquals(expectedOutput(messages), actualOutput);
     }
 
     @Test
@@ -70,8 +77,9 @@ public final class JSONFormatterTest {
         output.put(Messages.PATH_KEY, inputFile.getCanonicalPath());
         output.put(Messages.PARSED_KEY, false);
         output.put(Messages.VIOLATIONS_KEY, new ArrayList<>());
-        assertEquals(GSON.toJson(output) + System.lineSeparator(),
-            outContent.toString(Charset.defaultCharset().name()));
+        List<Object> files = new ArrayList<>();
+        files.add(output);
+        assertEquals(files, formatter.getFiles());
     }
 
     @Test
@@ -90,7 +98,8 @@ public final class JSONFormatterTest {
         summary.put(Messages.VIOLATIONS_KEY, violations);
         summary.put(Messages.ERRORS_KEY, errors);
         summary.put(Messages.WARNINGS_KEY, warnings);
-        Map<String, Object> output = new HashMap<>();
+        Map<String, Object> output = new LinkedHashMap<>();
+        output.put(Messages.FILES_KEY, new ArrayList<>());
         output.put(Messages.SUMMARY_KEY, summary);
 
         assertEquals(GSON.toJson(output) + System.lineSeparator(),
@@ -107,7 +116,7 @@ public final class JSONFormatterTest {
         assertEquals(ExitCode.FAILURE, formatter.getExitStatus(10));
     }
 
-    private String expectedOutput(List<ViolationMessage> list) throws IOException {
+    private List<Object> expectedOutput(List<ViolationMessage> list) throws IOException {
         Map<String, Object> output = new HashMap<>();
         output.put(Messages.PATH_KEY, inputFile.getCanonicalPath());
         output.put(Messages.PARSED_KEY, true);
@@ -126,6 +135,8 @@ public final class JSONFormatterTest {
         }
         output.put(Messages.VIOLATIONS_KEY, violations);
 
-        return GSON.toJson(output) + System.lineSeparator();
+        List<Object> files = new ArrayList<>();
+        files.add(output);
+        return files;
     }
 }
