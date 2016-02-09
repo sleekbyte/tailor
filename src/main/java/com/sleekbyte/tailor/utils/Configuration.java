@@ -160,6 +160,10 @@ public final class Configuration {
         cliArgumentParser.printHelp();
     }
 
+    public Format getFormat() throws CliArgumentParserException {
+        return cliArgumentParser.getFormat();
+    }
+
     /**
      * Get an instance of the formatter specified by the user.
      * @param colorSettings the command-line color settings
@@ -167,7 +171,7 @@ public final class Configuration {
      * @throws CliArgumentParserException if the user-specified format does not correspond to a supported type
      */
     public Formatter getFormatter(ColorSettings colorSettings) throws CliArgumentParserException {
-        String formatClass = cliArgumentParser.getFormat().getClassName();
+        String formatClass = getFormat().getClassName();
         Formatter formatter;
         try {
             Constructor formatConstructor = Class.forName(formatClass).getConstructor(ColorSettings.class);

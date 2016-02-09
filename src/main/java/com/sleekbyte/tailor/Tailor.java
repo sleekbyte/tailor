@@ -11,6 +11,7 @@ import com.sleekbyte.tailor.common.ExitCode;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
+import com.sleekbyte.tailor.format.Format;
 import com.sleekbyte.tailor.format.Formatter;
 import com.sleekbyte.tailor.integration.XcodeIntegrator;
 import com.sleekbyte.tailor.listeners.BlankLineListener;
@@ -243,7 +244,7 @@ public class Tailor {
         Severity maxSeverity = configuration.getMaxSeverity();
 
         List<File> files = fileNames.parallelStream().map(File::new).collect(Collectors.toList());
-        System.out.format("Analyzing %s:%n", Formatter.pluralize(fileNames.size(), "file", "files"));
+        printIfFormatAllows(String.format("Analyzing %s:%n", Formatter.pluralize(fileNames.size(), "file", "files")));
 
         files.parallelStream().forEach(
             file -> {
@@ -253,9 +254,9 @@ public class Tailor {
                     tokenStream = Tailor.getTokenStream(file);
                     tree = Tailor.getParseTree(tokenStream);
                     Tailor.analyzeFile(file, tokenStream, tree, formatter, maxSeverity);
-                    System.out.print(".");
+                    printIfFormatAllows(".");
                 } catch (ErrorListener.ParseException e) {
-                    System.out.print("S");
+                    printIfFormatAllows("S");
                     Printer printer = new Printer(file, maxSeverity, formatter);
                     printer.setShouldPrintParseErrorMessage(true);
                     printersForAllFiles.add(printer);
@@ -264,7 +265,7 @@ public class Tailor {
                     handleCliException(e);
                 }
             });
-        System.out.format("%n");
+        printIfFormatAllows(String.format("%n"));
 
         printersForAllFiles.forEach(printer -> {
                 try {
@@ -351,6 +352,16 @@ public class Tailor {
     private static void handleIoException(IOException exception) {
         System.err.println("Source file analysis failed. Reason: " + exception.getMessage());
         System.exit(ExitCode.failure());
+    }
+
+    private static void printIfFormatAllows(String str) {
+        try {
+            if (configuration.getFormat() == Format.XCODE) {
+                System.out.print(str);
+            }
+        } catch (CliArgumentParserException e) {
+            handleCliException(e);
+        }
     }
 
 }

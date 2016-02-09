@@ -109,7 +109,6 @@ public final class FormatTest {
         Tailor.main(command);
 
         String[] msgs = outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
-        msgs = Arrays.copyOfRange(msgs, 2, msgs.length);
 
         List<String> expected = new ArrayList<>();
         List<String> actual = new ArrayList<>();
