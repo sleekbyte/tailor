@@ -33,7 +33,11 @@
             <property name="eachLine" value="true"/>
         </module>
 
+    <!-- Differs from Google style: Added SuppressWarningsFilter module -->
+    <module name="SuppressWarningsFilter" />
     <module name="TreeWalker">
+        <!-- Differs from Google style: Added SuppressWarningsHolder module -->
+        <module name="SuppressWarningsHolder" />
         <module name="OuterTypeFilename"/>
         <module name="IllegalTokenText">
             <property name="tokens" value="STRING_LITERAL, CHAR_LITERAL"/>

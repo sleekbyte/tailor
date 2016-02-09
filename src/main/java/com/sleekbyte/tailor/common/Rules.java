@@ -63,6 +63,7 @@ public enum Rules {
     private String name;
     private String className;
     private String description;
+    private String category;
 
     public String getName() {
         return this.name;
@@ -74,6 +75,18 @@ public enum Rules {
 
     public String getDescription() {
         return this.description;
+    }
+
+    /**
+     * Get the category of a given rule.
+     *
+     * @return a string indicating which category this rule belongs to
+     */
+    public String getCategory() {
+        if (this == FORCED_TYPE_CAST) {
+            return Messages.BUG_RISK_CATEGORY;
+        }
+        return Messages.STYLE_CATEGORY;
     }
 
     public String getLink() {
