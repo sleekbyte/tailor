@@ -126,6 +126,25 @@ public final class Printer implements Comparable<Printer> {
         }
     }
 
+    @Override
+    public int compareTo(Printer printer) {
+        return this.inputFile.compareTo(printer.inputFile);
+    }
+
+    @Override
+    public boolean equals(Object printerObject) {
+        if (!(printerObject instanceof Printer)) {
+            return false;
+        }
+        return this.inputFile.equals(((Printer) printerObject).inputFile);
+    }
+
+    @Override
+    public int hashCode() {
+        assert false : "hashCode not designed";
+        return 100;
+    }
+
     private void print(Rules rule, Severity severity, String msg, Location location) {
         ViolationMessage violationMessage = new ViolationMessage(rule, location.line, location.column, severity, msg);
         try {
@@ -144,24 +163,5 @@ public final class Printer implements Comparable<Printer> {
         return msgBuffer.values().stream()
             .filter(msg -> !ignoredLineNumbers.contains(msg.getLineNumber()))
             .filter(msg -> msg.getSeverity().equals(severity)).count();
-    }
-
-    @Override
-    public int compareTo(Printer printer) {
-        return this.inputFile.compareTo(printer.inputFile);
-    }
-
-    @Override
-    public boolean equals(Object printerObject) {
-        if (!(printerObject instanceof Printer)) {
-            return false;
-        }
-        return this.inputFile.equals(((Printer) printerObject).inputFile);
-    }
-
-    @Override
-    public int hashCode() {
-        assert false : "hashCode not designed";
-        return 100;
     }
 }

@@ -81,7 +81,7 @@ public final class FormatTest {
 
         String[] msgs = outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
 
-        // Skip first two lines for file header, last two lines for summary
+        // Skip first four lines for file header, last two lines for summary
         msgs = Arrays.copyOfRange(msgs, 4, msgs.length - 2);
 
         for (String msg : msgs) {
