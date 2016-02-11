@@ -7,10 +7,12 @@ import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.common.YamlConfiguration;
 import com.sleekbyte.tailor.format.Format;
+import com.sleekbyte.tailor.format.Format.IllegalFormatException;
 import com.sleekbyte.tailor.format.Formatter;
 import com.sleekbyte.tailor.utils.CLIArgumentParser.CLIArgumentParserException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
+import org.yaml.snakeyaml.error.YAMLException;
 
 import java.io.File;
 import java.io.IOException;
@@ -130,7 +132,7 @@ public final class Configuration {
         } else if (yamlConfiguration.isPresent()) {
             YamlConfiguration config = yamlConfiguration.get();
             Optional<String> configFileLocation = config.getFileLocation();
-            if (configFileLocation.isPresent() && CLIArgumentParser.getFormat() == Format.XCODE) {
+            if (configFileLocation.isPresent() && getFormat() == Format.XCODE) {
                 System.out.println(Messages.TAILOR_CONFIG_LOCATION + configFileLocation.get());
             }
             URI rootUri = new File(srcRoot.orElse(".")).toURI();
@@ -161,17 +163,13 @@ public final class Configuration {
         CLIArgumentParser.printHelp();
     }
 
-    public Format getFormat() throws CLIArgumentParserException {
-        return CLIArgumentParser.getFormat();
-    }
-
     /**
      * Get an instance of the formatter specified by the user.
      * @param colorSettings the command-line color settings
      * @return formatter instance that implements Formatter interface
      * @throws CLIArgumentParserException if the user-specified format does not correspond to a supported type
      */
-    public Formatter getFormatter(ColorSettings colorSettings) throws CLIArgumentParserException {
+    public Formatter getFormatter(ColorSettings colorSettings) throws CLIArgumentParserException, YAMLException {
         String formatClass = getFormat().getClassName();
         Formatter formatter;
         try {
@@ -181,6 +179,30 @@ public final class Configuration {
             throw new CLIArgumentParserException("Formatter was not successfully created: " + e);
         }
         return formatter;
+    }
+
+    /**
+     * Retrieves format from CLI or YAML configuration file.
+     * Returns the XCODE format by default if no format is found.
+     *
+     * @return format from CLI or YAML configuration file.  XCODE format by default.
+     * @throws CLIArgumentParserException error when parsing the format from CLI arguments
+     * @throws YAMLException error when parsing the format from YAML configuration file
+     */
+    private Format getFormat() throws CLIArgumentParserException, YAMLException {
+        // Try to get format from CLI/config file. Else use the default format (XCODE)
+        Format format = Format.XCODE;
+        if (CLIArgumentParser.formatOptionSet()) {
+            format = CLIArgumentParser.getFormat();
+        } else if (yamlConfiguration.isPresent() && !yamlConfiguration.get().getFormat().isEmpty()) {
+            try {
+                format = Format.parseFormat(yamlConfiguration.get().getFormat());
+            } catch (IllegalFormatException e) {
+                throw new YAMLException(com.sleekbyte.tailor.utils.CLIArgumentParser.INVALID_OPTION_VALUE
+                    + "format ." + " Options are <" + Format.getFormats() + ">.");
+            }
+        }
+        return format;
     }
 
     private static Set<String> findFilesInPaths(List<String> pathNames) throws IOException {

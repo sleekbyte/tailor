@@ -19,7 +19,7 @@ import java.util.Set;
 /**
  * Parse command line options and arguments.
  */
-public class CLIArgumentParser {
+public final class CLIArgumentParser {
 
     private static final String SYNTAX_PREFIX = "Usage: ";
     private static final String OPTIONS_PREFIX = "Options:";
@@ -299,6 +299,10 @@ public class CLIArgumentParser {
 
     public boolean shouldInvertColorOutput() {
         return cmd != null && cmd.hasOption(INVERT_COLOR_OPT);
+    }
+
+    public boolean formatOptionSet() {
+        return cmd != null && cmd.hasOption(FORMAT_LONG_OPT);
     }
 
     /**

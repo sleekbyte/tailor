@@ -18,6 +18,11 @@ public final class YamlConfiguration {
     private Set<String> exclude = new HashSet<>(Arrays.asList(DEFAULT_EXCLUDE));
     private Set<String> only = new HashSet<>();
     private Set<String> except = new HashSet<>();
+    private String format = "";
+
+    public String getFormat() {
+        return format;
+    }
 
     public Optional<String> getFileLocation() {
         return fileLocation;
@@ -57,5 +62,9 @@ public final class YamlConfiguration {
 
     public void setExcept(Set<String> except) {
         this.except = except;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
     }
 }
