@@ -1,5 +1,6 @@
 package com.sleekbyte.tailor.listeners.lengths;
 
+import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClassNameContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ElementNameContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.EnumNameContext;
@@ -17,10 +18,12 @@ import com.sleekbyte.tailor.antlr.SwiftParser.VariableNameContext;
 import com.sleekbyte.tailor.common.ConstructLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
+import com.sleekbyte.tailor.listeners.DeclarationListener;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.SourceFileUtil;
 import org.antlr.v4.runtime.ParserRuleContext;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -39,6 +42,17 @@ public final class MinLengthListener extends LengthListener {
         this.constructLengths = constructLengths;
         this.printer = printer;
         this.enabledRules = enabledRules;
+    }
+
+    @Override
+    public void enterTopLevel(SwiftParser.TopLevelContext topLevelCtx) {
+        List<IdentifierContext> constants = DeclarationListener.getConstantNames(topLevelCtx);
+        constants.forEach(ctx ->
+            verifyNameLength(Messages.CONSTANT + Messages.NAME, constructLengths.minNameLength, ctx));
+
+        List<IdentifierContext> variables = DeclarationListener.getVariableNames(topLevelCtx);
+        variables.forEach(ctx ->
+            verifyNameLength(Messages.VARIABLE + Messages.NAME, constructLengths.minNameLength, ctx));
     }
 
     @Override
@@ -104,18 +118,6 @@ public final class MinLengthListener extends LengthListener {
     @Override
     public void enterUnionStyleEnumCase(UnionStyleEnumCaseContext ctx) {
         verifyNameLength(Messages.ENUM_CASE + Messages.NAME, constructLengths.minNameLength, ctx);
-    }
-
-    @Override
-    public void enterIdentifier(IdentifierContext ctx) {
-        if (traversedTreeForConstantDeclaration) {
-            verifyNameLength(Messages.CONSTANT + Messages.NAME, constructLengths.minNameLength, ctx);
-            traversedTreeForConstantDeclaration = false;
-        }
-        if (traversedTreeForVarDeclaration) {
-            verifyNameLength(Messages.VARIABLE + Messages.NAME, constructLengths.minNameLength, ctx);
-            traversedTreeForVarDeclaration = false;
-        }
     }
 
     @Override

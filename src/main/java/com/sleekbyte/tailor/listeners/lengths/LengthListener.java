@@ -18,17 +18,10 @@ public abstract class LengthListener extends SwiftBaseListener {
 
     protected ConstructLengths constructLengths;
     protected Printer printer;
-    protected boolean traversedTreeForConstantDeclaration = false;
-    protected boolean traversedTreeForVarDeclaration = false;
     protected Set<Rules> enabledRules;
 
-    public void setTraversedTreeForConstantDeclaration(boolean traversedTree) {
-        this.traversedTreeForConstantDeclaration = traversedTree;
-    }
-
-    public void setTraversedTreeForVarDeclaration(boolean traversedTree) {
-        this.traversedTreeForVarDeclaration = traversedTree;
-    }
+    @Override
+    public abstract void enterTopLevel(SwiftParser.TopLevelContext ctx);
 
     @Override
     public abstract void enterClassName(SwiftParser.ClassNameContext ctx);
@@ -68,9 +61,6 @@ public abstract class LengthListener extends SwiftBaseListener {
 
     @Override
     public abstract void enterUnionStyleEnumCase(SwiftParser.UnionStyleEnumCaseContext ctx);
-
-    @Override
-    public abstract void enterIdentifier(SwiftParser.IdentifierContext ctx);
 
     protected abstract void verifyNameLength(String constructType, int length, ParserRuleContext ctx);
 

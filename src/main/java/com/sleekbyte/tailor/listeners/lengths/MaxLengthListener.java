@@ -1,13 +1,16 @@
 package com.sleekbyte.tailor.listeners.lengths;
 
 import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.antlr.SwiftParser.IdentifierContext;
 import com.sleekbyte.tailor.common.ConstructLengths;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
+import com.sleekbyte.tailor.listeners.DeclarationListener;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.SourceFileUtil;
 import org.antlr.v4.runtime.ParserRuleContext;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -26,6 +29,17 @@ public final class MaxLengthListener extends LengthListener {
         this.constructLengths = constructLengths;
         this.printer = printer;
         this.enabledRules = enabledRules;
+    }
+
+    @Override
+    public void enterTopLevel(SwiftParser.TopLevelContext topLevelCtx) {
+        List<IdentifierContext> constants = DeclarationListener.getConstantNames(topLevelCtx);
+        constants.forEach(ctx ->
+            verifyNameLength(Messages.CONSTANT + Messages.NAME, constructLengths.maxNameLength, ctx));
+
+        List<IdentifierContext> variables = DeclarationListener.getVariableNames(topLevelCtx);
+        variables.forEach(ctx ->
+            verifyNameLength(Messages.VARIABLE + Messages.NAME, constructLengths.maxNameLength, ctx));
     }
 
     @Override
@@ -122,18 +136,6 @@ public final class MaxLengthListener extends LengthListener {
     public void enterUnionStyleEnumCase(SwiftParser.UnionStyleEnumCaseContext ctx) {
         verifyNameLength(Messages.ENUM_CASE + Messages.NAME, constructLengths.maxNameLength,
             ctx.enumCaseName());
-    }
-
-    @Override
-    public void enterIdentifier(SwiftParser.IdentifierContext ctx) {
-        if (traversedTreeForConstantDeclaration) {
-            verifyNameLength(Messages.CONSTANT + Messages.NAME, constructLengths.maxNameLength, ctx);
-            traversedTreeForConstantDeclaration = false;
-        }
-        if (traversedTreeForVarDeclaration) {
-            verifyNameLength(Messages.VARIABLE + Messages.NAME, constructLengths.maxNameLength, ctx);
-            traversedTreeForVarDeclaration = false;
-        }
     }
 
     protected void verifyConstructLength(Rules rule, String constructType, int length, ParserRuleContext ctx) {
