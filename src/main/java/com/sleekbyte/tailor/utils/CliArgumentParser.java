@@ -62,8 +62,8 @@ public class CliArgumentParser {
     /**
      * Exception thrown when option parsing fails.
      */
-    public static class ArgumentParserException extends Exception {
-        public ArgumentParserException(String message) {
+    public static class CliArgumentParserException extends Exception {
+        public CliArgumentParserException(String message) {
             super(message);
         }
     }

@@ -293,7 +293,7 @@ public final class YamlConfigurationTest {
 
         String[] msgs = outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
 
-        // Skip first three lines for file header, last two lines for summary
+        // Skip first five lines for progress and file header, last two lines for summary
         msgs = Arrays.copyOfRange(msgs, 5, msgs.length - 2);
 
         for (String msg : msgs) {

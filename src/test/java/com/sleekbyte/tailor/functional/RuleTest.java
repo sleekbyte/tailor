@@ -70,7 +70,6 @@ public abstract class RuleTest {
             String truncatedMsg = msg.substring(msg.indexOf(inputFile.getName()));
             actualOutput.add(truncatedMsg);
         }
-
         // Ensure number of warnings in summary equals actual number of warnings in the output
         assertThat(summary, containsString(expectedMessages.size() + " violation"));
         assertArrayEquals(outContent.toString(Charset.defaultCharset().name()), this.expectedMessages.toArray(),

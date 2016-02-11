@@ -13,9 +13,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintStream;
-import java.lang.reflect.InvocationTargetException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +25,7 @@ import java.util.stream.Stream;
  * Tests for parallel analysis.
  */
 @RunWith(MockitoJUnitRunner.class)
-public final class ParallelTest  {
+public final class ParallelTest {
 
     private static final String TEST_INPUT_DIR = "src/test/swift/com/sleekbyte/tailor/functional/";
     private static final String NEWLINE_REGEX = "\\r?\\n";
@@ -36,8 +35,7 @@ public final class ParallelTest  {
     private List<String> expectedMessages;
 
     @Before
-    public void setUp() throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
-        InvocationTargetException, InstantiationException, IOException  {
+    public void setUp() throws UnsupportedEncodingException {
         inputFiles = new ArrayList<>();
         inputFiles.add(new File(TEST_INPUT_DIR + "AngleBracketWhitespaceTest.swift"));
         inputFiles.add(new File(TEST_INPUT_DIR + "BraceWhitespaceTest.swift"));
@@ -55,7 +53,7 @@ public final class ParallelTest  {
     }
 
     @Test
-    public void testRule() throws Exception {
+    public void testRule() throws ReflectiveOperationException, UnsupportedEncodingException {
         String[] command = Stream.concat(Arrays.stream(this.getCommandArgs()), Arrays.stream(this.getDefaultArgs()))
             .toArray(String[]::new);
         addAllExpectedMsgs();
@@ -84,8 +82,7 @@ public final class ParallelTest  {
             actualOutput.toArray());
     }
 
-    private void addAllExpectedMsgs() throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
-        InvocationTargetException, InstantiationException {
+    private void addAllExpectedMsgs() throws ReflectiveOperationException {
         for (File file : inputFiles) {
             String fileClassName = this.getClass().getPackage().getName() + "."
                 + file.getName().substring(0, file.getName().indexOf(".swift"));

@@ -28,7 +28,7 @@ public final class Printer implements Comparable<Printer> {
     private Formatter formatter;
     private Map<String, ViolationMessage> msgBuffer = new HashMap<>();
     private Set<Integer> ignoredLineNumbers = new HashSet<>();
-    private Boolean shouldPrintParseErrorMessage;
+    private boolean shouldPrintParseErrorMessage = false;
 
     /**
      * Constructs a printer for the specified input file, maximum severity, and color setting.
@@ -41,7 +41,6 @@ public final class Printer implements Comparable<Printer> {
         this.inputFile = inputFile;
         this.maxSeverity = maxSeverity;
         this.formatter = formatter;
-        shouldPrintParseErrorMessage = false;
     }
 
     /**
@@ -109,7 +108,7 @@ public final class Printer implements Comparable<Printer> {
         this.ignoredLineNumbers.add(ignoredLineNumber);
     }
 
-    public void setShouldPrintParseErrorMessage(Boolean shouldPrintError) {
+    public void setShouldPrintParseErrorMessage(boolean shouldPrintError) {
         shouldPrintParseErrorMessage = shouldPrintError;
     }
 

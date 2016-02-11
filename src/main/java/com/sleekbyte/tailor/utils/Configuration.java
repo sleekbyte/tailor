@@ -8,6 +8,7 @@ import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.common.YamlConfiguration;
 import com.sleekbyte.tailor.format.Format;
 import com.sleekbyte.tailor.format.Formatter;
+import com.sleekbyte.tailor.utils.CliArgumentParser.CliArgumentParserException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
 
