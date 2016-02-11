@@ -17,6 +17,14 @@ import java.util.List;
  */
 public class DeclarationListener extends SwiftBaseListener {
 
+    private static final String LET = "let";
+    private static final String VAR = "var";
+    private Declaration declarationType;
+    private List<IdentifierContext> declarations;
+
+    /**
+     * Extracts identifier that's in the subtree of a given context.
+     */
     private static class IdentifierExtractor extends SwiftBaseListener {
 
         private IdentifierContext ctx;
@@ -30,15 +38,11 @@ public class DeclarationListener extends SwiftBaseListener {
             return ctx;
         }
     }
+
     /**
      * Declaration types handled by this listener.
      */
     public enum Declaration { VARIABLE_DEC, CONSTANT_DEC }
-
-    private static final String LET = "let";
-    private static final String VAR = "var";
-    private Declaration declarationType;
-    private List<IdentifierContext> declarations;
 
     /**
      * Creates a DeclarationListener object.
@@ -70,11 +74,11 @@ public class DeclarationListener extends SwiftBaseListener {
     }
 
     private String getKeyword() {
-        switch(declarationType) {
+        switch (declarationType) {
             case CONSTANT_DEC: return LET;
             case VARIABLE_DEC: return VAR;
+            default: return "";
         }
-        return "";
     }
 
     @Override
@@ -116,7 +120,9 @@ public class DeclarationListener extends SwiftBaseListener {
             }
         }
 
-        if (!declType.equals(declarationType)) return;
+        if (!declType.equals(declarationType)) {
+            return;
+        }
 
         if (ctx.externalParameterName() != null) {
             extractIdentifier(ctx.externalParameterName());

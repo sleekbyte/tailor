@@ -28,24 +28,26 @@ public class ConstantNamingListener extends SwiftBaseListener {
     public void enterTopLevel(TopLevelContext topLevelContext) {
         List<IdentifierContext> names =  DeclarationListener.getConstantNames(topLevelContext);
 
-        names.forEach(ctx -> {
-            String constantName = ctx.getText();
-            ParserRuleContext constantDecContext = ConstantDecHelper.getConstantDeclaration(ctx);
-            Location location = ListenerUtil.getContextStartLocation(ctx);
+        names.forEach(
+            ctx -> {
+                String constantName = ctx.getText();
+                ParserRuleContext constantDecContext = ConstantDecHelper.getConstantDeclaration(ctx);
+                Location location = ListenerUtil.getContextStartLocation(ctx);
 
-            if (ConstantDecHelper.isGlobal(constantDecContext)
-                || ConstantDecHelper.insideClass(constantDecContext)
-                || ConstantDecHelper.insideStruct(constantDecContext)) {
-                if (!CharFormatUtil.isUpperCamelCase(constantName)
-                    && !CharFormatUtil.isLowerCamelCaseOrAcronym(constantName)) {
-                    printer.error(Rules.CONSTANT_NAMING, Messages.GLOBAL + Messages.CONSTANT
-                        + Messages.GLOBAL_CONSTANT_NAMING, location);
-                }
-            } else {
-                if (!CharFormatUtil.isLowerCamelCaseOrAcronym(constantName)) {
-                    printer.error(Rules.CONSTANT_NAMING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE, location);
+                if (ConstantDecHelper.isGlobal(constantDecContext)
+                    || ConstantDecHelper.insideClass(constantDecContext)
+                    || ConstantDecHelper.insideStruct(constantDecContext)) {
+                    if (!CharFormatUtil.isUpperCamelCase(constantName)
+                        && !CharFormatUtil.isLowerCamelCaseOrAcronym(constantName)) {
+                        printer.error(Rules.CONSTANT_NAMING, Messages.GLOBAL + Messages.CONSTANT
+                            + Messages.GLOBAL_CONSTANT_NAMING, location);
+                    }
+                } else {
+                    if (!CharFormatUtil.isLowerCamelCaseOrAcronym(constantName)) {
+                        printer.error(Rules.CONSTANT_NAMING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE, location);
+                    }
                 }
             }
-        });
+        );
     }
 }
