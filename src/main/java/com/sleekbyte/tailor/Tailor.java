@@ -3,6 +3,7 @@ package com.sleekbyte.tailor;
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftLexer;
 import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.antlr.SwiftParser.TopLevelContext;
 import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.ConfigProperties;
 import com.sleekbyte.tailor.common.ConstructLengths;
@@ -24,7 +25,7 @@ import com.sleekbyte.tailor.listeners.lengths.MaxLengthListener;
 import com.sleekbyte.tailor.listeners.lengths.MinLengthListener;
 import com.sleekbyte.tailor.listeners.whitespace.CommentWhitespaceListener;
 import com.sleekbyte.tailor.output.Printer;
-import com.sleekbyte.tailor.utils.CliArgumentParserException;
+import com.sleekbyte.tailor.utils.CLIArgumentParser.CLIArgumentParserException;
 import com.sleekbyte.tailor.utils.CommentExtractor;
 import com.sleekbyte.tailor.utils.Configuration;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -39,20 +40,64 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 /**
  * Performs static analysis on Swift source files.
  */
-public class Tailor {
+public final class Tailor {
 
-    private static Configuration configuration;
+    public AtomicInteger numSkippedFiles = new AtomicInteger(0);
+    public AtomicLong numErrors = new AtomicLong(0);
+    public AtomicLong numWarnings = new AtomicLong(0);
+    public Configuration configuration;
+    public ConcurrentSkipListSet<Printer> printersForAllFiles = new ConcurrentSkipListSet<>();
+
+    /**
+     * Non-zero exit status when any violation messages have Severity.ERROR, controlled by --max-severity
+     */
+    public static void handleErrorViolations(Formatter formatter, long numErrors) {
+        ExitCode exitCode = formatter.getExitStatus(numErrors);
+        if (exitCode != ExitCode.SUCCESS) {
+            System.exit(exitCode.ordinal());
+        }
+    }
+
+    /**
+     * Handle command line exceptions by printing out error message and exiting.
+     */
+    public static void handleCLIException(Exception exception, Configuration configuration) {
+        System.err.println(exception.getMessage());
+        configuration.printHelp();
+        System.exit(ExitCode.failure());
+    }
+
+    /**
+     * Handle YAML related exceptions by printing out appropriate error message and exiting.
+     */
+    public static void handleYAMLException(YAMLException exception) {
+        System.err.println("Error parsing .tailor.yml:");
+        System.err.println(exception.getMessage());
+        System.exit(ExitCode.failure());
+    }
+
+    /**
+     * Handle IO exceptions by printing out appropriate error message and exiting.
+     */
+    public static void handleIOException(IOException exception) {
+        System.err.println("Source file analysis failed. Reason: " + exception.getMessage());
+        System.exit(ExitCode.failure());
+    }
 
     /**
      * Prints error indicating no source file was provided, and exits.
      */
-    public static void exitWithNoSourceFilesError() {
+    private void exitWithNoSourceFilesError() {
         System.err.println(Messages.NO_SWIFT_FILES_FOUND);
         configuration.printHelp();
         System.exit(ExitCode.failure());
@@ -64,13 +109,17 @@ public class Tailor {
      * @param enabledRules list of enabled rules
      * @param printer      passed into listener constructors
      * @param tokenStream  passed into listener constructors
-     * @throws CliArgumentParserException if listener for an enabled rule is not found
+     * @throws CLIArgumentParserException if listener for an enabled rule is not found
      */
-    public static List<SwiftBaseListener> createListeners(Set<Rules> enabledRules, Printer printer,
-                                                          CommonTokenStream tokenStream)
-        throws CliArgumentParserException {
+    private List<SwiftBaseListener> createListeners(Set<Rules> enabledRules,
+                                                    Printer printer,
+                                                    CommonTokenStream tokenStream,
+                                                    ConstructLengths constructLengths)
+        throws CLIArgumentParserException {
+
         List<SwiftBaseListener> listeners = new LinkedList<>();
         Set<String> classNames = enabledRules.stream().map(Rules::getClassName).collect(Collectors.toSet());
+
         for (String className : classNames) {
             try {
 
@@ -95,27 +144,38 @@ public class Tailor {
                 }
 
             } catch (ReflectiveOperationException e) {
-                throw new CliArgumentParserException("Listeners were not successfully created: " + e);
+                throw new CLIArgumentParserException("Listeners were not successfully created: " + e);
             }
         }
+
+        listeners.add(new MinLengthListener(printer, constructLengths, enabledRules));
+        listeners.add(new MaxLengthListener(printer, constructLengths, enabledRules));
+        DeclarationListener decListener = new DeclarationListener(listeners);
+        listeners.add(decListener);
+
         return listeners;
     }
 
     /** Runs SwiftLexer on input file to generate token stream.
      *
-     * @param inputFile Lexer input
+     * @param input Lexer input
      * @return Token stream
-     * @throws IOException if file cannot be opened
-     * @throws CliArgumentParserException if cmd line arguments cannot be parsed
      */
-    public static CommonTokenStream getTokenStream(File inputFile) throws IOException, CliArgumentParserException {
-        FileInputStream inputStream = new FileInputStream(inputFile);
-        SwiftLexer lexer = new SwiftLexer(new ANTLRInputStream(inputStream));
-        if (!configuration.debugFlagSet()) {
-            lexer.removeErrorListeners();
-            lexer.addErrorListener(new ErrorListener());
+    private Optional<CommonTokenStream> getTokenStream(File input) {
+        try {
+            FileInputStream inputStream = new FileInputStream(input);
+            SwiftLexer lexer = new SwiftLexer(new ANTLRInputStream(inputStream));
+            if (!configuration.debugFlagSet()) {
+                lexer.removeErrorListeners();
+                lexer.addErrorListener(new ErrorListener());
+            }
+            return Optional.of(new CommonTokenStream(lexer));
+        } catch (IOException e) {
+            handleIOException(e);
+        } catch (CLIArgumentParserException e) {
+            handleCLIException(e, configuration);
         }
-        return new CommonTokenStream(lexer);
+        return Optional.empty();
     }
 
     /**
@@ -123,84 +183,134 @@ public class Tailor {
      *
      * @param tokenStream Token stream generated by lexer
      * @return Parse Tree or null if parsing error occurs (and debug flag is set)
-     * @throws CliArgumentParserException if an error occurs when parsing cmd line arguments
      */
-    public static SwiftParser.TopLevelContext getParseTree(CommonTokenStream tokenStream)
-        throws CliArgumentParserException {
-        SwiftParser swiftParser = new SwiftParser(tokenStream);
-        if (!configuration.debugFlagSet()) {
-            swiftParser.removeErrorListeners();
-            swiftParser.addErrorListener(new ErrorListener());
+    private Optional<TopLevelContext> getParseTree(Optional<CommonTokenStream> tokenStream) {
+        Optional<TopLevelContext> tree = Optional.empty();
+        if (!tokenStream.isPresent()) {
+            return tree;
         }
-        return swiftParser.topLevel();
+        SwiftParser swiftParser = new SwiftParser(tokenStream.get());
+        try {
+            if (!configuration.debugFlagSet()) {
+                swiftParser.removeErrorListeners();
+                swiftParser.addErrorListener(new ErrorListener());
+            }
+            tree = Optional.of(swiftParser.topLevel());
+        } catch (CLIArgumentParserException e) {
+            handleCLIException(e, configuration);
+        }
+        return tree;
+    }
+
+    /**
+     * Walks the provided parse tree using the list of listeners.
+     *
+     * @param listeners List of parse tree listeners.
+     * @param tree Parse tree.
+     */
+    private void walkParseTree(List<SwiftBaseListener> listeners, TopLevelContext tree) {
+        ParseTreeWalker walker = new ParseTreeWalker();
+        for (SwiftBaseListener listener : listeners) {
+            // The following listeners are used by DeclarationListener to walk the tree
+            if (listener instanceof ConstantNamingListener || listener instanceof KPrefixListener) {
+                continue;
+            }
+            walker.walk(listener, tree);
+        }
+    }
+
+    /**
+     * Analyzes an individual file by creating the corresponding listeners and walking the file's parse tree.
+     *
+     * @param inputFile File to analyze.
+     * @param optTokenStream Common token stream for input file.
+     * @param optTree Parse tree for input file.
+     * @throws CLIArgumentParserException if an error occurs when parsing cmd line arguments
+     */
+    private void analyzeFile(File inputFile,
+                             Optional<CommonTokenStream> optTokenStream,
+                             Optional<TopLevelContext> optTree,
+                             Formatter formatter,
+                             Severity maxSeverity,
+                             ConstructLengths constructLengths,
+                             Set<Rules> enabledRules)
+        throws CLIArgumentParserException {
+
+        try {
+            Printer printer = new Printer(inputFile, maxSeverity, formatter);
+            if (optTokenStream.isPresent() && optTree.isPresent()) {
+                CommonTokenStream tokenStream = optTokenStream.get();
+                TopLevelContext tree = optTree.get();
+                List<SwiftBaseListener> listeners =
+                    createListeners(enabledRules, printer, tokenStream, constructLengths);
+                walkParseTree(listeners, tree);
+                try (FileListener fileListener =
+                         new FileListener(printer, inputFile, constructLengths, enabledRules)) {
+                    fileListener.verify();
+                }
+
+                numErrors.addAndGet(printer.getNumErrorMessages());
+                numWarnings.addAndGet(printer.getNumWarningMessages());
+
+            } else {
+                printer.setShouldPrintParseErrorMessage(true);
+            }
+            printersForAllFiles.add(printer);
+        } catch (IOException e) {
+            handleIOException(e);
+        } catch (CLIArgumentParserException e) {
+            handleCLIException(e, configuration);
+        }
     }
 
     /**
      * Analyze files with SwiftLexer, SwiftParser and Listeners.
      *
      * @param fileNames List of files to analyze
-     * @throws CliArgumentParserException if an error occurs when parsing cmd line arguments
+     * @throws CLIArgumentParserException if an error occurs when parsing cmd line arguments
      * @throws IOException if a file cannot be opened
      */
-    public static void analyzeFiles(Set<String> fileNames) throws CliArgumentParserException, IOException {
-        long numErrors = 0;
-        long numSkippedFiles = 0;
-        long numWarnings = 0;
-        ConstructLengths constructLengths = configuration.parseConstructLengths();
-        Severity maxSeverity = configuration.getMaxSeverity();
+    private void analyzeFiles(Set<String> fileNames) throws CLIArgumentParserException, IOException {
         ColorSettings colorSettings =
             new ColorSettings(configuration.shouldColorOutput(), configuration.shouldInvertColorOutput());
+        Formatter formatter = configuration.getFormatter(colorSettings);
+        Severity maxSeverity = configuration.getMaxSeverity();
+        ConstructLengths constructLengths = configuration.parseConstructLengths();
         Set<Rules> enabledRules = configuration.getEnabledRules();
-        Formatter formatter = null;
 
-        for (String fileName : fileNames) {
-            File inputFile = new File(fileName);
-            CommonTokenStream tokenStream;
-            SwiftParser.TopLevelContext tree;
-            formatter = configuration.getFormatter(inputFile, colorSettings);
+        List<File> files = fileNames.parallelStream().map(File::new).collect(Collectors.toList());
+        formatter.printProgressInfo(
+            String.format("Analyzing %s:%n", Formatter.pluralize(fileNames.size(), "file", "files")));
 
-            try {
-                tokenStream = getTokenStream(inputFile);
-                tree = getParseTree(tokenStream);
-            } catch (ErrorListener.ParseException e) {
-                Printer printer = new Printer(inputFile, maxSeverity, formatter);
-                printer.printParseErrorMessage();
-                numSkippedFiles++;
-                continue;
-            }
-
-            try (Printer printer = new Printer(inputFile, maxSeverity, formatter)) {
-                List<SwiftBaseListener> listeners = createListeners(enabledRules, printer, tokenStream);
-                listeners.add(new MaxLengthListener(printer, constructLengths, enabledRules));
-                listeners.add(new MinLengthListener(printer, constructLengths, enabledRules));
-                DeclarationListener decListener = new DeclarationListener(listeners);
-                listeners.add(decListener);
-
-                ParseTreeWalker walker = new ParseTreeWalker();
-                for (SwiftBaseListener listener : listeners) {
-                    // The following listeners are used by DeclarationListener to walk the tree
-                    if (listener instanceof ConstantNamingListener || listener instanceof KPrefixListener) {
-                        continue;
-                    }
-                    walker.walk(listener, tree);
+        files.parallelStream().forEach(
+            file -> {
+                try {
+                    Optional<CommonTokenStream> tokenStream = getTokenStream(file);
+                    Optional<TopLevelContext> tree = getParseTree(tokenStream);
+                    analyzeFile(file, tokenStream, tree, formatter, maxSeverity, constructLengths, enabledRules);
+                    formatter.printProgressInfo(".");
+                } catch (ErrorListener.ParseException e) {
+                    formatter.printProgressInfo("S");
+                    Printer printer = new Printer(file, maxSeverity, formatter);
+                    printer.setShouldPrintParseErrorMessage(true);
+                    printersForAllFiles.add(printer);
+                    numSkippedFiles.incrementAndGet();
+                } catch (CLIArgumentParserException e) {
+                    handleCLIException(e, configuration);
                 }
-                try (FileListener fileListener = new FileListener(printer, inputFile, constructLengths, enabledRules)) {
-                    fileListener.verify();
+            });
+        formatter.printProgressInfo(String.format("%n"));
+
+        printersForAllFiles.forEach(printer -> {
+                try {
+                    printer.printAllMessages();
+                } catch (IOException e) {
+                    handleIOException(e);
                 }
+            });
 
-                numErrors += printer.getNumErrorMessages();
-                numWarnings += printer.getNumWarningMessages();
-            }
-        }
-
-        if (formatter != null) {
-            formatter.displaySummary(fileNames.size(), numSkippedFiles, numErrors, numWarnings);
-            // Non-zero exit status when any violation messages have Severity.ERROR, controlled by --max-severity
-            ExitCode exitCode = formatter.getExitStatus(numErrors);
-            if (exitCode != ExitCode.SUCCESS) {
-                System.exit(exitCode.ordinal());
-            }
-        }
+        formatter.displaySummary(fileNames.size(), numSkippedFiles.get(), numErrors.get(), numWarnings.get());
+        handleErrorViolations(formatter, numErrors.get());
     }
 
     /**
@@ -209,54 +319,48 @@ public class Tailor {
      * @param args command line arguments
      */
     public static void main(String[] args) {
+        Tailor tailor = new Tailor();
 
         try {
-            configuration = new Configuration(args);
+            tailor.configuration = new Configuration(args);
 
-            if (configuration.shouldPrintHelp()) {
-                configuration.printHelp();
+            if (tailor.configuration.shouldPrintHelp()) {
+                tailor.configuration.printHelp();
                 System.exit(ExitCode.success());
             }
-            if (configuration.shouldPrintVersion()) {
+            if (tailor.configuration.shouldPrintVersion()) {
                 System.out.println(new ConfigProperties().getVersion());
                 System.exit(ExitCode.success());
             }
-            if (configuration.shouldPrintRules()) {
+            if (tailor.configuration.shouldPrintRules()) {
                 Printer.printRules();
                 System.exit(ExitCode.success());
             }
 
             // Exit program after configuring Xcode project
-            String xcodeprojPath = configuration.getXcodeprojPath();
+            String xcodeprojPath = tailor.configuration.getXcodeprojPath();
             if (xcodeprojPath != null) {
                 System.exit(XcodeIntegrator.setupXcode(xcodeprojPath));
             }
 
-            Set<String> fileNames = configuration.getFilesToAnalyze();
+            Set<String> fileNames = tailor.configuration.getFilesToAnalyze();
             if (fileNames.size() == 0) {
-                exitWithNoSourceFilesError();
+                tailor.exitWithNoSourceFilesError();
             }
 
-            if (configuration.shouldListFiles()) {
+            if (tailor.configuration.shouldListFiles()) {
                 System.out.println(Messages.FILES_TO_BE_ANALYZED);
                 fileNames.forEach(System.out::println);
                 System.exit(ExitCode.success());
             }
 
-            analyzeFiles(fileNames);
-        } catch (ParseException | CliArgumentParserException e) {
-            System.err.println(e.getMessage());
-            configuration.printHelp();
-            System.exit(ExitCode.failure());
+            tailor.analyzeFiles(fileNames);
+        } catch (ParseException | CLIArgumentParserException e) {
+            Tailor.handleCLIException(e, tailor.configuration);
         } catch (YAMLException e) {
-            System.err.println("Error parsing .tailor.yml:");
-            System.err.println(e.getMessage());
-            System.exit(ExitCode.failure());
+            Tailor.handleYAMLException(e);
         } catch (IOException e) {
-            System.err.println("Source file analysis failed. Reason: " + e.getMessage());
-            System.exit(ExitCode.failure());
+            Tailor.handleIOException(e);
         }
-
     }
-
 }

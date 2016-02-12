@@ -22,8 +22,8 @@ public final class JSONFormatter extends Formatter {
     private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
     private static final List<Map<String, Object>> FILES = new ArrayList<>();
 
-    public JSONFormatter(File inputFile, ColorSettings colorSettings) {
-        super(inputFile, colorSettings);
+    public JSONFormatter(ColorSettings colorSettings) {
+        super(colorSettings);
     }
 
     protected static List<Map<String, Object>> getFiles() {
@@ -35,7 +35,7 @@ public final class JSONFormatter extends Formatter {
     }
 
     @Override
-    public void displayViolationMessages(List<ViolationMessage> violationMessages) throws IOException {
+    public void displayViolationMessages(List<ViolationMessage> violationMessages, File inputFile) throws IOException {
         List<Map<String, Object>> violations = new ArrayList<>();
         for (ViolationMessage msg : violationMessages) {
             Map<String, Object> violation = new HashMap<>();
@@ -52,12 +52,12 @@ public final class JSONFormatter extends Formatter {
 
             violations.add(violation);
         }
-        storeMessages(violations, true);
+        storeMessages(violations, true, inputFile.getCanonicalPath());
     }
 
     @Override
-    public void displayParseErrorMessage() throws IOException {
-        storeMessages(new ArrayList<>(), false);
+    public void displayParseErrorMessage(File inputFile) throws IOException {
+        storeMessages(new ArrayList<>(), false, inputFile.getCanonicalPath());
     }
 
     @Override
@@ -79,9 +79,13 @@ public final class JSONFormatter extends Formatter {
         System.out.println(GSON.toJson(output));
     }
 
-    private void storeMessages(List<Map<String, Object>> violations, boolean parsed) throws IOException {
+    @Override
+    public void printProgressInfo(String str) {}
+
+    private void storeMessages(List<Map<String, Object>> violations, boolean parsed, String filePath)
+        throws IOException {
         Map<String, Object> output = new HashMap<>();
-        output.put(Messages.PATH_KEY, inputFile.getCanonicalPath());
+        output.put(Messages.PATH_KEY, filePath);
         output.put(Messages.VIOLATIONS_KEY, violations);
         output.put(Messages.PARSED_KEY, parsed);
         FILES.add(output);

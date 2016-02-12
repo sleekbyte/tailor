@@ -43,7 +43,7 @@ public final class JSONFormatterTest {
 
     @Before
     public void setUp() throws UnsupportedEncodingException {
-        formatter = new JSONFormatter(inputFile, colorSettings);
+        formatter = new JSONFormatter(colorSettings);
         formatter.clearFiles();
         outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent, false, Charset.defaultCharset().name()));
@@ -65,14 +65,14 @@ public final class JSONFormatterTest {
             Severity.ERROR, ERROR_MSG));
         Collections.sort(messages);
 
-        formatter.displayViolationMessages(messages);
+        formatter.displayViolationMessages(messages, inputFile);
         List<Map<String, Object>> actualOutput = formatter.getFiles();
         assertEquals(expectedOutput(messages), actualOutput);
     }
 
     @Test
     public void testDisplayParseErrorMessage() throws IOException {
-        formatter.displayParseErrorMessage();
+        formatter.displayParseErrorMessage(inputFile);
         Map<String, Object> output = new HashMap<>();
         output.put(Messages.PATH_KEY, inputFile.getCanonicalPath());
         output.put(Messages.PARSED_KEY, false);

@@ -81,8 +81,8 @@ public final class FormatTest {
 
         String[] msgs = outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
 
-        // Skip first two lines for file header, last two lines for summary
-        msgs = Arrays.copyOfRange(msgs, 2, msgs.length - 2);
+        // Skip first four lines for file header, last two lines for summary
+        msgs = Arrays.copyOfRange(msgs, 4, msgs.length - 2);
 
         for (String msg : msgs) {
             String truncatedMsg = msg.substring(msg.indexOf(inputFile.getName()));
@@ -122,6 +122,7 @@ public final class FormatTest {
             String strippedMsg = msg.replaceAll(inputFile.getCanonicalPath(), "");
             actual.add(strippedMsg);
         }
+
         assertArrayEquals(outContent.toString(Charset.defaultCharset().name()), expected.toArray(), actual.toArray());
     }
 

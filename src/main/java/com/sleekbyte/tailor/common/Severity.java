@@ -10,6 +10,11 @@ public enum Severity {
     private String value;
     private int severity;
 
+    /**
+     * Exception thrown when invalid severity is provided.
+     */
+    public static class IllegalSeverityException extends Exception {}
+
     Severity(String value, int severity) {
         this.value = value;
         this.severity = severity;
@@ -19,11 +24,6 @@ public enum Severity {
     public String toString() {
         return this.value;
     }
-
-    /**
-     * Exception thrown when invalid severity is provided.
-     */
-    public static class IllegalSeverityException extends Exception {}
 
     /**
      * Parse str and convert to appropriate Severity.

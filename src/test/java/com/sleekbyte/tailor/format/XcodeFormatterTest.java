@@ -33,7 +33,7 @@ public final class XcodeFormatterTest {
     private static final ColorSettings colorSettings = new ColorSettings(false, false);
 
     private File inputFile = new File("abc.swift");
-    private Formatter formatter = new XcodeFormatter(inputFile, colorSettings);
+    private Formatter formatter = new XcodeFormatter(colorSettings);
     private ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     @Before
@@ -55,13 +55,13 @@ public final class XcodeFormatterTest {
         messages.add(new ViolationMessage(Rules.UPPER_CAMEL_CASE, inputFile.getCanonicalPath(),  11, 14,
             Severity.ERROR, ERROR_MSG));
         Collections.sort(messages);
-        formatter.displayViolationMessages(messages);
+        formatter.displayViolationMessages(messages, inputFile);
         assertEquals(expectedOutput(messages), outContent.toString(Charset.defaultCharset().name()));
     }
 
     @Test
     public void testDisplayParseErrorMessage() throws IOException {
-        formatter.displayParseErrorMessage();
+        formatter.displayParseErrorMessage(inputFile);
         String expectedOutput = XcodeFormatter.getHeader(inputFile, colorSettings) + "\n" + inputFile
             + Messages.COULD_NOT_BE_PARSED + "\n";
         assertEquals(expectedOutput, outContent.toString(Charset.defaultCharset().name()));

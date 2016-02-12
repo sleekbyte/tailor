@@ -21,13 +21,14 @@ import java.util.stream.Collectors;
 /**
  * Generates and outputs formatted analysis messages for Xcode.
  */
-public final class Printer implements AutoCloseable {
+public final class Printer implements Comparable<Printer> {
 
     private File inputFile;
     private Severity maxSeverity;
     private Formatter formatter;
     private Map<String, ViolationMessage> msgBuffer = new HashMap<>();
     private Set<Integer> ignoredLineNumbers = new HashSet<>();
+    private boolean shouldPrintParseErrorMessage = false;
 
     /**
      * Constructs a printer for the specified input file, maximum severity, and color setting.
@@ -64,16 +65,6 @@ public final class Printer implements AutoCloseable {
         print(rule, Severity.min(Severity.ERROR, maxSeverity), errorMsg, location);
     }
 
-    private void print(Rules rule, Severity severity, String msg, Location location) {
-        ViolationMessage violationMessage = new ViolationMessage(rule, location.line, location.column, severity, msg);
-        try {
-            violationMessage.setFilePath(this.inputFile.getCanonicalPath());
-        } catch (IOException e) {
-            System.err.println("Error in getting canonical path of input file: " + e.getMessage());
-        }
-        this.msgBuffer.put(violationMessage.toString(), violationMessage);
-    }
-
     // Visible for testing only
     public static String genOutputStringForTest(Rules rule, String filePath, int line, Severity severity, String msg) {
         return new ViolationMessage(rule, filePath, line, 0, severity, msg).toString();
@@ -89,18 +80,20 @@ public final class Printer implements AutoCloseable {
         return new ArrayList<>(this.msgBuffer.values());
     }
 
-    @Override
-    public void close() throws IOException {
-        List<ViolationMessage> outputList = new ArrayList<>(this.getViolationMessages().stream()
-            .filter(msg -> !ignoredLineNumbers.contains(msg.getLineNumber())).collect(Collectors.toList()));
-        Collections.sort(outputList);
-        formatter.displayViolationMessages(outputList);
-    }
-
-    private long getNumMessagesWithSeverity(Severity severity) {
-        return msgBuffer.values().stream()
-            .filter(msg -> !ignoredLineNumbers.contains(msg.getLineNumber()))
-            .filter(msg -> msg.getSeverity().equals(severity)).count();
+    /**
+     * Calls formatter to display all violation or error messages.
+     *
+     * @throws IOException if formatter cannot retrieve canonical path from inputFile
+     */
+    public void printAllMessages() throws IOException {
+        if (shouldPrintParseErrorMessage) {
+            printParseErrorMessage();
+        } else {
+            List<ViolationMessage> outputList = new ArrayList<>(this.getViolationMessages().stream()
+                .filter(msg -> !ignoredLineNumbers.contains(msg.getLineNumber())).collect(Collectors.toList()));
+            Collections.sort(outputList);
+            formatter.displayViolationMessages(outputList, inputFile);
+        }
     }
 
     public long getNumErrorMessages() {
@@ -113,6 +106,10 @@ public final class Printer implements AutoCloseable {
 
     public void ignoreLine(int ignoredLineNumber) {
         this.ignoredLineNumbers.add(ignoredLineNumber);
+    }
+
+    public void setShouldPrintParseErrorMessage(boolean shouldPrintError) {
+        shouldPrintParseErrorMessage = shouldPrintError;
     }
 
     /**
@@ -129,7 +126,42 @@ public final class Printer implements AutoCloseable {
         }
     }
 
-    public void printParseErrorMessage() throws IOException {
-        formatter.displayParseErrorMessage();
+    @Override
+    public int compareTo(Printer printer) {
+        return this.inputFile.compareTo(printer.inputFile);
+    }
+
+    @Override
+    public boolean equals(Object printerObject) {
+        if (!(printerObject instanceof Printer)) {
+            return false;
+        }
+        return this.inputFile.equals(((Printer) printerObject).inputFile);
+    }
+
+    @Override
+    public int hashCode() {
+        assert false : "hashCode not designed";
+        return 100;
+    }
+
+    private void print(Rules rule, Severity severity, String msg, Location location) {
+        ViolationMessage violationMessage = new ViolationMessage(rule, location.line, location.column, severity, msg);
+        try {
+            violationMessage.setFilePath(this.inputFile.getCanonicalPath());
+        } catch (IOException e) {
+            System.err.println("Error in getting canonical path of input file: " + e.getMessage());
+        }
+        this.msgBuffer.put(violationMessage.toString(), violationMessage);
+    }
+
+    private void printParseErrorMessage() throws IOException {
+        formatter.displayParseErrorMessage(inputFile);
+    }
+
+    private long getNumMessagesWithSeverity(Severity severity) {
+        return msgBuffer.values().stream()
+            .filter(msg -> !ignoredLineNumbers.contains(msg.getLineNumber()))
+            .filter(msg -> msg.getSeverity().equals(severity)).count();
     }
 }

@@ -8,6 +8,7 @@ import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.common.YamlConfiguration;
 import com.sleekbyte.tailor.format.Format;
 import com.sleekbyte.tailor.format.Formatter;
+import com.sleekbyte.tailor.utils.CLIArgumentParser.CLIArgumentParserException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
 
@@ -27,45 +28,45 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 /**
- * Adaptor class for YamlConfiguration and CliArgumentParser.
+ * Adaptor class for YamlConfiguration and CLIArgumentParser.
  */
 public final class Configuration {
 
-    private static CliArgumentParser cliArgumentParser = new CliArgumentParser();
+    private static CLIArgumentParser CLIArgumentParser = new CLIArgumentParser();
     private Optional<YamlConfiguration> yamlConfiguration;
     private CommandLine cmd;
 
     public Configuration(String[] args) throws ParseException, IOException {
-        cmd = cliArgumentParser.parseCommandLine(args);
-        yamlConfiguration = YamlConfigurationFileManager.getConfiguration(cliArgumentParser.getConfigFilePath());
+        cmd = CLIArgumentParser.parseCommandLine(args);
+        yamlConfiguration = YamlConfigurationFileManager.getConfiguration(CLIArgumentParser.getConfigFilePath());
     }
 
     public boolean shouldPrintHelp() {
-        return cliArgumentParser.shouldPrintHelp();
+        return CLIArgumentParser.shouldPrintHelp();
     }
 
     public boolean shouldPrintVersion() {
-        return cliArgumentParser.shouldPrintVersion();
+        return CLIArgumentParser.shouldPrintVersion();
     }
 
     public boolean shouldPrintRules() {
-        return cliArgumentParser.shouldPrintRules();
+        return CLIArgumentParser.shouldPrintRules();
     }
 
     public boolean shouldListFiles() {
-        return cliArgumentParser.shouldListFiles();
+        return CLIArgumentParser.shouldListFiles();
     }
 
     public boolean shouldColorOutput() {
-        return cliArgumentParser.shouldColorOutput();
+        return CLIArgumentParser.shouldColorOutput();
     }
 
     public boolean shouldInvertColorOutput() {
-        return cliArgumentParser.shouldInvertColorOutput();
+        return CLIArgumentParser.shouldInvertColorOutput();
     }
 
-    public boolean debugFlagSet() throws CliArgumentParserException {
-        return cliArgumentParser.debugFlagSet();
+    public boolean debugFlagSet() throws CLIArgumentParserException {
+        return CLIArgumentParser.debugFlagSet();
     }
 
     /**
@@ -73,19 +74,19 @@ public final class Configuration {
      * and YamlConfiguration file.
      *
      * @return list of enabled rules after filtering
-     * @throws CliArgumentParserException if rule names specified in command line options are not valid
+     * @throws CLIArgumentParserException if rule names specified in command line options are not valid
      */
-    public Set<Rules> getEnabledRules() throws CliArgumentParserException {
+    public Set<Rules> getEnabledRules() throws CLIArgumentParserException {
         // --only is given precedence over --except
         // CLI input is given precedence over YAML configuration file
 
         // Retrieve included or excluded rules from CLI
-        Set<String> onlySpecificRules = cliArgumentParser.getOnlySpecificRules();
+        Set<String> onlySpecificRules = CLIArgumentParser.getOnlySpecificRules();
         if (onlySpecificRules.size() > 0) {
             return getRulesFilteredByOnly(onlySpecificRules);
         }
 
-        Set<String> excludedRules = cliArgumentParser.getExcludedRules();
+        Set<String> excludedRules = CLIArgumentParser.getExcludedRules();
         if (excludedRules.size() > 0) {
             return getRulesFilteredByExcept(excludedRules);
         }
@@ -114,7 +115,7 @@ public final class Configuration {
      * @return Swift file names
      * @throws IOException if path specified does not exist
      */
-    public Set<String> getFilesToAnalyze() throws IOException, CliArgumentParserException {
+    public Set<String> getFilesToAnalyze() throws IOException, CLIArgumentParserException {
         Optional<String> srcRoot = getSrcRoot();
         List<String> pathNames = new ArrayList<>();
         String[] cliPaths = cmd.getArgs();
@@ -129,7 +130,7 @@ public final class Configuration {
         } else if (yamlConfiguration.isPresent()) {
             YamlConfiguration config = yamlConfiguration.get();
             Optional<String> configFileLocation = config.getFileLocation();
-            if (configFileLocation.isPresent() && cliArgumentParser.getFormat() == Format.XCODE) {
+            if (configFileLocation.isPresent() && CLIArgumentParser.getFormat() == Format.XCODE) {
                 System.out.println(Messages.TAILOR_CONFIG_LOCATION + configFileLocation.get());
             }
             URI rootUri = new File(srcRoot.orElse(".")).toURI();
@@ -144,37 +145,40 @@ public final class Configuration {
         return fileNames;
     }
 
-    public ConstructLengths parseConstructLengths() throws CliArgumentParserException {
-        return cliArgumentParser.parseConstructLengths();
+    public ConstructLengths parseConstructLengths() throws CLIArgumentParserException {
+        return CLIArgumentParser.parseConstructLengths();
     }
 
-    public Severity getMaxSeverity() throws CliArgumentParserException {
-        return cliArgumentParser.getMaxSeverity();
+    public Severity getMaxSeverity() throws CLIArgumentParserException {
+        return CLIArgumentParser.getMaxSeverity();
     }
 
     public String getXcodeprojPath() {
-        return cliArgumentParser.getXcodeprojPath();
+        return CLIArgumentParser.getXcodeprojPath();
     }
 
     public void printHelp() {
-        cliArgumentParser.printHelp();
+        CLIArgumentParser.printHelp();
+    }
+
+    public Format getFormat() throws CLIArgumentParserException {
+        return CLIArgumentParser.getFormat();
     }
 
     /**
      * Get an instance of the formatter specified by the user.
-     * @param inputFile the file for which violation messages will be displayed
      * @param colorSettings the command-line color settings
      * @return formatter instance that implements Formatter interface
-     * @throws CliArgumentParserException if the user-specified format does not correspond to a supported type
+     * @throws CLIArgumentParserException if the user-specified format does not correspond to a supported type
      */
-    public Formatter getFormatter(File inputFile, ColorSettings colorSettings) throws CliArgumentParserException {
-        String formatClass = cliArgumentParser.getFormat().getClassName();
+    public Formatter getFormatter(ColorSettings colorSettings) throws CLIArgumentParserException {
+        String formatClass = getFormat().getClassName();
         Formatter formatter;
         try {
-            Constructor formatConstructor = Class.forName(formatClass).getConstructor(File.class, ColorSettings.class);
-            formatter = (Formatter) formatConstructor.newInstance(inputFile, colorSettings);
+            Constructor formatConstructor = Class.forName(formatClass).getConstructor(ColorSettings.class);
+            formatter = (Formatter) formatConstructor.newInstance(colorSettings);
         } catch (ReflectiveOperationException e) {
-            throw new CliArgumentParserException("Formatter was not successfully created: " + e);
+            throw new CLIArgumentParserException("Formatter was not successfully created: " + e);
         }
         return formatter;
     }
@@ -215,24 +219,24 @@ public final class Configuration {
      *
      * @param enabledRules   all valid rule names
      * @param specifiedRules rule names specified from command line
-     * @throws CliArgumentParserException if rule name specified in command line is not valid
+     * @throws CLIArgumentParserException if rule name specified in command line is not valid
      */
     private static void checkValidRules(Set<String> enabledRules, Set<String> specifiedRules)
-        throws CliArgumentParserException {
+        throws CLIArgumentParserException {
         if (!enabledRules.containsAll(specifiedRules)) {
             specifiedRules.removeAll(enabledRules);
-            throw new CliArgumentParserException("The following rules were not recognized: " + specifiedRules);
+            throw new CLIArgumentParserException("The following rules were not recognized: " + specifiedRules);
         }
     }
 
-    private Set<Rules> getRulesFilteredByOnly(Set<String> parsedRules) throws CliArgumentParserException {
+    private Set<Rules> getRulesFilteredByOnly(Set<String> parsedRules) throws CLIArgumentParserException {
         Set<Rules> enabledRules = new HashSet<>(Arrays.asList(Rules.values()));
         Set<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toSet());
         Configuration.checkValidRules(enabledRuleNames, parsedRules);
         return enabledRules.stream().filter(rule -> parsedRules.contains(rule.getName())).collect(Collectors.toSet());
     }
 
-    private Set<Rules> getRulesFilteredByExcept(Set<String> parsedRules) throws CliArgumentParserException {
+    private Set<Rules> getRulesFilteredByExcept(Set<String> parsedRules) throws CLIArgumentParserException {
         Set<Rules> enabledRules = new HashSet<>(Arrays.asList(Rules.values()));
         Set<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toSet());
         Configuration.checkValidRules(enabledRuleNames, parsedRules);
