@@ -79,6 +79,9 @@ public final class JSONFormatter extends Formatter {
         System.out.println(GSON.toJson(output));
     }
 
+    @Override
+    public void printProgressInfo(String str) {}
+
     private void storeMessages(List<Map<String, Object>> violations, boolean parsed, String filePath)
         throws IOException {
         Map<String, Object> output = new HashMap<>();

@@ -58,6 +58,15 @@ public abstract class Formatter {
         return ExitCode.SUCCESS;
     }
 
+    /**
+     * Print progress info to the console if the format allows.
+     *
+     * @param str the string to print
+     */
+    public void printProgressInfo(String str) {
+        System.out.print(str);
+    }
+
     public static String pluralize(long number, String singular, String plural) {
         return String.format("%d %s", number, number == 1 ? singular : plural);
     }

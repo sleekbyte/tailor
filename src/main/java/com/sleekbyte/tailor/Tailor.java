@@ -11,7 +11,6 @@ import com.sleekbyte.tailor.common.ExitCode;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
-import com.sleekbyte.tailor.format.Format;
 import com.sleekbyte.tailor.format.Formatter;
 import com.sleekbyte.tailor.integration.XcodeIntegrator;
 import com.sleekbyte.tailor.listeners.BlankLineListener;
@@ -280,7 +279,8 @@ public final class Tailor {
         Set<Rules> enabledRules = configuration.getEnabledRules();
 
         List<File> files = fileNames.parallelStream().map(File::new).collect(Collectors.toList());
-        printIfFormatAllows(String.format("Analyzing %s:%n", Formatter.pluralize(fileNames.size(), "file", "files")));
+        formatter.printProgressInfo(
+            String.format("Analyzing %s:%n", Formatter.pluralize(fileNames.size(), "file", "files")));
 
         files.parallelStream().forEach(
             file -> {
@@ -288,9 +288,9 @@ public final class Tailor {
                     Optional<CommonTokenStream> tokenStream = getTokenStream(file);
                     Optional<TopLevelContext> tree = getParseTree(tokenStream);
                     analyzeFile(file, tokenStream, tree, formatter, maxSeverity, constructLengths, enabledRules);
-                    printIfFormatAllows(".");
+                    formatter.printProgressInfo(".");
                 } catch (ErrorListener.ParseException e) {
-                    printIfFormatAllows("S");
+                    formatter.printProgressInfo("S");
                     Printer printer = new Printer(file, maxSeverity, formatter);
                     printer.setShouldPrintParseErrorMessage(true);
                     printersForAllFiles.add(printer);
@@ -299,7 +299,7 @@ public final class Tailor {
                     handleCLIException(e, configuration);
                 }
             });
-        printIfFormatAllows(String.format("%n"));
+        formatter.printProgressInfo(String.format("%n"));
 
         printersForAllFiles.forEach(printer -> {
                 try {
@@ -311,16 +311,6 @@ public final class Tailor {
 
         formatter.displaySummary(fileNames.size(), numSkippedFiles.get(), numErrors.get(), numWarnings.get());
         handleErrorViolations(formatter, numErrors.get());
-    }
-
-    private void printIfFormatAllows(String str) {
-        try {
-            if (configuration.getFormat() == Format.XCODE) {
-                System.out.print(str);
-            }
-        } catch (CLIArgumentParserException e) {
-            handleCLIException(e, configuration);
-        }
     }
 
     /**
