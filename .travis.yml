@@ -7,6 +7,8 @@ before_install:
 after_success:
   - codecov
   - ./gradlew coveralls
+before_deploy:
+  - "shasum -a 256 build/distributions/*"
 deploy:
   provider: releases
   api_key: ${GITHUB_KEY}
