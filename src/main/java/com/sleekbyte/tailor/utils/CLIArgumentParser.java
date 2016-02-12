@@ -19,7 +19,7 @@ import java.util.Set;
 /**
  * Parse command line options and arguments.
  */
-public class CliArgumentParser {
+public class CLIArgumentParser {
 
     private static final String SYNTAX_PREFIX = "Usage: ";
     private static final String OPTIONS_PREFIX = "Options:";
@@ -62,8 +62,8 @@ public class CliArgumentParser {
     /**
      * Exception thrown when option parsing fails.
      */
-    public static class CliArgumentParserException extends Exception {
-        public CliArgumentParserException(String message) {
+    public static class CLIArgumentParserException extends Exception {
+        public CLIArgumentParserException(String message) {
             super(message);
         }
     }
@@ -121,7 +121,7 @@ public class CliArgumentParser {
     /**
      * Parse construct length flags into ConstructLengths object.
      */
-    public ConstructLengths parseConstructLengths() throws CliArgumentParserException {
+    public ConstructLengths parseConstructLengths() throws CLIArgumentParserException {
         ConstructLengths constructLengths = new ConstructLengths();
 
         constructLengths.setMaxClassLength(getIntegerArgument(MAX_CLASS_LENGTH_OPT));
@@ -239,11 +239,11 @@ public class CliArgumentParser {
         return Option.builder().longOpt(longOpt).hasArgs().argName(argName).valueSeparator(',').desc(desc).build();
     }
 
-    private int getIntegerArgument(String opt) throws CliArgumentParserException {
+    private int getIntegerArgument(String opt) throws CLIArgumentParserException {
         try {
             return Integer.parseInt(this.cmd.getOptionValue(opt, DEFAULT_INT_ARG));
         } catch (NumberFormatException e) {
-            throw new CliArgumentParserException("Invalid value provided for integer argument " + opt + ".");
+            throw new CLIArgumentParserException("Invalid value provided for integer argument " + opt + ".");
         }
     }
 
@@ -279,17 +279,17 @@ public class CliArgumentParser {
      * Returns maximum severity configured by user or 'warning' if not specified.
      *
      * @return Maximum severity
-     * @throws CliArgumentParserException if invalid value specified for --max-severity
+     * @throws CLIArgumentParserException if invalid value specified for --max-severity
      */
-    public Severity getMaxSeverity() throws CliArgumentParserException {
+    public Severity getMaxSeverity() throws CLIArgumentParserException {
         try {
             return Severity.parseSeverity(this.cmd.getOptionValue(MAX_SEVERITY_OPT, Messages.WARNING));
         } catch (Severity.IllegalSeverityException ex) {
-            throw new CliArgumentParserException(INVALID_OPTION_VALUE + MAX_SEVERITY_OPT + ".");
+            throw new CLIArgumentParserException(INVALID_OPTION_VALUE + MAX_SEVERITY_OPT + ".");
         }
     }
 
-    public boolean debugFlagSet() throws CliArgumentParserException {
+    public boolean debugFlagSet() throws CLIArgumentParserException {
         return cmd != null && cmd.hasOption(DEBUG_OPT);
     }
 
@@ -306,15 +306,16 @@ public class CliArgumentParser {
      *
      * @return Format type
      */
-    public Format getFormat() throws CliArgumentParserException {
+    public Format getFormat() throws CLIArgumentParserException {
         if (cmd != null) {
             try {
                 return Format.parseFormat(cmd.getOptionValue(FORMAT_LONG_OPT, Format.XCODE.getName()));
             } catch (Format.IllegalFormatException e) {
-                throw new CliArgumentParserException(INVALID_OPTION_VALUE + FORMAT_LONG_OPT + "."
+                throw new CLIArgumentParserException(INVALID_OPTION_VALUE + FORMAT_LONG_OPT + "."
                     + " Options are <" + Format.getFormats() + ">.");
             }
         }
         return Format.XCODE;
     }
+
 }
