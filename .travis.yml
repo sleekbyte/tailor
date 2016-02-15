@@ -7,12 +7,15 @@ before_install:
 after_success:
   - codecov
   - ./gradlew coveralls
+before_deploy:
+  - "shasum -a 256 build/distributions/*"
 deploy:
   provider: releases
   api_key: ${GITHUB_KEY}
   file:
-    - build/distributions/tailor-*.tar
-    - build/distributions/tailor-*.zip
+    - "build/distributions/tailor-*.tar"
+    - "build/distributions/tailor-*.zip"
+  file_glob: true
   skip_cleanup: true
   on:
     tags: true
