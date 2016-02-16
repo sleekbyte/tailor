@@ -210,8 +210,8 @@ import Foundation; // tailor:disable
 ```
 
 ### Configuration
-The behavior of Tailor can be customized via the `.tailor.yml` configuration file. It enables you to 
-* include/exclude certain files and directories from analysis 
+The behavior of Tailor can be customized via the `.tailor.yml` configuration file. It enables you to
+* include/exclude certain files and directories from analysis
 * enable and disable specific analysis rules
 
 You can tell Tailor which configuration file to use by specifying its file path via the `--config` CLI option. By default, Tailor will look for the configuration file in the directory where you will run Tailor from.
@@ -323,6 +323,7 @@ Please review the [guidelines for contributing](https://github.com/sleekbyte/tai
 ## Development Environment
 * [Java Version 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
 * [Gradle](https://gradle.org) (optional, `./gradlew` may be used instead)
+* [Ruby 2.0.0+](https://www.ruby-lang.org/en/)
 * [Bundler](http://bundler.io)
 
 # External Tools and Libraries
