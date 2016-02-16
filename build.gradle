@@ -208,11 +208,13 @@ task updateInstallScripts(type: Exec) {
 
 // Generate man page {{{
 task manpage(type: Exec) {
+    inputs.files files('man/Gemfile', 'man/tailor.1.ronn')
+    outputs.files files('man/vendor/', 'src/dist/tailor.1')
     workingDir 'man'
     executable 'sh'
-    args '-c', "if bundle check >/dev/null; then" +
-        " bundle exec ronn --manual='Tailor Manual' --organization='Sleekbyte' --roff tailor.1.ronn && mv tailor.1 ../src/dist/;" +
-        " else echo 'WARNING: Man page will not be included in distribution since Ronn is missing, please run `script/bootstrap`.'; fi"
+    args '-c', "bundle install --path vendor/bundle" +
+        " && bundle exec ronn --manual='Tailor Manual' --organization='Sleekbyte' --roff tailor.1.ronn" +
+        " && mv tailor.1 ../src/dist/"
 }
 // Ensure man page is packaged into distribution
 distZip.dependsOn 'manpage'

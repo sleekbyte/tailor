@@ -14,7 +14,3 @@ fi
 
 # Install bundler if nonexistent
 gem list -i bundler >/dev/null || gem install bundler
-pushd . >/dev/null
-cd man
-bundle install --path vendor/bundle
-popd >/dev/null
