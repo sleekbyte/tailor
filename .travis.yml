@@ -2,6 +2,7 @@ language: java
 jdk:
   - oraclejdk8
 before_install:
+  - rvm install 2.3.0
   - gem update bundler
   - pip install --user codecov
 after_success:
