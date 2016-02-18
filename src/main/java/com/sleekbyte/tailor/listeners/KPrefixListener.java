@@ -1,13 +1,16 @@
 package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
-import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.antlr.SwiftParser.IdentifierContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.TopLevelContext;
 import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.CharFormatUtil;
 import com.sleekbyte.tailor.utils.ListenerUtil;
+
+import java.util.List;
 
 /**
  * Parse tree listener for 'k' prefix style check.
@@ -21,12 +24,18 @@ public class KPrefixListener extends SwiftBaseListener {
     }
 
     @Override
-    public void enterIdentifier(SwiftParser.IdentifierContext ctx) {
-        String constantName = ctx.getText();
-        Location location = ListenerUtil.getContextStartLocation(ctx);
-        if (CharFormatUtil.isKPrefixed(constantName)) {
-            printer.warn(Rules.CONSTANT_K_PREFIX, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED, location);
-        }
+    public void enterTopLevel(TopLevelContext topLevelCtx) {
+        List<IdentifierContext> names = DeclarationListener.getConstantNames(topLevelCtx);
+        names.forEach(
+            ctx -> {
+                String constantName = ctx.getText();
+                Location location = ListenerUtil.getContextStartLocation(ctx);
+                if (CharFormatUtil.isKPrefixed(constantName)) {
+                    printer.warn(Rules.CONSTANT_K_PREFIX, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED,
+                        location);
+                }
+            }
+        );
     }
 
 }

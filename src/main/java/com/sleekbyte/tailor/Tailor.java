@@ -15,11 +15,8 @@ import com.sleekbyte.tailor.format.Formatter;
 import com.sleekbyte.tailor.integration.XcodeIntegrator;
 import com.sleekbyte.tailor.listeners.BlankLineListener;
 import com.sleekbyte.tailor.listeners.BraceStyleListener;
-import com.sleekbyte.tailor.listeners.ConstantNamingListener;
-import com.sleekbyte.tailor.listeners.DeclarationListener;
 import com.sleekbyte.tailor.listeners.ErrorListener;
 import com.sleekbyte.tailor.listeners.FileListener;
-import com.sleekbyte.tailor.listeners.KPrefixListener;
 import com.sleekbyte.tailor.listeners.TodoCommentListener;
 import com.sleekbyte.tailor.listeners.lengths.MaxLengthListener;
 import com.sleekbyte.tailor.listeners.lengths.MinLengthListener;
@@ -126,7 +123,9 @@ public final class Tailor {
                 CommentExtractor commentExtractor = new CommentExtractor(tokenStream);
                 if (className.equals(FileListener.class.getName())) {
                     continue;
-                } else if (className.equals(CommentWhitespaceListener.class.getName())) {
+                }
+
+                if (className.equals(CommentWhitespaceListener.class.getName())) {
                     CommentWhitespaceListener commentWhitespaceListener = new CommentWhitespaceListener(printer,
                         commentExtractor.getSingleLineComments(), commentExtractor.getMultilineComments());
                     commentWhitespaceListener.analyze();
@@ -150,8 +149,6 @@ public final class Tailor {
 
         listeners.add(new MinLengthListener(printer, constructLengths, enabledRules));
         listeners.add(new MaxLengthListener(printer, constructLengths, enabledRules));
-        DeclarationListener decListener = new DeclarationListener(listeners);
-        listeners.add(decListener);
 
         return listeners;
     }
@@ -210,13 +207,7 @@ public final class Tailor {
      */
     private void walkParseTree(List<SwiftBaseListener> listeners, TopLevelContext tree) {
         ParseTreeWalker walker = new ParseTreeWalker();
-        for (SwiftBaseListener listener : listeners) {
-            // The following listeners are used by DeclarationListener to walk the tree
-            if (listener instanceof ConstantNamingListener || listener instanceof KPrefixListener) {
-                continue;
-            }
-            walker.walk(listener, tree);
-        }
+        listeners.forEach(listener -> walker.walk(listener, tree));
     }
 
     /**
