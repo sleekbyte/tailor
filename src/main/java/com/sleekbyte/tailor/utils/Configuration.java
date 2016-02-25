@@ -198,7 +198,7 @@ public final class Configuration {
             try {
                 format = Format.parseFormat(yamlConfiguration.get().getFormat());
             } catch (IllegalFormatException e) {
-                throw new YAMLException(com.sleekbyte.tailor.utils.CLIArgumentParser.INVALID_OPTION_VALUE
+                throw new YAMLException(Messages.INVALID_OPTION_VALUE
                     + "format ." + " Options are <" + Format.getFormats() + ">.");
             }
         }

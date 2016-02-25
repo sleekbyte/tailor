@@ -21,7 +21,6 @@ import com.sleekbyte.tailor.listeners.whitespace.CommaWhitespaceListener;
 import com.sleekbyte.tailor.listeners.whitespace.CommentWhitespaceListener;
 import com.sleekbyte.tailor.listeners.whitespace.OperatorWhitespaceListener;
 import com.sleekbyte.tailor.listeners.whitespace.ParenthesisWhitespaceListener;
-import com.sleekbyte.tailor.utils.CLIArgumentParser;
 
 /**
  * Enum for all rules implemented in Tailor.
@@ -133,35 +132,35 @@ public enum Rules {
         LOWER_CAMEL_CASE.description = "Method and variable names should follow lowerCamelCase naming convention.";
         LOWER_CAMEL_CASE.className = LowerCamelCaseListener.class.getName();
 
-        MAX_CLASS_LENGTH.name = CLIArgumentParser.MAX_CLASS_LENGTH_OPT;
+        MAX_CLASS_LENGTH.name = Messages.MAX_CLASS_LENGTH_OPT;
         MAX_CLASS_LENGTH.description = "Enforce a line limit on the lengths of class bodies.";
         MAX_CLASS_LENGTH.className = FileListener.class.getName();
 
-        MAX_CLOSURE_LENGTH.name = CLIArgumentParser.MAX_CLOSURE_LENGTH_OPT;
+        MAX_CLOSURE_LENGTH.name = Messages.MAX_CLOSURE_LENGTH_OPT;
         MAX_CLOSURE_LENGTH.description = "Enforce a line limit on the lengths of closure bodies.";
         MAX_CLOSURE_LENGTH.className = FileListener.class.getName();
 
-        MAX_FILE_LENGTH.name = CLIArgumentParser.MAX_FILE_LENGTH_OPT;
+        MAX_FILE_LENGTH.name = Messages.MAX_FILE_LENGTH_OPT;
         MAX_FILE_LENGTH.description = "Enforce a line limit on each file.";
         MAX_FILE_LENGTH.className = FileListener.class.getName();
 
-        MAX_FUNCTION_LENGTH.name = CLIArgumentParser.MAX_FUNCTION_LENGTH_OPT;
+        MAX_FUNCTION_LENGTH.name = Messages.MAX_FUNCTION_LENGTH_OPT;
         MAX_FUNCTION_LENGTH.description = "Enforce a line limit on the lengths of function bodies.";
         MAX_FUNCTION_LENGTH.className = FileListener.class.getName();
 
-        MAX_LINE_LENGTH.name = CLIArgumentParser.MAX_LINE_LENGTH_LONG_OPT;
+        MAX_LINE_LENGTH.name = Messages.MAX_LINE_LENGTH_LONG_OPT;
         MAX_LINE_LENGTH.description = "Enforce a character limit on the length of each line.";
         MAX_LINE_LENGTH.className = FileListener.class.getName();
 
-        MAX_NAME_LENGTH.name = CLIArgumentParser.MAX_NAME_LENGTH_OPT;
+        MAX_NAME_LENGTH.name = Messages.MAX_NAME_LENGTH_OPT;
         MAX_NAME_LENGTH.description = "Enforce a character limit on the length of each construct name.";
         MAX_NAME_LENGTH.className = FileListener.class.getName();
 
-        MAX_STRUCT_LENGTH.name = CLIArgumentParser.MAX_STRUCT_LENGTH_OPT;
+        MAX_STRUCT_LENGTH.name = Messages.MAX_STRUCT_LENGTH_OPT;
         MAX_STRUCT_LENGTH.description = "Enforce a line limit on the lengths of struct bodies.";
         MAX_STRUCT_LENGTH.className = FileListener.class.getName();
 
-        MIN_NAME_LENGTH.name = CLIArgumentParser.MIN_NAME_LENGTH_OPT;
+        MIN_NAME_LENGTH.name = Messages.MIN_NAME_LENGTH_OPT;
         MIN_NAME_LENGTH.description = "Enforce a minimum character limit on the length of each construct name.";
         MIN_NAME_LENGTH.className = FileListener.class.getName();
 
