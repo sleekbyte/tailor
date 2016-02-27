@@ -13,14 +13,20 @@ import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.output.ViolationMessage;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,6 +49,9 @@ public final class FormatTest {
     protected ByteArrayOutputStream outContent;
     protected File inputFile;
     protected List<String> expectedMessages;
+
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
 
     @Before
     public void setUp() throws IOException {
@@ -126,6 +135,43 @@ public final class FormatTest {
         assertArrayEquals(outContent.toString(Charset.defaultCharset().name()), expected.toArray(), actual.toArray());
     }
 
+    @Test
+    public void testXcodeConfigOption() throws IOException {
+        File configurationFile = xcodeFormatConfigFile(".tailor.yml");
+
+        final String[] command = new String[] {
+            "--config", configurationFile.getAbsolutePath(),
+            "--no-color",
+            "--only=upper-camel-case",
+            inputFile.getPath()
+        };
+
+        expectedMessages.addAll(getExpectedMsgs().stream().map(msg -> Printer.genOutputStringForTest(
+            msg.getRule(),
+            inputFile.getName(),
+            msg.getLineNumber(),
+            msg.getColumnNumber(),
+            msg.getSeverity(),
+            msg.getMessage())).collect(Collectors.toList()));
+
+        Tailor.main(command);
+
+        List<String> actualOutput = new ArrayList<>();
+
+        String[] msgs = outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
+
+        // Skip first two lines for file header, last two lines for summary
+        msgs = Arrays.copyOfRange(msgs, 2, msgs.length - 2);
+
+        for (String msg : msgs) {
+            String truncatedMsg = msg.substring(msg.indexOf(inputFile.getName()));
+            actualOutput.add(truncatedMsg);
+        }
+
+        assertArrayEquals(outContent.toString(Charset.defaultCharset().name()), this.expectedMessages.toArray(),
+            actualOutput.toArray());
+    }
+
     protected List<ViolationMessage> getExpectedMsgs() {
         List<ViolationMessage> messages = new ArrayList<>();
         messages.add(createViolationMessage(3, 7, Severity.WARNING, Messages.CLASS + Messages.NAMES));
@@ -193,6 +239,16 @@ public final class FormatTest {
         expectedOutput.put(Messages.FILES_KEY, files);
         expectedOutput.put(Messages.SUMMARY_KEY, getJSONSummary(1, 0, 0, 22));
         return expectedOutput;
+    }
+
+    private File xcodeFormatConfigFile(String fileName) throws IOException {
+        File configFile = folder.newFile(fileName);
+        Writer streamWriter = new OutputStreamWriter(new FileOutputStream(configFile), Charset.forName("UTF-8"));
+        PrintWriter printWriter = new PrintWriter(streamWriter);
+        printWriter.println("format: xcode");
+        streamWriter.close();
+        printWriter.close();
+        return configFile;
     }
 
 }
