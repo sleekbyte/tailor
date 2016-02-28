@@ -63,7 +63,6 @@ public enum Rules {
     private String name;
     private String className;
     private String description;
-    private String category;
 
     public String getName() {
         return this.name;
@@ -87,6 +86,10 @@ public enum Rules {
             return Messages.BUG_RISK_CATEGORY;
         }
         return Messages.STYLE_CATEGORY;
+    }
+
+    public String getInformation() {
+        return this.getDescription() + " View code samples in the [Style Guide](" + this.getLink() + ").";
     }
 
     public String getLink() {

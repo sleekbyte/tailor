@@ -55,8 +55,7 @@ public final class CCFormatter extends Formatter {
             violation.put(Messages.LOCATION_KEY, location);
             violation.put(Messages.CHECK_NAME_KEY, msg.getRule().getName());
             Map<String, Object> content = new HashMap<>();
-            content.put(Messages.BODY_KEY, msg.getRule().getDescription()
-                + " View code samples in the [Style Guide](" + msg.getRule().getLink() + ").");
+            content.put(Messages.BODY_KEY, msg.getRule().getInformation());
             violation.put(Messages.CONTENT_KEY, content);
             violation.put(Messages.DESCRIPTION_KEY, msg.getMessage());
 

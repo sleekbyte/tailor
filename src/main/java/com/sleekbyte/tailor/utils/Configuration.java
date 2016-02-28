@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  */
 public final class Configuration {
 
-    private static final String CONFIG_JSON = "/config.json";
+    private static final String CONFIG_JSON = "../config.json";
     private static final Path CODE_CLIMATE_CONFIG = Paths.get(CONFIG_JSON);
     private static CLIArgumentParser CLIArgumentParser = new CLIArgumentParser();
     private Optional<YamlConfiguration> yamlConfiguration;
