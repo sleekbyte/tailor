@@ -18,7 +18,9 @@ import java.util.Set;
  */
 public final class FileListener implements AutoCloseable {
 
-    private static final String DISABLE_PATTERN = "// tailor:disable";
+    private static final String DISABLE_LINE_PATTERN = "// tailor:disable";
+    private static final String DISABLE_REGION_BEGIN_PATTERN = "// tailor:disable-region-begin";
+    private static final String DISABLE_REGION_END_PATTERN = "// tailor:disable-region-end";
     private Printer printer;
     private File inputFile;
     private ConstructLengths constructLengths;
@@ -53,14 +55,29 @@ public final class FileListener implements AutoCloseable {
     public void verify() throws IOException {
         int lineLength;
         int lineNumber;
+        int disableBlockStartLineNumber = -1;
+        int disableBlockEndLineNumber = -1;
         for (String line = this.reader.readLine(); line != null; line = this.reader.readLine()) {
             lineLength = line.length();
             lineNumber = this.reader.getLineNumber();
             // Count the number of lines in a file
             this.numOfLines++;
 
-            // Suppress all violations on lines ending with the given pattern
-            if (line.trim().endsWith(DISABLE_PATTERN)) {
+            String trimmedLine = line.trim();
+            if (trimmedLine.equals(DISABLE_REGION_BEGIN_PATTERN)) {
+                // Suppress all violations after the given pattern
+                disableBlockStartLineNumber = lineNumber;
+            } else if (trimmedLine.equals(DISABLE_REGION_END_PATTERN)) {
+                // Suppress all violations before the given pattern
+                disableBlockEndLineNumber = lineNumber;
+            }
+
+            /** Suppress all violations on lines:
+             * 1. ending with DISABLE_LINE_PATTERN
+             * 2. inside the disable region
+             */
+            if (trimmedLine.endsWith(DISABLE_LINE_PATTERN)
+                || lineInsideRegion(disableBlockStartLineNumber, disableBlockEndLineNumber, lineNumber)) {
                 this.printer.ignoreLine(lineNumber);
             }
 
@@ -87,6 +104,12 @@ public final class FileListener implements AutoCloseable {
         if (enabledRules.contains(Rules.LEADING_WHITESPACE)) {
             verifyNoLeadingWhitespace();
         }
+    }
+
+    private boolean lineInsideRegion(int regionStart, int regionEnd, int lineNumber) {
+        return regionStart > -1
+            && lineNumber >= regionEnd
+            && regionEnd == -1;
     }
 
     private void lineLengthViolation(int lineNumber, int lineLength, int lengthLimit,  Rules rule, String msg) {
