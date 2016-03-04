@@ -284,7 +284,7 @@ Here is an example showcasing how to specify the CLI output color scheme:
 
 ```YAML
 # The CLI output will not be colored
-format: disable
+color: disable
 ```
 
 ##### Note
