@@ -207,4 +207,9 @@ public class Messages {
     public static final String FORMAT_SHORT_OPT = "f";
     public static final String FORMAT_LONG_OPT = "format";
     public static final String INVALID_OPTION_VALUE = "Invalid value provided for option ";
+
+    // Config options
+    public static final String INVERT = "invert";
+    public static final String DISABLE = "disable";
+
 }

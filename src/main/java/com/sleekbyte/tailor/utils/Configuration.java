@@ -59,12 +59,38 @@ public final class Configuration {
         return CLIArgumentParser.shouldListFiles();
     }
 
+    /**
+     * Determine if the output should be colorized.
+     *
+     * @return whether the output should be colorized
+     */
     public boolean shouldColorOutput() {
-        return CLIArgumentParser.shouldColorOutput();
+        boolean shouldColorOutput = CLIArgumentParser.shouldColorOutput();
+        if (shouldColorOutput && yamlConfiguration.isPresent() && yamlConfiguration.get().getColor() != null) {
+            String option = yamlConfiguration.get().getColor();
+            validateColorOption(option);
+            if (option.equals(Messages.DISABLE)) {
+                shouldColorOutput = false;
+            }
+        }
+        return shouldColorOutput;
     }
 
+    /**
+     * Determine if the output color should be inverted.
+     *
+     * @return whether the output color should be inverted
+     */
     public boolean shouldInvertColorOutput() {
-        return CLIArgumentParser.shouldInvertColorOutput();
+        boolean shouldInvertColorOutput = CLIArgumentParser.shouldInvertColorOutput();
+        if (!shouldInvertColorOutput && yamlConfiguration.isPresent() && yamlConfiguration.get().getColor() != null) {
+            String option = yamlConfiguration.get().getColor();
+            validateColorOption(option);
+            if (option.equals(Messages.INVERT)) {
+                shouldInvertColorOutput = true;
+            }
+        }
+        return shouldInvertColorOutput;
     }
 
     /**
@@ -273,6 +299,14 @@ public final class Configuration {
         Set<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toSet());
         Configuration.checkValidRules(enabledRuleNames, parsedRules);
         return enabledRules.stream().filter(rule -> !parsedRules.contains(rule.getName())).collect(Collectors.toSet());
+    }
+
+    private void validateColorOption(String colorOption) throws YAMLException {
+        Set<String> colorOptions = new HashSet<>(Arrays.asList(Messages.DISABLE, Messages.INVERT));
+        if (!colorOptions.contains(colorOption)) {
+            throw new YAMLException("The color option was not recognized.  Options are <" + Messages.DISABLE + "|"
+            + Messages.INVERT + ">.");
+        }
     }
 
 }

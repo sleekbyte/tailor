@@ -184,8 +184,7 @@ public final class YamlConfigurationTest {
         // Create config file that will only analyze YAML_TEST_2.swift for violations other than upper-camel-case
         File configurationFile = exceptOptionConfig(".tailor.yml");
         String[] command = new String[] {
-            "--config", configurationFile.getAbsolutePath(),
-            "--no-color"
+            "--config", configurationFile.getAbsolutePath()
         };
         runTest(command);
     }
@@ -209,6 +208,26 @@ public final class YamlConfigurationTest {
         String[] command = new String[] {
             "--config", configurationFile.getAbsolutePath(),
             "--no-color"
+        };
+        runTest(command);
+    }
+
+    @Test
+    public void testNoColorOption() throws IOException {
+        // Add expected output
+        addExpectedMsg(3, 7,
+            Rules.UPPER_CAMEL_CASE,
+            Messages.CLASS + Messages.NAMES + Messages.UPPER_CAMEL_CASE,
+            YAML_TEST_1);
+
+        addExpectedMsg(7, 7,
+            Rules.UPPER_CAMEL_CASE,
+            Messages.CLASS + Messages.NAMES + Messages.UPPER_CAMEL_CASE,
+            YAML_TEST_1);
+
+        File configurationFile = noColorConfig(".tailor.yml");
+        String[] command = new String[] {
+            "--config", configurationFile.getAbsolutePath(),
         };
         runTest(command);
     }
@@ -337,10 +356,27 @@ public final class YamlConfigurationTest {
         return configFile;
     }
 
+    private File noColorConfig(String fileName) throws IOException {
+        File configFile = folder.newFile(fileName);
+        Writer streamWriter = new OutputStreamWriter(new FileOutputStream(configFile), Charset.forName("UTF-8"));
+        PrintWriter printWriter = new PrintWriter(streamWriter);
+        printWriter.println("include:");
+        printWriter.println("  - '**/" + YAML_TEST_1 + "'");
+        printWriter.println("only:");
+        printWriter.println("  - upper-camel-case");
+        printWriter.println("except:");
+        printWriter.println("  - terminating-semicolon");
+        printWriter.println("color: disable");
+        streamWriter.close();
+        printWriter.close();
+        return configFile;
+    }
+
     private File exceptOptionConfig(String fileName) throws IOException {
         File configFile = folder.newFile(fileName);
         Writer streamWriter = new OutputStreamWriter(new FileOutputStream(configFile), Charset.forName("UTF-8"));
         PrintWriter printWriter = new PrintWriter(streamWriter);
+        printWriter.println("color: disable");
         printWriter.println("include:");
         printWriter.println("  - '**/" + YAML_TEST_2 + "'");
         printWriter.println("except:");
