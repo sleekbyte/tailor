@@ -20,7 +20,7 @@ public final class YamlConfiguration {
     private Set<String> except = new HashSet<>();
     private String format = "";
     private boolean debug = false;
-    private String color = null;
+    private String color = "";
 
     public String getFormat() {
         return format;

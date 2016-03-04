@@ -66,7 +66,9 @@ public final class Configuration {
      */
     public boolean shouldColorOutput() {
         boolean shouldColorOutput = CLIArgumentParser.shouldColorOutput();
-        if (shouldColorOutput && yamlConfiguration.isPresent() && yamlConfiguration.get().getColor() != null) {
+        if (shouldColorOutput
+            && yamlConfiguration.isPresent()
+            && !yamlConfiguration.get().getColor().isEmpty()) {
             String option = yamlConfiguration.get().getColor();
             validateColorOption(option);
             if (option.equals(Messages.DISABLE)) {
@@ -83,7 +85,9 @@ public final class Configuration {
      */
     public boolean shouldInvertColorOutput() {
         boolean shouldInvertColorOutput = CLIArgumentParser.shouldInvertColorOutput();
-        if (!shouldInvertColorOutput && yamlConfiguration.isPresent() && yamlConfiguration.get().getColor() != null) {
+        if (!shouldInvertColorOutput
+            && yamlConfiguration.isPresent()
+            && !yamlConfiguration.get().getColor().isEmpty()) {
             String option = yamlConfiguration.get().getColor();
             validateColorOption(option);
             if (option.equals(Messages.INVERT)) {

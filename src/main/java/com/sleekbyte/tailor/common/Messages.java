@@ -173,9 +173,11 @@ public class Messages {
     public static final String ERRORS_KEY = "errors";
     public static final String WARNINGS_KEY = "warnings";
 
-    // CLI options
+    // Error messags
     public static final String NO_SWIFT_FILES_FOUND = "No Swift source files were found.";
     public static final String COULD_NOT_BE_PARSED = " could not be parsed successfully, skipping...";
+
+    // CLI options
     public static final String SYNTAX_PREFIX = "Usage: ";
     public static final String OPTIONS_PREFIX = "Options:";
     public static final int HELP_WIDTH = 99;
