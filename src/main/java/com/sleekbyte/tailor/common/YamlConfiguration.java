@@ -19,6 +19,7 @@ public final class YamlConfiguration {
     private Set<String> only = new HashSet<>();
     private Set<String> except = new HashSet<>();
     private String format = "";
+    private boolean debug = false;
 
     public String getFormat() {
         return format;
@@ -44,6 +45,10 @@ public final class YamlConfiguration {
         return except;
     }
 
+    public boolean isDebug() {
+        return debug;
+    }
+
     public void setFileLocation(String fileLocation) {
         this.fileLocation = Optional.ofNullable(fileLocation);
     }
@@ -66,5 +71,9 @@ public final class YamlConfiguration {
 
     public void setFormat(String format) {
         this.format = format;
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
     }
 }

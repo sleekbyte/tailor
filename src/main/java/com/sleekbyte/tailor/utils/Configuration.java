@@ -67,8 +67,18 @@ public final class Configuration {
         return CLIArgumentParser.shouldInvertColorOutput();
     }
 
+    /**
+     * Determine is the debug flag is set.
+     *
+     * @return whether the debug flag is set
+     * @throws CLIArgumentParserException if CLI argument parsing for debug fails
+     */
     public boolean debugFlagSet() throws CLIArgumentParserException {
-        return CLIArgumentParser.debugFlagSet();
+        boolean debugFlagSet = CLIArgumentParser.debugFlagSet();
+        if (!debugFlagSet && yamlConfiguration.isPresent()) {
+            debugFlagSet = yamlConfiguration.get().isDebug();
+        }
+        return debugFlagSet;
     }
 
     /**

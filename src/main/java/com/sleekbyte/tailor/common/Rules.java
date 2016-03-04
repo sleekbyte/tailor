@@ -133,7 +133,7 @@ public enum Rules {
         LOWER_CAMEL_CASE.className = LowerCamelCaseListener.class.getName();
 
         MAX_CLASS_LENGTH.name = Messages.MAX_CLASS_LENGTH_OPT;
-            MAX_CLASS_LENGTH.description = "Enforce a line limit on the lengths of class bodies.";
+        MAX_CLASS_LENGTH.description = "Enforce a line limit on the lengths of class bodies.";
         MAX_CLASS_LENGTH.className = FileListener.class.getName();
 
         MAX_CLOSURE_LENGTH.name = Messages.MAX_CLOSURE_LENGTH_OPT;
