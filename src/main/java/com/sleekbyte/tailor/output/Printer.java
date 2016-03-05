@@ -108,6 +108,18 @@ public final class Printer implements Comparable<Printer> {
         this.ignoredLineNumbers.add(ignoredLineNumber);
     }
 
+    /**
+     * Suppress analysis output for a given region.
+     *
+     * @param start line number where the region begins
+     * @param end line number where the region ends
+     */
+    public void ignoreRegion(int start, int end) {
+        for (int i = start; i <= end; i++) {
+            this.ignoredLineNumbers.add(i);
+        }
+    }
+
     public void setShouldPrintParseErrorMessage(boolean shouldPrintError) {
         shouldPrintParseErrorMessage = shouldPrintError;
     }

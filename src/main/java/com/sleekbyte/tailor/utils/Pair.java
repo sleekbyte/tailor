@@ -1,7 +1,11 @@
 package com.sleekbyte.tailor.utils;
 
 /**
- * Pair data structure.
+ * Couples together a pair of values, which may be of different types (L and R).
+ * The individual values can be accessed through its public members first and second.
+ *
+ * @param <L> Type of member first.
+ * @param <R> Type of member second.
  */
 public final class Pair<L,R> {
     private final L first;
@@ -12,18 +16,26 @@ public final class Pair<L,R> {
         this.second = right;
     }
 
-    public L getFirst() { return first; }
-    public R getSecond() { return second; }
+    public L getFirst() {
+        return first;
+    }
+
+    public R getSecond() {
+        return second;
+    }
 
     @Override
-    public int hashCode() { return first.hashCode() ^ second.hashCode(); }
+    public int hashCode() {
+        return first.hashCode() ^ second.hashCode();
+    }
 
     @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Pair)) return false;
-        Pair pairObject = (Pair) o;
-        return this.first.equals(pairObject.getFirst()) &&
-            this.second.equals(pairObject.getSecond());
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Pair)) {
+            return false;
+        }
+        Pair pairObject = (Pair) obj;
+        return this.first.equals(pairObject.getFirst()) && this.second.equals(pairObject.getSecond());
     }
 
 }

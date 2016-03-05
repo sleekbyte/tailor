@@ -5,26 +5,19 @@ import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
-import com.sleekbyte.tailor.utils.Pair;
 import com.sleekbyte.tailor.utils.SourceFileUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
-import java.util.Stack;
 
 /**
  * Listener for verifying source files.
  */
 public final class FileListener implements AutoCloseable {
 
-    private static final String DISABLE_LINE_PATTERN = "// tailor:disable";
-    private static final String DISABLE_REGION_BEGIN_PATTERN = "// tailor:disable-region-begin";
-    private static final String DISABLE_REGION_END_PATTERN = "// tailor:disable-region-end";
     private Printer printer;
     private File inputFile;
     private ConstructLengths constructLengths;
@@ -59,27 +52,11 @@ public final class FileListener implements AutoCloseable {
     public void verify() throws IOException {
         int lineLength;
         int lineNumber;
-        List<Pair<Integer, Integer>> ignoreRegionList = new ArrayList<>();
-        Stack<Integer> ignoreBlockBeginStack = new Stack<>();
         for (String line = this.reader.readLine(); line != null; line = this.reader.readLine()) {
             lineLength = line.length();
             lineNumber = this.reader.getLineNumber();
             // Count the number of lines in a file
             this.numOfLines++;
-
-            String trimmedLine = line.trim();
-            if (trimmedLine.equals(DISABLE_REGION_BEGIN_PATTERN)) {
-                ignoreBlockBeginStack.push(lineNumber);
-            } else if (trimmedLine.equals(DISABLE_REGION_END_PATTERN)) {
-                if (ignoreBlockBeginStack.empty()) {
-                    // throw error
-                }
-                ignoreRegionList.add(new Pair<>(ignoreBlockBeginStack.pop(), lineNumber));
-            }
-
-            if (trimmedLine.endsWith(DISABLE_LINE_PATTERN)) {
-                this.printer.ignoreLine(lineNumber);
-            }
 
             if (enabledRules.contains(Rules.MAX_LINE_LENGTH)
                 && SourceFileUtil.lineTooLong(lineLength, this.constructLengths.maxLineLength)) {
@@ -93,8 +70,6 @@ public final class FileListener implements AutoCloseable {
             }
         }
 
-        ignoreLinesInDisableRegion(ignoreRegionList);
-
         if (enabledRules.contains(Rules.MAX_FILE_LENGTH)) {
             verifyFileLength();
         }
@@ -105,19 +80,6 @@ public final class FileListener implements AutoCloseable {
 
         if (enabledRules.contains(Rules.LEADING_WHITESPACE)) {
             verifyNoLeadingWhitespace();
-        }
-    }
-
-    private void ignoreLinesInDisableRegion(List<Pair<Integer, Integer>> ignoreRegionList) throws IOException {
-        int lineNumber;
-        for (String line = this.reader.readLine(); line != null; line = this.reader.readLine()) {
-            lineNumber = this.reader.getLineNumber();
-            System.out.println("ASDAS NUMBER: " + lineNumber);
-            for (Pair<Integer, Integer> region : ignoreRegionList) {
-                if (region.getFirst() < lineNumber && lineNumber < region.getSecond()) {
-                    this.printer.ignoreLine(lineNumber);
-                }
-            }
         }
     }
 

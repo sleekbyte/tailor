@@ -22,6 +22,7 @@ import com.sleekbyte.tailor.listeners.lengths.MaxLengthListener;
 import com.sleekbyte.tailor.listeners.lengths.MinLengthListener;
 import com.sleekbyte.tailor.listeners.whitespace.CommentWhitespaceListener;
 import com.sleekbyte.tailor.output.Printer;
+import com.sleekbyte.tailor.output.SuppressViolationsManager;
 import com.sleekbyte.tailor.utils.CLIArgumentParser.CLIArgumentParserException;
 import com.sleekbyte.tailor.utils.CommentExtractor;
 import com.sleekbyte.tailor.utils.Configuration;
@@ -111,16 +112,15 @@ public final class Tailor {
     private List<SwiftBaseListener> createListeners(Set<Rules> enabledRules,
                                                     Printer printer,
                                                     CommonTokenStream tokenStream,
-                                                    ConstructLengths constructLengths)
+                                                    ConstructLengths constructLengths,
+                                                    CommentExtractor commentExtractor)
         throws CLIArgumentParserException {
 
         List<SwiftBaseListener> listeners = new LinkedList<>();
         Set<String> classNames = enabledRules.stream().map(Rules::getClassName).collect(Collectors.toSet());
-
         for (String className : classNames) {
             try {
 
-                CommentExtractor commentExtractor = new CommentExtractor(tokenStream);
                 if (className.equals(FileListener.class.getName())) {
                     continue;
                 }
@@ -232,8 +232,17 @@ public final class Tailor {
             if (optTokenStream.isPresent() && optTree.isPresent()) {
                 CommonTokenStream tokenStream = optTokenStream.get();
                 TopLevelContext tree = optTree.get();
+
+                // Suppress violations for lines that have been disabled in source code
+                CommentExtractor commentExtractor = new CommentExtractor(tokenStream);
+                SuppressViolationsManager disableAnalysis = new SuppressViolationsManager(printer,
+                    commentExtractor.getSingleLineComments(),
+                    commentExtractor.getMultilineComments());
+                disableAnalysis.analyze();
+
+                // Generate listeners
                 List<SwiftBaseListener> listeners =
-                    createListeners(enabledRules, printer, tokenStream, constructLengths);
+                    createListeners(enabledRules, printer, tokenStream, constructLengths, commentExtractor);
                 walkParseTree(listeners, tree);
                 try (FileListener fileListener =
                          new FileListener(printer, inputFile, constructLengths, enabledRules)) {
