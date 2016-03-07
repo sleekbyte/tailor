@@ -596,7 +596,8 @@ dictionaryLiteralItem : expression ':' expression  ;
 selfExpression
  : 'self'
  | 'self' '.' identifier
- | 'self' '[' expressionList ']'
+ // SLR uses expressionList
+ | 'self' '[' expressionElementList ']'
  | 'self' '.' 'init'
  ;
 
@@ -609,7 +610,8 @@ superclassExpression
   ;
 
 superclassMethodExpression : 'super' '.' identifier  ;
-superclassSubscriptExpression : 'super' '[' expressionList ']'  ;
+// SLR uses expressionList
+superclassSubscriptExpression : 'super' '[' expressionElementList ']'  ;
 superclassInitializerExpression : 'super' '.' 'init'  ;
 
 // GRAMMAR OF A CLOSURE EXPRESSION
@@ -657,7 +659,8 @@ postfixExpression
  | postfixExpression '.' identifier genericArgumentClause?     # explicitMemberExpression2
  | postfixExpression '.' 'self'                                  # postfixSelfExpression
  | postfixExpression '.' 'dynamicType'                           # dynamicTypeExpression
- | postfixExpression '[' expressionList ']'                     # subscriptExpression
+ // SLR uses expressionList
+ | postfixExpression '[' expressionElementList ']'                     # subscriptExpression
  | postfixExpression '!'                                # forcedValueExpression
  | postfixExpression '?'                                         # optionalChainingExpression
  ;
@@ -857,7 +860,7 @@ contextSensitiveKeyword :
  'lazy' | 'left' | 'mutating' | 'none' | 'nonmutating' | 'optional' | 'operator' | 'override' | 'postfix' | 'precedence' |
  'prefix' | 'Protocol' | 'required' | 'right' | 'set' | 'Type' | 'unowned' | 'weak' | 'willSet' |
  'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS' | 'x86_64' |
- 'arm' | 'arm64' | 'i386' | 'os' | 'arch'
+ 'arm' | 'arm64' | 'i386' | 'os' | 'arch' | 'safe'
  ;
 
 OperatorHead

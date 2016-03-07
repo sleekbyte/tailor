@@ -69,3 +69,10 @@ if let beginsWithThe =
             print("John's building identifier does not begin with \"The\".")
         }
 }
+
+if let first = pathComponents[safe: 1] where first == "groups" {
+    if let second = pathComponents[safe: 2] where second == "share" {
+            return true
+        }
+    }
+}
