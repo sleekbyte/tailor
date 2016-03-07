@@ -72,7 +72,6 @@ if let beginsWithThe =
 
 if let first = pathComponents[safe: 1] where first == "groups" {
     if let second = pathComponents[safe: 2] where second == "share" {
-            return true
-        }
+        return true
     }
 }

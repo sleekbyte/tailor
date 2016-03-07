@@ -244,7 +244,8 @@ codeBlock : '{' statements? '}'  ;
 // GRAMMAR OF AN IMPORT DECLARATION
 
 importDeclaration : attributes? 'import' importKind? importPath  ;
-importKind : 'typealias' | 'struct' | 'class' | 'enum' | 'protocol' | 'var' | 'func'  ;
+// Swift Language Reference does not have let
+importKind : 'typealias' | 'struct' | 'class' | 'enum' | 'protocol' | 'var' | 'func' | 'let'  ;
 importPath : importPathIdentifier | importPathIdentifier '.' importPath  ;
 importPathIdentifier : identifier | operator  ;
 
@@ -596,7 +597,7 @@ dictionaryLiteralItem : expression ':' expression  ;
 selfExpression
  : 'self'
  | 'self' '.' identifier
- // SLR uses expressionList
+ // Swift Language Reference uses expressionList
  | 'self' '[' expressionElementList ']'
  | 'self' '.' 'init'
  ;
@@ -610,7 +611,7 @@ superclassExpression
   ;
 
 superclassMethodExpression : 'super' '.' identifier  ;
-// SLR uses expressionList
+// Swift Language Reference uses expressionList
 superclassSubscriptExpression : 'super' '[' expressionElementList ']'  ;
 superclassInitializerExpression : 'super' '.' 'init'  ;
 
@@ -659,7 +660,7 @@ postfixExpression
  | postfixExpression '.' identifier genericArgumentClause?     # explicitMemberExpression2
  | postfixExpression '.' 'self'                                  # postfixSelfExpression
  | postfixExpression '.' 'dynamicType'                           # dynamicTypeExpression
- // SLR uses expressionList
+ // Swift Language Reference uses expressionList
  | postfixExpression '[' expressionElementList ']'                     # subscriptExpression
  | postfixExpression '!'                                # forcedValueExpression
  | postfixExpression '?'                                         # optionalChainingExpression
