@@ -986,11 +986,14 @@ VersionLiteral: DecimalLiteral DecimalFraction DecimalFraction ;
 
 StringLiteral : '"' QuotedText? '"' ;
 fragment QuotedText : QuotedTextItem QuotedText? ;
-fragment QuotedTextItem : EscapedCharacter
+fragment QuotedTextItem : EscapedCharacter | InterpolatedString
 // | '\\(' expression ')'
  | ~["\\\u000A\u000D]
  ;
-EscapedCharacter : '\\' [0\\(tnr"']
+
+InterpolatedString: '\\(' (QuotedText | StringLiteral)* ')';
+
+EscapedCharacter : '\\' [0\\tnr"']
  | '\\x' HexadecimalDigit HexadecimalDigit
  | '\\u' '{' HexadecimalDigit HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? '}'
 ;
