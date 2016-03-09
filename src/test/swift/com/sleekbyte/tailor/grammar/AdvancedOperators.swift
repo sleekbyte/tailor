@@ -75,3 +75,5 @@ public func getFormattedLabel(index: Int) -> String
 
     return (valueFormatter ?? _defaultValueFormatter).stringFromNumber(entries[index])!
 }
+
+import let SwiftCovFramework.SwiftCovFrameworkBundleIdentifier
