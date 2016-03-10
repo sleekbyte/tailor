@@ -8,7 +8,8 @@ import java.util.stream.Collectors;
  */
 public enum Format {
     XCODE,
-    JSON;
+    JSON,
+    CC;
 
     private String name;
     private String className;
@@ -60,5 +61,9 @@ public enum Format {
         JSON.name = "json";
         JSON.description = "Valid JSON format.";
         JSON.className = JSONFormatter.class.getName();
+
+        CC.name = "cc";
+        CC.description = "Format for integration with Code Climate.";
+        CC.className = CCFormatter.class.getName();
     }
 }

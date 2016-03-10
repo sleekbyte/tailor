@@ -3,7 +3,7 @@ package com.sleekbyte.tailor.common;
 /**
  * Output messages.
  */
-public class Messages {
+public abstract class Messages {
 
     // Message styles
     public static final String WARNING = "warning";
@@ -172,6 +172,22 @@ public class Messages {
     public static final String SKIPPED_KEY = "skipped";
     public static final String ERRORS_KEY = "errors";
     public static final String WARNINGS_KEY = "warnings";
+
+    // Code Climate Format messages
+    public static final String BEGIN_KEY = "begin";
+    public static final String END_KEY = "end";
+    public static final String POSITIONS_KEY = "positions";
+    public static final String LINES_KEY = "lines";
+    public static final String CHECK_NAME_KEY = "check_name";
+    public static final String BODY_KEY = "body";
+    public static final String CONTENT_KEY = "content";
+    public static final String DESCRIPTION_KEY = "description";
+    public static final String TYPE_KEY = "type";
+    public static final String ISSUE_VALUE = "issue";
+    public static final String CATEGORIES_KEY = "categories";
+    public static final String REMEDIATION_POINTS_KEY = "remediation_points";
+    public static final String STYLE_CATEGORY = "Style";
+    public static final String BUG_RISK_CATEGORY = "Bug Risk";
 
     // Error messages
     public static final String NO_SWIFT_FILES_FOUND = "No Swift source files were found.";

@@ -1,5 +1,7 @@
 package com.sleekbyte.tailor.utils;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.ConstructLengths;
 import com.sleekbyte.tailor.common.Messages;
@@ -12,16 +14,19 @@ import com.sleekbyte.tailor.utils.CLIArgumentParser.CLIArgumentParserException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.net.URI;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -32,6 +37,8 @@ import java.util.stream.Collectors;
  */
 public final class Configuration {
 
+    private static final String CONFIG_JSON = "../config.json";
+    private static final Path CODE_CLIMATE_CONFIG = Paths.get(CONFIG_JSON);
     private static CLIArgumentParser CLIArgumentParser = new CLIArgumentParser();
     private Optional<YamlConfiguration> yamlConfiguration;
     private CommandLine cmd;
@@ -127,6 +134,9 @@ public final class Configuration {
 
         if (pathNames.size() >= 1) {
             fileNames.addAll(findFilesInPaths(pathNames));
+        } else if (Files.isReadable(CODE_CLIMATE_CONFIG)) {
+            pathNames.addAll(getCodeClimateIncludePaths());
+            fileNames.addAll(findFilesInPaths(pathNames));
         } else if (yamlConfiguration.isPresent()) {
             YamlConfiguration config = yamlConfiguration.get();
             Optional<String> configFileLocation = config.getFileLocation();
@@ -143,6 +153,34 @@ public final class Configuration {
         }
 
         return fileNames;
+    }
+
+    /**
+     * If a Code Climate configuration file exists, then load pathNames from the "include_paths" array.
+     *
+     * @throws IOException if the configuration file cannot be parsed
+     */
+    private List<String> getCodeClimateIncludePaths() throws IOException {
+        List<String> includePaths = new ArrayList<>();
+        BufferedReader reader = Files.newBufferedReader(CODE_CLIMATE_CONFIG);
+        try {
+            ConfigJSON config = new Gson().fromJson(reader, ConfigJSON.class);
+            if (config != null && config.include_paths != null) {
+                includePaths = config.include_paths.stream().filter(Objects::nonNull).collect(Collectors.toList());
+            }
+        } catch (JsonSyntaxException e) {
+            throw new IOException(e.getMessage());
+        }
+        return includePaths;
+    }
+
+    /**
+     * Data object to represent a Code Climate configuration, i.e. "config.json".
+     */
+    private class ConfigJSON {
+        // Name cannot be camel case because it must match key from Code Climate spec
+        @SuppressWarnings("checkstyle:membername")
+        List<String> include_paths;
     }
 
     public ConstructLengths parseConstructLengths() throws CLIArgumentParserException {

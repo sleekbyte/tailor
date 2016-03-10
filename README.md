@@ -121,7 +121,7 @@ Options:
  -c,--config=<path/to/.tailor.yml>             specify configuration file
     --debug                                    print ANTLR error messages when parsing error occurs
     --except=<rule1,rule2,...>                 run all rules except the specified ones
- -f,--format=<xcode|json>                      select an output format
+ -f,--format=<xcode|json|cc>                   select an output format
  -h,--help                                     display help
     --invert-color                             invert colorized console output
  -l,--max-line-length=<0-999>                  maximum Line length (in characters)
