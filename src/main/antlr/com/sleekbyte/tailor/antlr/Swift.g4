@@ -244,7 +244,8 @@ codeBlock : '{' statements? '}'  ;
 // GRAMMAR OF AN IMPORT DECLARATION
 
 importDeclaration : attributes? 'import' importKind? importPath  ;
-importKind : 'typealias' | 'struct' | 'class' | 'enum' | 'protocol' | 'var' | 'func'  ;
+// Swift Language Reference does not have let
+importKind : 'typealias' | 'struct' | 'class' | 'enum' | 'protocol' | 'var' | 'func' | 'let'  ;
 importPath : importPathIdentifier | importPathIdentifier '.' importPath  ;
 importPathIdentifier : identifier | operator  ;
 
@@ -596,7 +597,8 @@ dictionaryLiteralItem : expression ':' expression  ;
 selfExpression
  : 'self'
  | 'self' '.' identifier
- | 'self' '[' expressionList ']'
+ // Swift Language Reference uses expressionList
+ | 'self' '[' expressionElementList ']'
  | 'self' '.' 'init'
  ;
 
@@ -609,7 +611,8 @@ superclassExpression
   ;
 
 superclassMethodExpression : 'super' '.' identifier  ;
-superclassSubscriptExpression : 'super' '[' expressionList ']'  ;
+// Swift Language Reference uses expressionList
+superclassSubscriptExpression : 'super' '[' expressionElementList ']'  ;
 superclassInitializerExpression : 'super' '.' 'init'  ;
 
 // GRAMMAR OF A CLOSURE EXPRESSION
@@ -657,7 +660,8 @@ postfixExpression
  | postfixExpression '.' identifier genericArgumentClause?     # explicitMemberExpression2
  | postfixExpression '.' 'self'                                  # postfixSelfExpression
  | postfixExpression '.' 'dynamicType'                           # dynamicTypeExpression
- | postfixExpression '[' expressionList ']'                     # subscriptExpression
+ // Swift Language Reference uses expressionList
+ | postfixExpression '[' expressionElementList ']'                     # subscriptExpression
  | postfixExpression '!'                                # forcedValueExpression
  | postfixExpression '?'                                         # optionalChainingExpression
  ;
@@ -857,7 +861,7 @@ contextSensitiveKeyword :
  'lazy' | 'left' | 'mutating' | 'none' | 'nonmutating' | 'optional' | 'operator' | 'override' | 'postfix' | 'precedence' |
  'prefix' | 'Protocol' | 'required' | 'right' | 'set' | 'Type' | 'unowned' | 'weak' | 'willSet' |
  'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS' | 'x86_64' |
- 'arm' | 'arm64' | 'i386' | 'os' | 'arch'
+ 'arm' | 'arm64' | 'i386' | 'os' | 'arch' | 'safe'
  ;
 
 OperatorHead
@@ -982,11 +986,14 @@ VersionLiteral: DecimalLiteral DecimalFraction DecimalFraction ;
 
 StringLiteral : '"' QuotedText? '"' ;
 fragment QuotedText : QuotedTextItem QuotedText? ;
-fragment QuotedTextItem : EscapedCharacter
+fragment QuotedTextItem : EscapedCharacter | InterpolatedString
 // | '\\(' expression ')'
  | ~["\\\u000A\u000D]
  ;
-EscapedCharacter : '\\' [0\\(tnr"']
+
+InterpolatedString: '\\(' (QuotedText | StringLiteral)* ')';
+
+EscapedCharacter : '\\' [0\\tnr"']
  | '\\x' HexadecimalDigit HexadecimalDigit
  | '\\u' '{' HexadecimalDigit HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? '}'
 ;
