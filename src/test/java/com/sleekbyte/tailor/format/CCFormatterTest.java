@@ -58,9 +58,9 @@ public final class CCFormatterTest {
     @Test
     public void testDisplayMessages() throws IOException {
         List<ViolationMessage> messages = new ArrayList<>();
-        messages.add(new ViolationMessage(Rules.LOWER_CAMEL_CASE, inputFile.getCanonicalPath(), 10, 12,
+        messages.add(new ViolationMessage(Rules.MULTIPLE_IMPORTS, inputFile.getCanonicalPath(), 1, 0,
             Severity.WARNING, WARNING_MSG));
-        messages.add(new ViolationMessage(Rules.UPPER_CAMEL_CASE, inputFile.getCanonicalPath(),  11, 14,
+        messages.add(new ViolationMessage(Rules.TERMINATING_SEMICOLON, inputFile.getCanonicalPath(),  1, 18,
             Severity.ERROR, ERROR_MSG));
         Collections.sort(messages);
 
