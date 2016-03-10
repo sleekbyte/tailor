@@ -38,7 +38,7 @@ public final class SuppressViolationsManager extends CommentAnalyzer {
 
             // Ignore lines that end with the following pattern
             if (trimmedComment.equals(DISABLE_LINE_PATTERN)) {
-                printer.ignoreLine(lineNumber);
+                printer.ignoreRegion(lineNumber, lineNumber);
             }
 
             // Gather ignore regions

@@ -4,6 +4,7 @@ import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.format.Formatter;
+import com.sleekbyte.tailor.utils.Pair;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 
@@ -27,7 +28,7 @@ public final class Printer implements Comparable<Printer> {
     private Severity maxSeverity;
     private Formatter formatter;
     private Map<String, ViolationMessage> msgBuffer = new HashMap<>();
-    private Set<Integer> ignoredLineNumbers = new HashSet<>();
+    private Set<Pair<Integer, Integer>> ignoredRegions = new HashSet<>();
     private boolean shouldPrintParseErrorMessage = false;
 
     /**
@@ -89,8 +90,13 @@ public final class Printer implements Comparable<Printer> {
         if (shouldPrintParseErrorMessage) {
             printParseErrorMessage();
         } else {
-            List<ViolationMessage> outputList = new ArrayList<>(this.getViolationMessages().stream()
-                .filter(msg -> !ignoredLineNumbers.contains(msg.getLineNumber())).collect(Collectors.toList()));
+            List<ViolationMessage> outputList = getViolationMessages();
+            for (ViolationMessage msg : outputList) {
+                ignoredRegions.stream().filter(region -> region.getFirst() <= msg.getLineNumber()
+                    && msg.getLineNumber() <= region.getSecond())
+                    .forEach(region -> outputList.remove(msg));
+            }
+
             Collections.sort(outputList);
             formatter.displayViolationMessages(outputList, inputFile);
         }
@@ -104,10 +110,6 @@ public final class Printer implements Comparable<Printer> {
         return getNumMessagesWithSeverity(Severity.WARNING);
     }
 
-    public void ignoreLine(int ignoredLineNumber) {
-        this.ignoredLineNumbers.add(ignoredLineNumber);
-    }
-
     /**
      * Suppress analysis output for a given region.
      *
@@ -115,9 +117,7 @@ public final class Printer implements Comparable<Printer> {
      * @param end line number where the region ends
      */
     public void ignoreRegion(int start, int end) {
-        for (int i = start; i <= end; i++) {
-            this.ignoredLineNumbers.add(i);
-        }
+        this.ignoredRegions.add(new Pair<>(start, end));
     }
 
     public void setShouldPrintParseErrorMessage(boolean shouldPrintError) {
@@ -173,7 +173,7 @@ public final class Printer implements Comparable<Printer> {
 
     private long getNumMessagesWithSeverity(Severity severity) {
         return msgBuffer.values().stream()
-            .filter(msg -> !ignoredLineNumbers.contains(msg.getLineNumber()))
+            .filter(msg -> !ignoredRegions.contains(msg.getLineNumber()))
             .filter(msg -> msg.getSeverity().equals(severity)).count();
     }
 }
