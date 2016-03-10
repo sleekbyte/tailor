@@ -2,7 +2,7 @@ package com.sleekbyte.tailor.utils;
 
 /**
  * Couples together a pair of values, which may be of different types (L and R).
- * The individual values can be accessed through its public members first and second.
+ * The individual values can be accessed via its public getter functions getFirst() and getSecond().
  *
  * @param <L> Type of member first.
  * @param <R> Type of member second.
