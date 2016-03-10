@@ -256,19 +256,24 @@ public final class FormatTest {
                 location.put(Messages.LINES_KEY, lines);
             }
 
-            location.put(Messages.PATH_KEY, inputFile.getPath());
+            violation.put(Messages.TYPE_KEY, Messages.ISSUE_VALUE);
 
-            violation.put(Messages.LOCATION_KEY, location);
             violation.put(Messages.CHECK_NAME_KEY, msg.getRule().getName());
+
+            violation.put(Messages.DESCRIPTION_KEY, msg.getMessage());
+
             Map<String, Object> content = new HashMap<>();
             content.put(Messages.BODY_KEY, msg.getRule().getInformation());
             violation.put(Messages.CONTENT_KEY, content);
-            violation.put(Messages.DESCRIPTION_KEY, msg.getMessage());
 
-            violation.put(Messages.TYPE_KEY, Messages.ISSUE_VALUE);
             List<String> categories = new ArrayList<>();
             categories.add(msg.getRule().getCategory());
             violation.put(Messages.CATEGORIES_KEY, categories);
+
+            location.put(Messages.PATH_KEY, inputFile.getPath());
+            violation.put(Messages.LOCATION_KEY, location);
+
+            violation.put(Messages.REMEDIATION_POINTS_KEY, msg.getRule().getRemediationPoints());
 
             violations.add(violation);
         }

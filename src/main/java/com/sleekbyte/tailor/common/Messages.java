@@ -185,6 +185,7 @@ public abstract class Messages {
     public static final String TYPE_KEY = "type";
     public static final String ISSUE_VALUE = "issue";
     public static final String CATEGORIES_KEY = "categories";
+    public static final String REMEDIATION_POINTS_KEY = "remediation_points";
     public static final String STYLE_CATEGORY = "Style";
     public static final String BUG_RISK_CATEGORY = "Bug Risk";
 
