@@ -68,9 +68,9 @@ public final class Tailor {
     /**
      * Handle command line exceptions by printing out error message and exiting.
      */
-    public static void handleCLIException(Exception exception, Configuration configuration) {
+    public static void handleCLIException(Exception exception) {
         System.err.println(exception.getMessage());
-        configuration.printHelp();
+        Configuration.printHelp();
         System.exit(ExitCode.failure());
     }
 
@@ -170,7 +170,7 @@ public final class Tailor {
         } catch (IOException e) {
             handleIOException(e);
         } catch (CLIArgumentParserException e) {
-            handleCLIException(e, configuration);
+            handleCLIException(e);
         }
         return Optional.empty();
     }
@@ -194,7 +194,7 @@ public final class Tailor {
             }
             tree = Optional.of(swiftParser.topLevel());
         } catch (CLIArgumentParserException e) {
-            handleCLIException(e, configuration);
+            handleCLIException(e);
         }
         return tree;
     }
@@ -250,7 +250,7 @@ public final class Tailor {
         } catch (IOException e) {
             handleIOException(e);
         } catch (CLIArgumentParserException e) {
-            handleCLIException(e, configuration);
+            handleCLIException(e);
         }
     }
 
@@ -287,7 +287,7 @@ public final class Tailor {
                     printersForAllFiles.add(printer);
                     numSkippedFiles.incrementAndGet();
                 } catch (CLIArgumentParserException e) {
-                    handleCLIException(e, configuration);
+                    handleCLIException(e);
                 }
             });
         formatter.printProgressInfo(String.format("%n"));
@@ -347,7 +347,7 @@ public final class Tailor {
 
             tailor.analyzeFiles(fileNames);
         } catch (ParseException | CLIArgumentParserException e) {
-            Tailor.handleCLIException(e, tailor.configuration);
+            Tailor.handleCLIException(e);
         } catch (YAMLException e) {
             Tailor.handleYAMLException(e);
         } catch (IOException e) {
