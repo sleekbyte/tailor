@@ -195,7 +195,7 @@ public final class Configuration {
         return CLIArgumentParser.getXcodeprojPath();
     }
 
-    public void printHelp() {
+    public static void printHelp() {
         CLIArgumentParser.printHelp();
     }
 
