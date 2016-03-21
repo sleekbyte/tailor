@@ -8,6 +8,7 @@ import com.sleekbyte.tailor.Tailor;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
+import com.sleekbyte.tailor.format.CCFormatter;
 import com.sleekbyte.tailor.format.Format;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.output.ViolationMessage;
@@ -172,6 +173,40 @@ public final class FormatTest {
             actualOutput.toArray());
     }
 
+    public void testCCFormat() throws IOException {
+        Format format = Format.CC;
+
+        final String[] command = new String[] {
+            "--format", format.getName(),
+            "--no-color",
+            "--only=upper-camel-case",
+            inputFile.getPath()
+        };
+
+        Tailor.main(command);
+
+        List<String> expected = new ArrayList<>();
+        List<String> actual = new ArrayList<>();
+        StringBuilder expectedOutput = new StringBuilder();
+        for (Map<String, Object> msg : getCCMessages()) {
+            expectedOutput.append(GSON.toJson(msg)).append(CCFormatter.NULL_CHAR).append(System.lineSeparator());
+        }
+        expectedMessages.addAll(Arrays.asList(expectedOutput.toString().split(NEWLINE_REGEX)));
+
+        for (String msg : expectedMessages) {
+            String strippedMsg = msg.replaceAll(inputFile.getCanonicalPath(), "");
+            expected.add(strippedMsg);
+        }
+
+        String[] msgs = outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
+        for (String msg : msgs) {
+            String strippedMsg = msg.replaceAll(inputFile.getCanonicalPath(), "");
+            actual.add(strippedMsg);
+        }
+
+        assertArrayEquals(outContent.toString(Charset.defaultCharset().name()), expected.toArray(), actual.toArray());
+    }
+
     protected List<ViolationMessage> getExpectedMsgs() {
         List<ViolationMessage> messages = new ArrayList<>();
         messages.add(createViolationMessage(3, 7, Severity.WARNING, Messages.CLASS + Messages.NAMES));
@@ -249,6 +284,56 @@ public final class FormatTest {
         streamWriter.close();
         printWriter.close();
         return configFile;
+    }
+
+    private List<Map<String, Object>> getCCMessages() {
+        List<Map<String, Object>> violations = new ArrayList<>();
+
+        for (ViolationMessage msg : getExpectedMsgs()) {
+            Map<String, Object> violation = new HashMap<>();
+            Map<String, Object> location = new HashMap<>();
+            Map<String, Object> positions = new HashMap<>();
+            Map<String, Object> lines = new HashMap<>();
+            Map<String, Object> begin = new HashMap<>();
+            Map<String, Object> end = new HashMap<>();
+
+            if (msg.getColumnNumber() != 0) {
+                begin.put(Messages.LINE_KEY, msg.getLineNumber());
+                begin.put(Messages.COLUMN_KEY, msg.getColumnNumber());
+                end.put(Messages.LINE_KEY, msg.getLineNumber());
+                end.put(Messages.COLUMN_KEY, msg.getColumnNumber());
+                positions.put(Messages.BEGIN_KEY, begin);
+                positions.put(Messages.END_KEY, end);
+                location.put(Messages.POSITIONS_KEY, positions);
+            } else {
+                lines.put(Messages.BEGIN_KEY, msg.getLineNumber());
+                lines.put(Messages.END_KEY, msg.getLineNumber());
+                location.put(Messages.LINES_KEY, lines);
+            }
+
+            violation.put(Messages.TYPE_KEY, Messages.ISSUE_VALUE);
+
+            violation.put(Messages.CHECK_NAME_KEY, msg.getRule().getName());
+
+            violation.put(Messages.DESCRIPTION_KEY, msg.getMessage());
+
+            Map<String, Object> content = new HashMap<>();
+            content.put(Messages.BODY_KEY, msg.getRule().getInformation());
+            violation.put(Messages.CONTENT_KEY, content);
+
+            List<String> categories = new ArrayList<>();
+            categories.add(msg.getRule().getCategory());
+            violation.put(Messages.CATEGORIES_KEY, categories);
+
+            location.put(Messages.PATH_KEY, inputFile.getPath());
+            violation.put(Messages.LOCATION_KEY, location);
+
+            violation.put(Messages.REMEDIATION_POINTS_KEY, msg.getRule().getRemediationPoints());
+
+            violations.add(violation);
+        }
+
+        return violations;
     }
 
 }
