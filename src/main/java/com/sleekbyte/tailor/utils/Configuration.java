@@ -222,7 +222,7 @@ public final class Configuration {
     private class ConfigJSON {
         // Name cannot be camel case because it must match key from Code Climate spec
         @SuppressWarnings("checkstyle:membername")
-        List<String> include_paths;
+        private List<String> include_paths;
     }
 
     public ConstructLengths parseConstructLengths() throws CLIArgumentParserException {
