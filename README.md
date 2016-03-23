@@ -270,7 +270,7 @@ Tailor allows you to specify the output format (`xcode`/`json`) via the `format`
 Here is an example showcasing how to specify the output format:
 
 ```YAML
-# The output format will now be in JSON.
+# The output format will now be in JSON
 format: json
 ```
 
@@ -387,12 +387,3 @@ Tool                                                         | License
 
 # License
 Tailor is released under the MIT license. See [LICENSE.md](https://github.com/sleekbyte/tailor/blob/master/LICENSE.md) for details.
-
-[static analysis]: https://en.wikipedia.org/wiki/Static_program_analysis
-[lint]: https://en.wikipedia.org/wiki/Lint_(software)
-[tailor]: https://tailor.sh
-[swift]: https://swift.org
-[the swift programming language]: https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/
-[github]: https://github.com/github/swift-style-guide
-[ray wenderlich]: https://github.com/raywenderlich/swift-style-guide
-[coursera]: https://github.com/coursera/swift-style-guide
