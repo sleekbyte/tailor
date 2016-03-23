@@ -37,29 +37,21 @@ layout: default
   <p>Requires Java (JRE or JDK) Version 8 or above: <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank">Java SE Downloads</a></p>
   <a href="http://brew.sh" target="_blank">Homebrew</a>, <a href="http://brew.sh/linuxbrew/" target="_blank">Linuxbrew</a>
   <div onclick="selectText(this.firstElementChild)">
-    {% highlight bash %}
-    brew install tailor
-    {% endhighlight %}
+    {% highlight bash %}brew install tailor{% endhighlight %}
   </div>
   Mac OS X (10.10+), Linux
   <div onclick="selectText(this.firstElementChild)">
-    {% highlight bash %}
-    curl -fsSL https://tailor.sh/install.sh | sh
-    {% endhighlight %}
+    {% highlight bash %}curl -fsSL https://tailor.sh/install.sh | sh{% endhighlight %}
   </div>
   Windows (10+)
   <div onclick="selectText(this.firstElementChild)">
-    {% highlight powershell %}
-    iex (new-object net.webclient).downloadstring('https://tailor.sh/install.ps1')
-    {% endhighlight %}
+    {% highlight powershell %}iex (new-object net.webclient).downloadstring('https://tailor.sh/install.ps1'){% endhighlight %}
   </div>
   <br>
   <h2>Usage</h2>
   <p>Run Tailor with a list of files and directories to analyze, or via Xcode.</p>
   <div onclick="selectText(this.firstElementChild)">
-    {% highlight bash %}
-    $ tailor [options] [--] [[file|directory] ...]
-    {% endhighlight %}
+    {% highlight bash %}$ tailor [options] [--] [[file|directory] ...]{% endhighlight %}
   </div>
 </div>
 
@@ -81,9 +73,7 @@ layout: default
       <h2><span class="glyphicon glyphicon-console" aria-hidden="true"></span>&nbsp;&nbsp;Automatic Xcode Integration</h2>
       <p class="xcode">Tailor may be automatically integrated with Xcode projects as a Build Phase Run Script using the <code class="text-nowrap">--xcode</code> option.</p>
       <div onclick="selectText(this.firstElementChild)">
-        {% highlight bash %}
-        tailor --xcode /path/to/demo.xcodeproj/
-        {% endhighlight %}
+        {% highlight bash %}tailor --xcode /path/to/demo.xcodeproj/{% endhighlight %}
       </div>
       <p class="xcode">This adds the following Build Phase Run Script to your project's default target.</p>
       <img class="center-block img-thumbnail img-responsive" src="/assets/images/run-script.png" alt="Xcode Build Phase Run Script">
