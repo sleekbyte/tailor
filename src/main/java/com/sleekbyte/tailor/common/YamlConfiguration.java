@@ -18,6 +18,13 @@ public final class YamlConfiguration {
     private Set<String> exclude = new HashSet<>(Arrays.asList(DEFAULT_EXCLUDE));
     private Set<String> only = new HashSet<>();
     private Set<String> except = new HashSet<>();
+    private String format = "";
+    private boolean debug = false;
+    private String color = "";
+
+    public String getFormat() {
+        return format;
+    }
 
     public Optional<String> getFileLocation() {
         return fileLocation;
@@ -39,6 +46,14 @@ public final class YamlConfiguration {
         return except;
     }
 
+    public boolean isDebug() {
+        return debug;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
     public void setFileLocation(String fileLocation) {
         this.fileLocation = Optional.ofNullable(fileLocation);
     }
@@ -58,4 +73,17 @@ public final class YamlConfiguration {
     public void setExcept(Set<String> except) {
         this.except = except;
     }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
 }

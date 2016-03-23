@@ -213,6 +213,8 @@ import Foundation; // tailor:disable
 The behavior of Tailor can be customized via the `.tailor.yml` configuration file. It enables you to
 * include/exclude certain files and directories from analysis
 * enable and disable specific analysis rules
+* specify output format
+* specify CLI output color scheme
 
 You can tell Tailor which configuration file to use by specifying its file path via the `--config` CLI option. By default, Tailor will look for the configuration file in the directory where you will run Tailor from.
 
@@ -262,8 +264,33 @@ except:
 * *only* is given precedence over *except*
 * Rules that are explicitly included/excluded via CLI will cause the `only`/`except` rules specified in `.tailor.yml` to be ignored
 
-### Formatters
+#### Specifying output format
+Tailor allows you to specify the output format (`xcode`/`json`) via the `format` label.
 
+Here is an example showcasing how to specify the output format:
+
+```YAML
+# The output format will now be in JSON
+format: json
+```
+
+##### Note
+- The output format explicitly specified via CLI will cause the output format defined in `.tailor.yml` to be ignored
+
+#### Specifying CLI output color scheme
+Tailor allows you to specify the CLI output color schemes  via the `color` label.  To disable colored output, set `color` to `disable`. To invert the color scheme, set `color` to `invert`.
+
+Here is an example showcasing how to specify the CLI output color scheme:
+
+```YAML
+# The CLI output will not be colored
+color: disable
+```
+
+##### Note
+- The CLI output color scheme explicitly specified via CLI will cause the output color scheme  defined in `.tailor.yml` to be ignored
+
+### Formatters
 Tailor's output format may be customized via the `-f`/`--format` option. The Xcode formatter is selected by default.
 
 #### Xcode Formatter (default)
@@ -327,36 +354,36 @@ Please review the [guidelines for contributing](https://github.com/sleekbyte/tai
 * [Bundler](http://bundler.io)
 
 # External Tools and Libraries
+## Development & Runtime
 
-### Development & Runtime
-| Tool  | License |
-| ------------- | ------------- |
-| [ANTLR 4.5](https://theantlrguy.atlassian.net/wiki/display/ANTLR4/Home)  | [The BSD License](http://www.antlr.org/license.html) |
-| [Apache Commons CLI](http://commons.apache.org/proper/commons-cli/) | [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0) |
-| [Jansi](https://github.com/fusesource/jansi) | [Apache License, Version 2.0](https://github.com/fusesource/jansi/blob/master/license.txt) |
-| [Xcodeproj](https://github.com/CocoaPods/Xcodeproj) | [MIT](https://github.com/CocoaPods/Xcodeproj/blob/master/LICENSE) |
-| [SnakeYAML](https://bitbucket.org/asomov/snakeyaml) | [Apache License, Version 2.0](https://bitbucket.org/asomov/snakeyaml/raw/8939e0aa430d25b3b49b353508b23e072dd02171/LICENSE.txt) |
-| [Gson](https://github.com/google/gson) | [Apache License, Version 2.0](https://github.com/google/gson/blob/master/LICENSE) |
+Tool                                                                    | License
+----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------
+[ANTLR 4.5](https://theantlrguy.atlassian.net/wiki/display/ANTLR4/Home) | [The BSD License](http://www.antlr.org/license.html)
+[Apache Commons CLI](http://commons.apache.org/proper/commons-cli/)     | [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+[Jansi](https://github.com/fusesource/jansi)                            | [Apache License, Version 2.0](https://github.com/fusesource/jansi/blob/master/license.txt)
+[Xcodeproj](https://github.com/CocoaPods/Xcodeproj)                     | [MIT](https://github.com/CocoaPods/Xcodeproj/blob/master/LICENSE)
+[SnakeYAML](https://bitbucket.org/asomov/snakeyaml)                     | [Apache License, Version 2.0](https://bitbucket.org/asomov/snakeyaml/raw/8939e0aa430d25b3b49b353508b23e072dd02171/LICENSE.txt)
+[Gson](https://github.com/google/gson)                                  | [Apache License, Version 2.0](https://github.com/google/gson/blob/master/LICENSE)
 
-### Development Only
-| Tool  | License |
-| ------------- | ------------- |
-| [Gradle](https://gradle.org)  | [Apache License, Version 2.0](http://gradle.org/license/) |
-| [Travis CI](https://travis-ci.org)| [Free for Open Source Projects] (https://travis-ci.com/plans) |
-| [Mockito](http://mockito.org) | [MIT](https://code.google.com/p/mockito/wiki/License) |
-| [JUnit](http://junit.org) | [Eclipse Public License 1.0](http://junit.org/license) |
-| [Java Hamcrest](http://hamcrest.org/JavaHamcrest/) | [The BSD 3-Clause License](http://opensource.org/licenses/BSD-3-Clause) |
-| [FindBugs](http://findbugs.sourceforge.net) | [GNU Lesser General Public License](http://findbugs.sourceforge.net/manual/license.html) |
-| [Checkstyle](http://checkstyle.sourceforge.net) | [GNU Lesser General Public License](http://checkstyle.sourceforge.net/license.html) |
-| [PMD](http://pmd.sourceforge.net) | [BSD-style](http://pmd.sourceforge.net/pmd-5.3.2/license.html) |
-| [JaCoCo](http://eclemma.org/jacoco/) | [Eclipse Public License v1.0](http://eclemma.org/license.html) |
-| [Codecov](https://codecov.io) | [Free for Open Source](https://codecov.io/#pricing) |
-| [Coveralls](https://coveralls.io) | [Free for Open Source](https://coveralls.io/pricing) |
-| [Bundler](http://bundler.io) | [MIT](https://github.com/bundler/bundler/blob/master/LICENSE.md) |
-| [Codacy](https://www.codacy.com) | [Free for Open Source](https://www.codacy.com/pricing) |
-| [System Rules](http://stefanbirkner.github.io/system-rules/) | [Common Public License 1.0](https://stefanbirkner.github.io/system-rules/license.html) |
-| [Ronn](https://github.com/rtomayko/ronn) | [MIT](https://github.com/rtomayko/ronn/blob/master/COPYING) |
+## Development Only
 
+Tool                                                         | License
+------------------------------------------------------------ | ----------------------------------------------------------------------------------------
+[Gradle](https://gradle.org)                                 | [Apache License, Version 2.0](http://gradle.org/license/)
+[Travis CI](https://travis-ci.org)                           | [Free for Open Source Projects] (https://travis-ci.com/plans)
+[Mockito](http://mockito.org)                                | [MIT](https://code.google.com/p/mockito/wiki/License)
+[JUnit](http://junit.org)                                    | [Eclipse Public License 1.0](http://junit.org/license)
+[Java Hamcrest](http://hamcrest.org/JavaHamcrest/)           | [The BSD 3-Clause License](http://opensource.org/licenses/BSD-3-Clause)
+[FindBugs](http://findbugs.sourceforge.net)                  | [GNU Lesser General Public License](http://findbugs.sourceforge.net/manual/license.html)
+[Checkstyle](http://checkstyle.sourceforge.net)              | [GNU Lesser General Public License](http://checkstyle.sourceforge.net/license.html)
+[PMD](http://pmd.sourceforge.net)                            | [BSD-style](http://pmd.sourceforge.net/pmd-5.3.2/license.html)
+[JaCoCo](http://eclemma.org/jacoco/)                         | [Eclipse Public License v1.0](http://eclemma.org/license.html)
+[Codecov](https://codecov.io)                                | [Free for Open Source](https://codecov.io/#pricing)
+[Coveralls](https://coveralls.io)                            | [Free for Open Source](https://coveralls.io/pricing)
+[Bundler](http://bundler.io)                                 | [MIT](https://github.com/bundler/bundler/blob/master/LICENSE.md)
+[Codacy](https://www.codacy.com)                             | [Free for Open Source](https://www.codacy.com/pricing)
+[System Rules](http://stefanbirkner.github.io/system-rules/) | [Common Public License 1.0](https://stefanbirkner.github.io/system-rules/license.html)
+[Ronn](https://github.com/rtomayko/ronn)                     | [MIT](https://github.com/rtomayko/ronn/blob/master/COPYING)
 
 # License
 Tailor is released under the MIT license. See [LICENSE.md](https://github.com/sleekbyte/tailor/blob/master/LICENSE.md) for details.
