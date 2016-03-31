@@ -662,7 +662,8 @@ postfixExpression
  | postfixExpression '.' 'init'                                  # initializerExpression
  // TODO: don't allow '_' here in DecimalLiteral:
  | postfixExpression '.' DecimalLiteral                         # explicitMemberExpression1
- | postfixExpression '.' identifier genericArgumentClause?     # explicitMemberExpression2
+ | postfixExpression '.' identifier genericArgumentClause?      # explicitMemberExpression2
+ | postfixExpression '.' identifier '(' argumentNames ')'       # explicitMemberExpression3
  | postfixExpression '.' 'self'                                  # postfixSelfExpression
  | postfixExpression '.' 'dynamicType'                           # dynamicTypeExpression
  // Swift Language Reference uses expressionList
@@ -670,6 +671,10 @@ postfixExpression
  | postfixExpression '!'                                # forcedValueExpression
  | postfixExpression '?'                                         # optionalChainingExpression
  ;
+
+// GRAMMAR OF AN ARGUMENT NAME
+argumentNames : argumentName argumentNames?  ;
+argumentName: (identifier | '_') ':'? ;
 
 // GRAMMAR OF A FUNCTION CALL EXPRESSION
 
@@ -684,11 +689,16 @@ functionCallExpression
 
 //initializer_expression : postfix_expression '.' 'init' ;
 
-/*explicitMemberExpression
+/*
+explicitMemberExpression
   : postfixExpression '.' DecimalLiteral // TODO: don't allow '_' here in DecimalLiteral
   | postfixExpression '.' identifier genericArgumentClause?
+  | postfixExpression '.' identifier '(' argumentNames ')'
   ;
-  */
+
+argumentNames : argumentName argumentNames?  ;
+argumentName : identifier ':'  ;
+*/
 
 //postfix_self_expression : postfix_expression '.' 'self' ;
 

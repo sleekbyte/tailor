@@ -89,4 +89,6 @@ func test() {
                         userInfo: nil, repeats: false)
     button.addTarget(object, action: #selector(MyClass.buttonTapped),
                      forControlEvents: .TouchUpInside)
+    view.performSelector(#selector(UIView.insertSubview(_:aboveSubview:)),
+                         withObject: button, withObject: otherButton)
 }
