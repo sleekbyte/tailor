@@ -574,6 +574,7 @@ primaryExpression
  | implicitMemberExpression
 // | implicit_member_expression disallow as ambig with explicit member expr in postfix_expression
  | wildcardExpression
+ | selectorExpression
  ;
 
 // GRAMMAR OF A LITERAL EXPRESSION
@@ -645,6 +646,10 @@ expressionElement : expression | identifier ':' expression  ;
 // GRAMMAR OF A WILDCARD EXPRESSION
 
 wildcardExpression : '_'  ;
+
+// GRAMMAR OF A SELECTOR EXPRESSION
+
+selectorExpression: '#selector' '('expression')'  ;
 
 // GRAMMAR OF A POSTFIX EXPRESSION
 

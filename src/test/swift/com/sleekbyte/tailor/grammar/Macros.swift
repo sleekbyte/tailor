@@ -82,3 +82,11 @@ public var isRunningOnDevice: Bool = {
 		return true
 	#endif
 }()
+
+func test() {
+    let timer = NSTimer(timeInterval: 1, target: object,
+                        selector: #selector(MyClass.test),
+                        userInfo: nil, repeats: false)
+    button.addTarget(object, action: #selector(MyClass.buttonTapped),
+                     forControlEvents: .TouchUpInside)
+}
