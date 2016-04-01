@@ -674,7 +674,7 @@ postfixExpression
 
 // GRAMMAR OF AN ARGUMENT NAME
 argumentNames : argumentName argumentNames?  ;
-argumentName: (identifier | '_') ':'? ;
+argumentName: (identifier | '_') ':'?  ; // Swift Language Reference has argumentName → identifier :
 
 // GRAMMAR OF A FUNCTION CALL EXPRESSION
 
@@ -695,9 +695,6 @@ explicitMemberExpression
   | postfixExpression '.' identifier genericArgumentClause?
   | postfixExpression '.' identifier '(' argumentNames ')'
   ;
-
-argumentNames : argumentName argumentNames?  ;
-argumentName : identifier ':'  ;
 */
 
 //postfix_self_expression : postfix_expression '.' 'self' ;
