@@ -574,6 +574,7 @@ primaryExpression
  | implicitMemberExpression
 // | implicit_member_expression disallow as ambig with explicit member expr in postfix_expression
  | wildcardExpression
+ | selectorExpression
  ;
 
 // GRAMMAR OF A LITERAL EXPRESSION
@@ -646,6 +647,10 @@ expressionElement : expression | identifier ':' expression  ;
 
 wildcardExpression : '_'  ;
 
+// GRAMMAR OF A SELECTOR EXPRESSION
+
+selectorExpression: '#selector' '('expression')'  ;
+
 // GRAMMAR OF A POSTFIX EXPRESSION
 
 postfixExpression
@@ -657,7 +662,8 @@ postfixExpression
  | postfixExpression '.' 'init'                                  # initializerExpression
  // TODO: don't allow '_' here in DecimalLiteral:
  | postfixExpression '.' DecimalLiteral                         # explicitMemberExpression1
- | postfixExpression '.' identifier genericArgumentClause?     # explicitMemberExpression2
+ | postfixExpression '.' identifier genericArgumentClause?      # explicitMemberExpression2
+ | postfixExpression '.' identifier '(' argumentNames ')'       # explicitMemberExpression3
  | postfixExpression '.' 'self'                                  # postfixSelfExpression
  | postfixExpression '.' 'dynamicType'                           # dynamicTypeExpression
  // Swift Language Reference uses expressionList
@@ -665,6 +671,10 @@ postfixExpression
  | postfixExpression '!'                                # forcedValueExpression
  | postfixExpression '?'                                         # optionalChainingExpression
  ;
+
+// GRAMMAR OF AN ARGUMENT NAME
+argumentNames : argumentName argumentNames?  ;
+argumentName: (identifier | '_') ':'  ; // Swift Language Reference has argumentName → identifier :
 
 // GRAMMAR OF A FUNCTION CALL EXPRESSION
 
@@ -679,11 +689,13 @@ functionCallExpression
 
 //initializer_expression : postfix_expression '.' 'init' ;
 
-/*explicitMemberExpression
+/*
+explicitMemberExpression
   : postfixExpression '.' DecimalLiteral // TODO: don't allow '_' here in DecimalLiteral
   | postfixExpression '.' identifier genericArgumentClause?
+  | postfixExpression '.' identifier '(' argumentNames ')'
   ;
-  */
+*/
 
 //postfix_self_expression : postfix_expression '.' 'self' ;
 
