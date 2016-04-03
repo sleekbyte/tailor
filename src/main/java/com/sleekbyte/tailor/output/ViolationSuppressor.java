@@ -1,35 +1,34 @@
 package com.sleekbyte.tailor.output;
 
+import com.sleekbyte.tailor.common.Location;
+import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.listeners.CommentAnalyzer;
-import com.sleekbyte.tailor.utils.Pair;
 import org.antlr.v4.runtime.Token;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
 /**
  * Ignore analysis on lines that are marked "tailor:disable".
  */
-public final class SuppressViolationsManager extends CommentAnalyzer {
+public final class ViolationSuppressor extends CommentAnalyzer {
     private static final String DISABLE_LINE_PATTERN = "// tailor:disable";
-    private static final String DISABLE_REGION_BEGIN_PATTERN = "// tailor:disable-region-begin";
-    private static final String DISABLE_REGION_END_PATTERN = "// tailor:disable-region-end";
+    private static final String TAILOR_OFF = "// tailor:off";
+    private static final String TAILOR_ON = "// tailor:on";
 
     /**
-     * Create instance of SuppressViolationsManager.
+     * Create instance of ViolationSuppressor.
      *
      * @param printer            An instance of Printer
      * @param singleLineComments List of // comments
      * @param multilineComments  List of /* comments
      */
-    public SuppressViolationsManager(Printer printer, List<Token> singleLineComments, List<Token> multilineComments) {
+    public ViolationSuppressor(Printer printer, List<Token> singleLineComments, List<Token> multilineComments) {
         super(printer, singleLineComments, multilineComments);
     }
 
     @Override
     public void analyze() {
-        List<Pair<Integer, Integer>> ignoreRegionList = new ArrayList<>();
         Stack<Integer> ignoreBlockBeginStack = new Stack<>();
 
         for (Token comment : singleLineComments) {
@@ -42,19 +41,20 @@ public final class SuppressViolationsManager extends CommentAnalyzer {
             }
 
             // Gather ignore regions
-            if (trimmedComment.equals(DISABLE_REGION_BEGIN_PATTERN)) {
+            if (trimmedComment.equals(TAILOR_OFF)) {
                 ignoreBlockBeginStack.push(lineNumber);
-            } else if (trimmedComment.equals(DISABLE_REGION_END_PATTERN)) {
+            } else if (trimmedComment.equals(TAILOR_ON)) {
                 if (ignoreBlockBeginStack.empty()) {
-                    // TODO: print error message when "start" and "end" tags do not matched
+                    // Print warning message when "off" and "on" tags are not matched
+                    printer.warn(Messages.ON_OFF_MISMATCH,
+                        new Location(comment.getLine(),
+                        comment.getCharPositionInLine() + 1));
+                    return;
                 }
-                ignoreRegionList.add(new Pair<>(ignoreBlockBeginStack.pop(), lineNumber));
-            }
-        }
 
-        // Ignore lines from analysis that fall inside the ignore region
-        for (Pair<Integer, Integer> region : ignoreRegionList) {
-            printer.ignoreRegion(region.getFirst(), region.getSecond());
+                // Ignore lines from analysis that fall inside the ignore region
+                printer.ignoreRegion(ignoreBlockBeginStack.pop(), lineNumber);
+            }
         }
     }
 }

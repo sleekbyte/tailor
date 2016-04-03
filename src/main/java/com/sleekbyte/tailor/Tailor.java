@@ -22,7 +22,7 @@ import com.sleekbyte.tailor.listeners.lengths.MaxLengthListener;
 import com.sleekbyte.tailor.listeners.lengths.MinLengthListener;
 import com.sleekbyte.tailor.listeners.whitespace.CommentWhitespaceListener;
 import com.sleekbyte.tailor.output.Printer;
-import com.sleekbyte.tailor.output.SuppressViolationsManager;
+import com.sleekbyte.tailor.output.ViolationSuppressor;
 import com.sleekbyte.tailor.utils.CLIArgumentParser.CLIArgumentParserException;
 import com.sleekbyte.tailor.utils.CommentExtractor;
 import com.sleekbyte.tailor.utils.Configuration;
@@ -235,7 +235,7 @@ public final class Tailor {
 
                 // Suppress violations for lines that have been disabled in source code
                 CommentExtractor commentExtractor = new CommentExtractor(tokenStream);
-                SuppressViolationsManager disableAnalysis = new SuppressViolationsManager(printer,
+                ViolationSuppressor disableAnalysis = new ViolationSuppressor(printer,
                     commentExtractor.getSingleLineComments(),
                     commentExtractor.getMultilineComments());
                 disableAnalysis.analyze();

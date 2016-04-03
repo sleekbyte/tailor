@@ -38,6 +38,21 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
     }
 
     /**
+     * Constructs a ViolationMessage where the rule name is replaced by tool name (tailor).
+     *
+     * @param lineNumber       the logical line number in the source file
+     * @param columnNumber     the logical column number in the source file
+     * @param severity         the severity of the violation message
+     * @param violationMessage the description of the violation message
+     */
+    public ViolationMessage(int lineNumber, int columnNumber, Severity severity, String violationMessage) {
+        this.lineNumber = lineNumber;
+        this.columnNumber = columnNumber;
+        this.severity = severity;
+        this.violationMessage = "[tailor] " + violationMessage;
+    }
+
+    /**
      * Constructs a ViolationMessage with the specified message components.
      *
      * @param rule             the rule associated with the violation
@@ -152,12 +167,17 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
             return "";
         }
 
+        if (formattedRule().isEmpty()) {
+            return String.format("%s%s%s %s %s", formattedFilePath(), formattedLineNumber(), formattedColumnNumber(),
+                formattedSeverity(), formattedViolationMessage());
+        }
+
         return String.format("%s%s%s %s %s %s", formattedFilePath(), formattedLineNumber(), formattedColumnNumber(),
             formattedSeverity(), formattedRule(), formattedViolationMessage());
     }
 
     private String formattedRule() {
-        return String.format("[%s]", rule.getName());
+        return rule != null ? String.format("[%s]", rule.getName()) : "";
     }
 
     private String formattedFilePath() {

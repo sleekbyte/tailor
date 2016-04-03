@@ -55,6 +55,10 @@ public final class Printer implements Comparable<Printer> {
         print(rule, Severity.WARNING, warningMsg, location);
     }
 
+    public void warn(String warningMsg, Location location) {
+        print(null, Severity.WARNING, warningMsg, location);
+    }
+
     /**
      * Prints error message.
      *
@@ -64,6 +68,10 @@ public final class Printer implements Comparable<Printer> {
      */
     public void error(Rules rule, String errorMsg, Location location) {
         print(rule, Severity.min(Severity.ERROR, maxSeverity), errorMsg, location);
+    }
+
+    public void error(String errorMsg, Location location) {
+        print(null, Severity.min(Severity.ERROR, maxSeverity), errorMsg, location);
     }
 
     // Visible for testing only
@@ -90,12 +98,15 @@ public final class Printer implements Comparable<Printer> {
         if (shouldPrintParseErrorMessage) {
             printParseErrorMessage();
         } else {
-            List<ViolationMessage> outputList = getViolationMessages();
-            for (ViolationMessage msg : outputList) {
-                ignoredRegions.stream().filter(region -> region.getFirst() <= msg.getLineNumber()
-                    && msg.getLineNumber() <= region.getSecond())
-                    .forEach(region -> outputList.remove(msg));
-            }
+            List<ViolationMessage> outputList = getViolationMessages().stream().filter(msg -> {
+                for (Pair<Integer, Integer> ignoredRegion : ignoredRegions) {
+                    if (ignoredRegion.getFirst() <= msg.getLineNumber()
+                        && msg.getLineNumber() <= ignoredRegion.getSecond()) {
+                        return false;
+                    }
+                }
+                return true;
+            }).collect(Collectors.toList());
 
             Collections.sort(outputList);
             formatter.displayViolationMessages(outputList, inputFile);
@@ -158,7 +169,13 @@ public final class Printer implements Comparable<Printer> {
     }
 
     private void print(Rules rule, Severity severity, String msg, Location location) {
-        ViolationMessage violationMessage = new ViolationMessage(rule, location.line, location.column, severity, msg);
+        ViolationMessage violationMessage;
+        if (rule != null) {
+            violationMessage = new ViolationMessage(rule, location.line, location.column, severity, msg);
+        } else {
+            violationMessage = new ViolationMessage(location.line, location.column, severity, msg);
+        }
+
         try {
             violationMessage.setFilePath(this.inputFile.getCanonicalPath());
         } catch (IOException e) {
