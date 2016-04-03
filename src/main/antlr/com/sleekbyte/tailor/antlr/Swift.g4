@@ -674,7 +674,7 @@ postfixExpression
 
 // GRAMMAR OF AN ARGUMENT NAME
 argumentNames : argumentName argumentNames?  ;
-argumentName: (identifier | '_') ':'?  ; // Swift Language Reference has argumentName → identifier :
+argumentName: (identifier | '_') ':'  ; // Swift Language Reference has argumentName → identifier :
 
 // GRAMMAR OF A FUNCTION CALL EXPRESSION
 
