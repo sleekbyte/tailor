@@ -13,6 +13,7 @@ import java.util.List;
  * Class to analyze TODO comments.
  */
 public final class TodoCommentListener extends CommentAnalyzer {
+
     /**
      * Create instance of TodoCommentListener.
      *
@@ -30,13 +31,14 @@ public final class TodoCommentListener extends CommentAnalyzer {
     }
 
     private void checkTodoSyntaxInSingleLineComments() {
-        String todoRegex = "(?s)// TODO(?:\\(\\S+\\))?: \\S.*";
+        final String todoRegex = "(?s)// TODO(?:\\(\\S+\\))?: \\S.*";
         filterTodoSyntax(todoRegex, singleLineComments);
     }
 
     private void filterTodoSyntax(String todoRegex, List<Token> comments) {
+        final String containsTodo = ".*\\btodo\\b.*";
         comments.stream()
-            .filter(token -> token.getText().toLowerCase().contains("todo"))
+            .filter(token -> token.getText().trim().toLowerCase().matches(containsTodo))
             .filter(token -> !token.getText().trim().matches(todoRegex))
             .forEach(token -> todoContentWarning(token, Messages.TODOS));
     }
