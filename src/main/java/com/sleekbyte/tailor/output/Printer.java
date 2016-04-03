@@ -99,14 +99,14 @@ public final class Printer implements Comparable<Printer> {
             printParseErrorMessage();
         } else {
             List<ViolationMessage> outputList = getViolationMessages().stream().filter(msg -> {
-                for (Pair<Integer, Integer> ignoredRegion : ignoredRegions) {
-                    if (ignoredRegion.getFirst() <= msg.getLineNumber()
-                        && msg.getLineNumber() <= ignoredRegion.getSecond()) {
-                        return false;
+                    for (Pair<Integer, Integer> ignoredRegion : ignoredRegions) {
+                        if (ignoredRegion.getFirst() <= msg.getLineNumber()
+                            && msg.getLineNumber() <= ignoredRegion.getSecond()) {
+                            return false;
+                        }
                     }
-                }
-                return true;
-            }).collect(Collectors.toList());
+                    return true;
+                }).collect(Collectors.toList());
 
             Collections.sort(outputList);
             formatter.displayViolationMessages(outputList, inputFile);
