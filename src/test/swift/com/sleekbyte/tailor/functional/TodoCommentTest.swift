@@ -37,4 +37,7 @@ class SomeClass {
     // comment with // nested internal todo comment will get flagged
 
     // comment that ends with // TODO: do flag
+
+    // Todorov should not be flagged
+    // Mentioning a todo in a comment should be flagged
 }
