@@ -477,7 +477,7 @@ expressionPattern : expression  ;
 
 // GRAMMAR OF AN ATTRIBUTE
 
-attribute : '@' attributeName attributeArgumentClause? ;
+attribute : '@'? attributeName attributeArgumentClause? ;
 attributeName : identifier ;
 attributeArgumentClause : '('  balancedTokens?  ')'  ;
 attributes : attribute+ ;
