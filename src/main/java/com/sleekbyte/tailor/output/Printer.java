@@ -70,10 +70,6 @@ public final class Printer implements Comparable<Printer> {
         print(rule, Severity.min(Severity.ERROR, maxSeverity), errorMsg, location);
     }
 
-    public void error(String errorMsg, Location location) {
-        print(null, Severity.min(Severity.ERROR, maxSeverity), errorMsg, location);
-    }
-
     // Visible for testing only
     public static String genOutputStringForTest(Rules rule, String filePath, int line, Severity severity, String msg) {
         return new ViolationMessage(rule, filePath, line, 0, severity, msg).toString();
