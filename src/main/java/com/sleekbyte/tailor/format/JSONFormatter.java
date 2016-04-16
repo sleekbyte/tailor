@@ -80,7 +80,9 @@ public final class JSONFormatter extends Formatter {
     }
 
     @Override
-    public void printProgressInfo(String str) {}
+    public void printProgressInfo(String str) {
+        // Not Applicable to this formatter
+    }
 
     private void storeMessages(List<Map<String, Object>> violations, boolean parsed, String filePath)
         throws IOException {

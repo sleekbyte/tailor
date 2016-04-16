@@ -74,10 +74,14 @@ public final class CCFormatter extends Formatter {
     }
 
     @Override
-    public void displayParseErrorMessage(File inputFile) throws IOException {}
+    public void displayParseErrorMessage(File inputFile) throws IOException {
+        // Not Applicable to this formatter
+    }
 
     @Override
-    public void displaySummary(long numFiles, long numSkipped, long numErrors, long numWarnings) {}
+    public void displaySummary(long numFiles, long numSkipped, long numErrors, long numWarnings) {
+        // Not Applicable to this formatter
+    }
 
     @Override
     public ExitCode getExitStatus(long numErrors) {
@@ -85,6 +89,8 @@ public final class CCFormatter extends Formatter {
     }
 
     @Override
-    public void printProgressInfo(String str) {}
+    public void printProgressInfo(String str) {
+        // Not Applicable to this formatter
+    }
 
 }
