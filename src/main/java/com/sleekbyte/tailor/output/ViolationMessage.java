@@ -1,6 +1,7 @@
 package com.sleekbyte.tailor.output;
 
 import com.sleekbyte.tailor.common.ColorSettings;
+import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 
@@ -49,7 +50,25 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
         this.lineNumber = lineNumber;
         this.columnNumber = columnNumber;
         this.severity = severity;
-        this.violationMessage = "[tailor] " + violationMessage;
+        this.violationMessage = Messages.TAILOR + violationMessage;
+    }
+
+    /**
+     * Constructs a ViolationMessage where the rule name is replaced by tool name (tailor).
+     *
+     * @param filePath         the path of the source file
+     * @param lineNumber       the logical line number in the source file
+     * @param columnNumber     the logical column number in the source file
+     * @param severity         the severity of the violation message
+     * @param violationMessage the description of the violation message
+     */
+    public ViolationMessage(String filePath, int lineNumber, int columnNumber, Severity severity,
+                            String violationMessage) {
+        this.filePath = filePath;
+        this.lineNumber = lineNumber;
+        this.columnNumber = columnNumber;
+        this.severity = severity;
+        this.violationMessage = Messages.TAILOR + violationMessage;
     }
 
     /**

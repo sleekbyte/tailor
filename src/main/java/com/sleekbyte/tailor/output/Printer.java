@@ -80,6 +80,11 @@ public final class Printer implements Comparable<Printer> {
     }
 
     // Visible for testing only
+    public static String genOutputStringForTest(String filePath, int line, int column, Severity severity, String msg) {
+        return new ViolationMessage(filePath, line, column, severity, msg).toString();
+    }
+
+    // Visible for testing only
     public static String genOutputStringForTest(Rules rule, String filePath, int line, int column, Severity severity,
                                                 String msg) {
         return new ViolationMessage(rule, filePath, line, column, severity, msg).toString();
@@ -98,15 +103,8 @@ public final class Printer implements Comparable<Printer> {
         if (shouldPrintParseErrorMessage) {
             printParseErrorMessage();
         } else {
-            List<ViolationMessage> outputList = getViolationMessages().stream().filter(msg -> {
-                    for (Pair<Integer, Integer> ignoredRegion : ignoredRegions) {
-                        if (ignoredRegion.getFirst() <= msg.getLineNumber()
-                            && msg.getLineNumber() <= ignoredRegion.getSecond()) {
-                            return false;
-                        }
-                    }
-                    return true;
-                }).collect(Collectors.toList());
+            List<ViolationMessage> outputList = getViolationMessages().stream()
+                .filter(this::filterIgnoredRegions).collect(Collectors.toList());
 
             Collections.sort(outputList);
             formatter.displayViolationMessages(outputList, inputFile);
@@ -190,7 +188,17 @@ public final class Printer implements Comparable<Printer> {
 
     private long getNumMessagesWithSeverity(Severity severity) {
         return msgBuffer.values().stream()
-            .filter(msg -> !ignoredRegions.contains(msg.getLineNumber()))
+            .filter(this::filterIgnoredRegions)
             .filter(msg -> msg.getSeverity().equals(severity)).count();
+    }
+
+    private boolean filterIgnoredRegions(ViolationMessage msg) {
+        for (Pair<Integer, Integer> ignoredRegion : ignoredRegions) {
+            if (ignoredRegion.getFirst() <= msg.getLineNumber()
+                && msg.getLineNumber() <= ignoredRegion.getSecond()) {
+                return false;
+            }
+        }
+        return true;
     }
 }
