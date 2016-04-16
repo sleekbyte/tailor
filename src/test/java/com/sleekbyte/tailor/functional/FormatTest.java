@@ -8,19 +8,26 @@ import com.sleekbyte.tailor.Tailor;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
+import com.sleekbyte.tailor.format.CCFormatter;
 import com.sleekbyte.tailor.format.Format;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.output.ViolationMessage;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,6 +50,9 @@ public final class FormatTest {
     protected ByteArrayOutputStream outContent;
     protected File inputFile;
     protected List<String> expectedMessages;
+
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
 
     @Before
     public void setUp() throws IOException {
@@ -126,6 +136,77 @@ public final class FormatTest {
         assertArrayEquals(outContent.toString(Charset.defaultCharset().name()), expected.toArray(), actual.toArray());
     }
 
+    @Test
+    public void testXcodeConfigOption() throws IOException {
+        File configurationFile = xcodeFormatConfigFile(".tailor.yml");
+
+        final String[] command = new String[] {
+            "--config", configurationFile.getAbsolutePath(),
+            "--no-color",
+            "--only=upper-camel-case",
+            inputFile.getPath()
+        };
+
+        expectedMessages.addAll(getExpectedMsgs().stream().map(msg -> Printer.genOutputStringForTest(
+            msg.getRule(),
+            inputFile.getName(),
+            msg.getLineNumber(),
+            msg.getColumnNumber(),
+            msg.getSeverity(),
+            msg.getMessage())).collect(Collectors.toList()));
+
+        Tailor.main(command);
+
+        List<String> actualOutput = new ArrayList<>();
+
+        String[] msgs = outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
+
+        // Skip first four lines for file header, last two lines for summary
+        msgs = Arrays.copyOfRange(msgs, 4, msgs.length - 2);
+
+        for (String msg : msgs) {
+            String truncatedMsg = msg.substring(msg.indexOf(inputFile.getName()));
+            actualOutput.add(truncatedMsg);
+        }
+
+        assertArrayEquals(outContent.toString(Charset.defaultCharset().name()), this.expectedMessages.toArray(),
+            actualOutput.toArray());
+    }
+
+    public void testCCFormat() throws IOException {
+        Format format = Format.CC;
+
+        final String[] command = new String[] {
+            "--format", format.getName(),
+            "--no-color",
+            "--only=upper-camel-case",
+            inputFile.getPath()
+        };
+
+        Tailor.main(command);
+
+        List<String> expected = new ArrayList<>();
+        List<String> actual = new ArrayList<>();
+        StringBuilder expectedOutput = new StringBuilder();
+        for (Map<String, Object> msg : getCCMessages()) {
+            expectedOutput.append(GSON.toJson(msg)).append(CCFormatter.NULL_CHAR).append(System.lineSeparator());
+        }
+        expectedMessages.addAll(Arrays.asList(expectedOutput.toString().split(NEWLINE_REGEX)));
+
+        for (String msg : expectedMessages) {
+            String strippedMsg = msg.replaceAll(inputFile.getCanonicalPath(), "");
+            expected.add(strippedMsg);
+        }
+
+        String[] msgs = outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
+        for (String msg : msgs) {
+            String strippedMsg = msg.replaceAll(inputFile.getCanonicalPath(), "");
+            actual.add(strippedMsg);
+        }
+
+        assertArrayEquals(outContent.toString(Charset.defaultCharset().name()), expected.toArray(), actual.toArray());
+    }
+
     protected List<ViolationMessage> getExpectedMsgs() {
         List<ViolationMessage> messages = new ArrayList<>();
         messages.add(createViolationMessage(3, 7, Severity.WARNING, Messages.CLASS + Messages.NAMES));
@@ -193,6 +274,66 @@ public final class FormatTest {
         expectedOutput.put(Messages.FILES_KEY, files);
         expectedOutput.put(Messages.SUMMARY_KEY, getJSONSummary(1, 0, 0, 22));
         return expectedOutput;
+    }
+
+    private File xcodeFormatConfigFile(String fileName) throws IOException {
+        File configFile = folder.newFile(fileName);
+        Writer streamWriter = new OutputStreamWriter(new FileOutputStream(configFile), Charset.forName("UTF-8"));
+        PrintWriter printWriter = new PrintWriter(streamWriter);
+        printWriter.println("format: xcode");
+        streamWriter.close();
+        printWriter.close();
+        return configFile;
+    }
+
+    private List<Map<String, Object>> getCCMessages() {
+        List<Map<String, Object>> violations = new ArrayList<>();
+
+        for (ViolationMessage msg : getExpectedMsgs()) {
+            Map<String, Object> violation = new HashMap<>();
+            Map<String, Object> location = new HashMap<>();
+            Map<String, Object> positions = new HashMap<>();
+            Map<String, Object> lines = new HashMap<>();
+            Map<String, Object> begin = new HashMap<>();
+            Map<String, Object> end = new HashMap<>();
+
+            if (msg.getColumnNumber() != 0) {
+                begin.put(Messages.LINE_KEY, msg.getLineNumber());
+                begin.put(Messages.COLUMN_KEY, msg.getColumnNumber());
+                end.put(Messages.LINE_KEY, msg.getLineNumber());
+                end.put(Messages.COLUMN_KEY, msg.getColumnNumber());
+                positions.put(Messages.BEGIN_KEY, begin);
+                positions.put(Messages.END_KEY, end);
+                location.put(Messages.POSITIONS_KEY, positions);
+            } else {
+                lines.put(Messages.BEGIN_KEY, msg.getLineNumber());
+                lines.put(Messages.END_KEY, msg.getLineNumber());
+                location.put(Messages.LINES_KEY, lines);
+            }
+
+            violation.put(Messages.TYPE_KEY, Messages.ISSUE_VALUE);
+
+            violation.put(Messages.CHECK_NAME_KEY, msg.getRule().getName());
+
+            violation.put(Messages.DESCRIPTION_KEY, msg.getMessage());
+
+            Map<String, Object> content = new HashMap<>();
+            content.put(Messages.BODY_KEY, msg.getRule().getInformation());
+            violation.put(Messages.CONTENT_KEY, content);
+
+            List<String> categories = new ArrayList<>();
+            categories.add(msg.getRule().getCategory());
+            violation.put(Messages.CATEGORIES_KEY, categories);
+
+            location.put(Messages.PATH_KEY, inputFile.getPath());
+            violation.put(Messages.LOCATION_KEY, location);
+
+            violation.put(Messages.REMEDIATION_POINTS_KEY, msg.getRule().getRemediationPoints());
+
+            violations.add(violation);
+        }
+
+        return violations;
     }
 
 }

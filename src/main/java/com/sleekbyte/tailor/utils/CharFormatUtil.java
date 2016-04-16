@@ -3,7 +3,7 @@ package com.sleekbyte.tailor.utils;
 /**
  * Util class for character formatting.
  */
-public class CharFormatUtil {
+public final class CharFormatUtil {
 
     private static final String ALPHANUMERIC_REGEX = "^[a-zA-Z0-9]*$";
 

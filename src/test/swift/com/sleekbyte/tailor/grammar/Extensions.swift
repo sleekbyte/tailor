@@ -94,3 +94,9 @@ extension Manager {
         case NetService(NSNetService)
     }
 }
+
+extension Array {
+    subscript (safe index: Int) -> Element? {
+        return index >= 0 && index < count ? self[index] : nil
+    }
+}

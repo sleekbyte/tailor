@@ -244,7 +244,8 @@ codeBlock : '{' statements? '}'  ;
 // GRAMMAR OF AN IMPORT DECLARATION
 
 importDeclaration : attributes? 'import' importKind? importPath  ;
-importKind : 'typealias' | 'struct' | 'class' | 'enum' | 'protocol' | 'var' | 'func'  ;
+// Swift Language Reference does not have let
+importKind : 'typealias' | 'struct' | 'class' | 'enum' | 'protocol' | 'var' | 'func' | 'let'  ;
 importPath : importPathIdentifier | importPathIdentifier '.' importPath  ;
 importPathIdentifier : identifier | operator  ;
 
@@ -573,6 +574,7 @@ primaryExpression
  | implicitMemberExpression
 // | implicit_member_expression disallow as ambig with explicit member expr in postfix_expression
  | wildcardExpression
+ | selectorExpression
  ;
 
 // GRAMMAR OF A LITERAL EXPRESSION
@@ -596,7 +598,8 @@ dictionaryLiteralItem : expression ':' expression  ;
 selfExpression
  : 'self'
  | 'self' '.' identifier
- | 'self' '[' expressionList ']'
+ // Swift Language Reference uses expressionList
+ | 'self' '[' expressionElementList ']'
  | 'self' '.' 'init'
  ;
 
@@ -609,7 +612,8 @@ superclassExpression
   ;
 
 superclassMethodExpression : 'super' '.' identifier  ;
-superclassSubscriptExpression : 'super' '[' expressionList ']'  ;
+// Swift Language Reference uses expressionList
+superclassSubscriptExpression : 'super' '[' expressionElementList ']'  ;
 superclassInitializerExpression : 'super' '.' 'init'  ;
 
 // GRAMMAR OF A CLOSURE EXPRESSION
@@ -643,6 +647,10 @@ expressionElement : expression | identifier ':' expression  ;
 
 wildcardExpression : '_'  ;
 
+// GRAMMAR OF A SELECTOR EXPRESSION
+
+selectorExpression: '#selector' '('expression')'  ;
+
 // GRAMMAR OF A POSTFIX EXPRESSION
 
 postfixExpression
@@ -654,13 +662,19 @@ postfixExpression
  | postfixExpression '.' 'init'                                  # initializerExpression
  // TODO: don't allow '_' here in DecimalLiteral:
  | postfixExpression '.' DecimalLiteral                         # explicitMemberExpression1
- | postfixExpression '.' identifier genericArgumentClause?     # explicitMemberExpression2
+ | postfixExpression '.' identifier genericArgumentClause?      # explicitMemberExpression2
+ | postfixExpression '.' identifier '(' argumentNames ')'       # explicitMemberExpression3
  | postfixExpression '.' 'self'                                  # postfixSelfExpression
  | postfixExpression '.' 'dynamicType'                           # dynamicTypeExpression
- | postfixExpression '[' expressionList ']'                     # subscriptExpression
+ // Swift Language Reference uses expressionList
+ | postfixExpression '[' expressionElementList ']'                     # subscriptExpression
  | postfixExpression '!'                                # forcedValueExpression
  | postfixExpression '?'                                         # optionalChainingExpression
  ;
+
+// GRAMMAR OF AN ARGUMENT NAME
+argumentNames : argumentName argumentNames?  ;
+argumentName: (identifier | '_') ':'  ; // Swift Language Reference has argumentName → identifier :
 
 // GRAMMAR OF A FUNCTION CALL EXPRESSION
 
@@ -675,11 +689,13 @@ functionCallExpression
 
 //initializer_expression : postfix_expression '.' 'init' ;
 
-/*explicitMemberExpression
+/*
+explicitMemberExpression
   : postfixExpression '.' DecimalLiteral // TODO: don't allow '_' here in DecimalLiteral
   | postfixExpression '.' identifier genericArgumentClause?
+  | postfixExpression '.' identifier '(' argumentNames ')'
   ;
-  */
+*/
 
 //postfix_self_expression : postfix_expression '.' 'self' ;
 
@@ -857,7 +873,7 @@ contextSensitiveKeyword :
  'lazy' | 'left' | 'mutating' | 'none' | 'nonmutating' | 'optional' | 'operator' | 'override' | 'postfix' | 'precedence' |
  'prefix' | 'Protocol' | 'required' | 'right' | 'set' | 'Type' | 'unowned' | 'weak' | 'willSet' |
  'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS' | 'x86_64' |
- 'arm' | 'arm64' | 'i386' | 'os' | 'arch'
+ 'arm' | 'arm64' | 'i386' | 'os' | 'arch' | 'safe'
  ;
 
 OperatorHead
@@ -982,11 +998,14 @@ VersionLiteral: DecimalLiteral DecimalFraction DecimalFraction ;
 
 StringLiteral : '"' QuotedText? '"' ;
 fragment QuotedText : QuotedTextItem QuotedText? ;
-fragment QuotedTextItem : EscapedCharacter
+fragment QuotedTextItem : EscapedCharacter | InterpolatedString
 // | '\\(' expression ')'
  | ~["\\\u000A\u000D]
  ;
-EscapedCharacter : '\\' [0\\(tnr"']
+
+InterpolatedString: '\\(' (QuotedText | StringLiteral)* ')';
+
+EscapedCharacter : '\\' [0\\tnr"']
  | '\\x' HexadecimalDigit HexadecimalDigit
  | '\\u' '{' HexadecimalDigit HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? HexadecimalDigit? '}'
 ;

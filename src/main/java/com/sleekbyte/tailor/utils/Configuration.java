@@ -1,5 +1,7 @@
 package com.sleekbyte.tailor.utils;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.ConstructLengths;
 import com.sleekbyte.tailor.common.Messages;
@@ -7,21 +9,26 @@ import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.common.YamlConfiguration;
 import com.sleekbyte.tailor.format.Format;
+import com.sleekbyte.tailor.format.Format.IllegalFormatException;
 import com.sleekbyte.tailor.format.Formatter;
 import com.sleekbyte.tailor.utils.CLIArgumentParser.CLIArgumentParserException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
+import org.yaml.snakeyaml.error.YAMLException;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.net.URI;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -32,6 +39,8 @@ import java.util.stream.Collectors;
  */
 public final class Configuration {
 
+    private static final String CONFIG_JSON = "../config.json";
+    private static final Path CODE_CLIMATE_CONFIG = Paths.get(CONFIG_JSON);
     private static CLIArgumentParser CLIArgumentParser = new CLIArgumentParser();
     private Optional<YamlConfiguration> yamlConfiguration;
     private CommandLine cmd;
@@ -57,16 +66,56 @@ public final class Configuration {
         return CLIArgumentParser.shouldListFiles();
     }
 
+    /**
+     * Determine if the output should be colorized.
+     *
+     * @return whether the output should be colorized
+     */
     public boolean shouldColorOutput() {
-        return CLIArgumentParser.shouldColorOutput();
+        boolean shouldColorOutput = CLIArgumentParser.shouldColorOutput();
+        if (shouldColorOutput
+            && yamlConfiguration.isPresent()
+            && !yamlConfiguration.get().getColor().isEmpty()) {
+            String option = yamlConfiguration.get().getColor();
+            validateColorOption(option);
+            if (option.equals(Messages.DISABLE)) {
+                shouldColorOutput = false;
+            }
+        }
+        return shouldColorOutput;
     }
 
+    /**
+     * Determine if the output color should be inverted.
+     *
+     * @return whether the output color should be inverted
+     */
     public boolean shouldInvertColorOutput() {
-        return CLIArgumentParser.shouldInvertColorOutput();
+        boolean shouldInvertColorOutput = CLIArgumentParser.shouldInvertColorOutput();
+        if (!shouldInvertColorOutput
+            && yamlConfiguration.isPresent()
+            && !yamlConfiguration.get().getColor().isEmpty()) {
+            String option = yamlConfiguration.get().getColor();
+            validateColorOption(option);
+            if (option.equals(Messages.INVERT)) {
+                shouldInvertColorOutput = true;
+            }
+        }
+        return shouldInvertColorOutput;
     }
 
+    /**
+     * Determine is the debug flag is set.
+     *
+     * @return whether the debug flag is set
+     * @throws CLIArgumentParserException if CLI argument parsing for debug fails
+     */
     public boolean debugFlagSet() throws CLIArgumentParserException {
-        return CLIArgumentParser.debugFlagSet();
+        boolean debugFlagSet = CLIArgumentParser.debugFlagSet();
+        if (!debugFlagSet && yamlConfiguration.isPresent()) {
+            debugFlagSet = yamlConfiguration.get().isDebug();
+        }
+        return debugFlagSet;
     }
 
     /**
@@ -127,10 +176,13 @@ public final class Configuration {
 
         if (pathNames.size() >= 1) {
             fileNames.addAll(findFilesInPaths(pathNames));
+        } else if (Files.isReadable(CODE_CLIMATE_CONFIG)) {
+            pathNames.addAll(getCodeClimateIncludePaths());
+            fileNames.addAll(findFilesInPaths(pathNames));
         } else if (yamlConfiguration.isPresent()) {
             YamlConfiguration config = yamlConfiguration.get();
             Optional<String> configFileLocation = config.getFileLocation();
-            if (configFileLocation.isPresent() && CLIArgumentParser.getFormat() == Format.XCODE) {
+            if (configFileLocation.isPresent() && getFormat() == Format.XCODE) {
                 System.out.println(Messages.TAILOR_CONFIG_LOCATION + configFileLocation.get());
             }
             URI rootUri = new File(srcRoot.orElse(".")).toURI();
@@ -145,6 +197,34 @@ public final class Configuration {
         return fileNames;
     }
 
+    /**
+     * If a Code Climate configuration file exists, then load pathNames from the "include_paths" array.
+     *
+     * @throws IOException if the configuration file cannot be parsed
+     */
+    private List<String> getCodeClimateIncludePaths() throws IOException {
+        List<String> includePaths = new ArrayList<>();
+        BufferedReader reader = Files.newBufferedReader(CODE_CLIMATE_CONFIG);
+        try {
+            ConfigJSON config = new Gson().fromJson(reader, ConfigJSON.class);
+            if (config != null && config.include_paths != null) {
+                includePaths = config.include_paths.stream().filter(Objects::nonNull).collect(Collectors.toList());
+            }
+        } catch (JsonSyntaxException e) {
+            throw new IOException(e.getMessage());
+        }
+        return includePaths;
+    }
+
+    /**
+     * Data object to represent a Code Climate configuration, i.e. "config.json".
+     */
+    private class ConfigJSON {
+        // Name cannot be camel case because it must match key from Code Climate spec
+        @SuppressWarnings("checkstyle:membername")
+        private List<String> include_paths;
+    }
+
     public ConstructLengths parseConstructLengths() throws CLIArgumentParserException {
         return CLIArgumentParser.parseConstructLengths();
     }
@@ -157,12 +237,8 @@ public final class Configuration {
         return CLIArgumentParser.getXcodeprojPath();
     }
 
-    public void printHelp() {
+    public static void printHelp() {
         CLIArgumentParser.printHelp();
-    }
-
-    public Format getFormat() throws CLIArgumentParserException {
-        return CLIArgumentParser.getFormat();
     }
 
     /**
@@ -171,7 +247,7 @@ public final class Configuration {
      * @return formatter instance that implements Formatter interface
      * @throws CLIArgumentParserException if the user-specified format does not correspond to a supported type
      */
-    public Formatter getFormatter(ColorSettings colorSettings) throws CLIArgumentParserException {
+    public Formatter getFormatter(ColorSettings colorSettings) throws CLIArgumentParserException, YAMLException {
         String formatClass = getFormat().getClassName();
         Formatter formatter;
         try {
@@ -181,6 +257,30 @@ public final class Configuration {
             throw new CLIArgumentParserException("Formatter was not successfully created: " + e);
         }
         return formatter;
+    }
+
+    /**
+     * Retrieves format from CLI or YAML configuration file.
+     * Returns the XCODE format by default if no format is found.
+     *
+     * @return format from CLI or YAML configuration file.  XCODE format by default.
+     * @throws CLIArgumentParserException error when parsing the format from CLI arguments
+     * @throws YAMLException error when parsing the format from YAML configuration file
+     */
+    private Format getFormat() throws CLIArgumentParserException, YAMLException {
+        // Try to get format from CLI/config file. Else use the default format (XCODE)
+        Format format = Format.XCODE;
+        if (CLIArgumentParser.formatOptionSet()) {
+            format = CLIArgumentParser.getFormat();
+        } else if (yamlConfiguration.isPresent() && !yamlConfiguration.get().getFormat().isEmpty()) {
+            try {
+                format = Format.parseFormat(yamlConfiguration.get().getFormat());
+            } catch (IllegalFormatException e) {
+                throw new YAMLException(Messages.INVALID_OPTION_VALUE
+                    + "format ." + " Options are <" + Format.getFormats() + ">.");
+            }
+        }
+        return format;
     }
 
     private static Set<String> findFilesInPaths(List<String> pathNames) throws IOException {
@@ -241,6 +341,14 @@ public final class Configuration {
         Set<String> enabledRuleNames = enabledRules.stream().map(Rules::getName).collect(Collectors.toSet());
         Configuration.checkValidRules(enabledRuleNames, parsedRules);
         return enabledRules.stream().filter(rule -> !parsedRules.contains(rule.getName())).collect(Collectors.toSet());
+    }
+
+    private void validateColorOption(String colorOption) throws YAMLException {
+        Set<String> colorOptions = new HashSet<>(Arrays.asList(Messages.DISABLE, Messages.INVERT));
+        if (!colorOptions.contains(colorOption)) {
+            throw new YAMLException("The color option was not recognized.  Options are <" + Messages.DISABLE + "|"
+            + Messages.INVERT + ">.");
+        }
     }
 
 }

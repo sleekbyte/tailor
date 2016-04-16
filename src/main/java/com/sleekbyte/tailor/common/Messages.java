@@ -3,7 +3,7 @@ package com.sleekbyte.tailor.common;
 /**
  * Output messages.
  */
-public class Messages {
+public abstract class Messages {
 
     // Message styles
     public static final String WARNING = "warning";
@@ -174,10 +174,64 @@ public class Messages {
     public static final String ERRORS_KEY = "errors";
     public static final String WARNINGS_KEY = "warnings";
 
+    // Code Climate Format messages
+    public static final String BEGIN_KEY = "begin";
+    public static final String END_KEY = "end";
+    public static final String POSITIONS_KEY = "positions";
+    public static final String LINES_KEY = "lines";
+    public static final String CHECK_NAME_KEY = "check_name";
+    public static final String BODY_KEY = "body";
+    public static final String CONTENT_KEY = "content";
+    public static final String DESCRIPTION_KEY = "description";
+    public static final String TYPE_KEY = "type";
+    public static final String ISSUE_VALUE = "issue";
+    public static final String CATEGORIES_KEY = "categories";
+    public static final String REMEDIATION_POINTS_KEY = "remediation_points";
+    public static final String STYLE_CATEGORY = "Style";
+    public static final String BUG_RISK_CATEGORY = "Bug Risk";
+
     // Error messages
     public static final String NO_SWIFT_FILES_FOUND = "No Swift source files were found.";
     public static final String COULD_NOT_BE_PARSED = " could not be parsed successfully, skipping...";
 
     // Tailor disable feature warnings
     public static final String ON_OFF_MISMATCH = "Tailor block disable comments are unbalanced";
+
+    // CLI options
+    public static final String SYNTAX_PREFIX = "Usage: ";
+    public static final String OPTIONS_PREFIX = "Options:";
+    public static final int HELP_WIDTH = 99;
+    public static final String HELP_SHORT_OPT = "h";
+    public static final String HELP_LONG_OPT = "help";
+    public static final String VERSION_SHORT_OPT = "v";
+    public static final String VERSION_LONG_OPT = "version";
+    public static final String MAX_CLASS_LENGTH_OPT = "max-class-length";
+    public static final String MAX_CLOSURE_LENGTH_OPT = "max-closure-length";
+    public static final String MAX_FILE_LENGTH_OPT = "max-file-length";
+    public static final String MAX_FUNCTION_LENGTH_OPT = "max-function-length";
+    public static final String MAX_LINE_LENGTH_SHORT_OPT = "l";
+    public static final String MAX_LINE_LENGTH_LONG_OPT = "max-line-length";
+    public static final String MAX_NAME_LENGTH_OPT = "max-name-length";
+    public static final String MAX_STRUCT_LENGTH_OPT = "max-struct-length";
+    public static final String MIN_NAME_LENGTH_OPT = "min-name-length";
+    public static final String MAX_SEVERITY_OPT = "max-severity";
+    public static final String ONLY_OPT = "only";
+    public static final String EXCEPT_OPT = "except";
+    public static final String DEBUG_OPT = "debug";
+    public static final String NO_COLOR_OPT = "no-color";
+    public static final String INVERT_COLOR_OPT = "invert-color";
+    public static final String DEFAULT_INT_ARG = "0";
+    public static final String XCODE_INTEGRATION_OPT = "xcode";
+    public static final String SHOW_RULES_OPT = "show-rules";
+    public static final String CONFIG_SHORT_OPT = "c";
+    public static final String CONFIG_LONG_OPT = "config";
+    public static final String LIST_FILES_OPT = "list-files";
+    public static final String FORMAT_SHORT_OPT = "f";
+    public static final String FORMAT_LONG_OPT = "format";
+    public static final String INVALID_OPTION_VALUE = "Invalid value provided for option ";
+
+    // Config options
+    public static final String INVERT = "invert";
+    public static final String DISABLE = "disable";
+
 }

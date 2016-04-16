@@ -24,7 +24,7 @@ script/test
 
 ## Developing
 
-* The ANTLR-executable version of the Swift grammar (based on [The Swift Programming Language: Summary of the Grammar](https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/Swift_Programming_Language/zzSummaryOfTheGrammar.html)) is located at `src/main/antlr/Swift.g4`
+* The ANTLR-executable version of the Swift grammar (based on [The Swift Programming Language: Summary of the Grammar](https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/Swift_Programming_Language/zzSummaryOfTheGrammar.html)) is located at `src/main/antlr/com/sleekbyte/tailor/antlr/Swift.g4`
 * The lexer, parser, and listener generated via ANTLR from the grammar are located in `src/gen/java/com/sleekbyte/tailor/antlr/`
 * If modifications to the [ANTLR](http://www.antlr.org) grammar are necessary, regenerate the lexer/parser/listener:
 ```bash
