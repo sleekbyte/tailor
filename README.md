@@ -345,7 +345,7 @@ $ tailor -f json main.swift
 ```
 
 # Developers
-Please review the [guidelines for contributing](https://github.com/sleekbyte/tailor/blob/master/CONTRIBUTING.md) to this repository.
+Please review the [guidelines for contributing](https://github.com/sleekbyte/tailor/blob/master/.github/CONTRIBUTING.md) to this repository.
 
 ## Development Environment
 * [Java Version 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
