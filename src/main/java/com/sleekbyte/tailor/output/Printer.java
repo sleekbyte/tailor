@@ -55,8 +55,9 @@ public final class Printer implements Comparable<Printer> {
         print(rule, Severity.WARNING, warningMsg, location);
     }
 
+    // Use this method to print non rule based messages.
     public void warn(String warningMsg, Location location) {
-        print(null, Severity.WARNING, warningMsg, location);
+        print(Severity.WARNING, warningMsg, location);
     }
 
     /**
@@ -100,7 +101,7 @@ public final class Printer implements Comparable<Printer> {
             printParseErrorMessage();
         } else {
             List<ViolationMessage> outputList = getViolationMessages().stream()
-                .filter(this::filterIgnoredRegions).collect(Collectors.toList());
+                .filter(this::shouldIgnoreViolationMessage).collect(Collectors.toList());
 
             Collections.sort(outputList);
             formatter.displayViolationMessages(outputList, inputFile);
@@ -162,14 +163,17 @@ public final class Printer implements Comparable<Printer> {
         return 100;
     }
 
-    private void print(Rules rule, Severity severity, String msg, Location location) {
-        ViolationMessage violationMessage;
-        if (rule != null) {
-            violationMessage = new ViolationMessage(rule, location.line, location.column, severity, msg);
-        } else {
-            violationMessage = new ViolationMessage(location.line, location.column, severity, msg);
-        }
+    private void print(Severity severity, String msg, Location location) {
+        ViolationMessage violationMessage = new ViolationMessage(location.line, location.column, severity, msg);
+        addToMsgBuffer(violationMessage);
+    }
 
+    private void print(Rules rule, Severity severity, String msg, Location location) {
+        ViolationMessage violationMessage = new ViolationMessage(rule, location.line, location.column, severity, msg);
+        addToMsgBuffer(violationMessage);
+    }
+
+    private void addToMsgBuffer(ViolationMessage violationMessage) {
         try {
             violationMessage.setFilePath(this.inputFile.getCanonicalPath());
         } catch (IOException e) {
@@ -184,11 +188,11 @@ public final class Printer implements Comparable<Printer> {
 
     private long getNumMessagesWithSeverity(Severity severity) {
         return msgBuffer.values().stream()
-            .filter(this::filterIgnoredRegions)
+            .filter(this::shouldIgnoreViolationMessage)
             .filter(msg -> msg.getSeverity().equals(severity)).count();
     }
 
-    private boolean filterIgnoredRegions(ViolationMessage msg) {
+    private boolean shouldIgnoreViolationMessage(ViolationMessage msg) {
         for (Pair<Integer, Integer> ignoredRegion : ignoredRegions) {
             if (ignoredRegion.getFirst() <= msg.getLineNumber()
                 && msg.getLineNumber() <= ignoredRegion.getSecond()) {

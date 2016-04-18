@@ -30,6 +30,7 @@ public final class ViolationSuppressor extends CommentAnalyzer {
     @Override
     public void analyze() {
         Stack<Integer> ignoreBlockBeginStack = new Stack<>();
+        Token lastSuppressViolationComment = null;
 
         for (Token comment : singleLineComments) {
             int lineNumber = comment.getLine();
@@ -46,15 +47,25 @@ public final class ViolationSuppressor extends CommentAnalyzer {
             } else if (trimmedComment.equals(TAILOR_ON)) {
                 if (ignoreBlockBeginStack.empty()) {
                     // Print warning message when "off" and "on" tags are not matched
-                    printer.warn(Messages.ON_OFF_MISMATCH,
-                        new Location(comment.getLine(),
-                        comment.getCharPositionInLine() + 1));
+                    printOnOffMismatchWarning(comment);
                     return;
                 }
 
                 // Ignore lines from analysis that fall inside the ignore region
                 printer.ignoreRegion(ignoreBlockBeginStack.pop(), lineNumber);
+                lastSuppressViolationComment = comment;
             }
         }
+
+        // Print warning message when "off" and "on" stack is not empty
+        if (!ignoreBlockBeginStack.isEmpty() && lastSuppressViolationComment != null) {
+            printOnOffMismatchWarning(lastSuppressViolationComment);
+        }
+    }
+
+    private void printOnOffMismatchWarning(Token comment) {
+        printer.warn(Messages.ON_OFF_MISMATCH,
+            new Location(comment.getLine(),
+                comment.getCharPositionInLine() + 1));
     }
 }
