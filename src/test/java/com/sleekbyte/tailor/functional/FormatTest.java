@@ -318,7 +318,7 @@ public final class FormatTest {
             violation.put(Messages.DESCRIPTION_KEY, msg.getMessage());
 
             Map<String, Object> content = new HashMap<>();
-            content.put(Messages.BODY_KEY, msg.getRule().getInformation());
+            content.put(Messages.BODY_KEY, msg.getRule().getExamples());
             violation.put(Messages.CONTENT_KEY, content);
 
             List<String> categories = new ArrayList<>();
