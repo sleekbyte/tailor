@@ -44,6 +44,7 @@ public final class ViolationSuppressor extends CommentAnalyzer {
             // Gather ignore regions
             if (trimmedComment.equals(TAILOR_OFF)) {
                 ignoreBlockBeginStack.push(lineNumber);
+                lastSuppressViolationComment = comment;
             } else if (trimmedComment.equals(TAILOR_ON)) {
                 if (ignoreBlockBeginStack.empty()) {
                     // Print warning message when "off" and "on" tags are not matched

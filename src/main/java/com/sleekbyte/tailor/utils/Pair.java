@@ -7,7 +7,7 @@ package com.sleekbyte.tailor.utils;
  * @param <L> Type of member first.
  * @param <R> Type of member second.
  */
-public final class Pair<L,R> {
+public final class Pair<L, R> {
     private final L first;
     private final R second;
 

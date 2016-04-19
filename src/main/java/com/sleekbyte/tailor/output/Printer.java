@@ -101,7 +101,7 @@ public final class Printer implements Comparable<Printer> {
             printParseErrorMessage();
         } else {
             List<ViolationMessage> outputList = getViolationMessages().stream()
-                .filter(this::shouldIgnoreViolationMessage).collect(Collectors.toList());
+                .filter(this::shouldDisplayViolationMessage).collect(Collectors.toList());
 
             Collections.sort(outputList);
             formatter.displayViolationMessages(outputList, inputFile);
@@ -188,11 +188,11 @@ public final class Printer implements Comparable<Printer> {
 
     private long getNumMessagesWithSeverity(Severity severity) {
         return msgBuffer.values().stream()
-            .filter(this::shouldIgnoreViolationMessage)
+            .filter(this::shouldDisplayViolationMessage)
             .filter(msg -> msg.getSeverity().equals(severity)).count();
     }
 
-    private boolean shouldIgnoreViolationMessage(ViolationMessage msg) {
+    private boolean shouldDisplayViolationMessage(ViolationMessage msg) {
         for (Pair<Integer, Integer> ignoredRegion : ignoredRegions) {
             if (ignoredRegion.getFirst() <= msg.getLineNumber()
                 && msg.getLineNumber() <= ignoredRegion.getSecond()) {
