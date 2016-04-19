@@ -4,7 +4,8 @@
 #### Class names
 
 *Preferred*
-```swift
+
+```
 class SomeClass {
 	// class definition goes here
 }
@@ -13,8 +14,10 @@ class SomeClass : SomeSuperClass {
 	// class definition goes here
 }
 ```
+
 *Not Preferred*
-```swift
+
+```
 class invalidClassName {
 	// class definition goes here
 }
@@ -23,16 +26,20 @@ class inval1dCla$$Name : SomeSuperClass {
 	// class definition goes here
 }
 ```
+
 #### Enumeration types
 
 *Preferred*
-```swift
+
+```
 enum SomeEnumeration {
 	// enumeration definition goes here
 }
 ```
+
 *Not Preferred*
-```swift
+
+```
 enum S0me_Enumer4t!on {
 	// enumeration definition goes here
 }
@@ -41,7 +48,8 @@ enum S0me_Enumer4t!on {
 #### Enumeration values
 
 *Preferred*
-```swift
+
+```
 enum CompassPoint {
 	case North
 	case South
@@ -51,7 +59,8 @@ enum CompassPoint {
 ```
 
 *Not Preferred*
-```swift
+
+```
 enum CompassPoint {
 	case N0rth
 	case Sou-th
@@ -63,13 +72,16 @@ enum CompassPoint {
 #### Struct names
 
 *Preferred*
-```swift
+
+```
 struct SomeStructure {
 	// structure definition goes here
 }
 ```
+
 *Not Preferred*
-```swift
+
+```
 struct Some-Structure {
 	// structure definition goes here
 }
@@ -78,13 +90,16 @@ struct Some-Structure {
 #### Protocol names
 
 *Preferred*
-```swift
+
+```
 protocol SomeProtocol {
 	// protocol definition goes here
 }
 ```
+
 *Not Preferred*
-```swift
+
+```
 protocol someprotocol {
 	// protocol definition goes here
 }

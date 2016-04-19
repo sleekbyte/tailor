@@ -2,14 +2,16 @@
 Avoid using the forced form of the type cast operator (`as!`) because Swift is not able to determine at compile time if the type conversion will succeed.  In the event of an unsuccessful conversion, a runtime error will be triggered. The conditional form of the type cast operator (`as?`) is safer and should be used when possible.
 
 *Preferred*
-```swift
+
+```
 if let movie = item as? Movie {
     print("Movie: '\(movie.name)', dir. \(movie.director)")
 }
 ```
 
 *Not Preferred*
-```swift
+
+```
 let movie = item as! Movie
 print("Movie: '\(movie.name)', dir. \(movie.director)")
 ```

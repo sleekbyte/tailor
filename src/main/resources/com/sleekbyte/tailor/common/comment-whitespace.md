@@ -3,7 +3,8 @@
 Prefer _at least one_ whitespace character after a comment opening symbol (`//`, `///`, `/*`, or `/**`) and _at least one_ whitespace character before a comment closing symbol (`*/`).
 
 *Preferred*
-```swift
+
+```
 // This is a comment
 
 /// This is a documentation comment
@@ -22,7 +23,8 @@ comment
 ```
 
 *Not Preferred*
-```swift
+
+```
 //This is a comment
 
 ///This is a documentation comment

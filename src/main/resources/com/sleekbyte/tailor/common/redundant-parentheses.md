@@ -8,7 +8,8 @@ Additionally, method calls with no parameters and a trailing closure should not 
 - if, else if statement
 
 *Preferred*
-```swift
+
+```
 if SomeCondition {
 
 } else if SomeOtherCondition {
@@ -16,7 +17,8 @@ if SomeCondition {
 ```
 
 *Not Preferred*
-```swift
+
+```
 if (SomeCondition) {
 
 } else if (SomeOtherCondition) {
@@ -26,7 +28,8 @@ if (SomeCondition) {
 - switch statement
 
 *Preferred*
-```swift
+
+```
 switch SomeData {
 	default:
 		break
@@ -34,7 +37,8 @@ switch SomeData {
 ```
 
 *Not Preferred*
-```swift
+
+```
 switch (SomeData) {
 	default:
 		break
@@ -44,14 +48,16 @@ switch (SomeData) {
 - for loop
 
 *Preferred*
-```swift
+
+```
 for var i = 0; i < 10; i+=1 {
 
 }
 ```
 
 *Not Preferred*
-```swift
+
+```
 for (var i = 0; i < 10; i+=1) {
 
 }
@@ -60,14 +66,16 @@ for (var i = 0; i < 10; i+=1) {
 - while loop
 
 *Preferred*
-```swift
+
+```
 while SomeCondition {
 
 }
 ```
 
 *Not Preferred*
-```swift
+
+```
 while (SomeCondition) {
 
 }
@@ -76,14 +84,16 @@ while (SomeCondition) {
 - repeat-while loop
 
 *Preferred*
-```swift
+
+```
 repeat {
 
 } while SomeCondition
 ```
 
 *Not Preferred*
-```swift
+
+```
 repeat {
 
 } while (SomeCondition)
@@ -92,12 +102,14 @@ repeat {
 - guard clause
 
 *Preferred*
-```swift
+
+```
 guard true else {   }
 ```
 
 *Not Preferred*
-```swift
+
+```
 guard (true) else {   }
 ```
 
@@ -105,7 +117,8 @@ guard (true) else {   }
 - do/catch statement
 
 *Preferred*
-```swift
+
+```
 do  {
 
 } catch SomeException {
@@ -114,7 +127,8 @@ do  {
 ```
 
 *Not Preferred*
-```swift
+
+```
 do  {
 
 } catch (SomeException) {
@@ -125,12 +139,14 @@ do  {
 - throw statement
 
 *Preferred*
-```swift
+
+```
 throw SomeException
 ```
 
 *Not Preferred*
-```swift
+
+```
 throw (SomeException)
 ```
 
@@ -139,38 +155,44 @@ throw (SomeException)
 - array items
 
 *Preferred*
-```swift
+
+```
 var shoppingList: [String] = ["Eggs", "Milk"]
 ```
 
 *Not Preferred*
-```swift
+
+```
 var shoppingList: [String] = [("Eggs"), ("Milk")]
 ```
 
 - dictionary items
 
 *Preferred*
-```swift
+
+```
 var airports: [String: String] = ["YYZ": "Toronto Pearson", "DUB": "Dublin"]
 ```
 
 *Not Preferred*
-```swift
+
+```
 var airports: [String: String] = [("YYZ"): ("Toronto Pearson"), ("DUB"): ("Dublin")]
 ```
 
 - initializer patterns
 
 *Preferred*
-```swift
+
+```
 var x: Int = 2
 var y: String = "Sleekbyte"
 var x = 2
 ```
 
 *Not Preferred*
-```swift
+
+```
 var x: Int = (2)
 var y: String = ("Sleekbyte")
 var x = (2)
@@ -179,14 +201,16 @@ var x = (2)
 #### Method calls
 
 *Preferred*
-```swift
+
+```
 items.map {
   item in item.transform()
 }
 ```
 
 *Not Preferred*
-```swift
+
+```
 items.map() {
   item in item.transform()
 }

@@ -17,15 +17,18 @@ each construct has its opening brace one the same line along with the same inden
 #### Classes
 
 *Preferred*
-```swift
+
+```
 class SomeClass {
 }
 
 class SomeClass: SomeSuperClass {
 }
 ```
+
 *Not Preferred*
-```swift
+
+```
 class SomeClass
 {
 }
@@ -37,15 +40,18 @@ class SomeClass: SomeSuperClass{
 #### Structs
 
 *Preferred*
-```swift
+
+```
 struct SomeStruct {
 }
 
 struct SomeStruct : SomeParentStruct {
 }
 ```
+
 *Not Preferred*
-```swift
+
+```
 struct SomeStruct
 {
 }
@@ -57,7 +63,8 @@ struct SomeStruct : SomeParentStruct  {
 #### Functions
 
 *Preferred*
-```swift
+
+```
 func someMethod() {
 }
 
@@ -66,7 +73,8 @@ func someOtherFunction () -> () {
 ```
 
 *Not Preferred*
-```swift
+
+```
 func someMethod()
 {
 }
@@ -81,7 +89,8 @@ func someOtherFunction () -> ()
 - if, else if, and else statement
 
 *Preferred*
-```swift
+
+```
 if SomeCondition {
 
 } else if someOtherCondition {
@@ -90,7 +99,8 @@ if SomeCondition {
 ```
 
 *Not Preferred*
-```swift
+
+```
 if SomeCondition
 {
 
@@ -106,7 +116,8 @@ else
 - switch statement
 
 *Preferred*
-```swift
+
+```
 switch SomeData {
 	default:
 		break
@@ -114,7 +125,8 @@ switch SomeData {
 ```
 
 *Not Preferred*
-```swift
+
+```
 switch SomeData
 {
 	default:
@@ -125,14 +137,16 @@ switch SomeData
 - for loop
 
 *Preferred*
-```swift
+
+```
 for var i = 0; i < 10; i+=1 {
 
 }
 ```
 
 *Not Preferred*
-```swift
+
+```
 for var i = 0; i < 10; i+=1
 {
 
@@ -142,14 +156,16 @@ for var i = 0; i < 10; i+=1
 - while loop
 
 *Preferred*
-```swift
+
+```
 while SomeCondition {
 
 }
 ```
 
 *Not Preferred*
-```swift
+
+```
 while SomeCondition
 {
 
@@ -159,14 +175,16 @@ while SomeCondition
 - repeat-while loop
 
 *Preferred*
-```swift
+
+```
 repeat {
 
 } while SomeCondition
 ```
 
 *Not Preferred*
-```swift
+
+```
 repeat
 {
 
@@ -176,7 +194,8 @@ repeat
 #### Initializers
 
 *Preferred*
-```swift
+
+```
 init(someParameter:Double, someOtherParameter:Double) {
    self.someMember = someParameter
    self.someOtherMember = someOtherParameter
@@ -184,7 +203,8 @@ init(someParameter:Double, someOtherParameter:Double) {
 ```
 
 *Not Preferred*
-```swift
+
+```
 init(someParameter:Double, someOtherParameter:Double)
 {
    self.someMember = someParameter
@@ -195,7 +215,8 @@ init(someParameter:Double, someOtherParameter:Double)
 #### Protocols
 
 *Preferred*
-```swift
+
+```
 protocol SomeProtocol {
 
 }
@@ -206,7 +227,8 @@ protocol SomeOtherProtocol : X {
 ```
 
 *Not Preferred*
-```swift
+
+```
 protocol SomeProtocol
 {
 
@@ -221,7 +243,8 @@ protocol SomeOtherProtocol : X
 #### Enums
 
 *Preferred*
-```swift
+
+```
 enum SomeEnum {
     case A, B, C, D
 }
@@ -239,7 +262,8 @@ enum SomeEnum: Int {
 ```
 
 *Not Preferred*
-```swift
+
+```
 enum SomeEnum
 {
     case A, B, C, D
@@ -262,14 +286,16 @@ enum SomeEnum: Int
 #### Closures
 
 *Preferred*
-```swift
+
+```
 func someFunction () -> () {
 // closure
 }
 ```
 
 *Not Preferred*
-```swift
+
+```
 func someFunction () -> ()
 {
 // closure
@@ -281,14 +307,16 @@ func someFunction () -> ()
 - set
 
 *Preferred*
-```swift
+
+```
 set {
     oldValue = newValue / 2
 }
 ```
 
 *Not Preferred*
-```swift
+
+```
 set
 {
     oldValue = newValue / 2
@@ -298,14 +326,16 @@ set
 - get
 
 *Preferred*
-```swift
+
+```
 get {
     return value * 2
 }
 ```
 
 *Not Preferred*
-```swift
+
+```
 get
 {
     return value * 2
@@ -315,13 +345,15 @@ get
 #### Extensions
 
 *Preferred*
-```swift
+
+```
 extension someExtension {
 }
 ```
 
 *Not Preferred*
-```swift
+
+```
 extension someExtension
 {
 }

@@ -4,19 +4,22 @@ Swift does not require a semicolon after each statement in your code unless you 
 
 #### Imports
 *Preferred*
-```swift
+
+```
 import Foundation
 ```
 
 *Not Preferred*
-```swift
+
+```
 import Foundation;
 ```
 
 
 #### Enums and enum cases
 *Preferred*
-```swift
+
+```
 enum CompassPoint {
 	case North
 	case South
@@ -27,7 +30,8 @@ enum CompassPoint {
 
 
 *Not Preferred*
-```swift
+
+```
 enum CompassPoint {
 	case North;
 	case South;
@@ -38,7 +42,8 @@ enum CompassPoint {
 
 #### Protocols
 *Preferred*
-```swift
+
+```
 protocol SomeProtocol {
 	var SomeMethod: String { get }
 	func SomeMethod()
@@ -48,7 +53,8 @@ protocol SomeProtocol {
 ```
 
 *Not Preferred*
-```swift
+
+```
 protocol SomeProtocol {
 	var SomeMethod: String { get };
 	func SomeMethod();
@@ -59,14 +65,16 @@ protocol SomeProtocol {
 
 #### Extensions
 *Preferred*
-```swift
+
+```
 extension SomeType {
 
 }
 ```
 
 *Not Preferred*
-```swift
+
+```
 extension SomeType {
 
 };
@@ -74,14 +82,16 @@ extension SomeType {
 
 #### Structs
 *Preferred*
-```swift
+
+```
 struct DemoStruct {
         var x: String // variables
 }
 ```
 
 *Not Preferred*
-```swift
+
+```
 struct DemoStruct {
         var x: String // variables
 };
@@ -89,14 +99,16 @@ struct DemoStruct {
 
 #### Classes
 *Preferred*
-```swift
+
+```
 class SomeClass {
 	let b = 2 // constants
 }
 ```
 
 *Not Preferred*
-```swift
+
+```
 class SomeClass {
 	let b = 2 // constants
 };
@@ -104,7 +116,8 @@ class SomeClass {
 
 #### Loops
 *Preferred*
-```swift
+
+```
 // while loop
 while true {
 
@@ -121,7 +134,8 @@ repeat {
 ```
 
 *Not Preferred*
-```swift
+
+```
 // while loop
 while true {
 

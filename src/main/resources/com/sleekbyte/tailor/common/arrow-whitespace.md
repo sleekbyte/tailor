@@ -6,7 +6,7 @@ Prefer a single space before and after '->'.
 
 *Preferred*
 
-```swift
+```
 func onePlusTwo() -> Int {
   return 1 + 2
 }
@@ -19,7 +19,7 @@ names.map() {
 
 *Not Preferred*
 
-```swift
+```
 func onePlusTwo()->Int {
   return 1 + 2
 }
@@ -36,7 +36,7 @@ class SomeClass: SomeSuperClass{
 #### Subscript declarations
 *Preferred*
 
-```swift
+```
 struct TimesTable {
     let multiplier: Int
 
@@ -48,7 +48,7 @@ struct TimesTable {
 
 *Not Preferred*
 
-```swift
+```
 struct TimesTable {
     let multiplier: Int
 
@@ -65,7 +65,7 @@ struct SomeStruct : SomeParentStruct   {
 
 *Preferred*
 
-```swift
+```
 func something() -> (Int, Int) -> (Int) {
   // do something
 }
@@ -73,7 +73,7 @@ func something() -> (Int, Int) -> (Int) {
 
 *Not Preferred*
 
-```swift
+```
 func something() -> (Int, Int)-> (Int) {
   // do something
 }

@@ -2,13 +2,16 @@
 [`method`](#method-and-selector-names) and [`var`](#variable-names) names should follow *lowerCamelCase* naming convention: first letter of the entire word is lowercase, but subsequent first letters are uppercase.
 #### Method and selector names
 *Preferred*
-```swift
+
+```
 func someMethod() {
 	// method definition goes here
 }
 ```
+
 *Not Preferred*
-```swift
+
+```
 func some-method() {
 	// method definition goes here
 }
@@ -16,10 +19,13 @@ func some-method() {
 
 #### Variable names
 *Preferred*
-```swift
+
+```
 var someVariable = someValue
 ```
+
 *Not Preferred*
-```swift
+
+```
 var Some_Var1able = someValue
 ```

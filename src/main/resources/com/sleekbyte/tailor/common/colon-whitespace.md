@@ -9,24 +9,30 @@ However, for [conditional expressions](#conditional-expressions) there should be
 #### Variable declarations
 
 *Preferred*
-```swift
+
+```
 var x: Int = 2
 ```
+
 *Not Preferred*
-```swift
+
+```
 var x : Int
 var y:   String
 ```
+
 #### Dictionary literals and types
 
 *Preferred*
-```swift
+
+```
 var x = [ 'key1': 1, 'key2': 2 ]
 var y: [ Int: String ]
 ```
 
 *Not Preferred*
-```swift
+
+```
 var x = [ 'key1' : 1, 'key2':  3]
 var y: [ Int :    String ]
 ```
@@ -34,7 +40,8 @@ var y: [ Int :    String ]
 #### Case statements
 
 *Preferred*
-```swift
+
+```
 switch character {
 case "a": doSomething(a);
 default: alert();
@@ -42,7 +49,8 @@ default: alert();
 ```
 
 *Not Preferred*
-```swift
+
+```
 switch character {
 case "a" : doSomething(a);
 default:     alert();
@@ -52,7 +60,8 @@ default:     alert();
 #### Class, Struct, Protocol, and Extension declarations
 
 *Preferred*
-```swift
+
+```
 class ClassName: BaseClass {
 }
 
@@ -67,7 +76,8 @@ extension TypeName: ProtocolName {
 ```
 
 *Not Preferred*
-```swift
+
+```
 class ClassName : BaseClass {
 }
 
@@ -84,25 +94,29 @@ extension TypeName : ProtocolName {
 #### Tuple declarations
 
 *Preferred*
-```swift
+
+```
 var y = (key: 1, value: 2)
 ```
 
 *Not Preferred*
-```swift
+
+```
 var y = (key:1, value : 2)
 ```
 
 #### Function declarations
 
 *Preferred*
-```swift
+
+```
 func someFunction<T: SomeClass, U: SomeProtocol>(someT: T, someU: U) {
 }
 ```
 
 *Not Preferred*
-```swift
+
+```
 func someFunction<T : SomeClass, U:SomeProtocol>(someT: T, someU: U) {
 }
 ```
@@ -110,12 +124,14 @@ func someFunction<T : SomeClass, U:SomeProtocol>(someT: T, someU: U) {
 #### Conditional expressions
 
 *Preferred*
-```swift
+
+```
 var x = condition ? a : b
 ```
 
 *Not Preferred*
-```swift
+
+```
 var x = condition ? a: b
 var x = condition ? a   : b
 ```

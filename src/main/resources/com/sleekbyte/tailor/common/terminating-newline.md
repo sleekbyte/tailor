@@ -4,16 +4,19 @@ Verify that source files terminate with exactly one `\n` character. This ensures
 Swift source files should terminate with exactly 1 `\n` character, not 0 nor more than 1.
 
 *Preferred*
-```swift
+
+```
 let myConstant = 42¬
 <EOF>
 ```
 
 *Not Preferred*
-```swift
+
+```
 let myConstant = 42<EOF>
 ```
-```swift
+
+```
 let myConstant = 42¬
 ¬
 ¬

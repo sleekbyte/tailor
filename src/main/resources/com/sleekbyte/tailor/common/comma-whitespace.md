@@ -22,7 +22,7 @@ Prefer no spaces before and exactly one space after a comma (',') in the followi
 
 *Preferred*
 
-```swift
+```
 func someFunction<T: SomeClass, U: SomeProtocol>(someT: T, someU: U) {
     // function body goes here
 }
@@ -90,7 +90,7 @@ default: puzzleOutput.append(character)
 
 *Not Preferred*
 
-```swift
+```
 func someFunction<T: SomeClass,U: SomeProtocol>(someT: T, someU: U) {
     // function body goes here
 }

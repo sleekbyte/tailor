@@ -2,12 +2,14 @@
 Flag "k-prefixed" constants.
 
 *Preferred*
-```swift
+
+```
 let maxHeight = 42
 let MaxHeight = 42
 ```
 
 *Not Preferred*
-```swift
+
+```
 let kMaxHeight = 42
 ```

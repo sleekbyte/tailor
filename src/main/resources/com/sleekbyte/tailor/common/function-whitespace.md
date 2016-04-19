@@ -4,7 +4,7 @@ Every function and method declaration should have _one_ blank line before and af
 
 *Preferred*
 
-```swift
+```
 func function1() {
   var text = 1
   var text = 2
@@ -35,7 +35,8 @@ func function5() {
 ```
 
 *Not Preferred*
-```swift
+
+```
 func function1() {
   var text = 1
   var text = 2

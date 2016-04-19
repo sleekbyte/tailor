@@ -5,7 +5,8 @@ There should be no whitespace immediately before/after an opening chevron `<` an
 #### Generics
 
 *Preferred*
-```swift
+
+```
 func simpleMax<T: Comparable>(x: T, _ y: T) -> T {
     if x < y {
         return y
@@ -15,7 +16,8 @@ func simpleMax<T: Comparable>(x: T, _ y: T) -> T {
 ```
 
 *Not Preferred*
-```swift
+
+```
 func simpleMax < T: Comparable >(x: T, _ y: T) -> T {
     if x < y {
         return y
@@ -27,7 +29,8 @@ func simpleMax < T: Comparable >(x: T, _ y: T) -> T {
 #### Requirement list
 
 *Preferred*
-```swift
+
+```
 func allItemsMatch<
     C1: Container, C2: Container
     where C1.ItemType == C2.ItemType, C1.ItemType: Equatable>
@@ -35,7 +38,8 @@ func allItemsMatch<
 ```
 
 *Not Preferred*
-```swift
+
+```
 func allItemsMatch <
     C1: Container, C2: Container
     where C1.ItemType == C2.ItemType, C1.ItemType: Equatable >
