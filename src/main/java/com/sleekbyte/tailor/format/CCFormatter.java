@@ -19,8 +19,8 @@ import java.util.Map;
  */
 public final class CCFormatter extends Formatter {
 
-    private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
     public static final char NULL_CHAR = '\0';
+    private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
 
     public CCFormatter(ColorSettings colorSettings) {
         super(colorSettings);
@@ -57,7 +57,7 @@ public final class CCFormatter extends Formatter {
             violation.put(Messages.DESCRIPTION_KEY, msg.getMessage());
 
             Map<String, Object> content = new HashMap<>();
-            content.put(Messages.BODY_KEY, msg.getRule().getInformation());
+            content.put(Messages.BODY_KEY, msg.getRule().getExamples());
             violation.put(Messages.CONTENT_KEY, content);
 
             List<String> categories = new ArrayList<>();
