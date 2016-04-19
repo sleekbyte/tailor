@@ -114,6 +114,7 @@ public abstract class Messages {
     public static final String REDUNDANT_OPTIONAL_BINDING = " in optional binding should be removed";
     public static final String TRAILING_CLOSURE = "is the function's final argument and may be passed as a trailing "
         + "closure instead";
+    public static final String TAILOR = "[tailor] ";
 
 
     // Usage messages
@@ -192,6 +193,9 @@ public abstract class Messages {
     // Error messages
     public static final String NO_SWIFT_FILES_FOUND = "No Swift source files were found.";
     public static final String COULD_NOT_BE_PARSED = " could not be parsed successfully, skipping...";
+
+    // Tailor disable feature warnings
+    public static final String ON_OFF_MISMATCH = "Tailor block disable comments are unbalanced";
 
     // CLI options
     public static final String SYNTAX_PREFIX = "Usage: ";

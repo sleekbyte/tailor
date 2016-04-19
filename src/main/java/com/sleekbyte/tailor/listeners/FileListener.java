@@ -18,7 +18,6 @@ import java.util.Set;
  */
 public final class FileListener implements AutoCloseable {
 
-    private static final String DISABLE_PATTERN = "// tailor:disable";
     private Printer printer;
     private File inputFile;
     private ConstructLengths constructLengths;
@@ -58,11 +57,6 @@ public final class FileListener implements AutoCloseable {
             lineNumber = this.reader.getLineNumber();
             // Count the number of lines in a file
             this.numOfLines++;
-
-            // Suppress all violations on lines ending with the given pattern
-            if (line.trim().endsWith(DISABLE_PATTERN)) {
-                this.printer.ignoreLine(lineNumber);
-            }
 
             if (enabledRules.contains(Rules.MAX_LINE_LENGTH)
                 && SourceFileUtil.lineTooLong(lineLength, this.constructLengths.maxLineLength)) {

@@ -209,6 +209,21 @@ Violations on a specific line may be disabled with a **trailing** single-line co
 import Foundation; // tailor:disable
 ```
 
+Additionally, violations in a given block of code can be disabled by **enclosing the block** within `tailor:off` and `tailor:on` comments.
+```swift
+// tailor:off
+import Foundation;
+import UIKit;
+import CoreData;
+// tailor:on
+
+class Demo() {
+  // Define public members here
+}
+```
+##### Note
+- `// tailor:on` and `// tailor:off` comments must be paired
+
 ### Configuration
 The behavior of Tailor can be customized via the `.tailor.yml` configuration file. It enables you to
 * include/exclude certain files and directories from analysis

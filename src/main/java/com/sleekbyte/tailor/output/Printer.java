@@ -4,6 +4,7 @@ import com.sleekbyte.tailor.common.Location;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.format.Formatter;
+import com.sleekbyte.tailor.utils.Pair;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 
@@ -27,7 +28,7 @@ public final class Printer implements Comparable<Printer> {
     private Severity maxSeverity;
     private Formatter formatter;
     private Map<String, ViolationMessage> msgBuffer = new HashMap<>();
-    private Set<Integer> ignoredLineNumbers = new HashSet<>();
+    private Set<Pair<Integer, Integer>> ignoredRegions = new HashSet<>();
     private boolean shouldPrintParseErrorMessage = false;
 
     /**
@@ -54,6 +55,11 @@ public final class Printer implements Comparable<Printer> {
         print(rule, Severity.WARNING, warningMsg, location);
     }
 
+    // Use this method to print non rule based messages.
+    public void warn(String warningMsg, Location location) {
+        print(Severity.WARNING, warningMsg, location);
+    }
+
     /**
      * Prints error message.
      *
@@ -68,6 +74,11 @@ public final class Printer implements Comparable<Printer> {
     // Visible for testing only
     public static String genOutputStringForTest(Rules rule, String filePath, int line, Severity severity, String msg) {
         return new ViolationMessage(rule, filePath, line, 0, severity, msg).toString();
+    }
+
+    // Visible for testing only
+    public static String genOutputStringForTest(String filePath, int line, int column, Severity severity, String msg) {
+        return new ViolationMessage(filePath, line, column, severity, msg).toString();
     }
 
     // Visible for testing only
@@ -89,8 +100,9 @@ public final class Printer implements Comparable<Printer> {
         if (shouldPrintParseErrorMessage) {
             printParseErrorMessage();
         } else {
-            List<ViolationMessage> outputList = new ArrayList<>(this.getViolationMessages().stream()
-                .filter(msg -> !ignoredLineNumbers.contains(msg.getLineNumber())).collect(Collectors.toList()));
+            List<ViolationMessage> outputList = getViolationMessages().stream()
+                .filter(this::shouldDisplayViolationMessage).collect(Collectors.toList());
+
             Collections.sort(outputList);
             formatter.displayViolationMessages(outputList, inputFile);
         }
@@ -104,8 +116,14 @@ public final class Printer implements Comparable<Printer> {
         return getNumMessagesWithSeverity(Severity.WARNING);
     }
 
-    public void ignoreLine(int ignoredLineNumber) {
-        this.ignoredLineNumbers.add(ignoredLineNumber);
+    /**
+     * Suppress analysis output for a given region.
+     *
+     * @param start line number where the region begins
+     * @param end line number where the region ends
+     */
+    public void ignoreRegion(int start, int end) {
+        this.ignoredRegions.add(new Pair<>(start, end));
     }
 
     public void setShouldPrintParseErrorMessage(boolean shouldPrintError) {
@@ -145,8 +163,17 @@ public final class Printer implements Comparable<Printer> {
         return 100;
     }
 
+    private void print(Severity severity, String msg, Location location) {
+        ViolationMessage violationMessage = new ViolationMessage(location.line, location.column, severity, msg);
+        addToMsgBuffer(violationMessage);
+    }
+
     private void print(Rules rule, Severity severity, String msg, Location location) {
         ViolationMessage violationMessage = new ViolationMessage(rule, location.line, location.column, severity, msg);
+        addToMsgBuffer(violationMessage);
+    }
+
+    private void addToMsgBuffer(ViolationMessage violationMessage) {
         try {
             violationMessage.setFilePath(this.inputFile.getCanonicalPath());
         } catch (IOException e) {
@@ -161,7 +188,17 @@ public final class Printer implements Comparable<Printer> {
 
     private long getNumMessagesWithSeverity(Severity severity) {
         return msgBuffer.values().stream()
-            .filter(msg -> !ignoredLineNumbers.contains(msg.getLineNumber()))
+            .filter(this::shouldDisplayViolationMessage)
             .filter(msg -> msg.getSeverity().equals(severity)).count();
+    }
+
+    private boolean shouldDisplayViolationMessage(ViolationMessage msg) {
+        for (Pair<Integer, Integer> ignoredRegion : ignoredRegions) {
+            if (ignoredRegion.getFirst() <= msg.getLineNumber()
+                && msg.getLineNumber() <= ignoredRegion.getSecond()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

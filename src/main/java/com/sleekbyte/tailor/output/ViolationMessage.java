@@ -1,6 +1,7 @@
 package com.sleekbyte.tailor.output;
 
 import com.sleekbyte.tailor.common.ColorSettings;
+import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 
@@ -23,23 +24,6 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
     /**
      * Constructs a ViolationMessage with the specified message components.
      *
-     * @param rule             the rule associated with the violation message
-     * @param lineNumber       the logical line number in the source file
-     * @param columnNumber     the logical column number in the source file
-     * @param severity         the severity of the violation message
-     * @param violationMessage the description of the violation message
-     */
-    public ViolationMessage(Rules rule, int lineNumber, int columnNumber, Severity severity, String violationMessage) {
-        this.rule = rule;
-        this.lineNumber = lineNumber;
-        this.columnNumber = columnNumber;
-        this.severity = severity;
-        this.violationMessage = violationMessage;
-    }
-
-    /**
-     * Constructs a ViolationMessage with the specified message components.
-     *
      * @param rule             the rule associated with the violation
      * @param filePath         the path of the source file
      * @param lineNumber       the logical line number in the source file
@@ -55,6 +39,56 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
         this.columnNumber = columnNumber;
         this.severity = severity;
         this.violationMessage = violationMessage;
+    }
+
+    /**
+     * Constructs a ViolationMessage with the specified message components.
+     *
+     * @param rule             the rule associated with the violation message
+     * @param lineNumber       the logical line number in the source file
+     * @param columnNumber     the logical column number in the source file
+     * @param severity         the severity of the violation message
+     * @param violationMessage the description of the violation message
+     */
+    public ViolationMessage(Rules rule, int lineNumber, int columnNumber, Severity severity, String violationMessage) {
+        this.rule = rule;
+        this.lineNumber = lineNumber;
+        this.columnNumber = columnNumber;
+        this.severity = severity;
+        this.violationMessage = violationMessage;
+    }
+
+    /**
+     * Constructs a ViolationMessage where the rule name is replaced by tool name (tailor).
+     *
+     * @param filePath         the path of the source file
+     * @param lineNumber       the logical line number in the source file
+     * @param columnNumber     the logical column number in the source file
+     * @param severity         the severity of the violation message
+     * @param violationMessage the description of the violation message
+     */
+    public ViolationMessage(String filePath, int lineNumber, int columnNumber, Severity severity,
+                            String violationMessage) {
+        this.filePath = filePath;
+        this.lineNumber = lineNumber;
+        this.columnNumber = columnNumber;
+        this.severity = severity;
+        this.violationMessage = Messages.TAILOR + violationMessage;
+    }
+
+    /**
+     * Constructs a ViolationMessage where the rule name is replaced by tool name (tailor).
+     *
+     * @param lineNumber       the logical line number in the source file
+     * @param columnNumber     the logical column number in the source file
+     * @param severity         the severity of the violation message
+     * @param violationMessage the description of the violation message
+     */
+    public ViolationMessage(int lineNumber, int columnNumber, Severity severity, String violationMessage) {
+        this.lineNumber = lineNumber;
+        this.columnNumber = columnNumber;
+        this.severity = severity;
+        this.violationMessage = Messages.TAILOR + violationMessage;
     }
 
     public Rules getRule() {
@@ -152,12 +186,17 @@ public class ViolationMessage implements Comparable<ViolationMessage> {
             return "";
         }
 
+        if (formattedRule().isEmpty()) {
+            return String.format("%s%s%s %s %s", formattedFilePath(), formattedLineNumber(), formattedColumnNumber(),
+                formattedSeverity(), formattedViolationMessage());
+        }
+
         return String.format("%s%s%s %s %s %s", formattedFilePath(), formattedLineNumber(), formattedColumnNumber(),
             formattedSeverity(), formattedRule(), formattedViolationMessage());
     }
 
     private String formattedRule() {
-        return String.format("[%s]", rule.getName());
+        return rule != null ? String.format("[%s]", rule.getName()) : "";
     }
 
     private String formattedFilePath() {

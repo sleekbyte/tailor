@@ -2,10 +2,10 @@
 
 import Foundation	
 
-class My_Class { // tailor:disable
+class My {
     // Class definition goes here    
 }
 
-// tailor:disable var x = 42
-var y = 42; // tailor:disable
+// aaaaaaaaaaaaaa var x = 42
+var y = 42
 println(3)
