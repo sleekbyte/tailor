@@ -4,7 +4,7 @@ $erroractionpreference = 'stop' # Quit if anything goes wrong
 
 ### Variables
 $appdatadir = $env:localappdata.tolower()
-$tailorversion = '0.8.0'
+$tailorversion = '0.8.1'
 $tailor = 'tailor'
 $tailorzip = "$tailor-$tailorversion.zip"
 $tailorinstalldir = "$appdatadir\$tailor"
