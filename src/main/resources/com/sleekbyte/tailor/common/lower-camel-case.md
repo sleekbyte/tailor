@@ -1,5 +1,5 @@
 ### [lower-camel-case](https://github.com/sleekbyte/tailor/issues/9)
-[`method`](#method-and-selector-names) and [`var`](#variable-names) names should follow *lowerCamelCase* naming convention: first letter of the entire word is lowercase, but subsequent first letters are uppercase.
+`method` and `var` names should follow *lowerCamelCase* naming convention: first letter of the entire word is lowercase, but subsequent first letters are uppercase.
 #### Method and selector names
 *Preferred*
 

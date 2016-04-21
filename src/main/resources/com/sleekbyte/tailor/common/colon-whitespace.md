@@ -1,11 +1,11 @@
 ### [colon-whitespace](https://github.com/sleekbyte/tailor/issues/89)
 
 There should be no whitespace preceding the colon, exactly one whitespace after the colon for:
-* [`var`](#variable-declarations), [`class`](#class-struct-protocol-and-extension-declarations), [`struct`](#class-struct-protocol-and-extension-declarations), [`protocol`](#class-struct-protocol-and-extension-declarations), [`extension`](#class-struct-protocol-and-extension-declarations), [`func`](#function-declarations), and [`tuple`](#tuple-declarations) declarations
-* [`dict`](#dictionary-literals-and-types) literals and types
-* [`case`](#case-statements) statements
+* `var`, `class`, `struct`, `protocol`, `extension`, `func`, and `tuple` declarations
+* `dict` literals and types
+* `case` statements
 
-However, for [conditional expressions](#conditional-expressions) there should be a single whitespace before and after the colon.
+However, for conditional expressions there should be a single whitespace before and after the colon.
 #### Variable declarations
 
 *Preferred*
