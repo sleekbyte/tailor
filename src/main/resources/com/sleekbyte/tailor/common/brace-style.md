@@ -1,15 +1,15 @@
 ### [brace-style](https://github.com/sleekbyte/tailor/issues/86)
 Definitions of
-- [`class`](#classes)
-- [`struct`](#structs)
-- [`function`](#functions)
-- [Control flow constructs](#control-flow-constructs) (`if`, `else if`, `else`, `switch`, `for`, `while`, `repeat-while`)
-- [`init`](#initializers)
-- [`protocol`](#protocols)
-- [`enum`](#enums)
-- [`closure`](#closures)
-- [Getters and Setters](#getters-and-setters) (`set`, `get`)
-- [`extension`](#extensions)
+- `class`
+- `struct`
+- `function`
+- Control flow constructs (`if`, `else if`, `else`, `switch`, `for`, `while`, `repeat-while`)
+- `init`
+- `protocol`
+- `enum`
+- `closure`
+- Getters and Setters (`set`, `get`)
+- `extension`
 
 should follow the [One True Brace Style (1TBS)](https://en.wikipedia.org/wiki/Indent_style#Variant:_1TBS):
 each construct has its opening brace one the same line along with the same indentation level as its header, the statements within the braces are indented, and the closing brace at the end is on the same indentation level as the header of the function at a line of its own. Braces are not omitted for a control statement with only a single statement in its scope. Every opening brace must also have one space preceding it.

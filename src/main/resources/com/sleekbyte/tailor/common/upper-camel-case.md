@@ -1,5 +1,5 @@
 ### [upper-camel-case](https://github.com/sleekbyte/tailor/issues/8)
-[`class`](#class-names), [`enum`](#enumeration-types), [enum value](#enumeration-values), [`struct`](#struct-names), and [`protocol`](#protocol-names) names should follow *UpperCamelCase* naming convention : several words are joined together, and the first letter of every word is capitalized.
+`class`, `enum`, enum value, `struct`, and `protocol` names should follow *UpperCamelCase* naming convention : several words are joined together, and the first letter of every word is capitalized.
 
 #### Class names
 
