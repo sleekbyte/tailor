@@ -205,9 +205,6 @@ func printAreaIfStatement() {
         let lengthArray = [0,1,2,3,4]
         let breadthArray = [0,1,2,3,4]
 
-        for var x = 0; x < lengthArray.count; x+=1 {
-            println(x) }
-
         for breadth in breadthArray {
             println(breadth) }
 

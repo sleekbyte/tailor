@@ -16,13 +16,6 @@ let numberOfLegs = ["spider": 8, "ant": 6, "cat": 4]
 for (animalName, legCount) in numberOfLegs {
     print("\(animalName)s have \(legCount) legs")
 }
-for var index = 0; index < 3; ++index {
-    print("index is \(index)")
-}
-var index: Int
-for index = 0; index < 3; ++index {
-    print("index is \(index)")
-}
 
 var square = 0
 var diceRoll = 0
@@ -207,13 +200,6 @@ if #available(iOS 9, OSX 10.10, *) {
     // Use iOS 9 APIs on iOS, and use OS X v10.10 APIs on OS X
 } else {
     // Fall back to earlier iOS and OS X APIs
-}
-
-for var i = 0; i < Int(width); i++, sp = sp.advancedBy(4), dp = dp.advancedBy(4) {
-    let srcAlpha = Int(sp.advancedBy(3).memory) // Blend alpha to dst
-    if srcAlpha == 0xff {
-        memcpy(dp, sp, 4)
-    }
 }
 
 for pkg in parms.dependencies where pkg.type == .ModuleMap {

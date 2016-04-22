@@ -88,36 +88,28 @@ public class CommaWhitespaceTest extends RuleTest {
         addExpectedCommaMessage(start + 2, 11, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 2, 20, Messages.SPACE_AFTER);
 
-        // Expression lists
-        start = 223;
-        addExpectedCommaMessage(start, 11, Messages.SPACE_AFTER);
-        addExpectedCommaMessage(start + 4, 11, Messages.SPACE_AFTER);
-        addExpectedCommaMessage(start + 4, 46, Messages.NO_SPACE_BEFORE);
-        addExpectedCommaMessage(start + 8, 46, Messages.NO_SPACE_BEFORE);
-        addExpectedCommaMessage(start + 16, 5, Messages.NO_SPACE_BEFORE);
-
         // Array literals
-        start = 246;
+        start = 221;
         addExpectedCommaMessage(start, 37, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start, 47, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 2, 36, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 6, 57, Messages.NO_SPACE_BEFORE);
 
         // Dictionary literals
-        start = 259;
+        start = 234;
         addExpectedCommaMessage(start, 60, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 2, 59, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 4, 59, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 8, 77, Messages.NO_SPACE_BEFORE);
 
         // Capture lists
-        start = 275;
+        start = 250;
         addExpectedCommaMessage(start, 18, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 5, 19, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 10, 18, Messages.SPACE_AFTER);
 
         // Parenthesized Expressions
-        start = 296;
+        start = 271;
         addExpectedCommaMessage(start, 15, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start, 26, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 1, 18, Messages.SPACE_AFTER);
@@ -125,14 +117,14 @@ public class CommaWhitespaceTest extends RuleTest {
         addExpectedCommaMessage(start + 15, 22, Messages.SPACE_AFTER);
 
         // Identifier List
-        start = 315;
+        start = 290;
         addExpectedCommaMessage(start, 28, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start + 1, 29, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 3, 28, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start + 3, 32, Messages.SPACE_AFTER);
 
         // Case Item List
-        start = 326;
+        start = 301;
         addExpectedCommaMessage(start, 10, Messages.NO_SPACE_BEFORE);
         addExpectedCommaMessage(start, 15, Messages.SPACE_AFTER);
         addExpectedCommaMessage(start, 21, Messages.SPACE_AFTER);

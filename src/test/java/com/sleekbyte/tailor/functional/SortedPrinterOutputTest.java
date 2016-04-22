@@ -31,9 +31,8 @@ public class SortedPrinterOutputTest extends RuleTest {
             + Messages.UPPER_CAMEL_CASE);
         addExpectedMsg(Rules.TERMINATING_SEMICOLON, 21, 18, Severity.WARNING, Messages.STATEMENTS + Messages.SEMICOLON);
         addExpectedMsg(Rules.TERMINATING_SEMICOLON, 27, 10, Severity.WARNING, Messages.STATEMENTS + Messages.SEMICOLON);
-        addExpectedMsg(Rules.TERMINATING_SEMICOLON, 31, 10, Severity.WARNING, Messages.STATEMENTS + Messages.SEMICOLON);
-        addExpectedMsg(Rules.TERMINATING_NEWLINE, 34, Severity.WARNING, Messages.FILE + Messages.NEWLINE_TERMINATOR);
-        addExpectedMsg(Rules.TERMINATING_SEMICOLON, 34, 2, Severity.WARNING, Messages.STATEMENTS + Messages.SEMICOLON);
+        addExpectedMsg(Rules.TERMINATING_NEWLINE, 30, Severity.WARNING, Messages.FILE + Messages.NEWLINE_TERMINATOR);
+        addExpectedMsg(Rules.TERMINATING_SEMICOLON, 30, 2, Severity.WARNING, Messages.STATEMENTS + Messages.SEMICOLON);
     }
 
     private void addExpectedMsg(Rules rule, int line, Severity severity, String msg) {
