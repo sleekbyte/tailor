@@ -37,11 +37,16 @@ public class RedundantParenthesesTest extends RuleTest {
         addExpectedMsg(start + 2, 48, Severity.WARNING, Messages.DICTIONARY_LITERAL + Messages.ENCLOSED_PARENTHESES);
         addExpectedMsg(start + 2, 69, Severity.WARNING, Messages.DICTIONARY_LITERAL + Messages.ENCLOSED_PARENTHESES);
         addExpectedMsg(start + 2, 78, Severity.WARNING, Messages.DICTIONARY_LITERAL + Messages.ENCLOSED_PARENTHESES);
-        addExpectedMsg(start + 6, 18, Severity.WARNING, Messages.INITIALIZER_EXPRESSION + Messages.ENCLOSED_PARENTHESES);
-        addExpectedMsg(start + 7, 21, Severity.WARNING, Messages.INITIALIZER_EXPRESSION + Messages.ENCLOSED_PARENTHESES);
-        addExpectedMsg(start + 8, 13, Severity.WARNING, Messages.INITIALIZER_EXPRESSION + Messages.ENCLOSED_PARENTHESES);
-        addExpectedMsg(start + 18, 10, Severity.WARNING, Messages.EMPTY_PARENTHESES + Messages.REDUNDANT_METHOD_PARENTHESES);
-        addExpectedMsg(start + 32, 15, Severity.WARNING, Messages.EMPTY_PARENTHESES + Messages.REDUNDANT_METHOD_PARENTHESES);
+        addExpectedMsg(start + 6, 18, Severity.WARNING,
+            Messages.INITIALIZER_EXPRESSION + Messages.ENCLOSED_PARENTHESES);
+        addExpectedMsg(start + 7, 21, Severity.WARNING,
+            Messages.INITIALIZER_EXPRESSION + Messages.ENCLOSED_PARENTHESES);
+        addExpectedMsg(start + 8, 13, Severity.WARNING,
+            Messages.INITIALIZER_EXPRESSION + Messages.ENCLOSED_PARENTHESES);
+        addExpectedMsg(start + 18, 10, Severity.WARNING,
+            Messages.EMPTY_PARENTHESES + Messages.REDUNDANT_METHOD_PARENTHESES);
+        addExpectedMsg(start + 32, 15, Severity.WARNING,
+            Messages.EMPTY_PARENTHESES + Messages.REDUNDANT_METHOD_PARENTHESES);
     }
 
     private void addExpectedMsg(int line, int column, Severity classification, String msg) {
