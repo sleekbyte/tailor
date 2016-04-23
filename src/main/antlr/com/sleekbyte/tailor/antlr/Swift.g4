@@ -62,10 +62,6 @@ loopStatement : forInStatement
  | repeatWhileStatement
  ;
 
-// GRAMMAR OF A FOR STATEMENT
-
-forInit : variableDeclaration | expressionList  ;
-
 // GRAMMAR OF A FOR_IN STATEMENT
 
 forInStatement : 'for' 'case'? pattern 'in' expression whereClause? codeBlock  ;
@@ -488,8 +484,6 @@ balancedToken
 // Expressions
 
 // GRAMMAR OF AN EXPRESSION
-
-expressionList : expression (',' expression)* ;
 
 expression : tryOperator? prefixExpression binaryExpression* ;
 
