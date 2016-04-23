@@ -57,21 +57,10 @@ statements : statement+ ;
 
 // GRAMMAR OF A LOOP STATEMENT
 
-loopStatement : forStatement
- | forInStatement
+loopStatement : forInStatement
  | whileStatement
  | repeatWhileStatement
  ;
-
-// GRAMMAR OF A FOR STATEMENT
-
-// Swift Language Reference has expression? instead of expressionList?
-forStatement
- : 'for' forInit? ';' expression? ';' expressionList? codeBlock
- | 'for' '(' forInit?';' expression? ';' expressionList? ')' codeBlock
- ;
-
-forInit : variableDeclaration | expressionList  ;
 
 // GRAMMAR OF A FOR_IN STATEMENT
 
@@ -300,10 +289,9 @@ functionDeclaration : functionHead functionName genericParameterClause? function
 functionHead : attributes? declarationModifiers? 'func'  ;
 functionName : identifier |  operator  ;
 // rethrows is not marked as optional in the Swift Language Reference
-functionSignature : parameterClauses ('throws' | 'rethrows')? functionResult? ;
+functionSignature : parameterClause ('throws' | 'rethrows')? functionResult? ;
 functionResult : '->' attributes? sType  ;
 functionBody : codeBlock  ;
-parameterClauses : parameterClause parameterClauses? ;
 parameterClause : '(' ')' |  '(' parameterList '...'? ')'  ;
 parameterList : parameter (',' parameter)*  ;
 // Parameters don't have attributes in the Swift Language Reference
@@ -345,8 +333,9 @@ structBody : '{' declarations?'}'  ;
 
 // GRAMMAR OF A CLASS DECLARATION
 
-// declarationModifier missing in Swift Language Reference
-classDeclaration : attributes? declarationModifier* 'class' className genericParameterClause? typeInheritanceClause? classBody  ;
+classDeclaration : attributes? classDeclarationModifiers? 'class' className genericParameterClause? typeInheritanceClause? classBody  ;
+// Swift Language Reference does not allow final to come before accessLevelModifier
+classDeclarationModifiers: accessLevelModifier 'final'? | 'final' accessLevelModifier? ;
 className : identifier ;
 classBody : '{' declarations? '}'  ;
 
@@ -381,7 +370,7 @@ protocolSubscriptDeclaration : subscriptHead subscriptResult getterSetterKeyword
 
 // GRAMMAR OF A PROTOCOL ASSOCIATED TYPE DECLARATION
 
-protocolAssociatedTypeDeclaration : typealiasHead typeInheritanceClause? typealiasAssignment? ;
+protocolAssociatedTypeDeclaration : attributes? accessLevelModifier? 'associatedtype' typealiasName typeInheritanceClause? typealiasAssignment?;
 
 // GRAMMAR OF AN INITIALIZER DECLARATION
 
@@ -395,8 +384,8 @@ deinitializerDeclaration : attributes? 'deinit' codeBlock  ;
 
 // GRAMMAR OF AN EXTENSION DECLARATION
 
-// attributes, requirementClause missing in the Swift Language Reference
-extensionDeclaration : attributes? accessLevelModifier? 'extension' typeIdentifier requirementClause? typeInheritanceClause? extensionBody  ;
+// attributes missing in the Swift Language Reference
+extensionDeclaration : attributes? accessLevelModifier? 'extension' typeIdentifier (requirementClause | typeInheritanceClause)? extensionBody  ;
 extensionBody : '{' declarations?'}'  ;
 
 // GRAMMAR OF A SUBSCRIPT DECLARATION
@@ -414,9 +403,8 @@ subscriptResult : '->' attributes? sType  ;
 operatorDeclaration : prefixOperatorDeclaration | postfixOperatorDeclaration | infixOperatorDeclaration  ;
 prefixOperatorDeclaration : 'prefix' 'operator' operator '{' '}'  ;
 postfixOperatorDeclaration : 'postfix' 'operator' operator '{' '}'  ;
-infixOperatorDeclaration : 'infix' 'operator' operator '{' infixOperatorAttributes '}'  ;
-// Order of clauses can be reversed, not indicated in Swift Language Reference
-infixOperatorAttributes : precedenceClause? associativityClause? | associativityClause? precedenceClause? ;
+infixOperatorDeclaration : 'infix' 'operator' operator '{' infixOperatorAttributes? '}'  ;
+infixOperatorAttributes : precedenceClause associativityClause? | associativityClause precedenceClause? ;
 precedenceClause : 'precedence' precedenceLevel  ;
 precedenceLevel : integerLiteral ;
 associativityClause : 'associativity' associativity  ;
@@ -456,7 +444,7 @@ tuplePattern : '(' tuplePatternElementList? ')'  ;
 tuplePatternElementList
 	:	tuplePatternElement (',' tuplePatternElement)*
 	;
-tuplePatternElement : pattern  ;
+tuplePatternElement : pattern | identifier ':' pattern ;
 
 // GRAMMAR OF AN ENUMERATION CASE PATTERN
 
@@ -496,8 +484,6 @@ balancedToken
 // Expressions
 
 // GRAMMAR OF AN EXPRESSION
-
-expressionList : expression (',' expression)* ;
 
 expression : tryOperator? prefixExpression binaryExpression* ;
 
@@ -583,7 +569,7 @@ literalExpression
  : literal
  | arrayLiteral
  | dictionaryLiteral
- | '__FILE__' | '__LINE__' | '__COLUMN__' | '__FUNCTION__'
+ | '#file' | '#line' | '#column' | '#function'
  ;
 
 arrayLiteral : '[' arrayLiteralItems? ']'  ;
@@ -597,10 +583,10 @@ dictionaryLiteralItem : expression ':' expression  ;
 
 selfExpression
  : 'self'
- | 'self' '.' identifier
+ | 'self' '.' identifier  // self-method-expression
  // Swift Language Reference uses expressionList
- | 'self' '[' expressionElementList ']'
- | 'self' '.' 'init'
+ | 'self' '[' expressionElementList ']'  // self-subscript-expression
+ | 'self' '.' 'init' // self-initializer-expression
  ;
 
 // GRAMMAR OF A SUPERCLASS EXPRESSION
@@ -629,7 +615,7 @@ closureSignature
  ;
 
 captureList : '[' captureListItems ']' ;
-captureListItems: captureListItem (',' captureListItem)? ;
+captureListItems: captureListItem (',' captureListItem)* ;
 captureListItem: captureSpecifier? expression ;
 captureSpecifier : 'weak' | 'unowned' | 'unowned(safe)' | 'unowned(unsafe)'  ;
 
@@ -649,7 +635,7 @@ wildcardExpression : '_'  ;
 
 // GRAMMAR OF A SELECTOR EXPRESSION
 
-selectorExpression: '#selector' '('expression')'  ;
+selectorExpression: '#selector' '(' expression ')'  ;
 
 // GRAMMAR OF A POSTFIX EXPRESSION
 
@@ -660,6 +646,7 @@ postfixExpression
  | postfixExpression parenthesizedExpression? closureExpression  # functionCallWithClosureExpression
  | postfixExpression parenthesizedExpression                     # functionCallExpression
  | postfixExpression '.' 'init'                                  # initializerExpression
+ | postfixExpression '.' 'init' '(' argumentNames ')'            # initializerExpressionWithArguments
  // TODO: don't allow '_' here in DecimalLiteral:
  | postfixExpression '.' DecimalLiteral                         # explicitMemberExpression1
  | postfixExpression '.' identifier genericArgumentClause?      # explicitMemberExpression2
@@ -721,7 +708,7 @@ explicitMemberExpression
 // are also referenced individually. For example, type signatures use
 // <...>.
 
-operatorHead: '=' | '<' | '>' | '!' | '*' | '&' | '==' | '?' | '-' | '&&' | '||' | '/' | OperatorHead;
+operatorHead: '=' | '<' | '>' | '!' | '*' | '&' | '==' | '?' | '-' | '&&' | '||' | '/' | '>=' | OperatorHead;
 operatorCharacter: operatorHead | OperatorCharacter;
 
 operator: operatorHead operatorCharacter*
@@ -843,15 +830,17 @@ buildConfigurationElseIfClauses: buildConfigurationElseIfClause+ ;
 buildConfigurationElseIfClause: '#elseif' buildConfiguration statements? ;
 buildConfigurationElseClause: '#else' statements? ;
 
-buildConfiguration: platformTestingFunction | identifier | booleanLiteral
+buildConfiguration: platformTestingFunction | languageVersionTestingFunction | identifier | booleanLiteral
  | '(' buildConfiguration ')'
  | '!' buildConfiguration
  | buildConfiguration ('&&' | '||') buildConfiguration
  ;
 
 platformTestingFunction: 'os' '(' operatingSystem ')' | 'arch' '(' architecture ')' ;
+languageVersionTestingFunction: 'swift' '(' '>=' swiftVersion ')' ;
 operatingSystem: 'OSX' | 'iOS' | 'watchOS' | 'tvOS' ;
 architecture: 'i386' | 'x86_64' | 'arm' | 'arm64' ;
+swiftVersion: FloatingPointLiteral ;
 
 lineControlStatement: '#line' (lineNumber fileName)? ;
 lineNumber: integerLiteral ;

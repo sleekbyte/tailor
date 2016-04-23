@@ -21,10 +21,6 @@ class UpperCamelCase: SuperClass {
       let b = 2;
 
   func demo() {
-      for var x = 0; ; {
-          print(x);
-      };
-
       if temperatureInFahrenheit <= 32 {
           println("It's very cold. Consider wearing a scarf.");
       } else if temperatureInFahrenheit >= 86 {

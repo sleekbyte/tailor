@@ -25,20 +25,7 @@ public final class ParenthesisWhitespaceListener extends SwiftBaseListener {
     @Override
     public void enterParameterClause(SwiftParser.ParameterClauseContext ctx) {
         verifier.verifyBracketContentWhitespace(ctx, Messages.PARENTHESES);
-    }
 
-    @Override
-    public void enterTupleType(SwiftParser.TupleTypeContext ctx) {
-        verifier.verifyBracketContentWhitespace(ctx, Messages.PARENTHESES);
-    }
-
-    @Override
-    public void enterParenthesizedExpression(SwiftParser.ParenthesizedExpressionContext ctx) {
-        verifier.verifyBracketContentWhitespace(ctx, Messages.PARENTHESES);
-    }
-
-    @Override
-    public void enterParameterClauses(SwiftParser.ParameterClausesContext ctx) {
         ParserRuleContext parent = ctx.getParent();
         if (parent instanceof FunctionSignatureContext) {
             ParseTree declaration = parent.getParent();
@@ -53,6 +40,16 @@ public final class ParenthesisWhitespaceListener extends SwiftBaseListener {
             }
         }
         verifier.verifyLeadingWhitespaceBeforeBracket(ctx, Messages.PARENTHESES, Messages.NO_WHITESPACE_BEFORE, 0);
+    }
+
+    @Override
+    public void enterTupleType(SwiftParser.TupleTypeContext ctx) {
+        verifier.verifyBracketContentWhitespace(ctx, Messages.PARENTHESES);
+    }
+
+    @Override
+    public void enterParenthesizedExpression(SwiftParser.ParenthesizedExpressionContext ctx) {
+        verifier.verifyBracketContentWhitespace(ctx, Messages.PARENTHESES);
     }
 
     @Override

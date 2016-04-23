@@ -26,31 +26,27 @@ public class BraceWhitespaceTest extends RuleTest {
         addExpectedMsg(start + 6, 15);
 
         // loops
-        start = 35;
-        addExpectedMsg(start, 53);
+        start = 31;
         addExpectedMsg(start + 4, 38);
-        addExpectedMsg(start + 29, 22);
-        addExpectedMsg(start + 33, 17);
-        addExpectedMsg(start + 43, 17);
-        addExpectedMsg(start + 47, 26);
-        addExpectedMsg(start + 54, 22);
-        addExpectedMsg(start + 70, 20);
-        addExpectedMsg(start + 75, 18);
-        addExpectedMsg(start + 79, 71);
+        addExpectedMsg(start + 25, 22);
+        addExpectedMsg(start + 29, 17);
+        addExpectedMsg(start + 39, 17);
+        addExpectedMsg(start + 43, 26);
+        addExpectedMsg(start + 50, 71);
 
         // classes and structs with generic types
-        start = 126;
+        start = 93;
         addExpectedMsg(start, 6);
         addExpectedMsg(start + 3, 4);
 
         // protocols
-        start = 135;
+        start = 102;
         addExpectedMsg(start, 24);
         addExpectedMsg(start + 4, 32);
         addExpectedMsg(start + 13, 24);
 
         // enums
-        start = 162;
+        start = 129;
         addExpectedMsg(start, 16);
         addExpectedMsg(start + 4, 27);
         addExpectedMsg(start + 17, 6);
@@ -58,19 +54,19 @@ public class BraceWhitespaceTest extends RuleTest {
         addExpectedMsg(start + 34, 19);
 
         // closures
-        start = 200;
+        start = 167;
         addExpectedMsg(start, 29);
         addExpectedMsg(start + 14, 72);
         addExpectedMsg(start + 18, 17);
 
         // extensions
-        start = 236;
+        start = 203;
         addExpectedMsg(start, 26);
         addExpectedMsg(start + 4, 29);
         addExpectedMsg(start + 9, 19);
 
         // getters and setters
-        start = 250;
+        start = 217;
         addExpectedMsg(start, 8);
         addExpectedMsg(start + 4, 8);
         addExpectedMsg(start + 21, 14);

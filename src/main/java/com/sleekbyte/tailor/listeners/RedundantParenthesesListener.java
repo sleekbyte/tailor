@@ -7,7 +7,6 @@ import com.sleekbyte.tailor.antlr.SwiftParser.CatchClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ConditionClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryLiteralItemContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.ForStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.FunctionCallWithClosureExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.InitializerContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ParenthesizedExpressionContext;
@@ -21,8 +20,6 @@ import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.utils.ListenerUtil;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 /**
  * Parse tree listener for redundant parentheses checks.
@@ -43,22 +40,6 @@ public class RedundantParenthesesListener extends SwiftBaseListener {
     @Override
     public void enterSwitchStatement(SwitchStatementContext ctx) {
         verifyRedundantExpressionParentheses(Messages.SWITCH_EXPRESSION, ctx.expression());
-    }
-
-    @Override
-    public void enterForStatement(ForStatementContext ctx) {
-        if (!(ctx.getChild(1) instanceof TerminalNodeImpl)) {
-            return;
-        } // return if '(' not present
-
-        Token openParenthesisToken = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
-        char firstCharacter = openParenthesisToken.getText().charAt(0);
-
-        if (firstCharacter == '(') {
-            Location startLocation = ListenerUtil.getTokenLocation(openParenthesisToken);
-            this.printer.warn(Rules.REDUNDANT_PARENTHESES, Messages.FOR_LOOP + Messages.ENCLOSED_PARENTHESES,
-                startLocation);
-        }
     }
 
     @Override
