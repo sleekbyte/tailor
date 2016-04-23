@@ -25,10 +25,6 @@ struct invalidStructName {
         // while loop test
         while true {
         };
-
-        // for loop
-        for ; ; {
-        };
     }
 
 };

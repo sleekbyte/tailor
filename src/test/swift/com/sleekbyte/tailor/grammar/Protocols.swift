@@ -191,3 +191,10 @@ extension CollectionType where Generator.Element : TextRepresentable {
         return "(" + ", ".join(map({$0.asText()})) + ")"
     }
 }
+
+protocol Container {
+    associatedtype ItemType
+    mutating func append(item: ItemType)
+    var count: Int { get }
+    subscript(i: Int) -> ItemType { get }
+}

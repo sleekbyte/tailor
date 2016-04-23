@@ -15,33 +15,35 @@ public class SemicolonTest extends RuleTest {
 
     @Override
     protected void addAllExpectedMsgs() {
-        addExpectedMsg(1, 18, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(6, 15, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(7, 15, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(8, 14, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(9, 14, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(10, 2, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(13, 33, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(14, 16, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(15, 23, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(16, 39, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(17, 2, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(21, 2, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(24, 18, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(29, 10, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(34, 10, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(39, 21, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(40, 6, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(42, 2, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(47, 28, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(48, 14, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(52, 21, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(53, 10, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(56, 65, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(58, 73, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(60, 59, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(62, 6, Severity.WARNING, Messages.STATEMENTS);
-        addExpectedMsg(64, 2, Severity.WARNING, Messages.STATEMENTS);
+        int start = 1;
+        addExpectedMsg(start, 18, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(start + 5, 15, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(start + 6, 15, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(start + 7, 14, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(start + 8, 14, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(start + 9, 2, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(start + 12, 33, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(start + 13, 16, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(start + 14, 23, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(start + 15, 39, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(start + 16, 2, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(start + 20, 2, Severity.WARNING, Messages.STATEMENTS);
+
+        start = 24;
+        addExpectedMsg(start, 18, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(start + 5, 10, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(start + 15 - 5, 21, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(start + 16 - 5, 6, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(start + 18 - 5, 2, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(start + 23 - 5, 28, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(start + 24 - 5, 14, Severity.WARNING, Messages.STATEMENTS);
+
+        start = 47;
+        addExpectedMsg(start, 65, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(start + 2, 73, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(start + 4, 59, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(start + 6, 6, Severity.WARNING, Messages.STATEMENTS);
+        addExpectedMsg(start + 8, 2, Severity.WARNING, Messages.STATEMENTS);
     }
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg) {

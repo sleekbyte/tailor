@@ -47,3 +47,5 @@ for thing in things {
         print("something else")
     }
 }
+
+let s3 = someValue.dynamicType.init(data: 7)

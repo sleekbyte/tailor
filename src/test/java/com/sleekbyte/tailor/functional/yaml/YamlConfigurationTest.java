@@ -104,32 +104,22 @@ public final class YamlConfigurationTest {
             Messages.STATEMENTS + Messages.SEMICOLON,
             YAML_TEST_1);
 
-        addExpectedMsg(25, 19,
+        addExpectedMsg(25, 63,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
             YAML_TEST_1);
 
-        addExpectedMsg(26, 8,
+        addExpectedMsg(27, 71,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
             YAML_TEST_1);
 
-        addExpectedMsg(29, 63,
+        addExpectedMsg(29, 57,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
             YAML_TEST_1);
 
-        addExpectedMsg(31, 71,
-            Rules.TERMINATING_SEMICOLON,
-            Messages.STATEMENTS + Messages.SEMICOLON,
-            YAML_TEST_1);
-
-        addExpectedMsg(33, 57,
-            Rules.TERMINATING_SEMICOLON,
-            Messages.STATEMENTS + Messages.SEMICOLON,
-            YAML_TEST_1);
-
-        addExpectedMsg(35, 4,
+        addExpectedMsg(31, 4,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
             YAML_TEST_1);
@@ -265,32 +255,22 @@ public final class YamlConfigurationTest {
             Messages.STATEMENTS + Messages.SEMICOLON,
             YAML_TEST_1);
 
-        addExpectedMsg(25, 19,
+        addExpectedMsg(25, 63,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
             YAML_TEST_1);
 
-        addExpectedMsg(26, 8,
+        addExpectedMsg(27, 71,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
             YAML_TEST_1);
 
-        addExpectedMsg(29, 63,
+        addExpectedMsg(29, 57,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
             YAML_TEST_1);
 
-        addExpectedMsg(31, 71,
-            Rules.TERMINATING_SEMICOLON,
-            Messages.STATEMENTS + Messages.SEMICOLON,
-            YAML_TEST_1);
-
-        addExpectedMsg(33, 57,
-            Rules.TERMINATING_SEMICOLON,
-            Messages.STATEMENTS + Messages.SEMICOLON,
-            YAML_TEST_1);
-
-        addExpectedMsg(35, 4,
+        addExpectedMsg(31, 4,
             Rules.TERMINATING_SEMICOLON,
             Messages.STATEMENTS + Messages.SEMICOLON,
             YAML_TEST_1);

@@ -32,10 +32,6 @@ class Rectangle: Shape {
 
     func funWithLoops() {
 
-        for var x = 0; x < lengthArray.count; x+=1  {
-            println(x)
-        }
-
         for breadth in breadthArray  {
             println(breadth)
         }
@@ -52,10 +48,6 @@ class Rectangle: Shape {
     func moreFunWithLoops() {
         let lengthArray = [0,1,2,3,4]
         let breadthArray = [0,1,2,3,4]
-
-        for var x = 0; x < lengthArray.count; x+=1 {
-            println(x)
-        }
 
         for breadth in breadthArray {
             println(breadth)
@@ -86,31 +78,6 @@ class Rectangle: Shape {
    struct Line {
 
          func obscureLoops() {
-            for ; ;  {
-
-            }
-
-            for ;
-                ; {
-
-            }
-
-            var x = 1
-
-            for var x = 1 ; ; {
-
-            }
-
-            for ; ;
-                x  {
-
-            }
-
-            for ; ;
-                x{
-
-            }
-
             for pkg in parms.dependencies where pkg.type == .ModuleMap{
                 println(pkg.name)
             }

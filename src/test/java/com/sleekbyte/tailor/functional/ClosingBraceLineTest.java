@@ -47,29 +47,36 @@ public class ClosingBraceLineTest extends RuleTest {
         addExpectedBraceMsg(192, 38, Severity.WARNING, Messages.IF_STATEMENT);
         addExpectedBraceMsg(195, 35, Severity.WARNING, Messages.IF_STATEMENT);
         addExpectedBraceMsg(201, 44, Severity.WARNING, Messages.ELSE_CLAUSE);
-        addExpectedBraceMsg(209, 24, Severity.WARNING, Messages.FOR_LOOP);
-        addExpectedBraceMsg(212, 30, Severity.WARNING, Messages.FOR_IN_LOOP);
-        addExpectedBraceMsg(215, 47, Severity.WARNING, Messages.WHILE_STATEMENT);
-        addExpectedBraceMsg(217, 38, Severity.WARNING, Messages.REPEAT_WHILE_STATEMENT);
-        addExpectedBraceMsg(220, 18, Severity.WARNING, Messages.REPEAT_WHILE_STATEMENT);
-        addExpectedBraceMsg(224, 15, Severity.WARNING, Messages.FUNCTION);
-        addExpectedBraceMsg(226, 40, Severity.WARNING, Messages.FUNCTION);
-        addExpectedBraceMsg(239, 34, Severity.WARNING, Messages.CLOSURE);
-        addExpectedBraceMsg(247, 12, Severity.WARNING, Messages.CLOSURE);
-        addExpectedBraceMsg(260, 19, Severity.WARNING, Messages.ENUM);
-        addExpectedBraceMsg(268, 19, Severity.WARNING, Messages.ENUM);
-        addExpectedBraceMsg(275, 25, Severity.WARNING, Messages.ENUM);
-        addExpectedEmptyConstructBodyMsg(279, 15, Severity.WARNING);
-        addExpectedBraceMsg(285, 16, Severity.WARNING, Messages.CLOSURE);
-        addExpectedBraceMsg(295, 35, Severity.WARNING, Messages.SUBSCRIPT);
-        addExpectedBraceMsg(303, 10, Severity.WARNING, Messages.SUBSCRIPT);
-        addExpectedBraceMsg(329, 11, Severity.WARNING, Messages.GETTER_SETTER_BLOCK);
-        addExpectedBraceMsg(329, 11, Severity.WARNING, Messages.SUBSCRIPT);
-        addExpectedBraceMsg(335, 68, Severity.WARNING, Messages.WILL_SET_CLAUSE);
-        addExpectedBraceMsg(339, 15, Severity.WARNING, Messages.DID_SET_CLAUSE);
-        addExpectedBraceMsg(348, 15, Severity.WARNING, Messages.DID_SET_CLAUSE);
-        addExpectedBraceMsg(355, 68, Severity.WARNING, Messages.WILL_SET_CLAUSE);
-        addExpectedBraceMsg(363, 11, Severity.WARNING, Messages.WILLSET_DIDSET_BLOCK);
+
+        int start = 209;
+        addExpectedBraceMsg(start, 30, Severity.WARNING, Messages.FOR_IN_LOOP);
+        addExpectedBraceMsg(start + 3, 47, Severity.WARNING, Messages.WHILE_STATEMENT);
+        addExpectedBraceMsg(start + 5, 38, Severity.WARNING, Messages.REPEAT_WHILE_STATEMENT);
+        addExpectedBraceMsg(start + 8, 18, Severity.WARNING, Messages.REPEAT_WHILE_STATEMENT);
+
+        start = 221;
+        addExpectedBraceMsg(start, 15, Severity.WARNING, Messages.FUNCTION);
+        addExpectedBraceMsg(start + 2, 40, Severity.WARNING, Messages.FUNCTION);
+        addExpectedBraceMsg(start + 15, 34, Severity.WARNING, Messages.CLOSURE);
+        addExpectedBraceMsg(start + 23, 12, Severity.WARNING, Messages.CLOSURE);
+
+        start = 257;
+        addExpectedBraceMsg(start, 19, Severity.WARNING, Messages.ENUM);
+        addExpectedBraceMsg(start + 8, 19, Severity.WARNING, Messages.ENUM);
+        addExpectedBraceMsg(start + 15, 25, Severity.WARNING, Messages.ENUM);
+        addExpectedEmptyConstructBodyMsg(start + 19, 15, Severity.WARNING);
+        addExpectedBraceMsg(start + 25, 16, Severity.WARNING, Messages.CLOSURE);
+        addExpectedBraceMsg(start + 35, 35, Severity.WARNING, Messages.SUBSCRIPT);
+        addExpectedBraceMsg(start + 43, 10, Severity.WARNING, Messages.SUBSCRIPT);
+
+        start = 326;
+        addExpectedBraceMsg(start, 11, Severity.WARNING, Messages.GETTER_SETTER_BLOCK);
+        addExpectedBraceMsg(start, 11, Severity.WARNING, Messages.SUBSCRIPT);
+        addExpectedBraceMsg(start + 6, 68, Severity.WARNING, Messages.WILL_SET_CLAUSE);
+        addExpectedBraceMsg(start + 10, 15, Severity.WARNING, Messages.DID_SET_CLAUSE);
+        addExpectedBraceMsg(start + 19, 15, Severity.WARNING, Messages.DID_SET_CLAUSE);
+        addExpectedBraceMsg(start + 26, 68, Severity.WARNING, Messages.WILL_SET_CLAUSE);
+        addExpectedBraceMsg(start + 34, 11, Severity.WARNING, Messages.WILLSET_DIDSET_BLOCK);
     }
 
     private void addExpectedBraceMsg(int line, int column, Severity severity, String msg) {

@@ -20,64 +20,81 @@ public class OpeningBraceLineTest extends RuleTest {
 
     @Override
     protected void addAllExpectedMsgs() {
-        addExpectedMsg(2, 1, Severity.WARNING, Messages.CLASS);
-        addExpectedMsg(7, 5, Severity.WARNING, Messages.INITIALIZER_BODY);
-        addExpectedMsg(14, 5, Severity.WARNING, Messages.FUNCTION);
-        addExpectedMsg(19, 5, Severity.WARNING, Messages.FUNCTION);
-        addExpectedMsg(27, 9, Severity.WARNING, Messages.IF_STATEMENT);
-        addExpectedMsg(32, 9, Severity.WARNING, Messages.IF_STATEMENT);
-        addExpectedMsg(37, 9, Severity.WARNING, Messages.ELSE_CLAUSE);
-        addExpectedMsg(50, 9, Severity.WARNING, Messages.SWITCH_STATEMENT);
-        addExpectedMsg(82, 5, Severity.WARNING, Messages.FUNCTION);
-        addExpectedMsg(87, 9, Severity.WARNING, Messages.FOR_LOOP);
-        addExpectedMsg(92, 9, Severity.WARNING, Messages.FOR_IN_LOOP);
-        addExpectedMsg(97, 9, Severity.WARNING, Messages.WHILE_STATEMENT);
-        addExpectedMsg(102, 9, Severity.WARNING, Messages.REPEAT_WHILE_STATEMENT);
-        addExpectedMsg(113, 4, Severity.WARNING, Messages.CLASS);
-        addExpectedMsg(118, 4, Severity.WARNING, Messages.STRUCT);
-        addExpectedMsg(147, 13, Severity.WARNING, Messages.FOR_LOOP);
-        addExpectedMsg(160, 1, Severity.WARNING, Messages.CLASS);
-        addExpectedMsg(167, 4, Severity.WARNING, Messages.STRUCT);
-        addExpectedMsg(184, 1, Severity.WARNING, Messages.PROTOCOL);
-        addExpectedMsg(199, 1, Severity.WARNING, Messages.PROTOCOL);
-        addExpectedMsg(212, 1, Severity.WARNING, Messages.ENUM);
-        addExpectedMsg(217, 1, Severity.WARNING, Messages.ENUM);
-        addExpectedMsg(223, 1, Severity.WARNING, Messages.ENUM);
-        addExpectedMsg(243, 1, Severity.WARNING, Messages.FUNCTION);
-        addExpectedMsg(262, 1, Severity.WARNING, Messages.CLOSURE);
-        addExpectedMsg(272, 1, Severity.WARNING, Messages.ENUM);
-        addExpectedMsg(281, 1, Severity.WARNING, Messages.CLOSURE);
-        addExpectedMsg(287, 1, Severity.WARNING, Messages.CLOSURE);
-        addExpectedMsg(297, 1, Severity.WARNING, Messages.FUNCTION);
-        addExpectedMsg(302, 1, Severity.WARNING, Messages.ENUM);
-        addExpectedMsg(315, 1, Severity.WARNING, Messages.EXTENSION);
-        addExpectedMsg(320, 1, Severity.WARNING, Messages.EXTENSION);
-        addExpectedMsg(331, 1, Severity.WARNING, Messages.EXTENSION);
-        addExpectedMsg(336, 1, Severity.WARNING, Messages.CLOSURE);
-        addExpectedMsg(341, 1, Severity.WARNING, Messages.CLOSURE);
-        addExpectedMsg(360, 1, Severity.WARNING, Messages.CLOSURE);
-        addExpectedMsg(367, 1, Severity.WARNING, Messages.CLOSURE);
-        addExpectedMsg(394, 10, Severity.WARNING, Messages.SETTER);
-        addExpectedMsg(399, 10, Severity.WARNING, Messages.GETTER);
-        addExpectedMsg(412, 10, Severity.WARNING, Messages.GETTER);
-        addExpectedMsg(421, 9, Severity.WARNING, Messages.GETTER);
-        addExpectedMsg(445, 9, Severity.WARNING, Messages.GETTER);
-        addExpectedMsg(449, 9, Severity.WARNING, Messages.SETTER);
-        addExpectedMsg(460, 9, Severity.WARNING, Messages.SETTER);
-        addExpectedMsg(464, 9, Severity.WARNING, Messages.GETTER);
-        addExpectedMsg(492, 9, Severity.WARNING, Messages.SETTER);
-        addExpectedMsg(503, 5, Severity.WARNING, Messages.SUBSCRIPT);
-        addExpectedMsg(530, 9, Severity.WARNING, Messages.GETTER_SETTER_BLOCK);
-        addExpectedMsg(530, 9, Severity.WARNING, Messages.SUBSCRIPT);
-        addExpectedMsg(546, 13, Severity.WARNING, Messages.WILL_SET_CLAUSE);
-        addExpectedMsg(550, 13, Severity.WARNING, Messages.DID_SET_CLAUSE);
-        addExpectedMsg(561, 13, Severity.WARNING, Messages.WILL_SET_CLAUSE);
-        addExpectedMsg(565, 13, Severity.WARNING, Messages.DID_SET_CLAUSE);
-        addExpectedMsg(589, 13, Severity.WARNING, Messages.WILL_SET_CLAUSE);
-        addExpectedMsg(598, 13, Severity.WARNING, Messages.DID_SET_CLAUSE);
-        addExpectedMsg(608, 13, Severity.WARNING, Messages.WILLSET_DIDSET_BLOCK);
-        addExpectedMsg(644, 13, Severity.WARNING, Messages.WILL_SET_CLAUSE);
-        addExpectedMsg(649, 13, Severity.WARNING, Messages.DID_SET_CLAUSE);
+        int start = 2;
+        addExpectedMsg(start, 1, Severity.WARNING, Messages.CLASS);
+        addExpectedMsg(start + 5, 5, Severity.WARNING, Messages.INITIALIZER_BODY);
+        addExpectedMsg(start + 12, 5, Severity.WARNING, Messages.FUNCTION);
+        addExpectedMsg(start + 17, 5, Severity.WARNING, Messages.FUNCTION);
+
+        start = 27;
+        addExpectedMsg(start, 9, Severity.WARNING, Messages.IF_STATEMENT);
+        addExpectedMsg(start + 5, 9, Severity.WARNING, Messages.IF_STATEMENT);
+        addExpectedMsg(start + 10, 9, Severity.WARNING, Messages.ELSE_CLAUSE);
+        addExpectedMsg(start + 23, 9, Severity.WARNING, Messages.SWITCH_STATEMENT);
+
+        start = 78;
+        addExpectedMsg(start, 5, Severity.WARNING, Messages.FUNCTION);
+        addExpectedMsg(start + 10 - 5, 9, Severity.WARNING, Messages.FOR_IN_LOOP);
+        addExpectedMsg(start + 15 - 5, 9, Severity.WARNING, Messages.WHILE_STATEMENT);
+        addExpectedMsg(start + 20 - 5, 9, Severity.WARNING, Messages.REPEAT_WHILE_STATEMENT);
+        addExpectedMsg(start + 31 - 5, 4, Severity.WARNING, Messages.CLASS);
+        addExpectedMsg(start + 36 - 5, 4, Severity.WARNING, Messages.STRUCT);
+
+        start = 138;
+        addExpectedMsg(start + 13 - 32, 1, Severity.WARNING, Messages.CLASS);
+        addExpectedMsg(start + 20 - 32, 4, Severity.WARNING, Messages.STRUCT);
+        addExpectedMsg(start + 37 - 32, 1, Severity.WARNING, Messages.PROTOCOL);
+        addExpectedMsg(start + 52 - 32, 1, Severity.WARNING, Messages.PROTOCOL);
+
+        start = 171;
+        addExpectedMsg(start, 1, Severity.WARNING, Messages.ENUM);
+        addExpectedMsg(start + 5, 1, Severity.WARNING, Messages.ENUM);
+        addExpectedMsg(start + 11, 1, Severity.WARNING, Messages.ENUM);
+        addExpectedMsg(start + 31, 1, Severity.WARNING, Messages.FUNCTION);
+        addExpectedMsg(start + 50, 1, Severity.WARNING, Messages.CLOSURE);
+
+        start = 231;
+        addExpectedMsg(start, 1, Severity.WARNING, Messages.ENUM);
+        addExpectedMsg(start + 9, 1, Severity.WARNING, Messages.CLOSURE);
+        addExpectedMsg(start + 15, 1, Severity.WARNING, Messages.CLOSURE);
+        addExpectedMsg(start + 25, 1, Severity.WARNING, Messages.FUNCTION);
+        addExpectedMsg(start + 30, 1, Severity.WARNING, Messages.ENUM);
+
+        start = 274;
+        addExpectedMsg(start, 1, Severity.WARNING, Messages.EXTENSION);
+        addExpectedMsg(start + 5, 1, Severity.WARNING, Messages.EXTENSION);
+        addExpectedMsg(start + 16, 1, Severity.WARNING, Messages.EXTENSION);
+        addExpectedMsg(start + 21, 1, Severity.WARNING, Messages.CLOSURE);
+        addExpectedMsg(start + 26, 1, Severity.WARNING, Messages.CLOSURE);
+        addExpectedMsg(start + 45, 1, Severity.WARNING, Messages.CLOSURE);
+        addExpectedMsg(start + 52, 1, Severity.WARNING, Messages.CLOSURE);
+
+        start = 353;
+        addExpectedMsg(start, 10, Severity.WARNING, Messages.SETTER);
+        addExpectedMsg(start + 5, 10, Severity.WARNING, Messages.GETTER);
+        addExpectedMsg(start + 18, 10, Severity.WARNING, Messages.GETTER);
+        addExpectedMsg(start + 27, 9, Severity.WARNING, Messages.GETTER);
+        addExpectedMsg(start + 51, 9, Severity.WARNING, Messages.GETTER);
+
+        start = 408;
+        addExpectedMsg(start, 9, Severity.WARNING, Messages.SETTER);
+        addExpectedMsg(start + 11, 9, Severity.WARNING, Messages.SETTER);
+        addExpectedMsg(start + 15, 9, Severity.WARNING, Messages.GETTER);
+        addExpectedMsg(start + 43, 9, Severity.WARNING, Messages.SETTER);
+        addExpectedMsg(start + 54, 5, Severity.WARNING, Messages.SUBSCRIPT);
+        addExpectedMsg(start + 81, 9, Severity.WARNING, Messages.GETTER_SETTER_BLOCK);
+        addExpectedMsg(start + 81, 9, Severity.WARNING, Messages.SUBSCRIPT);
+
+        start = 505;
+        addExpectedMsg(start, 13, Severity.WARNING, Messages.WILL_SET_CLAUSE);
+        addExpectedMsg(start + 4, 13, Severity.WARNING, Messages.DID_SET_CLAUSE);
+        addExpectedMsg(start + 15, 13, Severity.WARNING, Messages.WILL_SET_CLAUSE);
+        addExpectedMsg(start + 19, 13, Severity.WARNING, Messages.DID_SET_CLAUSE);
+        addExpectedMsg(start + 43, 13, Severity.WARNING, Messages.WILL_SET_CLAUSE);
+        addExpectedMsg(start + 52, 13, Severity.WARNING, Messages.DID_SET_CLAUSE);
+        addExpectedMsg(start + 62, 13, Severity.WARNING, Messages.WILLSET_DIDSET_BLOCK);
+        addExpectedMsg(start + 98, 13, Severity.WARNING, Messages.WILL_SET_CLAUSE);
+        addExpectedMsg(start + 103, 13, Severity.WARNING, Messages.DID_SET_CLAUSE);
     }
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg) {

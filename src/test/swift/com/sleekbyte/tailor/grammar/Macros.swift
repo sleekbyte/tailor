@@ -92,3 +92,11 @@ func test() {
     view.performSelector(#selector(UIView.insertSubview(_:aboveSubview:)),
                          withObject: button, withObject: otherButton)
 }
+
+var validSwiftVersion: Bool = {
+  #if swift(>= 2.2)
+    true
+  #else
+    false
+  #endif
+}

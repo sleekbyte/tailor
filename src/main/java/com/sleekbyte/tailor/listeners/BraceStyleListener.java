@@ -50,11 +50,6 @@ public class BraceStyleListener extends SwiftBaseListener {
     }
 
     @Override
-    public void enterForStatement(SwiftParser.ForStatementContext ctx) {
-        verifyForLoopBraceStyle(ctx);
-    }
-
-    @Override
     public void enterFunctionDeclaration(SwiftParser.FunctionDeclarationContext ctx) {
         verifyFunctionBraceStyle(ctx);
     }
@@ -211,18 +206,6 @@ public class BraceStyleListener extends SwiftBaseListener {
     private void verifyStructBraceStyle(SwiftParser.StructBodyContext ctx) {
         verifyBodyOpenBraceStyle(ctx, Messages.STRUCT);
         verifyBodyCloseBraceStyle(ctx, Messages.STRUCT);
-    }
-
-    private void verifyForLoopBraceStyle(SwiftParser.ForStatementContext ctx) {
-        int numChildren = ctx.getChildCount();
-        Token loopEndToken;
-
-        // object at [numChildren - 1] index is codeBlock
-        // object at [numChildren - 2] index is either an expression or ';'
-        ParseTree constructBeforeOpenBrace = ctx.getChild(numChildren - 2);
-        loopEndToken = ParseTreeUtil.getStopTokenForNode(constructBeforeOpenBrace);
-        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), loopEndToken, Messages.FOR_LOOP);
-        verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.FOR_LOOP);
     }
 
     private void verifyProtocolBraceStyle(SwiftParser.ProtocolBodyContext ctx) {
