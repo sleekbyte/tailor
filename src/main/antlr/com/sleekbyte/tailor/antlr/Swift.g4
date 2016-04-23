@@ -986,13 +986,13 @@ VersionLiteral: DecimalLiteral DecimalFraction DecimalFraction ;
 // GRAMMAR OF A STRING LITERAL
 
 StringLiteral : '"' QuotedText? '"' ;
-fragment QuotedText : QuotedTextItem QuotedText? ;
+fragment QuotedText : QuotedTextItem+ ;
 fragment QuotedTextItem : EscapedCharacter | InterpolatedString
 // | '\\(' expression ')'
  | ~["\\\u000A\u000D]
  ;
-
-InterpolatedString: '\\(' (QuotedText | StringLiteral)* ')';
+fragment InterpolatedTextItem: QuotedTextItem | '"' ;
+fragment InterpolatedString: '\\(' InterpolatedTextItem+ ')';
 
 EscapedCharacter : '\\' [0\\tnr"']
  | '\\x' HexadecimalDigit HexadecimalDigit

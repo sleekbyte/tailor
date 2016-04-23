@@ -79,3 +79,5 @@ private let FAIcons = ["\u{f26e}", "\u{f0426}", "\u{f}", "\u{f0372992}"]
 
 let args = "[\(args.map(toYAML).joinWithSeparator(","))]"
 let testMsg = " (after \(st.successfulTestCount.successor()) test"
+
+let description = "\(firstVariable), \(secondVariable), \(thirdVariable), \(fourthVariable), \(fifthVariable)"
