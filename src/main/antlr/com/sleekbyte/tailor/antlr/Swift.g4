@@ -475,7 +475,8 @@ balancedToken
  : '('  balancedTokens? ')'
  | '[' balancedTokens? ']'
  | '{' balancedTokens? '}'
- | identifier | expression | contextSensitiveKeyword | literal | operator
+ // VersionLiteral and availabilityArgument are not in the Swift Language Reference
+ | identifier | expression | contextSensitiveKeyword | literal | operator | VersionLiteral | availabilityArgument
  // | Any punctuation except ( ,  ')' , '[' , ']' , { , or }
  // Punctuation is very ambiguous, interpreting punctuation as defined in www.thepunctuationguide.com
  | ':' | ';' | ',' | '!' | '<' | '>' | '-' | '\'' | '/' | '...' | '"'
@@ -860,9 +861,9 @@ keyword : 'convenience' | 'class' | 'deinit' | 'enum' | 'extension' | 'func' | '
 contextSensitiveKeyword :
  'associativity' | 'convenience' | 'dynamic' | 'didSet' | 'final' | 'get' | 'infix' | 'indirect' |
  'lazy' | 'left' | 'mutating' | 'none' | 'nonmutating' | 'optional' | 'operator' | 'override' | 'postfix' | 'precedence' |
- 'prefix' | 'Protocol' | 'required' | 'right' | 'set' | 'Type' | 'unowned' | 'weak' | 'willSet' |
+ 'prefix' | 'protocol' | 'required' | 'right' | 'set' | 'Type' | 'unowned' | 'weak' | 'willSet' |
  'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS' | 'x86_64' |
- 'arm' | 'arm64' | 'i386' | 'os' | 'arch' | 'safe'
+ 'arm' | 'arm64' | 'i386' | 'os' | 'arch' | 'safe' | 'tvOS'
  ;
 
 OperatorHead
@@ -991,8 +992,7 @@ fragment QuotedTextItem : EscapedCharacter | InterpolatedString
 // | '\\(' expression ')'
  | ~["\\\u000A\u000D]
  ;
-fragment InterpolatedTextItem: QuotedTextItem | '"' ;
-fragment InterpolatedString: '\\(' InterpolatedTextItem+ ')';
+fragment InterpolatedString: '\\(' (QuotedTextItem | StringLiteral)* ')';
 
 EscapedCharacter : '\\' [0\\tnr"']
  | '\\x' HexadecimalDigit HexadecimalDigit

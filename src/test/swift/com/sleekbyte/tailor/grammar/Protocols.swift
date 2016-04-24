@@ -198,3 +198,11 @@ protocol Container {
     var count: Int { get }
     subscript(i: Int) -> ItemType { get }
 }
+
+let protectionSpace = NSURLProtectionSpace(
+    host: host,
+    port: URL.port?.integerValue ?? 0,
+    protocol: URL.scheme,
+    realm: host,
+    authenticationMethod: NSURLAuthenticationMethodHTTPBasic
+)

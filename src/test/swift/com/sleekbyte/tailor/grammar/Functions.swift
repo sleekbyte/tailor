@@ -154,3 +154,8 @@ public func fopen(path: String..., mode: String = "r") throws -> UnsafeMutablePo
     guard f != nil else { throw SystemError.fopen(errno, path) }
     return f
 }
+
+@available(*, deprecated=3.4.0)
+public static func errorWithCode(code: Code, failureReason: String) -> NSError {
+    return errorWithCode(code.rawValue, failureReason: failureReason)
+}

@@ -100,3 +100,6 @@ extension Array {
         return index >= 0 && index < count ? self[index] : nil
     }
 }
+
+@available(iOS 9.0, OSX 10.11, tvOS 9.0, *)
+extension Manager.SessionDelegate: NSURLSessionStreamDelegate {}
