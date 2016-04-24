@@ -46,7 +46,7 @@ public class ConstantDecHelper {
     }
 
     public static boolean isGlobal(ParserRuleContext ctx) {
-        ParserRuleContext parentCtx = ParseTreeUtil.getNthParent(ctx, 3);
+        ParserRuleContext parentCtx = ParseTreeUtil.getNthParent(ctx, 4);
         return parentCtx != null && (parentCtx instanceof SwiftParser.TopLevelContext);
     }
 

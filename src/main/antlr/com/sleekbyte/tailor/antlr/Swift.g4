@@ -35,7 +35,7 @@ grammar Swift;
 package com.sleekbyte.tailor.antlr;
 }
 
-topLevel : (statement | expression)* EOF ;
+topLevel : statements? EOF ;
 
 // Statements
 
@@ -90,7 +90,7 @@ guardStatement : 'guard' conditionClause 'else' codeBlock ;
 // GRAMMAR OF A SWITCH STATEMENT
 
 switchStatement : 'switch' expression '{' switchCases? '}'  ;
-switchCases : switchCase switchCases? ;
+switchCases : switchCase+ ;
 switchCase : caseLabel statements | defaultLabel statements  | caseLabel ';' | defaultLabel ';'  ;
 caseLabel : 'case' caseItemList ':' ;
 caseItemList : caseItem (',' caseItem)* ;
@@ -213,8 +213,8 @@ declaration
  | compilerControlStatement ';'?
  ;
 
-declarations : declaration declarations? ;
-declarationModifiers : declarationModifier declarationModifiers? ;
+declarations : declaration+ ;
+declarationModifiers : declarationModifier+ ;
 declarationModifier : 'class' | 'convenience' | 'dynamic' | 'final' | 'infix'
  | 'lazy' | 'mutating' | 'nonmutating' | 'optional' | 'override' | 'postfix'
  | 'prefix' | 'required' | 'static' | 'unowned' | 'unowned' '(' 'safe' ')'
@@ -224,7 +224,7 @@ declarationModifier : 'class' | 'convenience' | 'dynamic' | 'final' | 'infix'
 accessLevelModifier : 'internal' | 'internal' '(' 'set' ')'
  | 'private' | 'private' '(' 'set' ')'
  | 'public' | 'public' '(' 'set' ')' ;
-accessLevelModifiers : accessLevelModifier accessLevelModifiers? ;
+accessLevelModifiers : accessLevelModifier+ ;
 
 // GRAMMAR OF A CODE BLOCK
 
@@ -309,7 +309,7 @@ defaultArgumentClause : '=' expression  ;
 enumDeclaration : attributes? accessLevelModifier? enumDef  ;
 enumDef: unionStyleEnum | rawValueStyleEnum  ;
 unionStyleEnum : 'indirect'? 'enum' enumName genericParameterClause? typeInheritanceClause? '{' unionStyleEnumMembers?'}'  ;
-unionStyleEnumMembers : unionStyleEnumMember unionStyleEnumMembers? ;
+unionStyleEnumMembers : unionStyleEnumMember+ ;
 unionStyleEnumMember : declaration | unionStyleEnumCaseClause ';'? ;
 unionStyleEnumCaseClause : attributes? 'indirect'? 'case' unionStyleEnumCaseList  ;
 unionStyleEnumCaseList : unionStyleEnumCase (',' unionStyleEnumCase)*  ;
@@ -318,7 +318,7 @@ enumName : identifier  ;
 enumCaseName : identifier  ;
 // typeInheritanceClause is not optional in the Swift Language Reference
 rawValueStyleEnum : 'enum' enumName genericParameterClause? typeInheritanceClause? '{' rawValueStyleEnumMembers?'}'  ;
-rawValueStyleEnumMembers : rawValueStyleEnumMember rawValueStyleEnumMembers? ;
+rawValueStyleEnumMembers : rawValueStyleEnumMember+ ;
 rawValueStyleEnumMember : declaration | rawValueStyleEnumCaseClause  ;
 rawValueStyleEnumCaseClause : attributes? 'case' rawValueStyleEnumCaseList  ;
 rawValueStyleEnumCaseList : rawValueStyleEnumCase (',' rawValueStyleEnumCase)*   ;
@@ -350,7 +350,7 @@ protocolMemberDeclaration : protocolPropertyDeclaration ';'?
  | protocolSubscriptDeclaration ';'?
  | protocolAssociatedTypeDeclaration ';'?
  ;
-protocolMemberDeclarations : protocolMemberDeclaration protocolMemberDeclarations? ;
+protocolMemberDeclarations : protocolMemberDeclaration+ ;
 
 // GRAMMAR OF A PROTOCOL PROPERTY DECLARATION
 
@@ -470,7 +470,7 @@ attributeName : identifier ;
 attributeArgumentClause : '('  balancedTokens?  ')'  ;
 attributes : attribute+ ;
 // Swift Language Reference does not have ','
-balancedTokens : balancedToken balancedTokens? ;
+balancedTokens : balancedToken+ ;
 balancedToken
  : '('  balancedTokens? ')'
  | '[' balancedTokens? ']'
@@ -661,7 +661,7 @@ postfixExpression
  ;
 
 // GRAMMAR OF AN ARGUMENT NAME
-argumentNames : argumentName argumentNames?  ;
+argumentNames : argumentName+  ;
 argumentName: (identifier | '_') ':'  ; // Swift Language Reference has argumentName → identifier :
 
 // GRAMMAR OF A FUNCTION CALL EXPRESSION
@@ -800,14 +800,14 @@ typeName : identifier ;
 
 tupleType : '('  tupleTypeBody? ')'  ;
 tupleTypeBody : tupleTypeElementList '...'? ;
-tupleTypeElementList : tupleTypeElement | tupleTypeElement ',' tupleTypeElementList  ;
+tupleTypeElementList : tupleTypeElement (',' tupleTypeElement)*  ;
 tupleTypeElement : attributes? 'inout'? sType | 'inout'? elementName typeAnnotation ;
 elementName : identifier  ;
 
 // GRAMMAR OF A PROTOCOL COMPOSITION TYPE
 
 protocolCompositionType : 'protocol' '<' protocolIdentifierList? '>'  ;
-protocolIdentifierList : protocolIdentifier | protocolIdentifier ',' protocolIdentifierList  ;
+protocolIdentifierList : protocolIdentifier (',' protocolIdentifier)*  ;
 protocolIdentifier : typeIdentifier  ;
 
 // GRAMMAR OF A METATYPE TYPE
@@ -951,7 +951,7 @@ integerLiteral
 BinaryLiteral : '0b' BinaryDigit BinaryLiteralCharacters? ;
 fragment BinaryDigit : [01] ;
 fragment BinaryLiteralCharacter : BinaryDigit | '_'  ;
-fragment BinaryLiteralCharacters : BinaryLiteralCharacter BinaryLiteralCharacters? ;
+fragment BinaryLiteralCharacters : BinaryLiteralCharacter+ ;
 
 OctalLiteral : '0o' OctalDigit OctalLiteralCharacters? ;
 fragment OctalDigit : [0-7] ;
