@@ -7,9 +7,9 @@
 **Installation Method:** Homebrew
 
 ### Steps to Reproduce Issue
+
 1.
 
 ### Expected Behavior
-
 
 ### Actual Behavior

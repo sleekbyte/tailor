@@ -10,11 +10,13 @@
 ## Getting Started
 
 * Set up dependencies:
+
 ```bash
 script/bootstrap
 ```
 
 * Run tests locally:
+
 ```bash
 script/test
 ```
@@ -27,19 +29,21 @@ script/test
 * The ANTLR-executable version of the Swift grammar (based on [The Swift Programming Language: Summary of the Grammar](https://developer.apple.com/library/prerelease/ios/documentation/Swift/Conceptual/Swift_Programming_Language/zzSummaryOfTheGrammar.html)) is located at `src/main/antlr/com/sleekbyte/tailor/antlr/Swift.g4`
 * The lexer, parser, and listener generated via ANTLR from the grammar are located in `src/gen/java/com/sleekbyte/tailor/antlr/`
 * If modifications to the [ANTLR](http://www.antlr.org) grammar are necessary, regenerate the lexer/parser/listener:
+
 ```bash
 ./gradlew build
 ```
 
 * Ensure that all new code is tested via unit and/or functional tests (`src/test/java/`)
 * Verify that your changes pass all tests and comply with the project's style guidelines:
+
 ```bash
 script/cibuild
 ```
 
 ## Committing Changes
 
-* Do not commit to `master`, your changes will be reverted. Always create a new branch and submit your changes as a pull request
+* Always create a new branch and submit your changes as a pull request
 * Please follow Tim Pope's Git commit message guidelines in [A Note About Git Commit Messages](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html)
 * Specifically, ensure that the first line of your commit message is brief (50 chars or less) and "Capitalized with no terminating period", then leave a blank line and provide more detailed explanatory text if necessary in paragraph or bulleted form with "`-`" or "`*`"
 * Attempt to keep the amount of modified code per commit to a reasonable size and refer to any relevant issues with their ID, using the verbs fix/close/resolve to automatically close issues once the commit has been merged into `master` (e.g. "Fix #4: Add .travis.yml to test against Python 3.4")
@@ -67,10 +71,53 @@ script/cibuild
 * If you are waiting for a second reviewer, you may reassign the PR to another contributor
 * If you make changes to a PR after receiving an endorsement, you must request another review from the endorser
 
+### Developer Certificate of Origin
+
+By submitting a PR, you agree to the [Developer Certificate of Origin](http://developercertificate.org):
+
+```
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+660 York Street, Suite 102,
+San Francisco, CA 94110 USA
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+```
+
 ### Closing a PR
 
-* Once you have received two :+1:s and the [Travis CI](https://travis-ci.org/sleekbyte/tailor) build has passed, you are responsible for merging your branch into `master` and subsequently deleting it from the remote
-* When merging your branch, refer to the issue at the beginning of the commit description (e.g. "Fix #4: Integrate Travis CI")
+* Once you have received two :+1:s and the [Travis CI](https://travis-ci.org/sleekbyte/tailor) build has passed, a maintainer will merge your branch into `master` and you may delete it from the remote
+* When merging your branch, ensure that the related issue is also resolved
 
 ## Triaging Issues
 
