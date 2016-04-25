@@ -260,8 +260,8 @@ variableDeclaration
 variableDeclarationHead : attributes? declarationModifiers? 'var'  ;
 variableName : identifier  ;
 getterSetterBlock : '{' getterClause setterClause?'}'  | '{' setterClause getterClause '}'  ;
-getterClause : attributes? 'get' codeBlock  ;
-setterClause : attributes? 'set' setterName? codeBlock  ;
+getterClause : attributes? declarationModifiers? 'get' codeBlock  ;
+setterClause : attributes? declarationModifiers? 'set' setterName? codeBlock  ;
 setterName : '(' identifier ')'  ;
 getterSetterKeywordBlock : '{' getterKeywordClause setterKeywordClause?'}' | '{' setterKeywordClause getterKeywordClause '}'  ;
 getterKeywordClause : attributes? 'get'  ;
