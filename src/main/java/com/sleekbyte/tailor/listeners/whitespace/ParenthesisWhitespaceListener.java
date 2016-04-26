@@ -41,7 +41,7 @@ public final class ParenthesisWhitespaceListener extends SwiftBaseListener {
             }
         }
 
-        //
+        // (Issue #400): Do not check for leading whitespace for parameter clauses inside a closure signature
         if (parent instanceof ClosureSignatureContext) {
             return;
         }
