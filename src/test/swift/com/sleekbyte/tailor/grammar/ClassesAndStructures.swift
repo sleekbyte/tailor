@@ -174,3 +174,21 @@ struct AudioChannel {
 public final class SessionDelegate: NSObject, NSURLSessionDelegate, NSURLSessionTaskDelegate, NSURLSessionDataDelegate, NSURLSessionDownloadDelegate {
     private var subdelegates: [Int: Request.TaskDelegate] = [:]
 }
+
+public subscript(i: Int) -> Element {
+  get {
+    return getElement(i, wasNativeTypeChecked: _isNativeTypeChecked)
+  }
+
+  // declarationModifier before setterClause
+  nonmutating set {
+    if _fastPath(_isNative) {
+      _native[i] = newValue
+    }
+    else {
+      var refCopy = self
+      refCopy.replace(
+        subRange: i...i, with: 1, elementsOf: CollectionOfOne(newValue))
+    }
+  }
+}
