@@ -7,12 +7,14 @@
   <a href="https://coveralls.io/github/sleekbyte/tailor">
     <img src="https://coveralls.io/repos/github/sleekbyte/tailor/badge.svg" alt="Code Coverage">
   </a>
-  <a href="https://www.codacy.com/app/sleekbot/tailor">
-    <img src="https://img.shields.io/codacy/d6de692405d14aad98b479cef4c45724.svg" alt="Code Quality">
+  <a href="https://codeclimate.com/github/sleekbyte/tailor">
+    <img src="https://codeclimate.com/github/sleekbyte/tailor/badges/gpa.svg" alt="Code Climate">
   </a>
 </p>
 
 <p align="center">
+  <a href="https://github.com/sleekbyte/tailor/wiki">Wiki</a>
+  •
   <a href="#installation">Installation</a>
   •
   <a href="#usage">Usage</a>
@@ -47,35 +49,36 @@ Tailor parses Swift source code using the primary Java target of [ANTLR](http://
 
 — [About the ANTLR Parser Generator](http://www.antlr.org/about.html)
 
-**See the [wiki](https://github.com/sleekbyte/tailor/wiki) for the full documentation.**
-
 # Getting Started
 
 ## Installation
 
 Requires Java (JRE or JDK) Version 8 or above: [Java SE Downloads](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
-#### [Homebrew](http://brew.sh), [Linuxbrew](http://brew.sh/linuxbrew/)
+
+### [Homebrew](http://brew.sh), [Linuxbrew](http://linuxbrew.sh)
+
 
 ```bash
 brew install tailor
 ```
 
-#### Mac OS X (10.10+), Linux
+### Mac OS X (10.10+), Linux
 
 ```bash
 curl -fsSL https://tailor.sh/install.sh | sh
 ```
 
-#### Windows (10+)
+### Windows (10+)
 
 ```powershell
 iex (new-object net.webclient).downloadstring('https://tailor.sh/install.ps1')
 ```
 
-#### Manually
+### Manually
+
 You may also download Tailor via [GitHub Releases](https://github.com/sleekbyte/tailor/releases), extract the archive, and symlink the `tailor/bin/tailor` shell script to a location in your `$PATH`.
 
-#### Continuous Integration
+### Continuous Integration
 
 If your continuous integration server supports [Homebrew](http://brew.sh) installation, you may use the following snippet:
 
@@ -142,6 +145,7 @@ Options:
 ```
 
 # Features
+
 * [Enabling and Disabling Rules](#enabling-and-disabling-rules)
 * [Cross-Platform](#cross-platform)
 * [Automatic Xcode Integration](#automatic-xcode-integration)
@@ -151,65 +155,79 @@ Options:
 * [Configuration](#configuration)
 * [Formatters](#formatters)
 
-### Enabling and Disabling Rules
+## Enabling and Disabling Rules
 
-**Rule identifiers and "preferred/not preferred" code samples may be found on the [Rules](https://github.com/sleekbyte/tailor/wiki/Rules) page.**
+Rule identifiers and "preferred/not preferred" code samples may be found on the [Rules](https://github.com/sleekbyte/tailor/wiki/Rules) page.
 
 Rules may be individually disabled (blacklist) or enabled (whitelist) via the `--except` and `--only` command-line flags.
 
-#### Except
+### Except
+
 ```bash
 tailor --except=brace-style,trailing-whitespace main.swift
 ```
 
-#### Only
+### Only
+
 ```bash
 tailor --only=redundant-parentheses,terminating-semicolon main.swift
 ```
 
-### Cross-Platform
+## Cross-Platform
+
 Tailor may be used on Mac OS X via your shell or integrated with Xcode, as well as on Linux and Windows.
 
-#### Linux
+### Linux
+
 ![Tailor on Ubuntu](https://cloud.githubusercontent.com/assets/1350704/9894130/2b959794-5bee-11e5-9ed2-84d035895239.png)
 
-#### Windows
+### Windows
+
 ![Tailor on Windows](https://cloud.githubusercontent.com/assets/1791760/9913016/2ff0e9a8-5cc8-11e5-8722-d5a6f9d84027.PNG)
 
-### Automatic Xcode Integration
+## Automatic Xcode Integration
+
 Tailor can be integrated with Xcode projects using the `--xcode` option.
+
 ```bash
 tailor --xcode /path/to/demo.xcodeproj/
 ```
+
 This adds the following Build Phase Run Script to your project's default target.
 ![Run Script](https://cloud.githubusercontent.com/assets/1350704/11074861/5bae6b24-87f2-11e5-8167-4328b9b01174.png)
 
 Tailor's output will be displayed inline within the Xcode Editor Area and as a list in the Log Navigator.
 ![Xcode messages](https://cloud.githubusercontent.com/assets/1350704/11017260/b79cb162-8599-11e5-94fa-e7cf77fdc657.png)
 
+## Colorized Output
 
-### Colorized Output
 Tailor uses the following color schemes to format CLI output:
 
 * **Dark theme** (enabled by default)
-![Dark theme](https://cloud.githubusercontent.com/assets/1791760/9807444/fde82de6-5870-11e5-9e20-05a9d736e136.png)
-* **Light theme** (enabled via `--invert-color` option)
-![Light theme](https://cloud.githubusercontent.com/assets/1791760/9807312/129ce45e-586f-11e5-8e26-fe818af0ec09.png)
-* **No color theme** (enabled via `--no-color` option)
-![No color](https://cloud.githubusercontent.com/assets/1791760/9807318/261811d4-586f-11e5-9010-0e627431bbb9.png)
+  ![Dark theme](https://cloud.githubusercontent.com/assets/1791760/9807444/fde82de6-5870-11e5-9e20-05a9d736e136.png)
 
-### Warnings, Errors, and Failing the Build
+* **Light theme** (enabled via `--invert-color` option)
+  ![Light theme](https://cloud.githubusercontent.com/assets/1791760/9807312/129ce45e-586f-11e5-8e26-fe818af0ec09.png)
+
+* **No color theme** (enabled via `--no-color` option)
+  ![No color](https://cloud.githubusercontent.com/assets/1791760/9807318/261811d4-586f-11e5-9010-0e627431bbb9.png)
+
+## Warnings, Errors, and Failing the Build
+
 `--max-severity` can be used to control the maximum severity of violation messages. It can be set to `error` or `warning` (by default, it is set to `warning`). Setting it to `error` allows you to distinguish between lower and higher priority messages. It also fails the build in Xcode, if any errors are reported (similar to how a compiler error fails the build in Xcode). With `max-severity` set to `warning`, all violation messages are warnings and the Xcode build will never fail.
 
 This setting also affects Tailor's exit code on the command-line, a failing build will `exit 1` whereas having warnings only will `exit 0`, allowing Tailor to be easily integrated into pre-commit hooks.
 
-### Disable Violations within Source Code
+## Disable Violations within Source Code
+
 Violations on a specific line may be disabled with a **trailing** single-line comment.
+
 ```swift
 import Foundation; // tailor:disable
 ```
 
 Additionally, violations in a given block of code can be disabled by **enclosing the block** within `tailor:off` and `tailor:on` comments.
+
 ```swift
 // tailor:off
 import Foundation;
@@ -221,11 +239,15 @@ class Demo() {
   // Define public members here
 }
 ```
-##### Note
-- `// tailor:on` and `// tailor:off` comments must be paired
 
-### Configuration
+### Note
+
+* `// tailor:off` and `// tailor:on` comments must be paired
+
+## Configuration
+
 The behavior of Tailor can be customized via the `.tailor.yml` configuration file. It enables you to
+
 * include/exclude certain files and directories from analysis
 * enable and disable specific analysis rules
 * specify output format
@@ -235,11 +257,13 @@ You can tell Tailor which configuration file to use by specifying its file path 
 
 The file follows the [YAML 1.1](http://www.yaml.org/spec/1.1/) format.
 
-#### Including/Excluding files
+### Including/Excluding files
+
 Tailor checks all files found by a recursive search starting from the directories given as command line arguments. However, it only analyzes Swift files that end in `.swift`. If you would like Tailor to analyze specific files and directories, you will have to add entries for them under `include`. Files and directories can also be ignored through `exclude`.
 
 Here is an example that might be used for an iOS project:
-```YAML
+
+```yaml
 include:
     - Source            # Inspect all Swift files under "Source/"
 exclude:
@@ -248,17 +272,20 @@ exclude:
     - Source/Pods       # Ignore Swift files under "Source/Pods/"
 ```
 
-##### Notes
+#### Notes
+
 * Files and directories are specified relative to where `tailor` is run from
 * Paths to directories or Swift files provided explicitly via CLI will cause the `include`/`exclude` rules specified in `.tailor.yml` to be ignored
 * *Exclude* is given higher precedence than *Include*
 * Tailor recognizes the [Java Glob](https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob) syntax
 
-#### Enabling/Disabling rules
+### Enabling/Disabling rules
+
 Tailor allows you to individually disable (blacklist) or enable (whitelist) rules via the `except` and `only` labels.
 
 Here is an example showcasing how to enable certain rules:
-```YAML
+
+```yaml
 # Tailor will solely check for violations to the following rules
 only:
     - upper-camel-case
@@ -268,47 +295,54 @@ only:
 ```
 
 Here is an example showcasing how to disable certain rules:
-```YAML
+
+```yaml
 # Tailor will check for violations to all rules except for the following ones
 except:
     - parenthesis-whitespace
     - lower-camel-case
 ```
 
-##### Notes
+#### Notes
+
 * *only* is given precedence over *except*
 * Rules that are explicitly included/excluded via CLI will cause the `only`/`except` rules specified in `.tailor.yml` to be ignored
 
-#### Specifying output format
+### Specifying output format
+
 Tailor allows you to specify the output format (`xcode`/`json`) via the `format` label.
 
 Here is an example showcasing how to specify the output format:
 
-```YAML
+```yaml
 # The output format will now be in JSON
 format: json
 ```
 
-##### Note
-- The output format explicitly specified via CLI will cause the output format defined in `.tailor.yml` to be ignored
+#### Note
 
-#### Specifying CLI output color scheme
+* The output format explicitly specified via CLI will cause the output format defined in `.tailor.yml` to be ignored
+
+### Specifying CLI output color scheme
+
 Tailor allows you to specify the CLI output color schemes  via the `color` label.  To disable colored output, set `color` to `disable`. To invert the color scheme, set `color` to `invert`.
 
 Here is an example showcasing how to specify the CLI output color scheme:
 
-```YAML
+```yaml
 # The CLI output will not be colored
 color: disable
 ```
 
-##### Note
-- The CLI output color scheme explicitly specified via CLI will cause the output color scheme  defined in `.tailor.yml` to be ignored
+#### Note
 
-### Formatters
+* The CLI output color scheme explicitly specified via CLI will cause the output color scheme  defined in `.tailor.yml` to be ignored
+
+## Formatters
+
 Tailor's output format may be customized via the `-f`/`--format` option. The Xcode formatter is selected by default.
 
-#### Xcode Formatter (default)
+### Xcode Formatter (default)
 
 The default `xcode` formatter outputs violation messages according to the format expected by Xcode to be displayed inline within the Xcode Editor Area and as a list in the Log Navigator. This format is also as human-friendly as possible on the console.
 
@@ -325,7 +359,7 @@ $ tailor main.swift
 Analyzed 1 file, skipped 0 files, and detected 5 violations (0 errors, 5 warnings).
 ```
 
-#### [JSON](http://www.json.org) Formatter
+### [JSON](http://www.json.org) Formatter
 
 The `json` formatter outputs an array of violation messages for each file, and a `summary` object indicating the parsing results and the violation counts.
 
@@ -360,15 +394,18 @@ $ tailor -f json main.swift
 ```
 
 # Developers
+
 Please review the [guidelines for contributing](https://github.com/sleekbyte/tailor/blob/master/.github/CONTRIBUTING.md) to this repository.
 
 ## Development Environment
+
 * [Java Version 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
 * [Gradle](https://gradle.org) (optional, `./gradlew` may be used instead)
 * [Ruby 2.0.0+](https://www.ruby-lang.org/en/)
 * [Bundler](http://bundler.io)
 
 # External Tools and Libraries
+
 ## Development & Runtime
 
 Tool                                                                    | License
@@ -401,4 +438,5 @@ Tool                                                         | License
 [Ronn](https://github.com/rtomayko/ronn)                     | [MIT](https://github.com/rtomayko/ronn/blob/master/COPYING)
 
 # License
+
 Tailor is released under the MIT license. See [LICENSE.md](https://github.com/sleekbyte/tailor/blob/master/LICENSE.md) for details.
