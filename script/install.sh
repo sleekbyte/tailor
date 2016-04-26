@@ -70,7 +70,7 @@ cecho() {
 echo "Tailor $TAILOR_VERSION will be installed to: $blue$TAILOR_DIR/$reset"
 if wait_for_user; then
   verify_java
-  maybe_sudo /bin/mkdir -p $BIN_DIR $TAILOR_DIR
+  maybe_sudo /bin/mkdir -p $BIN_DIR $TAILOR_DIR $MAN_DIR
   cecho "Downloading $TAILOR_ZIP to $TAILOR_DIR/..." "$blue"
   maybe_sudo /usr/bin/curl -#fLo "$TAILOR_DIR/$TAILOR_ZIP" "$TAILOR_ZIP_URL"
   maybe_sudo /usr/bin/unzip -oqq "$TAILOR_DIR/$TAILOR_ZIP" -d "$TAILOR_DIR"
