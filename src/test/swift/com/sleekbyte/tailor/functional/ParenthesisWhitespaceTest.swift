@@ -113,3 +113,10 @@ func <| (lhs: Int, rhs: Int) -> Int {}
 func <|< <A> (lhs: A, rhs: A) -> A
 
 func <|< <A>(lhs: A, rhs: A) -> A
+
+
+let days = ["Monday", "Wednesday", "Friday"]
+// Do not flag (Issue #400)
+days.map({ (day: String) -> String in
+  "\(day) is good!"
+})

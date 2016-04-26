@@ -2,6 +2,7 @@ package com.sleekbyte.tailor.listeners.whitespace;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.antlr.SwiftParser.ClosureSignatureContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.FunctionNameContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.FunctionSignatureContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.GenericParameterClauseContext;
@@ -38,6 +39,11 @@ public final class ParenthesisWhitespaceListener extends SwiftBaseListener {
                 verifier.verifyLeadingWhitespaceBeforeBracket(ctx, Messages.OPERATOR_OVERLOADING_ONE_SPACE, 1);
                 return;
             }
+        }
+
+        //
+        if (parent instanceof ClosureSignatureContext) {
+            return;
         }
         verifier.verifyLeadingWhitespaceBeforeBracket(ctx, Messages.PARENTHESES, Messages.NO_WHITESPACE_BEFORE, 0);
     }
