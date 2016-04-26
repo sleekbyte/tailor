@@ -300,7 +300,7 @@ parameter : attributes? 'inout'? 'let'? '#'? externalParameterName? localParamet
  | attributes? sType
  | externalParameterName? localParameterName typeAnnotation '...'
  ;
-externalParameterName : identifier | '_'  ;
+externalParameterName : identifier | keyword | '_'  ;
 localParameterName : identifier | '_'  ;
 defaultArgumentClause : '=' expression  ;
 
@@ -628,7 +628,8 @@ implicitMemberExpression : '.' identifier  ;
 
 parenthesizedExpression : '(' expressionElementList? ')'  ;
 expressionElementList : expressionElement (',' expressionElement)*  ;
-expressionElement : expression | identifier ':' expression  ;
+expressionElement : expression | expressionElementIdentifier ':' expression  ;
+expressionElementIdentifier: identifier | keyword ;
 
 // GRAMMAR OF A WILDCARD EXPRESSION
 
@@ -861,7 +862,7 @@ keyword : 'convenience' | 'class' | 'deinit' | 'enum' | 'extension' | 'func' | '
 contextSensitiveKeyword :
  'associativity' | 'convenience' | 'dynamic' | 'didSet' | 'final' | 'get' | 'infix' | 'indirect' |
  'lazy' | 'left' | 'mutating' | 'none' | 'nonmutating' | 'optional' | 'operator' | 'override' | 'postfix' | 'precedence' |
- 'prefix' | 'protocol' | 'required' | 'right' | 'set' | 'Type' | 'unowned' | 'weak' | 'willSet' |
+ 'prefix' | 'Protocol' | 'required' | 'right' | 'set' | 'Type' | 'unowned' | 'weak' | 'willSet' |
  'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS' | 'x86_64' |
  'arm' | 'arm64' | 'i386' | 'os' | 'arch' | 'safe' | 'tvOS'
  ;
