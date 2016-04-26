@@ -1,0 +1,10 @@
+---
+engines:
+  shellcheck:
+    enabled: true
+ratings:
+  paths:
+  - "script/**"
+exclude_paths:
+- build/
+- gradlew

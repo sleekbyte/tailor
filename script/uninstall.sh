@@ -14,12 +14,8 @@ BIN_DIR="$PREFIX/bin"
 MAN_DIR="$PREFIX/share/man/man1"
 
 wait_for_user() {
-  if [ $(uname) = "Darwin" ]; then
-    read -n 1 -a CONTINUE -p "Press [y/N] to continue: " < /dev/tty
-  elif [ $(uname) = "Linux" ]; then
-    echo -n "Press [y/N] to continue: "
-    read CONTINUE < /dev/tty
-  fi
+  printf "Enter [y/N] to continue: "
+  read -r CONTINUE < /dev/tty
   echo; echo
   [ "$CONTINUE" = "y" ] || [ "$CONTINUE" = "Y" ]
 }
@@ -51,7 +47,7 @@ if wait_for_user; then
   maybe_sudo /bin/rm -f "$MAN_DIR"/tailor.1
   kill_sudo
 
-  cecho "Tailor uninstalled." $green
+  cecho "Tailor uninstalled." "$green"
 else
-  cecho "Tailor uninstallation cancelled." $red
+  cecho "Tailor uninstallation cancelled." "$red"
 fi
