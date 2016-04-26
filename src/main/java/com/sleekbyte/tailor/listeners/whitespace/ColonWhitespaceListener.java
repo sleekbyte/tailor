@@ -96,9 +96,9 @@ public final class ColonWhitespaceListener extends SwiftBaseListener {
 
     @Override
     public void enterExpressionElement(SwiftParser.ExpressionElementContext ctx) {
-        if (ctx.identifier() != null) {
+        if (ctx.expressionElementIdentifier() != null) {
             Token colon = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
-            Token left = ctx.identifier().getStop();
+            Token left = ctx.expressionElementIdentifier().getStop();
             Token right = ctx.expression().getStart();
 
             verifyColonLeftAssociation(left, right, colon);

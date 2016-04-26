@@ -83,3 +83,5 @@ let testMsg = " (after \(st.successfulTestCount.successor()) test"
 let description = "\(firstVariable), \(secondVariable), \(thirdVariable), \(fourthVariable), \(fifthVariable)"
 
 return (components.map { "\($0)=\($1)" } as [String]).joinWithSeparator("&")
+
+var Protocol = "just a variable called Protocol"

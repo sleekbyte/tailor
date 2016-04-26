@@ -302,7 +302,8 @@ parameter : attributes? 'inout'? 'let'? '#'? externalParameterName? localParamet
  | attributes? sType
  | externalParameterName? localParameterName typeAnnotation '...'
  ;
-externalParameterName : identifier | '_'  ;
+// Swift Language Reference does not have "keyword"
+externalParameterName : identifier | keyword | '_'  ;
 localParameterName : identifier | '_'  ;
 defaultArgumentClause : '=' expression  ;
 
@@ -628,7 +629,9 @@ implicitMemberExpression : '.' identifier  ;
 
 parenthesizedExpression : '(' expressionElementList? ')'  ;
 expressionElementList : expressionElement (',' expressionElement)*  ;
-expressionElement : expression | identifier ':' expression  ;
+expressionElement : expression | expressionElementIdentifier ':' expression  ;
+// Swift Language Reference does not have "keyword"
+expressionElementIdentifier: identifier | keyword ;
 
 // GRAMMAR OF A WILDCARD EXPRESSION
 
@@ -856,12 +859,27 @@ NilLiteral: 'nil' ;
 
 identifier : Identifier | contextSensitiveKeyword ;
 
-keyword : 'convenience' | 'class' | 'deinit' | 'enum' | 'extension' | 'func' | 'import' | 'init' | 'let' | 'protocol' | 'static' | 'struct' | 'subscript' | 'typealias' | 'var' | 'break' | 'case' | 'continue' | 'default' | 'do' | 'else' | 'fallthrough' | 'if' | 'in' | 'for' | 'return' | 'switch' | 'where' | 'while' | 'as' | 'dynamicType' | 'is' | 'super' | 'self' | 'Self' | 'Type' | 'repeat' ;
+keyword :
+ // Keywords used in declarations
+ 'associatedtype' | 'class' | 'deinit' | 'enum' | 'extension' | 'func' | 'import' | 'init' | 'internal'
+ | 'private' | 'protocol' | 'public' | 'static' | 'struct' | 'subscript' | 'typealias'
+ // Keywords used in statements
+ | 'break' | 'case' | 'continue' | 'default' | 'defer' | 'do' | 'else' | 'fallthrough' | 'for' | 'guard' | 'if' | 'in'
+ | 'repeat' | 'return' | 'switch' | 'where' | 'while'
+ // Keywords used in expressions and types
+ | 'as' | 'catch' | 'dynamicType' | 'is' | 'nil' | 'rethrows' | 'super' | 'self' | 'Self' | 'throw'
+ | 'throws' | 'try' | '#column' | '#file' | '#function' | '#line'
+ | BooleanLiteral
+ // Keywords used in patterns
+ | '_'
+ // Keywords that begin with a number sign (#)
+ | '#available' | '#column' | '#else' | '#elseif' | '#endif' | '#file' | '#function' | '#if' | '#line' | '#selector'
+ ;
 
 contextSensitiveKeyword :
  'associativity' | 'convenience' | 'dynamic' | 'didSet' | 'final' | 'get' | 'infix' | 'indirect' |
  'lazy' | 'left' | 'mutating' | 'none' | 'nonmutating' | 'optional' | 'operator' | 'override' | 'postfix' | 'precedence' |
- 'prefix' | 'protocol' | 'required' | 'right' | 'set' | 'Type' | 'unowned' | 'weak' | 'willSet' |
+ 'prefix' | 'Protocol' | 'required' | 'right' | 'set' | 'Type' | 'unowned' | 'weak' | 'willSet' |
  'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS' | 'x86_64' |
  'arm' | 'arm64' | 'i386' | 'os' | 'arch' | 'safe' | 'tvOS'
  ;
