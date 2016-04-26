@@ -443,9 +443,7 @@ valueBindingPattern : 'var' pattern | 'let' pattern  ;
 // GRAMMAR OF A TUPLE PATTERN
 
 tuplePattern : '(' tuplePatternElementList? ')'  ;
-tuplePatternElementList
- : tuplePatternElement (',' tuplePatternElement)*
- ;
+tuplePatternElementList : tuplePatternElement (',' tuplePatternElement)* ;
 tuplePatternElement : pattern | identifier ':' pattern ;
 
 // GRAMMAR OF AN ENUMERATION CASE PATTERN
