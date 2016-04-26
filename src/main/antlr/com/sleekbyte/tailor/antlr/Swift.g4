@@ -260,8 +260,10 @@ variableDeclaration
 variableDeclarationHead : attributes? declarationModifiers? 'var'  ;
 variableName : identifier  ;
 getterSetterBlock : '{' getterClause setterClause?'}'  | '{' setterClause getterClause '}'  ;
-getterClause : attributes? 'get' codeBlock  ;
-setterClause : attributes? 'set' setterName? codeBlock  ;
+// declarationModifiers missing in the Swift Language Reference
+getterClause : attributes? declarationModifiers? 'get' codeBlock  ;
+// declarationModifiers missing in the Swift Language Reference
+setterClause : attributes? declarationModifiers? 'set' setterName? codeBlock  ;
 setterName : '(' identifier ')'  ;
 getterSetterKeywordBlock : '{' getterKeywordClause setterKeywordClause?'}' | '{' setterKeywordClause getterKeywordClause '}'  ;
 getterKeywordClause : attributes? 'get'  ;
@@ -442,8 +444,8 @@ valueBindingPattern : 'var' pattern | 'let' pattern  ;
 
 tuplePattern : '(' tuplePatternElementList? ')'  ;
 tuplePatternElementList
-	:	tuplePatternElement (',' tuplePatternElement)*
-	;
+ : tuplePatternElement (',' tuplePatternElement)*
+ ;
 tuplePatternElement : pattern | identifier ':' pattern ;
 
 // GRAMMAR OF AN ENUMERATION CASE PATTERN
@@ -495,24 +497,24 @@ prefixExpression
 
 /*
 expression
-	:	prefixOperator expression
-    |	inOutExpression
-    |	primaryExpression
-    |	expression binaryOperator expression
-    |	expression assignmentOperator expression
-    |	expression conditionalOperator expression
-    |	expression typeCastingOperator
-    |	expression postfixOperator
-    |	expression parenthesizedExpression trailingClosure?
-	|	expression '.' 'init'
- 	|	expression '.' DecimalLiteral
-	|	expression '.' identifier genericArgumentClause?
-	|	expression '.' 'self'
-	|	expression '.' 'dynamicType'
-	|	expression '[' expressionList ']'
-	|	expression '!'
-	|	expression '?'
-	;
+ : prefixOperator expression
+ | inOutExpression
+ | primaryExpression
+ | expression binaryOperator expression
+ | expression assignmentOperator expression
+ | expression conditionalOperator expression
+ | expression typeCastingOperator
+ | expression postfixOperator
+ | expression parenthesizedExpression trailingClosure?
+ | expression '.' 'init'
+ | expression '.' DecimalLiteral
+ | expression '.' identifier genericArgumentClause?
+ | expression '.' 'self'
+ | expression '.' 'dynamicType'
+ | expression '[' expressionList ']'
+ | expression '!'
+ | expression '?'
+ ;
 */
 
 // GRAMMAR OF A PREFIX EXPRESSION
