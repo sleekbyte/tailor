@@ -57,3 +57,15 @@ struct Celsius {
         }
     }
 }
+
+extension SystemError {
+    public static func description(for errorNumber: Int32) -> String {
+        return String(cString: strerror(errorNumber))
+    }
+}
+
+extension SystemError: CustomStringConvertible {
+    public var description: String {
+        return SystemError.description(for: errorNumber)
+    }
+}
