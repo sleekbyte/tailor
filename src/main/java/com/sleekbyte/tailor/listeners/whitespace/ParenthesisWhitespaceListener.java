@@ -41,11 +41,13 @@ public final class ParenthesisWhitespaceListener extends SwiftBaseListener {
             }
         }
 
-        // (Issue #400): Do not check for leading whitespace for parameter clauses inside a closure signature
+        // (Issue #400): Check for one leading whitespace for parameter clauses inside a closure signature
         if (parent instanceof ClosureSignatureContext) {
-            return;
+            verifier.verifyLeadingWhitespaceBeforeBracket(ctx, Messages.CLOSURE_PARENTHESES_ONE_SPACE, 1);
+        } else {
+            verifier.verifyLeadingWhitespaceBeforeBracket(ctx, Messages.PARENTHESES, Messages.NO_WHITESPACE_BEFORE, 0);
         }
-        verifier.verifyLeadingWhitespaceBeforeBracket(ctx, Messages.PARENTHESES, Messages.NO_WHITESPACE_BEFORE, 0);
+
     }
 
     @Override
