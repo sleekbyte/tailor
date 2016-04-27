@@ -20,3 +20,13 @@ names.something()
 names.convert(toUpperCase)
 
 print(1 + 2 + 4 + 5)
+
+guard let x = x.filter({ return $0.id == someString }).first else {
+    return
+}
+
+if y.contains({ return $0.id == someString }) {}
+
+let x = x.filter({ return $0.id == someString }).first
+
+let x = x.filter { return $0.id == someString }.first
