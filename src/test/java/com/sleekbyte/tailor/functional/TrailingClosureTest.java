@@ -20,6 +20,7 @@ public final class TrailingClosureTest extends RuleTest {
         addExpectedMessage(3, 23);
         addExpectedMessage(5, 41);
         addExpectedMessage(12, 3);
+        addExpectedMessage(30, 18);
     }
 
     private void addExpectedMessage(int line, int column) {
