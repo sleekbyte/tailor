@@ -4,9 +4,9 @@ jdk:
 before_install:
   - rvm install 2.3.0
   - gem update bundler
-  - pip install --user codecov
+    # HACK: Workaround for bundler/bundler#4494
+  - gem install bundler -v 1.11.2
 after_success:
-  - codecov
   - ./gradlew coveralls
 before_deploy:
   - "shasum -a 256 build/distributions/*"

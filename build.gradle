@@ -174,7 +174,8 @@ task gems(type: Exec) {
     outputs.dir file('src/dist/gems/vendor/')
     workingDir 'src/dist/gems'
     executable 'sh'
-    args '-c', 'bundle package --no-install'
+    // HACK: Workaround for bundler/bundler#4494
+    args '-c', 'bundle _1.11.2_ package --no-install'
 }
 // Ensure gems are packaged into distribution
 distZip.dependsOn 'gems'
