@@ -124,7 +124,7 @@ Options:
  -c,--config=<path/to/.tailor.yml>             specify configuration file
     --debug                                    print ANTLR error messages when parsing error occurs
     --except=<rule1,rule2,...>                 run all rules except the specified ones
- -f,--format=<xcode|json|cc>                   select an output format
+ -f,--format=<xcode|json|cc|html>              select an output format
  -h,--help                                     display help
     --invert-color                             invert colorized console output
  -l,--max-line-length=<0-999>                  maximum Line length (in characters)
@@ -392,6 +392,16 @@ $ tailor -f json main.swift
   }
 }
 ```
+
+### HTML Formatter
+
+The `html` formatter outputs a complete HTML document that should be written to a file.
+
+```
+tailor -f html main.swift > tailor.html
+```
+
+![HTML format](https://cloud.githubusercontent.com/assets/1350704/14971733/236fd5b0-10a3-11e6-9a02-fa1e70702e47.png)
 
 # Developers
 

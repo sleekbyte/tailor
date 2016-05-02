@@ -9,7 +9,8 @@ import java.util.stream.Collectors;
 public enum Format {
     XCODE,
     JSON,
-    CC;
+    CC,
+    HTML;
 
     private String name;
     private String className;
@@ -65,5 +66,9 @@ public enum Format {
         CC.name = "cc";
         CC.description = "Format for integration with Code Climate.";
         CC.className = CCFormatter.class.getName();
+
+        HTML.name = "html";
+        HTML.description = "Valid HTML format.";
+        HTML.className = HTMLFormatter.class.getName();
     }
 }
