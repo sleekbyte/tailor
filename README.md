@@ -430,7 +430,6 @@ Tool                                                         | License
 [Checkstyle](http://checkstyle.sourceforge.net)              | [GNU Lesser General Public License](http://checkstyle.sourceforge.net/license.html)
 [PMD](http://pmd.sourceforge.net)                            | [BSD-style](http://pmd.sourceforge.net/pmd-5.3.2/license.html)
 [JaCoCo](http://eclemma.org/jacoco/)                         | [Eclipse Public License v1.0](http://eclemma.org/license.html)
-[Codecov](https://codecov.io)                                | [Free for Open Source](https://codecov.io/#pricing)
 [Coveralls](https://coveralls.io)                            | [Free for Open Source](https://coveralls.io/pricing)
 [Bundler](http://bundler.io)                                 | [MIT](https://github.com/bundler/bundler/blob/master/LICENSE.md)
 [Codacy](https://www.codacy.com)                             | [Free for Open Source](https://www.codacy.com/pricing)
