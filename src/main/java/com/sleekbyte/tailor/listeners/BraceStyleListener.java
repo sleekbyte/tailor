@@ -161,8 +161,18 @@ public class BraceStyleListener extends SwiftBaseListener {
     }
 
     private void verifyInitializerBraceStyle(SwiftParser.InitializerDeclarationContext ctx) {
-        verifyCodeBlockOpenBraceStyle(ctx.initializerBody().codeBlock(), ctx.parameterClause().getStop(),
-            Messages.INITIALIZER_BODY);
+        // Check if there is an element between the parameter clause and open brace (i.e. 'throws' or 'rethrows')
+        // (Issue #405)
+        if (ctx.getChild(ctx.getChildCount() - 2) instanceof TerminalNodeImpl) {
+            verifyCodeBlockOpenBraceStyle(
+                ctx.initializerBody().codeBlock(),
+                ((TerminalNodeImpl) ctx.getChild(ctx.getChildCount() - 2)).getSymbol(),
+                Messages.INITIALIZER_BODY);
+        } else {
+            verifyCodeBlockOpenBraceStyle(ctx.initializerBody().codeBlock(), ctx.parameterClause().getStop(),
+                Messages.INITIALIZER_BODY);
+        }
+
         verifyBodyCloseBraceStyle(ctx.initializerBody().codeBlock(), Messages.INITIALIZER_BODY);
     }
 

@@ -73,6 +73,10 @@ public class BraceWhitespaceTest extends RuleTest {
         addExpectedMsg(start + 32, 21);
         addExpectedMsg(start + 45, 24);
         addExpectedMsg(start + 51, 25);
+
+        // initializers (Issue #405)
+        start = 275;
+        addExpectedMsg(start, 52);
     }
 
     private void addExpectedMsg(int line, int column) {
