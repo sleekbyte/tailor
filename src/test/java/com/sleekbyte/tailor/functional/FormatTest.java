@@ -2,14 +2,19 @@ package com.sleekbyte.tailor.functional;
 
 import static org.junit.Assert.assertArrayEquals;
 
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sleekbyte.tailor.Tailor;
+import com.sleekbyte.tailor.common.ConfigProperties;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
 import com.sleekbyte.tailor.format.CCFormatter;
 import com.sleekbyte.tailor.format.Format;
+import com.sleekbyte.tailor.format.Formatter;
+import com.sleekbyte.tailor.format.HTMLFormatter;
 import com.sleekbyte.tailor.output.Printer;
 import com.sleekbyte.tailor.output.ViolationMessage;
 import org.junit.After;
@@ -24,6 +29,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -43,9 +49,10 @@ import java.util.stream.Collectors;
 @RunWith(MockitoJUnitRunner.class)
 public final class FormatTest {
 
-    protected static final String TEST_INPUT_DIR = "src/test/swift/com/sleekbyte/tailor/functional";
-    protected static final String NEWLINE_REGEX = "\\r?\\n";
-    protected static final Gson GSON = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+    private static final String TEST_INPUT_DIR = "src/test/swift/com/sleekbyte/tailor/functional";
+    private static final String NEWLINE_REGEX = "\\r?\\n";
+    private static final String NEWLINE_PATTERN = "\n";
+    private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
 
     protected ByteArrayOutputStream outContent;
     protected File inputFile;
@@ -118,16 +125,17 @@ public final class FormatTest {
 
         Tailor.main(command);
 
-        String[] msgs = outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
-
         List<String> expected = new ArrayList<>();
         List<String> actual = new ArrayList<>();
         expectedMessages.addAll(
             Arrays.asList((GSON.toJson(expectedOutput) + System.lineSeparator()).split(NEWLINE_REGEX)));
+
         for (String msg : expectedMessages) {
             String strippedMsg = msg.replaceAll(inputFile.getCanonicalPath(), "");
             expected.add(strippedMsg);
         }
+
+        String[] msgs = outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
         for (String msg : msgs) {
             String strippedMsg = msg.replaceAll(inputFile.getCanonicalPath(), "");
             actual.add(strippedMsg);
@@ -192,6 +200,45 @@ public final class FormatTest {
             expectedOutput.append(GSON.toJson(msg)).append(CCFormatter.NULL_CHAR).append(System.lineSeparator());
         }
         expectedMessages.addAll(Arrays.asList(expectedOutput.toString().split(NEWLINE_REGEX)));
+
+        for (String msg : expectedMessages) {
+            String strippedMsg = msg.replaceAll(inputFile.getCanonicalPath(), "");
+            expected.add(strippedMsg);
+        }
+
+        String[] msgs = outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
+        for (String msg : msgs) {
+            String strippedMsg = msg.replaceAll(inputFile.getCanonicalPath(), "");
+            actual.add(strippedMsg);
+        }
+
+        assertArrayEquals(outContent.toString(Charset.defaultCharset().name()), expected.toArray(), actual.toArray());
+    }
+
+    @Test
+    public void testHTMLFormat() throws IOException {
+        Format format = Format.HTML;
+
+        final String[] command = new String[] {
+            "--format", format.getName(),
+            "--no-color",
+            "--only=upper-camel-case",
+            inputFile.getPath()
+        };
+
+        Map<String, Object> expectedOutput = getHTMLMessages();
+
+        Tailor.main(command);
+
+        List<String> expected = new ArrayList<>();
+        List<String> actual = new ArrayList<>();
+        Mustache mustache = new DefaultMustacheFactory().compile(
+            new InputStreamReader(HTMLFormatter.class.getResourceAsStream("index.html"), Charset.defaultCharset()),
+            "index.html"
+        );
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        mustache.execute(new OutputStreamWriter(baos, Charset.defaultCharset()), expectedOutput).flush();
+        expectedMessages.addAll(Arrays.asList(baos.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX)));
 
         for (String msg : expectedMessages) {
             String strippedMsg = msg.replaceAll(inputFile.getCanonicalPath(), "");
@@ -334,6 +381,47 @@ public final class FormatTest {
         }
 
         return violations;
+    }
+
+    private Map<String, Object> getHTMLMessages() throws IOException {
+        List<Map<String, Object>> violations = new ArrayList<>();
+        for (ViolationMessage msg : getExpectedMsgs()) {
+            Map<String, Object> violation = new HashMap<>();
+            Map<String, Object> location = new HashMap<>();
+            location.put(Messages.LINE_KEY, msg.getLineNumber());
+            location.put(Messages.COLUMN_KEY, msg.getColumnNumber());
+            violation.put(Messages.LOCATION_KEY, location);
+            switch (msg.getSeverity()) {
+                case ERROR:
+                    violation.put(Messages.ERROR, true);
+                    break;
+                case WARNING:
+                    violation.put(Messages.WARNING, true);
+                    break;
+                default:
+                    break;
+            }
+            violation.put(Messages.RULE_KEY, Rules.UPPER_CAMEL_CASE.getName());
+            violation.put(Messages.MESSAGE_KEY, msg.getMessage());
+            violations.add(violation);
+        }
+
+        Map<String, Object> file = new HashMap<>();
+        file.put(Messages.PATH_KEY, "");
+        file.put(Messages.PARSED_KEY, true);
+        file.put(Messages.VIOLATIONS_KEY, violations);
+        file.put(Messages.NUM_VIOLATIONS_KEY,
+            Formatter.pluralize(violations.size(), Messages.SINGLE_VIOLATION_KEY, Messages.MULTI_VIOLATIONS_KEY));
+
+        List<Object> files = new ArrayList<>();
+        files.add(file);
+
+        Map<String, Object> expectedOutput = new LinkedHashMap<>();
+        expectedOutput.put(Messages.FILES_KEY, files);
+        expectedOutput.put(Messages.SUMMARY_KEY,
+            Formatter.formatSummary(1, 0, 0, 22).replace(NEWLINE_PATTERN, ""));
+        expectedOutput.put(Messages.VERSION_LONG_OPT, new ConfigProperties().getVersion());
+        return expectedOutput;
     }
 
 }

@@ -24,9 +24,9 @@ import java.util.Map;
  */
 public final class HTMLFormatter extends Formatter {
 
-    private static final List<Map<String, Object>> FILES = new ArrayList<>();
-    private static final String TEMPLATE_PATH = "index.html";
+    protected static final String TEMPLATE_PATH = "index.html";
     private static final String NEWLINE_PATTERN = "\n";
+    private static final List<Map<String, Object>> FILES = new ArrayList<>();
 
     public HTMLFormatter(ColorSettings colorSettings) {
         super(colorSettings);
