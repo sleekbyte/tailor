@@ -13,8 +13,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,15 +78,9 @@ public final class HTMLFormatter extends Formatter {
         Map<String, Object> output = new HashMap<>();
         output.put(Messages.SUMMARY_KEY,
             Formatter.formatSummary(numFiles, numSkipped, numErrors, numWarnings).replace(NEWLINE_PATTERN, ""));
-        Collections.sort(FILES, Collections.reverseOrder(new Comparator<Map<String, Object>>() {
-            @Override
-            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-                return Integer.compare(
-                    ((List) o1.get(Messages.VIOLATIONS_KEY)).size(),
-                    ((List) o2.get(Messages.VIOLATIONS_KEY)).size()
-                );
-            }
-        }));
+        // Sort files by descending order of the number of violations
+        FILES.sort((o1, o2) ->
+            ((List) o2.get(Messages.VIOLATIONS_KEY)).size() - ((List) o1.get(Messages.VIOLATIONS_KEY)).size());
         output.put(Messages.FILES_KEY, FILES);
         output.put(Messages.VERSION_LONG_OPT, new ConfigProperties().getVersion());
 
