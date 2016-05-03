@@ -154,6 +154,7 @@ public abstract class Messages {
     public static final String CONFIG_FILE_DESC = "specify configuration file";
     public static final String LIST_FILES_DESC = "display Swift source files to be analyzed";
     public static final String FORMAT_DESC = "select an output format";
+    public static final String PURGE_DESC = "reduce memory usage by clearing DFA cache after every parse";
 
     // Runtime messages
     public static final String TAILOR_CONFIG_LOCATION = "Using Tailor configuration file at: ";
@@ -235,6 +236,7 @@ public abstract class Messages {
     public static final String LIST_FILES_OPT = "list-files";
     public static final String FORMAT_SHORT_OPT = "f";
     public static final String FORMAT_LONG_OPT = "format";
+    public static final String PURGE_OPT = "purge";
     public static final String INVALID_OPTION_VALUE = "Invalid value provided for option ";
 
     // Config options

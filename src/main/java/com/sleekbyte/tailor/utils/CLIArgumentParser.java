@@ -71,6 +71,13 @@ public final class CLIArgumentParser {
     }
 
     /**
+     * Check if "--purge" option was specified
+     */
+    public boolean shouldClearDFAs() {
+        return cmd != null && cmd.hasOption(Messages.PURGE_OPT);
+    }
+
+    /**
      * Print usage message with flag descriptions to STDOUT.
      */
     public void printHelp() {
@@ -151,6 +158,8 @@ public final class CLIArgumentParser {
         argName = Format.getFormats();
         options.addOption(createSingleArgOpt(Messages.FORMAT_SHORT_OPT, Messages.FORMAT_LONG_OPT, argName,
             Messages.FORMAT_DESC));
+
+        options.addOption(createNoArgOpt(Messages.PURGE_OPT, Messages.PURGE_DESC));
     }
 
     /**

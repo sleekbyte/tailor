@@ -66,6 +66,8 @@ public final class Configuration {
         return CLIArgumentParser.shouldListFiles();
     }
 
+    public boolean shouldClearDFAs() { return CLIArgumentParser.shouldClearDFAs(); }
+
     /**
      * Determine if the output should be colorized.
      *
