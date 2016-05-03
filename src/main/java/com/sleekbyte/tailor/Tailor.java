@@ -179,7 +179,7 @@ public final class Tailor {
     /**
      * Clear the DFA cache if --purge option is set.
      *
-     * @param parser SwiftParser current SwiftParser instance
+     * @param parser current SwiftParser instance
      */
     private void clearDFACache(SwiftParser parser) {
         if (configuration.shouldClearDFAs()) {
