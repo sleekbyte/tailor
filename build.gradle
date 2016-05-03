@@ -89,7 +89,7 @@ run {
 // Exclude unnecessary compile/runtime dependencies from distribution
 distributions.main.contents {
     exclude(
-        'antlr4-4.5.2-1.jar',
+        'antlr4-4.5.3.jar',
         'com/',
     )
 }
@@ -174,7 +174,8 @@ task gems(type: Exec) {
     outputs.dir file('src/dist/gems/vendor/')
     workingDir 'src/dist/gems'
     executable 'sh'
-    args '-c', 'bundle package --no-install'
+    // HACK: Workaround for bundler/bundler#4494
+    args '-c', 'bundle _1.11.2_ package --no-install'
 }
 // Ensure gems are packaged into distribution
 distZip.dependsOn 'gems'
@@ -253,12 +254,12 @@ repositories {
 }
 
 dependencies {
-    antlr 'org.antlr:antlr4:4.5.2-1'
-    genCompile 'org.antlr:antlr4-runtime:4.5.2-1'
+    antlr 'org.antlr:antlr4:4.5.3'
+    genCompileOnly 'org.antlr:antlr4-runtime:4.5.3'
     // Ensure ANTLR output is compiled before main sourceSet
     compile sourceSets.gen.output
     compile 'commons-cli:commons-cli:1.3.1'
-    compile 'org.antlr:antlr4-runtime:4.5.2-1'
+    compile 'org.antlr:antlr4-runtime:4.5.3'
     compile 'org.fusesource.jansi:jansi:1.11'
     compile 'org.yaml:snakeyaml:1.17'
     compile 'com.google.code.gson:gson:2.6.2'
