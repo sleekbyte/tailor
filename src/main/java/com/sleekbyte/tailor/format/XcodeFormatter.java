@@ -72,15 +72,7 @@ public final class XcodeFormatter extends Formatter {
 
     @Override
     public void displaySummary(long numFiles, long numSkipped, long numErrors, long numWarnings) {
-        long numFilesAnalyzed = numFiles - numSkipped;
-        long numViolations = numErrors + numWarnings;
-        System.out.println(String.format("%nAnalyzed %s, skipped %s, and detected %s (%s, %s).%n",
-            Formatter.pluralize(numFilesAnalyzed, "file", "files"),
-            Formatter.pluralize(numSkipped, "file", "files"),
-            Formatter.pluralize(numViolations, "violation", "violations"),
-            Formatter.pluralize(numErrors, "error", "errors"),
-            Formatter.pluralize(numWarnings, "warning", "warnings")
-        ));
+        System.out.println(Formatter.formatSummary(numFiles, numSkipped, numErrors, numWarnings));
     }
 
     private void printColoredMessage(String msg) {

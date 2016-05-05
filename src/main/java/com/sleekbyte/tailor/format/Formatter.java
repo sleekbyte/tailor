@@ -31,6 +31,7 @@ public abstract class Formatter {
 
     /**
      * Print a message to the console indicating that the file failed to be parsed.
+     *
      * @throws IOException if canonical path could not be retrieved from the inputFile
      */
     public abstract void displayParseErrorMessage(File inputFile) throws IOException;
@@ -42,8 +43,10 @@ public abstract class Formatter {
      * @param numSkipped number of files that could not be parsed successfully
      * @param numErrors number of errors detected during analysis
      * @param numWarnings number of warnings detected during analysis
+     * @throws IOException if an I/O error occurs
      */
-    public abstract void displaySummary(long numFiles, long numSkipped, long numErrors, long numWarnings);
+    public abstract void displaySummary(long numFiles, long numSkipped, long numErrors, long numWarnings)
+        throws IOException;
 
     /**
      * Determine an appropriate exit code for the application, depending on the number of errors and warnings found.
@@ -65,6 +68,27 @@ public abstract class Formatter {
      */
     public void printProgressInfo(String str) {
         System.out.print(str);
+    }
+
+    /**
+     * Generate the canonical summary string indicating the number of files analyzed and skipped, with violation info.
+     *
+     * @param numFiles number of files to be analyzed
+     * @param numSkipped number of files that could not be parsed successfully
+     * @param numErrors number of errors detected during analysis
+     * @param numWarnings number of warnings detected during analysis
+     * @return String representation of the canonical summary message
+     */
+    public static String formatSummary(long numFiles, long numSkipped, long numErrors, long numWarnings) {
+        long numFilesAnalyzed = numFiles - numSkipped;
+        long numViolations = numErrors + numWarnings;
+        return String.format("%nAnalyzed %s, skipped %s, and detected %s (%s, %s).%n",
+            pluralize(numFilesAnalyzed, "file", "files"),
+            pluralize(numSkipped, "file", "files"),
+            pluralize(numViolations, "violation", "violations"),
+            pluralize(numErrors, "error", "errors"),
+            pluralize(numWarnings, "warning", "warnings")
+        );
     }
 
     public static String pluralize(long number, String singular, String plural) {

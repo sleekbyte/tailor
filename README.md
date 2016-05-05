@@ -124,7 +124,7 @@ Options:
  -c,--config=<path/to/.tailor.yml>             specify configuration file
     --debug                                    print ANTLR error messages when parsing error occurs
     --except=<rule1,rule2,...>                 run all rules except the specified ones
- -f,--format=<xcode|json|cc>                   select an output format
+ -f,--format=<xcode|json|cc|html>              select an output format
  -h,--help                                     display help
     --invert-color                             invert colorized console output
  -l,--max-line-length=<0-999>                  maximum Line length (in characters)
@@ -393,6 +393,16 @@ $ tailor -f json main.swift
 }
 ```
 
+### HTML Formatter
+
+The `html` formatter outputs a complete HTML document that should be written to a file.
+
+```
+tailor -f html main.swift > tailor.html
+```
+
+![HTML format](https://cloud.githubusercontent.com/assets/1350704/14971733/236fd5b0-10a3-11e6-9a02-fa1e70702e47.png)
+
 # Developers
 
 Please review the [guidelines for contributing](https://github.com/sleekbyte/tailor/blob/master/.github/CONTRIBUTING.md) to this repository.
@@ -416,13 +426,14 @@ Tool                                                                    | Licens
 [Xcodeproj](https://github.com/CocoaPods/Xcodeproj)                     | [MIT](https://github.com/CocoaPods/Xcodeproj/blob/master/LICENSE)
 [SnakeYAML](https://bitbucket.org/asomov/snakeyaml)                     | [Apache License, Version 2.0](https://bitbucket.org/asomov/snakeyaml/raw/8939e0aa430d25b3b49b353508b23e072dd02171/LICENSE.txt)
 [Gson](https://github.com/google/gson)                                  | [Apache License, Version 2.0](https://github.com/google/gson/blob/master/LICENSE)
+[Mustache.java](https://github.com/spullara/mustache.java)              | [Apache License, Version 2.0](https://github.com/spullara/mustache.java/blob/master/LICENSE)
 
 ## Development Only
 
 Tool                                                         | License
 ------------------------------------------------------------ | ----------------------------------------------------------------------------------------
 [Gradle](https://gradle.org)                                 | [Apache License, Version 2.0](http://gradle.org/license/)
-[Travis CI](https://travis-ci.org)                           | [Free for Open Source Projects] (https://travis-ci.com/plans)
+[Travis CI](https://travis-ci.org)                           | [Free for Open Source Projects](https://travis-ci.com/plans)
 [Mockito](http://mockito.org)                                | [MIT](https://code.google.com/p/mockito/wiki/License)
 [JUnit](http://junit.org)                                    | [Eclipse Public License 1.0](http://junit.org/license)
 [Java Hamcrest](http://hamcrest.org/JavaHamcrest/)           | [The BSD 3-Clause License](http://opensource.org/licenses/BSD-3-Clause)
