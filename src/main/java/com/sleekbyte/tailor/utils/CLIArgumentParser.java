@@ -71,10 +71,17 @@ public final class CLIArgumentParser {
     }
 
     /**
-     * Check if "--purge" option was specified
+     * Check if "--purge" option was specified.
      */
     public boolean shouldClearDFAs() {
         return cmd != null && cmd.hasOption(Messages.PURGE_OPT);
+    }
+
+    /**
+     * Returns number specified with --purge option, or 0 if not specified.
+     */
+    public int numberOfFilesBeforePurge() throws CLIArgumentParserException {
+        return getIntegerArgument(Messages.PURGE_OPT);
     }
 
     /**
@@ -127,6 +134,7 @@ public final class CLIArgumentParser {
             Messages.MAX_LINE_LENGTH_DESC));
         options.addOption(createSingleArgOpt(Messages.MAX_NAME_LENGTH_OPT, argName, Messages.MAX_NAME_LENGTH_DESC));
         options.addOption(createSingleArgOpt(Messages.MAX_STRUCT_LENGTH_OPT, argName, Messages.MAX_STRUCT_LENGTH_DESC));
+        options.addOption(createSingleArgOpt(Messages.PURGE_OPT, argName, Messages.PURGE_DESC));
 
         argName = "1-999";
         options.addOption(createSingleArgOpt(Messages.MIN_NAME_LENGTH_OPT, argName, Messages.MIN_NAME_LENGTH_DESC));
@@ -158,8 +166,6 @@ public final class CLIArgumentParser {
         argName = Format.getFormats();
         options.addOption(createSingleArgOpt(Messages.FORMAT_SHORT_OPT, Messages.FORMAT_LONG_OPT, argName,
             Messages.FORMAT_DESC));
-
-        options.addOption(createNoArgOpt(Messages.PURGE_OPT, Messages.PURGE_DESC));
     }
 
     /**

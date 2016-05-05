@@ -24,6 +24,6 @@ public final class PurgeTest extends RuleTest {
 
     @Override
     protected String[] getCommandArgs() {
-        return new String[]{ "--purge", "--only=colon-whitespace" };
+        return new String[]{ "--purge", "20", "--only=colon-whitespace" };
     }
 }

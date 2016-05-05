@@ -154,7 +154,8 @@ public abstract class Messages {
     public static final String CONFIG_FILE_DESC = "specify configuration file";
     public static final String LIST_FILES_DESC = "display Swift source files to be analyzed";
     public static final String FORMAT_DESC = "select an output format";
-    public static final String PURGE_DESC = "reduce memory usage by clearing DFA cache after every parse";
+    public static final String PURGE_DESC = "reduce memory usage by clearing DFA cache after specified number "
+        + "of files are parsed";
 
     // Runtime messages
     public static final String TAILOR_CONFIG_LOCATION = "Using Tailor configuration file at: ";

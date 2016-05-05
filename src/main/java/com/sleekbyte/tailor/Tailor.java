@@ -56,7 +56,7 @@ public final class Tailor {
     public Configuration configuration;
     public ConcurrentSkipListSet<Printer> printersForAllFiles = new ConcurrentSkipListSet<>();
 
-    private static final int FILES_BEFORE_CLEARING_DFA = 20;
+    private int numberOfFilesBeforePurge;
     private AtomicInteger numFiles = new AtomicInteger(0);
 
     /**
@@ -185,8 +185,14 @@ public final class Tailor {
      */
     private void clearDFACache(SwiftParser parser) {
         numFiles.incrementAndGet();
-        if (numFiles.compareAndSet(FILES_BEFORE_CLEARING_DFA, 0)) {
+        if (numFiles.compareAndSet(numberOfFilesBeforePurge, 0)) {
             parser.getInterpreter().clearDFA();
+        }
+    }
+
+    private void setNumberOfFilesBeforePurge() throws CLIArgumentParserException {
+        if (configuration.shouldClearDFAs()) {
+            numberOfFilesBeforePurge = configuration.numberOfFilesBeforePurge();
         }
     }
 
@@ -295,6 +301,8 @@ public final class Tailor {
         Severity maxSeverity = configuration.getMaxSeverity();
         ConstructLengths constructLengths = configuration.parseConstructLengths();
         Set<Rules> enabledRules = configuration.getEnabledRules();
+
+        setNumberOfFilesBeforePurge();
 
         List<File> files = fileNames.parallelStream().map(File::new).collect(Collectors.toList());
         formatter.printProgressInfo(

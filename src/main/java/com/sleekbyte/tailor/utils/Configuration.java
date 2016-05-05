@@ -66,7 +66,13 @@ public final class Configuration {
         return CLIArgumentParser.shouldListFiles();
     }
 
-    public boolean shouldClearDFAs() { return CLIArgumentParser.shouldClearDFAs(); }
+    public boolean shouldClearDFAs() {
+        return CLIArgumentParser.shouldClearDFAs();
+    }
+
+    public int numberOfFilesBeforePurge() throws CLIArgumentParserException {
+        return CLIArgumentParser.numberOfFilesBeforePurge();
+    }
 
     /**
      * Determine if the output should be colorized.
