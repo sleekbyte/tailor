@@ -426,13 +426,14 @@ Tool                                                                    | Licens
 [Xcodeproj](https://github.com/CocoaPods/Xcodeproj)                     | [MIT](https://github.com/CocoaPods/Xcodeproj/blob/master/LICENSE)
 [SnakeYAML](https://bitbucket.org/asomov/snakeyaml)                     | [Apache License, Version 2.0](https://bitbucket.org/asomov/snakeyaml/raw/8939e0aa430d25b3b49b353508b23e072dd02171/LICENSE.txt)
 [Gson](https://github.com/google/gson)                                  | [Apache License, Version 2.0](https://github.com/google/gson/blob/master/LICENSE)
+[Mustache.java](https://github.com/spullara/mustache.java)              | [Apache License, Version 2.0](https://github.com/spullara/mustache.java/blob/master/LICENSE)
 
 ## Development Only
 
 Tool                                                         | License
 ------------------------------------------------------------ | ----------------------------------------------------------------------------------------
 [Gradle](https://gradle.org)                                 | [Apache License, Version 2.0](http://gradle.org/license/)
-[Travis CI](https://travis-ci.org)                           | [Free for Open Source Projects] (https://travis-ci.com/plans)
+[Travis CI](https://travis-ci.org)                           | [Free for Open Source Projects](https://travis-ci.com/plans)
 [Mockito](http://mockito.org)                                | [MIT](https://code.google.com/p/mockito/wiki/License)
 [JUnit](http://junit.org)                                    | [Eclipse Public License 1.0](http://junit.org/license)
 [Java Hamcrest](http://hamcrest.org/JavaHamcrest/)           | [The BSD 3-Clause License](http://opensource.org/licenses/BSD-3-Clause)
