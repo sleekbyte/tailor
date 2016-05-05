@@ -28,7 +28,6 @@ import com.sleekbyte.tailor.utils.CommentExtractor;
 import com.sleekbyte.tailor.utils.Configuration;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.atn.ATNSimulator;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.cli.ParseException;
 import org.yaml.snakeyaml.error.YAMLException;
@@ -56,6 +55,9 @@ public final class Tailor {
     public AtomicLong numWarnings = new AtomicLong(0);
     public Configuration configuration;
     public ConcurrentSkipListSet<Printer> printersForAllFiles = new ConcurrentSkipListSet<>();
+
+    private static final int FILES_BEFORE_CLEARING_DFA = 20;
+    private AtomicInteger numFiles = new AtomicInteger(0);
 
     /**
      * Non-zero exit status when any violation messages have Severity.ERROR, controlled by --max-severity
@@ -182,9 +184,9 @@ public final class Tailor {
      * @param parser current SwiftParser instance
      */
     private void clearDFACache(SwiftParser parser) {
-        if (configuration.shouldClearDFAs()) {
-            ATNSimulator simulator = parser.getInterpreter();
-            simulator.clearDFA();
+        numFiles.incrementAndGet();
+        if (numFiles.compareAndSet(FILES_BEFORE_CLEARING_DFA, 0)) {
+            parser.getInterpreter().clearDFA();
         }
     }
 
@@ -209,7 +211,9 @@ public final class Tailor {
         } catch (CLIArgumentParserException e) {
             handleCLIException(e);
         }
-        clearDFACache(swiftParser);
+        if (configuration.shouldClearDFAs()) {
+            clearDFACache(swiftParser);
+        }
         return tree;
     }
 
