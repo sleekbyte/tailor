@@ -271,3 +271,9 @@ struct Rect {
         }
     }
 }
+
+public convenience init(name: String...) rethrows  {
+}
+
+public convenience init(name: String...) throws {
+}
