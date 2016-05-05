@@ -67,11 +67,33 @@ public final class Configuration {
     }
 
     public boolean shouldClearDFAs() {
-        return CLIArgumentParser.shouldClearDFAs();
+        return CLIArgumentParser.shouldClearDFAs()
+            || (yamlConfiguration.isPresent() && yamlConfiguration.get().isPurgeSet());
     }
 
+    /**
+     * Returns number of files specified by the user for the "purge" option.
+     * NOTE: This method assumes that the purge option has been set i.e. shouldClearDFA() returns true
+     *
+     * @return number specified for the "purge" option
+     * @throws CLIArgumentParserException, YAMLException
+     */
     public int numberOfFilesBeforePurge() throws CLIArgumentParserException {
-        return CLIArgumentParser.numberOfFilesBeforePurge();
+        if (CLIArgumentParser.shouldClearDFAs()) {
+            int purge = CLIArgumentParser.numberOfFilesBeforePurge();
+            if (purge >= 1) {
+                return purge;
+            } else {
+                throw new CLIArgumentParserException("Invalid number of files specified for purge");
+            }
+        }
+
+        int purge = yamlConfiguration.get().getPurge();
+        if (purge >= 1) {
+            return purge;
+        } else {
+            throw new YAMLException("Invalid number of files specified for purge in config file");
+        }
     }
 
     /**
