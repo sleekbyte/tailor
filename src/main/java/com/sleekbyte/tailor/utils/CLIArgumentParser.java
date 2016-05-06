@@ -134,10 +134,10 @@ public final class CLIArgumentParser {
             Messages.MAX_LINE_LENGTH_DESC));
         options.addOption(createSingleArgOpt(Messages.MAX_NAME_LENGTH_OPT, argName, Messages.MAX_NAME_LENGTH_DESC));
         options.addOption(createSingleArgOpt(Messages.MAX_STRUCT_LENGTH_OPT, argName, Messages.MAX_STRUCT_LENGTH_DESC));
-        options.addOption(createSingleArgOpt(Messages.PURGE_OPT, argName, Messages.PURGE_DESC));
 
         argName = "1-999";
         options.addOption(createSingleArgOpt(Messages.MIN_NAME_LENGTH_OPT, argName, Messages.MIN_NAME_LENGTH_DESC));
+        options.addOption(createSingleArgOpt(Messages.PURGE_OPT, argName, Messages.PURGE_DESC));
 
 
         argName = "error|warning (default)";

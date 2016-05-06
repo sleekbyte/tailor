@@ -190,12 +190,6 @@ public final class Tailor {
         }
     }
 
-    private void setNumberOfFilesBeforePurge() throws CLIArgumentParserException {
-        if (configuration.shouldClearDFAs()) {
-            numberOfFilesBeforePurge = configuration.numberOfFilesBeforePurge();
-        }
-    }
-
     /**
      * Parse token stream to generate a CST.
      *
@@ -302,7 +296,7 @@ public final class Tailor {
         ConstructLengths constructLengths = configuration.parseConstructLengths();
         Set<Rules> enabledRules = configuration.getEnabledRules();
 
-        setNumberOfFilesBeforePurge();
+        numberOfFilesBeforePurge = configuration.numberOfFilesBeforePurge();
 
         List<File> files = fileNames.parallelStream().map(File::new).collect(Collectors.toList());
         formatter.printProgressInfo(

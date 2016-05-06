@@ -1,8 +1,10 @@
 package com.sleekbyte.tailor.functional.yaml;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.sleekbyte.tailor.Tailor;
+import com.sleekbyte.tailor.common.ExitCode;
 import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.common.Rules;
 import com.sleekbyte.tailor.common.Severity;
@@ -11,6 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -39,12 +42,16 @@ public final class YamlConfigurationTest {
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
 
+    @Rule
+    public final ExpectedSystemExit exit = ExpectedSystemExit.none();
+
     protected static final String TEST_INPUT_DIR = "src/test/swift/com/sleekbyte/tailor/functional/yaml";
     protected static final String NEWLINE_REGEX = "\\r?\\n";
     private static final String YAML_TEST_1 = "YamlTest1.swift";
     private static final String YAML_TEST_2 = "YamlTest2.swift";
 
     protected ByteArrayOutputStream outContent;
+    protected ByteArrayOutputStream errContent;
     protected File inputFile;
     protected List<String> expectedMessages;
 
@@ -53,12 +60,15 @@ public final class YamlConfigurationTest {
         inputFile = new File(TEST_INPUT_DIR);
         expectedMessages = new ArrayList<>();
         outContent = new ByteArrayOutputStream();
+        errContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent, false, Charset.defaultCharset().name()));
+        System.setErr(new PrintStream(errContent, false, Charset.defaultCharset().name()));
     }
 
     @After
     public void tearDown() {
         System.setOut(null);
+        System.setErr(null);
     }
 
     @Test
@@ -304,6 +314,85 @@ public final class YamlConfigurationTest {
             actualOutput.toArray());
     }
 
+    @Test
+    public void testPurge() throws IOException {
+        addExpectedMsg(12, 15,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        addExpectedMsg(13, 18,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        addExpectedMsg(17, 15,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        addExpectedMsg(18, 18,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        addExpectedMsg(20, 26,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        addExpectedMsg(21, 16,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        addExpectedMsg(25, 63,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        addExpectedMsg(27, 71,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        addExpectedMsg(29, 57,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        addExpectedMsg(31, 4,
+            Rules.TERMINATING_SEMICOLON,
+            Messages.STATEMENTS + Messages.SEMICOLON,
+            YAML_TEST_1);
+
+        File configurationFile = purgeConfig(".tailor.yml");
+        String[] command = new String[] {
+            "--only", "terminating-semicolon",
+            "--config", configurationFile.getAbsolutePath(),
+            "--no-color"
+        };
+        runTest(command);
+    }
+
+    @Test
+    public void testInvalidPurge() throws IOException {
+        exit.expectSystemExitWithStatus(ExitCode.failure());
+
+        exit.checkAssertionAfterwards(() ->
+            assertTrue("STDERR should contain error message",
+                errContent.toString().contains("Invalid number of files specified for purge in config file")));
+
+        File configurationFile = invalidPurgeConfig(".tailor.yml");
+        String[] command = new String[] {
+            "--only", "terminating-semicolon",
+            "--config", configurationFile.getAbsolutePath(),
+            "--no-color"
+        };
+
+        Tailor.main(command);
+    }
+
     private void addExpectedMsg(int line, int column, Rules rule, String msg, String fileName) {
         expectedMessages.add(
             Printer.genOutputStringForTest(rule, inputFile.getName() + "/" + fileName,
@@ -361,6 +450,30 @@ public final class YamlConfigurationTest {
         printWriter.println("  - '**/" + YAML_TEST_2 + "'");
         printWriter.println("except:");
         printWriter.println("  - upper-camel-case");
+        streamWriter.close();
+        printWriter.close();
+        return configFile;
+    }
+
+    private File purgeConfig(String fileName) throws IOException {
+        File configFile = folder.newFile(fileName);
+        Writer streamWriter = new OutputStreamWriter(new FileOutputStream(configFile), Charset.forName("UTF-8"));
+        PrintWriter printWriter = new PrintWriter(streamWriter);
+        printWriter.println("purge: 1");
+        printWriter.println("include:");
+        printWriter.println("  - '**/" + YAML_TEST_1 + "'");
+        streamWriter.close();
+        printWriter.close();
+        return configFile;
+    }
+
+    private File invalidPurgeConfig(String fileName) throws IOException {
+        File configFile = folder.newFile(fileName);
+        Writer streamWriter = new OutputStreamWriter(new FileOutputStream(configFile), Charset.forName("UTF-8"));
+        PrintWriter printWriter = new PrintWriter(streamWriter);
+        printWriter.println("purge: -1");
+        printWriter.println("include:");
+        printWriter.println("  - '**/" + YAML_TEST_1 + "'");
         streamWriter.close();
         printWriter.close();
         return configFile;
