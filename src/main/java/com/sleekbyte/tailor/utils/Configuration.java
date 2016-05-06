@@ -66,6 +66,39 @@ public final class Configuration {
         return CLIArgumentParser.shouldListFiles();
     }
 
+    public boolean shouldClearDFAs() {
+        return CLIArgumentParser.shouldClearDFAs()
+            || (yamlConfiguration.isPresent() && yamlConfiguration.get().isPurgeSet());
+    }
+
+    /**
+     * Returns number of files specified by the user for the "purge" option.
+     *
+     * @return number specified for the "purge" option
+     */
+    public int numberOfFilesBeforePurge() throws CLIArgumentParserException {
+        if (CLIArgumentParser.shouldClearDFAs()) {
+            int purge = CLIArgumentParser.numberOfFilesBeforePurge();
+            if (purge >= 1) {
+                return purge;
+            } else {
+                throw new CLIArgumentParserException("Invalid number of files specified for purge.");
+            }
+        }
+
+        if (!yamlConfiguration.isPresent() || !yamlConfiguration.get().isPurgeSet()) {
+            // Purge is not set in CLI or config
+            return 0;
+        }
+
+        int purge = yamlConfiguration.get().getPurge();
+        if (purge >= 1) {
+            return purge;
+        } else {
+            throw new YAMLException("Invalid number of files specified for purge in config file.");
+        }
+    }
+
     /**
      * Determine if the output should be colorized.
      *

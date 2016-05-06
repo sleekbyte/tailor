@@ -71,6 +71,20 @@ public final class CLIArgumentParser {
     }
 
     /**
+     * Check if "--purge" option was specified.
+     */
+    public boolean shouldClearDFAs() {
+        return cmd != null && cmd.hasOption(Messages.PURGE_OPT);
+    }
+
+    /**
+     * Returns number specified with --purge option, or 0 if not specified.
+     */
+    public int numberOfFilesBeforePurge() throws CLIArgumentParserException {
+        return getIntegerArgument(Messages.PURGE_OPT);
+    }
+
+    /**
      * Print usage message with flag descriptions to STDOUT.
      */
     public void printHelp() {
@@ -123,6 +137,7 @@ public final class CLIArgumentParser {
 
         argName = "1-999";
         options.addOption(createSingleArgOpt(Messages.MIN_NAME_LENGTH_OPT, argName, Messages.MIN_NAME_LENGTH_DESC));
+        options.addOption(createSingleArgOpt(Messages.PURGE_OPT, argName, Messages.PURGE_DESC));
 
 
         argName = "error|warning (default)";

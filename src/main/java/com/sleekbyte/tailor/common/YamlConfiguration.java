@@ -21,6 +21,9 @@ public final class YamlConfiguration {
     private String format = "";
     private boolean debug = false;
     private String color = "";
+    private int purge = 0;
+
+    private boolean purgeSet = false;
 
     public String getFormat() {
         return format;
@@ -54,6 +57,10 @@ public final class YamlConfiguration {
         return color;
     }
 
+    public int getPurge() {
+        return purge;
+    }
+
     public void setFileLocation(String fileLocation) {
         this.fileLocation = Optional.ofNullable(fileLocation);
     }
@@ -84,6 +91,15 @@ public final class YamlConfiguration {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public void setPurge(int purge) {
+        this.purge = purge;
+        purgeSet = true;
+    }
+
+    public boolean isPurgeSet() {
+        return purgeSet;
     }
 
 }

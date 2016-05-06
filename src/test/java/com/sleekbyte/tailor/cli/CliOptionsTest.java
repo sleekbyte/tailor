@@ -138,4 +138,16 @@ public final class CliOptionsTest {
         Tailor.main(command);
     }
 
+    @Test
+    public void testPurgeWithInvalidInput() throws IOException {
+        exit.expectSystemExitWithStatus(ExitCode.failure());
+        String inputPath = Paths.get(TEST_DIR).toString();
+        String[] command = { "--purge=-1", inputPath };
+
+        exit.checkAssertionAfterwards(() ->
+            assertTrue(errContent.toString().startsWith("Invalid number of files specified for purge")));
+
+        Tailor.main(command);
+    }
+
 }
