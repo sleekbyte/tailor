@@ -139,6 +139,8 @@ Options:
     --min-name-length=<1-999>                  minimum Identifier name length (in characters)
     --no-color                                 disable colorized console output
     --only=<rule1,rule2,...>                   run only the specified rules
+    --purge=<1-999>                            reduce memory usage by clearing DFA cache after
+                                               specified number of files are parsed
     --show-rules                               show description for each rule
  -v,--version                                  display version
     --xcode=<path/to/project.xcodeproj>        add Tailor Build Phase Run Script to Xcode Project
