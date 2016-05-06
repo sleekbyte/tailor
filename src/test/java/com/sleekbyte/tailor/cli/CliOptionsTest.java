@@ -56,11 +56,11 @@ public final class CliOptionsTest {
         String[] command = { "--help" };
 
         exit.checkAssertionAfterwards(() -> {
-            String[] msgs = outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
-            String actualUsageMessage = msgs[0];
-            String expectedUsageMessage = "Usage: " + Messages.CMD_LINE_SYNTAX;
-            assertEquals(expectedUsageMessage, actualUsageMessage);
-        });
+                String[] msgs = outContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
+                String actualUsageMessage = msgs[0];
+                String expectedUsageMessage = "Usage: " + Messages.CMD_LINE_SYNTAX;
+                assertEquals(expectedUsageMessage, actualUsageMessage);
+            });
 
         Tailor.main(command);
     }
@@ -96,11 +96,11 @@ public final class CliOptionsTest {
         String[] command = { "" };
 
         exit.checkAssertionAfterwards(() -> {
-            String[] msgs = errContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
-            String actualErrorMessage = msgs[0];
-            String expectedErrorMessage = Messages.NO_SWIFT_FILES_FOUND;
-            assertEquals(expectedErrorMessage, actualErrorMessage);
-        });
+                String[] msgs = errContent.toString(Charset.defaultCharset().name()).split(NEWLINE_REGEX);
+                String actualErrorMessage = msgs[0];
+                String expectedErrorMessage = Messages.NO_SWIFT_FILES_FOUND;
+                assertEquals(expectedErrorMessage, actualErrorMessage);
+            });
 
         Tailor.main(command);
     }
@@ -144,9 +144,8 @@ public final class CliOptionsTest {
         String inputPath = Paths.get(TEST_DIR).toString();
         String[] command = { "--purge=-1", inputPath };
 
-        exit.checkAssertionAfterwards(() -> {
-            assertTrue(errContent.toString().startsWith("Invalid number of files specified for purge"));
-        });
+        exit.checkAssertionAfterwards(() ->
+            assertTrue(errContent.toString().startsWith("Invalid number of files specified for purge")));
 
         Tailor.main(command);
     }

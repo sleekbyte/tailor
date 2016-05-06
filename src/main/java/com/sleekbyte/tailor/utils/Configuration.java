@@ -75,9 +75,8 @@ public final class Configuration {
      * Returns number of files specified by the user for the "purge" option.
      *
      * @return number specified for the "purge" option
-     * @throws CLIArgumentParserException, YAMLException
      */
-    public int numberOfFilesBeforePurge() throws CLIArgumentParserException, YAMLException {
+    public int numberOfFilesBeforePurge() throws CLIArgumentParserException {
         if (CLIArgumentParser.shouldClearDFAs()) {
             int purge = CLIArgumentParser.numberOfFilesBeforePurge();
             if (purge >= 1) {
