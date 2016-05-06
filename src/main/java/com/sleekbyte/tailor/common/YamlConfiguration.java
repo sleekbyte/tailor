@@ -21,7 +21,7 @@ public final class YamlConfiguration {
     private String format = "";
     private boolean debug = false;
     private String color = "";
-    private int purge = -1;
+    private int purge = 0;
 
     private boolean purgeSet = false;
 
