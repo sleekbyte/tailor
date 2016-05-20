@@ -628,7 +628,7 @@ implicitMemberExpression : '.' identifier  ;
 // GRAMMAR OF A PARENTHESIZED EXPRESSION
 
 parenthesizedExpression : '(' expressionElementList? ')'  ;
-expressionElementList : expressionElement (',' expressionElement)*  ;
+expressionElementList : expressionElement (','? expressionElement)*  ;
 expressionElement : expression | expressionElementIdentifier ':' expression  ;
 // Swift Language Reference does not have "keyword"
 expressionElementIdentifier: identifier | keyword ;
