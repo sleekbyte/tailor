@@ -183,3 +183,9 @@ func allItemsMatch<
     where C1.ItemType == C2.ItemType, C1.ItemType: Equatable>
     (someContainer: C1, _ anotherContainer: C2) -> Bool {
 }
+
+SystemError.description(for: errorNumber)
+SystemError.description(for:errorNumber)
+SystemError.description(for : errorNumber)
+SystemError.description(_:)
+SystemError.description(_ :)
