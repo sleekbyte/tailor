@@ -116,6 +116,12 @@ public class ColonWhitespaceTest extends RuleTest {
         addExpectedMessage(start + 6, 20, Messages.SPACE_AFTER);
         addExpectedMessage(start + 10, 8, Messages.NO_SPACE_BEFORE);
 
+        // expressionElement
+        start = 188;
+        addExpectedMessage(start, 28, Messages.SPACE_AFTER);
+        addExpectedMessage(start + 1, 29, Messages.NO_SPACE_BEFORE);
+        addExpectedMessage(start + 3, 27, Messages.NO_SPACE_BEFORE);
+
     }
 
     private void addExpectedMessage(int line, int column, String msg) {

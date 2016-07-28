@@ -99,9 +99,13 @@ public final class ColonWhitespaceListener extends SwiftBaseListener {
         if (ctx.expressionElementIdentifier() != null) {
             Token colon = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
             Token left = ctx.expressionElementIdentifier().getStop();
-            Token right = ctx.expression().getStart();
 
-            verifyColonLeftAssociation(left, right, colon);
+            if (ctx.expression() != null) {
+                Token right = ctx.expression().getStart();
+                verifyColonLeftAssociation(left, right, colon);
+            } else {
+                verifier.verifyPunctuationLeftAssociation(left, colon, Messages.COLON);
+            }
         }
     }
 
