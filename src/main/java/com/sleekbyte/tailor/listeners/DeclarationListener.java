@@ -2,6 +2,7 @@ package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.antlr.SwiftParser.ClosureParameterNameContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.IdentifierContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TopLevelContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.VariableNameContext;
@@ -94,6 +95,13 @@ public class DeclarationListener extends SwiftBaseListener {
             return;
         }
         evaluatePatternInitializerList(ctx.patternInitializerList());
+    }
+
+    @Override
+    public void enterClosureParameterName(ClosureParameterNameContext ctx) {
+        if (declarationType.equals(Declaration.CONSTANT_DEC)) {
+            extractIdentifier(ctx);
+        }
     }
 
     @Override

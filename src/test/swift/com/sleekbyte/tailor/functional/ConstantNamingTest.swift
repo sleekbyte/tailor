@@ -54,7 +54,7 @@ case let (x, y):
 }
 
 let many_strings = numbers.map {
-    (var number) -> String in
+    (number) -> String in
     var output = ""
     while number > 0 {
         output = digitNames[number % 10]! + output

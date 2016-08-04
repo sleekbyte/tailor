@@ -21,7 +21,7 @@ reversed = names.sort(>)
 reversed = names.sort() { $0 > $1 }
 
 let strings = numbers.map {
-    (var number) -> String in
+    (number) -> String in
     var output = ""
     while number > 0 {
         output = digitNames[number % 10]! + output

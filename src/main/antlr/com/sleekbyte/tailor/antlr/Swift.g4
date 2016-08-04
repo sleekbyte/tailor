@@ -609,13 +609,18 @@ superclassInitializerExpression : 'super' '.' 'init'  ;
 
 // Statements are not optional in the Swift Language Reference
 closureExpression : '{' closureSignature? statements? '}'  ;
+
 closureSignature
- : parameterClause functionResult? 'in'
- | identifierList functionResult? 'in'
- | captureList parameterClause functionResult? 'in'
- | captureList identifierList functionResult? 'in'
+ : captureList? closureParameterClause 'throws'? functionResult? 'in'
  | captureList 'in'
  ;
+
+closureParameterClause: '(' ')' | '(' closureParameterList ')' | identifierList ;
+closureParameterList: closureParameter (',' closureParameterList)* ;
+closureParameter: closureParameterName typeAnnotation?
+ | closureParameterName typeAnnotation '...'
+ ;
+closureParameterName: identifier ;
 
 captureList : '[' captureListItems ']' ;
 captureListItems: captureListItem (',' captureListItem)* ;

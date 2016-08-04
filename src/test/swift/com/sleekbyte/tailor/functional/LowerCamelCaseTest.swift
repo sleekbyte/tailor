@@ -53,7 +53,7 @@ private struct Scaling {
 }
 
 var many_times = numbers.map {
-    (var URL) -> String in
+    (URL) -> String in
     var Output = ""
     while number < 0 {
         number = 10

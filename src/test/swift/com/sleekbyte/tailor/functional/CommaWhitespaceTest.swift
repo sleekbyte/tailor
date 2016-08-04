@@ -307,3 +307,7 @@ case "a", "e", "i", "o",
   "u"," ": continue
 default: puzzleOutput.append(character)
 }
+
+reversed = names.sort( { s1, s2 in return s1 > s2 } )
+reversed = names.sort( { s1,s2 in return s1 > s2 } )
+reversed = names.sort( { s1 , s2 in return s1 > s2 } )

@@ -2,7 +2,7 @@ package com.sleekbyte.tailor.listeners.whitespace;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
-import com.sleekbyte.tailor.antlr.SwiftParser.ClosureSignatureContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ClosureParameterClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.FunctionNameContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.FunctionSignatureContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.GenericParameterClauseContext;
@@ -41,13 +41,13 @@ public final class ParenthesisWhitespaceListener extends SwiftBaseListener {
             }
         }
 
-        // (Issue #400): Check for one leading whitespace for parameter clauses inside a closure signature
-        if (parent instanceof ClosureSignatureContext) {
-            verifier.verifyLeadingWhitespaceBeforeBracket(ctx, Messages.CLOSURE_PARENTHESES_ONE_SPACE, 1);
-        } else {
-            verifier.verifyLeadingWhitespaceBeforeBracket(ctx, Messages.PARENTHESES, Messages.NO_WHITESPACE_BEFORE, 0);
-        }
+        verifier.verifyLeadingWhitespaceBeforeBracket(ctx, Messages.PARENTHESES, Messages.NO_WHITESPACE_BEFORE, 0);
+    }
 
+    @Override
+    public void enterClosureParameterClause(ClosureParameterClauseContext ctx) {
+        // (Issue #400): Check for one leading whitespace for parameter clauses inside a closure signature
+        verifier.verifyLeadingWhitespaceBeforeBracket(ctx, Messages.CLOSURE_PARENTHESES_ONE_SPACE, 1);
     }
 
     @Override
