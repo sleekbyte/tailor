@@ -100,3 +100,16 @@ var validSwiftVersion: Bool = {
     false
   #endif
 }
+
+@objc class SomeClass: NSObject {
+    var someProperty: Int
+    init(someProperty: Int) {
+        self.someProperty = someProperty
+    }
+    func keyPathTest() -> String {
+        return #keyPath(someProperty)
+    }
+}
+
+let c = SomeClass(someProperty: 12)
+let keyPath = #keyPath(SomeClass.someProperty)

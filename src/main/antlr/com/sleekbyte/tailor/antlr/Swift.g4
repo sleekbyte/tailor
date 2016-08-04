@@ -563,6 +563,7 @@ primaryExpression
 // | implicit_member_expression disallow as ambig with explicit member expr in postfix_expression
  | wildcardExpression
  | selectorExpression
+ | keyPathExpression
  ;
 
 // GRAMMAR OF A LITERAL EXPRESSION
@@ -641,6 +642,10 @@ wildcardExpression : '_'  ;
 // GRAMMAR OF A SELECTOR EXPRESSION
 
 selectorExpression: '#selector' '(' expression ')'  ;
+
+// GRAMMAR OF A KEY PATH EXPRESSION
+
+keyPathExpression: '#keyPath' '(' expression ')' ;
 
 // GRAMMAR OF A POSTFIX EXPRESSION
 
