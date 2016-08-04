@@ -768,6 +768,9 @@ postfixOperator : operator  ;
 sType
  : arrayType
  | dictionaryType
+ // tupleType is not in Swift Language Reference
+ | tupleType 'throws'? '->' sType    // function-type
+ | tupleType 'rethrows' '->' sType   // function-type
  | '(' sType ')' 'throws'? '->' sType  // function-type
  | '(' sType ')' 'rethrows' '->' sType // function-type
  | typeIdentifier
