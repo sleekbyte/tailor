@@ -30,7 +30,7 @@ let strings = numbers.map {
     return output
 }
 
-func makeIncrementer(forIncrement amount: Int) -> Void -> Int {
+func makeIncrementer(forIncrement amount: Int) -> (Void) -> Int {
     var runningTotal = 0
     func incrementer() -> Int {
         runningTotal += amount

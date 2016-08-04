@@ -34,8 +34,8 @@ public class ArrowWhitespaceTest extends RuleTest {
 
         // Function type arrow
         start = 37;
-        addExpectedMessage(start, 19, Messages.SPACE_BEFORE);
-        addExpectedMessage(start + 4, 20, Messages.SPACE_AFTER);
+        addExpectedMessage(start, 21, Messages.SPACE_BEFORE);
+        addExpectedMessage(start + 4, 22, Messages.SPACE_AFTER);
         addExpectedMessage(start + 8, 40, Messages.SPACE_BEFORE);
         addExpectedMessage(start + 12, 32, Messages.SPACE_AFTER);
 

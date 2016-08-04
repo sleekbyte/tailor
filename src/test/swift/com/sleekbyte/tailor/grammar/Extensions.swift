@@ -24,7 +24,7 @@ extension Rect {
 }
 
 extension Int {
-    func repetitions(task: () -> Void) {
+    func repetitions(task: () -> ()) {
         for _ in 0..<self {
             task()
         }

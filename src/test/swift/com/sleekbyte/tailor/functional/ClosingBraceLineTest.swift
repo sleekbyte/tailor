@@ -77,11 +77,11 @@ SomeExtension: X {
 
 func demo() {}
 
-func max<T, U: Comparable>(f: T -> U ) -> U? {
+func max<T, U: Comparable>(f: (T) -> U ) -> U? {
     return nil
 }
 
-func max<T, U: Comparable>(f: T -> U ) -> U? {
+func max<T, U: Comparable>(f: (T) -> U ) -> U? {
     return nil }
 
 protocol SomeProtocol {}
@@ -235,7 +235,7 @@ padawans.map() {
   (padawan: String) -> String in
   "\(padawan) has been trained!" }
 
-func applyMutliplication(value: Int, multFunction: Int -> Int) -> Int {
+func applyMutliplication(value: Int, multFunction: (Int) -> Int) -> Int {
   return multFunction(value)
 }
 
