@@ -4,8 +4,6 @@ jdk:
 before_install:
   - rvm install 2.3.0
   - gem update bundler
-    # HACK: Workaround for bundler/bundler#4494
-  - gem install bundler -v 1.11.2
 after_success:
   - ./gradlew coveralls
 before_deploy:
