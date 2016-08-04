@@ -768,8 +768,8 @@ postfixOperator : operator  ;
 sType
  : arrayType
  | dictionaryType
- | sType 'throws'? '->' sType  // function-type
- | sType 'rethrows' '->' sType // function-type
+ | '(' sType ')' 'throws'? '->' sType  // function-type
+ | '(' sType ')' 'rethrows' '->' sType // function-type
  | typeIdentifier
  | tupleType
  | sType '?'  // optional-type
@@ -788,7 +788,7 @@ implicitlyUnwrappedOptionalType: sType '!' ;
 
 // GRAMMAR OF A TYPE ANNOTATION
 
-typeAnnotation : ':' attributes? sType  ;
+typeAnnotation : ':' attributes? 'inout'? sType  ;
 
 // GRAMMAR OF A TYPE IDENTIFIER
 
@@ -805,7 +805,7 @@ typeName : identifier ;
 tupleType : '('  tupleTypeBody? ')'  ;
 tupleTypeBody : tupleTypeElementList '...'? ;
 tupleTypeElementList : tupleTypeElement (',' tupleTypeElement)*  ;
-tupleTypeElement : attributes? 'inout'? sType | 'inout'? elementName typeAnnotation ;
+tupleTypeElement : attributes? 'inout'? sType | elementName typeAnnotation ;
 elementName : identifier  ;
 
 // GRAMMAR OF A PROTOCOL COMPOSITION TYPE
