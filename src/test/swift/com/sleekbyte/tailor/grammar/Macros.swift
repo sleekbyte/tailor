@@ -113,3 +113,6 @@ var validSwiftVersion: Bool = {
 
 let c = SomeClass(someProperty: 12)
 let keyPath = #keyPath(SomeClass.someProperty)
+
+#sourceLocation(file: "foo", line: 42)
+#sourceLocation()    // reset to original position. 

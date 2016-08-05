@@ -840,27 +840,39 @@ typeInheritanceClause : ':' classRequirement ',' typeInheritanceList
 typeInheritanceList : typeIdentifier (',' typeIdentifier)* ;
 classRequirement: 'class' ;
 
-// ------ Build Configurations (Macros) -------
+// GRAMMAR OF A COMPILER CONTROL STATEMENT
 
-compilerControlStatement: buildConfigurationStatement | lineControlStatement ;
-buildConfigurationStatement: '#if' buildConfiguration statements? buildConfigurationElseIfClauses? buildConfigurationElseClause? '#endif' ;
-buildConfigurationElseIfClauses: buildConfigurationElseIfClause+ ;
-buildConfigurationElseIfClause: '#elseif' buildConfiguration statements? ;
-buildConfigurationElseClause: '#else' statements? ;
+compilerControlStatement: conditionalCompilationBlock | lineControlStatement ;
 
-buildConfiguration: platformTestingFunction | languageVersionTestingFunction | identifier | booleanLiteral
- | '(' buildConfiguration ')'
- | '!' buildConfiguration
- | buildConfiguration ('&&' | '||') buildConfiguration
+// GRAMMAR OF A CONDITIONAL COMPILATION BLOCK
+
+conditionalCompilationBlock: ifDirectiveClause elseifDirectiveClauses? elseDirectiveClause? '#endif' ;
+ifDirectiveClause: '#if' compilationCondition statements? ;
+elseifDirectiveClauses: elseifDirectiveClause+ ;
+elseifDirectiveClause: '#elseif' compilationCondition statements? ;
+elseDirectiveClause: '#else' statements? ;
+
+compilationCondition
+ : platformCondition
+ | identifier
+ | booleanLiteral
+ | '(' compilationCondition ')'
+ | '!' compilationCondition
+ | compilationCondition ('&&' | '||') compilationCondition
  ;
 
-platformTestingFunction: 'os' '(' operatingSystem ')' | 'arch' '(' architecture ')' ;
-languageVersionTestingFunction: 'swift' '(' '>=' swiftVersion ')' ;
+platformCondition
+ : 'os' '(' operatingSystem ')'
+ | 'arch' '(' architecture ')'
+ | 'swift' '(' '>=' swiftVersion ')'
+ ;
+
 operatingSystem: 'OSX' | 'iOS' | 'watchOS' | 'tvOS' ;
 architecture: 'i386' | 'x86_64' | 'arm' | 'arm64' ;
 swiftVersion: FloatingPointLiteral ;
 
-lineControlStatement: '#line' (lineNumber fileName)? ;
+lineControlStatement: '#sourceLocation' '(' 'file:' fileName ',' 'line:' lineNumber ')'
+ | '#sourceLocation' '(' ')' ;
 lineNumber: integerLiteral ;
 fileName: StringLiteral ;
 
