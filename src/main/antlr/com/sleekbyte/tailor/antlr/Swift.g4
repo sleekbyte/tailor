@@ -275,7 +275,7 @@ didSetClause : attributes? 'didSet' setterName? codeBlock  ;
 // GRAMMAR OF A TYPE ALIAS DECLARATION
 
 typealiasDeclaration : typealiasHead typealiasAssignment  ;
-typealiasHead : attributes? accessLevelModifier? 'typealias' typealiasName  ;
+typealiasHead : attributes? accessLevelModifier? 'typealias' typealiasName genericParameterClause?  ;
 typealiasName : identifier  ;
 typealiasAssignment : '=' sType  ;
 

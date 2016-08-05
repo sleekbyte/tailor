@@ -93,5 +93,11 @@ func blendFrameDstBytes(dstBytes: Array<UnsafeMutablePointer<UInt8>>,
                         offsetY: UInt32,
                         width: UInt32,
                         height: UInt32) {
-                          
+
 }
+
+typealias StringDictionary<T> = Dictionary<String, T>
+typealias DictionaryOfStrings<T : Hashable> = Dictionary<T, String>
+typealias IntFunction<T> = (T) -> Int
+typealias Vec3<T> = (T, T, T)
+typealias BackwardTriple<T1,T2,T3> = (T3, T2, T1)
