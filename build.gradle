@@ -174,8 +174,7 @@ task gems(type: Exec) {
     outputs.dir file('src/dist/gems/vendor/')
     workingDir 'src/dist/gems'
     executable 'sh'
-    // HACK: Workaround for bundler/bundler#4494
-    args '-c', 'bundle _1.11.2_ package --no-install'
+    args '-c', 'bundle package --no-install'
 }
 // Ensure gems are packaged into distribution
 distZip.dependsOn 'gems'
@@ -260,10 +259,10 @@ dependencies {
     compile sourceSets.gen.output
     compile 'commons-cli:commons-cli:1.3.1'
     compile 'org.antlr:antlr4-runtime:4.5.3'
-    compile 'org.fusesource.jansi:jansi:1.11'
+    compile 'org.fusesource.jansi:jansi:1.13'
     compile 'org.yaml:snakeyaml:1.17'
-    compile 'com.google.code.gson:gson:2.6.2'
-    compile 'com.github.spullara.mustache.java:compiler:0.9.1'
+    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.github.spullara.mustache.java:compiler:0.9.3'
     testCompile 'junit:junit:4.12'
     testCompile 'org.hamcrest:hamcrest-all:1.3'
     testCompile 'org.mockito:mockito-core:1.+'
