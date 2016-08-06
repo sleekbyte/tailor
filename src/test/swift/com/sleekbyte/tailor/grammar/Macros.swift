@@ -115,4 +115,20 @@ let c = SomeClass(someProperty: 12)
 let keyPath = #keyPath(SomeClass.someProperty)
 
 #sourceLocation(file: "foo", line: 42)
-#sourceLocation()    // reset to original position. 
+#sourceLocation()    // reset to original position.
+
+class Person: NSObject {
+    dynamic var firstName: String
+    dynamic let lastName: String
+    dynamic var fullName: String {
+        return "\(firstName) \(lastName)"
+    }
+
+    init(firstName: String, lastName: String) {
+        self.firstName = firstName
+        self.lastName = lastName
+    }
+}
+
+let firstNameGetter = #selector(getter: Person.firstName)
+let firstNameSetter = #selector(setter: Person.firstName)

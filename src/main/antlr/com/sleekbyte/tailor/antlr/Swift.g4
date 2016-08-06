@@ -645,7 +645,10 @@ wildcardExpression : '_'  ;
 
 // GRAMMAR OF A SELECTOR EXPRESSION
 
-selectorExpression: '#selector' '(' expression ')'  ;
+selectorExpression
+ : '#selector' '(' expression ')'
+ | '#selector' '(' ('getter:' | 'setter:') expression ')'
+ ;
 
 // GRAMMAR OF A KEY PATH EXPRESSION
 
@@ -788,6 +791,7 @@ sType
  | sType '!'  // implicitly-unwrapped-optional-type
  | protocolCompositionType
  | sType '.' 'Type' | sType '.' 'Protocol' // metatype
+ | 'Any' | 'Self'
  ;
 
 arrayType: '[' sType ']' ;
