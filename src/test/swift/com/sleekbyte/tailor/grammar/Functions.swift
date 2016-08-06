@@ -80,7 +80,7 @@ func arithmeticMean(numbers: Double...) -> Double {
 }
 arithmeticMean(1, 2, 3, 4, 5)
 
-func alignRight(var string: String, totalLength: Int, pad: Character) -> String {
+func alignRight(string: String, totalLength: Int, pad: Character) -> String {
     let amountToPad = totalLength - string.characters.count
     if amountToPad < 1 {
         return string
@@ -94,7 +94,7 @@ func alignRight(var string: String, totalLength: Int, pad: Character) -> String 
 let originalString = "hello"
 let paddedString = alignRight(originalString, totalLength: 10, pad: "-")
 
-func swapTwoInts(inout a: Int, inout _ b: Int) {
+func swapTwoInts(_ a: inout Int, _ b: inout Int) {
     let temporaryA = a
     a = b
     b = temporaryA

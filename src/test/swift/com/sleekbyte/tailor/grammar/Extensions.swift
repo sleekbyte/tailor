@@ -42,11 +42,10 @@ extension Int {
 }
 
 extension Int {
-    subscript(var digitIndex: Int) -> Int {
+    subscript(digitIndex: Int) -> Int {
         var decimalBase = 1
-        while digitIndex > 0 {
+        for _ in 0..<digitIndex {
             decimalBase *= 10
-            --digitIndex
         }
         return (self / decimalBase) % 10
     }

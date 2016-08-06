@@ -7,7 +7,6 @@ import com.sleekbyte.tailor.antlr.SwiftParser.IdentifierContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TopLevelContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.VariableNameContext;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.util.ArrayList;
@@ -120,15 +119,7 @@ public class DeclarationListener extends SwiftBaseListener {
 
     @Override
     public void enterParameter(SwiftParser.ParameterContext ctx) {
-        Declaration declType = Declaration.CONSTANT_DEC;
-        for (ParseTree child : ctx.children) {
-            if (child.getText().equals(VAR)) {
-                declType = Declaration.VARIABLE_DEC;
-                break;
-            }
-        }
-
-        if (!declType.equals(declarationType)) {
+        if (!declarationType.equals(Declaration.CONSTANT_DEC)) {
             return;
         }
 

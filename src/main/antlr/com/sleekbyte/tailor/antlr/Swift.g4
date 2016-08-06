@@ -297,14 +297,13 @@ functionBody : codeBlock  ;
 parameterClause : '(' ')' |  '(' parameterList '...'? ')'  ;
 parameterList : parameter (',' parameter)*  ;
 // Parameters don't have attributes in the Swift Language Reference
-parameter : attributes? 'inout'? 'let'? '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?
- | 'inout'? 'var' '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?
- | attributes? sType
- | externalParameterName? localParameterName typeAnnotation '...'
+parameter
+ : attributes? externalParameterName? localParameterName typeAnnotation defaultArgumentClause?
+ | attributes? externalParameterName? localParameterName typeAnnotation '...'
  ;
 // Swift Language Reference does not have "keyword"
-externalParameterName : identifier | keyword | '_'  ;
-localParameterName : identifier | '_'  ;
+externalParameterName : identifier | keyword  ;
+localParameterName : identifier  ;
 defaultArgumentClause : '=' expression  ;
 
 // GRAMMAR OF AN ENUMERATION DECLARATION
