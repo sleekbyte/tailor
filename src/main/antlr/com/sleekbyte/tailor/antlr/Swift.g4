@@ -822,9 +822,9 @@ elementName : identifier  ;
 
 // GRAMMAR OF A PROTOCOL COMPOSITION TYPE
 
-protocolCompositionType : 'protocol' '<' protocolIdentifierList? '>'  ;
-protocolIdentifierList : protocolIdentifier (',' protocolIdentifier)*  ;
-protocolIdentifier : typeIdentifier  ;
+protocolCompositionType: protocolIdentifier '&' protocolCompositionContinuation ;
+protocolCompositionContinuation: protocolIdentifier | protocolCompositionType ;
+protocolIdentifier: typeIdentifier ;
 
 // GRAMMAR OF A METATYPE TYPE
 
