@@ -124,11 +124,11 @@ if let roomCount = john.residence?.numberOfRooms {
     println("John's residence has \(roomCount) room(s).")
 }
 
-if let roomCount = john.residence?.numberOfRooms, roomCountTwo = john.residence?.numberOfRooms {
+if let roomCount = john.residence?.numberOfRooms, let roomCountTwo = john.residence?.numberOfRooms {
     println("John's residence has \(roomCount) room(s).")
 }
 
-if let roomCount = john.residence?.numberOfRooms,roomCountTwo = john.residence?.numberOfRooms {
+if let roomCount = john.residence?.numberOfRooms,let roomCountTwo = john.residence?.numberOfRooms {
     println("John's residence has \(roomCount) room(s).")
 }
 
@@ -137,7 +137,7 @@ if let roomCount = john.residence?.numberOfRooms , var roomCountTwo = john.resid
     println("John's residence has \(roomCount) room(s).")
 }
 
-if var x = point.x?.val,  var y = point.y?.val,z = point.z?.val {
+if var x = point.x?.val,  var y = point.y?.val,var z = point.z?.val {
   println(x, y, z)
 }
 

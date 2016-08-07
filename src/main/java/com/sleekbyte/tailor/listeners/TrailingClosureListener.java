@@ -1,7 +1,7 @@
 package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
-import com.sleekbyte.tailor.antlr.SwiftParser.ConditionClauseContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ConditionListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementListContext;
@@ -33,14 +33,14 @@ public final class TrailingClosureListener extends SwiftBaseListener {
      * @param ctx Parse tree node
      * @return true if ctx is inside a condition-clause.
      */
-    public static boolean isInsideConditionClause(ParserRuleContext ctx) {
+    public static boolean isInsideConditionList(ParserRuleContext ctx) {
         if (ctx == null) {
             return false;
         }
-        if (ctx instanceof ConditionClauseContext) {
+        if (ctx instanceof ConditionListContext) {
             return true;
         }
-        return isInsideConditionClause(ctx.getParent());
+        return isInsideConditionList(ctx.getParent());
     }
 
     @Override
@@ -48,7 +48,7 @@ public final class TrailingClosureListener extends SwiftBaseListener {
         ExpressionElementListContext elemList = ctx.parenthesizedExpression().expressionElementList();
 
         // Check if the function call is inside a condition clause (Issue #401)
-        if (isInsideConditionClause(ctx)) {
+        if (isInsideConditionList(ctx)) {
             return;
         }
 

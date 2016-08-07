@@ -51,9 +51,9 @@ public class ConstantNamingTest extends RuleTest {
         addExpectedMsg(Rules.CONSTANT_NAMING, 88, 17, Severity.WARNING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE);
         addExpectedMsg(Rules.CONSTANT_NAMING, 95, 8, Severity.WARNING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE);
         addExpectedMsg(Rules.CONSTANT_NAMING, 105, 14, Severity.WARNING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE);
-        addExpectedMsg(Rules.CONSTANT_NAMING, 112, 51, Severity.WARNING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE);
-        addExpectedMsg(Rules.CONSTANT_NAMING, 117, 61, Severity.WARNING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE);
-        addExpectedMsg(Rules.CONSTANT_NAMING, 118, 3, Severity.WARNING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE);
+        addExpectedMsg(Rules.CONSTANT_NAMING, 112, 55, Severity.WARNING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE);
+        addExpectedMsg(Rules.CONSTANT_NAMING, 117, 65, Severity.WARNING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE);
+        addExpectedMsg(Rules.CONSTANT_NAMING, 118, 7, Severity.WARNING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE);
         addExpectedMsg(Rules.CONSTANT_K_PREFIX, 127, 16, Severity.WARNING, Messages.CONSTANT + Messages.NAME
             + Messages.K_PREFIXED);
         addExpectedMsg(Rules.CONSTANT_K_PREFIX, 128, 16, Severity.WARNING, Messages.CONSTANT + Messages.NAME

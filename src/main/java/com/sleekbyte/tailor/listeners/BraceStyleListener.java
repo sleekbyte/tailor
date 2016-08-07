@@ -183,12 +183,12 @@ public class BraceStyleListener extends SwiftBaseListener {
     }
 
     private void verifyWhileLoopBraceStyle(SwiftParser.WhileStatementContext ctx) {
-        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), ctx.conditionClause().getStop(), Messages.WHILE_STATEMENT);
+        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), ctx.conditionList().getStop(), Messages.WHILE_STATEMENT);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.WHILE_STATEMENT);
     }
 
     private void verifyIfStatementBraceStyle(SwiftParser.IfStatementContext ctx) {
-        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), ctx.conditionClause().getStop(), Messages.IF_STATEMENT);
+        verifyCodeBlockOpenBraceStyle(ctx.codeBlock(), ctx.conditionList().getStop(), Messages.IF_STATEMENT);
         verifyBodyCloseBraceStyle(ctx.codeBlock(), Messages.IF_STATEMENT);
     }
 

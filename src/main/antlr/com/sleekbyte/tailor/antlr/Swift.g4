@@ -68,11 +68,11 @@ forInStatement : 'for' 'case'? pattern 'in' expression whereClause? codeBlock  ;
 
 // GRAMMAR OF A WHILE STATEMENT
 
-whileStatement : 'while' conditionClause codeBlock  ;
+whileStatement : 'while' conditionList codeBlock  ;
 
 // GRAMMAR OF A REPEAT WHILE STATEMENT
 
-repeatWhileStatement: 'repeat' codeBlock 'while' conditionClause ;
+repeatWhileStatement: 'repeat' codeBlock 'while' expression ;
 
 // GRAMMAR OF A BRANCH STATEMENT
 
@@ -80,12 +80,12 @@ branchStatement : ifStatement | guardStatement | switchStatement  ;
 
 // GRAMMAR OF AN IF STATEMENT
 
-ifStatement : 'if' conditionClause codeBlock elseClause? ;
+ifStatement : 'if' conditionList codeBlock elseClause? ;
 elseClause : 'else' codeBlock | 'else' ifStatement  ;
 
 // GRAMMAR OF A GUARD STATEMENT
 
-guardStatement : 'guard' conditionClause 'else' codeBlock ;
+guardStatement : 'guard' conditionList 'else' codeBlock ;
 
 // GRAMMAR OF A SWITCH STATEMENT
 
@@ -142,22 +142,10 @@ doStatement: 'do' codeBlock catchClauses? ;
 catchClauses: catchClause catchClauses? ;
 catchClause: 'catch' pattern? whereClause? codeBlock ;
 
-// GRAMMAR FOR CONDITION CLAUSES
-
-conditionClause : expression
- | expression ',' conditionList
- | conditionList
- | availabilityCondition ',' expression
- ;
-
 conditionList : condition (',' condition)* ;
-condition: availabilityCondition | caseCondition | optionalBindingCondition ;
-caseCondition: 'case' pattern initializer whereClause? ;
-// optionalBindingCondition is incorrect in the Swift Language Reference (missing a ',')
-optionalBindingCondition: optionalBindingHead (',' optionalBindingContinuationList)? whereClause? ;
-optionalBindingHead: 'let' pattern initializer | 'var' pattern initializer ;
-optionalBindingContinuationList: optionalBindingContinuation (',' optionalBindingContinuation)* ;
-optionalBindingContinuation: optionalBindingHead | pattern initializer ;
+condition: availabilityCondition | caseCondition | optionalBindingCondition | expression ;
+caseCondition: 'case' pattern initializer ;
+optionalBindingCondition: ('let'|'var') pattern initializer ;
 
 whereClause: 'where' whereExpression ;
 whereExpression: expression ;
