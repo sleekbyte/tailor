@@ -159,3 +159,14 @@ public func fopen(path: String..., mode: String = "r") throws -> UnsafeMutablePo
 public static func errorWithCode(code: Code, failureReason: String) -> NSError {
     return errorWithCode(code.rawValue, failureReason: failureReason)
 }
+
+@discardableResult
+public func upload(
+    _ method: Method,
+    _ URLString: URLStringConvertible,
+    headers: [String: String]? = nil,
+    file: URL)
+    -> Request
+{
+    return Manager.sharedInstance.upload(method, URLString, headers: headers, file: file)
+}

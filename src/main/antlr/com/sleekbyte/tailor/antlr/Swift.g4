@@ -289,8 +289,8 @@ parameter
  : attributes? externalParameterName? localParameterName typeAnnotation defaultArgumentClause?
  | attributes? externalParameterName? localParameterName typeAnnotation '...'
  ;
-// Swift Language Reference does not have "keyword"
-externalParameterName : identifier | keyword  ;
+// Swift Language Reference does not have "keyword" or "_"
+externalParameterName : identifier | keyword | '_';
 localParameterName : identifier  ;
 defaultArgumentClause : '=' expression  ;
 
@@ -862,7 +862,7 @@ operatingSystem: 'OSX' | 'iOS' | 'watchOS' | 'tvOS' ;
 architecture: 'i386' | 'x86_64' | 'arm' | 'arm64' ;
 swiftVersion: FloatingPointLiteral ;
 
-lineControlStatement: '#sourceLocation' '(' 'file:' fileName ',' 'line:' lineNumber ')'
+lineControlStatement: '#sourceLocation' '(' 'file' ':' fileName ',' 'line' ':' lineNumber ')'
  | '#sourceLocation' '(' ')' ;
 lineNumber: integerLiteral ;
 fileName: StringLiteral ;
@@ -898,7 +898,7 @@ contextSensitiveKeyword :
  'lazy' | 'left' | 'mutating' | 'none' | 'nonmutating' | 'optional' | 'operator' | 'override' | 'postfix' | 'precedence' |
  'prefix' | 'Protocol' | 'required' | 'right' | 'set' | 'Type' | 'unowned' | 'weak' | 'willSet' |
  'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS' | 'x86_64' |
- 'arm' | 'arm64' | 'i386' | 'os' | 'arch' | 'safe' | 'tvOS'
+ 'arm' | 'arm64' | 'i386' | 'os' | 'arch' | 'safe' | 'tvOS' | 'file' | 'line'
  ;
 
 OperatorHead
