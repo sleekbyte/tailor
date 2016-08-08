@@ -170,3 +170,19 @@ public func upload(
 {
     return Manager.sharedInstance.upload(method, URLString, headers: headers, file: file)
 }
+
+public class func suggestedDownloadDestination(
+        directory: FileManager.SearchPathDirectory = .documentDirectory,
+        domain: FileManager.SearchPathDomainMask = .userDomainMask)
+        -> DownloadFileDestination
+    {
+        return { temporaryURL, response -> URL in
+            let directoryURLs = FileManager.default.urls(for: directory, in: domain)
+
+            if !directoryURLs.isEmpty {
+                return directoryURLs[0].appendingPathComponent(response.suggestedFilename!)
+            }
+
+            return temporaryURL
+        }
+    }
