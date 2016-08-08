@@ -607,7 +607,8 @@ closureParameterList: closureParameter (',' closureParameterList)* ;
 closureParameter: closureParameterName typeAnnotation?
  | closureParameterName typeAnnotation '...'
  ;
-closureParameterName: identifier ;
+// Swift Language Reference does not have "_"
+closureParameterName: identifier | '_';
 
 captureList : '[' captureListItems ']' ;
 captureListItems: captureListItem (',' captureListItem)* ;

@@ -42,3 +42,12 @@ func makeIncrementer(forIncrement amount: Int) -> (Void) -> Int {
 downloader?.downloadImage(URLRequest: URLRequest(.GET, "https://httpbin.org/image/png")) { _, _, _ in
     // No-op
 }
+
+let callbackEnabled = SCNetworkReachabilitySetCallback(
+    reachability,
+    { (_, flags, info) in
+        let reachability = Unmanaged<NetworkReachabilityManager>.fromOpaque(info!).takeUnretainedValue()
+        reachability.notifyListener(flags)
+    },
+    &context
+)
