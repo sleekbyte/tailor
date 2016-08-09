@@ -77,3 +77,8 @@ public func getFormattedLabel(index: Int) -> String
 }
 
 import let SwiftCovFramework.SwiftCovFrameworkBundleIdentifier
+
+infix operator >>->> {
+	associativity right
+	precedence 110
+}

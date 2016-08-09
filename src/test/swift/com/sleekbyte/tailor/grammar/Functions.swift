@@ -186,3 +186,7 @@ public class func suggestedDownloadDestination(
             return temporaryURL
         }
     }
+
+public static func shrink(_ : Self) -> [Self] {
+	 return []
+}

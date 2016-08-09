@@ -102,3 +102,16 @@ extension Array {
 
 @available(iOS 9.0, OSX 10.11, tvOS 9.0, *)
 extension Manager.SessionDelegate: NSURLSessionStreamDelegate {}
+
+extension Integer {
+	/// Shrinks any `IntegerType`.
+	public var shrinkIntegral : [Self] {
+		return unfoldr({ i in
+			if i <= 0 {
+				return .none
+			}
+			let n = i / 2
+			return .some((n, n))
+		}, initial: self < 0 ? (Self.multiplyWithOverflow(self, -1).0) : self)
+	}
+}

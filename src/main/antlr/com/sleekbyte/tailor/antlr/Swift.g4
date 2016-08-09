@@ -291,7 +291,7 @@ parameter
  ;
 // Swift Language Reference does not have "keyword" or "_"
 externalParameterName : identifier | keyword | '_';
-localParameterName : identifier  ;
+localParameterName : identifier | '_' ;
 defaultArgumentClause : '=' expression  ;
 
 // GRAMMAR OF AN ENUMERATION DECLARATION
@@ -714,7 +714,7 @@ explicitMemberExpression
 // are also referenced individually. For example, type signatures use
 // <...>.
 
-operatorHead: '=' | '<' | '>' | '!' | '*' | '&' | '==' | '?' | '-' | '&&' | '||' | '/' | '>=' | OperatorHead;
+operatorHead: '=' | '<' | '>' | '!' | '*' | '&' | '==' | '?' | '-' | '&&' | '||' | '/' | '>=' | '->' | OperatorHead;
 operatorCharacter: operatorHead | OperatorCharacter;
 
 operator: operatorHead operatorCharacter*
@@ -800,7 +800,6 @@ typeAnnotation : ':' attributes? 'inout'? sType  ;
 typeIdentifier
  : typeName genericArgumentClause?
  | typeName genericArgumentClause? '.' typeIdentifier
- | 'Self' // Swift Language Reference does not have this
  ;
 
 typeName : identifier ;
@@ -899,7 +898,7 @@ contextSensitiveKeyword :
  'lazy' | 'left' | 'mutating' | 'none' | 'nonmutating' | 'optional' | 'operator' | 'override' | 'postfix' | 'precedence' |
  'prefix' | 'Protocol' | 'required' | 'right' | 'set' | 'Type' | 'unowned' | 'weak' | 'willSet' |
  'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS' | 'x86_64' |
- 'arm' | 'arm64' | 'i386' | 'os' | 'arch' | 'safe' | 'tvOS' | 'file' | 'line' | 'default'
+ 'arm' | 'arm64' | 'i386' | 'os' | 'arch' | 'safe' | 'tvOS' | 'file' | 'line' | 'default' | 'Self' | 'var'
  ;
 
 OperatorHead

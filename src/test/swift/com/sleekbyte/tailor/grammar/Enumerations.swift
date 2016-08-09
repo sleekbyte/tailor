@@ -162,3 +162,16 @@ public enum SystemError: ErrorType {
     case unlink(Int32, String)
     case waitpid(Int32)
 }
+
+func == (l : Exp, r : Exp) -> Bool {
+	switch (l, r) {
+	case let (.lam(ln, le), .lam(rn, re)):
+		return ln == rn && le == re
+	case let (.app(ln, le), .app(rn, re)):
+		return ln == rn && le == re
+	case let (.var(n1), .var(n2)):
+		return n1 == n2
+	default:
+		return false
+	}
+}
