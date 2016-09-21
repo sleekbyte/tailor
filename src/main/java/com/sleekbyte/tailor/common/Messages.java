@@ -199,6 +199,9 @@ public abstract class Messages {
     public static final String MULTI_VIOLATIONS_KEY = "violations";
     public static final String NUM_VIOLATIONS_KEY = "num_violations";
 
+    // Formatter messages
+    public static final String FILE_KEY = "file";
+
     // Error messages
     public static final String NO_SWIFT_FILES_FOUND = "No Swift source files were found.";
     public static final String COULD_NOT_BE_PARSED = " could not be parsed successfully, skipping...";

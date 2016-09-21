@@ -84,11 +84,12 @@ public final class HTMLFormatter extends Formatter {
         output.put(Messages.FILES_KEY, FILES);
         output.put(Messages.VERSION_LONG_OPT, new ConfigProperties().getVersion());
 
-        Mustache mustache = new DefaultMustacheFactory().compile(
-            new InputStreamReader(this.getClass().getResourceAsStream(TEMPLATE_PATH), Charset.defaultCharset()),
-            TEMPLATE_PATH
-        );
+        InputStreamReader inputStreamReader = new InputStreamReader(
+            HTMLFormatter.class.getResourceAsStream(TEMPLATE_PATH),
+            Charset.defaultCharset());
+        Mustache mustache = new DefaultMustacheFactory().compile(inputStreamReader, TEMPLATE_PATH);
         mustache.execute(new OutputStreamWriter(System.out, Charset.defaultCharset()), output).flush();
+        inputStreamReader.close();
     }
 
     @Override

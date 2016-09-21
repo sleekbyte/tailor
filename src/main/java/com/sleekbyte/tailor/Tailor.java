@@ -169,6 +169,7 @@ public final class Tailor {
                 lexer.removeErrorListeners();
                 lexer.addErrorListener(new ErrorListener());
             }
+            inputStream.close();
             return Optional.of(new CommonTokenStream(lexer));
         } catch (IOException e) {
             handleIOException(e);

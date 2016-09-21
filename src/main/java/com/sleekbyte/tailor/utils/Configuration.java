@@ -252,7 +252,7 @@ public final class Configuration {
     /**
      * Data object to represent a Code Climate configuration, i.e. "config.json".
      */
-    private class ConfigJSON {
+    private static class ConfigJSON {
         // Name cannot be camel case because it must match key from Code Climate spec
         @SuppressWarnings("checkstyle:membername")
         private List<String> include_paths;
@@ -341,7 +341,7 @@ public final class Configuration {
      */
     private static Optional<String> getSrcRoot() {
         String srcRoot = System.getenv("SRCROOT");
-        if (srcRoot == null || srcRoot.equals("")) {
+        if (srcRoot == null || srcRoot.length() == 0) {
             return Optional.empty();
         }
         return Optional.of(srcRoot);

@@ -2,6 +2,7 @@ package com.sleekbyte.tailor.format;
 
 import com.sleekbyte.tailor.common.ColorSettings;
 import com.sleekbyte.tailor.common.ExitCode;
+import com.sleekbyte.tailor.common.Messages;
 import com.sleekbyte.tailor.output.ViolationMessage;
 
 import java.io.File;
@@ -83,11 +84,11 @@ public abstract class Formatter {
         long numFilesAnalyzed = numFiles - numSkipped;
         long numViolations = numErrors + numWarnings;
         return String.format("%nAnalyzed %s, skipped %s, and detected %s (%s, %s).%n",
-            pluralize(numFilesAnalyzed, "file", "files"),
-            pluralize(numSkipped, "file", "files"),
-            pluralize(numViolations, "violation", "violations"),
-            pluralize(numErrors, "error", "errors"),
-            pluralize(numWarnings, "warning", "warnings")
+            pluralize(numFilesAnalyzed, Messages.FILE_KEY, Messages.FILES_KEY),
+            pluralize(numSkipped, Messages.FILE_KEY, Messages.FILES_KEY),
+            pluralize(numViolations, Messages.SINGLE_VIOLATION_KEY, Messages.MULTI_VIOLATIONS_KEY),
+            pluralize(numErrors, Messages.ERROR, Messages.ERRORS_KEY),
+            pluralize(numWarnings, Messages.WARNING, Messages.WARNINGS_KEY)
         );
     }
 
