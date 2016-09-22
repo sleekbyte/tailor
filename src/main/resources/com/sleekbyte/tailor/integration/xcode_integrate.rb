@@ -18,6 +18,7 @@ tailor_gems_dir = find_tailor + 'gems/installed'
 tailor_cache_dir = find_tailor + 'gems/vendor/cache'
 ENV['GEM_HOME'] = tailor_gems_dir.to_s
 ENV['GEM_PATH'] = tailor_gems_dir.to_s
+Gem.use_paths(ENV['GEM_HOME'], ENV['GEM_PATH'])
 cmd = "gem install --local --no-rdoc --no-ri xcodeproj-*.gem"
 Dir.chdir(tailor_cache_dir.to_s){ %%x[#{cmd}] }
 require 'xcodeproj'
