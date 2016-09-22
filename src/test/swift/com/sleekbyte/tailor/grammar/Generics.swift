@@ -1,10 +1,16 @@
-func swapTwoDoubles(inout a: Double, inout _ b: Double) {
+func swapTwoInts(_ a: inout Int, _ b: inout Int) {
     let temporaryA = a
     a = b
     b = temporaryA
 }
 
-func swapTwoValues<T>(inout a: T, inout _ b: T) {
+func swapTwoStrings(_ a: inout String, _ b: inout String) {
+    let temporaryA = a
+    a = b
+    b = temporaryA
+}
+
+func swapTwoDoubles(_ a: inout Double, _ b: inout Double) {
     let temporaryA = a
     a = b
     b = temporaryA
@@ -93,5 +99,11 @@ func blendFrameDstBytes(dstBytes: Array<UnsafeMutablePointer<UInt8>>,
                         offsetY: UInt32,
                         width: UInt32,
                         height: UInt32) {
-                          
+
 }
+
+typealias StringDictionary<T> = Dictionary<String, T>
+typealias DictionaryOfStrings<T : Hashable> = Dictionary<T, String>
+typealias IntFunction<T> = (T) -> Int
+typealias Vec3<T> = (T, T, T)
+typealias BackwardTriple<T1,T2,T3> = (T3, T2, T1)

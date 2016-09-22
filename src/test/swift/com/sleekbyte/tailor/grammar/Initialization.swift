@@ -200,7 +200,7 @@ struct Celsius {
         temperatureInCelsius = (fahrenheit - 32.0) / 1.8
     }
 
-    init(_: (Int) throws -> Bool) rethrows {
-        temperatureInCelsius = 2;
+    init(_ celsius: Double) {
+        temperatureInCelsius = celsius
     }
 }

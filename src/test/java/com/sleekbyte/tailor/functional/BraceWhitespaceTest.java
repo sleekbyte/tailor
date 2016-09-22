@@ -56,7 +56,7 @@ public class BraceWhitespaceTest extends RuleTest {
         // closures
         start = 167;
         addExpectedMsg(start, 29);
-        addExpectedMsg(start + 14, 72);
+        addExpectedMsg(start + 14, 74);
         addExpectedMsg(start + 18, 17);
 
         // extensions

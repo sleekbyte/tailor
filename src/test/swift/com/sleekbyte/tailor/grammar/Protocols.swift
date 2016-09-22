@@ -150,8 +150,8 @@ struct Person: Named, Aged {
     var name: String
     var age: Int
 }
-func wishHappyBirthday(celebrator: protocol<Named, Aged>) {
-    print("Happy birthday \(celebrator.name) - you're \(celebrator.age)!")
+func wishHappyBirthday(to celebrator: Named & Aged) {
+    print("Happy birthday, \(celebrator.name), you're \(celebrator.age)!")
 }
 let birthdayPerson = Person(name: "Malcolm", age: 21)
 

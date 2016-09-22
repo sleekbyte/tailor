@@ -172,7 +172,7 @@ let tupleception = (statusCode: (statusCode : 200, description: "OK"), descripti
 func someFunction<T: SomeClass, U: SomeProtocol>(someT: T, someU: U) {
 }
 
-func someFunction<T : SomeClass, U:protocol<SomeProtocol> >(someT: T, someU: U) {
+func someFunction<T : SomeClass, U:SomeProtocol & AnotherProtocol >(someT: T, someU: U) {
 }
 
 func someFunction<T:  SomeClass, U: SomeProtocol>(someT: T, someU: U) {

@@ -24,7 +24,7 @@ extension Rect {
 }
 
 extension Int {
-    func repetitions(task: () -> Void) {
+    func repetitions(task: () -> ()) {
         for _ in 0..<self {
             task()
         }
@@ -42,11 +42,10 @@ extension Int {
 }
 
 extension Int {
-    subscript(var digitIndex: Int) -> Int {
+    subscript(digitIndex: Int) -> Int {
         var decimalBase = 1
-        while digitIndex > 0 {
+        for _ in 0..<digitIndex {
             decimalBase *= 10
-            --digitIndex
         }
         return (self / decimalBase) % 10
     }
@@ -103,3 +102,16 @@ extension Array {
 
 @available(iOS 9.0, OSX 10.11, tvOS 9.0, *)
 extension Manager.SessionDelegate: NSURLSessionStreamDelegate {}
+
+extension Integer {
+	/// Shrinks any `IntegerType`.
+	public var shrinkIntegral : [Self] {
+		return unfoldr({ i in
+			if i <= 0 {
+				return .none
+			}
+			let n = i / 2
+			return .some((n, n))
+		}, initial: self < 0 ? (Self.multiplyWithOverflow(self, -1).0) : self)
+	}
+}

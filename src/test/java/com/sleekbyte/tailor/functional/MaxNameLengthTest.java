@@ -43,9 +43,9 @@ public class MaxNameLengthTest extends RuleTest {
         addExpectedNameMsg(38, 33, Messages.TYPE + Messages.NAME, 6, 5);
         addExpectedNameMsg(41, 9, Messages.VARIABLE + Messages.NAME, 19, 5);
         addExpectedNameMsg(48, 6, Messages.FUNCTION + Messages.NAME, 24, 5);
-        addExpectedNameMsg(48, 35, Messages.VARIABLE + Messages.NAME, 25, 5); // external param
-        addExpectedLineMsg(48, 41, Messages.LINE, 99, 40);
-        addExpectedNameMsg(48, 61, Messages.VARIABLE + Messages.NAME, 23, 5); // local param
+        addExpectedNameMsg(48, 31, Messages.CONSTANT + Messages.NAME, 25, 5); // external param
+        addExpectedLineMsg(48, 41, Messages.LINE, 95, 40);
+        addExpectedNameMsg(48, 57, Messages.CONSTANT + Messages.NAME, 23, 5); // local param
         addExpectedNameMsg(52, 5, Messages.CONSTANT + Messages.NAME, 23, 5);
         addExpectedNameMsg(53, 5, Messages.VARIABLE + Messages.NAME, 23, 5);
         addExpectedNameMsg(55, 6, Messages.ENUM + Messages.NAME, 8, 5);

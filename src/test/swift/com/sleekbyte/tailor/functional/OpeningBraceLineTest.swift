@@ -213,7 +213,7 @@ padawans.map({
   "\(padawan) has been trained!"
 })
 
-func applyMutliplication(value: Int, multFunction: Int -> Int) -> Int {
+func applyMutliplication(value: Int, multFunction: (Int) -> Int) -> Int {
   return multFunction(value)
 }
 
@@ -248,11 +248,11 @@ padawans.map
   "\(padawan) has been trained!"
 }
 
-func max<T, U: Comparable>(f: T -> U ) -> U? {
+func max<T, U: Comparable>(f: (T) -> U ) -> U? {
     return nil
 }
 
-func max<T, U: Comparable>(f: T -> U ) -> U?
+func max<T, U: Comparable>(f: (T) -> U ) -> U?
 {
     return nil
 }

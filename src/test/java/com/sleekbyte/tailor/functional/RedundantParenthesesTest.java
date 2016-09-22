@@ -21,11 +21,11 @@ public class RedundantParenthesesTest extends RuleTest {
     @Override
     protected void addAllExpectedMsgs() {
         int start = 3;
-        addExpectedMsg(start, 8, Severity.WARNING, Messages.CONDITIONAL_CLAUSE + Messages.ENCLOSED_PARENTHESES);
-        addExpectedMsg(start + 3, 13, Severity.WARNING, Messages.CONDITIONAL_CLAUSE + Messages.ENCLOSED_PARENTHESES);
-        addExpectedMsg(start + 7, 10, Severity.WARNING, Messages.CONDITIONAL_CLAUSE + Messages.ENCLOSED_PARENTHESES);
-        addExpectedMsg(start + 13, 13, Severity.WARNING, Messages.CONDITIONAL_CLAUSE + Messages.ENCLOSED_PARENTHESES);
-        addExpectedMsg(start + 15, 11, Severity.WARNING, Messages.CONDITIONAL_CLAUSE + Messages.ENCLOSED_PARENTHESES);
+        addExpectedMsg(start, 8, Severity.WARNING, Messages.CONDITION + Messages.ENCLOSED_PARENTHESES);
+        addExpectedMsg(start + 3, 13, Severity.WARNING, Messages.CONDITION + Messages.ENCLOSED_PARENTHESES);
+        addExpectedMsg(start + 7, 10, Severity.WARNING, Messages.CONDITION + Messages.ENCLOSED_PARENTHESES);
+        addExpectedMsg(start + 13, 13, Severity.WARNING, Messages.CONDITION + Messages.ENCLOSED_PARENTHESES);
+        addExpectedMsg(start + 15, 11, Severity.WARNING, Messages.CONDITION + Messages.ENCLOSED_PARENTHESES);
         addExpectedMsg(start + 18, 12, Severity.WARNING, Messages.SWITCH_EXPRESSION + Messages.ENCLOSED_PARENTHESES);
         addExpectedMsg(start + 25, 13, Severity.WARNING, Messages.CATCH_CLAUSE + Messages.ENCLOSED_PARENTHESES);
         addExpectedMsg(start + 29, 11, Severity.WARNING, Messages.THROW_STATEMENT + Messages.ENCLOSED_PARENTHESES);

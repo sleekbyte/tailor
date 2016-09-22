@@ -4,7 +4,7 @@ import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
 import com.sleekbyte.tailor.antlr.SwiftParser.ArrayLiteralItemContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.CatchClauseContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.ConditionClauseContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ConditionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryLiteralItemContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.FunctionCallWithClosureExpressionContext;
@@ -12,6 +12,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser.InitializerContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ParenthesizedExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.PatternContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.RepeatWhileStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.SwitchStatementContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ThrowStatementContext;
 import com.sleekbyte.tailor.common.Location;
@@ -33,8 +34,13 @@ public class RedundantParenthesesListener extends SwiftBaseListener {
     }
 
     @Override
-    public void enterConditionClause(ConditionClauseContext ctx) {
-        verifyRedundantExpressionParentheses(Messages.CONDITIONAL_CLAUSE, ctx.expression());
+    public void enterCondition(ConditionContext ctx) {
+        verifyRedundantExpressionParentheses(Messages.CONDITION, ctx.expression());
+    }
+
+    @Override
+    public void enterRepeatWhileStatement(RepeatWhileStatementContext ctx) {
+        verifyRedundantExpressionParentheses(Messages.CONDITION, ctx.expression());
     }
 
     @Override

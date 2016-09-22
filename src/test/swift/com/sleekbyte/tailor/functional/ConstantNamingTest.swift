@@ -54,7 +54,7 @@ case let (x, y):
 }
 
 let many_strings = numbers.map {
-    (var number) -> String in
+    (number) -> String in
     var output = ""
     while number > 0 {
         output = digitNames[number % 10]! + output
@@ -109,17 +109,17 @@ for thing in things {
     }
 }
 
-if let roomCount = john.residence?.numberOfRooms, RoomCount = john.residence?.numberOfRooms {
+if let roomCount = john.residence?.numberOfRooms, let RoomCount = john.residence?.numberOfRooms {
     println("John's residence has \(roomCount) room(s).")
 }
 
 if let hello = john.residence?.numberOfRooms, var ShouldNotMatter = john.residence?.numberOfRooms,
-  StillShouldNotMatter = john.residence?.numberOfRooms, let BadName = john.residence?.numberOfRooms,
-  AlsoBadName = john.residence?.number {
+  var StillShouldNotMatter = john.residence?.numberOfRooms, let BadName = john.residence?.numberOfRooms,
+  let AlsoBadName = john.residence?.number {
     println("John's residence has \(roomCount) room(s).")
 }
 
-if var ShouldNotMatter = john.residence?.numberOfRooms, RoomCount = john.residence?.numberOfRooms {
+if var ShouldNotMatter = john.residence?.numberOfRooms, var RoomCount = john.residence?.numberOfRooms {
     println("John's residence has \(roomCount) room(s).")
 }
 

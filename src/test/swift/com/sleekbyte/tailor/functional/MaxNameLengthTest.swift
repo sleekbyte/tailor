@@ -45,7 +45,7 @@ struct Rect { // test enterVariableName
     }
 }
 
-func myFunctionNameIsAlsoLong(var longExternalParameterName aLongLocalParameterName: Int) -> Bool {
+func myFunctionNameIsAlsoLong(longExternalParameterName aLongLocalParameterName: Int) -> Bool {
     return true
 }
 

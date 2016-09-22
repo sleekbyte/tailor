@@ -4,13 +4,5 @@
 
 set -e
 
-# Enable the Gradle Daemon for the current user: https://docs.gradle.org/current/userguide/gradle_daemon.html
-GRADLE_PROPERTIES=~/.gradle/gradle.properties
-GRADLE_DAEMON_ENABLE="org.gradle.daemon=true"
-mkdir -p ~/.gradle/ && touch "${GRADLE_PROPERTIES}"
-if ! grep "${GRADLE_DAEMON_ENABLE}" "${GRADLE_PROPERTIES}" >/dev/null; then
-  echo "${GRADLE_DAEMON_ENABLE}" >> "${GRADLE_PROPERTIES}"
-fi
-
 # Install bundler if nonexistent
 gem list -i bundler >/dev/null || gem install bundler

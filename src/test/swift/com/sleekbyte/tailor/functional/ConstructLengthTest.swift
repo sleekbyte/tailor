@@ -8,7 +8,7 @@ func sayHello(personName: String) -> String {
 class Greeting {
 
     // Check Function with Nested Function length
-    func makeIncrementer(forIncrement amount: Int) -> Void -> Int {
+    func makeIncrementer(forIncrement amount: Int) -> () -> Int {
         var runningTotal = 0
 
         func incrementer() -> Int {

@@ -1,4 +1,4 @@
-func helloWorld(var nameOfVar: String) {
+func helloWorld(nameOfVar: String) {
     var URL = "https://tailor.sh"
     var helloWorld = 3
     var thisWorld = 10
@@ -53,7 +53,7 @@ private struct Scaling {
 }
 
 var many_times = numbers.map {
-    (var URL) -> String in
+    (URL) -> String in
     var Output = ""
     while number < 0 {
         number = 10
@@ -119,7 +119,7 @@ func ** (left: Double, right: Double) -> Double {
 
 infix operator **= { associativity right precedence 90 }
 
-func **= (inout left: Double, right: Double) {
+func **= (left: inout Double, right: Double) {
     left = left ** right
 }
 
