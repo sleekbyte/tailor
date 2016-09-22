@@ -19,7 +19,7 @@ public class ConfigProperties {
     }
 
     protected InputStream getConfigResource() {
-        return getClass().getResourceAsStream(CONFIG_RESOURCE_PATH);
+        return ConfigProperties.class.getResourceAsStream(CONFIG_RESOURCE_PATH);
     }
 
     private String getProperty(String key, String defaultValue) throws IOException {

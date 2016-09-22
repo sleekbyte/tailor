@@ -162,8 +162,7 @@ public final class Tailor {
      * @return Token stream
      */
     private Optional<CommonTokenStream> getTokenStream(File input) {
-        try {
-            FileInputStream inputStream = new FileInputStream(input);
+        try (FileInputStream inputStream = new FileInputStream(input)) {
             SwiftLexer lexer = new SwiftLexer(new ANTLRInputStream(inputStream));
             if (!configuration.debugFlagSet()) {
                 lexer.removeErrorListeners();
