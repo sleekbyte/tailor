@@ -22,12 +22,12 @@ func allItemsMatch < C1: Container, C2: Container
     (someContainer: C1, _ anotherContainer: C2) -> Bool {}
 
 
-func <<<T>(inout left: [T], right: [T]) -> [T] {
+func <<<T>(left: inout [T], right: [T]) -> [T] {
     left.extend(right)
     return left
 }
 
-func << <T>(inout left: [T], right: [T]) -> [T] {
+func << <T>(left: inout [T], right: [T]) -> [T] {
     left.extend(right)
     return left
 }

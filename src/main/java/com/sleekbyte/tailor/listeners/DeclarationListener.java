@@ -2,11 +2,11 @@ package com.sleekbyte.tailor.listeners;
 
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser;
+import com.sleekbyte.tailor.antlr.SwiftParser.ClosureParameterNameContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.IdentifierContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TopLevelContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.VariableNameContext;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.util.ArrayList;
@@ -97,6 +97,13 @@ public class DeclarationListener extends SwiftBaseListener {
     }
 
     @Override
+    public void enterClosureParameterName(ClosureParameterNameContext ctx) {
+        if (declarationType.equals(Declaration.CONSTANT_DEC)) {
+            extractIdentifier(ctx);
+        }
+    }
+
+    @Override
     public void enterVariableName(VariableNameContext ctx) {
         if (declarationType.equals(Declaration.VARIABLE_DEC)) {
             extractIdentifier(ctx);
@@ -112,15 +119,7 @@ public class DeclarationListener extends SwiftBaseListener {
 
     @Override
     public void enterParameter(SwiftParser.ParameterContext ctx) {
-        Declaration declType = Declaration.CONSTANT_DEC;
-        for (ParseTree child : ctx.children) {
-            if (child.getText().equals(VAR)) {
-                declType = Declaration.VARIABLE_DEC;
-                break;
-            }
-        }
-
-        if (!declType.equals(declarationType)) {
+        if (!declarationType.equals(Declaration.CONSTANT_DEC)) {
             return;
         }
 
@@ -132,48 +131,10 @@ public class DeclarationListener extends SwiftBaseListener {
 
     @Override
     public void enterOptionalBindingCondition(SwiftParser.OptionalBindingConditionContext ctx) {
-        /*  Optional Binding is tricky. Consider the following Swift code:
-            if let const1 = foo?.bar, const2 = foo?.bar, var var1 = foo?.bar, var2 = foo?.bar {
-                ...
-            }
-            const1 and const2 are both constants even though only const1 has 'let' before it.
-            var1 and var2 are both variables as there is a 'var' before var1 and no 'let' before var2.
-
-            The code below iterates through each declared variable and applies rules based on the last seen binding,
-            'let' or 'var'.
-         */
-        String currentBinding = letOrVar(ctx.optionalBindingHead());
+        String currentBinding = ctx.getChild(0).getText();
         if (currentBinding.equals(getKeyword())) {
-            evaluateOptionalBindingHead(ctx.optionalBindingHead());
-        }
-        SwiftParser.OptionalBindingContinuationListContext continuationList = ctx.optionalBindingContinuationList();
-        if (continuationList != null) {
-            for (SwiftParser.OptionalBindingContinuationContext continuation :
-                continuationList.optionalBindingContinuation()) {
-                if (continuation.optionalBindingHead() != null) {
-                    currentBinding = letOrVar(continuation.optionalBindingHead());
-                }
-                if (currentBinding.equals(getKeyword())) {
-                    evaluateOptionalBindingContinuation(continuation);
-                }
-            }
-        }
-    }
-
-    private void evaluateOptionalBindingHead(SwiftParser.OptionalBindingHeadContext ctx) {
-        evaluatePattern(ctx.pattern());
-    }
-
-    private void evaluateOptionalBindingContinuation(SwiftParser.OptionalBindingContinuationContext ctx) {
-        if (ctx.optionalBindingHead() != null) {
-            evaluateOptionalBindingHead(ctx.optionalBindingHead());
-        } else {
             evaluatePattern(ctx.pattern());
         }
-    }
-
-    private String letOrVar(SwiftParser.OptionalBindingHeadContext ctx) {
-        return ctx.getChild(0).getText();
     }
 
     private void extractIdentifier(ParserRuleContext ctx) {

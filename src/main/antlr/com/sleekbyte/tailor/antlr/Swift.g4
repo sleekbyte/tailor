@@ -68,11 +68,11 @@ forInStatement : 'for' 'case'? pattern 'in' expression whereClause? codeBlock  ;
 
 // GRAMMAR OF A WHILE STATEMENT
 
-whileStatement : 'while' conditionClause codeBlock  ;
+whileStatement : 'while' conditionList codeBlock  ;
 
 // GRAMMAR OF A REPEAT WHILE STATEMENT
 
-repeatWhileStatement: 'repeat' codeBlock 'while' conditionClause ;
+repeatWhileStatement: 'repeat' codeBlock 'while' expression ;
 
 // GRAMMAR OF A BRANCH STATEMENT
 
@@ -80,12 +80,12 @@ branchStatement : ifStatement | guardStatement | switchStatement  ;
 
 // GRAMMAR OF AN IF STATEMENT
 
-ifStatement : 'if' conditionClause codeBlock elseClause? ;
+ifStatement : 'if' conditionList codeBlock elseClause? ;
 elseClause : 'else' codeBlock | 'else' ifStatement  ;
 
 // GRAMMAR OF A GUARD STATEMENT
 
-guardStatement : 'guard' conditionClause 'else' codeBlock ;
+guardStatement : 'guard' conditionList 'else' codeBlock ;
 
 // GRAMMAR OF A SWITCH STATEMENT
 
@@ -142,22 +142,10 @@ doStatement: 'do' codeBlock catchClauses? ;
 catchClauses: catchClause catchClauses? ;
 catchClause: 'catch' pattern? whereClause? codeBlock ;
 
-// GRAMMAR FOR CONDITION CLAUSES
-
-conditionClause : expression
- | expression ',' conditionList
- | conditionList
- | availabilityCondition ',' expression
- ;
-
 conditionList : condition (',' condition)* ;
-condition: availabilityCondition | caseCondition | optionalBindingCondition ;
-caseCondition: 'case' pattern initializer whereClause? ;
-// optionalBindingCondition is incorrect in the Swift Language Reference (missing a ',')
-optionalBindingCondition: optionalBindingHead (',' optionalBindingContinuationList)? whereClause? ;
-optionalBindingHead: 'let' pattern initializer | 'var' pattern initializer ;
-optionalBindingContinuationList: optionalBindingContinuation (',' optionalBindingContinuation)* ;
-optionalBindingContinuation: optionalBindingHead | pattern initializer ;
+condition: availabilityCondition | caseCondition | optionalBindingCondition | expression ;
+caseCondition: 'case' pattern initializer ;
+optionalBindingCondition: ('let'|'var') pattern initializer ;
 
 whereClause: 'where' whereExpression ;
 whereExpression: expression ;
@@ -275,7 +263,7 @@ didSetClause : attributes? 'didSet' setterName? codeBlock  ;
 // GRAMMAR OF A TYPE ALIAS DECLARATION
 
 typealiasDeclaration : typealiasHead typealiasAssignment  ;
-typealiasHead : attributes? accessLevelModifier? 'typealias' typealiasName  ;
+typealiasHead : attributes? accessLevelModifier? 'typealias' typealiasName genericParameterClause?  ;
 typealiasName : identifier  ;
 typealiasAssignment : '=' sType  ;
 
@@ -297,14 +285,13 @@ functionBody : codeBlock  ;
 parameterClause : '(' ')' |  '(' parameterList '...'? ')'  ;
 parameterList : parameter (',' parameter)*  ;
 // Parameters don't have attributes in the Swift Language Reference
-parameter : attributes? 'inout'? 'let'? '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?
- | 'inout'? 'var' '#'? externalParameterName? localParameterName typeAnnotation? defaultArgumentClause?
- | attributes? sType
- | externalParameterName? localParameterName typeAnnotation '...'
+parameter
+ : attributes? externalParameterName? localParameterName typeAnnotation defaultArgumentClause?
+ | attributes? externalParameterName? localParameterName typeAnnotation '...'
  ;
-// Swift Language Reference does not have "keyword"
-externalParameterName : identifier | keyword | '_'  ;
-localParameterName : identifier | '_'  ;
+// Swift Language Reference does not have "keyword" or "_"
+externalParameterName : identifier | keyword | '_';
+localParameterName : identifier | '_' ;
 defaultArgumentClause : '=' expression  ;
 
 // GRAMMAR OF AN ENUMERATION DECLARATION
@@ -563,6 +550,7 @@ primaryExpression
 // | implicit_member_expression disallow as ambig with explicit member expr in postfix_expression
  | wildcardExpression
  | selectorExpression
+ | keyPathExpression
  ;
 
 // GRAMMAR OF A LITERAL EXPRESSION
@@ -608,13 +596,19 @@ superclassInitializerExpression : 'super' '.' 'init'  ;
 
 // Statements are not optional in the Swift Language Reference
 closureExpression : '{' closureSignature? statements? '}'  ;
+
 closureSignature
- : parameterClause functionResult? 'in'
- | identifierList functionResult? 'in'
- | captureList parameterClause functionResult? 'in'
- | captureList identifierList functionResult? 'in'
+ : captureList? closureParameterClause 'throws'? functionResult? 'in'
  | captureList 'in'
  ;
+
+closureParameterClause: '(' ')' | '(' closureParameterList ')' | identifierList ;
+closureParameterList: closureParameter (',' closureParameterList)* ;
+closureParameter: closureParameterName typeAnnotation?
+ | closureParameterName typeAnnotation '...'
+ ;
+// Swift Language Reference does not have "_"
+closureParameterName: identifier | '_';
 
 captureList : '[' captureListItems ']' ;
 captureListItems: captureListItem (',' captureListItem)* ;
@@ -640,7 +634,14 @@ wildcardExpression : '_'  ;
 
 // GRAMMAR OF A SELECTOR EXPRESSION
 
-selectorExpression: '#selector' '(' expression ')'  ;
+selectorExpression
+ : '#selector' '(' expression ')'
+ | '#selector' '(' ('getter:' | 'setter:') expression ')'
+ ;
+
+// GRAMMAR OF A KEY PATH EXPRESSION
+
+keyPathExpression: '#keyPath' '(' expression ')' ;
 
 // GRAMMAR OF A POSTFIX EXPRESSION
 
@@ -713,7 +714,7 @@ explicitMemberExpression
 // are also referenced individually. For example, type signatures use
 // <...>.
 
-operatorHead: '=' | '<' | '>' | '!' | '*' | '&' | '==' | '?' | '-' | '&&' | '||' | '/' | '>=' | OperatorHead;
+operatorHead: '=' | '<' | '>' | '!' | '*' | '&' | '==' | '?' | '-' | '&&' | '||' | '/' | '>=' | '->' | OperatorHead;
 operatorCharacter: operatorHead | OperatorCharacter;
 
 operator: operatorHead operatorCharacter*
@@ -768,14 +769,18 @@ postfixOperator : operator  ;
 sType
  : arrayType
  | dictionaryType
- | sType 'throws'? '->' sType  // function-type
- | sType 'rethrows' '->' sType // function-type
+ // tupleType is not in Swift Language Reference
+ | tupleType 'throws'? '->' sType    // function-type
+ | tupleType 'rethrows' '->' sType   // function-type
+ | '(' sType ')' 'throws'? '->' sType  // function-type
+ | '(' sType ')' 'rethrows' '->' sType // function-type
  | typeIdentifier
  | tupleType
  | sType '?'  // optional-type
  | sType '!'  // implicitly-unwrapped-optional-type
  | protocolCompositionType
  | sType '.' 'Type' | sType '.' 'Protocol' // metatype
+ | 'Any' | 'Self'
  ;
 
 arrayType: '[' sType ']' ;
@@ -788,14 +793,13 @@ implicitlyUnwrappedOptionalType: sType '!' ;
 
 // GRAMMAR OF A TYPE ANNOTATION
 
-typeAnnotation : ':' attributes? sType  ;
+typeAnnotation : ':' attributes? 'inout'? sType  ;
 
 // GRAMMAR OF A TYPE IDENTIFIER
 
 typeIdentifier
  : typeName genericArgumentClause?
  | typeName genericArgumentClause? '.' typeIdentifier
- | 'Self' // Swift Language Reference does not have this
  ;
 
 typeName : identifier ;
@@ -805,14 +809,14 @@ typeName : identifier ;
 tupleType : '('  tupleTypeBody? ')'  ;
 tupleTypeBody : tupleTypeElementList '...'? ;
 tupleTypeElementList : tupleTypeElement (',' tupleTypeElement)*  ;
-tupleTypeElement : attributes? 'inout'? sType | 'inout'? elementName typeAnnotation ;
+tupleTypeElement : attributes? 'inout'? sType | elementName typeAnnotation ;
 elementName : identifier  ;
 
 // GRAMMAR OF A PROTOCOL COMPOSITION TYPE
 
-protocolCompositionType : 'protocol' '<' protocolIdentifierList? '>'  ;
-protocolIdentifierList : protocolIdentifier (',' protocolIdentifier)*  ;
-protocolIdentifier : typeIdentifier  ;
+protocolCompositionType: protocolIdentifier '&' protocolCompositionContinuation ;
+protocolCompositionContinuation: protocolIdentifier | protocolCompositionType ;
+protocolIdentifier: typeIdentifier ;
 
 // GRAMMAR OF A METATYPE TYPE
 
@@ -827,27 +831,39 @@ typeInheritanceClause : ':' classRequirement ',' typeInheritanceList
 typeInheritanceList : typeIdentifier (',' typeIdentifier)* ;
 classRequirement: 'class' ;
 
-// ------ Build Configurations (Macros) -------
+// GRAMMAR OF A COMPILER CONTROL STATEMENT
 
-compilerControlStatement: buildConfigurationStatement | lineControlStatement ;
-buildConfigurationStatement: '#if' buildConfiguration statements? buildConfigurationElseIfClauses? buildConfigurationElseClause? '#endif' ;
-buildConfigurationElseIfClauses: buildConfigurationElseIfClause+ ;
-buildConfigurationElseIfClause: '#elseif' buildConfiguration statements? ;
-buildConfigurationElseClause: '#else' statements? ;
+compilerControlStatement: conditionalCompilationBlock | lineControlStatement ;
 
-buildConfiguration: platformTestingFunction | languageVersionTestingFunction | identifier | booleanLiteral
- | '(' buildConfiguration ')'
- | '!' buildConfiguration
- | buildConfiguration ('&&' | '||') buildConfiguration
+// GRAMMAR OF A CONDITIONAL COMPILATION BLOCK
+
+conditionalCompilationBlock: ifDirectiveClause elseifDirectiveClauses? elseDirectiveClause? '#endif' ;
+ifDirectiveClause: '#if' compilationCondition statements? ;
+elseifDirectiveClauses: elseifDirectiveClause+ ;
+elseifDirectiveClause: '#elseif' compilationCondition statements? ;
+elseDirectiveClause: '#else' statements? ;
+
+compilationCondition
+ : platformCondition
+ | identifier
+ | booleanLiteral
+ | '(' compilationCondition ')'
+ | '!' compilationCondition
+ | compilationCondition ('&&' | '||') compilationCondition
  ;
 
-platformTestingFunction: 'os' '(' operatingSystem ')' | 'arch' '(' architecture ')' ;
-languageVersionTestingFunction: 'swift' '(' '>=' swiftVersion ')' ;
+platformCondition
+ : 'os' '(' operatingSystem ')'
+ | 'arch' '(' architecture ')'
+ | 'swift' '(' '>=' swiftVersion ')'
+ ;
+
 operatingSystem: 'OSX' | 'iOS' | 'watchOS' | 'tvOS' ;
 architecture: 'i386' | 'x86_64' | 'arm' | 'arm64' ;
 swiftVersion: FloatingPointLiteral ;
 
-lineControlStatement: '#line' (lineNumber fileName)? ;
+lineControlStatement: '#sourceLocation' '(' 'file' ':' fileName ',' 'line' ':' lineNumber ')'
+ | '#sourceLocation' '(' ')' ;
 lineNumber: integerLiteral ;
 fileName: StringLiteral ;
 
@@ -882,7 +898,7 @@ contextSensitiveKeyword :
  'lazy' | 'left' | 'mutating' | 'none' | 'nonmutating' | 'optional' | 'operator' | 'override' | 'postfix' | 'precedence' |
  'prefix' | 'Protocol' | 'required' | 'right' | 'set' | 'Type' | 'unowned' | 'weak' | 'willSet' |
  'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS' | 'x86_64' |
- 'arm' | 'arm64' | 'i386' | 'os' | 'arch' | 'safe' | 'tvOS'
+ 'arm' | 'arm64' | 'i386' | 'os' | 'arch' | 'safe' | 'tvOS' | 'file' | 'line' | 'default' | 'Self' | 'var'
  ;
 
 OperatorHead

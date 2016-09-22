@@ -27,7 +27,7 @@ public class ConstructLengthTest extends RuleTest {
     @Override
     protected void addAllExpectedMsgs() {
         addExpectedMsg(Rules.MAX_CLASS_LENGTH, 8, 16, Messages.CLASS, 16, 8);
-        addExpectedMsg(Rules.MAX_FUNCTION_LENGTH, 11, 67, Messages.FUNCTION, 11, 3);
+        addExpectedMsg(Rules.MAX_FUNCTION_LENGTH, 11, 65, Messages.FUNCTION, 11, 3);
         addExpectedMsg(Rules.MAX_FUNCTION_LENGTH, 14, 35, Messages.FUNCTION, 5, 3);
         addExpectedMsg(Rules.MAX_CLOSURE_LENGTH, 28, 27, Messages.CLOSURE, 8, 6);
         addExpectedMsg(Rules.MAX_FILE_LENGTH, 31, Messages.FILE, 42, 30);

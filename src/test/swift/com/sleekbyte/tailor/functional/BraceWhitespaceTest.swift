@@ -178,7 +178,7 @@ padawans.map({
   "\(padawan) has been trained!"
 })
 
-func applyMutliplication(value: Int, multFunction: Int -> Int) -> Int  {
+func applyMutliplication(value: Int, multFunction: (Int) -> Int) -> Int  {
   return multFunction(value)
 }
 

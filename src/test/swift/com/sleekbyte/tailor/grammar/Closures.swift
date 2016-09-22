@@ -21,7 +21,7 @@ reversed = names.sort(>)
 reversed = names.sort() { $0 > $1 }
 
 let strings = numbers.map {
-    (var number) -> String in
+    (number) -> String in
     var output = ""
     while number > 0 {
         output = digitNames[number % 10]! + output
@@ -30,7 +30,7 @@ let strings = numbers.map {
     return output
 }
 
-func makeIncrementer(forIncrement amount: Int) -> Void -> Int {
+func makeIncrementer(forIncrement amount: Int) -> (Void) -> Int {
     var runningTotal = 0
     func incrementer() -> Int {
         runningTotal += amount
@@ -42,3 +42,12 @@ func makeIncrementer(forIncrement amount: Int) -> Void -> Int {
 downloader?.downloadImage(URLRequest: URLRequest(.GET, "https://httpbin.org/image/png")) { _, _, _ in
     // No-op
 }
+
+let callbackEnabled = SCNetworkReachabilitySetCallback(
+    reachability,
+    { (_, flags, info) in
+        let reachability = Unmanaged<NetworkReachabilityManager>.fromOpaque(info!).takeUnretainedValue()
+        reachability.notifyListener(flags)
+    },
+    &context
+)

@@ -119,13 +119,13 @@ class Dictionary<Key, Value> {
 class Dictionary<key, v4lue> {
 }
 
-func swapTwoValues<T>(inout a: T, inout _ b: T) {
+func swapTwoValues<T>(a: inout T, _ b: inout T) {
     let temporaryA = a
     a = b
     b = temporaryA
 }
 
-func swapTwoValues<type>(inout a: type, inout _ b: type) {
+func swapTwoValues<type>(a: inout type, _ b: inout type) {
     let temporaryA = a
     a = b
     b = temporaryA

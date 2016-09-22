@@ -50,12 +50,12 @@ let vector = Vector2D(x: 3.0, y: 1.0)
 let anotherVector = Vector2D(x: 2.0, y: 4.0)
 let combinedVector = vector + anotherVector
 
-prefix func ++ (inout vector: Vector2D) -> Vector2D {
+prefix func ++ (vector: inout Vector2D) -> Vector2D {
     vector += Vector2D(x: 1.0, y: 1.0)
     return vector
 }
 
-prefix func +++ (inout vector: Vector2D) -> Vector2D {
+prefix func +++ (vector: inout Vector2D) -> Vector2D {
     vector += vector
     return vector
 }
@@ -77,3 +77,8 @@ public func getFormattedLabel(index: Int) -> String
 }
 
 import let SwiftCovFramework.SwiftCovFrameworkBundleIdentifier
+
+infix operator >>->> {
+	associativity right
+	precedence 110
+}

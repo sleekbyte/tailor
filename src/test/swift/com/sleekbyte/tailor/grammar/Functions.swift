@@ -80,7 +80,7 @@ func arithmeticMean(numbers: Double...) -> Double {
 }
 arithmeticMean(1, 2, 3, 4, 5)
 
-func alignRight(var string: String, totalLength: Int, pad: Character) -> String {
+func alignRight(string: String, totalLength: Int, pad: Character) -> String {
     let amountToPad = totalLength - string.characters.count
     if amountToPad < 1 {
         return string
@@ -94,7 +94,7 @@ func alignRight(var string: String, totalLength: Int, pad: Character) -> String 
 let originalString = "hello"
 let paddedString = alignRight(originalString, totalLength: 10, pad: "-")
 
-func swapTwoInts(inout a: Int, inout _ b: Int) {
+func swapTwoInts(_ a: inout Int, _ b: inout Int) {
     let temporaryA = a
     a = b
     b = temporaryA
@@ -137,7 +137,7 @@ public func beforeEach(closure: BeforeExampleWithMetadataClosure) {
   exampleHooks.appendBefore(closure)
 }
 
-public func success(@noescape closure: T -> Void) {
+public func success(@noescape closure: (T) -> Void) {
     switch self {
     case .Value(let value): closure(value)
     default: break
@@ -158,4 +158,35 @@ public func fopen(path: String..., mode: String = "r") throws -> UnsafeMutablePo
 @available(*, deprecated=3.4.0)
 public static func errorWithCode(code: Code, failureReason: String) -> NSError {
     return errorWithCode(code.rawValue, failureReason: failureReason)
+}
+
+@discardableResult
+public func upload(
+    _ method: Method,
+    _ URLString: URLStringConvertible,
+    headers: [String: String]? = nil,
+    file: URL)
+    -> Request
+{
+    return Manager.sharedInstance.upload(method, URLString, headers: headers, file: file)
+}
+
+public class func suggestedDownloadDestination(
+        directory: FileManager.SearchPathDirectory = .documentDirectory,
+        domain: FileManager.SearchPathDomainMask = .userDomainMask)
+        -> DownloadFileDestination
+    {
+        return { temporaryURL, response -> URL in
+            let directoryURLs = FileManager.default.urls(for: directory, in: domain)
+
+            if !directoryURLs.isEmpty {
+                return directoryURLs[0].appendingPathComponent(response.suggestedFilename!)
+            }
+
+            return temporaryURL
+        }
+    }
+
+public static func shrink(_ : Self) -> [Self] {
+	 return []
 }

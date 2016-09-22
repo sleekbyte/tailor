@@ -47,7 +47,7 @@ class HTMLElement {
     let name: String
     let text: String?
 
-    lazy var asHTML: Void -> String = {
+    lazy var asHTML: () -> String = {
         if let text = self.text {
             return "<\(self.name)>\(text)</\(self.name)>"
         } else {
@@ -71,7 +71,7 @@ lazy var someClosure: (Int, String) -> String = {
     return ""
 }
 
-lazy var someClosure: Void -> String = {
+lazy var someClosure: () -> String = {
     [unowned self, weak delegate = self.delegate!] in
     return ""
 }
@@ -81,7 +81,7 @@ class HTMLElement {
     let name: String
     let text: String?
 
-    lazy var asHTML: Void -> String = {
+    lazy var asHTML: () -> String = {
         [unowned self] in
         if let text = self.text {
             return "<\(self.name)>\(text)</\(self.name)>"

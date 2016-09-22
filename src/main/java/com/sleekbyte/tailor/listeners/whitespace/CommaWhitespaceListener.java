@@ -6,12 +6,12 @@ import com.sleekbyte.tailor.antlr.SwiftParser.ArrayLiteralItemsContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.AvailabilityArgumentsContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.CaptureListItemsContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.CaseItemListContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.ConditionClauseContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ClosureParameterListContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.ConditionListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryLiteralItemsContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.GenericArgumentListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.IdentifierListContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.OptionalBindingConditionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ParameterListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.RawValueStyleEnumCaseListContext;
@@ -65,34 +65,8 @@ public final class CommaWhitespaceListener extends SwiftBaseListener {
 
 
     @Override
-    public void enterConditionClause(ConditionClauseContext ctx) {
-        if (
-            // conditionClause -> expression ',' conditionList
-            (ctx.expression() != null && ctx.conditionList() != null)
-            // conditionClause -> availabilityCondition ',' expression
-                || (ctx.availabilityCondition() != null && ctx.expression() != null)) {
-
-            Token left = ParseTreeUtil.getStopTokenForNode(ctx.getChild(0));
-            Token right = ParseTreeUtil.getStartTokenForNode(ctx.getChild(2));
-            Token comma = ParseTreeUtil.getStartTokenForNode(ctx.getChild(1));
-
-            verifyCommaLeftAssociation(left, right, comma);
-        }
-        if (ctx.conditionList() != null) {
-            checkWhitespaceAroundCommaSeparatedList(ctx.conditionList());
-        }
-    }
-
-    @Override
-    public void enterOptionalBindingCondition(OptionalBindingConditionContext ctx) {
-        if (ctx.optionalBindingContinuationList() != null) {
-            Token left = ParseTreeUtil.getStopTokenForNode(ctx.optionalBindingHead());
-            Token right = ParseTreeUtil.getStartTokenForNode(ctx.optionalBindingContinuationList());
-            Token comma = ParseTreeUtil.getStartTokenForNode(ctx.getChild(1));
-
-            verifyCommaLeftAssociation(left, right, comma);
-            checkWhitespaceAroundCommaSeparatedList(ctx.optionalBindingContinuationList());
-        }
+    public void enterConditionList(ConditionListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
     }
 
     @Override
@@ -112,6 +86,11 @@ public final class CommaWhitespaceListener extends SwiftBaseListener {
 
     @Override
     public void enterParameterList(ParameterListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterClosureParameterList(ClosureParameterListContext ctx) {
         checkWhitespaceAroundCommaSeparatedList(ctx);
     }
 

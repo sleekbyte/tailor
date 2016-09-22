@@ -34,11 +34,11 @@ names.map() {
   return 1
 }
 
-func map(a: String-> String) {
+func map(a: (String)-> String) {
   // do something
 }
 
-func map(a: String ->  String) {
+func map(a: (String) ->  String) {
   // do something
 }
 
