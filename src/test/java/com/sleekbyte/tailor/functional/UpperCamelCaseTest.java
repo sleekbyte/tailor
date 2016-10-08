@@ -22,22 +22,14 @@ public class UpperCamelCaseTest extends RuleTest {
     protected void addAllExpectedMsgs() {
         addExpectedMsg(3, 7, Severity.WARNING, Messages.CLASS + Messages.NAMES);
         addExpectedMsg(7, 7, Severity.WARNING, Messages.CLASS + Messages.NAMES);
-        addExpectedMsg(24, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
-        addExpectedMsg(25, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
-        addExpectedMsg(26, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
         addExpectedMsg(42, 6, Severity.WARNING, Messages.ENUM + Messages.NAMES);
-        addExpectedMsg(43, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
         addExpectedMsg(46, 6, Severity.WARNING, Messages.ENUM + Messages.NAMES);
-        addExpectedMsg(47, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
         addExpectedMsg(50, 6, Severity.WARNING, Messages.ENUM + Messages.NAMES);
-        addExpectedMsg(55, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
-        addExpectedMsg(63, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
         addExpectedMsg(72, 8, Severity.WARNING, Messages.STRUCT + Messages.NAMES);
         addExpectedMsg(76, 8, Severity.WARNING, Messages.STRUCT + Messages.NAMES);
         addExpectedMsg(90, 10, Severity.WARNING, Messages.PROTOCOL + Messages.NAMES);
         addExpectedMsg(94, 10, Severity.WARNING, Messages.PROTOCOL + Messages.NAMES);
         addExpectedMsg(98, 10, Severity.WARNING, Messages.PROTOCOL + Messages.NAMES);
-        addExpectedMsg(107, 10, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
         addExpectedMsg(119, 18, Severity.WARNING, Messages.GENERIC_PARAMETERS + Messages.NAMES);
         addExpectedMsg(119, 23, Severity.WARNING, Messages.GENERIC_PARAMETERS + Messages.NAMES);
         addExpectedMsg(128, 20, Severity.WARNING, Messages.GENERIC_PARAMETERS + Messages.NAMES);
