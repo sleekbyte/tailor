@@ -1,7 +1,7 @@
-enum VendingMachineError: ErrorType {
-    case InvalidSelection
-    case InsufficientFunds(required : Double)
-    case OutOfStock
+enum VendingMachineError: Error {
+    case invalidSelection
+    case insufficientFunds(coinsNeeded: Int)
+    case outOfStock
 }
 
 func canThrowErrors() throws -> String {
@@ -13,52 +13,57 @@ func cannotThrowErrors() -> String {
 }
 
 func vend(itemNamed name: String) throws {
-    guard var item = inventory[name] else {
-        throw VendingMachineError.InvalidSelection
+    guard let item = inventory[name] else {
+        throw VendingMachineError.invalidSelection
     }
 
     guard item.count > 0 else {
-        throw VendingMachineError.OutOfStock
+        throw VendingMachineError.outOfStock
     }
 
-    if amountDeposited >= item.price {
-        // Dispense the snack
-        amountDeposited -= item.price
-        --item.count
-        inventory[name] = item
-    } else {
-        let amountRequired = item.price - amountDeposited
-        throw VendingMachineError.InsufficientFunds(required: amountRequired)
+    guard item.price <= coinsDeposited else {
+        throw VendingMachineError.insufficientFunds(coinsNeeded: item.price - coinsDeposited)
     }
+
+    coinsDeposited -= item.price
+
+    var newItem = item
+    newItem.count -= 1
+    inventory[name] = newItem
+
+    print("Dispensing \(name)")
 }
 
-func buyFavoriteSnack(person: String) throws {
+func buyFavoriteSnack(person: String, vendingMachine: VendingMachine) throws {
     let snackName = favoriteSnacks[person] ?? "Candy Bar"
-    try vend(itemNamed: snackName)
+    try vendingMachine.vend(itemNamed: snackName)
 }
 
 do {
-    try vend(itemNamed: "Candy Bar")
-    // Enjoy delicious snack
-} catch VendingMachineError.InvalidSelection {
+    try buyFavoriteSnack(person: "Alice", vendingMachine: vendingMachine)
+} catch VendingMachineError.invalidSelection {
     print("Invalid Selection.")
-} catch VendingMachineError.OutOfStock {
+} catch VendingMachineError.outOfStock {
     print("Out of Stock.")
-} catch VendingMachineError.InsufficientFunds(let amountRequired) {
-    print("Insufficient funds. Please insert an additional $\(amountRequired).")
+} catch VendingMachineError.insufficientFunds(let coinsNeeded) {
+    print("Insufficient funds. Please insert an additional \(coinsNeeded) coins.")
 }
 
-func willOnlyThrowIfTrue(value: Bool) throws {
-    if value { throw someError }
+
+func someThrowingFunction() throws -> Int {
+    // ...
 }
 
+let x = try? someThrowingFunction()
+
+let y: Int?
 do {
-    try willOnlyThrowIfTrue(false)
+    y = try someThrowingFunction()
 } catch {
-    // Handle Error
+    y = nil
 }
 
-try! willOnlyThrowIfTrue(false)
+let photo = try! loadImage(atPath: "./Resources/John Appleseed.jpg")
 
 func processFile(filename: String) throws {
     if exists(filename) {
@@ -67,19 +72,8 @@ func processFile(filename: String) throws {
             close(file)
         }
         while let line = try file.readline() {
-            /* Work with the file. */
+            // Work with the file.
         }
         // close(file) is called here, at the end of the scope.
     }
-}
-
-private func reduceRightToURL(str: String) -> NSURL? {
-    if let regex = try? NSRegularExpression(pattern: "(?i)https?://(?:www\\.)?\\S+(?:/|\\b)", options: [.CaseInsensitive]) {
-        let nsStr = str as NSString
-        let results = regex.matchesInString(str, options: [], range: NSRange(location: 0, length: nsStr.length))
-        if let result = results.map({ nsStr.substringWithRange($0.range) }).first, url = NSURL(string: result) {
-            return url
-        }
-    }
-    return nil
 }

@@ -209,9 +209,11 @@ declarationModifier : 'class' | 'convenience' | 'dynamic' | 'final' | 'infix'
  | 'unowned' '(' 'unsafe' ')' | 'weak'
  | accessLevelModifier ;
 
-accessLevelModifier : 'internal' | 'internal' '(' 'set' ')'
- | 'private' | 'private' '(' 'set' ')'
- | 'public' | 'public' '(' 'set' ')' ;
+accessLevelModifier : 'private' | 'private' '(' 'set' ')'
+ | 'fileprivate' | 'fileprivate' '(' 'set' ')'
+ | 'internal' | 'internal' '(' 'set' ')'
+ | 'public' | 'public' '(' 'set' ')'
+ | 'open' | 'open' '(' 'set' ')' ;
 accessLevelModifiers : accessLevelModifier+ ;
 
 // GRAMMAR OF A CODE BLOCK
@@ -540,7 +542,7 @@ typeCastingOperator
 // GRAMMAR OF A PRIMARY EXPRESSION
 
 primaryExpression
- : (identifier | operator) genericArgumentClause? // operator not mentioned in the Swift Language Reference
+ : (identifier | operator | keyword | contextSensitiveKeyword) genericArgumentClause? // operator, keyword, and contextSensitiveKeyword are not mentioned in the Swift Language Reference
  | literalExpression
  | selfExpression
  | superclassExpression
@@ -878,19 +880,21 @@ identifier : Identifier | contextSensitiveKeyword ;
 
 keyword :
  // Keywords used in declarations
- 'associatedtype' | 'class' | 'deinit' | 'enum' | 'extension' | 'func' | 'import' | 'init' | 'internal'
- | 'private' | 'protocol' | 'public' | 'static' | 'struct' | 'subscript' | 'typealias'
+ 'associatedtype' | 'class' | 'deinit' | 'enum' | 'extension' | 'fileprivate' | 'func' | 'import' | 'init' | 'inout'
+ | 'internal' | 'let' | 'open' | 'operator' | 'private' | 'protocol' | 'public' | 'static' | 'struct' | 'subscript'
+ | 'typealias' | 'var'
  // Keywords used in statements
  | 'break' | 'case' | 'continue' | 'default' | 'defer' | 'do' | 'else' | 'fallthrough' | 'for' | 'guard' | 'if' | 'in'
  | 'repeat' | 'return' | 'switch' | 'where' | 'while'
  // Keywords used in expressions and types
- | 'as' | 'catch' | 'dynamicType' | 'is' | 'nil' | 'rethrows' | 'super' | 'self' | 'Self' | 'throw'
- | 'throws' | 'try' | '#column' | '#file' | '#function' | '#line'
+ | 'as' | 'Any' | 'catch' | 'dynamicType' | 'is' | 'nil' | 'rethrows' | 'super' | 'self' | 'Self' | 'throw'
+ | 'throws' | 'try'
  | BooleanLiteral
  // Keywords used in patterns
  | '_'
  // Keywords that begin with a number sign (#)
- | '#available' | '#column' | '#else' | '#elseif' | '#endif' | '#file' | '#function' | '#if' | '#line' | '#selector'
+ | '#available' | '#colorLiteral' | '#column' | '#else' | '#elseif' | '#endif' | '#file' | 'fileLiteral' | '#function'
+ | '#if' | 'imageLiteral' | '#line' | '#selector'
  ;
 
 contextSensitiveKeyword :
