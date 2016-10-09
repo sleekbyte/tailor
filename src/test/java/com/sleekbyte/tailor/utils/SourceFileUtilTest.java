@@ -112,12 +112,6 @@ public class SourceFileUtilTest {
     public void testConstructTooLongMaxLengthZeroOrNegative() {
         assertFalse(SourceFileUtil.constructTooLong(context, 0));
         assertFalse(SourceFileUtil.constructTooLong(context, -1));
-
-        when(startToken.getLine()).thenReturn(10);
-        when(stopToken.getLine()).thenReturn(11);
-
-        assertFalse(SourceFileUtil.constructTooLong(context, 0));
-        assertFalse(SourceFileUtil.constructTooLong(context, -1));
     }
 
     @Test
@@ -134,10 +128,6 @@ public class SourceFileUtilTest {
 
     @Test
     public void testNameTooLongMaxLengthZeroOrNegative() {
-        assertFalse(SourceFileUtil.nameTooLong(context, 0));
-        assertFalse(SourceFileUtil.nameTooLong(context, -1));
-
-        when(context.getText()).thenReturn(NAME);
         assertFalse(SourceFileUtil.nameTooLong(context, 0));
         assertFalse(SourceFileUtil.nameTooLong(context, -1));
     }
