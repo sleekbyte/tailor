@@ -21,22 +21,22 @@ class UpperCamelCase: SuperClass {
 // Enum examples
 
 enum Enumeration {
-  case invalid
-  case Invalid_name
-  case invalid_name
-  case ValidName
-  case Validname
+  case validName
+  case anotherValidName
+  case yetAnotherValidName
+  case four
+  case five
 }
 
 enum Barcode {
-  case UPCA(Int, Int, Int, Int)
-  case QRCode(String)
+  case upca(Int, Int, Int, Int)
+  case qrCode(String)
 }
 
 enum ASCIIControlCharacter: Character {
-    case Tab = "\t"
-    case LineFeed = "\n"
-    case CarriageReturn = "\r"
+    case tab = "\t"
+    case lineFeed = "\n"
+    case carriageReturn = "\r"
 }
 
 enum lowerCamelCase {
@@ -48,7 +48,7 @@ enum snake_case {
 }
 
 enum SCREAMING_SNAKE_CASE {
-  case Matters
+  case matters
 }
 
 enum UpperCamelCase {
@@ -56,10 +56,10 @@ enum UpperCamelCase {
 }
 
 enum Planet {
-    case Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune
+    case mercury, venus, earth, mars, jupiter, saturn, uranus, neptune
 }
 
-enum Num3ricalNameCare {
+enum Num3ricalNameCase {
   case foo
 }
 
@@ -104,11 +104,11 @@ protocol Num3ricalName {
 }
 
 enum SomeEnum: Int {
-    case Some_Enum_Case
+    case someCase
     init (value: NSNumber) {
         switch value.integerValue {
-        case Some_Enum_Case.rawValue:
-             self = Some_Enum_Case
+        case someCase.rawValue:
+             self = someCase
         }
     }
 }

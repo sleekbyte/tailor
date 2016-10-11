@@ -258,22 +258,14 @@ public final class FormatTest {
         List<ViolationMessage> messages = new ArrayList<>();
         messages.add(createViolationMessage(3, 7, Severity.WARNING, Messages.CLASS + Messages.NAMES));
         messages.add(createViolationMessage(7, 7, Severity.WARNING, Messages.CLASS + Messages.NAMES));
-        messages.add(createViolationMessage(24, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES));
-        messages.add(createViolationMessage(25, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES));
-        messages.add(createViolationMessage(26, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES));
         messages.add(createViolationMessage(42, 6, Severity.WARNING, Messages.ENUM + Messages.NAMES));
-        messages.add(createViolationMessage(43, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES));
         messages.add(createViolationMessage(46, 6, Severity.WARNING, Messages.ENUM + Messages.NAMES));
-        messages.add(createViolationMessage(47, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES));
         messages.add(createViolationMessage(50, 6, Severity.WARNING, Messages.ENUM + Messages.NAMES));
-        messages.add(createViolationMessage(55, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES));
-        messages.add(createViolationMessage(63, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES));
         messages.add(createViolationMessage(72, 8, Severity.WARNING, Messages.STRUCT + Messages.NAMES));
         messages.add(createViolationMessage(76, 8, Severity.WARNING, Messages.STRUCT + Messages.NAMES));
         messages.add(createViolationMessage(90, 10, Severity.WARNING, Messages.PROTOCOL + Messages.NAMES));
         messages.add(createViolationMessage(94, 10, Severity.WARNING, Messages.PROTOCOL + Messages.NAMES));
         messages.add(createViolationMessage(98, 10, Severity.WARNING, Messages.PROTOCOL + Messages.NAMES));
-        messages.add(createViolationMessage(107, 10, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES));
         messages.add(createViolationMessage(119, 18, Severity.WARNING, Messages.GENERIC_PARAMETERS + Messages.NAMES));
         messages.add(createViolationMessage(119, 23, Severity.WARNING, Messages.GENERIC_PARAMETERS + Messages.NAMES));
         messages.add(createViolationMessage(128, 20, Severity.WARNING, Messages.GENERIC_PARAMETERS + Messages.NAMES));
@@ -319,7 +311,7 @@ public final class FormatTest {
 
         Map<String, Object> expectedOutput = new LinkedHashMap<>();
         expectedOutput.put(Messages.FILES_KEY, files);
-        expectedOutput.put(Messages.SUMMARY_KEY, getJSONSummary(1, 0, 0, 22));
+        expectedOutput.put(Messages.SUMMARY_KEY, getJSONSummary(1, 0, 0, violations.size()));
         return expectedOutput;
     }
 
@@ -419,7 +411,7 @@ public final class FormatTest {
         Map<String, Object> expectedOutput = new LinkedHashMap<>();
         expectedOutput.put(Messages.FILES_KEY, files);
         expectedOutput.put(Messages.SUMMARY_KEY,
-            Formatter.formatSummary(1, 0, 0, 22).replace(NEWLINE_PATTERN, ""));
+            Formatter.formatSummary(1, 0, 0, violations.size()).replace(NEWLINE_PATTERN, ""));
         expectedOutput.put(Messages.VERSION_LONG_OPT, new ConfigProperties().getVersion());
         return expectedOutput;
     }

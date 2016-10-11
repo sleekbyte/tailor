@@ -14,6 +14,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class SemicolonTest extends RuleTest {
 
     @Override
+    protected String[] getCommandArgs() {
+        return new String[]{ "--only=terminating-semicolon" };
+    }
+
+    @Override
     protected void addAllExpectedMsgs() {
         int start = 1;
         addExpectedMsg(start, 18, Severity.WARNING, Messages.STATEMENTS);

@@ -3,10 +3,10 @@ import Foundation;
 println("Hello, World!");
 
 enum CompassPoint {
-    case North;
-    case South;
-    case East;
-    case West;
+    case north;
+    case south;
+    case east;
+    case west;
 };
 
 protocol SomeProtocol {
