@@ -23,6 +23,14 @@ public final class CharFormatUtil {
     public static boolean isLowerCamelCaseOrAcronym(String word) {
         return startsWithAcronym(word) || isLowerCamelCase(word);
     }
+    
+    public static String unescapeIdentifier(String word) {
+        int length = word.length();
+        if (length >= 2 && word.charAt(0) == '`' && word.charAt(length-1) == '`') {
+            return word.substring(1, length - 2);
+        }
+        return word;
+    }
 
     /**
      * Checks if a name is prefixed with a 'k' or 'K'.

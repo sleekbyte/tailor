@@ -30,7 +30,7 @@ public class ConstantNamingListener extends SwiftBaseListener {
 
         names.forEach(
             ctx -> {
-                String constantName = ctx.getText();
+                String constantName = CharFormatUtil.unescapeIdentifier(ctx.getText());
                 ParserRuleContext constantDecContext = ConstantDecHelper.getConstantDeclaration(ctx);
                 Location location = ListenerUtil.getContextStartLocation(ctx);
 

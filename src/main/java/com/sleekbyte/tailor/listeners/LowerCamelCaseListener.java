@@ -28,28 +28,29 @@ public class LowerCamelCaseListener extends SwiftBaseListener {
     @Override
     public void enterTopLevel(TopLevelContext topLevelCtx) {
         List<IdentifierContext> names = DeclarationListener.getVariableNames(topLevelCtx);
-        names.forEach(ctx -> verifyLowerCamelCase(Messages.VARIABLE + Messages.NAMES, ctx));
+        names.forEach(ctx -> verifyLowerCamelCase(Messages.VARIABLE + Messages.NAMES, ctx, true));
     }
 
     @Override
     public void enterFunctionName(SwiftParser.FunctionNameContext ctx) {
         if (ctx.operator() == null) {
-            verifyLowerCamelCase(Messages.FUNCTION + Messages.NAMES, ctx);
+            verifyLowerCamelCase(Messages.FUNCTION + Messages.NAMES, ctx, false);
         }
     }
 
     @Override
     public void enterRawValueStyleEnumCase(SwiftParser.RawValueStyleEnumCaseContext ctx) {
-        verifyLowerCamelCase(Messages.ENUM_CASE + Messages.NAMES, ctx.enumCaseName());
+        verifyLowerCamelCase(Messages.ENUM_CASE + Messages.NAMES, ctx.enumCaseName(), false);
     }
 
     @Override
     public void enterUnionStyleEnumCase(SwiftParser.UnionStyleEnumCaseContext ctx) {
-        verifyLowerCamelCase(Messages.ENUM_CASE + Messages.NAMES, ctx.enumCaseName());
+        verifyLowerCamelCase(Messages.ENUM_CASE + Messages.NAMES, ctx.enumCaseName(), false);
     }
 
-    private void verifyLowerCamelCase(String constructType, ParserRuleContext ctx) {
-        String constructName = ctx.getText();
+    private void verifyLowerCamelCase(String constructType, ParserRuleContext ctx, Boolean unescapeIdentifier) {
+        String text = unescapeIdentifier ? CharFormatUtil.unescapeIdentifier(ctx.getText()) : ctx.getText();
+        String constructName = CharFormatUtil.unescapeIdentifier(text);
         if (!CharFormatUtil.isLowerCamelCaseOrAcronym(constructName)) {
             Location location = ListenerUtil.getContextStartLocation(ctx);
             this.printer.error(Rules.LOWER_CAMEL_CASE, constructType + Messages.LOWER_CAMEL_CASE, location);
