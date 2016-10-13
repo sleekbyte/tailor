@@ -33,7 +33,7 @@ public final class CharFormatUtil {
     public static String unescapeIdentifier(String identifier) {
         int length = identifier.length();
         if (length >= 2 && identifier.charAt(0) == '`' && identifier.charAt(length - 1) == '`') {
-            return identifier.substring(1, length - 2);
+            return identifier.substring(1, length - 1);
         }
         return identifier;
     }
