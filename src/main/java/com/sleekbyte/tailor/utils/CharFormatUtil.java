@@ -24,12 +24,18 @@ public final class CharFormatUtil {
         return startsWithAcronym(word) || isLowerCamelCase(word);
     }
     
-    public static String unescapeIdentifier(String word) {
-        int length = word.length();
-        if (length >= 2 && word.charAt(0) == '`' && word.charAt(length-1) == '`') {
-            return word.substring(1, length - 2);
+    /**
+     * Will strip leading and trailing ` character in given string if both present.
+     *
+     * @param identifier value to sanitize
+     * @return sanitized string
+     */
+    public static String unescapeIdentifier(String identifier) {
+        int length = identifier.length();
+        if (length >= 2 && identifier.charAt(0) == '`' && identifier.charAt(length - 1) == '`') {
+            return identifier.substring(1, length - 2);
         }
-        return word;
+        return identifier;
     }
 
     /**
