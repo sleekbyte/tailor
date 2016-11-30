@@ -259,12 +259,12 @@ dependencies {
     compile sourceSets.gen.output
     compile 'commons-cli:commons-cli:1.3.1'
     compile 'org.antlr:antlr4-runtime:4.5.3'
-    compile 'org.fusesource.jansi:jansi:1.13'
+    compile 'org.fusesource.jansi:jansi:1.14'
     compile 'org.yaml:snakeyaml:1.17'
-    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.github.spullara.mustache.java:compiler:0.9.4'
     testCompile 'junit:junit:4.12'
     testCompile 'org.hamcrest:hamcrest-all:1.3'
-    testCompile 'org.mockito:mockito-core:2.2.0'
+    testCompile 'org.mockito:mockito-core:2.2.21'
     testCompile 'com.github.stefanbirkner:system-rules:1.16.1'
 }
