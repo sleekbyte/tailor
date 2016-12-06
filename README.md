@@ -201,6 +201,25 @@ This adds the following Build Phase Run Script to your project's default target.
 Tailor's output will be displayed inline within the Xcode Editor Area and as a list in the Log Navigator.
 ![Xcode messages](https://cloud.githubusercontent.com/assets/1350704/11017260/b79cb162-8599-11e5-94fa-e7cf77fdc657.png)
 
+### Configure Xcode to Analyze Code Natively (⇧⌘B)
+
+1. Add a new configuration, say `Analyze`,  to the project
+<img width="1020" alt="screen shot 2016-11-30 at 12 29 34 am" src="https://cloud.githubusercontent.com/assets/1791760/20745188/fba98222-b694-11e6-8212-038333b259b3.png">
+
+2. Modify the active scheme's `Analyze` phase to use the new build configuration created above
+<img width="899" alt="screen shot 2016-11-30 at 12 37 08 am" src="https://cloud.githubusercontent.com/assets/1791760/20745259/57e71acc-b695-11e6-9671-092f89029467.png">
+
+3. Tweak the build phase run script to run Tailor **only** when analyzing the project (⇧⌘B)
+```bash
+if [ "${CONFIGURATION}" = "Analyze" ]; then
+    if hash tailor 2>/dev/null; then
+        tailor
+    else
+        echo "warning: Please install Tailor from https://tailor.sh"
+    fi
+fi
+```
+
 ## Colorized Output
 
 Tailor uses the following color schemes to format CLI output:
