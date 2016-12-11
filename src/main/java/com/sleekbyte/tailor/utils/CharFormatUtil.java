@@ -23,6 +23,20 @@ public final class CharFormatUtil {
     public static boolean isLowerCamelCaseOrAcronym(String word) {
         return startsWithAcronym(word) || isLowerCamelCase(word);
     }
+    
+    /**
+     * Will strip leading and trailing ` character in given string if both present.
+     *
+     * @param identifier value to sanitize
+     * @return sanitized string
+     */
+    public static String unescapeIdentifier(String identifier) {
+        int length = identifier.length();
+        if (length >= 2 && identifier.charAt(0) == '`' && identifier.charAt(length - 1) == '`') {
+            return identifier.substring(1, length - 1);
+        }
+        return identifier;
+    }
 
     /**
      * Checks if a name is prefixed with a 'k' or 'K'.

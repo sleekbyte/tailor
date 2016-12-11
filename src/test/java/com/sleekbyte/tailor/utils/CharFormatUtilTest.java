@@ -88,4 +88,13 @@ public class CharFormatUtilTest {
         assertFalse(CharFormatUtil.startsWithAcronym("xURLS"));
         assertFalse(CharFormatUtil.startsWithAcronym("shieldPROGRAMMEmarvel"));
     }
+
+    @Test
+    public void testBacktickEscapedIdentifier() {
+        // Backticks are not part of the identifier
+        assertTrue(CharFormatUtil.unescapeIdentifier("`self`").equals("self"));
+        assertFalse(CharFormatUtil.unescapeIdentifier("`self").equals("self"));
+        assertFalse(CharFormatUtil.unescapeIdentifier("self`").equals("self"));
+        assertFalse(CharFormatUtil.unescapeIdentifier("``self`").equals("self"));
+    }
 }
