@@ -771,11 +771,7 @@ postfixOperator : operator  ;
 sType
  : arrayType
  | dictionaryType
- // tupleType is not in Swift Language Reference
- | tupleType 'throws'? '->' sType    // function-type
- | tupleType 'rethrows' '->' sType   // function-type
- | '(' sType ')' 'throws'? '->' sType  // function-type
- | '(' sType ')' 'rethrows' '->' sType // function-type
+ | functionType
  | typeIdentifier
  | tupleType
  | sType '?'  // optional-type
@@ -784,6 +780,13 @@ sType
  | sType '.' 'Type' | sType '.' 'Protocol' // metatype
  | 'Any' | 'Self'
  ;
+
+functionType: attributes? functionTypeArgumentClause ('throws' | 'rethrows')? '->' sType ;
+functionTypeArgumentClause: '(' ')'
+ | '(' functionTypeArgumentList '...'? ')' ;
+functionTypeArgumentList: functionTypeArgument (',' functionTypeArgument)* ;
+functionTypeArgument: attributes? 'inout'? sType | argumentLabel typeAnnotation ;
+argumentLabel: identifier ;
 
 arrayType: '[' sType ']' ;
 
