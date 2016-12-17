@@ -808,10 +808,9 @@ typeName : identifier ;
 
 // GRAMMAR OF A TUPLE TYPE
 
-tupleType : '('  tupleTypeBody? ')'  ;
-tupleTypeBody : tupleTypeElementList '...'? ;
+tupleType : '('  tupleTypeElementList? ')'  ;
 tupleTypeElementList : tupleTypeElement (',' tupleTypeElement)*  ;
-tupleTypeElement : attributes? 'inout'? sType | elementName typeAnnotation ;
+tupleTypeElement : elementName typeAnnotation | sType ;
 elementName : identifier  ;
 
 // GRAMMAR OF A PROTOCOL COMPOSITION TYPE
