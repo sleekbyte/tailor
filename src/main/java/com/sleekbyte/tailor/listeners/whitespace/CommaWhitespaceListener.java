@@ -9,12 +9,13 @@ import com.sleekbyte.tailor.antlr.SwiftParser.CaseItemListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ClosureParameterListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ConditionListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryLiteralItemsContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementListContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.FunctionCallArgumentListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.GenericArgumentListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.IdentifierListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ParameterListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.PatternInitializerListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.RawValueStyleEnumCaseListContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.TupleElementListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TuplePatternElementListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.TupleTypeElementListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.UnionStyleEnumCaseListContext;
@@ -130,7 +131,12 @@ public final class CommaWhitespaceListener extends SwiftBaseListener {
     }
 
     @Override
-    public void enterExpressionElementList(ExpressionElementListContext ctx) {
+    public void enterTupleElementList(TupleElementListContext ctx) {
+        checkWhitespaceAroundCommaSeparatedList(ctx);
+    }
+
+    @Override
+    public void enterFunctionCallArgumentList(FunctionCallArgumentListContext ctx) {
         checkWhitespaceAroundCommaSeparatedList(ctx);
     }
 

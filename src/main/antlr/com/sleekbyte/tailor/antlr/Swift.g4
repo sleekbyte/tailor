@@ -548,6 +548,7 @@ primaryExpression
  | superclassExpression
  | closureExpression
  | parenthesizedExpression
+ | tupleExpression
  | implicitMemberExpression
 // | implicit_member_expression disallow as ambig with explicit member expr in postfix_expression
  | wildcardExpression
@@ -561,15 +562,21 @@ literalExpression
  : literal
  | arrayLiteral
  | dictionaryLiteral
+ | playgroundLiteral
  | '#file' | '#line' | '#column' | '#function'
  ;
 
 arrayLiteral : '[' arrayLiteralItems? ']'  ;
 arrayLiteralItems : arrayLiteralItem (',' arrayLiteralItem)* ','?  ;
 arrayLiteralItem : expression ;
+
 dictionaryLiteral : '[' dictionaryLiteralItems ']' | '[' ':' ']'  ;
 dictionaryLiteralItems : dictionaryLiteralItem (',' dictionaryLiteralItem)* ','? ;
 dictionaryLiteralItem : expression ':' expression  ;
+
+playgroundLiteral: '#colorLiteral' '(' 'red' ':' expression ',' 'green' ':' expression ',' 'blue' ':' expression ',' 'alpha' ':' expression ')'
+ | '#fileLiteral' '(' 'resourceName' ':' expression ')'
+ | '#imageLiteral' '(' 'resourceName' ':' expression ')' ;
 
 // GRAMMAR OF A SELF EXPRESSION
 
@@ -577,7 +584,7 @@ selfExpression
  : 'self'
  | 'self' '.' identifier  // self-method-expression
  // Swift Language Reference uses expressionList
- | 'self' '[' expressionElementList ']'  // self-subscript-expression
+ | 'self' '[' tupleElementList ']'  // self-subscript-expression
  | 'self' '.' 'init' // self-initializer-expression
  ;
 
@@ -591,12 +598,11 @@ superclassExpression
 
 superclassMethodExpression : 'super' '.' identifier  ;
 // Swift Language Reference uses expressionList
-superclassSubscriptExpression : 'super' '[' expressionElementList ']'  ;
+superclassSubscriptExpression : 'super' '[' tupleElementList ']'  ;
 superclassInitializerExpression : 'super' '.' 'init'  ;
 
 // GRAMMAR OF A CLOSURE EXPRESSION
 
-// Statements are not optional in the Swift Language Reference
 closureExpression : '{' closureSignature? statements? '}'  ;
 
 closureSignature
@@ -623,12 +629,13 @@ implicitMemberExpression : '.' identifier  ;
 
 // GRAMMAR OF A PARENTHESIZED EXPRESSION
 
-parenthesizedExpression : '(' expressionElementList? ')'  ;
-expressionElementList : expressionElement (',' expressionElement)*  ;
-// Swift Language Reference does not have expression as optional
-expressionElement : expression | expressionElementIdentifier ':' expression?  ;
-// Swift Language Reference does not have "keyword"
-expressionElementIdentifier: identifier | keyword ;
+parenthesizedExpression : '(' expression ')'  ;
+
+// GRAMMAR OF A TUPLE EXPRESSION
+
+tupleExpression: '(' tupleElementList? ')' ;
+tupleElementList: tupleElement (',' tupleElement)* ;
+tupleElement: (identifier ':')? expression ;
 
 // GRAMMAR OF A WILDCARD EXPRESSION
 
@@ -651,8 +658,8 @@ postfixExpression
  : primaryExpression                                             # primary
  | postfixExpression postfixOperator                             # postfixOperation
  // Function call with closure expression should always be above a lone parenthesized expression to reduce ambiguity
- | postfixExpression parenthesizedExpression? closureExpression  # functionCallWithClosureExpression
- | postfixExpression parenthesizedExpression                     # functionCallExpression
+ | postfixExpression functionCallArgumentClause? closureExpression  # functionCallWithClosureExpression
+ | postfixExpression functionCallArgumentClause                     # functionCallExpression
  | postfixExpression '.' 'init'                                  # initializerExpression
  | postfixExpression '.' 'init' '(' argumentNames ')'            # initializerExpressionWithArguments
  // TODO: don't allow '_' here in DecimalLiteral:
@@ -662,10 +669,19 @@ postfixExpression
  | postfixExpression '.' 'self'                                  # postfixSelfExpression
  | postfixExpression '.' 'dynamicType'                           # dynamicTypeExpression
  // Swift Language Reference uses expressionList
- | postfixExpression '[' expressionElementList ']'                     # subscriptExpression
+ | postfixExpression '[' tupleElementList ']'                     # subscriptExpression
  | postfixExpression '!'                                # forcedValueExpression
  | postfixExpression '?'                                         # optionalChainingExpression
  ;
+
+// GRAMMAR OF A FUNCTION CALL EXPRESSION
+functionCallArgumentClause: '(' functionCallArgumentList? ')' ;
+functionCallArgumentList: functionCallArgument (',' functionCallArgument)* ;
+// (expression | operator) is optional to handle selector expressions (see #425 for example)
+functionCallArgument: (functionCallIdentifier ':') (expression | operator)?
+  | (functionCallIdentifier ':')? (expression | operator) ;
+// SwiftLanguageReference does not have keyword
+functionCallIdentifier: identifier | keyword ;
 
 // GRAMMAR OF AN ARGUMENT NAME
 argumentNames : argumentName+  ;
@@ -878,7 +894,7 @@ NilLiteral: 'nil' ;
 
 // GRAMMAR OF AN IDENTIFIER
 
-identifier : Identifier | contextSensitiveKeyword ;
+identifier : Identifier | contextSensitiveKeyword | grammarString ;
 
 keyword :
  // Keywords used in declarations
@@ -906,6 +922,9 @@ contextSensitiveKeyword :
  'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS' | 'x86_64' |
  'arm' | 'arm64' | 'i386' | 'os' | 'arch' | 'safe' | 'tvOS' | 'file' | 'line' | 'default' | 'Self' | 'var'
  ;
+
+grammarString:
+  'red' | 'blue' | 'green' | 'alpha' | 'resourceName' ;
 
 OperatorHead
   : '/' | '=' | '-' | '+' | '!' | '*' | '%' | '<' | '>' | '&' | '|' | '^' | '~' | '?'

@@ -95,10 +95,10 @@ public final class ColonWhitespaceListener extends SwiftBaseListener {
     }
 
     @Override
-    public void enterExpressionElement(SwiftParser.ExpressionElementContext ctx) {
-        if (ctx.expressionElementIdentifier() != null) {
+    public void enterTupleElement(SwiftParser.TupleElementContext ctx) {
+        if (ctx.identifier() != null) {
             Token colon = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
-            Token left = ctx.expressionElementIdentifier().getStop();
+            Token left = ctx.identifier().getStop();
 
             if (ctx.expression() != null) {
                 Token right = ctx.expression().getStart();
@@ -106,6 +106,22 @@ public final class ColonWhitespaceListener extends SwiftBaseListener {
             } else {
                 verifier.verifyPunctuationLeftAssociation(left, colon, Messages.COLON);
             }
+        }
+    }
+
+    @Override
+    public void enterFunctionCallArgument(SwiftParser.FunctionCallArgumentContext ctx) {
+        if (ctx.functionCallIdentifier() != null) {
+            Token colon = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
+            Token left = ctx.functionCallIdentifier().getStop();
+            if (ctx.expression() == null && ctx.operator() == null) {
+                verifier.verifyPunctuationLeftAssociation(left, colon, Messages.COLON);
+                return;
+            }
+            ParserRuleContext rightCtx = ctx.expression() == null ? ctx.operator() : ctx.expression();
+            Token right = rightCtx.getStart();
+
+            verifyColonLeftAssociation(left, right, colon);
         }
     }
 
@@ -118,6 +134,15 @@ public final class ColonWhitespaceListener extends SwiftBaseListener {
 
             verifyColonLeftAssociation(left, right, colon);
         }
+    }
+
+    @Override
+    public void enterArgumentName(SwiftParser.ArgumentNameContext ctx) {
+        Token colon = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
+        Token left = ctx.identifier() == null ?
+            ((TerminalNodeImpl) ctx.getChild(0)).getSymbol() :
+            ctx.identifier().getStop();
+        verifier.verifyPunctuationLeftAssociation(left, colon, Messages.COLON);
     }
 
     private void verifyColonIsSpaceDelimited(Token left, Token right, Token colon) {

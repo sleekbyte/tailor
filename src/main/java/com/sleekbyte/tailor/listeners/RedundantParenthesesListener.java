@@ -7,6 +7,7 @@ import com.sleekbyte.tailor.antlr.SwiftParser.CatchClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ConditionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.DictionaryLiteralItemContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.FunctionCallArgumentClauseContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.FunctionCallWithClosureExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.InitializerContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ParenthesizedExpressionContext;
@@ -87,8 +88,9 @@ public class RedundantParenthesesListener extends SwiftBaseListener {
 
     @Override
     public void enterFunctionCallWithClosureExpression(FunctionCallWithClosureExpressionContext ctx) {
-        if (ctx.parenthesizedExpression() != null && ctx.parenthesizedExpression().expressionElementList() == null) {
-            printRedundantParenthesesWarning(ctx.parenthesizedExpression(), Messages.EMPTY_PARENTHESES
+        FunctionCallArgumentClauseContext argumentClause = ctx.functionCallArgumentClause();
+        if (argumentClause != null && argumentClause.functionCallArgumentList() == null) {
+            printRedundantParenthesesWarning(argumentClause, Messages.EMPTY_PARENTHESES
                 + Messages.REDUNDANT_METHOD_PARENTHESES);
         }
     }
@@ -114,15 +116,6 @@ public class RedundantParenthesesListener extends SwiftBaseListener {
 
         if (primaryExpression.getChildCount() != 1
             || !(primaryExpression.getChild(0) instanceof ParenthesizedExpressionContext)) {
-            return;
-        }
-
-        ParenthesizedExpressionContext parenthesizedExpressionContext =
-            (ParenthesizedExpressionContext) primaryExpression.getChild(0);
-
-        // check to not flag tuple initialization
-        if (parenthesizedExpressionContext.expressionElementList() == null
-            || parenthesizedExpressionContext.expressionElementList().getChildCount() != 1) {
             return;
         }
 

@@ -3,8 +3,8 @@ package com.sleekbyte.tailor.listeners;
 import com.sleekbyte.tailor.antlr.SwiftBaseListener;
 import com.sleekbyte.tailor.antlr.SwiftParser.ConditionListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementContext;
-import com.sleekbyte.tailor.antlr.SwiftParser.ExpressionElementListContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.FunctionCallArgumentContext;
+import com.sleekbyte.tailor.antlr.SwiftParser.FunctionCallArgumentListContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.FunctionCallExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.PostfixExpressionContext;
 import com.sleekbyte.tailor.antlr.SwiftParser.PrimaryExpressionContext;
@@ -45,7 +45,8 @@ public final class TrailingClosureListener extends SwiftBaseListener {
 
     @Override
     public void enterFunctionCallExpression(FunctionCallExpressionContext ctx) {
-        ExpressionElementListContext elemList = ctx.parenthesizedExpression().expressionElementList();
+        FunctionCallArgumentListContext argumentList =
+            ctx.functionCallArgumentClause().functionCallArgumentList();
 
         // Check if the function call is inside a condition clause (Issue #401)
         if (isInsideConditionList(ctx)) {
@@ -53,20 +54,30 @@ public final class TrailingClosureListener extends SwiftBaseListener {
         }
 
         // Check if the function call has any parameters
-        if (elemList == null) {
+        if (argumentList == null) {
             return;
         }
 
-        List<ExpressionElementContext> elements = elemList.expressionElement();
+        List<FunctionCallArgumentContext> arguments = argumentList.functionCallArgument();
 
         // Check if the last parameter isn't named
-        ExpressionElementContext element = elements.get(elements.size() - 1);
-        if (element.expressionElementIdentifier() != null) {
+        FunctionCallArgumentContext argument = arguments.get(arguments.size() - 1);
+        if (argument.functionCallIdentifier() != null) {
+            return;
+        }
+
+        // Check if the last parameter isn't an operator
+        if (argument.operator() != null) {
+            return;
+        }
+
+        // Check if the last parameter has an expression
+        if (argument.expression() == null) {
             return;
         }
 
         // Check if the parameter is a simple prefix expression
-        ExpressionContext expression = element.expression();
+        ExpressionContext expression = argument.expression();
         if (expression.binaryExpression().size() != 0) {
             return;
         }
