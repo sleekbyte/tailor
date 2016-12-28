@@ -99,7 +99,7 @@ defaultLabel : 'default' ':' ;
 
 // GRAMMAR OF A LABELED STATEMENT
 
-labeledStatement : statementLabel loopStatement | statementLabel switchStatement  ;
+labeledStatement : statementLabel (loopStatement | ifStatement | switchStatement | doStatement)  ;
 statementLabel : labelName ':' ;
 labelName : identifier  ;
 
@@ -667,7 +667,7 @@ postfixExpression
  | postfixExpression '.' identifier genericArgumentClause?      # explicitMemberExpression2
  | postfixExpression '.' identifier '(' argumentNames ')'       # explicitMemberExpression3
  | postfixExpression '.' 'self'                                  # postfixSelfExpression
- | postfixExpression '.' 'dynamicType'                           # dynamicTypeExpression
+ | 'type' '(' 'of' ':' expression ')'                            # dynamicTypeExpression
  // Swift Language Reference uses expressionList
  | postfixExpression '[' tupleElementList ']'                     # subscriptExpression
  | postfixExpression '!'                                # forcedValueExpression
@@ -686,15 +686,6 @@ functionCallIdentifier: identifier | keyword ;
 // GRAMMAR OF AN ARGUMENT NAME
 argumentNames : argumentName+  ;
 argumentName: (identifier | '_') ':'  ; // Swift Language Reference has argumentName → identifier :
-
-// GRAMMAR OF A FUNCTION CALL EXPRESSION
-
-/*
-functionCallExpression
-  : postfixExpression parenthesizedExpression
-  : postfixExpression parenthesizedExpression? trailingClosure
-  ;
-  */
 
 //trailing_closure : closure_expression  ;
 
@@ -924,7 +915,7 @@ contextSensitiveKeyword :
  ;
 
 grammarString:
-  'red' | 'blue' | 'green' | 'alpha' | 'resourceName' ;
+  'red' | 'blue' | 'green' | 'alpha' | 'resourceName' | 'of' | 'type' ;
 
 OperatorHead
   : '/' | '=' | '-' | '+' | '!' | '*' | '%' | '<' | '>' | '&' | '|' | '^' | '~' | '?'
