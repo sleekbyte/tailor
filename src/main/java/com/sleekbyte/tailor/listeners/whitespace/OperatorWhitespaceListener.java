@@ -29,17 +29,13 @@ public final class OperatorWhitespaceListener extends SwiftBaseListener {
             if (ctx.getChild(0).getChild(i) instanceof SwiftParser.OperatorContext) {
                 SwiftParser.OperatorContext op = (SwiftParser.OperatorContext) ctx.getChild(0).getChild(i);
                 Token before = ParseTreeUtil.getStopTokenForNode(ctx.getChild(0).getChild(i - 1));
-                Token after = ParseTreeUtil.getStartTokenForNode(ctx.getChild(0).getChild(i + 1));
 
                 if (verifier.checkLeftSpaces(before, op.getStart(), 1)) {
                     printer.error(Rules.OPERATOR_WHITESPACE, Messages.OPERATOR + Messages.SPACE_BEFORE,
                         ListenerUtil.getContextStartLocation(op));
                 }
 
-                if (verifier.checkRightSpaces(after, op.getStop(), 1)) {
-                    printer.error(Rules.OPERATOR_WHITESPACE, Messages.OPERATOR + Messages.SPACE_AFTER,
-                        ListenerUtil.getContextStartLocation(op));
-                }
+                // TODO: Verify one space after colon for infix operator declarations
             }
         }
     }

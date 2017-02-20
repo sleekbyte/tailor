@@ -60,7 +60,7 @@ prefix func +++ (vector: inout Vector2D) -> Vector2D {
     return vector
 }
 
-infix operator +- { associativity left precedence 140 }
+infix operator +-: AdditionPrecedence
 func +- (left: Vector2D, right: Vector2D) -> Vector2D {
     return Vector2D(x: left.x + right.x, y: left.y - right.y)
 }
@@ -78,7 +78,21 @@ public func getFormattedLabel(index: Int) -> String
 
 import let SwiftCovFramework.SwiftCovFrameworkBundleIdentifier
 
-infix operator >>->> {
-	associativity right
-	precedence 110
+infix operator >>->>: AdditionPrecedence
+
+precedencegroup Additive {
+  associativity: left
+}
+precedencegroup Multiplicative {
+  associativity: left
+  higherThan: Additive
+}
+precedencegroup BitwiseAnd {
+  associativity: left
+}
+
+// module A
+precedencegroup Equivalence {
+  higherThan: Comparative
+  lowerThan: Additive  // possible, because Additive lies in another module
 }

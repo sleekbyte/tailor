@@ -199,6 +199,7 @@ declaration
  | operatorDeclaration ';'?
  // compiler-control-statement not in Swift Language Reference
  | compilerControlStatement ';'?
+ | precedenceGroupDeclaration ';'?
  ;
 
 declarations : declaration+ ;
@@ -393,14 +394,25 @@ subscriptResult : '->' attributes? sType  ;
 // GRAMMAR OF AN OPERATOR DECLARATION
 
 operatorDeclaration : prefixOperatorDeclaration | postfixOperatorDeclaration | infixOperatorDeclaration  ;
-prefixOperatorDeclaration : 'prefix' 'operator' operator '{' '}'  ;
-postfixOperatorDeclaration : 'postfix' 'operator' operator '{' '}'  ;
-infixOperatorDeclaration : 'infix' 'operator' operator '{' infixOperatorAttributes? '}'  ;
-infixOperatorAttributes : precedenceClause associativityClause? | associativityClause precedenceClause? ;
-precedenceClause : 'precedence' precedenceLevel  ;
-precedenceLevel : integerLiteral ;
-associativityClause : 'associativity' associativity  ;
-associativity : 'left' | 'right' | 'none'  ;
+prefixOperatorDeclaration : 'prefix' 'operator' operator  ;
+postfixOperatorDeclaration : 'postfix' 'operator' operator  ;
+infixOperatorDeclaration : 'infix' 'operator' operator infixOperatorGroup? ;
+infixOperatorGroup: ':' precedenceGroupName ;
+
+
+// GRAMMAR OF A PRECEDENCE GROUP DECLARATION
+
+precedenceGroupDeclaration: 'precedencegroup' precedenceGroupName '{' precedenceGroupAttributes? '}' ;
+
+precedenceGroupAttributes: precedenceGroupAttribute+;
+precedenceGroupAttribute: precedenceGroupRelation | precedenceGroupAssignment | precedenceGroupAssociativity ;
+precedenceGroupRelation: ('higherThan' | 'lowerThan') ':' precedenceGroupNames;
+precedenceGroupAssignment: 'assignment' ':' booleanLiteral ;
+precedenceGroupAssociativity: 'associativity' ':' ('left' | 'right' | 'none') ;
+
+precedenceGroupNames: precedenceGroupName (',' precedenceGroupName)* ;
+precedenceGroupName: identifier ;
+
 
 // Patterns
 

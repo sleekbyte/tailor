@@ -111,13 +111,13 @@ public func ==(lhs: Position, rhs: Position) -> Bool {
         && (lhs.column == rhs.column)
 }
 
-infix operator ** { associativity left precedence 160 }
+infix operator **: AdditionPrecedence
 
 func ** (left: Double, right: Double) -> Double {
     return pow(left, right)
 }
 
-infix operator **= { associativity right precedence 90 }
+infix operator **=: AdditionPrecedence
 
 func **= (left: inout Double, right: Double) {
     left = left ** right
@@ -134,7 +134,7 @@ extension String: RegularExpressionMatchable {
     }
 }
 
-infix operator =~ { associativity left precedence 130 }
+infix operator =~ AdditionPrecedence
 func =~<T: RegularExpressionMatchable> (left: T, right: String) -> Bool {
     return try! left.match(right, options: [])
 }
