@@ -205,10 +205,11 @@ declaration
 declarations : declaration+ ;
 declarationModifiers : declarationModifier+ ;
 declarationModifier : 'class' | 'convenience' | 'dynamic' | 'final' | 'infix'
- | 'lazy' | 'mutating' | 'nonmutating' | 'optional' | 'override' | 'postfix'
+ | 'lazy' | 'optional' | 'override' | 'postfix'
  | 'prefix' | 'required' | 'static' | 'unowned' | 'unowned' '(' 'safe' ')'
  | 'unowned' '(' 'unsafe' ')' | 'weak'
- | accessLevelModifier ;
+ | accessLevelModifier
+ | mutationModifier ;
 
 accessLevelModifier : 'private' | 'private' '(' 'set' ')'
  | 'fileprivate' | 'fileprivate' '(' 'set' ')'
@@ -216,6 +217,8 @@ accessLevelModifier : 'private' | 'private' '(' 'set' ')'
  | 'public' | 'public' '(' 'set' ')'
  | 'open' | 'open' '(' 'set' ')' ;
 accessLevelModifiers : accessLevelModifier+ ;
+
+mutationModifier: 'mutating' | 'nonmutating' ;
 
 // GRAMMAR OF A CODE BLOCK
 
