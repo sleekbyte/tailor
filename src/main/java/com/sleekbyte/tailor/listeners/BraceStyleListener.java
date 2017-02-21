@@ -204,8 +204,8 @@ public class BraceStyleListener extends SwiftBaseListener {
         if (ctx.functionBody() == null) {
             return;
         }
-        verifyCodeBlockOpenBraceStyle(ctx.functionBody().codeBlock(), ctx.functionSignature().getStop(),
-            Messages.FUNCTION);
+        Token left = ParseTreeUtil.getStopTokenForNode(ParseTreeUtil.getLeftSibling(ctx.functionBody()));
+        verifyCodeBlockOpenBraceStyle(ctx.functionBody().codeBlock(), left, Messages.FUNCTION);
         verifyBodyCloseBraceStyle(ctx.functionBody().codeBlock(), Messages.FUNCTION);
     }
 

@@ -163,10 +163,10 @@ platformVersion: VersionLiteral | DecimalLiteral | FloatingPointLiteral ; // TOD
 
 // GRAMMAR OF A GENERIC PARAMETER CLAUSE
 
-genericParameterClause : '<' genericParameterList requirementClause? '>'  ;
+genericParameterClause : '<' genericParameterList '>'  ;
 genericParameterList : genericParameter (',' genericParameter)*  ;
 genericParameter : typeName | typeName ':' typeIdentifier | typeName ':' protocolCompositionType  ;
-requirementClause : 'where' requirementList  ;
+genericWhereClause : 'where' requirementList  ;
 requirementList : requirement (',' requirement)*  ;
 requirement : conformanceRequirement | sameTypeRequirement  ;
 conformanceRequirement : typeIdentifier ':' typeIdentifier | typeIdentifier ':' protocolCompositionType  ;
@@ -278,8 +278,8 @@ typealiasAssignment : '=' sType  ;
 /* HACK: functionBody? is intentionally not used to force the parser to try and match a functionBody first
  * This can be removed once we figure out how to enforce that statements are either separated by semi colons or new line characters
  */
-functionDeclaration : functionHead functionName genericParameterClause? functionSignature functionBody
- | functionHead functionName genericParameterClause? functionSignature
+functionDeclaration : functionHead functionName genericParameterClause? functionSignature genericWhereClause? functionBody
+ | functionHead functionName genericParameterClause? functionSignature genericWhereClause?
  ;
 
 functionHead : attributes? declarationModifiers? 'func'  ;
@@ -304,18 +304,18 @@ defaultArgumentClause : '=' expression  ;
 
 enumDeclaration : attributes? accessLevelModifier? enumDef  ;
 enumDef: unionStyleEnum | rawValueStyleEnum  ;
-unionStyleEnum : 'indirect'? 'enum' enumName genericParameterClause? typeInheritanceClause? '{' unionStyleEnumMembers?'}'  ;
+unionStyleEnum : 'indirect'? 'enum' enumName genericParameterClause? typeInheritanceClause? genericWhereClause? '{' unionStyleEnumMembers?'}'  ;
 unionStyleEnumMembers : unionStyleEnumMember+ ;
-unionStyleEnumMember : declaration | unionStyleEnumCaseClause ';'? ;
+unionStyleEnumMember : declaration | unionStyleEnumCaseClause ';'? | compilerControlStatement ;
 unionStyleEnumCaseClause : attributes? 'indirect'? 'case' unionStyleEnumCaseList  ;
 unionStyleEnumCaseList : unionStyleEnumCase (',' unionStyleEnumCase)*  ;
 unionStyleEnumCase : enumCaseName tupleType? ;
 enumName : identifier  ;
 enumCaseName : identifier  ;
 // typeInheritanceClause is not optional in the Swift Language Reference
-rawValueStyleEnum : 'enum' enumName genericParameterClause? typeInheritanceClause? '{' rawValueStyleEnumMembers?'}'  ;
+rawValueStyleEnum : 'enum' enumName genericParameterClause? typeInheritanceClause? genericWhereClause? '{' rawValueStyleEnumMembers?'}'  ;
 rawValueStyleEnumMembers : rawValueStyleEnumMember+ ;
-rawValueStyleEnumMember : declaration | rawValueStyleEnumCaseClause  ;
+rawValueStyleEnumMember : declaration | rawValueStyleEnumCaseClause | compilerControlStatement  ;
 rawValueStyleEnumCaseClause : attributes? 'case' rawValueStyleEnumCaseList  ;
 rawValueStyleEnumCaseList : rawValueStyleEnumCase (',' rawValueStyleEnumCase)*   ;
 rawValueStyleEnumCase : enumCaseName rawValueAssignment? ;
@@ -323,30 +323,34 @@ rawValueAssignment : '=' literal  ;
 
 // GRAMMAR OF A STRUCTURE DECLARATION
 
-structDeclaration : attributes? accessLevelModifier? 'struct' structName genericParameterClause? typeInheritanceClause? structBody  ;
+structDeclaration : attributes? accessLevelModifier? 'struct' structName genericParameterClause? typeInheritanceClause? genericWhereClause? structBody  ;
 structName : identifier  ;
-structBody : '{' declarations?'}'  ;
+structBody : '{' structMembers? '}'  ;
+structMembers: structMember+ ;
+structMember: declaration | compilerControlStatement ;
 
 // GRAMMAR OF A CLASS DECLARATION
 
-classDeclaration : attributes? classDeclarationModifiers? 'class' className genericParameterClause? typeInheritanceClause? classBody  ;
-// Swift Language Reference does not allow final to come before accessLevelModifier
+classDeclaration : attributes? classDeclarationModifiers? 'class' className genericParameterClause? typeInheritanceClause? genericWhereClause? classBody  ;
 classDeclarationModifiers: accessLevelModifier 'final'? | 'final' accessLevelModifier? ;
 className : identifier ;
-classBody : '{' declarations? '}'  ;
+classBody : '{' classMembers? '}'  ;
+classMembers: classMember+ ;
+classMember: declaration | compilerControlStatement ;
 
 // GRAMMAR OF A PROTOCOL DECLARATION
 
 protocolDeclaration : attributes? accessLevelModifier? 'protocol' protocolName typeInheritanceClause? protocolBody  ;
 protocolName : identifier  ;
-protocolBody : '{' protocolMemberDeclarations?'}'  ;
+protocolBody : '{' protocolMembers? '}'  ;
+protocolMembers: protocolMember+ ;
+protocolMember: protocolMemberDeclaration | compilerControlStatement ;
 protocolMemberDeclaration : protocolPropertyDeclaration ';'?
  | protocolMethodDeclaration ';'?
  | protocolInitializerDeclaration ';'?
  | protocolSubscriptDeclaration ';'?
  | protocolAssociatedTypeDeclaration ';'?
  ;
-protocolMemberDeclarations : protocolMemberDeclaration+ ;
 
 // GRAMMAR OF A PROTOCOL PROPERTY DECLARATION
 
@@ -354,11 +358,11 @@ protocolPropertyDeclaration : variableDeclarationHead variableName typeAnnotatio
 
 // GRAMMAR OF A PROTOCOL METHOD DECLARATION
 
-protocolMethodDeclaration : functionHead functionName genericParameterClause? functionSignature  ;
+protocolMethodDeclaration : functionHead functionName genericParameterClause? functionSignature genericWhereClause?  ;
 
 // GRAMMAR OF A PROTOCOL INITIALIZER DECLARATION
 
-protocolInitializerDeclaration : initializerHead genericParameterClause? parameterClause ('throws' | 'rethrows')? ;
+protocolInitializerDeclaration : initializerHead genericParameterClause? parameterClause ('throws' | 'rethrows')? genericWhereClause? ;
 
 // GRAMMAR OF A PROTOCOL SUBSCRIPT DECLARATION
 
@@ -370,7 +374,7 @@ protocolAssociatedTypeDeclaration : attributes? accessLevelModifier? 'associated
 
 // GRAMMAR OF AN INITIALIZER DECLARATION
 
-initializerDeclaration : initializerHead genericParameterClause? parameterClause ('throws' | 'rethrows')? initializerBody  ;
+initializerDeclaration : initializerHead genericParameterClause? parameterClause ('throws' | 'rethrows')? genericWhereClause? initializerBody  ;
 initializerHead : attributes? declarationModifiers? 'init' ('?' | '!')?  ;
 initializerBody : codeBlock  ;
 
@@ -380,9 +384,10 @@ deinitializerDeclaration : attributes? 'deinit' codeBlock  ;
 
 // GRAMMAR OF AN EXTENSION DECLARATION
 
-// attributes missing in the Swift Language Reference
-extensionDeclaration : attributes? accessLevelModifier? 'extension' typeIdentifier (requirementClause | typeInheritanceClause)? extensionBody  ;
-extensionBody : '{' declarations?'}'  ;
+extensionDeclaration : attributes? accessLevelModifier? 'extension' typeIdentifier (genericWhereClause | typeInheritanceClause)? extensionBody  ;
+extensionBody : '{' extensionMembers?'}'  ;
+extensionMembers: extensionMember+ ;
+extensionMember: declaration | compilerControlStatement ;
 
 // GRAMMAR OF A SUBSCRIPT DECLARATION
 

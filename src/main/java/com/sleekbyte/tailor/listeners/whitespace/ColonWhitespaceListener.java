@@ -139,9 +139,9 @@ public final class ColonWhitespaceListener extends SwiftBaseListener {
     @Override
     public void enterArgumentName(SwiftParser.ArgumentNameContext ctx) {
         Token colon = ((TerminalNodeImpl) ctx.getChild(1)).getSymbol();
-        Token left = ctx.identifier() == null ?
-            ((TerminalNodeImpl) ctx.getChild(0)).getSymbol() :
-            ctx.identifier().getStop();
+        Token left = ctx.identifier() == null
+            ? ((TerminalNodeImpl) ctx.getChild(0)).getSymbol()
+            : ctx.identifier().getStop();
         verifier.verifyPunctuationLeftAssociation(left, colon, Messages.COLON);
     }
 
