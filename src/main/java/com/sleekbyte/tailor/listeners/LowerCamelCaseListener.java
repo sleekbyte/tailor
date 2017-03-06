@@ -28,7 +28,7 @@ public class LowerCamelCaseListener extends SwiftBaseListener {
     @Override
     public void enterTopLevel(TopLevelContext topLevelCtx) {
         List<IdentifierContext> names = DeclarationListener.getVariableNames(topLevelCtx);
-        names.forEach(ctx -> verifyLowerCamelCase(Messages.VARIABLE + Messages.NAMES, ctx));
+        names.forEach(ctx -> verifyLowerCamelCase(Messages.VARIABLE + Messages.NAMES, ctx, true));
     }
 
     @Override
@@ -49,7 +49,12 @@ public class LowerCamelCaseListener extends SwiftBaseListener {
     }
 
     private void verifyLowerCamelCase(String constructType, ParserRuleContext ctx) {
-        String constructName = ctx.getText();
+        verifyLowerCamelCase(constructType, ctx, false);
+    }
+
+    private void verifyLowerCamelCase(String constructType, ParserRuleContext ctx, Boolean unescapeIdentifier) {
+        String text = unescapeIdentifier ? CharFormatUtil.unescapeIdentifier(ctx.getText()) : ctx.getText();
+        String constructName = CharFormatUtil.unescapeIdentifier(text);
         if (!CharFormatUtil.isLowerCamelCaseOrAcronym(constructName)) {
             Location location = ListenerUtil.getContextStartLocation(ctx);
             this.printer.error(Rules.LOWER_CAMEL_CASE, constructType + Messages.LOWER_CAMEL_CASE, location);
