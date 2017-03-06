@@ -197,6 +197,7 @@ enum SomeEnum: Int {
 }
 
 func demo() {
-    let `open` = true
+    var `Open` = true
     var `close` = false
+    let `open` = true
 }

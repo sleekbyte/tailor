@@ -4,8 +4,8 @@ package com.sleekbyte.tailor.utils;
  * Couples together a pair of values, which may be of different types (L and R).
  * The individual values can be accessed via its public getter functions getFirst() and getSecond().
  *
- * @param <L> Type of member first.
- * @param <R> Type of member second.
+ * @param <L> Type of member first
+ * @param <R> Type of member second
  */
 public final class Pair<L, R> {
     private final L first;

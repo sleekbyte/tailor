@@ -147,4 +147,8 @@ private struct Scaling {
 
     let `open` = true
     var `close` = false
+
+    func demo() {
+        let `Open` = true
+    }
 }

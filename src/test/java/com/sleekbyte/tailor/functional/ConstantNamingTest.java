@@ -62,6 +62,7 @@ public class ConstantNamingTest extends RuleTest {
             + Messages.K_PREFIXED);
         addExpectedMsg(Rules.CONSTANT_K_PREFIX, 134, 20, Severity.WARNING, Messages.CONSTANT + Messages.NAME
             + Messages.K_PREFIXED);
+        addExpectedMsg(Rules.CONSTANT_NAMING, 152, 14, Severity.WARNING, Messages.CONSTANT + Messages.LOWER_CAMEL_CASE);
     }
 
     @Override

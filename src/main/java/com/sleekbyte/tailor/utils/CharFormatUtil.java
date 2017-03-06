@@ -24,6 +24,11 @@ public final class CharFormatUtil {
         return startsWithAcronym(word) || isLowerCamelCase(word);
     }
 
+    public static boolean isEnclosedInBackticks(String identifier) {
+        int length = identifier.length();
+        return length >= 2 && identifier.charAt(0) == '`' && identifier.charAt(length - 1) == '`';
+    }
+
     /**
      * Will strip leading and trailing ` character in given string if both present.
      *
@@ -32,7 +37,7 @@ public final class CharFormatUtil {
      */
     public static String unescapeIdentifier(String identifier) {
         int length = identifier.length();
-        if (length >= 2 && identifier.charAt(0) == '`' && identifier.charAt(length - 1) == '`') {
+        if (isEnclosedInBackticks(identifier)) {
             return identifier.substring(1, length - 1);
         }
         return identifier;
