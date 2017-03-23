@@ -28,7 +28,7 @@ public class LowerCamelCaseListener extends SwiftBaseListener {
     @Override
     public void enterTopLevel(TopLevelContext topLevelCtx) {
         List<IdentifierContext> names = DeclarationListener.getVariableNames(topLevelCtx);
-        names.forEach(ctx -> verifyLowerCamelCase(Messages.VARIABLE + Messages.NAMES, ctx, true));
+        names.forEach(ctx -> verifyLowerCamelCase(Messages.VARIABLE + Messages.NAMES, ctx));
     }
 
     @Override
@@ -49,16 +49,11 @@ public class LowerCamelCaseListener extends SwiftBaseListener {
     }
 
     private void verifyLowerCamelCase(String constructType, ParserRuleContext ctx) {
-        verifyLowerCamelCase(constructType, ctx, false);
-    }
-
-    private void verifyLowerCamelCase(String constructType, ParserRuleContext ctx, Boolean unescapeIdentifier) {
-        String text = unescapeIdentifier ? CharFormatUtil.unescapeIdentifier(ctx.getText()) : ctx.getText();
-        String constructName = CharFormatUtil.unescapeIdentifier(text);
+        String constructName = CharFormatUtil.unescapeIdentifier(ctx.getText());
         if (!CharFormatUtil.isLowerCamelCaseOrAcronym(constructName)) {
             Location location = ListenerUtil.getContextStartLocation(ctx);
             // Ensure that the violation column number reports the character after the opening backtick.
-            if (unescapeIdentifier && CharFormatUtil.isEnclosedInBackticks(ctx.getText())) {
+            if (CharFormatUtil.isEnclosedInBackticks(ctx.getText())) {
                 location.column += 1;
             }
             this.printer.error(Rules.LOWER_CAMEL_CASE, constructType + Messages.LOWER_CAMEL_CASE, location);

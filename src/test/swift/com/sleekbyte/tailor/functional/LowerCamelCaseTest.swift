@@ -201,3 +201,10 @@ func demo() {
     var `close` = false
     let `open` = true
 }
+
+func `func`() {
+}
+
+enum Test {
+    case `case`, `class`, notReserved
+}
