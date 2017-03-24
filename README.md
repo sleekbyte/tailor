@@ -36,7 +36,7 @@
 [Tailor]: https://tailor.sh
 [Swift]: https://swift.org
 
-Tailor supports Swift 2 out of the box and helps enforce style guidelines outlined in the [The Swift Programming Language][], [GitHub][], [Ray Wenderlich][], and [Coursera][] style guides. It supports cross-platform usage and can be run on Mac OS X via your shell or integrated with Xcode, as well as on Linux and Windows.
+Tailor supports Swift 3.0.1 out of the box and helps enforce style guidelines outlined in the [The Swift Programming Language][], [GitHub][], [Ray Wenderlich][], and [Coursera][] style guides. It supports cross-platform usage and can be run on Mac OS X via your shell or integrated with Xcode, as well as on Linux and Windows.
 
 [The Swift Programming Language]: https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/
 [GitHub]: https://github.com/github/swift-style-guide
