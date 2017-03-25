@@ -36,11 +36,11 @@ public class CommaWhitespaceTest extends RuleTest {
         addExpectedCommaMessage(start + 8, 32, Messages.NO_SPACE_BEFORE);
 
         // Requirement list commas
-        start = 82;
+        start = 83;
         addExpectedCommaMessage(start, 37, Messages.SPACE_AFTER);
-        addExpectedCommaMessage(start + 4, 43, Messages.SPACE_AFTER);
-        addExpectedCommaMessage(start + 4, 43, Messages.NO_SPACE_BEFORE);
-        addExpectedCommaMessage(start + 8, 1, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 3, 43, Messages.SPACE_AFTER);
+        addExpectedCommaMessage(start + 3, 43, Messages.NO_SPACE_BEFORE);
+        addExpectedCommaMessage(start + 7, 1, Messages.NO_SPACE_BEFORE);
 
         // Condition clause/list commas
         start = 103;

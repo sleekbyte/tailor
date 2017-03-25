@@ -61,6 +61,16 @@ public final class ParenthesisWhitespaceListener extends SwiftBaseListener {
     }
 
     @Override
+    public void enterTupleExpression(SwiftParser.TupleExpressionContext ctx) {
+        verifier.verifyBracketContentWhitespace(ctx, Messages.PARENTHESES);
+    }
+
+    @Override
+    public void enterFunctionCallArgumentClause(SwiftParser.FunctionCallArgumentClauseContext ctx) {
+        verifier.verifyBracketContentWhitespace(ctx, Messages.PARENTHESES);
+    }
+
+    @Override
     public void enterInitializerDeclaration(SwiftParser.InitializerDeclarationContext ctx) {
         verifier.verifyLeadingWhitespaceBeforeBracket(ctx.parameterClause(), Messages.PARENTHESES,
             Messages.NO_WHITESPACE_BEFORE, 0);

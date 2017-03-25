@@ -31,7 +31,7 @@ public final class ArrowWhitespaceListener extends SwiftBaseListener {
     }
 
     @Override
-    public void enterSType(SwiftParser.STypeContext ctx) {
+    public void enterFunctionType(SwiftParser.FunctionTypeContext ctx) {
         Optional<ParseTree> arrowOptional = ctx.children.stream()
             .filter(node -> node.getText().equals("->"))
             .findFirst();

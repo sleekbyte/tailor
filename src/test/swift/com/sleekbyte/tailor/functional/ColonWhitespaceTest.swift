@@ -179,9 +179,9 @@ func someFunction<T:  SomeClass, U: SomeProtocol>(someT: T, someU: U) {
 }
 
 func allItemsMatch<
-    C1 : Container, C2: Container
-    where C1.ItemType == C2.ItemType, C1.ItemType: Equatable>
-    (someContainer: C1, _ anotherContainer: C2) -> Bool {
+    C1 : Container, C2: Container>
+    (someContainer: C1, _ anotherContainer: C2) -> Bool
+    where C1.ItemType == C2.ItemType, C1.ItemType: Equatable {
 }
 
 SystemError.description(for: errorNumber)

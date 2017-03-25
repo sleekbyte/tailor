@@ -99,7 +99,7 @@ defaultLabel : 'default' ':' ;
 
 // GRAMMAR OF A LABELED STATEMENT
 
-labeledStatement : statementLabel loopStatement | statementLabel switchStatement  ;
+labeledStatement : statementLabel (loopStatement | ifStatement | switchStatement | doStatement)  ;
 statementLabel : labelName ':' ;
 labelName : identifier  ;
 
@@ -163,10 +163,10 @@ platformVersion: VersionLiteral | DecimalLiteral | FloatingPointLiteral ; // TOD
 
 // GRAMMAR OF A GENERIC PARAMETER CLAUSE
 
-genericParameterClause : '<' genericParameterList requirementClause? '>'  ;
+genericParameterClause : '<' genericParameterList '>'  ;
 genericParameterList : genericParameter (',' genericParameter)*  ;
 genericParameter : typeName | typeName ':' typeIdentifier | typeName ':' protocolCompositionType  ;
-requirementClause : 'where' requirementList  ;
+genericWhereClause : 'where' requirementList  ;
 requirementList : requirement (',' requirement)*  ;
 requirement : conformanceRequirement | sameTypeRequirement  ;
 conformanceRequirement : typeIdentifier ':' typeIdentifier | typeIdentifier ':' protocolCompositionType  ;
@@ -199,15 +199,17 @@ declaration
  | operatorDeclaration ';'?
  // compiler-control-statement not in Swift Language Reference
  | compilerControlStatement ';'?
+ | precedenceGroupDeclaration ';'?
  ;
 
 declarations : declaration+ ;
 declarationModifiers : declarationModifier+ ;
 declarationModifier : 'class' | 'convenience' | 'dynamic' | 'final' | 'infix'
- | 'lazy' | 'mutating' | 'nonmutating' | 'optional' | 'override' | 'postfix'
+ | 'lazy' | 'optional' | 'override' | 'postfix'
  | 'prefix' | 'required' | 'static' | 'unowned' | 'unowned' '(' 'safe' ')'
  | 'unowned' '(' 'unsafe' ')' | 'weak'
- | accessLevelModifier ;
+ | accessLevelModifier
+ | mutationModifier ;
 
 accessLevelModifier : 'private' | 'private' '(' 'set' ')'
  | 'fileprivate' | 'fileprivate' '(' 'set' ')'
@@ -215,6 +217,8 @@ accessLevelModifier : 'private' | 'private' '(' 'set' ')'
  | 'public' | 'public' '(' 'set' ')'
  | 'open' | 'open' '(' 'set' ')' ;
 accessLevelModifiers : accessLevelModifier+ ;
+
+mutationModifier: 'mutating' | 'nonmutating' ;
 
 // GRAMMAR OF A CODE BLOCK
 
@@ -274,8 +278,8 @@ typealiasAssignment : '=' sType  ;
 /* HACK: functionBody? is intentionally not used to force the parser to try and match a functionBody first
  * This can be removed once we figure out how to enforce that statements are either separated by semi colons or new line characters
  */
-functionDeclaration : functionHead functionName genericParameterClause? functionSignature functionBody
- | functionHead functionName genericParameterClause? functionSignature
+functionDeclaration : functionHead functionName genericParameterClause? functionSignature genericWhereClause? functionBody
+ | functionHead functionName genericParameterClause? functionSignature genericWhereClause?
  ;
 
 functionHead : attributes? declarationModifiers? 'func'  ;
@@ -300,18 +304,18 @@ defaultArgumentClause : '=' expression  ;
 
 enumDeclaration : attributes? accessLevelModifier? enumDef  ;
 enumDef: unionStyleEnum | rawValueStyleEnum  ;
-unionStyleEnum : 'indirect'? 'enum' enumName genericParameterClause? typeInheritanceClause? '{' unionStyleEnumMembers?'}'  ;
+unionStyleEnum : 'indirect'? 'enum' enumName genericParameterClause? typeInheritanceClause? genericWhereClause? '{' unionStyleEnumMembers?'}'  ;
 unionStyleEnumMembers : unionStyleEnumMember+ ;
-unionStyleEnumMember : declaration | unionStyleEnumCaseClause ';'? ;
+unionStyleEnumMember : declaration | unionStyleEnumCaseClause ';'? | compilerControlStatement ;
 unionStyleEnumCaseClause : attributes? 'indirect'? 'case' unionStyleEnumCaseList  ;
 unionStyleEnumCaseList : unionStyleEnumCase (',' unionStyleEnumCase)*  ;
 unionStyleEnumCase : enumCaseName tupleType? ;
 enumName : identifier  ;
 enumCaseName : identifier  ;
 // typeInheritanceClause is not optional in the Swift Language Reference
-rawValueStyleEnum : 'enum' enumName genericParameterClause? typeInheritanceClause? '{' rawValueStyleEnumMembers?'}'  ;
+rawValueStyleEnum : 'enum' enumName genericParameterClause? typeInheritanceClause? genericWhereClause? '{' rawValueStyleEnumMembers?'}'  ;
 rawValueStyleEnumMembers : rawValueStyleEnumMember+ ;
-rawValueStyleEnumMember : declaration | rawValueStyleEnumCaseClause  ;
+rawValueStyleEnumMember : declaration | rawValueStyleEnumCaseClause | compilerControlStatement  ;
 rawValueStyleEnumCaseClause : attributes? 'case' rawValueStyleEnumCaseList  ;
 rawValueStyleEnumCaseList : rawValueStyleEnumCase (',' rawValueStyleEnumCase)*   ;
 rawValueStyleEnumCase : enumCaseName rawValueAssignment? ;
@@ -319,30 +323,34 @@ rawValueAssignment : '=' literal  ;
 
 // GRAMMAR OF A STRUCTURE DECLARATION
 
-structDeclaration : attributes? accessLevelModifier? 'struct' structName genericParameterClause? typeInheritanceClause? structBody  ;
+structDeclaration : attributes? accessLevelModifier? 'struct' structName genericParameterClause? typeInheritanceClause? genericWhereClause? structBody  ;
 structName : identifier  ;
-structBody : '{' declarations?'}'  ;
+structBody : '{' structMembers? '}'  ;
+structMembers: structMember+ ;
+structMember: declaration | compilerControlStatement ;
 
 // GRAMMAR OF A CLASS DECLARATION
 
-classDeclaration : attributes? classDeclarationModifiers? 'class' className genericParameterClause? typeInheritanceClause? classBody  ;
-// Swift Language Reference does not allow final to come before accessLevelModifier
+classDeclaration : attributes? classDeclarationModifiers? 'class' className genericParameterClause? typeInheritanceClause? genericWhereClause? classBody  ;
 classDeclarationModifiers: accessLevelModifier 'final'? | 'final' accessLevelModifier? ;
 className : identifier ;
-classBody : '{' declarations? '}'  ;
+classBody : '{' classMembers? '}'  ;
+classMembers: classMember+ ;
+classMember: declaration | compilerControlStatement ;
 
 // GRAMMAR OF A PROTOCOL DECLARATION
 
 protocolDeclaration : attributes? accessLevelModifier? 'protocol' protocolName typeInheritanceClause? protocolBody  ;
 protocolName : identifier  ;
-protocolBody : '{' protocolMemberDeclarations?'}'  ;
+protocolBody : '{' protocolMembers? '}'  ;
+protocolMembers: protocolMember+ ;
+protocolMember: protocolMemberDeclaration | compilerControlStatement ;
 protocolMemberDeclaration : protocolPropertyDeclaration ';'?
  | protocolMethodDeclaration ';'?
  | protocolInitializerDeclaration ';'?
  | protocolSubscriptDeclaration ';'?
  | protocolAssociatedTypeDeclaration ';'?
  ;
-protocolMemberDeclarations : protocolMemberDeclaration+ ;
 
 // GRAMMAR OF A PROTOCOL PROPERTY DECLARATION
 
@@ -350,11 +358,11 @@ protocolPropertyDeclaration : variableDeclarationHead variableName typeAnnotatio
 
 // GRAMMAR OF A PROTOCOL METHOD DECLARATION
 
-protocolMethodDeclaration : functionHead functionName genericParameterClause? functionSignature  ;
+protocolMethodDeclaration : functionHead functionName genericParameterClause? functionSignature genericWhereClause?  ;
 
 // GRAMMAR OF A PROTOCOL INITIALIZER DECLARATION
 
-protocolInitializerDeclaration : initializerHead genericParameterClause? parameterClause ('throws' | 'rethrows')? ;
+protocolInitializerDeclaration : initializerHead genericParameterClause? parameterClause ('throws' | 'rethrows')? genericWhereClause? ;
 
 // GRAMMAR OF A PROTOCOL SUBSCRIPT DECLARATION
 
@@ -366,7 +374,7 @@ protocolAssociatedTypeDeclaration : attributes? accessLevelModifier? 'associated
 
 // GRAMMAR OF AN INITIALIZER DECLARATION
 
-initializerDeclaration : initializerHead genericParameterClause? parameterClause ('throws' | 'rethrows')? initializerBody  ;
+initializerDeclaration : initializerHead genericParameterClause? parameterClause ('throws' | 'rethrows')? genericWhereClause? initializerBody  ;
 initializerHead : attributes? declarationModifiers? 'init' ('?' | '!')?  ;
 initializerBody : codeBlock  ;
 
@@ -376,9 +384,10 @@ deinitializerDeclaration : attributes? 'deinit' codeBlock  ;
 
 // GRAMMAR OF AN EXTENSION DECLARATION
 
-// attributes missing in the Swift Language Reference
-extensionDeclaration : attributes? accessLevelModifier? 'extension' typeIdentifier (requirementClause | typeInheritanceClause)? extensionBody  ;
-extensionBody : '{' declarations?'}'  ;
+extensionDeclaration : attributes? accessLevelModifier? 'extension' typeIdentifier (genericWhereClause | typeInheritanceClause)? extensionBody  ;
+extensionBody : '{' extensionMembers?'}'  ;
+extensionMembers: extensionMember+ ;
+extensionMember: declaration | compilerControlStatement ;
 
 // GRAMMAR OF A SUBSCRIPT DECLARATION
 
@@ -393,14 +402,25 @@ subscriptResult : '->' attributes? sType  ;
 // GRAMMAR OF AN OPERATOR DECLARATION
 
 operatorDeclaration : prefixOperatorDeclaration | postfixOperatorDeclaration | infixOperatorDeclaration  ;
-prefixOperatorDeclaration : 'prefix' 'operator' operator '{' '}'  ;
-postfixOperatorDeclaration : 'postfix' 'operator' operator '{' '}'  ;
-infixOperatorDeclaration : 'infix' 'operator' operator '{' infixOperatorAttributes? '}'  ;
-infixOperatorAttributes : precedenceClause associativityClause? | associativityClause precedenceClause? ;
-precedenceClause : 'precedence' precedenceLevel  ;
-precedenceLevel : integerLiteral ;
-associativityClause : 'associativity' associativity  ;
-associativity : 'left' | 'right' | 'none'  ;
+prefixOperatorDeclaration : 'prefix' 'operator' operator  ;
+postfixOperatorDeclaration : 'postfix' 'operator' operator  ;
+infixOperatorDeclaration : 'infix' 'operator' operator infixOperatorGroup? ;
+infixOperatorGroup: ':' precedenceGroupName ;
+
+
+// GRAMMAR OF A PRECEDENCE GROUP DECLARATION
+
+precedenceGroupDeclaration: 'precedencegroup' precedenceGroupName '{' precedenceGroupAttributes? '}' ;
+
+precedenceGroupAttributes: precedenceGroupAttribute+;
+precedenceGroupAttribute: precedenceGroupRelation | precedenceGroupAssignment | precedenceGroupAssociativity ;
+precedenceGroupRelation: ('higherThan' | 'lowerThan') ':' precedenceGroupNames;
+precedenceGroupAssignment: 'assignment' ':' booleanLiteral ;
+precedenceGroupAssociativity: 'associativity' ':' ('left' | 'right' | 'none') ;
+
+precedenceGroupNames: precedenceGroupName (',' precedenceGroupName)* ;
+precedenceGroupName: identifier ;
+
 
 // Patterns
 
@@ -548,6 +568,7 @@ primaryExpression
  | superclassExpression
  | closureExpression
  | parenthesizedExpression
+ | tupleExpression
  | implicitMemberExpression
 // | implicit_member_expression disallow as ambig with explicit member expr in postfix_expression
  | wildcardExpression
@@ -561,15 +582,21 @@ literalExpression
  : literal
  | arrayLiteral
  | dictionaryLiteral
+ | playgroundLiteral
  | '#file' | '#line' | '#column' | '#function'
  ;
 
 arrayLiteral : '[' arrayLiteralItems? ']'  ;
 arrayLiteralItems : arrayLiteralItem (',' arrayLiteralItem)* ','?  ;
 arrayLiteralItem : expression ;
+
 dictionaryLiteral : '[' dictionaryLiteralItems ']' | '[' ':' ']'  ;
 dictionaryLiteralItems : dictionaryLiteralItem (',' dictionaryLiteralItem)* ','? ;
 dictionaryLiteralItem : expression ':' expression  ;
+
+playgroundLiteral: '#colorLiteral' '(' 'red' ':' expression ',' 'green' ':' expression ',' 'blue' ':' expression ',' 'alpha' ':' expression ')'
+ | '#fileLiteral' '(' 'resourceName' ':' expression ')'
+ | '#imageLiteral' '(' 'resourceName' ':' expression ')' ;
 
 // GRAMMAR OF A SELF EXPRESSION
 
@@ -577,7 +604,7 @@ selfExpression
  : 'self'
  | 'self' '.' identifier  // self-method-expression
  // Swift Language Reference uses expressionList
- | 'self' '[' expressionElementList ']'  // self-subscript-expression
+ | 'self' '[' tupleElementList ']'  // self-subscript-expression
  | 'self' '.' 'init' // self-initializer-expression
  ;
 
@@ -591,12 +618,11 @@ superclassExpression
 
 superclassMethodExpression : 'super' '.' identifier  ;
 // Swift Language Reference uses expressionList
-superclassSubscriptExpression : 'super' '[' expressionElementList ']'  ;
+superclassSubscriptExpression : 'super' '[' tupleElementList ']'  ;
 superclassInitializerExpression : 'super' '.' 'init'  ;
 
 // GRAMMAR OF A CLOSURE EXPRESSION
 
-// Statements are not optional in the Swift Language Reference
 closureExpression : '{' closureSignature? statements? '}'  ;
 
 closureSignature
@@ -623,12 +649,13 @@ implicitMemberExpression : '.' identifier  ;
 
 // GRAMMAR OF A PARENTHESIZED EXPRESSION
 
-parenthesizedExpression : '(' expressionElementList? ')'  ;
-expressionElementList : expressionElement (',' expressionElement)*  ;
-// Swift Language Reference does not have expression as optional
-expressionElement : expression | expressionElementIdentifier ':' expression?  ;
-// Swift Language Reference does not have "keyword"
-expressionElementIdentifier: identifier | keyword ;
+parenthesizedExpression : '(' expression ')'  ;
+
+// GRAMMAR OF A TUPLE EXPRESSION
+
+tupleExpression: '(' tupleElementList? ')' ;
+tupleElementList: tupleElement (',' tupleElement)* ;
+tupleElement: (identifier ':')? expression ;
 
 // GRAMMAR OF A WILDCARD EXPRESSION
 
@@ -651,8 +678,8 @@ postfixExpression
  : primaryExpression                                             # primary
  | postfixExpression postfixOperator                             # postfixOperation
  // Function call with closure expression should always be above a lone parenthesized expression to reduce ambiguity
- | postfixExpression parenthesizedExpression? closureExpression  # functionCallWithClosureExpression
- | postfixExpression parenthesizedExpression                     # functionCallExpression
+ | postfixExpression functionCallArgumentClause? closureExpression  # functionCallWithClosureExpression
+ | postfixExpression functionCallArgumentClause                     # functionCallExpression
  | postfixExpression '.' 'init'                                  # initializerExpression
  | postfixExpression '.' 'init' '(' argumentNames ')'            # initializerExpressionWithArguments
  // TODO: don't allow '_' here in DecimalLiteral:
@@ -660,25 +687,25 @@ postfixExpression
  | postfixExpression '.' identifier genericArgumentClause?      # explicitMemberExpression2
  | postfixExpression '.' identifier '(' argumentNames ')'       # explicitMemberExpression3
  | postfixExpression '.' 'self'                                  # postfixSelfExpression
- | postfixExpression '.' 'dynamicType'                           # dynamicTypeExpression
+ | 'type' '(' 'of' ':' expression ')'                            # dynamicTypeExpression
  // Swift Language Reference uses expressionList
- | postfixExpression '[' expressionElementList ']'                     # subscriptExpression
+ | postfixExpression '[' tupleElementList ']'                     # subscriptExpression
  | postfixExpression '!'                                # forcedValueExpression
  | postfixExpression '?'                                         # optionalChainingExpression
  ;
 
+// GRAMMAR OF A FUNCTION CALL EXPRESSION
+functionCallArgumentClause: '(' functionCallArgumentList? ')' ;
+functionCallArgumentList: functionCallArgument (',' functionCallArgument)* ;
+// (expression | operator) is optional to handle selector expressions (see #425 for example)
+functionCallArgument: (functionCallIdentifier ':') (expression | operator)?
+  | (functionCallIdentifier ':')? (expression | operator) ;
+// SwiftLanguageReference does not have keyword
+functionCallIdentifier: identifier | keyword ;
+
 // GRAMMAR OF AN ARGUMENT NAME
 argumentNames : argumentName+  ;
 argumentName: (identifier | '_') ':'  ; // Swift Language Reference has argumentName → identifier :
-
-// GRAMMAR OF A FUNCTION CALL EXPRESSION
-
-/*
-functionCallExpression
-  : postfixExpression parenthesizedExpression
-  : postfixExpression parenthesizedExpression? trailingClosure
-  ;
-  */
 
 //trailing_closure : closure_expression  ;
 
@@ -771,11 +798,7 @@ postfixOperator : operator  ;
 sType
  : arrayType
  | dictionaryType
- // tupleType is not in Swift Language Reference
- | tupleType 'throws'? '->' sType    // function-type
- | tupleType 'rethrows' '->' sType   // function-type
- | '(' sType ')' 'throws'? '->' sType  // function-type
- | '(' sType ')' 'rethrows' '->' sType // function-type
+ | functionType
  | typeIdentifier
  | tupleType
  | sType '?'  // optional-type
@@ -784,6 +807,13 @@ sType
  | sType '.' 'Type' | sType '.' 'Protocol' // metatype
  | 'Any' | 'Self'
  ;
+
+functionType: attributes? functionTypeArgumentClause ('throws' | 'rethrows')? '->' sType ;
+functionTypeArgumentClause: '(' ')'
+ | '(' functionTypeArgumentList '...'? ')' ;
+functionTypeArgumentList: functionTypeArgument (',' functionTypeArgument)* ;
+functionTypeArgument: attributes? 'inout'? sType | argumentLabel typeAnnotation ;
+argumentLabel: identifier ;
 
 arrayType: '[' sType ']' ;
 
@@ -808,10 +838,9 @@ typeName : identifier ;
 
 // GRAMMAR OF A TUPLE TYPE
 
-tupleType : '('  tupleTypeBody? ')'  ;
-tupleTypeBody : tupleTypeElementList '...'? ;
+tupleType : '('  tupleTypeElementList? ')'  ;
 tupleTypeElementList : tupleTypeElement (',' tupleTypeElement)*  ;
-tupleTypeElement : attributes? 'inout'? sType | elementName typeAnnotation ;
+tupleTypeElement : elementName typeAnnotation | sType ;
 elementName : identifier  ;
 
 // GRAMMAR OF A PROTOCOL COMPOSITION TYPE
@@ -876,7 +905,7 @@ NilLiteral: 'nil' ;
 
 // GRAMMAR OF AN IDENTIFIER
 
-identifier : Identifier | contextSensitiveKeyword ;
+identifier : Identifier | contextSensitiveKeyword | grammarString ;
 
 keyword :
  // Keywords used in declarations
@@ -904,6 +933,9 @@ contextSensitiveKeyword :
  'iOS' | 'iOSApplicationExtension' | 'OSX' | 'OSXApplicationExtension­' | 'watchOS' | 'x86_64' |
  'arm' | 'arm64' | 'i386' | 'os' | 'arch' | 'safe' | 'tvOS' | 'file' | 'line' | 'default' | 'Self' | 'var'
  ;
+
+grammarString:
+  'red' | 'blue' | 'green' | 'alpha' | 'resourceName' | 'of' | 'type' ;
 
 OperatorHead
   : '/' | '=' | '-' | '+' | '!' | '*' | '%' | '<' | '>' | '&' | '|' | '^' | '~' | '?'
