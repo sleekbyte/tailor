@@ -145,4 +145,10 @@ private struct Scaling {
     init?(URL url: NSURL, statusCode statusCode: Int, HTTPVersion HTTPVersion: String?, headerFields headerFields: [String: String]?) {
     }
 
+    let `open` = true
+    var `close` = false
+
+    func demo() {
+        let `Open` = true
+    }
 }

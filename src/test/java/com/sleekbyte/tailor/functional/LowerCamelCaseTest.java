@@ -44,6 +44,7 @@ public class LowerCamelCaseTest extends RuleTest {
         addExpectedMsg(176, 10, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
         addExpectedMsg(177, 10, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
         addExpectedMsg(190, 10, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
+        addExpectedMsg(200, 10, Severity.WARNING, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
     }
 
     private void addExpectedMsg(int line, int column, Severity severity, String msg) {

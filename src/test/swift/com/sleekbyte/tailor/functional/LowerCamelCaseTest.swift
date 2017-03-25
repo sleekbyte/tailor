@@ -195,3 +195,16 @@ enum SomeEnum: Int {
         }
     }
 }
+
+func demo() {
+    var `Open` = true
+    var `close` = false
+    let `open` = true
+}
+
+func `func`() {
+}
+
+enum Test {
+    case `case`, `class`, notReserved
+}

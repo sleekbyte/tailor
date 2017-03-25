@@ -1,5 +1,6 @@
 package com.sleekbyte.tailor.utils;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -87,5 +88,18 @@ public class CharFormatUtilTest {
         assertFalse(CharFormatUtil.startsWithAcronym("uRL"));
         assertFalse(CharFormatUtil.startsWithAcronym("xURLS"));
         assertFalse(CharFormatUtil.startsWithAcronym("shieldPROGRAMMEmarvel"));
+    }
+
+    @Test
+    public void testBacktickEscapedIdentifier() {
+        // Backtick(s) are not part of the identifier
+        assertTrue(CharFormatUtil.unescapeIdentifier("``").isEmpty());
+        assertTrue(CharFormatUtil.unescapeIdentifier("").isEmpty());
+        assertEquals("self", CharFormatUtil.unescapeIdentifier("`self`"));
+        assertEquals("s",CharFormatUtil.unescapeIdentifier("`s`"));
+        assertEquals("self",CharFormatUtil.unescapeIdentifier("`self`"));
+        assertEquals("`self", CharFormatUtil.unescapeIdentifier("`self"));
+        assertEquals("self`", CharFormatUtil.unescapeIdentifier("self`"));
+        assertEquals("`self", CharFormatUtil.unescapeIdentifier("``self`"));
     }
 }

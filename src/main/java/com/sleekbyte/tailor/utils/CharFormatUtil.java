@@ -24,6 +24,25 @@ public final class CharFormatUtil {
         return startsWithAcronym(word) || isLowerCamelCase(word);
     }
 
+    public static boolean isEnclosedInBackticks(String identifier) {
+        int length = identifier.length();
+        return length >= 2 && identifier.charAt(0) == '`' && identifier.charAt(length - 1) == '`';
+    }
+
+    /**
+     * Will strip leading and trailing ` character in given string if both present.
+     *
+     * @param identifier value to sanitize
+     * @return sanitized string
+     */
+    public static String unescapeIdentifier(String identifier) {
+        int length = identifier.length();
+        if (isEnclosedInBackticks(identifier)) {
+            return identifier.substring(1, length - 1);
+        }
+        return identifier;
+    }
+
     /**
      * Checks if a name is prefixed with a 'k' or 'K'.
      *
