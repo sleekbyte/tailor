@@ -209,3 +209,8 @@ for pkg in parms.dependencies where pkg.type == .ModuleMap {
 
 if commandSelector == #selector(insertTab(_:)) {
 }
+
+loop:
+do {
+  something();
+}

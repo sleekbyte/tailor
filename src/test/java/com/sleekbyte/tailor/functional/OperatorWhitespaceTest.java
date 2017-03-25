@@ -14,14 +14,8 @@ public class OperatorWhitespaceTest extends RuleTest {
     protected void addAllExpectedMsgs() {
         // Operator declarations
         addExpectedMsg(3, 18, Messages.SPACE_BEFORE);
-        addExpectedMsg(5, 17, Messages.SPACE_AFTER);
-        addExpectedMsg(7, 18, Messages.SPACE_AFTER);
         addExpectedMsg(7, 18, Messages.SPACE_BEFORE);
-        addExpectedMsg(9, 19, Messages.SPACE_BEFORE);
-        addExpectedMsg(11, 16, Messages.SPACE_AFTER);
-        addExpectedMsg(18, 16, Messages.SPACE_BEFORE);
-        addExpectedMsg(21, 1, Messages.SPACE_AFTER);
-        addExpectedMsg(26, 5, Messages.SPACE_AFTER);
+        addExpectedMsg(12, 16, Messages.SPACE_BEFORE);
     }
 
     private void addExpectedMsg(int line, int column, String msg) {

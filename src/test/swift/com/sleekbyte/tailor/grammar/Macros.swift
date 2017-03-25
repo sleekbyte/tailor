@@ -132,3 +132,5 @@ class Person: NSObject {
 
 let firstNameGetter = #selector(getter: Person.firstName)
 let firstNameSetter = #selector(setter: Person.firstName)
+
+#colorLiteral(red: 2, green: 2, blue: 2, alpha: 100)

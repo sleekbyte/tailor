@@ -1,33 +1,15 @@
-prefix operator -+- {}
+prefix operator -+-
 
-prefix operator  += {}
+prefix operator  +=
 
-prefix operator *++  {}
+infix operator -+*: AdditionPrecedence
 
-prefix operator  -=   {}
-
-postfix operator  += {}
-
-infix operator -+*  { precedence 70 associativity right }
+infix operator   -+*: AdditionPrecedence
 
 prefix operator
-+= {
++=
 
-}
-
-prefix operator-++ {}
+prefix operator-++
 
 prefix operator
-+=     {
-
-}
-
-prefix operator
-    +=    {
-
-}
-
-prefix operator
-   += {
-
-}
+    +=

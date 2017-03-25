@@ -48,4 +48,4 @@ for thing in things {
     }
 }
 
-let s3 = someValue.dynamicType.init(data: 7)
+let s3 = type(of: someValue).init(data: 7)

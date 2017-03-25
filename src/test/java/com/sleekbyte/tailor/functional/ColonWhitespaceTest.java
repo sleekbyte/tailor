@@ -116,7 +116,7 @@ public class ColonWhitespaceTest extends RuleTest {
         addExpectedMessage(start + 6, 20, Messages.SPACE_AFTER);
         addExpectedMessage(start + 10, 8, Messages.NO_SPACE_BEFORE);
 
-        // expressionElement
+        // functionCallExpression / explicitMemberExpression
         start = 188;
         addExpectedMessage(start, 28, Messages.SPACE_AFTER);
         addExpectedMessage(start + 1, 29, Messages.NO_SPACE_BEFORE);

@@ -51,12 +51,12 @@ public class ConstantDecHelper {
     }
 
     public static boolean insideClass(ParserRuleContext ctx) {
-        ParserRuleContext rootCtx = ParseTreeUtil.getNthParent(getDeclarationRoot(ctx), 1);
+        ParserRuleContext rootCtx = ParseTreeUtil.getNthParent(getDeclarationRoot(ctx), 3);
         return rootCtx != null && (rootCtx instanceof SwiftParser.ClassDeclarationContext);
     }
 
     public static boolean insideStruct(ParserRuleContext ctx) {
-        ParserRuleContext rootCtx = ParseTreeUtil.getNthParent(getDeclarationRoot(ctx), 1);
+        ParserRuleContext rootCtx = ParseTreeUtil.getNthParent(getDeclarationRoot(ctx), 3);
         return rootCtx != null && (rootCtx instanceof SwiftParser.StructDeclarationContext);
     }
 }

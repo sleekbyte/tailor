@@ -13,13 +13,13 @@ func simpleMaxWithWhitespace < T: Comparable >(x: T, _ y: T) -> T {
 }
 
 func allItemsMatch<
-    C1: Container, C2: Container
-    where C1.ItemType == C2.ItemType, C1.ItemType: Equatable >
-    (someContainer: C1, _ anotherContainer: C2) -> Bool {}
+    C1: Container, C2: Container >
+    (someContainer: C1, _ anotherContainer: C2) -> Bool
+    where C1.ItemType == C2.ItemType, C1.ItemType: Equatable {}
 
-func allItemsMatch < C1: Container, C2: Container
-    where C1.ItemType == C2.ItemType, C1.ItemType: Equatable>
-    (someContainer: C1, _ anotherContainer: C2) -> Bool {}
+func allItemsMatch < C1: Container, C2: Container>
+    (someContainer: C1, _ anotherContainer: C2) -> Bool
+    where C1.ItemType == C2.ItemType, C1.ItemType: Equatable {}
 
 
 func <<<T>(left: inout [T], right: [T]) -> [T] {

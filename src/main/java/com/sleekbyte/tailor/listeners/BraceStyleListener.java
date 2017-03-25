@@ -204,8 +204,8 @@ public class BraceStyleListener extends SwiftBaseListener {
         if (ctx.functionBody() == null) {
             return;
         }
-        verifyCodeBlockOpenBraceStyle(ctx.functionBody().codeBlock(), ctx.functionSignature().getStop(),
-            Messages.FUNCTION);
+        Token left = ParseTreeUtil.getStopTokenForNode(ParseTreeUtil.getLeftSibling(ctx.functionBody()));
+        verifyCodeBlockOpenBraceStyle(ctx.functionBody().codeBlock(), left, Messages.FUNCTION);
         verifyBodyCloseBraceStyle(ctx.functionBody().codeBlock(), Messages.FUNCTION);
     }
 
@@ -266,7 +266,7 @@ public class BraceStyleListener extends SwiftBaseListener {
             list.map {(element: Int) in element * 2}
          */
         ParseTree leftSibling = ParseTreeUtil.getLeftSibling(ctx);
-        if (leftSibling != null && (leftSibling instanceof SwiftParser.ParenthesizedExpressionContext
+        if (leftSibling != null && (leftSibling instanceof SwiftParser.FunctionCallArgumentClauseContext
             || leftSibling instanceof SwiftParser.PostfixExpressionContext)) {
             Token leftToken = ((ParserRuleContext) leftSibling).getStop();
             verifySingleSpaceBeforeOpenBrace(ctx, leftToken);

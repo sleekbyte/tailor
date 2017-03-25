@@ -277,3 +277,7 @@ public convenience init(name: String...) rethrows  {
 
 public convenience init(name: String...) throws {
 }
+
+func allItemsMatch<C1: Container, C2: Container>
+    (someContainer: C1, _ anotherContainer: C2) -> Bool
+    where C1.ItemType == C2.ItemType, C1.ItemType: Equatable {}
