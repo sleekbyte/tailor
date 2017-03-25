@@ -29,11 +29,7 @@ public class KPrefixListener extends SwiftBaseListener {
         names.forEach(
             ctx -> {
                 String constantName = CharFormatUtil.unescapeIdentifier(ctx.getText());
-                Location location = ListenerUtil.getContextStartLocation(ctx);
-                // Ensure that the violation column number reports the character after the opening backtick.
-                if (CharFormatUtil.isEnclosedInBackticks(ctx.getText())) {
-                    location.column += 1;
-                }
+                Location location = ListenerUtil.getIdentifierStartLocation(ctx);
                 if (CharFormatUtil.isKPrefixed(constantName)) {
                     printer.warn(Rules.CONSTANT_K_PREFIX, Messages.CONSTANT + Messages.NAME + Messages.K_PREFIXED,
                         location);

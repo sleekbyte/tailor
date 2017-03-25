@@ -51,11 +51,7 @@ public class LowerCamelCaseListener extends SwiftBaseListener {
     private void verifyLowerCamelCase(String constructType, ParserRuleContext ctx) {
         String constructName = CharFormatUtil.unescapeIdentifier(ctx.getText());
         if (!CharFormatUtil.isLowerCamelCaseOrAcronym(constructName)) {
-            Location location = ListenerUtil.getContextStartLocation(ctx);
-            // Ensure that the violation column number reports the character after the opening backtick.
-            if (CharFormatUtil.isEnclosedInBackticks(ctx.getText())) {
-                location.column += 1;
-            }
+            Location location = ListenerUtil.getIdentifierStartLocation(ctx);
             this.printer.error(Rules.LOWER_CAMEL_CASE, constructType + Messages.LOWER_CAMEL_CASE, location);
         }
     }

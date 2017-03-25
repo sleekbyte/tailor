@@ -32,11 +32,7 @@ public class ConstantNamingListener extends SwiftBaseListener {
             ctx -> {
                 String constantName = CharFormatUtil.unescapeIdentifier(ctx.getText());
                 ParserRuleContext constantDecContext = ConstantDecHelper.getConstantDeclaration(ctx);
-                Location location = ListenerUtil.getContextStartLocation(ctx);
-                // Ensure that the violation column number reports the character after the opening backtick.
-                if (CharFormatUtil.isEnclosedInBackticks(ctx.getText())) {
-                    location.column += 1;
-                }
+                Location location = ListenerUtil.getIdentifierStartLocation(ctx);
 
                 if (ConstantDecHelper.isGlobal(constantDecContext)
                     || ConstantDecHelper.insideClass(constantDecContext)

@@ -32,6 +32,20 @@ public final class ListenerUtil {
         return new Location(ctx.getStop().getLine(), ctx.getStop().getCharPositionInLine() + 1);
     }
 
+    /**
+     * Gets the start location of the context string.
+     * @param ctx the context
+     * @return the start location of the provided context's string
+     */
+    public static Location getIdentifierStartLocation(ParserRuleContext ctx) {
+        Location location = getContextStartLocation(ctx);
+        // Ensure that the violation column number reports the character after the opening backtick.
+        if (CharFormatUtil.isEnclosedInBackticks(ctx.getText())) {
+            location.column += 1;
+        }
+        return location;
+    }
+
     public static Location getLocationOfChildToken(ParserRuleContext ctx, int childNumber) {
         Token token = ((TerminalNodeImpl) ctx.getChild(childNumber)).getSymbol();
         return ListenerUtil.getTokenLocation(token);
