@@ -258,9 +258,14 @@ public final class FormatTest {
         List<ViolationMessage> messages = new ArrayList<>();
         messages.add(createViolationMessage(3, 7, Severity.WARNING, Messages.CLASS + Messages.NAMES));
         messages.add(createViolationMessage(7, 7, Severity.WARNING, Messages.CLASS + Messages.NAMES));
+        messages.add(createViolationMessage(27, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES));
+        messages.add(createViolationMessage(33, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES));
+        messages.add(createViolationMessage(39, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES));
         messages.add(createViolationMessage(42, 6, Severity.WARNING, Messages.ENUM + Messages.NAMES));
         messages.add(createViolationMessage(46, 6, Severity.WARNING, Messages.ENUM + Messages.NAMES));
         messages.add(createViolationMessage(50, 6, Severity.WARNING, Messages.ENUM + Messages.NAMES));
+        messages.add(createViolationMessage(59, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES));
+        messages.add(createViolationMessage(59, 62, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES));
         messages.add(createViolationMessage(72, 8, Severity.WARNING, Messages.STRUCT + Messages.NAMES));
         messages.add(createViolationMessage(76, 8, Severity.WARNING, Messages.STRUCT + Messages.NAMES));
         messages.add(createViolationMessage(90, 10, Severity.WARNING, Messages.PROTOCOL + Messages.NAMES));
