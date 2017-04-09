@@ -32,6 +32,16 @@ public class UpperCamelCaseListener extends SwiftBaseListener {
     }
 
     @Override
+    public void enterRawValueStyleEnumCase(SwiftParser.RawValueStyleEnumCaseContext ctx) {
+        verifyUpperCamelCase(Messages.ENUM_CASE + Messages.NAMES, ctx.enumCaseName());
+    }
+
+    @Override
+    public void enterUnionStyleEnumCase(SwiftParser.UnionStyleEnumCaseContext ctx) {
+        verifyUpperCamelCase(Messages.ENUM_CASE + Messages.NAMES, ctx.enumCaseName());
+    }
+
+    @Override
     public void enterStructName(SwiftParser.StructNameContext ctx) {
         verifyUpperCamelCase(Messages.STRUCT + Messages.NAMES, ctx);
     }

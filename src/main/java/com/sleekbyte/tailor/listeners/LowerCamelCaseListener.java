@@ -38,11 +38,6 @@ public class LowerCamelCaseListener extends SwiftBaseListener {
         }
     }
 
-    @Override
-    public void enterUnionStyleEnumCase(SwiftParser.UnionStyleEnumCaseContext ctx) {
-        verifyLowerCamelCase(Messages.ENUM_CASE + Messages.NAMES, ctx.enumCaseName());
-    }
-
     private void verifyLowerCamelCase(String constructType, ParserRuleContext ctx) {
         String constructName = CharFormatUtil.unescapeIdentifier(ctx.getText());
         if (!CharFormatUtil.isLowerCamelCaseOrAcronym(constructName)) {

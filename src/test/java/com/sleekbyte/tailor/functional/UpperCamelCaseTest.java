@@ -22,9 +22,14 @@ public class UpperCamelCaseTest extends RuleTest {
     protected void addAllExpectedMsgs() {
         addExpectedMsg(3, 7, Severity.WARNING, Messages.CLASS + Messages.NAMES);
         addExpectedMsg(7, 7, Severity.WARNING, Messages.CLASS + Messages.NAMES);
+        addExpectedMsg(27, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
+        addExpectedMsg(33, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
+        addExpectedMsg(39, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
         addExpectedMsg(42, 6, Severity.WARNING, Messages.ENUM + Messages.NAMES);
         addExpectedMsg(46, 6, Severity.WARNING, Messages.ENUM + Messages.NAMES);
         addExpectedMsg(50, 6, Severity.WARNING, Messages.ENUM + Messages.NAMES);
+        addExpectedMsg(59, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
+        addExpectedMsg(59, 62, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES);
         addExpectedMsg(72, 8, Severity.WARNING, Messages.STRUCT + Messages.NAMES);
         addExpectedMsg(76, 8, Severity.WARNING, Messages.STRUCT + Messages.NAMES);
         addExpectedMsg(90, 10, Severity.WARNING, Messages.PROTOCOL + Messages.NAMES);

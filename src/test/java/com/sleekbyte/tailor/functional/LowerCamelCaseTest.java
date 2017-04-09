@@ -38,12 +38,6 @@ public class LowerCamelCaseTest extends RuleTest {
         addExpectedMsg(80, 17, Severity.WARNING, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
         addExpectedMsg(85, 17, Severity.WARNING, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
         addExpectedMsg(91, 9, Severity.WARNING, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
-        /*addExpectedMsg(163, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
-        addExpectedMsg(164, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
-        addExpectedMsg(165, 8, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
-        addExpectedMsg(176, 10, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
-        addExpectedMsg(177, 10, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
-        addExpectedMsg(190, 10, Severity.WARNING, Messages.ENUM_CASE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);*/
         addExpectedMsg(161, 10, Severity.WARNING, Messages.VARIABLE + Messages.NAMES + Messages.LOWER_CAMEL_CASE);
     }
 
