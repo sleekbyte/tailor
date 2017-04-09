@@ -157,45 +157,6 @@ init(URL URL: NSURL, entersReaderIfAvailable entersReaderIfAvailable: Bool) {
 init?(URL url: NSURL, statusCode statusCode: Int, HTTPVersion HTTPVersion: String?, headerFields headerFields: [String: String]?) {
 }
 
-// Enum examples
-
-enum Enumeration {
-  case InvalidName
-  case Invalid_name
-  case invalid_name
-  case validName
-  case validname
-}
-
-enum Barcode {
-  case UPCA(Int, Int, Int, Int)
-  case QRCode(String)
-}
-
-enum ASCIIControlCharacter: Character {
-    case Tab = "\t"
-    case LineFeed = "\n"
-    case carriageReturn = "\r"
-}
-
-enum UpperCamelCase {
-  case foo
-}
-
-enum Planet {
-    case mercury, venus, earth, mars, jupiter, saturn, uranus, neptune
-}
-
-enum SomeEnum: Int {
-    case Some_Enum_Case
-    init(value: NSNumber) {
-        switch value.integerValue {
-        case Some_Enum_Case.rawValue:
-             self = Some_Enum_Case
-        }
-    }
-}
-
 func demo() {
     var `Open` = true
     var `close` = false
