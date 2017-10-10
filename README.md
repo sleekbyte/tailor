@@ -467,6 +467,7 @@ Tool                                                         | License
 [Codacy](https://www.codacy.com)                             | [Free for Open Source](https://www.codacy.com/pricing)
 [System Rules](http://stefanbirkner.github.io/system-rules/) | [Common Public License 1.0](https://stefanbirkner.github.io/system-rules/license.html)
 [Ronn](https://github.com/rtomayko/ronn)                     | [MIT](https://github.com/rtomayko/ronn/blob/master/COPYING)
+[Inspecode](https://rocro.com/inspecode)                     | [Free for Open Source](https://rocro.com/inspecode)
 
 # License
 
