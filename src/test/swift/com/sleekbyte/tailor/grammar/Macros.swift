@@ -109,6 +109,9 @@ var validSwiftVersion: Bool = {
     func keyPathTest() -> String {
         return #keyPath(someProperty)
     }
+    func keyPathTestForSwift4() -> KeyPath<SomeClass, Int> {
+        return \SomeClass.someProperty
+    }
 }
 
 let c = SomeClass(someProperty: 12)

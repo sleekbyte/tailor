@@ -670,7 +670,10 @@ selectorExpression
 
 // GRAMMAR OF A KEY PATH EXPRESSION
 
-keyPathExpression: '#keyPath' '(' expression ')' ;
+keyPathExpression
+ : '#keyPath' '(' expression ')' 
+ | '\\' expression
+;
 
 // GRAMMAR OF A POSTFIX EXPRESSION
 
