@@ -3,6 +3,26 @@ let someString = "Some string literal value"
 var emptyString = ""               // empty string literal
 var anotherEmptyString = String()  // initializer syntax
 
+let star = "⭐️"
+
+let multilineString = """
+multiline
+text
+"""
+
+let multilineStringWithVar = """
+multiline
+text
+with a star \(star)
+"""
+
+let multilineStringWithEscaped = """
+  You could write multi-lined strings
+  without "escaping" single quotes.
+"""
+
+
+
 if emptyString.isEmpty {
     print("Nothing to see here")
 }
