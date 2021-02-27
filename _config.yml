@@ -1,9 +1,9 @@
 name: Tailor
 description: Cross-platform static analyzer and linter for Swift
-url: "https://tailor.sh"
+url: "https://sleekbyte.github.io/tailor"
 github_url: "https://github.com/sleekbyte/tailor"
 company_name: Sleekbyte
-company_url: "https://sleekbyte.com"
+company_url: "https://sleekbyte.github.io"
 
 exclude: [README.md, LICENSE.md, CNAME, Gemfile, Gemfile.lock, vendor, script]
 

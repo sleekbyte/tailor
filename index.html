@@ -3,7 +3,7 @@ layout: default
 ---
 <div class="jumbotron text-center">
   <div class="container">
-    <img class="center-block logo img-responsive" src="/assets/images/logo.png" alt="Tailor">
+    <img class="center-block logo img-responsive" src="{{ site.url }}/assets/images/logo.png" alt="Tailor">
     <h1 class="title">{{ site.name }}. {{ site.description }}.</h1>
     <p class="description">
       A static analysis and lint tool for source code written in Apple's Swift programming language.
@@ -24,7 +24,7 @@ layout: default
     <br>
     <iframe src="https://ghbtns.com/github-btn.html?user=sleekbyte&repo=tailor&type=star&count=true&size=large" class="ghbtns" frameborder="0" scrolling="0" width="130px" height="30px"></iframe>
     <noscript>
-      <img class="center-block screencast img-responsive" src="/assets/images/screencast.gif" alt="Tailor screencast">
+      <img class="center-block screencast img-responsive" src="{{ site.url }}/assets/images/screencast.gif" alt="Tailor screencast">
     </noscript>
     <script src="https://asciinema.org/a/evkm04cvuv4kuojkx3ivctqtf.js" id="asciicast-evkm04cvuv4kuojkx3ivctqtf" data-autoplay="true" data-loop="true" async></script>
   </div>
@@ -35,17 +35,17 @@ layout: default
 <div class="container subtopic text-center">
   <h2>Installation</h2>
   <p>Requires Java (JRE or JDK) Version 8 or above: <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank">Java SE Downloads</a></p>
-  <a href="http://brew.sh" target="_blank">Homebrew</a>, <a href="http://brew.sh/linuxbrew/" target="_blank">Linuxbrew</a>
+  <a href="http://brew.sh" target="_blank">Homebrew</a>
   <div onclick="selectText(this.firstElementChild)">
     {% highlight bash %}brew install tailor{% endhighlight %}
   </div>
   Mac OS X (10.10+), Linux
   <div onclick="selectText(this.firstElementChild)">
-    {% highlight bash %}curl -fsSL https://tailor.sh/install.sh | sh{% endhighlight %}
+    {% highlight bash %}curl -fsSL {{ site.url }}/install.sh | sh{% endhighlight %}
   </div>
   Windows (10+)
   <div onclick="selectText(this.firstElementChild)">
-    {% highlight powershell %}iex (new-object net.webclient).downloadstring('https://tailor.sh/install.ps1'){% endhighlight %}
+    {% highlight powershell %}iex (new-object net.webclient).downloadstring('{{ site.url }}/install.ps1'){% endhighlight %}
   </div>
   <br>
   <h2>Usage</h2>
@@ -67,7 +67,7 @@ layout: default
       <h2><span class="glyphicon glyphicon-globe" aria-hidden="true"></span>&nbsp;&nbsp;Cross-Platform</h2>
       <p>Tailor may be used on Mac OS X via your shell or integrated with Xcode, as well as on Linux and Windows.</p>
       <h2><span class="glyphicon glyphicon-text-background" aria-hidden="true"></span>&nbsp;&nbsp;Colourized Output</h2>
-      <img class="center-block img-responsive" src="/assets/images/colour-console.png" alt="Coloured console">
+      <img class="center-block img-responsive" src="{{ site.url }}/assets/images/colour-console.png" alt="Coloured console">
     </div>
     <div class="col-md-6 feature">
       <h2><span class="glyphicon glyphicon-console" aria-hidden="true"></span>&nbsp;&nbsp;Automatic Xcode Integration</h2>
@@ -76,7 +76,7 @@ layout: default
         {% highlight bash %}tailor --xcode /path/to/demo.xcodeproj/{% endhighlight %}
       </div>
       <p class="xcode">This adds the following Build Phase Run Script to your project's default target.</p>
-      <img class="center-block img-thumbnail img-responsive" src="/assets/images/run-script.png" alt="Xcode Build Phase Run Script">
+      <img class="center-block img-thumbnail img-responsive" src="{{ site.url }}/assets/images/run-script.png" alt="Xcode Build Phase Run Script">
     </div>
   </div>
 </div>
@@ -91,7 +91,7 @@ layout: default
   <div class="row">
     {% for member in site.data.members %}
       <div class="col-md-3 col-sm-6 col-xs-12 individual">
-        <img class="img-circle" src="/assets/images/{{ member.name | downcase }}.jpg" alt="{{ member.name }}" width="140" height="140">
+        <img class="img-circle" src="{{ site.url }}/assets/images/{{ member.name | downcase }}.jpg" alt="{{ member.name }}" width="140" height="140">
         <h2><a id="{{member.name}}" href="{{ member.url }}" target="_blank">{{ member.name }}</a></h2>
       </div>
     {% endfor %}
